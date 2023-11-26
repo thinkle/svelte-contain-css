@@ -81,10 +81,12 @@
       display: block;
       position: absolute;
       top: var(--pad);
-      left: var(--pad);
+      left: calc(-1 * var(--pad));
       background-color: var(--mini-button-bg);
       color: var(--mini-button-fg);
       border-radius: var(--mini-button-radius);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
       border: var(--mini-button-border);
       width: var(--icon-size);
       height: var(--icon-size);
@@ -93,6 +95,8 @@
       left: calc(var(--sidebar-width) - 2 * var(--pad));
       --mini-button-hover-bg: #3333;
       --mini-button-hover-fg: #222;
+      border-top-left-radius: 50%;
+      border-bottom-left-radius: 50%;
     }
 
     aside > button:hover {

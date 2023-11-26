@@ -8,6 +8,7 @@
   import "$lib/vars/defaults.css";
   import Button from "$lib/controls/Button.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
+  import ResponsiveText from "$lib/layout/ResponsiveText.svelte";
 
   const componentCategories = [
     {
@@ -102,11 +103,20 @@
         <p>
           We use container queries out of the box, so you can adjust the layout
           of your components based on their size, rather than relying only on
-          the viewport size. This "Card" has a sidebar, for example, but it's
-          layout will be different than the sidebar on the main page.
+          the viewport size. This "Card" has a sidebar, for example, but because
+          the card is small, the sidebar will be in the "expander" small mode in
+          the card, regardless of the screen size.
         </p>
       </div>
     </Card>
+
+    <h2 slot="header">
+      <ResponsiveText>
+        <span slot="medium">Text that Adapts to Container Size</span>
+        <span slot="small">Adaptable Text</span>
+        <span slot="xs">Resizing!</span>
+      </ResponsiveText>
+    </h2>
     <Card>
       <h2 slot="header">The Adaptable Card</h2>
       <GridLayout --card-width-small="80px">
@@ -123,6 +133,53 @@
       <div slot="footer">We also support a simple card footer</div>
     </Card>
   </GridLayout>
+  <div style="margin:auto">
+    <h2>Responsive Content</h2>
+    <p>
+      We provide a convenient <code>ResponsiveText</code>
+      component for making text appear depending on screen size.
+    </p>
+    <ResponsiveText>
+      <p slot="xs">This text adapts!</p>
+      <p slot="small">This text can change size (small screen)</p>
+      <p slot="medium">
+        This text will adapt to the container size. (medium size)
+      </p>
+      <p slot="large">
+        This text will adapt and change depending on the size of the container.
+        As the container grows, we have more room. (large size)
+      </p>
+      <div slot="xl">
+        <h3>X-Large Container!</h3>
+        <table>
+          <tr>
+            <td> Small Container </td>
+            <td> Small Text </td>
+          </tr>
+          <tr>
+            <td>Medium Container</td>
+            <td>Medium length text</td>
+          </tr>
+          <tr>
+            <td>Big Container</td>
+            <td>Suddenly we have room for so much more detail!</td>
+          </tr>
+        </table>
+      </div>
+    </ResponsiveText>
+    <ResponsiveText>
+      <p slot="xs">This text is for small!</p>
+      <p slot="small">This text is for small!</p>
+      <p slot="medium">This text is for medium!</p>
+      <p slot="else">This text is for everything else</p>
+    </ResponsiveText>
+    <ResponsiveText greaterThan="large">
+      <p slot="greaterThan">This text is for large and up!</p>
+    </ResponsiveText>
+    <ResponsiveText smallerThan="large">
+      <p slot="smallerThan">This text is for large and below!</p>
+    </ResponsiveText>
+  </div>
   <TextLayout>
     <h2>Typography</h2>
     <p>Here is some basic text layout.</p>

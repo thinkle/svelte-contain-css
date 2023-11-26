@@ -39,6 +39,14 @@
     position: relative;
     user-select: none;
   }
+  label:hover {
+    filter: var(--checkbox-hover-filter);
+    transform: var(--checkbox-hover-transform);
+  }
+  label:has(:global(*:active)) {
+    filter: var(--checkbox-active-filter);
+    transform: var(--checkbox-active-transform);
+  }
   label span {
     width: var(--label-width);
   }

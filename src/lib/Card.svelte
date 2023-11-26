@@ -46,7 +46,6 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
-    box-shadow: var(--box-shadow);
     border-radius: var(--border-radius);
     background-color: var(--card-bg);
     color: var(--card-fg);

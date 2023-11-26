@@ -1,5 +1,6 @@
 :root {
-  --hover-filter: brightness(1.2);
+  --hover-filter: brightness(1.2)
+    drop-shadow(var(--space) var(--space) var(--shadow-color));
   --active-filter: brightness(1.1);
   --hover-transform: translate(var(--space), var(--space));
   --button-hover-filter: var(--hover-filter);
@@ -11,6 +12,10 @@
   --menu-transition: var(--transition);
   --button-transition: var(--transition);
   --sidebar-transition: var(--transition);
+  --checkbox-hover-filter: var(--hover-filter);
+  --checkbox-hover-transform: rotateY(-5deg);
+  --checkbox-active-filter: var(--active-filter);
+  --checkbox-active-transform: rotateY(5deg);
   --checkbox-transition: 400ms;
   --checked-weight: var(--bold);
 }
