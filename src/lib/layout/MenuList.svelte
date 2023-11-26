@@ -7,7 +7,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: var(--menu-bg);
+    background: var(--menu-bg);
     color: var(--menu-fg);
   }
   .menu :global(a),
@@ -20,7 +20,7 @@
     padding: var(--pad);
     text-decoration: none;
     color: var(--menu-fg);
-    background-color: var(--menu-bg);
+    background: var(--menu-bg);
     transition: all var(--menu-transition);
   }
 
@@ -34,7 +34,7 @@
     padding: var(--pad);
     text-decoration: none;
     color: var(--menu-even-fg);
-    background-color: var(--menu-even-bg);
+    background: var(--menu-even-bg);
   }
 
   .menu :global(a:hover),

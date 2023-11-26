@@ -65,13 +65,13 @@
     content: " ";
     width: var(--checkbox-size);
     height: var(--checkbox-size);
-    background-color: var(--checkbox-bg);
+    background: var(--checkbox-bg);
     color: var(--checkbox-checked-fg);
     border: var(--checkbox-border);
     box-sizing: border-box;
   }
   label:has(input:checked)::before {
-    background-color: var(--checkbox-checked-bg);
+    background: var(--checkbox-checked-bg);
     color: var(--checkbox-checked-fg);
     border: var(--checkbox-checked-border);
     box-sizing: border-box;

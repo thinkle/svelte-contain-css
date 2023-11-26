@@ -47,7 +47,7 @@
     container-type: inline-size;
     width: var(--w);
     border-radius: var(--border-radius);
-    background-color: var(--card-bg);
+    background: var(--card-bg);
     color: var(--card-fg);
     box-shadow: var(--shadow-distance) var(--shadow-distance) 0
       var(--shadow-color);
@@ -72,7 +72,7 @@
     border-bottom: var(--card-header-border);
   }
   header {
-    background-color: var(--card-header-bg);
+    background: var(--card-header-bg);
     color: var(--card-header-fg);
     display: flex;
     align-items: center;
@@ -82,7 +82,7 @@
     padding: var(--pad);
     border-bottom-right-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
-    background-color: var(--card-footer-bg);
+    background: var(--card-footer-bg);
     color: var(--card-footer-fg);
     border-top: var(--card-footer-border);
     height: var(--card-footer-height);

@@ -18,4 +18,9 @@
   --checkbox-active-transform: rotateY(5deg);
   --checkbox-transition: 400ms;
   --checked-weight: var(--bold);
+  --grab-bar-hover-bg: #fff2;
+  --grab-bar-active-bg: #fff4;
+  --grab-bar-hover-filter: drop-shadow(0 0 2px #fff);
+  --grab-bar-active-filter: drop-shdaow(0 0 4px #fff);
+  --greyed-out-filter: blur(1px) opacity(0.8);
 }

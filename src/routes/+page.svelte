@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Page from "$lib/layout/Page.svelte";
   import Card from "$lib/Card.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
@@ -48,12 +48,23 @@
       ],
     },
   ];
+  let right: boolean = false;
 </script>
 
 <h1>Contain Component Library</h1>
-<Page>
-  <Sidebar slot="sidebar">
+<Page {right}>
+  <Sidebar slot="sidebar" {right}>
     <MenuList>
+      <li>
+        <button
+          on:click={() => {
+            right = !right;
+          }}
+        >
+          Move Sidebar to
+          {#if right}Left{:else}Right{/if}
+        </button>
+      </li>
       <li>
         {#each componentCategories as category}
           <h2>{category.title}</h2>

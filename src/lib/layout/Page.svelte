@@ -1,4 +1,8 @@
-<section class="page">
+<script>
+  export let right;
+</script>
+
+<section class="page" class:right>
   <div class="aside">
     <slot name="sidebar" />
   </div>
@@ -27,8 +31,14 @@
     gap: var(--column-gap);
     padding: var(--pad);
   }
+  .page.right {
+    flex-direction: row-reverse;
+  }
   .page .content {
-    background-color: var(--bg);
+    container-type: size;
+    height: 100%;
+    width: 100%;
+    background: var(--bg);
     color: var(--text);
   }
 </style>
