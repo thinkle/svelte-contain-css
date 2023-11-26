@@ -1,0 +1,16 @@
+:root {
+  --hover-filter: brightness(1.2);
+  --active-filter: brightness(1.1);
+  --hover-transform: translate(var(--space), var(--space));
+  --button-hover-filter: var(--hover-filter);
+  --menu-hover-filter: var(--hover-filter);
+  --menu-hover-transform: var(--hover-transform);
+  --button-hover-transform: var(var(--button-hover-transform));
+  --button-hover-filter: var(var(--button-hover-filter));
+  --transition: 300ms;
+  --menu-transition: var(--transition);
+  --button-transition: var(--transition);
+  --sidebar-transition: var(--transition);
+  --checkbox-transition: 400ms;
+  --checked-weight: var(--bold);
+}

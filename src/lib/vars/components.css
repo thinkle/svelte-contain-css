@@ -1,0 +1,10 @@
+:root {
+  --checkbox-check: "✓";
+  --checkbox-size: var(--font-size);
+  --checkbox-bg: var(--inactive-bg);
+  --checkbox-fg: var(--inactive-fg);
+  --checkbox-checked-bg: var(--primary-bg);
+  --checkbox-checked-fg: var(--primary-fg);
+  --checkbox-border: 1px solid var(--white);
+  --checkbox-checked-border: 1px solid var(--white);
+}

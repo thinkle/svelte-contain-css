@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Basic spacing */
+  --space: 2px;
+  --space-md: calc(var(--space) * 2);
+  --space-lg: calc(var(--space-md) * 2);
+  --space-xl: calc(var(--space-xl) * 2);
+  --pad: calc(var(--space) * 4);
+  --gap: calc(var(--pad) * 2);
+  --shadow-distance: var(--space-md);
+  --column-gap: var(--gap);
+  --row-gap: var(--gap);
+  --border-radius: 8px;
+  --border-style: solid;
+  --border-width: 1px;
+  /* Simple icon sizes and such */
+  --icon-size: 32px;
+  /* Cards */
+  --card-width: 420px;
+  --card-width-small: 250px;
+  --card-width-large: 600px;
+  --card-height: 300px;
+  --card-height-small: 150px;
+  --card-height-large: 450px;
+  --min-card-height: 200px;
+  /* header and footer heights in em so they scale with 
+   typography changes that happen in media queries */
+  --card-header-height: 2em;
+  --card-footer-height: 1.5em;
+  --card-footer-border: 1px solid #1113;
+}
+
+:root {
+  --sidebar-width: 256px;
+}

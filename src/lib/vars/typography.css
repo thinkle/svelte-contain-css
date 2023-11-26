@@ -1,0 +1,15 @@
+:root {
+  --font-size: 16px;
+  --heading-size: 1.5rem;
+  --text-size: 1.2rem;
+  --font-family: Verdana, Geneva, Tahoma, sans-serif;
+  --heading-font-family: var(--font-family);
+  --body-font-family: Garamond, serif;
+  --ui-font-family: var(--font-family);
+  --code-font-family: Courier, monospace;
+  --code-font-size: 0.9em;
+  /* Basic typography... */
+  --line-height: 1.4;
+  --line-width: 30rem;
+  --bold: bold;
+}
