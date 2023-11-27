@@ -36,7 +36,7 @@
 <style>
   aside {
     height: 100%;
-    width: calc(var(--sidebar-width)+var(--grab-bar-width));
+    width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;
   }
   aside .content {
