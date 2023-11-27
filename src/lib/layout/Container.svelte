@@ -22,6 +22,7 @@
     border: var(--container-border);
     margin-top: var(--container-margin);
     margin-bottom: var(--container-margin);
+    container-type: inline-size;
   }
   .border {
     border: var(--border-width) var(--border-style) var(--border-color);

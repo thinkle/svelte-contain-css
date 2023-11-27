@@ -13,7 +13,10 @@
   import ResponsiveText from "$lib/layout/ResponsiveText.svelte";
   import ButtonDemo from "./demos/ButtonDemo.svelte";
   import TypographyDemo from "./demos/TypographyDemo.svelte";
+
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
+  import Slider from "$lib/controls/Slider.svelte";
+  import FormItemDemo from "./demos/FormItemDemo.svelte";
   let hash: string = "";
   const updateHash = () => {
     hash = window.location.hash;
@@ -167,7 +170,7 @@
       <div slot="footer">We also support a simple card footer</div>
     </Card>
   </GridLayout>
-  <div style="margin:auto">
+  <!-- <div style="margin:auto">
     <h2>Responsive Content</h2>
     <p>
       We provide a convenient <code>ResponsiveText</code>
@@ -213,7 +216,7 @@
     <ResponsiveText smallerThan="large">
       <p slot="smallerThan">This text is for large and below!</p>
     </ResponsiveText>
-  </div>
+  </div> -->
   <div id="typography">
     <h2>Typography</h2>
     <TypographyDemo />
@@ -228,5 +231,8 @@
   </div>
   <div id="checkbox">
     <CheckboxDemo />
+  </div>
+  <div id="form-item">
+    <FormItemDemo />
   </div>
 </Page>
