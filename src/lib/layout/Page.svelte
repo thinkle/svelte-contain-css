@@ -12,9 +12,8 @@
 </section>
 
 <style>
-  .page .content,
-  .page .aside {
-    overflow-y: auto;
+  .content {
+    overflow-y: scroll;
   }
   .page .aside {
     flex: 0 0 auto;
@@ -26,7 +25,7 @@
     flex-direction: row;
     align-items: stretch;
     justify-content: stretch;
-    height: 100vh;
+    height: var(--height, 100vh);
     box-sizing: border-box;
     gap: var(--column-gap);
     padding: var(--pad);

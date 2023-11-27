@@ -22,5 +22,5 @@
   --grab-bar-active-bg: #fff4;
   --grab-bar-hover-filter: drop-shadow(0 0 2px #fff);
   --grab-bar-active-filter: drop-shdaow(0 0 4px #fff);
-  --greyed-out-filter: blur(1px) opacity(0.8);
+  --greyed-out-filter: blur(2px) grayscale(0.5);
 }

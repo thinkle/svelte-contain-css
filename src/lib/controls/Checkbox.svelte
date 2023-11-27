@@ -19,6 +19,17 @@
 >
 
 <style>
+  :root {
+    --checkbox-size: var(--font-size);
+    --checkbox-bg: var(--inactive-bg);
+    --checkbox-fg: var(--inactive-fg);
+    --checkbox-checked-bg: var(--primary-bg);
+    --checkbox-checked-fg: var(--primary-fg);
+    --checkbox-border: 1px solid var(--white);
+    --checkbox-checked-border: 1px solid var(--white);
+    --checkbox-check: "✓";
+  }
+
   .offscreen,
   label {
     font-family: var(--ui-font-family);
@@ -81,6 +92,7 @@
   label:has(input:checked)::after {
     content: var(--checkbox-check);
     font-size: var(--checkbox-size);
+    color: var(--checkbox-checked-fg);
     position: absolute;
     left: 0;
     animation: checkbox-check var(--checkbox-transition) ease-in-out;

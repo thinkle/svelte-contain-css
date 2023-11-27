@@ -22,6 +22,7 @@
     color: var(--menu-fg);
     background: var(--menu-bg);
     transition: all var(--menu-transition);
+    border: var(--menu-item-border);
   }
 
   .menu :global(li:nth-child(even) a),
@@ -50,5 +51,11 @@
   .menu :global(input[type="submit"]:active) {
     filter: var(--menu-active-filter);
     transform: var(--menu-active-transform);
+  }
+
+  .menu :global(li a.active),
+  .menu :global(li:nth-child(even) a.active) {
+    background: var(--menu-current-bg) !important;
+    color: var(--menu-current-fg) !important;
   }
 </style>

@@ -21,6 +21,11 @@
   .card {
     --w: var(--card-width);
     --h: var(--card-height);
+    display: flex;
+    flex-direction: column;
+  }
+  .card section {
+    flex-grow: grow;
   }
   @container (max-width: 600px) {
     .card {

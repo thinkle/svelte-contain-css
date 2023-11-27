@@ -43,6 +43,9 @@
     background: var(--sidebar-bg);
     color: var(--sidebar-fg);
     width: var(--sidebar-width);
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
     box-sizing: border-box;
   }
   .right {
@@ -70,7 +73,7 @@
     }
     aside .content {
       transition: transform var(--sidebar-transition);
-      transform: translateX(-100%);
+      transform: translateX(-110%);
     }
     aside.right .content {
       transform: translateX(100%);
@@ -93,6 +96,7 @@
       top: 0;
       height: 100%;
       width: var(--grab-bar-width);
+      background: var(--body-bg);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -103,7 +107,7 @@
     }
     .edge-bar button {
       display: block;
-      background: var(--body-bg);
+      background: transparent;
       color: var(--body-fg);
       width: var(--grab-bar-width);
       box-sizing: border-box;

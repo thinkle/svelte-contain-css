@@ -1,57 +1,78 @@
 <script lang="ts">
+  import "$lib/vars/defaults.css";
+  import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Card from "$lib/Card.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
-  import TextLayout from "$lib/typography/TextLayout.svelte";
-  import "$lib/vars/defaults.css";
-  import Button from "$lib/controls/Button.svelte";
-  import Checkbox from "$lib/controls/Checkbox.svelte";
+
+  import BarDemo from "./demos/BarDemo.svelte";
+
+  import { onMount } from "svelte";
   import ResponsiveText from "$lib/layout/ResponsiveText.svelte";
+  import ButtonDemo from "./demos/ButtonDemo.svelte";
+  import TypographyDemo from "./demos/TypographyDemo.svelte";
+  import CheckboxDemo from "./demos/CheckboxDemo.svelte";
+  let hash: string = "";
+  const updateHash = () => {
+    hash = window.location.hash;
+    console.log("Hash is", hash);
+  };
+  onMount(() => {
+    updateHash();
+    window.addEventListener("hashchange", updateHash);
+    return () => {
+      window.removeEventListener("hashchange", updateHash);
+    };
+  });
 
   const componentCategories = [
     {
       title: "Simple Components",
       items: [
-        { title: "Button", url: "/button" },
-        { title: "Card", url: "/card" },
-        { title: "Checkbox", url: "/checkbox" },
-        { title: "Input", url: "/input" },
-        { title: "Menu", url: "/menu" },
-        { title: "Radio", url: "/radio" },
-        { title: "Select", url: "/select" },
-        { title: "Sidebar", url: "/sidebar" },
-        { title: "Tabs", url: "/tabs" },
-        { title: "Textarea", url: "/textarea" },
-        { title: "Toggle", url: "/toggle" },
+        { title: "Button", url: "#button" },
+        { title: "Card", url: "#card" },
+        { title: "Checkbox", url: "#checkbox" },
+        { title: "Input", url: "#input" },
+        { title: "Menu", url: "#menu" },
+        { title: "Radio", url: "#radio" },
+        { title: "Select", url: "#select" },
+        { title: "Sidebar", url: "#sidebar" },
+        { title: "Tabs", url: "#tabs" },
+        { title: "Textarea", url: "#textarea" },
+        { title: "Toggle", url: "#toggle" },
       ],
     },
     {
       title: "Layout Components",
       items: [
-        { title: "Cards", url: "/cards" },
-        { title: "Grid", url: "/grid" },
-        { title: "Page", url: "/page" },
-        { title: "Sidebar", url: "/sidebar" },
+        { title: "Cards", url: "#cards" },
+        { title: "Grid", url: "#grid" },
+        { title: "Page", url: "#page" },
+        { title: "Sidebar", url: "#sidebar" },
       ],
     },
     {
       title: "Advanced Components",
       items: [
-        { title: "Accordion", url: "/accordion" },
-        { title: "Dialog", url: "/dialog" },
-        { title: "Drawer", url: "/drawer" },
-        { title: "Modal", url: "/modal" },
-        { title: "Popover", url: "/popover" },
-        { title: "Tooltip", url: "/tooltip" },
+        { title: "Accordion", url: "#accordion" },
+        { title: "Dialog", url: "#dialog" },
+        { title: "Drawer", url: "#drawer" },
+        { title: "Modal", url: "#modal" },
+        { title: "Popover", url: "#popover" },
+        { title: "Tooltip", url: "#tooltip" },
       ],
     },
   ];
   let right: boolean = false;
 </script>
 
-<h1>Contain Component Library</h1>
+<Bar>
+  <div />
+  <h1><em>Contain</em> Component Library</h1>
+  <a style:color="var(--body-fg)" href="https://tomhinkle.net">by Tom Hinkle</a>
+</Bar>
 <Page {right}>
   <Sidebar slot="sidebar" {right}>
     <MenuList>
@@ -70,7 +91,9 @@
           <h2>{category.title}</h2>
           {#each category.items as item}
             <li>
-              <a href={item.url}>{item.title}</a>
+              <a class:active={hash === item.url} href={item.url}
+                >{item.title}</a
+              >
             </li>
           {/each}
         {/each}
@@ -191,37 +214,19 @@
       <p slot="smallerThan">This text is for large and below!</p>
     </ResponsiveText>
   </div>
-  <TextLayout>
+  <div id="typography">
     <h2>Typography</h2>
-    <p>Here is some basic text layout.</p>
-    <p>
-      Our core text-layout styles assume we define a body font size, a body
-      font, and so on and so forth. Vital to our layout is the definition of <code
-        >--line-width</code
-      >, <code>--line-height</code>
-      and <code>body-font-family</code>
-      and <code>text-size</code> values that work harmoniously together.
-    </p>
-    <p>
-      We also support <q>basic quotations.</q>
-    </p>
-
-    <div>
-      <Button>Simple button</Button>
-      <Button
-        >Icon Button
-        <span slot="icon">*</span>
-      </Button>
-      <Button center={true}>Centered Button</Button>
-      <div>
-        <Checkbox>Use Checkboxes</Checkbox>
-        <Checkbox>Cool Beans</Checkbox>
-      </div>
-    </div>
-    <p>
-      Here is another paragraph just to see what happens with some more content
-      along the bottom of the page and if it affects the layout of the
-      checkboxes and such.
-    </p>
-  </TextLayout>
+    <TypographyDemo />
+  </div>
+  <h2>Layout</h2>
+  <div id="bar">
+    <BarDemo />
+  </div>
+  <h2>Components</h2>
+  <div id="button">
+    <ButtonDemo />
+  </div>
+  <div id="checkbox">
+    <CheckboxDemo />
+  </div>
 </Page>
