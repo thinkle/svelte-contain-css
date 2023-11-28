@@ -41,8 +41,16 @@
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
 }
 
+@mixin box-props-square($prefixes...) {
+  box-sizing: border-box;
+  border: var-with-fallbacks(--border, $prefixes...);
+  padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  border-radius: var-with-fallbacks(--square-radius, append($prefixes, 0)...);
+}
+
 @mixin box-props($prefixes...) {
   // Using the var-with-fallbacks function for each property
+  box-sizing: border-box;
   border: var-with-fallbacks(--border, $prefixes...);
   padding: var-with-fallbacks(--padding, append($prefixes,4px)...);  
   border-radius: var-with-fallbacks(--border-radius, append($prefixes,none)...);
@@ -50,6 +58,7 @@
 
 @mixin box-props-bottom ($prefixes...) {
   // Using the var-with-fallbacks function for each property
+  box-sizing: border-box;
   border: var-with-fallbacks(--border, $prefixes...);
   padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
   border-bottom-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
@@ -57,6 +66,7 @@
 }
 @mixin box-props-top ($prefixes...) {
   // Using the var-with-fallbacks function for each property
+  box-sizing: border-box;
   border: var-with-fallbacks(--border, $prefixes...);
   padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
   border-top-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
@@ -81,3 +91,15 @@
       transform: var-with-fallbacks(--hover-transform, append($prefixes, translate(var(--space),var(--space)))...);
     }
 }
+
+/* Convenience groupings */
+
+@mixin global-buttons {
+  & :global(a),
+  & :global(button),
+  & :global(input[type="submit"]),
+  & :global(.button) {
+    @content
+  }
+}
+

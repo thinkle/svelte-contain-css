@@ -2,60 +2,35 @@
   <slot />
 </ul>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   .menu {
     list-style: none;
     padding: 0;
     margin: 0;
-    background: var(--menu-bg);
-    color: var(--menu-fg);
-  }
-  .menu :global(a),
-  .menu :global(button),
-  .menu :global(.button),
-  .menu :global(input[type="submit"]) {
-    display: grid;
-    width: 100%;
-    box-sizing: border-box;
-    padding: var(--pad);
-    text-decoration: none;
-    color: var(--menu-fg);
-    background: var(--menu-bg);
-    transition: all var(--menu-transition);
-    border: var(--menu-item-border);
+    @include color-props(menu, container);
   }
 
-  .menu :global(li:nth-child(even) a),
-  .menu :global(li:nth-child(even) button),
-  .menu :global(li:nth-child(even) .button),
-  .menu :global(li:nth-child(even) input[type="submit"]) {
-    display: grid;
-    width: 100%;
-    box-sizing: border-box;
-    padding: var(--pad);
-    text-decoration: none;
-    color: var(--menu-even-fg);
-    background: var(--menu-even-bg);
-  }
+  .menu {
+    @include global-buttons {
+      display: grid;
+      width: 100%;
+      text-decoration: none;
+      @include typography-props(menu-item, button, ui);
+      @include color-props(menu-item, button);
+      @include box-props-square(menu-item, button);
+      @include clickable(menu-item, button);
+    }
 
-  .menu :global(a:hover),
-  .menu :global(button:hover),
-  .menu :global(.button:hover),
-  .menu :global(input[type="submit"]:hover) {
-    filter: var(--menu-hover-filter);
-    transform: var(--menu-hover-transform);
-  }
-  .menu :global(a:active),
-  .menu :global(button:active),
-  .menu :global(.button:active),
-  .menu :global(input[type="submit"]:active) {
-    filter: var(--menu-active-filter);
-    transform: var(--menu-active-transform);
-  }
+    & :global(li:nth-child(odd)) {
+      @include global-buttons {
+        @include color-props(menu-item-even, stripe, menu-item, button);
+      }
+    }
 
-  .menu :global(li a.active),
-  .menu :global(li:nth-child(even) a.active) {
-    background: var(--menu-current-bg) !important;
-    color: var(--menu-current-fg) !important;
+    & :global(li:nth-child(even)) :global(.active),
+    :global(li:nth-child(odd)) :global(.active) {
+      @include color-props(menu-item-active, primary, menu-item, button);
+    }
   }
 </style>
