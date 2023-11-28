@@ -7,11 +7,13 @@
   <slot />
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   .grid-layout {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--gap);
+    /*@include box-props(grid-layout);*/
+    gap: var-with-fallbacks(--gap, grid-layout, 8px);
   }
 </style>

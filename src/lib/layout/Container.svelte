@@ -15,14 +15,13 @@
   }
   section {
     margin: auto;
-    max-width: var(--container-max-width);
+    max-width: var-with-fallbacks(--max-width, container, block);
     box-sizing: border-box;
-
     padding: var(--pad);
-    @include color-props(container);
-    border: var(--container-border);
-    margin-top: var(--container-margin);
-    margin-bottom: var(--container-margin);
+    @include color-props(container, block);
+    @include box-props(container, block);
+    margin-top: var-with-fallbacks(--margin, container, block, var(--gap));
+    margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
     container-type: inline-size;
   }
   .border {
