@@ -40,6 +40,7 @@
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;
+    overflow: hidden;
   }
   aside .content {
     @include color-props(sidebar, container);
