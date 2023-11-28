@@ -1,10 +1,30 @@
-<script>
+<script lang="ts">
+  import { injectVars } from "$lib/util";
   export let primary = false;
   export let warning = false;
   let iconSlotted = $$slots.icon;
+  export let bg: string | null = null;
+  export let fg: string | null = null;
+  export let padding: string | null = null;
+  export let width: string | null = null;
+  export let height: string | null = null;
+
+  let cssVars = injectVars($$props, "button", [
+    "bg",
+    "fg",
+    "padding",
+    "width",
+    "height",
+  ]);
 </script>
 
-<button on:click class:primary class:warning class:has-icon={iconSlotted}>
+<button
+  style={cssVars}
+  on:click
+  class:primary
+  class:warning
+  class:has-icon={iconSlotted}
+>
   <span class="content"><slot /></span>
   <span class:hidden={!iconSlotted} class="icon"><slot name="icon" /></span>
 </button>
@@ -17,15 +37,10 @@
     gap: var(--space);
   }
   button {
+    width: var(--button-width);
+    height: var(--button-height);
     @include box-props(button, control, secondary);
     @include color-props(button, control, secondary);
-    /* padding: var(--button-pad);
-    border-radius: var(--button-radius);
-    background: var(--button-bg);
-    color: var(--button-fg); */
-    /* transition:
-      transform var(--button-transition),
-      filter var(--button-transition); */
     font-family: var(--button-font);
     @include clickable(button, clickable);
     margin: var-with-fallbacks(--margin, button, control, var(--space));

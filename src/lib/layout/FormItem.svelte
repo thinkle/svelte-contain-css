@@ -19,9 +19,9 @@
   label {
     display: flex;
     align-items: var(--form-label-align, baseline);
-    gap: var-with-fallbacks(--gap, form-label-horizontal, var(--pad));
-    padding-top: var(--pad, form-item, 8px);
-    padding-bottom: var(--pad, form-item, 8px);
+    gap: var(--form-label-horizontal-gap, var(--padding));
+    padding-top: var(--padding, form-item, 8px);
+    padding-bottom: var(--padding, form-item, 8px);
     @include typography-props(form-item, ui);
     box-sizing: border-box;
   }
@@ -46,7 +46,7 @@
   @container (max-width: 400px) {
     label {
       flex-direction: column;
-      gap: var(form-label-vertical-gap, --space);
+      gap: var(--form-label-vertical-gap, var(--space));
     }
     .label {
       width: auto;

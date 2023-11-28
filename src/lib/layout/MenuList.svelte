@@ -1,4 +1,32 @@
-<ul class="menu">
+<script lang="ts">
+  import { injectVars } from "$lib/util";
+  export let fg: string | null = null;
+  export let bg: string | null = null;
+  export let itemPadding: string | null = null;
+  export let itemWidth: string | null = null;
+  export let itemHeight: string | null = null;
+  export let itemFg: string | null = null;
+  export let itemBg: string | null = null;
+  export let itemEvenFg: string | null = null;
+  export let itemEvenBg: string | null = null;
+  export let itemActiveFg: string | null = null;
+  export let itemActiveBg: string | null = null;
+  let style = injectVars($$props, "menu", [
+    "fg",
+    "bg",
+    "itemPadding",
+    "itemWidth",
+    "itemHeight",
+    "itemFg",
+    "itemBg",
+    "itemEvenFg",
+    "itemEvenBg",
+    "itemActiveFg",
+    "itemActiveBg",
+  ]);
+</script>
+
+<ul {style} class="menu">
   <slot />
 </ul>
 
@@ -14,7 +42,8 @@
   .menu {
     @include global-buttons {
       display: grid;
-      width: 100%;
+      width: var(--menu-item-width, 100%);
+      height: var(--menu-item-height);
       text-decoration: none;
       @include typography-props(menu-item, button, ui);
       @include color-props(menu-item, button);
@@ -22,14 +51,14 @@
       @include clickable(menu-item, button);
     }
 
-    & :global(li:nth-child(odd)) {
+    & :global(li:nth-of-type(even)) > {
       @include global-buttons {
         @include color-props(menu-item-even, stripe, menu-item, button);
       }
     }
 
-    & :global(li:nth-child(even)) :global(.active),
-    :global(li:nth-child(odd)) :global(.active) {
+    & :global(li:nth-of-type(even)) :global(.active),
+    :global(li:nth-of-type(odd)) :global(.active) {
       @include color-props(menu-item-active, primary, menu-item, button);
     }
   }

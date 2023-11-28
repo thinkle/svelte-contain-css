@@ -1,11 +1,31 @@
 <script lang="ts">
+  import { injectVars } from "./util";
+
   export let center: boolean = false;
   export let fixedHeight = false;
+  export let bg: string | null = null;
+  export let fg: string | null = null;
+  export let padding: string | null = null;
+  export let width: string | null = null;
+  export let height: string | null = null;
+
+  let cssVars = injectVars($$props, "card", [
+    "bg",
+    "fg",
+    "padding",
+    "width",
+    "height",
+  ]);
+
+  $: if (height) {
+    fixedHeight = true;
+  }
+
   let hasHeader = $$slots.header;
   let hasFooter = $$slots.footer;
 </script>
 
-<div class="card" class:center class:fixedHeight>
+<div class="card" class:center class:fixedHeight style={cssVars}>
   <header class:hide={!hasHeader}>
     <slot name="header" />
   </header>
@@ -25,18 +45,24 @@
     @include box-shadow(card, container);
     @include color-props(card, container);
     border-radius: var-with-fallbacks(--border-radius, card, container, 0);
+    border: var-with-fallbacks(
+      --border,
+      card,
+      container,
+      var(--border-width) var(--border-style) var(--border-color)
+    );
     display: flex;
     flex-direction: column;
   }
   .card section {
-    flex-grow: grow;
+    flex-grow: 1;
   }
   @container (max-width: 600px) {
     .card {
       --w: var(--card-width-small);
       --h: var(--card-height-small);
       --font-size: 0.8em;
-      --sidebar-width: calc(var(--card-width-small) - var(--pad) * 2);
+      --sidebar-width: calc(var(--card-width-small) - var(--padding) * 2);
     }
   }
   @container (min-width: 1921px) {
@@ -70,7 +96,7 @@
 
   header,
   section {
-    padding: var(--pad);
+    padding: var(--padding);
     border-top-right-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     border-bottom: var(--card-header-border);

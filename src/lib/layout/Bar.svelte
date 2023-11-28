@@ -1,4 +1,31 @@
-<div class="bar">
+<script lang="ts">
+  import { injectVars } from "$lib/util";
+  export let bg: string | null = null;
+  export let fg: string | null = null;
+  export let padding: string | null = null;
+  export let width: string | null = null;
+  export let height: string | null = null;
+  export let justify:
+    | "center"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+    | "start"
+    | "end"
+    | null = null;
+  export let align: "center" | "start" | "end" | "stretch" | null = null;
+  let style = injectVars($$props, "bar", [
+    "bg",
+    "fg",
+    "padding",
+    "width",
+    "height",
+    "justify",
+    "align",
+  ]);
+</script>
+
+<div class="bar" {style}>
   <slot />
 </div>
 
@@ -20,7 +47,7 @@
     display: flex;
     align-items: var(--bar-align, center);
     justify-content: var(--bar-justify, space-between);
-    padding: var-with-fallbacks(--pad, bar, 8px);
+    padding: var-with-fallbacks(--padding, bar, 8px);
     border-bottom: var(
       --bar-border-bottom,
       var-with-fallbacks(--border-width, bar, 1px)

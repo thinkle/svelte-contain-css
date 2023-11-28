@@ -1,8 +1,16 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
+  import { injectVars } from "$lib/util";
+
+  export let width: string | null = null;
+  export let bg: string | null = null;
+  export let fg: string | null = null;
 
   export let right = false;
   export let left = true;
+
+  let style = injectVars($$props, "sidebar", ["bg", "fg", "width"]);
+
   let expandedHamburger = false;
   let expandedBar = true;
 </script>
@@ -13,6 +21,7 @@
   class:left
   class:expandedHamburger
   class:expandedBar
+  {style}
 >
   <button
     class:expander={!expandedHamburger}
@@ -168,7 +177,7 @@
       background: transparent;
       pointer-events: none;
       transition: transform var(--sidebar-transition) ease-in-out;
-      padding: var(--pad);
+      padding: var(--padding);
     }
     aside.left > .content {
       border-right: var(--border-width) var(--border-style) var(--border-color);
@@ -193,8 +202,8 @@
       pointer-events: all;
       display: block;
       position: absolute;
-      top: var(--pad);
-      left: calc(-1 * var(--pad));
+      top: var(--padding);
+      left: calc(-1 * var(--padding));
 
       border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-left-radius: 0;
@@ -206,7 +215,9 @@
       @include clickable(mini-button, button, control);
     }
     aside > button.close {
-      left: calc(var(--sidebar-width) - var(--icon-size, 32px) + var(--pad));
+      left: calc(
+        var(--sidebar-width) - var(--icon-size, 32px) + var(--padding)
+      );
       border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -223,8 +234,8 @@
     }
     aside .content {
       position: absolute;
-      --top: calc(var(--pad) + var(--icon-size));
-      left: var(--pad);
+      --top: calc(var(--padding) + var(--icon-size));
+      left: var(--padding);
       width: var(--sidebar-width);
       background: var(--sidebar-bg);
       color: var(--sidebar-fg);
