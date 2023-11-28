@@ -33,15 +33,16 @@
   </label>
 </aside>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   aside {
+    @include color-props(sidebar, container);
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;
   }
   aside .content {
-    background: var(--sidebar-bg);
-    color: var(--sidebar-fg);
+    @include color-props(sidebar, container);
     width: var(--sidebar-width);
     height: 100%;
     overflow-y: auto;
@@ -49,10 +50,18 @@
     box-sizing: border-box;
   }
   .right {
-    border-left: var(--border-width) var(--border-style) var(--border-color);
+    border-left: var-with-fallbacks(
+      --border,
+      sidebar,
+      var(--border-width) var(--border-style) var(--border-color)
+    );
   }
   .left {
-    border-right: var(--border-width) var(--border-style) var(--border-color);
+    border-right: var-with-fallbacks(
+      --border,
+      sidebar,
+      var(--border-width) var(--border-style) var(--border-color)
+    );
   }
 
   /* Expander doo-dad */
@@ -171,6 +180,7 @@
       height: 100%;
       opacity: 1;
       pointer-events: all;
+      @include color-props(sidebar, container);
     }
 
     aside > button {
@@ -184,27 +194,27 @@
       position: absolute;
       top: var(--pad);
       left: calc(-1 * var(--pad));
-      background: var(--mini-button-bg);
-      color: var(--mini-button-fg);
-      border-radius: var(--mini-button-radius);
+
+      border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border: var(--mini-button-border);
-      width: var(--icon-size);
-      height: var(--icon-size);
+      width: var(--icon-size, 32px);
+      height: var(--icon-size, 32px);
+      @include color-props(mini-button, button, control, secondary);
+      @include clickable(mini-button, button, control);
     }
     aside > button.close {
-      left: calc(var(--sidebar-width) - 2 * var(--pad));
-      --mini-button-hover-bg: #3333;
-      --mini-button-hover-fg: #222;
-      border-top-left-radius: 50%;
-      border-bottom-left-radius: 50%;
+      left: calc(var(--sidebar-width) - var(--icon-size, 32px) + var(--pad));
+      border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
-    aside > button:hover {
+    /* aside > button:hover {
       background: var(--mini-button-hover-bg);
       color: var(--mini-button-hover-fg);
-    }
+    } */
 
     aside {
       width: calc(var(--gap) + var(--icon-size));
@@ -221,13 +231,13 @@
     }
   }
   button.expander::after {
-    content: var(--sidebar-expand);
+    content: var(--sidebar-expand, "»");
   }
   button.close::after {
-    content: var(--sidebar-collapse);
+    content: var(--sidebar-collapse, "«");
   }
   .right button::after {
     display: inline-block;
-    transform: var(--mirror-sidebar-icons);
+    transform: var(--mirror-sidebar-icons, scaleX(-1));
   }
 </style>
