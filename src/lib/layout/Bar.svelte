@@ -2,15 +2,13 @@
   <slot />
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
+
   :root {
     --bar-align: center; /* Align items vertically */
     --bar-justify: space-between; /* Distribute items along the line */
-    --bar-pad: var(--pad); /* Padding inside the bar */
-    --bar-gap: var(--gap);
-    --bar-border-bottom: var(--border-width) var(--border-style)
-      var(--border-color);
-    --bar-border-top: none;
+
     --bar-margin-bottom: var(--gap);
     --bar-height: 3rem;
     --bar-min-height: var(--bar-height);
@@ -20,18 +18,27 @@
 
   .bar {
     display: flex;
-    align-items: var(--bar-align);
-    justify-content: var(--bar-justify);
-    padding: var(--bar-pad);
-    border-top: var(--bar-border-top);
-    border-bottom: var(--bar-border-bottom);
+    align-items: var(--bar-align, center);
+    justify-content: var(--bar-justify, space-between);
+    padding: var-with-fallbacks(--pad, bar, 8px);
+    border-bottom: var(
+      --bar-border-bottom,
+      var-with-fallbacks(--border-width, bar, 1px)
+        var-with-fallbacks(--border-style, bar, 1px)
+        var-with-fallbacks(--border-color, bar, 1px)
+    );
+    border-top: var(
+      --bar-border-top,
+      var-with-fallbacks(--border-width, bar, 1px)
+        var-with-fallbacks(--border-style, bar, 1px)
+        var-with-fallbacks(--border-color, bar, 1px)
+    );
     margin-bottom: var(--bar-margin-bottom);
     min-height: var(--bar-min-height);
     height: var(--bar-height);
     max-height: var(--bar-max-height);
-    background-color: var(--bar-bg);
-    color: var(--bar-fg);
-    gap: var(--bar-gap);
+    @include color-props(bar, container);
+    gap: var-with-fallbacks(--gap, bar, 8px);
     /* Add other styles like background, border, etc., as needed */
   }
 

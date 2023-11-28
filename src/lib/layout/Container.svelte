@@ -6,7 +6,8 @@
   <slot />
 </section>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   :root {
     --container-max-width: 900px;
     --container-border: none;
@@ -16,9 +17,9 @@
     margin: auto;
     max-width: var(--container-max-width);
     box-sizing: border-box;
+
     padding: var(--pad);
-    background-color: var(--body-bg);
-    color: var(--body-fg);
+    @include color-props(container);
     border: var(--container-border);
     margin-top: var(--container-margin);
     margin-bottom: var(--container-margin);

@@ -13,29 +13,22 @@
   </span>
 </label>
 
-<style>
-  :root {
-    --form-label-width: 22em;
-    --form-input-width: auto;
-    --form-item-pad: var(--pad);
-    --form-item-pad: var(--pad);
-    --form-label-horizontal-gap: var(--pad);
-    --form-label-vertical-gap: var(--space);
-  }
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
 
   label {
     display: flex;
-    align-items: baseline;
-    gap: var(--form-label-horizontal-gap);
-    padding-top: var(--form-item-pad);
-    padding-bottom: var(--form-item-pad);
-    font-family: var(--ui-font);
+    align-items: var(--form-label-align, baseline);
+    gap: var-with-fallbacks(--gap, form-label-horizontal, var(--pad));
+    padding-top: var(--pad, form-item, 8px);
+    padding-bottom: var(--pad, form-item, 8px);
+    @include typography-props(form-item, ui);
     box-sizing: border-box;
   }
   .label {
     box-sizing: border-box;
-    width: var(--form-label-width);
-    text-align: right;
+    width: var(--form-label-width, 22em);
+    text-align: var(--form-label-text-align, right);
   }
   .input {
     box-sizing: border-box;
@@ -53,7 +46,7 @@
   @container (max-width: 400px) {
     label {
       flex-direction: column;
-      gap: var(--form-label-vertical-gap);
+      gap: var(form-label-vertical-gap, --space);
     }
     .label {
       width: auto;
@@ -68,10 +61,7 @@
   /* Global Input Styles */
   .globalInputStyles :global(input),
   .globalInputStyles :global(button) {
-    font-family: var(--ui-font);
-    width: var(--input-width);
-    padding: var(--input-padding);
-    border: var(--input-border);
-    border-radius: var(--input-radius);
+    @include typography-props(form-input, input, ui);
+    @include box-props(form-input, input, ui);
   }
 </style>

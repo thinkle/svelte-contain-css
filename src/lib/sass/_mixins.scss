@@ -1,0 +1,77 @@
+@function var-with-fallbacks($base-var, $args...) {
+  // Remove the initial -- from the base variable for concatenation purposes
+  $base-var-name: str-slice($base-var, 3);
+  $fallback : nth($args,length($args));
+
+  // Initialize the result with the final fallback value
+  $result: var($base-var,$fallback);
+
+  // Iterate through the prefixes in reverse order
+  @for $i from length($args)-1 through 1 {
+    $prefix: nth($args,$i);
+    // Construct the variable name by concatenating the prefix and base variable name
+    // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
+    $prefixed-var: unquote('--#{$prefix}-#{$base-var-name}');
+    // Nest the current prefixed variable as a fallback to the current result
+    $result: var(#{$prefixed-var}, #{$result});
+  }
+
+  // Return the final CSS var() function with all fallbacks
+  // e.g., var(--card-bg, var(--container-bg, var(--bg, white)))
+  @return #{$result};
+}
+
+@mixin color-props ($prefixes...) {
+  background: var-with-fallbacks(--bg, append($prefixes,white)...);
+  color: var-with-fallbacks(--fg, append($prefixes,black)...);
+  //text-shadow: var-with-fallbacks(--text-shadow,append($prefixes,#0000));
+}
+
+@mixin typography-props ($prefixes...) {
+  font-family: var-with-fallbacks(--font-family, append($prefixes, sans-serif)...);
+  font-size: var-with-fallbacks(--font-size, append($prefixes, 16px)...);
+  font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
+  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
+  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
+}
+
+@mixin box-props($prefixes...) {
+  // Using the var-with-fallbacks function for each property
+  border: var-with-fallbacks(--border, $prefixes...);
+  padding: var-with-fallbacks(--padding, append($prefixes,4px)...);  
+  border-radius: var-with-fallbacks(--border-radius, append($prefixes,none)...);
+}
+
+@mixin box-props-bottom ($prefixes...) {
+  // Using the var-with-fallbacks function for each property
+  border: var-with-fallbacks(--border, $prefixes...);
+  padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  border-bottom-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
+  border-bottom-left-radius: var-with-fallbacks(--border-radius, $prefixes...);
+}
+@mixin box-props-top ($prefixes...) {
+  // Using the var-with-fallbacks function for each property
+  border: var-with-fallbacks(--border, $prefixes...);
+  padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  border-top-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
+  border-top-left-radius: var-with-fallbacks(--border-radius, $prefixes...);
+}
+
+@mixin box-shadow($prefixes...) {
+  --shadow-distance: var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...);
+  --shadow-color: var-with-fallbacks(--shadow-color, append($prefixes, #4444)...);
+  box-shadow: var(--shadow-distance) var(--shadow-distance) 0 var(--shadow-color);
+}
+
+@mixin clickable($prefixes...) {
+  cursor: pointer;
+  transition: filter,transform var-with-fallbacks(--transition,button,control,300ms);
+  &:hover {
+    filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.1))...);
+    transform: var-with-fallbacks(--hover-transform, append($prefixes, none)...);
+  }
+  &:active {
+      filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(0.9))...);
+      transform: var-with-fallbacks(--hover-transform, append($prefixes, translate(var(--space),var(--space)))...);
+    }
+}

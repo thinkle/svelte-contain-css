@@ -9,27 +9,8 @@
   --inactive-fg: var(--material-color-grey-900);
   --bg: #1a1a1a;
   --fg: #fffcfe;
-  --body-bg: var(--bg);
-  --body-fg: var(--fg);
-  --card-bg: var(--material-color-grey-700);
-  --card-fg: #fffcfe;
-  --card-header-bg: var(--material-color-grey-800);
-  --card-header-fg: white;
-  --sidebar-bg: var(--white);
-  --sidebar-fg: var(--black);
   --shadow-color: #eeeeee0f;
   --border-color: #e9e9e9;
-  /* Buttons and UI */
-  --mini-button-bg: var(--body-bg);
-  --mini-button-fg: var(--body-fg);
-  --mini-button-hover-bg: #fff3;
-  --mini-button-hover-fg: inherit;
-  --mini-button-radius: 50%;
-  --mini-button-border: none;
-  --menu-bg: var(--material-color-grey-100);
-  --menu-fg: var(--black);
-  --menu-even-bg: var(--material-color-grey-200);
-  --menu-even-fg: var(--black);
 }
 
 /* Color definitions */
