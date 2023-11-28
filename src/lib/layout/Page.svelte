@@ -1,5 +1,5 @@
 <script>
-  export let right;
+  export let right = false;
 </script>
 
 <section class="page" class:right>
