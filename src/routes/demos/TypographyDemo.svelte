@@ -162,7 +162,7 @@
         which is unset by default (since our default headings don't have a
         background color). I recommend trying one of the existing spacing
         utility variables such as
-        <code>var(--pad)</code> or <code>var(--gap)</code>
+        <code>var(--padding)</code> or <code>var(--gap)</code>
         or <code>var(--space)</code> to make sure the space around the heading will
         harmonize with space elsewhere in your interface.
       </p>

@@ -73,7 +73,7 @@
       name: "--button-pad",
       type: "text",
       placeholder: "16px 8px 8px 16px",
-      defaultValue: "var(--pad)",
+      defaultValue: "var(--padding)",
       unit: "",
     },
   ];
