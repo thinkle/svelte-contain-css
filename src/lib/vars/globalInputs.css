@@ -1,6 +1,0 @@
-:root {
-  --input-width: auto;
-  --input-padding: var(--pad) var(--space) var(--pad) var(--space);
-  --input-border: var(--border-width) var(--border-style) var(--border-color);
-  --input-radius: 0;
-}
