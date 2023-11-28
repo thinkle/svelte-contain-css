@@ -1,8 +1,3 @@
-/* let cssVariableInjetion = injectVars(
-    $$props,
-    ['bg', 'fg', 'padding', 'cardWidth', 'cardHeight'],    
-  ) */
-
 export function injectVars(
   props: { [key: string]: string },
   prefix: string,
