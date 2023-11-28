@@ -6,6 +6,12 @@
   // Initialize the result with the final fallback value
   $result: var($base-var,$fallback);
 
+  // Check if only one argument (apart from $base-var) is provided
+  @if length($args)==1 {
+    // Only one argument means it's the fallback value
+    @return var(#{$base-var}, #{$fallback});
+  }
+
   // Iterate through the prefixes in reverse order
   @for $i from length($args)-1 through 1 {
     $prefix: nth($args,$i);
