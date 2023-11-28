@@ -19,6 +19,9 @@
   import Slider from "$lib/controls/Slider.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
+  import Button from "$lib/controls/Button.svelte";
+  import Code from "$lib/misc/Code.svelte";
+  import Hero from "$lib/layout/Hero.svelte";
   let hash: string = "";
   const updateHash = () => {
     hash = window.location.hash;
@@ -105,30 +108,67 @@
       </li>
     </MenuList>
   </Sidebar>
-
+  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+    <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
+    <p>
+      The Simple Svelte Component Library designed to make optimal use of css
+      variables & container queries to make your life easy.
+    </p>
+  </Hero>
   <GridLayout>
-    <Card center={true}>
-      <p>Welcome to my new component library!</p>
-    </Card>
     <Card>
       <h2 slot="header">Simple Components</h2>
       <p>
         Presenting the simple components you would expect to see in any modern
         component library.
       </p>
+      <p>
+        Using svelte components is easy and supports a number of intuitive
+        properties, such as:
+      </p>
+      <br /><code
+        >&lt;Button bg="green" fg="white" width="64px"
+        height="64px"&gt;Wow&lt;/Button&gt;</code
+      >
+      <br />Which produces:
+      <Button bg="green" fg="white" width="64px" height="64px">Wow</Button>
     </Card>
-    <Card --card-bg="var(--material-color-purple)">
+    <Card>
       <h2 slot="header">CSS Variables</h2>
       <p>
-        We use simple CSS variables to adjust styles, which have the advantage
-        of being easy to override and cascading down through the DOM, regardless
-        of your other design choices.
+        Our shorthand properties like bg and fg are just syntactic sugar for CSS
+        variables scoped to components, like <code>--card-bg</code> and
+        <code>--button-width</code>.
       </p>
       <p>
-        This card has a purple background, but you can change it by setting the <code
-          >--card-bg</code
-        > CSS variable on the card.
+        Because we use CSS variables, you can inject variables wherever you like
+        in your component heirarchy, as in this nav bar with custom buttons:
       </p>
+      <code>
+        &lt;Bar --bar-bg="#333"
+        <br />&nbsp;&nbsp;--button-bg="#333"
+        <br />&nbsp;&nbsp;--button-fg="#eee"
+        <br />&nbsp;&nbsp;--button-height="3rem"
+        <br />&gt;
+        <br />
+        &nbsp;&nbsp;&lt;Button&gt;Home&lt;/Button&gt;
+        <br />
+        &nbsp;&nbsp;&lt;Button&gt;About&lt;/Button&gt;
+        <br />
+        &nbsp;&nbsp;&lt;Button&gt;Contact&lt;/Button&gt;
+        <br />
+        &lt;/Bar&gt;
+      </code>
+      <Bar
+        --bar-bg="#333"
+        --button-bg="#333"
+        --button-fg="#eee"
+        --button-height="3rem"
+      >
+        <Button>Home</Button>
+        <Button>About</Button>
+        <Button>Contact</Button>
+      </Bar>
     </Card>
     <Card fixedHeight={true}>
       <h2 slot="header">Container Queries</h2>

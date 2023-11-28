@@ -28,7 +28,7 @@
     height: var(--height, 100vh);
     box-sizing: border-box;
     gap: var(--column-gap);
-    padding: var(--pad);
+    padding: var(--padding);
   }
   .page.right {
     flex-direction: row-reverse;

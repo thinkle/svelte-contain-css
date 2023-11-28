@@ -9,12 +9,12 @@ body {
   --space-md: calc(var(--space) * 2);
   --space-lg: calc(var(--space-md) * 2);
   --space-xl: calc(var(--space-xl) * 2);
-  --pad: calc(var(--space) * 4);
-  --gap: calc(var(--pad) * 2);
+  --padding: calc(var(--space) * 4);
+  --gap: calc(var(--padding) * 2);
   --shadow-distance: var(--space-md);
   --column-gap: var(--gap);
   --row-gap: var(--gap);
-  --grab-bar-width: var(--pad);
+  --grab-bar-width: var(--padding);
   --border-radius: 8px;
   --border-style: solid;
   --border-width: 1px;
