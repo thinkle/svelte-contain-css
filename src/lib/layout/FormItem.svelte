@@ -62,6 +62,6 @@
   .globalInputStyles :global(input),
   .globalInputStyles :global(button) {
     @include typography-props(form-input, input, ui);
-    @include box-props(form-input, input, ui);
+    @include box-props-square(form-input, input, ui);
   }
 </style>
