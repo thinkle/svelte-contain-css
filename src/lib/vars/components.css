@@ -1,15 +1,4 @@
-/* Icons */
-:root {
-  --sidebar-expand: "»";
-  --sidebar-collapse: "«";
-  --mirror-sidebar-icons: scaleX(-1);
-}
 
-/* Component styling */
-:root {
-  /* Checkbox */
 
-  --menu-item-border: none;
-  --menu-current-bg: var(--primary-bg);
-  --menu-current-fg: var(--primary-fg);
-}
+
+
