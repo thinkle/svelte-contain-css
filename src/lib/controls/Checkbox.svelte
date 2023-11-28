@@ -18,27 +18,33 @@
 <span class="offscreen" bind:clientWidth={labelWidth}>{@html labelContent}</span
 >
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
+
   :root {
-    --checkbox-size: var(--font-size);
+    /*   --checkbox-size: var(--font-size);
     --checkbox-bg: var(--inactive-bg);
     --checkbox-fg: var(--inactive-fg);
     --checkbox-checked-bg: var(--primary-bg);
     --checkbox-checked-fg: var(--primary-fg);
     --checkbox-border: 1px solid var(--white);
-    --checkbox-checked-border: 1px solid var(--white);
+    --checkbox-checked-border: 1px solid var(--white); */
     --checkbox-check: "✓";
   }
 
   .offscreen,
   label {
-    font-family: var(--ui-font-family);
-    font-size: var(--font-size);
+    @include typography-props(checkbox, ui);
   }
 
   .offscreen {
     visibility: hidden;
-    font-weight: var(--checked-weight);
+    font-weight: var-with-fallbacks(
+      --weight,
+      checkbox-checked,
+      checked,
+      active
+    );
     position: absolute;
   }
 
@@ -55,14 +61,19 @@
     transform: var(--checkbox-hover-transform);
   }
   label:has(:global(*:active)) {
-    filter: var(--checkbox-active-filter);
-    transform: var(--checkbox-active-transform);
+    filter: var-with-fallbacks(--active-filter, checkbox, control);
+    transform: var-with-fallbacks(--active-transform, checkbox, control);
   }
   label span {
     width: var(--label-width);
   }
   label:has(input:checked) {
-    font-weight: var(--checked-weight);
+    font-weight: var-with-fallbacks(
+      --weight,
+      checkbox-checked,
+      checked,
+      active
+    );
   }
 
   input {
@@ -70,29 +81,35 @@
   }
   label::before {
     margin-right: var(--space);
-    transition: all var(--checkbox-transition);
+    transition: all var-with-fallbacks(--transition, checkbox, control);
     display: inline-grid;
     place-content: center;
     content: " ";
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
-    background: var(--checkbox-bg);
-    color: var(--checkbox-checked-fg);
-    border: var(--checkbox-border);
+    width: var-with-fallbacks(--size, checkbox, font, 1em);
+    height: var-with-fallbacks(--size, checkbox, font, 1em);
+    /* background: var(--checkbox-bg);
+    color: var(--checkbox-checked-fg); */
+    @include color-props(checkbox, secondary);
+    border: var-with-fallbacks(
+      --border,
+      checkbox,
+      1px solid var(--border-color)
+    );
     box-sizing: border-box;
   }
   label:has(input:checked)::before {
-    background: var(--checkbox-checked-bg);
-    color: var(--checkbox-checked-fg);
-    border: var(--checkbox-checked-border);
+    @include color-props(checkbox-checked, primary, checkbox);
+    /* background: var(--checkbox-checked-bg);
+    color: var(--checkbox-checked-fg); */
+    border: var-with-fallbacks(--border, checkbox-checked, checkbox);
     box-sizing: border-box;
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
+    width: var-with-fallbacks(--size, checkbox, font, 1em);
+    height: var-with-fallbacks(--size, checkbox, font, 1em);
   }
   label:has(input:checked)::after {
     content: var(--checkbox-check);
-    font-size: var(--checkbox-size);
-    color: var(--checkbox-checked-fg);
+    font-size: var-with-fallbacks(--size, checkbox, font, 1em);
+    color: var-with-fallbacks(--fg, checkbox-checked, checkbox);
     position: absolute;
     left: 0;
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
@@ -104,7 +121,7 @@
       overflow: hidden;
     }
     100% {
-      width: var(--checkbox-size);
+      width: var-with-fallbacks(--size, checkbox, font, 1em);
     }
   }
 </style>

@@ -17,10 +17,14 @@
   </footer>
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   .card {
     --w: var(--card-width);
     --h: var(--card-height);
+    @include box-shadow(card, container);
+    @include color-props(card, container);
+    border-radius: var-with-fallbacks(--border-radius, card, container, 0);
     display: flex;
     flex-direction: column;
   }
@@ -51,11 +55,6 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
-    border-radius: var(--border-radius);
-    background: var(--card-bg);
-    color: var(--card-fg);
-    box-shadow: var(--shadow-distance) var(--shadow-distance) 0
-      var(--shadow-color);
     font-size: var(--font-size);
     font-family: var(--font-family);
   }
@@ -77,20 +76,16 @@
     border-bottom: var(--card-header-border);
   }
   header {
-    background: var(--card-header-bg);
-    color: var(--card-header-fg);
+    @include color-props(card-header, secondary);
+    @include box-props-top(card-header, bar);
     display: flex;
     align-items: center;
-    height: var(--card-header-height);
+    height: var-with-fallbacks(--height, card-header, bar, 2em);
   }
   footer {
-    padding: var(--pad);
-    border-bottom-right-radius: var(--border-radius);
-    border-bottom-left-radius: var(--border-radius);
-    background: var(--card-footer-bg);
-    color: var(--card-footer-fg);
-    border-top: var(--card-footer-border);
-    height: var(--card-footer-height);
+    @include color-props(card-footer, secondary);
+    @include box-props-bottom(card-footer, bar);
+    height: var-with-fallbacks(--height, card-header, bar, 2em);
   }
   .hide {
     display: none;
