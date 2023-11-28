@@ -1,5 +1,6 @@
 <script lang="ts">
   import "$lib/vars/defaults.css";
+
   import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Card from "$lib/Card.svelte";
@@ -17,6 +18,7 @@
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
+  import VariableDemo from "./demos/VariableDemo.svelte";
   let hash: string = "";
   const updateHash = () => {
     hash = window.location.hash;
@@ -146,14 +148,6 @@
         </p>
       </div>
     </Card>
-
-    <h2 slot="header">
-      <ResponsiveText>
-        <span slot="medium">Text that Adapts to Container Size</span>
-        <span slot="small">Adaptable Text</span>
-        <span slot="xs">Resizing!</span>
-      </ResponsiveText>
-    </h2>
     <Card>
       <h2 slot="header">The Adaptable Card</h2>
       <GridLayout --card-width-small="80px">
@@ -170,6 +164,9 @@
       <div slot="footer">We also support a simple card footer</div>
     </Card>
   </GridLayout>
+  <div id="variables">
+    <VariableDemo />
+  </div>
   <!-- <div style="margin:auto">
     <h2>Responsive Content</h2>
     <p>
