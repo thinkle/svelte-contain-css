@@ -9,6 +9,8 @@
   --inactive-fg: var(--material-color-grey-900);
   --bg: #1a1a1a;
   --fg: #fffcfe;
+  --stripe-fg: #eaeaea;
+  --stripe-bg: #3a3a3a;
   --shadow-color: #eeeeee0f;
   --border-color: #e9e9e9;
 }
