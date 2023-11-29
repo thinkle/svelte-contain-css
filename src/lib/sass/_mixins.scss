@@ -95,6 +95,35 @@
     }
 }
 
+@mixin custom-scrollbar($prefixes...) {
+  overflow-y: auto;
+
+  // Customizing the scrollbar
+  &::-webkit-scrollbar {
+    width: var-with-fallbacks(--scrollbar-width, append($prefixes, var(--space-md))...);
+    height: var-with-fallbacks(--scrollbar-height, append($prefixes, var(--gap))...);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--bg))...);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, var(--stripe-bg))...);
+
+    border-radius: var-with-fallbacks(--scrollbar-thumb-radius, append($prefixes, var(--border-radius))...);
+
+    &:hover {
+      background: var-with-fallbacks(--scroll-hover-bg, append($prefixes, var(--secondary-bg))...);
+      
+    }
+  }
+
+  // For Firefox
+  scrollbar-width: var-with-fallbacks(--scrollbar-width, append($prefixes, thin)...);
+  scrollbar-color: var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, #888)...) var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--border-color))...);
+}
+
 /* Convenience groupings */
 
 @mixin global-buttons {

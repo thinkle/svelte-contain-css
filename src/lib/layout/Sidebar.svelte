@@ -55,23 +55,15 @@
     @include color-props(sidebar, container);
     width: var(--sidebar-width);
     height: 100%;
-    overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    @include custom-scrollbar(sidebar, container);
   }
   .right {
-    border-left: var-with-fallbacks(
-      --border,
-      sidebar,
-      var(--border-width) var(--border-style) var(--border-color)
-    );
+    border-left: var-with-fallbacks(--border, sidebar, none);
   }
   .left {
-    border-right: var-with-fallbacks(
-      --border,
-      sidebar,
-      var(--border-width) var(--border-style) var(--border-color)
-    );
+    border-right: var-with-fallbacks(--border, sidebar, none);
   }
 
   /* Expander doo-dad */

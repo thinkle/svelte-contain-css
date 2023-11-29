@@ -76,12 +76,21 @@
   let right: boolean = false;
 </script>
 
-<Bar>
-  <div />
-  <h1><em>Contain</em> Component Library</h1>
-  <a style:color="var(--body-fg)" href="https://tomhinkle.net">by Tom Hinkle</a>
-</Bar>
+<Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+  <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
+  <p>
+    The Simple Svelte Component Library designed to make optimal use of css
+    variables & container queries to make your life easy.
+  </p>
+</Hero>
 <Page {right}>
+  <Bar slot="header">
+    <div />
+    <h1><em>Contain</em> Component Library</h1>
+    <a style:color="var(--body-fg)" href="https://tomhinkle.net"
+      >by Tom Hinkle</a
+    >
+  </Bar>
   <Sidebar slot="sidebar" {right}>
     <MenuList>
       <li>
@@ -108,13 +117,7 @@
       </li>
     </MenuList>
   </Sidebar>
-  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
-    <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
-    <p>
-      The Simple Svelte Component Library designed to make optimal use of css
-      variables & container queries to make your life easy.
-    </p>
-  </Hero>
+
   <GridLayout>
     <Card>
       <h2 slot="header">Simple Components</h2>
