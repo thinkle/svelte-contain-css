@@ -35,13 +35,26 @@
 
 @mixin typography-props ($prefixes...) {
   font-family: var-with-fallbacks(--font-family, append($prefixes, sans-serif)...);
+  text-transform: var-with-fallbacks(--text-transform, append($prefixes, none)...);
+  text-decoration: var-with-fallbacks(--text-decoration, append($prefixes, none)...);
   font-size: var-with-fallbacks(--font-size, append($prefixes, 16px)...);
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
   line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);  
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
-  & :global(p),:global(h1),:global(h2),:global(h3),:global(h4),:global(h5),:global(h6),:global(blockquote) {
+  & :global(p),:global(blockquote) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
-  }
+    font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
+    line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
+  }  
+  & :global(h1),
+   :global(h2),
+   :global(h3),
+   :global(h4),
+   :global(h5),
+   :global(h6) {
+    max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
+    font-family: var-with-fallbacks(--heading-font-family, append($prefixes, var(--font-family))...);
+  }   
 }
 
 @mixin box-props-square($prefixes...) {
