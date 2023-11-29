@@ -84,17 +84,18 @@
   </p>
 </Hero>
 <Page {right}>
-  <Bar slot="header">
+  <Bar slot="header" --bar-border-top="none">
+    <div class="icon"></div>
     <h1><em>Contain</em> Component Library</h1>
+    <div class="info"></div>
   </Bar>
   <Bar
     slot="footer"
     --bar-justify="flex-end"
-    height="1em"
+    height="1.5em"
     --bar-border-top="none"
     --bar-border-bottom="none"
     marginBottom="0"
-    padding="var(--space)"
   >
     <a style:color="var(--body-fg)" href="https://tomhinkle.net"
       >by Tom Hinkle</a
