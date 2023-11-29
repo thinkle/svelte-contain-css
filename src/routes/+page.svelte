@@ -16,6 +16,7 @@
   import TypographyDemo from "./demos/TypographyDemo.svelte";
 
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
+  import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
@@ -37,19 +38,13 @@
 
   const componentCategories = [
     {
-      title: "Simple Components",
+      title: "Controls",
       items: [
         { title: "Button", url: "#button" },
-        { title: "Card", url: "#card" },
         { title: "Checkbox", url: "#checkbox" },
-        { title: "Input", url: "#input" },
-        { title: "Menu", url: "#menu" },
         { title: "Radio", url: "#radio" },
+        { title: "Input", url: "#input" },
         { title: "Select", url: "#select" },
-        { title: "Sidebar", url: "#sidebar" },
-        { title: "Tabs", url: "#tabs" },
-        { title: "Textarea", url: "#textarea" },
-        { title: "Toggle", url: "#toggle" },
       ],
     },
     {
@@ -59,9 +54,10 @@
         { title: "Grid", url: "#grid" },
         { title: "Page", url: "#page" },
         { title: "Sidebar", url: "#sidebar" },
+        { title: "Hero", url: "#hero" },
       ],
     },
-    {
+    /* {
       title: "Advanced Components",
       items: [
         { title: "Accordion", url: "#accordion" },
@@ -69,9 +65,9 @@
         { title: "Drawer", url: "#drawer" },
         { title: "Modal", url: "#modal" },
         { title: "Popover", url: "#popover" },
-        { title: "Tooltip", url: "#tooltip" },
+        { title: "Tooltip", url: "#tooltip" }, 
       ],
-    },
+    },*/
   ];
   let right: boolean = false;
 </script>
@@ -86,7 +82,7 @@
 <Page {right}>
   <Bar slot="header" --bar-border-top="none">
     <div class="icon"></div>
-    <h1><em>Contain</em> Component Library</h1>
+    <h1><em>ContainCSS</em></h1>
     <div class="info"></div>
   </Bar>
   <Bar
@@ -281,6 +277,9 @@
   </div>
   <div id="checkbox">
     <CheckboxDemo />
+  </div>
+  <div id="radio">
+    <RadioButtonDemo />
   </div>
   <div id="form-item">
     <FormItemDemo />
