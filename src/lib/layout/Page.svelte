@@ -83,7 +83,7 @@
     gap: var(--column-gap);
     padding: var(--padding);
   }
-  .page.right {
+  .right .side-by-side {
     flex-direction: row-reverse;
   }
   .page .content {
