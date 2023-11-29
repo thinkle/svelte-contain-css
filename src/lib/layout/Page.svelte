@@ -1,16 +1,51 @@
-<script>
+<script lang="ts">
+  import { onDestroy, onMount } from "svelte";
+
   export let right = false;
+  export let sticky = false;
   let hasSidebar = $$slots.sidebar;
   let hasHeader = $$slots.header;
   let hasFooter = $$slots.footer;
+  let freeze = sticky; // Do we "freeze" before scrolling?
+
+  let pageElement: HTMLElement;
+
+  function handleScroll() {
+    if (sticky) {
+      // Set up listener to disable scrolling until we're
+      // "stuck" on the top
+      // needs to work on SSR, so only reference window if
+      // rendered in browser.
+      const rect = pageElement.getBoundingClientRect();
+      const computedTopStyle =
+        getComputedStyle(pageElement).getPropertyValue("top");
+      const computedTop = parseFloat(computedTopStyle);
+      const isSticking = rect.top <= computedTop;
+      freeze = !isSticking;
+    }
+  }
+
+  onMount(() => {
+    if (sticky) {
+      window.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (window) {
+        window.removeEventListener("scroll", handleScroll);
+      }
+    };
+  });
 </script>
 
 <section
   class="page"
+  class:freeze
   class:right
+  class:sticky
   class:hasHeader
   class:hasSidebar
   class:hasFooter
+  bind:this={pageElement}
 >
   <header>
     <slot name="header" />
@@ -60,6 +95,10 @@
     align-items: stretch;
     justify-content: stretch;
   }
+  .page.sticky {
+    position: sticky;
+    top: 0;
+  }
   .header {
     flex-shrink: 1;
   }
@@ -92,5 +131,8 @@
     width: 100%;
     background: var(--bg);
     color: var(--text);
+  }
+  .page.freeze :global(*) {
+    overflow: hidden;
   }
 </style>
