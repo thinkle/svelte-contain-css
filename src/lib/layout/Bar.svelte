@@ -5,6 +5,8 @@
   export let padding: string | null = null;
   export let width: string | null = null;
   export let height: string | null = null;
+  export let marginBottom: string | null = null;
+  export let marginTop: string | null = null;
   export let justify:
     | "center"
     | "space-between"
@@ -22,6 +24,7 @@
     "height",
     "justify",
     "align",
+    "marginBottom",
   ]);
 </script>
 
@@ -38,7 +41,7 @@
 
     --bar-margin-bottom: var(--gap);
     --bar-height: 3rem;
-    --bar-min-height: var(--bar-height);
+    /* --bar-min-height: var(--bar-height); */
     --bar-bg: var(--bg, inherit);
     --bar-fg: var(--fg, inherit);
   }

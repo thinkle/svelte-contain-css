@@ -2,9 +2,16 @@
   export let right = false;
   let hasSidebar = $$slots.sidebar;
   let hasHeader = $$slots.header;
+  let hasFooter = $$slots.footer;
 </script>
 
-<section class="page" class:right class:hasHeader class:hasSidebar>
+<section
+  class="page"
+  class:right
+  class:hasHeader
+  class:hasSidebar
+  class:hasFooter
+>
   <header>
     <slot name="header" />
   </header>
@@ -16,10 +23,32 @@
       <slot />
     </div>
   </div>
+  <footer>
+    <slot name="footer" />
+  </footer>
 </section>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
+
+  header {
+    display: none;
+  }
+  .hasHeader header {
+    display: block;
+  }
+  footer {
+    display: none;
+  }
+  .hasFooter footer {
+    display: block;
+  }
+  .aside {
+    display: none;
+  }
+  .hasSidebar .aside {
+    display: flex;
+  }
 
   .page {
     @include color-props(page);
