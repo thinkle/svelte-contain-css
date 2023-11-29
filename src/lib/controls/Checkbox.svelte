@@ -55,6 +55,7 @@
     line-height: 1.2;
     position: relative;
     user-select: none;
+    gap: var(--radio-button-space, var(--toggle-space, var(--space-md)));
   }
   label:hover {
     filter: var(--checkbox-hover-filter);
@@ -80,16 +81,13 @@
     display: none;
   }
   label::before {
-    margin-right: var(--space);
     transition: all var-with-fallbacks(--transition, checkbox, control);
     display: inline-grid;
     place-content: center;
     content: " ";
-    width: var-with-fallbacks(--size, checkbox, font, 1em);
-    height: var-with-fallbacks(--size, checkbox, font, 1em);
-    /* background: var(--checkbox-bg);
-    color: var(--checkbox-checked-fg); */
-    @include color-props(checkbox, secondary);
+    width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    height: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    @include color-props(checkbox, toggle, inactive, secondary);
     border: var-with-fallbacks(
       --border,
       checkbox,
@@ -98,18 +96,18 @@
     box-sizing: border-box;
   }
   label:has(input:checked)::before {
-    @include color-props(checkbox-checked, primary, checkbox);
+    @include color-props(checkbox-checked, toggle-on, primary, checkbox);
     /* background: var(--checkbox-checked-bg);
     color: var(--checkbox-checked-fg); */
-    border: var-with-fallbacks(--border, checkbox-checked, checkbox);
+    border: var-with-fallbacks(--border, checkbox-checked, toggle-on, checkbox);
     box-sizing: border-box;
-    width: var-with-fallbacks(--size, checkbox, font, 1em);
-    height: var-with-fallbacks(--size, checkbox, font, 1em);
+    width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    height: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
   }
   label:has(input:checked)::after {
     content: var(--checkbox-check);
-    font-size: var-with-fallbacks(--size, checkbox, font, 1em);
-    color: var-with-fallbacks(--fg, checkbox-checked, checkbox);
+    font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    color: var-with-fallbacks(--fg, checkbox-checked, toggle-on, checkbox);
     position: absolute;
     left: 0;
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
@@ -121,7 +119,7 @@
       overflow: hidden;
     }
     100% {
-      width: var-with-fallbacks(--size, checkbox, font, 1em);
+      width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
     }
   }
 </style>
