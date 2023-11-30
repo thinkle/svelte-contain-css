@@ -2,9 +2,9 @@
   export let code: string;
   import Prism from "svelte-prism";
   import "prismjs/themes/prism.css";
-  export let inline;
+  export let inline = false; /*
   export let width;
-  export let height;
+  export let height; */
 </script>
 
 <div class="code" class:inline>
