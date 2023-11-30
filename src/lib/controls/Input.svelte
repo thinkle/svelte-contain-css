@@ -11,6 +11,7 @@
   input {
     @include typography-props(input, ui);
     @include box-props(input, ui);
+    @include color-props(input, ui);
     width: var(--input-width);
   }
 </style>

@@ -58,26 +58,47 @@
 <select bind:value on:change bind:this={selectElement}>
   <slot />
 </select>
-<DropdownMenu>
-  <span class="select-dropdown" slot="label"
-    >{#if activeOption}{@html activeOption.html}{:else}-{/if}
-  </span>
-  {#each options as option}
-    <li>
-      <button value={option.value} on:click={() => (value = option.value)}
-        >{@html option.html}
-      </button>
-    </li>
-  {/each}
-</DropdownMenu>
+<div class="dropdown-wrapper">
+  <DropdownMenu>
+    <span class="select-dropdown" slot="label"
+      >{#if activeOption}{@html activeOption.html}{:else}-{/if}
+    </span>
+    {#each options as option}
+      <li>
+        <button value={option.value} on:click={() => (value = option.value)}
+          >{@html option.html}
+        </button>
+      </li>
+    {/each}
+  </DropdownMenu>
+</div>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
-  select {
+  select,
+  .select-dropdown {
     @include box-props-square(select, menu, control, container);
-    @include color-props(select, menu, control, container);
+    @include color-props(select, input, menu, control, container);
+    @include border-props(select, menu, control, container);
   }
   .select-dropdown::after {
-    content: " ↓";
+    content: "↓";
+    padding-left: var(--gap);
+  }
+
+  select {
+    display: none;
+  }
+  .dropdown-wrapper {
+    display: contents;
+  }
+
+  @include responsive-content($max-width: 600px) {
+    select {
+      display: block;
+    }
+    .dropdown-wrapper {
+      display: none;
+    }
   }
 </style>
