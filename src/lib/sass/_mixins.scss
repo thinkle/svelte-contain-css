@@ -35,19 +35,39 @@
 
 @mixin typography-props ($prefixes...) {
   font-family: var-with-fallbacks(--font-family, append($prefixes, sans-serif)...);
+  text-transform: var-with-fallbacks(--text-transform, append($prefixes, none)...);
+  text-decoration: var-with-fallbacks(--text-decoration, append($prefixes, none)...);
   font-size: var-with-fallbacks(--font-size, append($prefixes, 16px)...);
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
   line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);  
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
-  & :global(p),:global(h1),:global(h2),:global(h3),:global(h4),:global(h5),:global(h6),:global(blockquote) {
+  & :global(p),:global(blockquote) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
-  }
+    font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
+    line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
+  }  
+  & :global(h1),
+   :global(h2),
+   :global(h3),
+   :global(h4),
+   :global(h5),
+   :global(h6) {
+    max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
+    font-family: var-with-fallbacks(--heading-font-family, append($prefixes, var(--font-family))...);
+  }   
 }
 
 @mixin box-props-square($prefixes...) {
   box-sizing: border-box;
   border: var-with-fallbacks(--border, $prefixes...);
   padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  $directions: (top, right, bottom, left);
+
+  // Loop through each direction
+  @each $dir in $directions {
+    // Apply padding for each direction
+    padding-#{$dir}: var-with-fallbacks(--padding-#{$dir}, append($prefixes, 4px)...);
+  }
   border-radius: var-with-fallbacks(--square-radius, append($prefixes, 0)...);
 }
 
@@ -57,6 +77,41 @@
   border: var-with-fallbacks(--border, $prefixes...);
   padding: var-with-fallbacks(--padding, append($prefixes,4px)...);  
   border-radius: var-with-fallbacks(--border-radius, append($prefixes,none)...);
+  $directions: (
+      top,
+      right,
+      bottom,
+      left
+    );
+  $rectProps : (padding,border);
+  
+  // Loop through each direction
+  @each $dir in $directions {
+    // Apply prop for each direction
+    @each $p in $rectProps {
+    #{$p}-#{$dir}: var-with-fallbacks(
+      --#{$p}-#{$dir}, 
+      append(
+        $prefixes, 
+        var-with-fallbacks(
+          --#{$p},
+          append($prefixes,4px)...
+      ))...);
+    }    
+  }
+  // Corner names for border-radius
+  $corners: (
+    top-left,
+    top-right,
+    bottom-right,
+    bottom-left
+  );
+  // Loop through each corner for border-radius
+  @each $corner in $corners {
+    border-#{$corner}-radius: var-with-fallbacks(--border-#{$corner}-radius,
+      append($prefixes, var-with-fallbacks(--border-radius, append($prefixes, none)...))...);
+  }
+  
 }
 
 @mixin box-props-bottom ($prefixes...) {

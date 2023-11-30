@@ -23,6 +23,8 @@
   import Button from "$lib/controls/Button.svelte";
   import Code from "$lib/misc/Code.svelte";
   import Hero from "$lib/layout/Hero.svelte";
+  import PageDemo from "./demos/PageDemo.svelte";
+  import TabDemo from "./demos/TabDemo.svelte";
   let hash: string = "";
   const updateHash = () => {
     hash = window.location.hash;
@@ -51,12 +53,19 @@
       title: "Layout Components",
       items: [
         { title: "Cards", url: "#cards" },
+        { title : 'Bar', url: '#bar'},
         { title: "Grid", url: "#grid" },
-        { title: "Page", url: "#page" },
-        { title: "Sidebar", url: "#sidebar" },
+        { title: "Page", url: "#page" },        
         { title: "Hero", url: "#hero" },
       ],
     },
+    {
+      title : 'Fancy Stuff',
+      items: [
+        {title : 'Tabs', url:'#tabs'},
+        { title: "Sidebar", url: "#sidebar" },
+      ]
+    }
     /* {
       title: "Advanced Components",
       items: [
@@ -79,7 +88,7 @@
     variables & container queries to make your life easy.
   </p>
 </Hero>
-<Page {right}>
+<Page {right} sticky>
   <Bar slot="header" --bar-border-top="none">
     <div class="icon"></div>
     <h1><em>ContainCSS</em></h1>
@@ -283,5 +292,11 @@
   </div>
   <div id="form-item">
     <FormItemDemo />
+  </div>
+  <div id="tabs">
+    <TabDemo />
+    </div>
+  <div id="page">
+    <PageDemo />
   </div>
 </Page>
