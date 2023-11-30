@@ -14,7 +14,7 @@
   import ResponsiveText from "$lib/layout/ResponsiveText.svelte";
   import ButtonDemo from "./demos/ButtonDemo.svelte";
   import TypographyDemo from "./demos/TypographyDemo.svelte";
-
+  import SplitPaneDemo from "./demos/SplitPaneDemo.svelte";
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
   import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
   import Slider from "$lib/controls/Slider.svelte";
@@ -25,6 +25,7 @@
   import Hero from "$lib/layout/Hero.svelte";
   import PageDemo from "./demos/PageDemo.svelte";
   import TabDemo from "./demos/TabDemo.svelte";
+
   let hash: string = "";
   const updateHash = () => {
     hash = window.location.hash;
@@ -53,19 +54,20 @@
       title: "Layout Components",
       items: [
         { title: "Cards", url: "#cards" },
-        { title : 'Bar', url: '#bar'},
+        { title: "Bar", url: "#bar" },
         { title: "Grid", url: "#grid" },
-        { title: "Page", url: "#page" },        
+        { title: "Page", url: "#page" },
         { title: "Hero", url: "#hero" },
       ],
     },
     {
-      title : 'Fancy Stuff',
+      title: "Fancy Stuff",
       items: [
-        {title : 'Tabs', url:'#tabs'},
+        { title: "Tabs", url: "#tabs" },
         { title: "Sidebar", url: "#sidebar" },
-      ]
-    }
+        { title: "Split Pane", url: "#split" },
+      ],
+    },
     /* {
       title: "Advanced Components",
       items: [
@@ -144,10 +146,17 @@
         Using svelte components is easy and supports a number of intuitive
         properties, such as:
       </p>
-      <br /><code
-        >&lt;Button bg="green" fg="white" width="64px"
-        height="64px"&gt;Wow&lt;/Button&gt;</code
-      >
+      <Code
+        code={`
+<Button 
+  bg="green" 
+  fg="white" 
+  width="64px" 
+  height="64px">
+  Wow
+</Button>`}
+      />
+
       <br />Which produces:
       <Button bg="green" fg="white" width="64px" height="64px">Wow</Button>
     </Card>
@@ -295,8 +304,11 @@
   </div>
   <div id="tabs">
     <TabDemo />
-    </div>
+  </div>
   <div id="page">
     <PageDemo />
+  </div>
+  <div id="split">
+    <SplitPaneDemo />
   </div>
 </Page>
