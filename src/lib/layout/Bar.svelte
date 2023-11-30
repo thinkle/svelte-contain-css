@@ -35,17 +35,6 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
-  :root {
-    --bar-align: center; /* Align items vertically */
-    --bar-justify: space-between; /* Distribute items along the line */
-
-    --bar-margin-bottom: var(--gap);
-    --bar-height: 3rem;
-    /* --bar-min-height: var(--bar-height); */
-    --bar-bg: var(--bg, inherit);
-    --bar-fg: var(--fg, inherit);
-  }
-
   .bar {
     display: flex;
     align-items: var(--bar-align, center);
@@ -65,7 +54,7 @@
     );
     margin-bottom: var(--bar-margin-bottom);
     min-height: var(--bar-min-height);
-    height: var(--bar-height);
+    height: var(--bar-height, 3em);
     max-height: var(--bar-max-height);
     @include color-props(bar, container);
     gap: var-with-fallbacks(--gap, bar, 8px);
