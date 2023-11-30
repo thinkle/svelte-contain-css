@@ -1,0 +1,83 @@
+<script lang="ts">
+  import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
+  import { onMount, tick } from "svelte";
+
+  export let value: any;
+  let selectElement: HTMLSelectElement;
+  let observer: MutationObserver;
+  onMount(async () => {
+    await tick(); // Ensure slot content is rendered
+    updateOptions();
+
+    // Observe changes in the select element
+    observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          updateOptions();
+        }
+      });
+    });
+
+    observer.observe(selectElement, { childList: true });
+    return () => observer.disconnect();
+  });
+  let options: { value: string; html: string }[] = [];
+  let activeOption: { value: string; html: string } | null = null;
+
+  function getActiveOption(
+    val: any,
+    options: { value: string; html: string }[]
+  ) {
+    for (let option of options) {
+      if (option.value == val) {
+        activeOption = option;
+        return;
+      }
+    }
+    activeOption = null;
+  }
+
+  $: getActiveOption(value, options);
+
+  function updateOptions() {
+    if (!selectElement) {
+      return;
+    }
+    options = [];
+    let optionEls = selectElement.querySelectorAll("option");
+    let newOptions = [];
+    for (let optionEl of optionEls) {
+      options.push({
+        value: optionEl.value,
+        html: optionEl.innerHTML,
+      });
+    }
+  }
+</script>
+
+<select bind:value on:change bind:this={selectElement}>
+  <slot />
+</select>
+<DropdownMenu>
+  <span class="select-dropdown" slot="label"
+    >{#if activeOption}{@html activeOption.html}{:else}-{/if}
+  </span>
+  {#each options as option}
+    <li>
+      <button value={option.value} on:click={() => (value = option.value)}
+        >{@html option.html}
+      </button>
+    </li>
+  {/each}
+</DropdownMenu>
+
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
+  select {
+    @include box-props-square(select, menu, control, container);
+    @include color-props(select, menu, control, container);
+  }
+  .select-dropdown::after {
+    content: " ↓";
+  }
+</style>
