@@ -34,42 +34,42 @@
   for (let i = 0; i < 30; i++) {
     longList.push(`${randomWord()} ${i}`);
   }
-  let val = 2;
+  let val = { val: 2 };
 </script>
 
-<Bar>
-  <Menu>
-    <span slot="label">Left Menu</span>
-    <li><button>Foo</button></li>
-    <li><button>Bar</button></li>
-    <li><button>Baz</button></li>
-    <li><button>Bang</button></li>
-  </Menu>
-  <Menu>
-    <span slot="label">Long Menu</span>
-    {#each longList as item}
-      <li>
-        <a href="#">{item}</a>
-      </li>
-    {/each}
-  </Menu>
-  <Menu>
-    <span slot="label">Right Menu</span>
-    <li><button>Foo</button></li>
-    <li><button>Bar</button></li>
-    <li><button>Baz</button></li>
-    <li><button>Bang</button></li>
-  </Menu>
-</Bar>
 <Container>
+  <Bar>
+    <Menu>
+      <span slot="label">Left Menu</span>
+      <li><button>Foo</button></li>
+      <li><button>Bar</button></li>
+      <li><button>Baz</button></li>
+      <li><button>Bang</button></li>
+    </Menu>
+    <Menu>
+      <span slot="label">Long Menu</span>
+      {#each longList as item}
+        <li>
+          <a href="#">{item}</a>
+        </li>
+      {/each}
+    </Menu>
+    <Menu>
+      <span slot="label">Right Menu</span>
+      <li><button>Foo</button></li>
+      <li><button>Bar</button></li>
+      <li><button>Baz</button></li>
+      <li><button>Bang</button></li>
+    </Menu>
+  </Bar>
   <Select bind:value={val}>
-    <option value={1}>Option A</option>
-    <option value={2}><b>Strong</b> B</option>
-    <option value={3}><em>Fancy</em> C</option>
-    <option value={4}><span style="color:red">Red</span> D</option>
+    <option value={{ val: 1 }}>Option A</option>
+    <option value={{ val: 2 }}><b>Strong</b> B</option>
+    <option value={{ val: 3 }}><em>Fancy</em> C</option>
+    <option value={{ val: 4 }}><span style="color:red">Red</span> D</option>
   </Select>
   <p>
-    Well look, they selected {val}
+    Well look, they selected {val.val}
   </p>
   Selection:<input type="number" bind:value={val} />
 </Container>

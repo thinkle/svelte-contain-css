@@ -1,6 +1,21 @@
+<script context="module" lang="ts">
+  let addedGlobalDiv: boolean;
+</script>
+
 <script lang="ts">
   import MenuList from "$lib/layout/MenuList.svelte";
   import { injectVars } from "$lib/util";
+  import { portal } from "svelte-portal";
+  import { onMount } from "svelte";
+  onMount(() => {
+    console.log("Mounted");
+    if (!addedGlobalDiv) {
+      let div = document.createElement("div");
+      div.id = "dropdowns";
+      document.body.appendChild(div);
+      addedGlobalDiv = true;
+    }
+  });
 
   let buttonElement: HTMLButtonElement;
   let dropdownContentElement: HTMLDivElement;
@@ -99,7 +114,13 @@
   <button bind:this={buttonElement} on:click={triggerMenu}>
     <slot name="label">Menu</slot>
   </button>
-  <div class="dropdown-container" class:open class:right={rightDropdown}>
+  <div
+    use:portal={"#dropdowns"}
+    class="dropdown-container"
+    class:open
+    class:right={rightDropdown}
+    hidden
+  >
     <div class="dropdown-content" bind:this={dropdownContentElement}>
       <MenuList>
         <slot />
@@ -125,7 +146,7 @@
   }
   .dropdown-container {
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     opacity: 0;
     pointer-events: none;
     transition: var(--dropdown-transition, 150ms) opacity;
@@ -136,6 +157,9 @@
   .dropdown-container.open {
     opacity: 1;
     pointer-events: all;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);
