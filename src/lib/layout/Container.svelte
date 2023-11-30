@@ -38,9 +38,10 @@
     @include typography-props(container, block);
     margin-top: var-with-fallbacks(--margin, container, block, var(--gap));
     margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
-    container-type: inline-size;
+    /* Why is this suddenly causing a scroll? */
+    /* container-type: inline-size; */
     overflow-x: hidden;
-    height: var(--container-height, auto);
+    height: var(--container-height);
     overflow-y: auto;
   }
   .border {
