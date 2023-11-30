@@ -16,48 +16,6 @@
   let cssValues = {};
   let cssVariables: CSSVariable[] = [
     {
-      name: "--border-radius",
-      type: "length",
-      placeholder: "e.g., 4px",
-      defaultValue: "8px",
-      unit: "px",
-    },
-    {
-      name: "--tab-bar-padding-bottom",
-      type: "length",
-      placeholder: "e.g., 4px",
-      defaultValue: "0",
-      unit: "px",
-    },
-    {
-      name: "--tab-bar-border-bottom",
-      type: "color",
-      placeholder: "e.g., #007bff",
-      defaultValue: "var(--border)",
-      unit: "",
-    },
-    {
-      name: "--tab-bar-border-top",
-      type: "color",
-      placeholder: "e.g., #ffffff",
-      defaultValue: "none",
-      unit: "",
-    },
-    {
-      name: "--tab-bar-justify",
-      type: "text",
-      placeholder: "e.g., Arial",
-      defaultValue: "start",
-      unit: "",
-    },
-    {
-      name: "--tab-bar-align",
-      type: "text",
-      placeholder: "e.g., Arial",
-      defaultValue: "end",
-      unit: "",
-    },
-    {
       name: "--tab-bg",
       type: "color",
       placeholder: "e.g., #007bff",
@@ -66,6 +24,50 @@
       name: "--tab-fg",
       type: "color",
       placeholder: "e.g., #007bff",
+    },
+    {
+      name: "--tab-active-bg",
+      type: "color",
+      placeholder: "e.g., #007bff",
+    },
+    {
+      name: "--tab-active-fg",
+      type: "color",
+      placeholder: "e.g., #007bff",
+    },
+    {
+      name: "--tab-border-radius",
+      type: "length",
+      placeholder: "4px 4px 0 0",
+      defaultValue: "8px",
+      unit: "px",
+    },
+    {
+      name: "--tab-bar-border-bottom",
+      type: "border",
+      placeholder: "none",
+      defaultValue: "0",
+      unit: "px",
+    },
+    {
+      name: "--tab-bar-gap",
+      type: "length",
+      placeholder: "var(--space-lg)",
+    },
+
+    {
+      name: "--tab-bar-justify",
+      type: "text",
+      placeholder: "end",
+      defaultValue: "start",
+      unit: "",
+    },
+    {
+      name: "--tab-bar-align",
+      type: "text",
+      placeholder: "stretch",
+      defaultValue: "end",
+      unit: "",
     },
   ];
 </script>

@@ -11,7 +11,7 @@
   export let height: string | null = null;
   export let active: boolean;
 
-  let style = injectVars($$props, "button", [
+  let style = injectVars($$props, "tab", [
     "bg",
     "fg",
     "padding",
@@ -29,32 +29,20 @@
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
-  div.active {
-    --button-border-bottom: var(--tab-border-bottom-active, 0);
-  }
-  div {
-    --button-border-bottom: var(--tab-border-bottom, var(--border));
-    --button-border-bottom-right-radius: var(
-      --tab-border-bottom-right-radius,
-      0
-    );
-    --button-border-bottom-left-radius: var(--tab-border-bottom-left-radius, 0);
-    --button-border-top-right-radius: var(
-      --tab-border-bottom-left-radius,
-      var(--border-radius)
-    );
-    --button-border-top-left-radius: var(
-      --tab-border-bottom-left-radius,
-      var(--border-radius)
-    );
-    background-color: var-with-fallbacks(--bg, tab, button, control, secondary);
-    --button-margin: var(--tab-margin, 0);
-    --button-bg: var(--tab-bg, var(--button-bg));
-    --button-fg: var(--tab-fg, var(--button-fg));
-    --button-padding: var(--tab-padding, var(--button-padding));
-  }
   div,
   span {
     display: contents;
+  }
+  div > :global(button) {
+    @include color-props(tab, button, control, secondary);
+    @include box-props(tab, button, control, secondary);
+    border-radius: var(
+      --tab-border-radius,
+      var(--border-radius) var(--border-radius) 0 0
+    );
+    margin: 0;
+  }
+  div.active > :global(button) {
+    @include color-props(tab-active, primary, tab, button, control, secondary);
   }
 </style>

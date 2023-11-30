@@ -30,15 +30,18 @@
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
-  div {
-    --bar-padding-bottom: var(--tab-bar-padding-bottom, 0);
-    --bar-border-bottom: var(
+  div > :global(.bar) {
+    @include color-props(tab-bar, bar, container);
+    justify-content: var-with-fallbacks(--justify, tab-bar, flex-start);
+    align-items: var-with-fallbacks(--align, tab-bar, flex-end);
+    border-bottom: var(
       --tab-bar-border-bottom,
-      var(--bar-border-bottom, var(--border))
+      var(--border-width) var(--border-style) var(--border-color)
     );
-    --bar-border-top: var(--tab-bar-border-top, none);
-    --bar-justify: var(--tab-bar-justify, start);
-    --bar-align: var(--tab-bar-align, end);
+    border-left: var(--tab-bar-border-left, none);
+    border-right: var(--tab-bar-border-left, none);
+    border-top: var(--tab-bar-border-left, none);
+    gap: var(--tab-bar-gap, var(--space-md));
   }
   .sticky {
     position: sticky;
