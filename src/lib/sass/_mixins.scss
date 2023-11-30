@@ -39,8 +39,12 @@
   text-decoration: var-with-fallbacks(--text-decoration, append($prefixes, none)...);
   font-size: var-with-fallbacks(--font-size, append($prefixes, 16px)...);
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
-  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);  
-  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
+  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
+  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);
+}
+
+@mixin typography-container-props ($prefixes...) {
+  @include typography-props($prefixes...);  
   & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
     font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
@@ -61,88 +65,72 @@
   }   
 }
 
-@mixin box-props-square($prefixes...) {
-  box-sizing: border-box;
-  border: var-with-fallbacks(--border, $prefixes...);
+@mixin padding-props ($prefixes...) {
   padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
-  $directions: (top, right, bottom, left);
+}
+
+@mixin border-props ($prefixes...) {
+  border: var-with-fallbacks(--border, $prefixes...);  
+  $directions: (
+    top,
+    right,
+    bottom,
+    left
+  );
+  $rectProps : (border);
 
   // Loop through each direction
   @each $dir in $directions {
-    // Apply padding for each direction
-    padding-#{$dir}: var-with-fallbacks(--padding-#{$dir}, append($prefixes, 4px)...);
+    // Apply prop for each direction
+    @each $p in $rectProps {
+      #{$p}-#{$dir}: var-with-fallbacks(--#{$p}-#{$dir},
+        append($prefixes,
+          var-with-fallbacks(--#{$p},
+            append($prefixes, 4px)...))...);
+    }
   }
+}
+
+
+@mixin box-props-square($prefixes...) {
+  box-sizing: border-box;   
+  @include border-props($prefixes...);
+  @include padding-props($prefixes...);
   border-radius: var-with-fallbacks(--square-radius, append($prefixes, 0)...);
 }
 
 @mixin box-props($prefixes...) {
   // Using the var-with-fallbacks function for each property
   box-sizing: border-box;
-  border: var-with-fallbacks(--border, $prefixes...);
-  padding: var-with-fallbacks(--padding, append($prefixes,4px)...);  
+  @include padding-props($prefixes...);
+  @include border-props($prefixes...);
   border-radius: var-with-fallbacks(--border-radius, append($prefixes,none)...);
-  $directions: (
-      top,
-      right,
-      bottom,
-      left
-    );
-  $rectProps : (border);
-  
-  // Loop through each direction
-  @each $dir in $directions {
-    // Apply prop for each direction
-    @each $p in $rectProps {
-    #{$p}-#{$dir}: var-with-fallbacks(
-      --#{$p}-#{$dir}, 
-      append(
-        $prefixes, 
-        var-with-fallbacks(
-          --#{$p},
-          append($prefixes,4px)...
-      ))...);
-    }    
-  }
-  // Thought better of this dead code:
-  // clutters up the dev console and radii can
-  // easily be specified with shorthand.
-  // Corner names for border-radius
-  /* $corners: (
-    top-left,
-    top-right,
-    bottom-right,
-    bottom-left
-  ); */
-  
-  // Loop through each corner for border-radius
- //  @each $corner in $corners {
- //   border-#{$corner}-radius: var-with-fallbacks(--border-#{$corner}-radius,
- //     append($prefixes, var-with-fallbacks(--border-radius, append($prefixes, none)...))...);
- // }  
-  
 }
 
 @mixin box-props-bottom ($prefixes...) {
   // Using the var-with-fallbacks function for each property
   box-sizing: border-box;
-  border: var-with-fallbacks(--border, $prefixes...);
-  padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  @include padding-props($prefixes...);
+  @include border-props($prefixes...);
   border-bottom-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
   border-bottom-left-radius: var-with-fallbacks(--border-radius, $prefixes...);
 }
 @mixin box-props-top ($prefixes...) {
   // Using the var-with-fallbacks function for each property
   box-sizing: border-box;
-  border: var-with-fallbacks(--border, $prefixes...);
-  padding: var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  @include padding-props($prefixes...);
+  @include border-props($prefixes...);  
   border-top-right-radius: var-with-fallbacks(--border-radius, $prefixes...);
   border-top-left-radius: var-with-fallbacks(--border-radius, $prefixes...);
 }
 
-@mixin box-shadow($prefixes...) {
-  --shadow-distance: var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...);
-  --shadow-color: var-with-fallbacks(--shadow-color, append($prefixes, #4444)...);
-  box-shadow: var(--shadow-distance) var(--shadow-distance) 0 var(--shadow-color);
+@mixin box-shadow($prefixes...) {  
+  box-shadow: 
+    var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...)
+    var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...)
+    0 
+    var-with-fallbacks(--shadow-color, append($prefixes, green)...);
+  box-shadow: 4px 4px 0  green;
 }
 
 @mixin clickable($prefixes...) {
