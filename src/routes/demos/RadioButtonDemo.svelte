@@ -113,7 +113,7 @@
 </script>
 
 <Container border>
-  <h2>radioes</h2>
+  <h2>Radio Buttons</h2>
   <CssWrapper variables={cssValues}>
     <RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
     <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
