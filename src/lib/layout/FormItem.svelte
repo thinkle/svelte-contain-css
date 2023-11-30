@@ -19,6 +19,7 @@
   label {
     display: flex;
     align-items: var(--form-label-align, baseline);
+    justify-content: var(--form-label-justify, flex-start);
     gap: var(--form-label-horizontal-gap, var(--padding));
     padding-top: var(--padding, form-item, 8px);
     padding-bottom: var(--padding, form-item, 8px);
@@ -27,7 +28,7 @@
   }
   .label {
     box-sizing: border-box;
-    width: var(--form-label-width, 22em);
+    width: var(--form-label-width, 12em);
     text-align: var(--form-label-text-align, right);
   }
   .input {
