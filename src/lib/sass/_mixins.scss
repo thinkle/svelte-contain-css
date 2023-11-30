@@ -87,7 +87,7 @@
       bottom,
       left
     );
-  $rectProps : (padding,border);
+  $rectProps : (border);
   
   // Loop through each direction
   @each $dir in $directions {
@@ -103,18 +103,22 @@
       ))...);
     }    
   }
+  // Thought better of this dead code:
+  // clutters up the dev console and radii can
+  // easily be specified with shorthand.
   // Corner names for border-radius
-  $corners: (
+  /* $corners: (
     top-left,
     top-right,
     bottom-right,
     bottom-left
-  );
+  ); */
+  
   // Loop through each corner for border-radius
-  @each $corner in $corners {
-    border-#{$corner}-radius: var-with-fallbacks(--border-#{$corner}-radius,
-      append($prefixes, var-with-fallbacks(--border-radius, append($prefixes, none)...))...);
-  }
+ //  @each $corner in $corners {
+ //   border-#{$corner}-radius: var-with-fallbacks(--border-#{$corner}-radius,
+ //     append($prefixes, var-with-fallbacks(--border-radius, append($prefixes, none)...))...);
+ // }  
   
 }
 
