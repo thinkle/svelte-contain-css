@@ -80,6 +80,8 @@
     @include box-props-square(select, menu, control, container);
     @include color-props(select, input, menu, control, container);
     @include border-props(select, menu, control, container);
+    width: var(--select-width, var(--dropdown-menu-width, 12em));
+    display: inline-block;
   }
   .select-dropdown::after {
     content: "↓";
