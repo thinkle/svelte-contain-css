@@ -186,3 +186,24 @@
   }
 }
 
+@mixin responsive-content ($max-width: null, $min-width: null) {
+  @if $max-width {
+    @container (max-width: #{$max-width}) {
+      @content;
+    }
+
+    @media (max-width: #{$max-width}) {
+      @content;
+    }
+  }
+
+  @if $min-width {
+    @container (min-width: #{$min-width}) {
+      @content;
+    }
+
+    @media (min-width: #{$min-width}) {
+      @content;
+    }
+  }
+}
