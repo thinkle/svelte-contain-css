@@ -35,11 +35,11 @@
     padding: var-with-fallbacks(--padding, container, 8px);
     @include color-props(container, block);
     @include box-props(container, block);
-    @include typography-props(container, block);
+    @include typography-container-props(container, block);
     margin-top: var-with-fallbacks(--margin, container, block, var(--gap));
     margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
     /* Why is this suddenly causing a scroll? */
-    /* container-type: inline-size; */
+    container-type: inline-size;
     overflow-x: hidden;
     height: var(--container-height);
     overflow-y: auto;

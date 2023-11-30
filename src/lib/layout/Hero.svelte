@@ -23,7 +23,7 @@
   @import "$lib/sass/_mixins.scss";
   .hero {
     @include color-props(hero, container);
-    @include typography-props(hero, container);
+    @include typography-container-props(hero, container);
     display: grid;
     place-content: center;
     width: var(--hero-width, 100%);
