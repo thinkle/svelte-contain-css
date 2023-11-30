@@ -21,12 +21,18 @@
     "height",
   ]);
 
-  let hasSidebar = $$slots.sidebar && !hideSidebar;
-  let hasHeader = $$slots.header && !hideHeader;
-  let hasFooter = $$slots.footer && !hideFooter;
+  let hasSidebar: boolean;
+  let hasHeader: boolean;
+  let hasFooter: boolean;
   $: hasSidebar = $$slots.sidebar && !hideSidebar;
   $: hasHeader = $$slots.header && !hideHeader;
   $: hasFooter = $$slots.footer && !hideFooter;
+  $: console.log(
+    "Update to flags: header,footer,sidebar=",
+    hasHeader,
+    hasFooter,
+    hasSidebar
+  );
   let freeze = sticky; // Do we "freeze" before scrolling?
   let pageElement: HTMLElement;
 
@@ -90,19 +96,19 @@
   header {
     display: none;
   }
-  .hasHeader header {
+  .hasHeader > header {
     display: block;
   }
   footer {
     display: none;
   }
-  .hasFooter footer {
+  .hasFooter > footer {
     display: block;
   }
   .aside {
     display: none;
   }
-  .hasSidebar .aside {
+  .hasSidebar > div > .aside {
     display: flex;
   }
 
