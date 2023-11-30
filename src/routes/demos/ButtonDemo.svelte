@@ -1,13 +1,14 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import SplitPane from "$lib/layout/SplitPane.svelte";
   import Code from "$lib/misc/Code.svelte";
   import CssVariables from "./CssVariables.svelte";
   import CssWrapper from "./CssWrapper.svelte";
 
   const buttonCSSVariables = [
     {
-      name: "--button-radius",
+      name: "--button-border-radius",
       type: "length",
       placeholder: "e.g., 4px",
       defaultValue: "var(--border-radius)",
@@ -70,9 +71,23 @@
       unit: "",
     },
     {
-      name: "--button-pad",
+      name: "--button-padding",
       type: "text",
-      placeholder: "16px 8px 8px 16px",
+      placeholder: "16px",
+      defaultValue: "var(--padding)",
+      unit: "",
+    },
+    {
+      name: "--button-padding-left",
+      type: "text",
+      placeholder: "8px",
+      defaultValue: "var(--padding)",
+      unit: "",
+    },
+    {
+      name: "--button-padding-right",
+      type: "text",
+      placeholder: "8px",
       defaultValue: "var(--padding)",
       unit: "",
     },
@@ -83,30 +98,32 @@
 <Container border>
   <h2>Buttons</h2>
   <p>Our buttons are easily stylable with colors, padding,</p>
-  <CssVariables
-    variables={buttonCSSVariables}
-    onSetVariables={(variables) => {
-      cssValues = variables;
-    }}
-  />
-  <CssWrapper variables={cssValues}>
-    <Button>Standard Button</Button>
-    <Button>
-      Icon Button
-      <div slot="icon">▶</div>
-    </Button>
-    <Button primary={true}>Primary Button</Button>
-  </CssWrapper>
-
   <Code
-    code={`
-    <Button>Standard Button</Button>
-    <Button --button-bg="transparent">Transparent Button</Button>
-    <Button>
-      Icon Button
-      <div slot="icon">▶</div>
-    </Button>
-    <Button primary={true}>Primary Button</Button>
-    `}
+    code={`<Button>Standard Button</Button>
+<Button bg="transparent">Transparent Button</Button>
+<Button>
+  Icon Button
+  <div slot="icon">▶</div>
+</Button>
+<Button primary={true}>Primary Button</Button>`}
   />
+  <SplitPane leftWidth="2fr">
+    <CssVariables
+      slot="left"
+      variables={buttonCSSVariables}
+      onSetVariables={(variables) => {
+        cssValues = variables;
+      }}
+    />
+    <div slot="right">
+      <CssWrapper variables={cssValues}>
+        <Button>Standard Button</Button>
+        <Button>
+          Icon Button
+          <div slot="icon">▶</div>
+        </Button>
+        <Button primary={true}>Primary Button</Button>
+      </CssWrapper>
+    </div>
+  </SplitPane>
 </Container>

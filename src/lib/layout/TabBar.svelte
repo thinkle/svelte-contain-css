@@ -1,4 +1,5 @@
 <script lang="ts">
+  export let sticky: boolean = false;
   import Bar from "$lib/layout/Bar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
   import { createEventDispatcher } from "svelte";
@@ -14,7 +15,7 @@
   }
 </script>
 
-<div class="tabs">
+<div class="tabs" class:sticky>
   <Bar padding="0" borderTop="none">
     {#each items as item}
       {@const value = item.value || item}
@@ -30,13 +31,18 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   div {
-    --bar-padding-bottom: 0;
+    --bar-padding-bottom: var(--tab-bar-padding-bottom, 0);
     --bar-border-bottom: var(
       --tab-bar-border-bottom,
       var(--bar-border-bottom, var(--border))
     );
     --bar-border-top: var(--tab-bar-border-top, none);
-    --bar-justify: start;
-    --bar-align: end;
+    --bar-justify: var(--tab-bar-justify, start);
+    --bar-align: var(--tab-bar-align, end);
+  }
+  .sticky {
+    position: sticky;
+    top: calc(-1 * var-with-fallbacks(--padding, container, block, 8px));
+    background-color: var-with-fallbacks(--bg, tab-bar);
   }
 </style>

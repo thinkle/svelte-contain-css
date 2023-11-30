@@ -33,7 +33,9 @@
     hasFooter,
     hasSidebar
   );
-  let freeze = sticky; // Do we "freeze" before scrolling?
+  // Start "unfrozen" so i.e. scrolling on reload
+  // or hash link works properly
+  let freeze = false;
   let pageElement: HTMLElement;
 
   function handleScroll() {
@@ -47,12 +49,18 @@
         getComputedStyle(pageElement).getPropertyValue("top");
       const computedTop = parseFloat(computedTopStyle);
       const isSticking = rect.top <= computedTop;
+      console.log("Freeze = ", !isSticking);
       freeze = !isSticking;
     }
   }
 
   onMount(() => {
     if (sticky) {
+      console.log("Add scroll handler in a sec");
+
+      let el = document.querySelector(window.location.hash);
+      console.log("Hash", window.location.hash, "points to ", el);
+      el?.scrollIntoView();
       window.addEventListener("scroll", handleScroll);
     }
     return () => {

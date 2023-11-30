@@ -27,7 +27,8 @@
   </Button>
 </div>
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   div.active {
     --button-border-bottom: var(--tab-border-bottom-active, 0);
   }
@@ -46,7 +47,11 @@
       --tab-border-bottom-left-radius,
       var(--border-radius)
     );
+    background-color: var-with-fallbacks(--bg, tab, button, control, secondary);
     --button-margin: var(--tab-margin, 0);
+    --button-bg: var(--tab-bg, var(--button-bg));
+    --button-fg: var(--tab-fg, var(--button-fg));
+    --button-padding: var(--tab-padding, var(--button-padding));
   }
   div,
   span {

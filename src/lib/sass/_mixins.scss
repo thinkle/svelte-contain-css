@@ -41,10 +41,12 @@
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
   line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);  
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);  
-  & :global(p),:global(blockquote) {
+  & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
     font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
     line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
+    margin-left: auto;
+    margin-right: auto;
   }  
   & :global(h1),
    :global(h2),
@@ -54,6 +56,8 @@
    :global(h6) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
     font-family: var-with-fallbacks(--heading-font-family, append($prefixes, var(--font-family))...);
+    margin-left: auto;
+    margin-right: auto;
   }   
 }
 

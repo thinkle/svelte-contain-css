@@ -5,8 +5,10 @@
   export let margin: string | null = null;
   export let maxWidth: string | null = null;
   export let padding: string | null = null;
-
+  export let height: string | null = null;
   export let border: boolean = false;
+  export let paddingTop: string | null = null;
+  export let borderTop: string | null = null;
 
   const style = injectVars($$props, "container", [
     "bg",
@@ -14,6 +16,9 @@
     "margin",
     "maxWidth",
     "padding",
+    "height",
+    "paddingTop",
+    "borderTop",
   ]);
 </script>
 
@@ -35,6 +40,8 @@
     margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
     container-type: inline-size;
     overflow-x: hidden;
+    height: var(--container-height, auto);
+    overflow-y: auto;
   }
   .border {
     border: var-with-fallbacks(

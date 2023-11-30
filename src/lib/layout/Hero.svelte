@@ -30,7 +30,12 @@
     height: var(--hero-height, 100vh);
     font-size: var(--hero-font-size, 2rem);
     box-sizing: border-box;
-
+    animation-name: fade-in;
+    animation-duration: var(--hero-animation-duration, 1s);
+    animation-timing-function: var(
+      --hero-animation-timing-function,
+      ease-in-out
+    );
     & h1,
     h2,
     h3,
@@ -38,6 +43,17 @@
     h5,
     h6 {
       text-align: center;
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      filter: blur(3px);
+      opacity: 0;
+    }
+    100% {
+      filter: blur(0);
+      opacity: 1;
     }
   }
 </style>

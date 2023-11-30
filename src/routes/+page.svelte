@@ -1,6 +1,6 @@
 <script lang="ts">
   import "$lib/vars/defaults.css";
-
+  
   import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Card from "$lib/Card.svelte";
@@ -25,6 +25,7 @@
   import Hero from "$lib/layout/Hero.svelte";
   import PageDemo from "./demos/PageDemo.svelte";
   import TabDemo from "./demos/TabDemo.svelte";
+  import Container from "$lib/layout/Container.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -147,8 +148,7 @@
         properties, such as:
       </p>
       <Code
-        code={`
-<Button 
+        code={`<Button 
   bg="green" 
   fg="white" 
   width="64px" 
@@ -171,21 +171,17 @@
         Because we use CSS variables, you can inject variables wherever you like
         in your component heirarchy, as in this nav bar with custom buttons:
       </p>
-      <code>
-        &lt;Bar --bar-bg="#333"
-        <br />&nbsp;&nbsp;--button-bg="#333"
-        <br />&nbsp;&nbsp;--button-fg="#eee"
-        <br />&nbsp;&nbsp;--button-height="3rem"
-        <br />&gt;
-        <br />
-        &nbsp;&nbsp;&lt;Button&gt;Home&lt;/Button&gt;
-        <br />
-        &nbsp;&nbsp;&lt;Button&gt;About&lt;/Button&gt;
-        <br />
-        &nbsp;&nbsp;&lt;Button&gt;Contact&lt;/Button&gt;
-        <br />
-        &lt;/Bar&gt;
-      </code>
+      <Code
+        code={`<Bar --bar-bg="#333"
+  --button-bg="#333"
+  --button-fg="#eee"
+  --button-height="3rem">
+  <Button>Home</Button>
+  <Button>About</Button>
+  <Button>Contact</Button>
+</Bar>`}
+      />
+
       <Bar
         --bar-bg="#333"
         --button-bg="#333"
@@ -282,10 +278,9 @@
     </ResponsiveText>
   </div> -->
   <div id="typography">
-    <h2>Typography</h2>
     <TypographyDemo />
   </div>
-  <h2>Layout</h2>
+  <Container><h2>Layout</h2></Container>
   <div id="bar">
     <BarDemo />
   </div>
