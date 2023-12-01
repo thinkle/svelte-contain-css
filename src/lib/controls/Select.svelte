@@ -68,9 +68,8 @@
   @import "$lib/sass/_mixins.scss";
   select,
   .select-dropdown {
-    @include box-props-square(select, menu, control, container);
+    @include box-props-square-border(select, menu, control, container);
     @include color-props(select, input, secondary, menu, control, container);
-    @include border-props(select, menu, control, container);
     width: var(--select-width, var(--dropdown-menu-width, 12em));
     display: inline-block;
   }
