@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import { cssProperties } from "$lib/cssprops";
   import MenuList from "$lib/layout/MenuList.svelte";
   import { injectVars } from "$lib/util";
   import { portal } from "svelte-portal";
@@ -28,17 +29,30 @@
     "width",
     "height",
   ]);
-  let rightDropdown: boolean = false;
+  let dropdownTop: number;
+  let dropdownLeft: number;
+  let dropdownMaxHeight: number;
+
   function triggerMenu() {
     open = !open;
     if (open) {
+      injectVariablesIntoDropdown();
       let dropdownRect = dropdownContentElement.getBoundingClientRect();
       let buttonRect = buttonElement.getBoundingClientRect();
-      if (buttonRect.left + dropdownRect.width > window.innerWidth) {
-        rightDropdown = true;
-      } else {
-        rightDropdown = false;
+      // Fix me -- we need to figure out where the dropdown goes in fixed
+      // positioning relative to the viewport
+      dropdownTop = buttonRect.bottom;
+      dropdownLeft = buttonRect.left;
+      if (dropdownLeft + dropdownRect.width > window.innerWidth) {
+        dropdownLeft = window.innerWidth - dropdownRect.width;
       }
+      if (dropdownTop + dropdownRect.height > window.innerHeight) {
+        dropdownTop = Math.max(0, window.innerHeight - dropdownRect.height);
+      }
+      if (dropdownTop + dropdownRect.height > window.innerHeight) {
+        dropdownMaxHeight = window.innerHeight - dropdownTop;
+      }
+
       setTimeout(() => window.addEventListener("click", closeMenu), 0);
     }
   }
@@ -108,6 +122,18 @@
   }
 
   let open = false;
+  let cssVariableContext = "";
+  function injectVariablesIntoDropdown() {
+    cssVariableContext = "";
+    let buttonStyle = getComputedStyle(buttonElement);
+    for (let prop of cssProperties) {
+      if (buttonStyle.getPropertyValue(prop).trim()) {
+        cssVariableContext += `${prop}: ${buttonStyle
+          .getPropertyValue(prop)
+          .trim()};`;
+      }
+    }
+  }
 </script>
 
 <nav class="dropdown-menu" on:keydown={handleKeystroke}>
@@ -116,12 +142,19 @@
   </button>
   <div
     use:portal={"#dropdowns"}
+    on:keydown={handleKeystroke}
     class="dropdown-container"
     class:open
-    class:right={rightDropdown}
     hidden
+    style:top="{dropdownTop}px"
+    style:left="{dropdownLeft}px"
+    style:max-height="{dropdownMaxHeight}px"
   >
-    <div class="dropdown-content" bind:this={dropdownContentElement}>
+    <div
+      class="dropdown-content"
+      bind:this={dropdownContentElement}
+      style={cssVariableContext}
+    >
       <MenuList>
         <slot />
       </MenuList>
@@ -145,21 +178,16 @@
     @include clickable(menu, button, control);
   }
   .dropdown-container {
-    overflow: hidden;
     position: fixed;
     opacity: 0;
     pointer-events: none;
     transition: var(--dropdown-transition, 150ms) opacity;
+    @include custom-scrollbar(dropdown-menu, menu);
   }
-  .dropdown-container.right {
-    right: 0;
-  }
+
   .dropdown-container.open {
     opacity: 1;
     pointer-events: all;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);

@@ -88,7 +88,7 @@
 
   @include responsive-content($max-width: 600px) {
     select {
-      display: block;
+      display: inline-block;
     }
     .dropdown-wrapper {
       display: none;

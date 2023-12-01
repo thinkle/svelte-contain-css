@@ -1,0 +1,131 @@
+--active-filter
+--active-transform
+--bar-align, center
+--bar-height, 3em
+--bar-justify, space-between
+--bar-margin-bottom
+--bar-max-height
+--bar-min-height
+--bg
+--body-bg
+--body-fg
+--body-font-family
+--bold
+--border-color
+--border-radius
+--border-style
+--border-width
+--button-font
+--button-height
+--button-hover-filter
+--button-hover-transform
+--button-width
+--card-bg, var
+--card-header-border
+--card-height
+--card-height-large
+--card-height-small
+--card-width
+--card-width-large
+--card-width-small
+--checkbox-check
+--checkbox-checked-bg
+--checkbox-checked-fg
+--checkbox-hover-filter
+--checkbox-hover-transform
+--checkbox-transition
+--code-font-family
+--code-font-size
+--code-height, auto
+--code-width, 100%
+--column-gap
+--container-height
+--dropdown-menu-width, 12em
+--dropdown-transition, 150ms
+--fg
+--first-heading-margin
+--font-family
+--font-size
+--font-size-small
+--form-input-fixed-width, 100%
+--form-input-fixed-width, var
+--form-input-width
+--form-label-align, baseline
+--form-label-horizontal-gap, var
+--form-label-justify, flex-start
+--form-label-text-align, right
+--form-label-vertical-gap, var
+--form-label-width, 12em
+--gap
+--gap, 4px
+--grab-bar-active-bg
+--grab-bar-active-filter
+--grab-bar-hover-bg
+--grab-bar-hover-filter
+--grab-bar-width
+--greyed-out-filter
+--h
+--heading-bg
+--heading-fg
+--heading-font-family
+--heading-margin
+--heading-pad
+--hero-animation-duration, 1s
+--hero-font-size, 2rem
+--hero-height, 100vh
+--hero-width, 100%
+--hover-filter
+--hover-transform
+--icon-size
+--icon-size, 32px
+--inactive-bg
+--inactive-fg
+--input-width
+--label-width
+--line-height
+--line-width
+
+--mirror-sidebar-icons, scaleX
+--padding
+--padding, form-item, 8px
+--page-border
+--page-height, 100vh
+--page-width, 100%
+--primary-bg
+--primary-fg
+--radio-button-space, var
+--resizer-border, var
+--resizer-color, var
+--resizer-grab-height, 1em
+--resizer-grab-width, 12px
+--resizer-grab-width, 8px
+--resizer-width, var
+--secondary-bg
+--secondary-fg
+--select-width, var
+--shadow-color
+--sidebar-bg
+--sidebar-collapse, "«"
+--sidebar-expand, "»"
+--sidebar-fg
+--sidebar-transition
+--sidebar-width
+--slider-button-color
+--slider-line-color
+--space
+--space-lg
+--space-md
+--space-xl
+--split-pane-height, auto
+--split-pane-left-width, 1fr
+--split-pane-right-width, 1fr
+--split-pane-width, 100%
+--stripe-bg
+--tab-bar-border-left, none
+--tab-bar-gap, var
+--text
+--text-size
+--transition
+--ui-font
+--w
+--white
