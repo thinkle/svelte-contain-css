@@ -10,8 +10,7 @@ body {
   --space-lg: calc(var(--space-md) * 2);
   --space-xl: calc(var(--space-xl) * 2);
   --padding: calc(var(--space) * 4);
-  --gap: calc(var(--padding) * 2);
-  --shadow-distance: var(--space-md);
+  --gap: calc(var(--padding) * 2);  
   --column-gap: var(--gap);
   --row-gap: var(--gap);
   --grab-bar-width: var(--padding);
