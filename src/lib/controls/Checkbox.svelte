@@ -97,12 +97,6 @@
   }
   label:has(input:checked)::before {
     @include color-props(checkbox-checked, toggle-on, primary, checkbox);
-    /* background: var(--checkbox-checked-bg);
-    color: var(--checkbox-checked-fg); */
-    border: var-with-fallbacks(--border, checkbox-checked, toggle-on, checkbox);
-    box-sizing: border-box;
-    width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
-    height: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
   }
   label:has(input:checked)::after {
     content: var(--checkbox-check);
