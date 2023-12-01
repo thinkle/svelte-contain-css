@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
+  import MiniButton from "$lib/controls/MiniButton.svelte";
   import Container from "$lib/layout/Container.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Code from "$lib/misc/Code.svelte";
@@ -78,18 +79,19 @@
       unit: "",
     },
     {
-      name: "--button-padding-left",
-      type: "text",
-      placeholder: "8px",
-      defaultValue: "var(--padding)",
-      unit: "",
+      name: "--button-box-shadow-color",
+      type: "color",
+      placeholder: "e.g., #0003",
     },
     {
-      name: "--button-padding-right",
-      type: "text",
-      placeholder: "8px",
-      defaultValue: "var(--padding)",
-      unit: "",
+      name: "--button-box-shadow-distance",
+      type: "distance",
+      placeholder: "var(--space-lg)",
+    },
+    {
+      name: "--mini-button-size",
+      type: "distance",
+      placeholder: "48px",
     },
   ];
   let cssValues = {};
@@ -105,7 +107,8 @@
   Icon Button
   <div slot="icon">▶</div>
 </Button>
-<Button primary={true}>Primary Button</Button>`}
+<Button primary={true}>Primary Button</Button>
+<MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
   />
   <SplitPane leftWidth="2fr">
     <CssVariables
@@ -123,6 +126,9 @@
           <div slot="icon">▶</div>
         </Button>
         <Button primary={true}>Primary Button</Button>
+        <MiniButton bg="var(--material-color-deep-orange)" fg="white"
+          >+</MiniButton
+        >
       </CssWrapper>
     </div>
   </SplitPane>

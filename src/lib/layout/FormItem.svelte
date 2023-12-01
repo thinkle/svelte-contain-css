@@ -4,19 +4,23 @@
   export let globalInputStyles = true;
 </script>
 
-<label class:fullWidth class:globalInputStyles>
-  <span class="label">
-    <slot name="label" />
-  </span>
-  <span class="input">
-    <slot />
-  </span>
-</label>
+<div class="form-item" class:fullWidth class:globalInputStyles>
+  <slot name="before" />
+  <label>
+    <span class="label">
+      <slot name="label" />
+    </span>
+    <span class="input">
+      <slot />
+    </span>
+  </label>
+  <slot name="after" />
+</div>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
-  label {
+  .form-item {
     display: flex;
     align-items: var(--form-label-align, baseline);
     justify-content: var(--form-label-justify, flex-start);
@@ -25,6 +29,9 @@
     padding-bottom: var(--padding, form-item, 8px);
     @include typography-props(form-item, ui);
     box-sizing: border-box;
+  }
+  label {
+    display: contents;
   }
   .label {
     box-sizing: border-box;
@@ -45,23 +52,22 @@
   }
 
   @container (max-width: 400px) {
-    label {
+    .form-item {
       flex-direction: column;
       gap: var(--form-label-vertical-gap, var(--space));
     }
-    .label {
+    .form-item {
       width: auto;
       text-align: left;
       font-size: var(--font-size-small);
     }
-    .input {
+    .form-item {
       width: var(--form-input-fixed-width, var(--form-input-width));
     }
   }
 
   /* Global Input Styles */
-  .globalInputStyles :global(input),
-  .globalInputStyles :global(button) {
+  .globalInputStyles :global(input) {
     @include typography-props(form-input, input, ui);
     @include box-props-square(form-input, input, ui);
   }

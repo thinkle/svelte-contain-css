@@ -1,6 +1,6 @@
 <script lang="ts">
   import "$lib/vars/defaults.css";
-  
+
   import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Card from "$lib/Card.svelte";
@@ -26,6 +26,7 @@
   import PageDemo from "./demos/PageDemo.svelte";
   import TabDemo from "./demos/TabDemo.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import DropdownMenuDemo from "./demos/DropdownMenuDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -305,5 +306,8 @@
   </div>
   <div id="split">
     <SplitPaneDemo />
+  </div>
+  <div id="menu">
+    <DropdownMenuDemo />
   </div>
 </Page>
