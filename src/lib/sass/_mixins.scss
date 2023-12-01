@@ -125,12 +125,12 @@
 }
 
 @mixin box-shadow($prefixes...) {  
-  box-shadow: 
-    var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...)
-    var-with-fallbacks(--shadow-distance, append($prefixes, 4px)...)
-    0 
-    var-with-fallbacks(--shadow-color, append($prefixes, green)...);
-  box-shadow: 4px 4px 0  green;
+  //works:  
+  $shadow-distance: var-with-fallbacks(--shadow-distance, append($prefixes, var(--space-md))...);
+  $shadow-blur: var-with-fallbacks(--shadow-blur, append($prefixes, var(--space))...);
+  $shadow-color: var-with-fallbacks(--shadow-color, append($prefixes, rgba(127, 127, 127, 0.4))...);
+  
+  box-shadow: $shadow-distance $shadow-distance $shadow-blur $shadow-color;
 }
 
 @mixin clickable($prefixes...) {
@@ -165,7 +165,7 @@
     border-radius: var-with-fallbacks(--scrollbar-thumb-radius, append($prefixes, var(--border-radius))...);
 
     &:hover {
-      background: var-with-fallbacks(--scroll-hover-bg, append($prefixes, var(--secondary-bg))...);
+      background: var-with-fallbacks(--scrollbar-thumb-hover-bg, append($prefixes, var(--secondary-bg))...);
       
     }
   }
