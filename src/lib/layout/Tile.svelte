@@ -41,14 +41,6 @@
     align-items: var-with-fallbacks(--align, tile, center);
     // Add other specific styles for the tile
   }
-  @include responsive-content(600px) {
-    .tile,
-    .tile label,
-    .tile button {
-      width: var(--tile-width-small, calc(var(--space-lg) * 16));
-      min-height: var(--tile-small, calc(var(--space-lg) * 24));
-    }
-  }
   @include responsive-content(null, 1200px) {
     .tile,
     .tile label,
@@ -58,6 +50,17 @@
     }
   }
 
+  /* Smaller comes after so it "wins" if 
+  we have a responsive container query vs. 
+  a responsive media query */
+  @include responsive-content(601px) {
+    .tile,
+    .tile label,
+    .tile button {
+      width: var(--tile-width-small, calc(var(--space-lg) * 16));
+      min-height: var(--tile-small, calc(var(--space-lg) * 24));
+    }
+  }
   button.tile,
   label.tile {
     @include clickable(tile);
