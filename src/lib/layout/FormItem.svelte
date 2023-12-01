@@ -54,7 +54,11 @@
   @container (max-width: 400px) {
     .form-item {
       flex-direction: column;
+      align-items: flex-start;
       gap: var(--form-label-vertical-gap, var(--space));
+    }
+    .label {
+      text-align: left;
     }
     .form-item {
       width: auto;
