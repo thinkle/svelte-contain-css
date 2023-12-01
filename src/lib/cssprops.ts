@@ -170,6 +170,29 @@ const components: {
     props: [],
     propnames: [...typography, ...color],
   })),
+  {
+    component: "tile",
+    props: [],
+    propnames: [
+      ...color,
+      ...box,
+      ...typography,
+      ...clickable,
+      ...size,
+      "width-large",
+      "width-small",
+      "height-large",
+      "height-small",
+      "selected",
+      "checkbox",
+      "checkbox-checked",
+    ],
+  },
+  {
+    component: "tile-selected",
+    props: [],
+    propnames: [...color, ...typography],
+  },
 ];
 
 for (let c of components) {
