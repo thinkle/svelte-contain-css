@@ -89,8 +89,8 @@
 <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
   <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
   <p>
-    The Simple Svelte Component Library designed to make optimal use of css
-    variables & container queries to make your life easy.
+    The Simple Svelte Component Library that uses css variables & container
+    queries to make your life easier.
   </p>
 </Hero>
 <Page {right} sticky>
