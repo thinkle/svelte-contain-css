@@ -1,4 +1,5 @@
 <script>
+  import purple from "$lib/vars/themes/purple.css?raw";
   import browser from "$lib/vars/themes/typography-browser.css?raw";
   import airy from "$lib/vars/themes/typography-airy.css?raw";
   import ibm from "$lib/vars/themes/typography-carbon.css?raw";
@@ -11,6 +12,7 @@
   ];
 
   let colorThemes = [
+    { name: "Purple", css: purple },
     { name: "Defaults", css: "" },
     { name: "Light or Dark (Responsive)", css: lightordark },
   ];
