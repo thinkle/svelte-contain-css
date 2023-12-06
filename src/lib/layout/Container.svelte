@@ -43,6 +43,7 @@
     overflow-x: hidden;
     height: var(--container-height);
     overflow-y: auto;
+    @include custom-scrollbar(container);
   }
   .border {
     border: var-with-fallbacks(

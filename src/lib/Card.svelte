@@ -88,6 +88,7 @@
   .card.fixedHeight {
     height: var(--h);
     container-type: size;
+    @include custom-scrollbar(card, container);
   }
 
   header,
