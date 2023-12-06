@@ -75,7 +75,12 @@
 }
 
 @mixin border-props-border ($prefixes...) {
-  border: var-with-fallbacks(--border, $prefixes...);  
+  border: var-with-fallbacks(
+    --border, 
+    append(
+      $prefixes, 
+      var(--border-width, 1px) var(--border-style, solid) var(--border-color, var(--fg))
+    )...);  
   $directions: (
     top,
     right,
@@ -89,16 +94,14 @@
     // Apply prop for each direction
     @each $p in $rectProps {
       #{$p}-#{$dir}: var-with-fallbacks(--#{$p}-#{$dir},
-        append($prefixes,
-          var(--border-width, 1px)
-          var(--border-style, solid)
-          var(--border-color, var(--fg))
+        append($prefixes,          
+          var-with-fallbacks(--border,$prefixes...)
         )...)
     }
   }
 }
 @mixin border-props-none ($prefixes...) {
-  border: var-with-fallbacks(--border, $prefixes...);
+  border: var-with-fallbacks(--border, append($prefixes,none)...);
   $directions: (
     top,
     right,
@@ -113,7 +116,9 @@ $rectProps : (border);
   // Apply prop for each direction
   @each $p in $rectProps {
     #{$p}-#{$dir}: var-with-fallbacks(--#{$p}-#{$dir},
-      append($prefixes,none)...)
+      append($prefixes,
+        var-with-fallbacks(--border,append($prefixes,none)...)
+      )...);
   }
 }
 }
