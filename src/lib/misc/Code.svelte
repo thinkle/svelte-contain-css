@@ -20,4 +20,11 @@
     width: var(--code-width, 100%);
     overflow-x: auto;
   }
+  .code :global(code[class*="language-"]),
+  .code :global(pre[class*="language-"]) {
+    font-family: var(--code-font-family);
+    font-size: var(--code-font-size);
+    line-height: var(--code-line-height);
+    tab-size: var(--code-tab-size);
+  }
 </style>
