@@ -47,21 +47,35 @@
       width: var(--menu-item-width, 100%);
       height: var(--menu-item-height);
       text-decoration: none;
-      @include typography-props(menu-item, button, ui);
-      @include color-props(menu-item, button);
-      @include box-props-square(menu-item, button);
-      @include clickable(menu-item, button);
+      @include typography-props(menu-item, button, ui, control);
+      @include color-props(menu-item, button, control);
+      @include box-props-square(menu-item, button, control);
+      @include clickable(menu-item, button, control);
     }
+  }
 
-    & :global(li:nth-of-type(even)) > {
+  /* & :global(li:nth-of-type(even)) > {
       @include global-buttons {
-        @include color-props(menu-item-even, stripe, menu-item, button);
+        @include color-props(
+          menu-item-even,
+          stripe,
+          menu-item,
+          button,
+          control
+        );
       }
     }
 
     & :global(li:nth-of-type(even)) :global(.active),
     :global(li:nth-of-type(odd)) :global(.active) {
-      @include color-props(menu-item-active, primary, menu-item, button);
+      @include color-props(
+        menu-item-active,
+        primary,
+        menu-item,
+        button,
+        control,
+        container
+      );
     }
-  }
+  } */
 </style>
