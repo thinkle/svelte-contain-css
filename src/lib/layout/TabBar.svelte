@@ -46,6 +46,6 @@
   .sticky {
     position: sticky;
     top: calc(-1 * var-with-fallbacks(--padding, container, block, 8px));
-    background-color: var-with-fallbacks(--bg, tab-bar);
+    background-color: var-with-fallbacks(--bg, tab-bar, white);
   }
 </style>

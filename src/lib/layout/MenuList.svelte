@@ -52,6 +52,17 @@
       @include box-props-square(menu-item, button, control);
       @include clickable(menu-item, button, control);
     }
+
+    & :global(.active) {
+      @include color-props(
+        menu-item-active,
+        primary,
+        menu-item,
+        button,
+        control,
+        container
+      );
+    }
   }
 
   /* & :global(li:nth-of-type(even)) > {

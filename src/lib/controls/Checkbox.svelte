@@ -28,8 +28,8 @@
     --checkbox-checked-bg: var(--primary-bg);
     --checkbox-checked-fg: var(--primary-fg);
     --checkbox-border: 1px solid var(--white);
-    --checkbox-checked-border: 1px solid var(--white); */
-    --checkbox-check: "✓";
+    --checkbox-checked-border: 1px solid var(--white); 
+    --checkbox-check: "✓"; */
   }
 
   .offscreen,
@@ -99,9 +99,15 @@
     @include color-props(checkbox-checked, toggle-on, primary, checkbox);
   }
   label:has(input:checked)::after {
-    content: var(--checkbox-check);
+    content: var(--checkbox-check, "✓");
     font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
-    color: var-with-fallbacks(--fg, checkbox-checked, toggle-on, checkbox);
+    color: var-with-fallbacks(
+      --fg,
+      checkbox-checked,
+      toggle-on,
+      primary,
+      checkbox
+    );
     position: absolute;
     left: 0;
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
