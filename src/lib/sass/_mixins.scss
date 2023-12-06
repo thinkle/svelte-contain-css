@@ -41,6 +41,7 @@
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
   line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);
+
 }
 
 @mixin typography-container-props ($prefixes...) {
@@ -51,6 +52,7 @@
     line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
     margin-left: auto;
     margin-right: auto;
+    font-weight: var-with-fallbacks(--body-font-weight, append($prefixes, var(--normal))...);
   }  
   & :global(h1),
    :global(h2),
@@ -60,8 +62,11 @@
    :global(h6) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
     font-family: var-with-fallbacks(--heading-font-family, append($prefixes, var(--font-family))...);
+    line-height: var-with-fallbacks(--heading-line-height, append($prefixes, var(--line-height))...);
     margin-left: auto;
     margin-right: auto;
+    color: var(--heading-color,append($prefixes,var(--fg))...);
+    font-weight: var(--heading-font-weight,append($prefixes,var(--bold)));
   }   
 }
 

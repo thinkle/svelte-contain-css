@@ -2,7 +2,6 @@
 @import url("./colors.css");
 @import url("./affordances.css");
 @import url("./layout.css");
-@import url("./components.css");
 
 :root {
   font-family: var(--font-family);
