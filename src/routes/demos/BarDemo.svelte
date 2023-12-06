@@ -8,7 +8,7 @@
   import type { CSSVariable } from "./types";
   import CssWrapper from "./CssWrapper.svelte";
   let barBG = "var(--material-color-light-blue-900)";
-
+  let barFG = "var(--material-color-light-blue-100)";
   const cssVariables: CSSVariable[] = [
     {
       name: "--bar-height",
@@ -117,7 +117,7 @@
 </TextLayout>
 <Container --container-border="1px solid #ccc">
   <h3>Example</h3>
-  <Bar --bar-bg={barBG}>
+  <Bar --bar-bg={barBG} --bar-fg={barFG}>
     <div>Left</div>
     <div>Center</div>
     <div>Right</div>
@@ -126,7 +126,10 @@
   <h3>Code</h3>
   <Code
     code={`
-  <Bar --bar-bg="${barBG}">
+  <Bar 
+    --bar-bg="${barBG}" 
+    --bar-fg="${barFG}"
+    >
     <div>Left</div>
     <div>Center</div>
     <div>Right</div>
