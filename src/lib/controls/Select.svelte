@@ -53,8 +53,10 @@
 </select>
 <div class="dropdown-wrapper">
   <DropdownMenu>
-    <span class="select-dropdown" slot="label"
-      >{#if activeOption}{@html activeOption.html}{:else}-{/if}
+    <span class="select-dropdown" slot="label">
+      <span>
+        {#if activeOption}{@html activeOption.html}{:else}-{/if}
+      </span>
     </span>
     {#each options as option, index}
       <li>
@@ -67,15 +69,39 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   select,
-  .select-dropdown {
-    @include box-props-square-border(select, menu, control, container);
-    @include color-props(select, input, secondary, menu, control, container);
+  .dropdown-wrapper {
+    @include box-props-square-border(select, input, menu, control, container);
+    @include color-props(select, input, menu, control, container);
     width: var(--select-width, var(--dropdown-menu-width, 12em));
-    display: inline-block;
+  }
+  .select-dropdown {
+    display: inline-flex;
+    width: var(--select-width, var(--dropdown-menu-width, 12em));
+    box-sizing: border-box;
+  }
+  .dropdown-wrapper {
+    @include color-props(select, input, menu, control, container);
+  }
+  .dropdown-menu :global(.dropdown-menu) > :global(button) {
+    background-color: inherit;
+    color: inherit;
+  }
+  .select-dropdown {
+    position: relative;
   }
   .select-dropdown::after {
-    content: "↓";
-    padding-left: var(--gap);
+    content: var(--select-arrow, "⌄"); /* ↓ */
+    margin-left: auto;
+    transform: scaleX(1.5) translateY(-50%);
+    display: inline-grid;
+    width: 1em;
+    place-content: center;
+    position: absolute;
+    right: var(--padding);
+    top: 50%;
+  }
+  :global(.open) .select-dropdown::after {
+    transform: rotate(180deg) scaleX(1.5);
   }
 
   select {

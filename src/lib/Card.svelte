@@ -1,6 +1,5 @@
 <script lang="ts">
   import { injectVars } from "./util";
-
   export let center: boolean = false;
   export let fixedHeight = false;
   export let bg: string | null = null;
@@ -44,6 +43,7 @@
     --h: var(--card-height);
     @include box-shadow(card, container);
     @include color-props(card, container);
+    @include typography-container-props(card, container);
     border-radius: var-with-fallbacks(--border-radius, card, container, 0);
     border: var-with-fallbacks(
       --border,
@@ -61,7 +61,6 @@
     .card {
       --w: var(--card-width-small);
       --h: var(--card-height-small);
-      --font-size: 0.8em;
       --sidebar-width: calc(var(--card-width-small) - var(--padding) * 2);
     }
   }
@@ -69,7 +68,6 @@
     .card {
       --w: var(--card-width-large);
       --h: var(--card-height-large);
-      --font-size: 1.2em;
     }
   }
 
@@ -81,8 +79,6 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
-    font-size: var(--font-size);
-    font-family: var(--font-family);
   }
   .card section {
     line-height: var(--line-height);

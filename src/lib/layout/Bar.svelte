@@ -52,7 +52,7 @@
         var-with-fallbacks(--border-style, bar, 1px)
         var-with-fallbacks(--border-color, bar, 1px)
     );
-    margin-bottom: var(--bar-margin-bottom);
+    margin-bottom: var(--bar-margin-bottom, 1em);
     min-height: var(--bar-min-height);
     height: var(--bar-height, 3em);
     max-height: var(--bar-max-height);

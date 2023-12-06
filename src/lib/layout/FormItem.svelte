@@ -1,5 +1,4 @@
 <script>
-  import "../vars/globalInputs.css";
   export let fullWidth = false;
   export let globalInputStyles = true;
 </script>

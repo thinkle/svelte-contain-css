@@ -136,7 +136,7 @@
   }
 </script>
 
-<nav class="dropdown-menu" on:keydown={handleKeystroke}>
+<nav class="dropdown-menu" on:keydown={handleKeystroke} class:open>
   <button bind:this={buttonElement} on:click={triggerMenu}>
     <slot name="label">Menu</slot>
   </button>
