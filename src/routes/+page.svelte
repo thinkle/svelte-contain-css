@@ -27,6 +27,7 @@
   import TabDemo from "./demos/TabDemo.svelte";
   import Container from "$lib/layout/Container.svelte";
   import DropdownMenuDemo from "./demos/DropdownMenuDemo.svelte";
+  import Themes from "./Themes.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -136,6 +137,8 @@
       </li>
     </MenuList>
   </Sidebar>
+
+  <Themes />
 
   <GridLayout>
     <Card>
