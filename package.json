@@ -13,8 +13,11 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
-		}
+			"svelte": "./dist/index.js",
+			"css": "./dist/vars/defaults.css"
+		},
+		"./vars/*":"./dist/vars/*",
+		"./themes/*":"./dist/vars/themes/*"
 	},
 	"files": [
 		"dist",
