@@ -1,3 +1,5 @@
+@import 'containers';
+
 @function var-with-fallbacks($base-var, $args...) {
   // Remove the initial -- from the base variable for concatenation purposes
   $base-var-name: str-slice($base-var, 3);
@@ -237,24 +239,71 @@ $rectProps : (border);
   Put min-width queries *after* max-width queries so that smaller
   container queries don't get their styles overridden by large media queries.
   */
-@mixin responsive-content ($max-width: null, $min-width: null) {
-  @if $max-width {  
-    @media (max-width: #{$max-width}) {
-      @content;
+    @mixin responsive-content($max-width: null, $min-width: null, $max-height: null, $min-height: null) {
+  
+      // Max-width and Max-height
+      @if $max-width and $max-height {
+        @media (max-width: #{$max-width}) and (max-height: #{$max-height}) {
+          @content;
+        }
+  
+        @container (max-width: #{$max-width}) and (max-height: #{$max-height}) {
+          @content;
+        }
+      }
+  
+      // Max-width only
+      @else if $max-width {
+        @media (max-width: #{$max-width}) {
+          @content;
+        }
+  
+        @container (max-width: #{$max-width}) {
+          @content;
+        }
+      }
+  
+      // Max-height only
+      @else if $max-height {
+        @media (max-height: #{$max-height}) {
+          @content;
+        }
+  
+        @container (max-height: #{$max-height}) {
+          @content;
+        }
+      }
+  
+      // Min-width and Min-height
+      @if $min-width and $min-height {
+        @media (min-width: #{$min-width}) and (min-height: #{$min-height}) {
+          @content;
+        }
+  
+        @container (min-width: #{$min-width}) and (min-height: #{$min-height}) {
+          @content;
+        }
+      }
+  
+      // Min-width only
+      @else if $min-width {
+        @media (min-width: #{$min-width}) {
+          @content;
+        }
+  
+        @container (min-width: #{$min-width}) {
+          @content;
+        }
+      }
+  
+      // Min-height only
+      @else if $min-height {
+        @media (min-height: #{$min-height}) {
+          @content;
+        }
+  
+        @container (min-height: #{$min-height}) {
+          @content;
+        }
+      }
     }
-    @container (max-width: #{$max-width}) {
-      @content;
-    }
-  }
-
-  @if $min-width {
-    @media (min-width: #{$min-width}) {
-      @content;
-    }
-    @container (min-width: #{$min-width}) {
-      @content;
-    }
-
-    
-  }
-}
