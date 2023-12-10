@@ -3,11 +3,14 @@
   export let interactive = false; // Prop to make the tile clickable or not
   export let selectable = false;
   export let checked = false;
+  $: console.log("Checked=>", checked);
 </script>
 
 {#if selectable}
   <label class="tile">
-    <div class="checkbox"><input type="checkbox" bind:checked /></div>
+    <div class="checkbox">
+      <input type="checkbox" bind:checked on:input on:change on:click />
+    </div>
     <slot />
   </label>
 {:else if interactive}
@@ -34,33 +37,14 @@
     @include color-props(tile);
     @include typography-container-props(tile);
     width: var(--tile-width, calc(var(--space-lg) * 24));
-    min-height: var(--tile-height, calc(var(--space-lg) * 36));
+
     display: inline-flex;
     flex-direction: column;
     justify-content: var-with-fallbacks(--justify, tile, flex-start);
     align-items: var-with-fallbacks(--align, tile, center);
     // Add other specific styles for the tile
   }
-  @include responsive-content(null, 1200px) {
-    .tile,
-    .tile label,
-    .tile button {
-      width: var(--tile-width-large, calc(var(--space-lg) * 32));
-      min-height: var(--tile-height-large, calc(var(--space-lg) * 48));
-    }
-  }
 
-  /* Smaller comes after so it "wins" if 
-  we have a responsive container query vs. 
-  a responsive media query */
-  @include responsive-content(601px) {
-    .tile,
-    .tile label,
-    .tile button {
-      width: var(--tile-width-small, calc(var(--space-lg) * 16));
-      min-height: var(--tile-small, calc(var(--space-lg) * 24));
-    }
-  }
   button.tile,
   label.tile {
     @include clickable(tile);
@@ -69,6 +53,15 @@
     @include color-props(tile-selected);
     @include typography-props(tile-selected);
   }
+  $aspect: 1.333;
+  /* Sizing code */
+
+  .tile {
+    width: var(--tile-width, 200px);
+    height: calc(var(--tile-width, 200px) * $aspect);
+  }
+
+  /* Checkbox code */
   .tile {
     position: relative;
   }
@@ -110,7 +103,7 @@
     );
   }
   .checkbox:has(input:checked)::after {
-    content: var(--tile-checkbox-check, var(--checkbox-check));
+    content: var(--tile-checkbox-check, var(--checkbox-check, "✓"));
     font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
     color: var-with-fallbacks(--fg, checkbox-checked, toggle-on, checkbox);
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
