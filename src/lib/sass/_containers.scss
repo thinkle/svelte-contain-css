@@ -1,0 +1,117 @@
+$xxsmall : 120px;
+$xsmall : 240px;
+$small : 320px;
+$medium : 640px;
+$large: 1024px;
+$xlarge: 1200px;
+
+@mixin width_container($min-width: null, $max-width: null) {
+  @if $min-width !=null and $max-width !=null {
+    @container (min-width: #{$min-width}) and (max-width: #{$max-width}) {
+      @content;
+    }
+  }
+
+  @else if $min-width !=null {
+    @container (min-width: #{$min-width}) {
+      @content;
+    }
+  }
+
+  @else if $max-width !=null {
+    @container (max-width: #{$max-width}) {
+      @content;
+    }
+  }
+}
+
+
+@mixin height_container($min-height: null, $max-height: null) {
+  @if $min-height !=null and $max-height !=null {
+    @container (min-height: #{$min-height}) and (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+
+  @else if $min-height !=null {
+    @container (min-height: #{$min-height}) {
+      @content;
+    }
+  }
+
+  @else if $max-height !=null {
+    @container (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+}
+
+@mixin box_container($min-width: null, $max-width: null, $min-height: null, $max-height: null) {
+  @if $min-width !=null and $max-width !=null and $min-height !=null and $max-height !=null {
+    @container (min-width: #{$min-width}) and (max-width: #{$max-width}) and (min-height: #{$min-height}) and (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+
+  @else if $min-width !=null and $min-height !=null {
+    @container (min-width: #{$min-width}) and (min-height: #{$min-height}) {
+      @content;
+    }
+  }
+
+  @else if $max-width !=null and $max-height !=null {
+    @container (max-width: #{$max-width}) and (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+
+  @else if $min-width !=null and $max-height !=null {
+    @container (min-width: #{$min-width}) and (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+
+  @else if $max-width !=null and $min-height !=null {
+    @container (max-width: #{$max-width}) and (min-height: #{$min-height}) {
+      @content;
+    }
+  }
+
+  @else if $min-width !=null {
+    @container (min-width: #{$min-width}) {
+      @content;
+    }
+  }
+
+  @else if $max-width !=null {
+    @container (max-width: #{$max-width}) {
+      @content;
+    }
+  }
+
+  @else if $min-height !=null {
+    @container (min-height: #{$min-height}) {
+      @content;
+    }
+  }
+
+  @else if $max-height !=null {
+    @container (max-height: #{$max-height}) {
+      @content;
+    }
+  }
+}
+
+@mixin aspect_container($min-width: null, $max-width: null, $aspect-ratio: 16/9) {
+  $min-height: null;
+  $max-height: null;
+  @if $min-width != null {  
+    $min-height: $min-width * $aspect-ratio;
+  }
+  /* @if $max-width != null {  
+    $max-height: $max-width * $aspect-ratio;
+  }   */
+  @include box_container($min-width, $max-width, $min-height, $max-height) {
+    @content;
+  };
+}
