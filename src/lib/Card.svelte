@@ -53,6 +53,7 @@
     );
     display: flex;
     flex-direction: column;
+    margin: var-with-fallbacks(--margin, card, 16px);
   }
   .card section {
     flex-grow: 1;
