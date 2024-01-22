@@ -4,6 +4,9 @@
   import airy from "$lib/vars/themes/typography-airy.css?raw";
   import ibm from "$lib/vars/themes/typography-carbon.css?raw";
   import lightordark from "$lib/vars/themes/lightordark.css?raw";
+  import light from "$lib/vars/themes/light.css?raw";
+  import dark from "$lib/vars/themes/dark.css?raw";
+
   let typographyThemes = [
     { name: "Defaults", css: "" },
     { name: "Browser Defaults", css: browser },
@@ -13,8 +16,10 @@
 
   let colorThemes = [
     { name: "Purple", css: purple },
-    { name: "Defaults", css: "" },
+    { name: "Light", css: light },
+    { name: "Dark", css: dark },
     { name: "Light or Dark (Responsive)", css: lightordark },
+    { name: "Defaults", css: "" },
   ];
 
   import RadioButton from "$lib/controls/RadioButton.svelte";
@@ -42,7 +47,7 @@
   $: injectStyle("color", colorThemes[colorTheme].css);
 </script>
 
-<FormItem>
+<FormItem fullWidth>
   <span class="label">Typography</span>
   {#each typographyThemes as theme, i}
     <RadioButton bind:group={typographyTheme} value={i}
@@ -50,7 +55,7 @@
     >
   {/each}
 </FormItem>
-<FormItem>
+<FormItem fullWidth>
   <span class="label">Color</span>
   {#each colorThemes as theme, i}
     <RadioButton bind:group={colorTheme} value={i}>{theme.name}</RadioButton>
