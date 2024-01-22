@@ -1,0 +1,24 @@
+/* light mode */
+
+:root {
+  --fg: var(--material-color-grey-800);
+  --bg: #fafafa;
+  --container-bg: var(--material-color-grey-100);
+  --container-fg: var(--material-color-grey-800);
+  --sidebar-bg: var(--material-color-grey-100);
+  --sidebar-fg: var(--material-color-grey-900);
+  --menu-bg: var(--material-color-grey-100);
+  --menu-fg: var(--material-color-grey-900);
+  --primary-bg: var(--material-color-blue-500);
+  --primary-fg: var(--material-color-grey-100);
+  --secondary-bg: var(--material-color-grey-400);
+  --secondary-fg: var(--material-color-grey-900);
+  --stripe-bg: var(--material-color-grey-900);
+  --stripe-fg: var(--material-color-grey-100);
+  --control-bg: var(--material-color-grey-300);
+  --control-fg: var(--material-color-grey-900);
+  --border-color: var(--material-color-grey-400);
+  --input-bg: #fefefe;
+  --input-fg: var(--material-color-grey-900);
+  --hover-filter: brightness(0.9) contrast(1.5);
+}
