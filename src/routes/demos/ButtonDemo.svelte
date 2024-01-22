@@ -110,26 +110,21 @@
 <Button primary={true}>Primary Button</Button>
 <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
   />
-  <SplitPane leftWidth="2fr">
-    <CssVariables
-      slot="left"
-      variables={buttonCSSVariables}
-      onSetVariables={(variables) => {
-        cssValues = variables;
-      }}
-    />
-    <div slot="right">
-      <CssWrapper variables={cssValues}>
-        <Button>Standard Button</Button>
-        <Button>
-          Icon Button
-          <div slot="icon">▶</div>
-        </Button>
-        <Button primary={true}>Primary Button</Button>
-        <MiniButton bg="var(--material-color-deep-orange)" fg="white"
-          >+</MiniButton
-        >
-      </CssWrapper>
-    </div>
-  </SplitPane>
+  <h3>Try Customizing Some Buttons...</h3>
+  <CssVariables
+    variables={buttonCSSVariables}
+    onSetVariables={(variables) => {
+      cssValues = variables;
+    }}
+  />
+
+  <CssWrapper variables={cssValues}>
+    <Button>Standard Button</Button>
+    <Button>
+      Icon Button
+      <div slot="icon">▶</div>
+    </Button>
+    <Button primary={true}>Primary Button</Button>
+    <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
+  </CssWrapper>
 </Container>
