@@ -33,9 +33,10 @@
       --tile-border,
       var(--border-width) var(--border-style) var(--border-color)
     );
-    @include box-props-square-border(tile);
+    @include box-props-square-border(tile, container);
     @include color-props(tile);
     @include typography-container-props(tile);
+    @include box-shadow(tile, container);
     width: var(--tile-width, calc(var(--space-lg) * 24));
 
     display: inline-flex;
