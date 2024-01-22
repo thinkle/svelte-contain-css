@@ -129,6 +129,8 @@
   .split-pane > div {
     padding: var-with-fallbacks(--padding, split-pane-content, split-pane, 8px);
     container-type: inline-size;
+    display: flex;
+    flex-direction: column;
   }
 
   /* Resizer */
