@@ -28,6 +28,9 @@
   import Container from "$lib/layout/Container.svelte";
   import DropdownMenuDemo from "./demos/DropdownMenuDemo.svelte";
   import Themes from "./Themes.svelte";
+  import CardDemo from "./demos/CardDemo.svelte";
+  import TileDemo from "./demos/TileDemo.svelte";
+  import RowsAndColumnsDemo from "./demos/RowsAndColumnsDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -44,6 +47,15 @@
 
   const componentCategories = [
     {
+      title: "Overview",
+      items: [
+        { title: "About", url: "#about" },
+        { title: "Themes", url: "#themes" },
+        { title: "Variables", url: "#variables" },
+        { title: "Typography", url: "#typography" },
+      ],
+    },
+    {
       title: "Controls",
       items: [
         { title: "Button", url: "#button" },
@@ -56,9 +68,11 @@
     {
       title: "Layout Components",
       items: [
-        { title: "Cards", url: "#cards" },
         { title: "Bar", url: "#bar" },
+        { title: "Cards", url: "#cards" },
+        { title: "Tiles", url: "#tiles" },
         { title: "Grid", url: "#grid" },
+        { title: "Rows & Columns", url: "#rows-and-columns" },
         { title: "Page", url: "#page" },
         { title: "Hero", url: "#hero" },
       ],
@@ -138,6 +152,7 @@
     </MenuList>
   </Sidebar>
 
+  <h2 id="themes">Themes</h2>
   <Themes />
 
   <GridLayout>
@@ -215,21 +230,6 @@
         </p>
       </div>
     </Card>
-    <Card>
-      <h2 slot="header">The Adaptable Card</h2>
-      <GridLayout --card-width-small="80px">
-        <Card --card-bg="var(--material-color-teal)">We can nest</Card>
-        <Card --card-bg="var(--material-color-deep-orange)"
-          >Cards within cards</Card
-        >
-        <Card
-          --card-bg="var(--material-color-yellow)"
-          --card-fg="var(--material-color-grey-900)">Just for kicks!</Card
-        >
-        <p>If we really feel like it.</p>
-      </GridLayout>
-      <div slot="footer">We also support a simple card footer</div>
-    </Card>
   </GridLayout>
   <div id="variables">
     <VariableDemo />
@@ -287,6 +287,17 @@
   <Container><h2>Layout</h2></Container>
   <div id="bar">
     <BarDemo />
+  </div>
+  <div id="cards">
+    <CardDemo />
+  </div>
+  <div id="tiles">
+    <TileDemo />
+  </div>
+  <div id="grid"></div>
+  <div id="hero"></div>
+  <div id="rows-and-columns">
+    <RowsAndColumnsDemo />
   </div>
   <h2>Components</h2>
   <div id="button">
