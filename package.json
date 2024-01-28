@@ -1,6 +1,6 @@
 {
 	"name": "contain-css-svelte",
-	"version": "0.0.1",
+	"version": "0.0.4",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
@@ -16,8 +16,13 @@
 			"svelte": "./dist/index.js",
 			"css": "./dist/vars/defaults.css"
 		},
-		"./vars/*":"./dist/vars/*",
-		"./themes/*":"./dist/vars/themes/*"
+		"./vars/*": "./dist/vars/*",
+		"./themes/*": "./dist/vars/themes/*",			
+		"./controls/":"./dist/controls/",
+		"./layout/":"./dist/layout/",
+		"./dropdowns/":"./dist/dropdowns/",
+		"./typography/":"./dist/typography/",
+		"./misc":"./dist/misc/"
 	},
 	"files": [
 		"dist",
@@ -44,7 +49,6 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"prism-svelte": "^0.5.0",
 		"svelte-actions-resize": "^0.1.1",
 		"svelte-portal": "^2.2.0",
 		"svelte-prism": "^1.1.6"
