@@ -97,6 +97,11 @@
       You can turn off the global input styles by setting globalInputStyles to
       false.
     </p>
+    <p>
+      Out of the box, we use nested labels for simple accessibility, so it's
+      important that if you have a complex input, you have the first item in it
+      the one you want focused when the user clicks the label.
+    </p>
   </TextLayout>
   <Container>
     <h3>Sample Code:</h3>
