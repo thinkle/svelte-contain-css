@@ -101,6 +101,13 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
+  header,
+  .content,
+  .aside,
+  footer {
+    /* Absolute positioning is relative to area */
+    position: relative;
+  }
   header {
     display: none;
   }
