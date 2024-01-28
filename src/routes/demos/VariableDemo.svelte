@@ -1,11 +1,14 @@
 <script lang="ts">
   import Bar from "$lib/layout/Bar.svelte";
+  import Card from "$lib/Card.svelte";
   import Container from "$lib/layout/Container.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
-
+  import Button from "$lib/controls/Button.svelte";
+  import Checkbox from "$lib/controls/Checkbox.svelte";
+  import RadioButton from "$lib/controls/RadioButton.svelte";
   import CssVariables from "./CssVariables.svelte";
   import CssWrapper from "./CssWrapper.svelte";
   let vars = {
@@ -48,34 +51,36 @@
     ],
     layout: [
       {
-        name: "space",
+        name: "--space",
         type: "length",
         placeholder: "2px",
       },
       {
-        name: "pad",
+        name: "--padding",
         type: "length",
         placeholder: "calc(var(--space) * 4)",
       },
       {
-        name: "shadow-distance",
+        name: "--shadow-distance",
         type: "length",
         placeholder: "2px",
       },
       {
-        name: "border-radius",
+        name: "--border-radius",
         type: "radius",
         placeholder: "8px",
       },
     ],
     color: [
-      "--body-bg",
-      "--body-fg",
+      "--bg",
+      "--fg",
       "--primary-bg",
       "--primary-fg",
       "--secondary-bg",
       "--secondary-fg",
-      "----inactive-bg",
+      "--body-bg",
+      "--body-fg",
+      "--inactive-bg",
       "--inactive-fg",
       "--shadow-color",
       "--border-color",
@@ -85,6 +90,7 @@
       "--menu-even-fg",
     ].map((v) => ({ name: v, type: "color", placeholder: "#110042" })),
   };
+  let modes = ["color", "typography", "layout"];
   let values = {
     typography: {},
     layout: {},
@@ -121,6 +127,16 @@
         keep everything sane and consistent, you can do so by tweaking a few
         top-level variables and letting inheritance do the rest.
       </p>
+      <p>
+        So, for example, all elements with a border inherit the <code
+          >--border-radius</code
+        >
+        variable out of the gate, so if you just want your whole app to feel square,
+        you can set <code>--border-radius</code> to <code>0</code> and be done
+        with it, but if you would like to get more granular, you can go in and
+        tweak <code>--card-border-radius</code>
+        and <code>--button-border-radius</code> and so forth.
+      </p>
     </TextLayout>
     <Page right>
       <Sidebar slot="sidebar" right>
@@ -139,14 +155,34 @@
         </MenuList>
       </Sidebar>
       <Container>
-        <h2>Variables for {mode}</h2>
-        <CssVariables
-          variables={vars[mode]}
-          onSetVariables={(variables) => {
-            values[mode] = variables;
-          }}
-        ></CssVariables>
+        {#each modes as m}
+          <div class:hide={mode !== m}>
+            <h2>Variables for {m}</h2>
+            <CssVariables
+              variables={vars[m]}
+              onSetVariables={(variables) => {
+                values[m] = variables;
+              }}
+            ></CssVariables>
+          </div>
+        {/each}
+        <Card>
+          <div slot="header">Sample Card</div>
+          <p>Here is a little text.</p>
+          <Button primary>Primary Button</Button>
+          <Button secondary>Secondary Button</Button>
+          <Button>Regular Old Button</Button>
+          <div>
+            <Checkbox>Check</Checkbox>
+          </div>
+        </Card>
       </Container>
     </Page>
   </Container>
 </CssWrapper>
+
+<style>
+  .hide {
+    display: none;
+  }
+</style>
