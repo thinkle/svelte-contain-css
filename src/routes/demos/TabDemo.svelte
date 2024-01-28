@@ -5,13 +5,13 @@
   import TabBar from "$lib/layout/TabBar.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
-
+  import type { CSSVariable } from "./types";
   let active = "TabItem";
   let items = [
     { label: "TabItem", value: "TabItem" },
     { label: "TabBar", value: "TabBar" },
     { label: "Containers & Tabs", value: "containers" },
-    { label: "Overrides", value: "vars" },
+    { label: "Customize", value: "vars" },
   ];
   let cssValues = {};
   let cssVariables: CSSVariable[] = [
@@ -167,19 +167,26 @@
   </div>
 </Container>`}
     />
+
     <p>
       Notice that I also have included the <code>sticky</code>
       flag, which makes the tab have an opaque background and stick to the top of
       its container
     </p>
-  {:else if active == "vars"}
+  {/if}
+  <div class:hide={active !== "vars"}>
+    <h3>Adjust variables to customize tabs</h3>
     <CssVariables
       variables={cssVariables}
       onSetVariables={(v) => {
         cssValues = v;
       }}
     />
-  {:else}
-    ???
-  {/if}
+  </div>
 </Container>
+
+<style>
+  .hide {
+    display: none;
+  }
+</style>
