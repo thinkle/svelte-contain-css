@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
   export let greaterThan: "xs" | "small" | "medium" | "large" | "xl" | null =
     null;
   export let smallerThan: "xs" | "small" | "medium" | "large" | "xl" | null =
