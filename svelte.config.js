@@ -31,7 +31,7 @@ const config = {
       fallback: null,
     }),
     paths: {
-      base: process.env.NODE_ENV === "production" ? "/contain-css-svelte" : "",
+      base: process.env.NODE_ENV === "production" ? "/svelte-contain-css" : "",
     },
     prerender: {
       handleMissingId: "ignore", // or 'ignore' or a custom function
