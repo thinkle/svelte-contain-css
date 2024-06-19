@@ -3,18 +3,20 @@
   import "prismjs";
   import Prism from "svelte-prism";
   export let inline = false;
+  export let language = "html";
 </script>
 
 <div class="code" class:inline>
-  <Prism language="html" source={code} />
+  <Prism {language} source={code} />
 </div>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
   div {
-    width: var(--code-width, 100%);
+    width: var(--code-width, var(--line-width, 90%));
     height: var(--code-height, auto);
+    margin: auto;
   }
 
   div > :global(pre) {
