@@ -6,7 +6,8 @@
   import lightordark from "$lib/vars/themes/lightordark.css?raw";
   import light from "$lib/vars/themes/light.css?raw";
   import dark from "$lib/vars/themes/dark.css?raw";
-
+  import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
+  import boxy from "$lib/vars/boxy.css?raw";
   let typographyThemes = [
     { name: "Defaults", css: "", file: "" },
     {
@@ -29,6 +30,15 @@
     },
     { name: "Defaults", css: "", file: "" },
   ];
+
+  let extraThemes = [
+    { name: "Responsive Typography", css: responsiveTypography, file: "" },
+    { name: "Sharp Edges", css: boxy, file: "boxy.css" },
+  ];
+  let enabledExtraThemes = {
+    0: false,
+    1: false,
+  };
 
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import { onMount } from "svelte";
@@ -56,6 +66,14 @@
   $: injectStyle("typography", typographyThemes[typographyTheme].css);
   $: injectStyle("color", colorThemes[colorTheme].css);
 
+  $: for (let i = 0; i < extraThemes.length; i++) {
+    if (enabledExtraThemes[i]) {
+      injectStyle(`extra-${i}`, extraThemes[i].css);
+    } else {
+      injectStyle(`extra-${i}`, "");
+    }
+  }
+
   function buildThemeCode(...themes) {
     let themeFiles = [
       "defaults.css",
@@ -70,14 +88,17 @@
 
   $: themeCode = buildThemeCode(
     typographyThemes[typographyTheme],
-    colorThemes[colorTheme]
+    colorThemes[colorTheme],
+    ...extraThemes
+      .map((theme, i) => (enabledExtraThemes[i] ? theme : null))
+      .filter((theme) => theme)
   );
 
   let showCode = false;
 </script>
 
 <FormItem fullWidth>
-  <span class="label">Typography</span>
+  <span class="label">Typography:</span>
   {#each typographyThemes as theme, i}
     <RadioButton bind:group={typographyTheme} value={i}
       >{theme.name}</RadioButton
@@ -88,6 +109,12 @@
   <span class="label">Color</span>
   {#each colorThemes as theme, i}
     <RadioButton bind:group={colorTheme} value={i}>{theme.name}</RadioButton>
+  {/each}
+</FormItem>
+<FormItem fullWidth>
+  <h3 class="label">Extra Settings</h3>
+  {#each extraThemes as theme, i}
+    <Checkbox bind:checked={enabledExtraThemes[i]}>{theme.name}</Checkbox>
   {/each}
 </FormItem>
 <FormItem fullWidth>
