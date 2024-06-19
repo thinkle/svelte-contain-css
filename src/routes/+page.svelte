@@ -130,6 +130,7 @@
   <Sidebar slot="sidebar" {right}>
     <MenuList>
       <li>
+        <h3>Standalone Pages</h3>
         <DropdownMenu>
           <span slot="label">Jump to Component</span>
           {#each ["Card", "RadioButton", "Bar"] as component}
@@ -147,6 +148,7 @@
           {#if right}Left{:else}Right{/if}
         </Button>
       </li>
+      <li>Jump</li>
       <li>
         {#each componentCategories as category}
           <h2>{category.title}</h2>
