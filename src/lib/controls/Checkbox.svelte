@@ -49,7 +49,6 @@
 
   .label-sizing-box .checkbox-item {
     position: absolute;
-    bottom: 0;
     left: 0;
   }
 
@@ -67,6 +66,9 @@
   .offscreen,
   label {
     @include typography-props(checkbox, ui);
+  }
+  label {
+    margin-left: var(--checkbox-padding, var(--padding));
   }
 
   .offscreen {

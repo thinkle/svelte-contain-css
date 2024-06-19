@@ -45,7 +45,6 @@
   }
   .label-sizing-box .radio-item {
     position: absolute;
-    bottom: 0;
     left: 0;
   }
   .label-sizing-box .invisible {
