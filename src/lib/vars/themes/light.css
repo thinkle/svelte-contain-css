@@ -1,5 +1,7 @@
 /* light mode */
 
+@import url("./code-light.css");
+
 :root {
   --fg: var(--material-color-grey-800);
   --bg: #fafafa;
@@ -21,4 +23,40 @@
   --input-bg: #fefefe;
   --input-fg: var(--material-color-grey-900);
   --hover-filter: brightness(0.9) contrast(1.5);
+  /* Code */
+  --code-bg: #ffffff; /* Background color for the code block */
+  --code-fg: #333333; /* Default text color */
+
+  --code-comment-fg: #999999; /* Comment color */
+  --code-comment-bg: transparent;
+
+  --code-string-fg: #d14; /* String color */
+  --code-string-bg: transparent;
+
+  --code-keyword-fg: #00f; /* Keyword color */
+  --code-keyword-bg: transparent;
+
+  --code-attr-name-fg: #ff4500; /* Attribute name color */
+  --code-attr-name-bg: transparent;
+
+  --code-tag-fg: #170; /* Tag color */
+  --code-tag-bg: transparent;
+
+  --code-function-fg: #005cc5; /* Function name color */
+  --code-function-bg: transparent;
+
+  --code-variable-fg: #e90; /* Variable color */
+  --code-variable-bg: transparent;
+
+  --code-operator-fg: #9a6e3a; /* Operator color */
+  --code-operator-bg: transparent;
+
+  --code-prolog-fg: #999999; /* Prolog color */
+  --code-prolog-bg: transparent;
+
+  --code-doctype-fg: #999999; /* Doctype color */
+  --code-doctype-bg: transparent;
+
+  --code-cdata-fg: #999999; /* CDATA color */
+  --code-cdata-bg: transparent;
 }

@@ -10,7 +10,7 @@ body {
   --space-lg: calc(var(--space-md) * 2);
   --space-xl: calc(var(--space-xl) * 2);
   --padding: calc(var(--space) * 4);
-  --gap: calc(var(--padding) * 2);  
+  --gap: calc(var(--padding) * 2);
   --column-gap: var(--gap);
   --row-gap: var(--gap);
   --grab-bar-width: var(--padding);
@@ -36,4 +36,5 @@ body {
 
 :root {
   --sidebar-width: 256px;
+  --sidebar-border: 1px solid var(--fg);
 }
