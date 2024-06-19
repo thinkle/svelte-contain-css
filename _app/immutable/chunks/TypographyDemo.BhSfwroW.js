@@ -1,4 +1,4 @@
-import{s as J,a as c,c as d,i as o,g as i,e as g,b as y,h as $,n as K}from"./scheduler.D80rtIld.js";import{S as N,i as Q,c as V,a as L,m as H,t as k,b as M,d as q}from"./index.DWql_2kn.js";import{C as R,a as U}from"./Columns.svelte_svelte_type_style_lang.djWLsC7u.js";import{T as X}from"./TextLayout.CDIb4Vfu.js";import{C as Y,a as Z}from"./CssWrapper.ax8Hg-Pd.js";function ee(f){let a,s="Typography",t,l,p=`If you wrap an element in a
+import{s as J,a as c,c as d,i as o,g as i,e as g,b as y,h as $,n as K}from"./scheduler.D80rtIld.js";import{S as N,i as Q,c as V,a as L,m as H,t as k,b as M,d as q}from"./index.DWql_2kn.js";import{C as R,a as U}from"./Columns.svelte_svelte_type_style_lang.BL2b3t5a.js";import{T as X}from"./TextLayout.DzOThmVy.js";import{C as Y,a as Z}from"./CssWrapper.DAo7Ue5P.js";function ee(f){let a,s="Typography",t,l,p=`If you wrap an element in a
         <code>TextLayout</code> container, we will automatically apply some basic
         typography for body text, headers, and so forth.`,m,n,u=`The TextLayout element uses some of the typographic styles that are
         applied at our top level component, which you can define anywhere in
