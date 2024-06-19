@@ -28,11 +28,16 @@
   // e.g., var(--card-bg, var(--container-bg, var(--bg, white)))
   @return #{$result};
 }
+@function generate-var-name($prefix, $suffix) {
+  @return unquote('--#{$prefix}-#{$suffix}');
+}
 
 @mixin color-props ($prefixes...) {
   background: var-with-fallbacks(--bg, append($prefixes,white)...);
   color: var-with-fallbacks(--fg, append($prefixes,black)...);
-  //text-shadow: var-with-fallbacks(--text-shadow,append($prefixes,#0000));
+  //text-shadow: var-with-fallbacks(--text-shadow,append($prefixes,#0000));  
+  --link-bg: var(#{generate-var-name(nth($prefixes, 1), 'link-bg')}, unset);
+  --link-fg: var(#{generate-var-name(nth($prefixes, 1), 'link-fg')}, unset);
 }
 
 @mixin typography-props ($prefixes...) {

@@ -10,6 +10,11 @@ export function injectVars(
       cssVars += `--${prefix}-${cssVarName}: ${props[v]};`;
     }
   });
+  for (let prop in props) {
+    if (prop[0] == "-" && prop[1] == "-") {
+      cssVars += `${prop}: ${props[prop]};`;
+    }
+  }
   return cssVars;
 }
 function toKebabCase(str: string) {

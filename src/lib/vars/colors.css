@@ -20,6 +20,11 @@ body {
   color: var(--fg);
 }
 
+a {
+  background-color: var(--link-bg, transparent);
+  color: var(--link-fg, var(--material-color-blue-a400));
+}
+
 /* Color definitions */
 
 :root {
