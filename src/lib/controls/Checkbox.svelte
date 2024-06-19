@@ -1,8 +1,26 @@
 <script lang="ts">
   export let checked: boolean;
+  export let value;
+  export let group: string;
+
+  /* Styling properties */
+  import { injectVars } from "$lib/util";
+  export let bg: string | null = null;
+  export let fg: string | null = null;
+  export let padding: string | null = null;
+  export let width: string | null = null;
+  export let height: string | null = null;
+  let style = injectVars($$props, "checkbox", [
+    "bg",
+    "fg",
+    "padding",
+    "width",
+    "height",
+  ]);
+
   let ref;
   let labelContent;
-  let labelWidth;
+
   $: {
     if (ref) {
       labelContent = ref.innerHTML;
@@ -10,26 +28,40 @@
   }
 </script>
 
-<label>
-  <input type="checkbox" bind:checked />
-  <span style:--label-width="{labelWidth + 4}px" bind:this={ref}><slot /></span>
-</label>
-<!-- Off-screen span for measuring -->
-<span class="offscreen" bind:clientWidth={labelWidth}>{@html labelContent}</span
->
+<div class="label-sizing-box">
+  <label class="checkbox-item">
+    <input type="checkbox" bind:checked />
+    <span bind:this={ref}><slot /></span>
+  </label>
+  <label class="invisible">
+    <input type="checkbox" checked="true" />
+    <span>{@html labelContent}</span>
+  </label>
+</div>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
+  .label-sizing-box {
+    position: relative;
+    display: inline-block;
+  }
+
+  .label-sizing-box .checkbox-item {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .label-sizing-box .invisible {
+    position: static;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
   :root {
-    /*   --checkbox-size: var(--font-size);
-    --checkbox-bg: var(--inactive-bg);
-    --checkbox-fg: var(--inactive-fg);
-    --checkbox-checked-bg: var(--primary-bg);
-    --checkbox-checked-fg: var(--primary-fg);
-    --checkbox-border: 1px solid var(--white);
-    --checkbox-checked-border: 1px solid var(--white); 
-    --checkbox-check: "✓"; */
+    /* Customize these variables for checkbox styling */
+    --checkbox-check: "✓";
   }
 
   .offscreen,
@@ -38,7 +70,7 @@
   }
 
   .offscreen {
-    visibility: hidden;
+    visibility: visible;
     font-weight: var-with-fallbacks(
       --weight,
       checkbox-checked,
@@ -52,22 +84,16 @@
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    line-height: 1.2;
-    position: relative;
     user-select: none;
-    gap: var(--radio-button-space, var(--toggle-space, var(--space-md)));
+    gap: var(--checkbox-space, var(--toggle-space, var(--space-md)));
+
+    @include clickable(checkbox, clickable);
   }
-  label:hover {
-    filter: var(--checkbox-hover-filter);
-    transform: var(--checkbox-hover-transform);
-  }
-  label:has(:global(*:active)) {
-    filter: var-with-fallbacks(--active-filter, checkbox, control);
-    transform: var-with-fallbacks(--active-transform, checkbox, control);
-  }
+
   label span {
     width: var(--label-width);
   }
+
   label:has(input:checked) {
     font-weight: var-with-fallbacks(
       --weight,
@@ -77,16 +103,17 @@
     );
   }
 
-  input {
+  input[type="checkbox"] {
     display: none;
   }
+
   label::before {
     transition: all var-with-fallbacks(--transition, checkbox, control);
     display: inline-grid;
     place-content: center;
     content: " ";
-    width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
-    height: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    width: var-with-fallbacks(--size, checkbox, font, 1em);
+    height: var-with-fallbacks(--size, checkbox, font, 1em);
     @include color-props(checkbox, toggle, inactive, secondary);
     border: var-with-fallbacks(
       --border,
@@ -95,9 +122,13 @@
     );
     box-sizing: border-box;
   }
+
   label:has(input:checked)::before {
     @include color-props(checkbox-checked, toggle-on, primary, checkbox);
+    border: var-with-fallbacks(--border, checkbox-checked, toggle-on, checkbox);
+    box-sizing: border-box;
   }
+
   label:has(input:checked)::after {
     content: var(--checkbox-check, "✓");
     font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);

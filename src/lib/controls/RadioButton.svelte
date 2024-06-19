@@ -19,7 +19,7 @@
 
   let ref;
   let labelContent;
-  let labelWidth;
+
   $: {
     if (ref) {
       labelContent = ref.innerHTML;
@@ -27,15 +27,33 @@
   }
 </script>
 
-<label>
-  <input {value} type="radio" bind:group />
-  <span style:--label-width="{labelWidth + 4}px" bind:this={ref}><slot /></span>
-</label>
-<!-- Off-screen span for measuring -->
-<span class="offscreen" bind:clientWidth={labelWidth}>{@html labelContent}</span
->
+<div class="label-sizing-box">
+  <label class="radio-item">
+    <input {value} type="radio" bind:group />
+    <span bind:this={ref}><slot /></span>
+  </label>
+  <label class="invisible">
+    <input type="radio" checked="true" />
+    <span>{@html labelContent}</span>
+  </label>
+</div>
 
 <style lang="scss">
+  .label-sizing-box {
+    position: relative;
+    display: inline-block;
+  }
+  .label-sizing-box .radio-item {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .label-sizing-box .invisible {
+    position: static;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
   @import "$lib/sass/_mixins.scss";
 
   :root {
@@ -51,7 +69,7 @@
   }
 
   .offscreen {
-    visibility: hidden;
+    visibility: visible;
     font-weight: var-with-fallbacks(
       --weight,
       radio-button-checked,
@@ -106,6 +124,7 @@
       --radio-button-border-radius,
       50%
     ); // Circular border for radio button
+    margin-left: var(--radio-button-padding, var(--padding));
   }
 
   label:has(input:checked)::before {
