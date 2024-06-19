@@ -49,8 +49,8 @@
     <Menu>
       <span slot="label">Long Menu</span>
       {#each longList as item}
-        <li>
-          <a href="#">{item}</a>
+        <li id="go-nowhere">
+          <a href="#go-nowhere">{item}</a>
         </li>
       {/each}
     </Menu>
