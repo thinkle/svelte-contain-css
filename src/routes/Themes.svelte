@@ -8,23 +8,33 @@
   import dark from "$lib/vars/themes/dark.css?raw";
 
   let typographyThemes = [
-    { name: "Defaults", css: "" },
-    { name: "Browser Defaults", css: browser },
-    { name: "Airy", css: airy },
-    { name: "IBM Plex", css: ibm },
+    { name: "Defaults", css: "", file: "" },
+    {
+      name: "Browser Defaults",
+      css: browser,
+      file: "themes/typography-browser.css",
+    },
+    { name: "Airy", css: airy, file: "themes/typography-airy.css" },
+    { name: "IBM Plex", css: ibm, file: "themes/typography-carbon.css" },
   ];
 
   let colorThemes = [
-    { name: "Purple", css: purple },
-    { name: "Light", css: light },
-    { name: "Dark", css: dark },
-    { name: "Light or Dark (Responsive)", css: lightordark },
-    { name: "Defaults", css: "" },
+    { name: "Purple", css: purple, file: "themes/purple.css" },
+    { name: "Light", css: light, file: "themes/light.css" },
+    { name: "Dark", css: dark, file: "themes/dark.css" },
+    {
+      name: "Light or Dark (Responsive)",
+      css: lightordark,
+      file: "themes/lightordark.css",
+    },
+    { name: "Defaults", css: "", file: "" },
   ];
 
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import { onMount } from "svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
+  import Checkbox from "$lib/controls/Checkbox.svelte";
+  import Code from "$lib/misc/Code.svelte";
   let typographyTheme = 0;
   let colorTheme = 0;
   let ready = false;
@@ -45,6 +55,25 @@
 
   $: injectStyle("typography", typographyThemes[typographyTheme].css);
   $: injectStyle("color", colorThemes[colorTheme].css);
+
+  function buildThemeCode(...themes) {
+    let themeFiles = [
+      "defaults.css",
+      ...themes.map((theme) => theme && theme.file).filter((file) => file),
+    ];
+    return themeFiles
+      .map((theme) => `import "contain-css-svelte/vars/${theme}";`)
+      .join("\n");
+  }
+
+  let themeCode = buildThemeCode();
+
+  $: themeCode = buildThemeCode(
+    typographyThemes[typographyTheme],
+    colorThemes[colorTheme]
+  );
+
+  let showCode = false;
 </script>
 
 <FormItem fullWidth>
@@ -61,3 +90,9 @@
     <RadioButton bind:group={colorTheme} value={i}>{theme.name}</RadioButton>
   {/each}
 </FormItem>
+<FormItem fullWidth>
+  <Checkbox bind:checked={showCode}>Show code</Checkbox>
+</FormItem>
+{#if showCode}
+  <Code code={themeCode} language="js" />
+{/if}
