@@ -31,6 +31,8 @@
   import CardDemo from "./demos/CardDemo.svelte";
   import TileDemo from "./demos/TileDemo.svelte";
   import RowsAndColumnsDemo from "./demos/RowsAndColumnsDemo.svelte";
+  import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
+  import { base } from "$app/paths";
 
   let hash: string = "";
   const updateHash = () => {
@@ -128,14 +130,22 @@
   <Sidebar slot="sidebar" {right}>
     <MenuList>
       <li>
-        <button
+        <DropdownMenu>
+          <span slot="label">Jump to Component</span>
+          {#each ["Card", "RadioButton", "Bar"] as component}
+            <a href="{base}/{component}" target="_blank">{component}</a>
+          {/each}
+        </DropdownMenu>
+      </li>
+      <li>
+        <Button
           on:click={() => {
             right = !right;
           }}
         >
           Move Sidebar to
           {#if right}Left{:else}Right{/if}
-        </button>
+        </Button>
       </li>
       <li>
         {#each componentCategories as category}
