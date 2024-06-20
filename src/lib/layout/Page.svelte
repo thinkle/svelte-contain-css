@@ -57,7 +57,6 @@
   onMount(() => {
     console.log("onMount is called!");
     if (sticky) {
-      debugger;
       console.log("Add scroll handler in a sec");
       if (window.location.hash) {
         let el = document.querySelector(window.location.hash);
