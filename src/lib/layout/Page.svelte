@@ -55,12 +55,17 @@
   }
 
   onMount(() => {
+    console.log("onMount is called!");
     if (sticky) {
+      debugger;
       console.log("Add scroll handler in a sec");
-
-      let el = document.querySelector(window.location.hash);
-      console.log("Hash", window.location.hash, "points to ", el);
-      el?.scrollIntoView();
+      if (window.location.hash) {
+        let el = document.querySelector(window.location.hash);
+        if (el) {
+          console.log("Hash", window.location.hash, "points to ", el);
+          el?.scrollIntoView();
+        }
+      }
       window.addEventListener("scroll", handleScroll);
     }
     return () => {
