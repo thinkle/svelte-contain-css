@@ -48,7 +48,13 @@
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
   line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
   letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);
-
+  margin-top: var-with-fallbacks(--margin, append($prefixes, 0)...);
+  margin-top: var-with-fallbacks(--margin-top, append($prefixes, 0)...);
+  margin-bottom: var-with-fallbacks(--margin, append($prefixes, 0)...);
+  margin-bottom: var-with-fallbacks(--margin-bottom, append($prefixes, 0)...);
+  text-indent: var-with-fallbacks(--indent, append($prefixes, 0)...);
+  font-variant: var-with-fallbacks(--font-variant, append($prefixes, normal)...);
+  text-align: var-with-fallbacks(--text-align, append($prefixes, left)...);
 }
 
 @mixin typography-container-props ($prefixes...) {
@@ -67,14 +73,39 @@
    :global(h4),
    :global(h5),
    :global(h6) {
+    @include typography-props(heading);
+    @include color-props(heading);
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
-    font-family: var-with-fallbacks(--heading-font-family, append($prefixes, var(--font-family))...);
-    line-height: var-with-fallbacks(--heading-line-height, append($prefixes, var(--line-height))...);
     margin-left: auto;
     margin-right: auto;
-    color: var(--heading-color,append($prefixes,var(--fg))...);
-    font-weight: var(--heading-font-weight,append($prefixes,var(--bold)));
-  }   
+  }  
+  &   :global(p:first-of-type),
+    :global(h1 + p),
+    :global(h2 + p),
+    :global(h3 + p),
+    :global(h4 + p),
+    :global(h5 + p),
+    :global(h6 + p) {
+     @include typography-props(first-paragraph,
+       paragraph,
+       text,
+       body,
+       container);
+    }
+  & :global(p:first-of-type::first-line) {
+    @include typography-props(first-line,
+      paragraph,
+      text,
+      body,
+      container);  
+  }
+  & :global(p:first-of-type::first-letter) {
+    @include typography-props(first-letter,
+      paragraph,
+      text,
+      body,
+      container);  
+  }  
 }
 
 @mixin padding-props ($prefixes...) {
@@ -190,7 +221,7 @@ $rectProps : (border);
   cursor: pointer;
   transition: filter,transform var-with-fallbacks(--transition,button,control,300ms);
   &:hover {
-    filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.1))...);
+    filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.4))...);
     transform: var-with-fallbacks(--hover-transform, append($prefixes, none)...);
   }
   &:active {

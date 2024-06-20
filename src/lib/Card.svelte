@@ -43,7 +43,6 @@
     --h: var(--card-height);
     @include box-shadow(card, container);
     @include color-props(card, container);
-    @include typography-container-props(card, container);
     border-radius: var-with-fallbacks(--border-radius, card, container, 0);
     border: var-with-fallbacks(
       --border,
@@ -57,6 +56,7 @@
   }
   .card section {
     flex-grow: 1;
+    @include typography-container-props(card, container);
   }
   @container (max-width: 600px) {
     .card {

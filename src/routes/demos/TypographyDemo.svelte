@@ -34,7 +34,18 @@
       defaultValue: "30rem",
       unit: "rem",
     },
-
+    {
+      name: "--heading-font-variant",
+      type: "text",
+      placeholder: "e.g., small-caps",
+      defaultValue: "small-caps",
+    },
+    {
+      name: "--first-paragraph-first-line-text-transform",
+      type: "text",
+      placeholder: "e.g., uppercase",
+      defaultValue: "uppercase",
+    },
     {
       name: "--font-family",
       type: "text",
@@ -47,6 +58,13 @@
       type: "text",
       placeholder: "e.g., Arial, sans-serif",
       defaultValue: "var(--font-family)",
+      unit: "",
+    },
+    {
+      name: "--heading-text-decoration",
+      type: "decoration",
+      placeholder: "e.g., underline",
+      defaultValue: "none",
       unit: "",
     },
 
@@ -108,11 +126,30 @@
       unit: "",
     },
     {
-      name: "--heading-pad",
+      name: "--heading-padding",
       type: "length",
       placeholder: "var(--space)",
       defaultValue: "",
       unit: "",
+    },
+    {
+      name: "--paragraph-indent",
+      type: "length",
+      placeholder: "e.g., 1em",
+      defaultValue: "none",
+    },
+    {
+      name: "--first-paragraph-indent",
+      type: "length",
+      placeholder: "e.g., 1em",
+      defaultValue: "none",
+      unit: "em",
+    },
+    {
+      name: "--paragraph-margin",
+      type: "length",
+      placeholder: "e.g., 0",
+      defaultValue: "0",
     },
   ];
 
