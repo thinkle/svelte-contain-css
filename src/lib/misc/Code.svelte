@@ -16,11 +16,13 @@
   div {
     width: var(--code-width, var(--line-width, 90%));
     height: var(--code-height, auto);
+    box-sizing: border-box;
     margin: auto;
   }
 
   div > :global(pre) {
     width: var(--code-width, 100%);
+    box-sizing: border-box;
     overflow-x: auto;
   }
 
