@@ -1,9 +1,15 @@
 <script>
+  import { injectVars } from "$lib/util";
+
   export let fullWidth = false;
   export let globalInputStyles = true;
+  let style = injectVars($$props, "form-item", [
+    "fullWidth",
+    "globalInputStyles",
+  ]);
 </script>
 
-<div class="form-item" class:fullWidth class:globalInputStyles>
+<div {style} class="form-item" class:fullWidth class:globalInputStyles>
   <slot name="before" />
   <label>
     <span class="label">
