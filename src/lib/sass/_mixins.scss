@@ -44,10 +44,10 @@
   font-family: var-with-fallbacks(--font-family, append($prefixes, sans-serif)...);
   text-transform: var-with-fallbacks(--text-transform, append($prefixes, none)...);
   text-decoration: var-with-fallbacks(--text-decoration, append($prefixes, none)...);
-  font-size: var-with-fallbacks(--font-size, append($prefixes, 16px)...);
+  font-size: var-with-fallbacks(--font-size, append($prefixes, 1em)...);
   font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
-  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
-  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0.05em)...);
+  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.2)...);
+  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0)...);
   margin-top: var-with-fallbacks(--margin, append($prefixes, 0)...);
   margin-top: var-with-fallbacks(--margin-top, append($prefixes, 0)...);
   margin-bottom: var-with-fallbacks(--margin, append($prefixes, 0)...);
@@ -58,6 +58,7 @@
 }
 
 @mixin typography-container-props ($prefixes...) {
+
   @include typography-props($prefixes...);  
   & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol) {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
@@ -86,19 +87,18 @@
     :global(h4 + p),
     :global(h5 + p),
     :global(h6 + p) {
-     @include typography-props(first-paragraph,
-       paragraph,
-       text,
-       body,
-       container);
+    margin-top: var-with-fallbacks(--first-paragraph-margin-top, append($prefixes, unset)...);
+    padding-top: var-with-fallbacks(--first-paragraph-padding-top, append($prefixes, unset)...);
+    font-variant: var-with-fallbacks(--first-paragraph-font-variant, append($prefixes, unset)...);
+    font-family: var-with-fallbacks(--first-paragraph-font-family, append($prefixes, unset)...);
+    font-style: var-with-fallbacks(--first-paragraph-font-style, append($prefixes, unset)...);
     }
   & :global(p:first-of-type::first-line) {
-    @include typography-props(first-line,
-      paragraph,
-      text,
-      body,
-      container);  
+    font-variant: var-with-fallbacks(--first-line-font-variant, append($prefixes, unset)...);
+    font-size: var-with-fallbacks(--first-line-size, append($prefixes, unset)...);
+    text-transform: var-with-fallbacks(--first-line-text-transform, append($prefixes, unset)...);
   }
+
   & :global(p:first-of-type::first-letter) {
     @include typography-props(first-letter,
       paragraph,
