@@ -15,7 +15,7 @@
   ]);
 </script>
 
-<div class="hero">
+<div class="hero" style:--text-align="var(--hero-text-align,center)">
   <slot />
 </div>
 
@@ -36,14 +36,6 @@
       --hero-animation-timing-function,
       ease-in-out
     );
-    & h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      text-align: center;
-    }
   }
 
   @keyframes fade-in {
