@@ -1,23 +1,15 @@
 <script context="module" lang="ts">
-  let addedGlobalDiv: boolean;
+  var idPostfix = 1;
 </script>
 
 <script lang="ts">
   import { cssProperties } from "$lib/cssprops";
   import MenuList from "$lib/layout/MenuList.svelte";
   import { injectVars } from "$lib/util";
-  import { portal } from "svelte-portal";
-  import { onMount } from "svelte";
-  onMount(() => {
-    console.log("Mounted");
-    if (!addedGlobalDiv) {
-      let div = document.createElement("div");
-      div.id = "dropdowns";
-      document.body.appendChild(div);
-      addedGlobalDiv = true;
-    }
-  });
 
+  import { onMount } from "svelte";
+  idPostfix++;
+  let id = "contain-dropdown-menu-" + idPostfix;
   let buttonElement: HTMLButtonElement;
   let dropdownContentElement: HTMLDivElement;
 
@@ -33,32 +25,45 @@
   let dropdownLeft: number;
   let dropdownMaxHeight: number;
 
-  function triggerMenu() {
-    open = !open;
-    if (open) {
-      injectVariablesIntoDropdown();
-      let dropdownRect = dropdownContentElement.getBoundingClientRect();
-      let buttonRect = buttonElement.getBoundingClientRect();
-      // Fix me -- we need to figure out where the dropdown goes in fixed
-      // positioning relative to the viewport
-      dropdownTop = buttonRect.bottom;
-      dropdownLeft = buttonRect.left;
-      if (dropdownLeft + dropdownRect.width > window.innerWidth) {
-        dropdownLeft = window.innerWidth - dropdownRect.width;
-      }
-      if (dropdownTop + dropdownRect.height > window.innerHeight) {
-        dropdownTop = Math.max(0, window.innerHeight - dropdownRect.height);
-      }
-      if (dropdownTop + dropdownRect.height > window.innerHeight) {
-        dropdownMaxHeight = window.innerHeight - dropdownTop;
-      }
+  function computePosition() {
+    let dropdownRect = dropdownContentElement.getBoundingClientRect();
+    let buttonRect = buttonElement.getBoundingClientRect();
+    // Fix me -- we need to figure out where the dropdown goes in fixed
+    // positioning relative to the viewport
+    dropdownTop = buttonRect.bottom;
+    dropdownLeft = buttonRect.left;
+    if (dropdownLeft + dropdownRect.width > window.innerWidth) {
+      dropdownLeft = window.innerWidth - dropdownRect.width;
+    }
+    if (dropdownTop + dropdownRect.height > window.innerHeight) {
+      dropdownTop = Math.max(0, window.innerHeight - dropdownRect.height);
+    }
 
-      setTimeout(() => window.addEventListener("click", closeMenu), 0);
+    dropdownMaxHeight = window.innerHeight - dropdownTop;
+
+    console.log(
+      "Computed top",
+      dropdownTop,
+      "left",
+      dropdownLeft,
+      "maxHeight",
+      dropdownMaxHeight
+    );
+  }
+
+  function triggerMenu(e) {
+    console.log("Triggered...");
+    let isOpen = popoverDiv.matches(":popover-open");
+    console.log("Popover is currently open?", isOpen);
+    if (!isOpen) {
+      console.log("Opening popover");
+      injectVariablesIntoDropdown();
+      computePosition();
     }
   }
-  function closeMenu() {
-    open = false;
-    window.removeEventListener("click", closeMenu);
+  function dismissPopover(e) {
+    console.log("Dismissing popover");
+    popoverDiv.hidePopover();
   }
 
   let searchString = "";
@@ -74,14 +79,13 @@
     } else {
       searchString = "";
       if (event.key === "Escape") {
-        closeMenu();
+        popoverDiv.hidePopover();
       } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault(); // Prevent default to stop scrolling the page
         navigateMenu(event.key);
         searchString = "";
       }
     }
-    console.log("Got ", event.key, "in menu");
   }
   function maybeFocusMatch(searchString: string) {
     console.log("Maybe focus", searchString);
@@ -102,6 +106,10 @@
     }
   }
   function navigateMenu(direction: string) {
+    if (!popoverDiv.matches(":popover-open")) {
+      buttonElement.click();
+      return;
+    }
     const focusableItems = Array.from(
       dropdownContentElement.querySelectorAll(
         "button, a, [tabindex]:not([tabindex='-1'])"
@@ -121,7 +129,6 @@
     focusableItems[currentIndex]?.focus();
   }
 
-  let open = false;
   let cssVariableContext = "";
   function injectVariablesIntoDropdown() {
     cssVariableContext = "";
@@ -134,18 +141,18 @@
       }
     }
   }
+  let popoverDiv: HTMLDivElement;
 </script>
 
-<nav class="dropdown-menu" on:keydown={handleKeystroke} class:open>
-  <button bind:this={buttonElement} on:click={triggerMenu}>
+<nav class="dropdown-menu" on:keydown={handleKeystroke}>
+  <button bind:this={buttonElement} on:click={triggerMenu} popovertarget={id}>
     <slot name="label">Menu</slot>
   </button>
   <div
-    use:portal={"#dropdowns"}
-    on:keydown={handleKeystroke}
+    {id}
+    bind:this={popoverDiv}
     class="dropdown-container"
-    class:open
-    hidden
+    popover
     style:top="{dropdownTop}px"
     style:left="{dropdownLeft}px"
     style:max-height="{dropdownMaxHeight}px"
@@ -154,6 +161,7 @@
       class="dropdown-content"
       bind:this={dropdownContentElement}
       style={cssVariableContext}
+      on:click={dismissPopover}
     >
       <MenuList>
         <slot />
@@ -169,6 +177,7 @@
     @include color-props(menu, button, container);
     @include box-props-square(menu, button, container);
     @include clickable(menu, button, control);
+    position: relative;
   }
 
   .menu {
@@ -178,19 +187,39 @@
     @include clickable(menu, button, control);
   }
   .dropdown-container {
-    position: fixed;
+    box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
     transition: var(--dropdown-transition, 150ms) opacity;
     @include custom-scrollbar(dropdown-menu, menu);
   }
 
-  .dropdown-container.open {
+  .dropdown-container:popover-open {
     opacity: 1;
     pointer-events: all;
+    position: fixed;
+    inset: unset;
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);
     @include box-shadow(dropdown-menu, dropdown);
+  }
+  nav {
+    position: relative;
+  }
+
+  [popover] {
+    visibility: hidden;
+    display: block;
+    opacity: 0;
+    transition:
+      transform,
+      opacity 300ms ease-in-out;
+  }
+
+  [popover]:popover-open {
+    opacity: 1;
+    visibility: visible;
+    opacity: 1;
   }
 </style>
