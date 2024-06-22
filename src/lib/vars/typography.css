@@ -1,8 +1,8 @@
 :root {
   --font-size: 16px;
   --font-size-small: 12px;
-  --heading-size: 1.5rem;
-  --text-size: 1.2rem;
+  --heading-font-size: 1.5em;
+  --text-font-size: 1.2em;
   --font-family: sans-serif;
   --code-font-size: 0.9em;
   /* Basic typography... */
@@ -12,10 +12,11 @@
   --heading-margin-top: 1em;
   --heading-margin-bottom: 0.25em;
   --first-heading-margin-top: 0;
+  --first-line-font-size: var(--font-size);
   --heading-bg: transparent;
   --heading-fg: var(--primary-bg);
-
   --heading-padding: 0;
   --first-heading-padding: 0;
   --paragraph-padding: 0;
+  --first-line-font-variant: small-caps;
 }
