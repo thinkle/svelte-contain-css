@@ -13,88 +13,137 @@
   const variableValues: { [key: string]: string } = {};
   let remainingVariables: CSSVariable[] = [];
   let theVariable: CSSVariable | null;
+  let theVariables: {
+    [key: string]: CSSVariable;
+  } = {};
 
   function updateRemaining(customizedVariables: string[]) {
     remainingVariables = variables.filter(
       (v) => customizedVariables.find((cv) => cv === v.name) === undefined
     );
-    theVariable = remainingVariables[0];
+    for (let group in theVariables) {
+      if (!remainingVariables.includes(theVariables[group])) {
+        let theVariable = remainingVariables.find(
+          (v) => v.group === group || (!v.group && group == "no-group")
+        );
+        if (theVariable) {
+          theVariables[group] = theVariable;
+        }
+      }
+    }
+    //theVariables[group] = remainingVariables[0];
   }
   $: updateRemaining(customizedVariables);
+  let groups: (string | undefined)[] = [];
+  $: {
+    groups = [];
+    for (let variable of variables) {
+      let group = variable.group;
+      if (!groups.includes(group)) {
+        groups = [...groups, group];
+      }
+    }
+  }
 </script>
 
-<Container --form-label-width="20em">
-  <FormItem>
-    <Select
-      slot="label"
-      bind:value={theVariable}
-      --select-width="22em"
-      --menu-item-width="22em"
-      --dropdown-menu-width="22em"
-    >
-      {#each remainingVariables as variable}
-        <option value={variable}>{variable.name}</option>
-      {/each}
-    </Select>
-    {#if theVariable}
-      <input
-        type="text"
-        placeholder={theVariable.placeholder}
-        bind:value={variableValues[theVariable.name]}
-        on:input={(e) => {
-          for (let v in variableValues) {
-            if (variableValues[v] === "") {
-              delete variableValues[v];
-            }
-          }
-          onSetVariables(variableValues);
-        }}
-      />
-    {/if}
-    <div slot="after">
-      {#if theVariable && variableValues[theVariable.name]}
-        <div style="display:flex;justify-content:end;">
-          <MiniButton
-            primary
-            on:click={() => {
-              customizedVariables = [...customizedVariables, theVariable.name];
-            }}>+</MiniButton
-          >
+<Container>
+  {#each groups as group, i}
+    {#if remainingVariables.filter((v) => v.group == group).length > 0}
+      <FormItem --form-label-width="20em" --form-label-align="end">
+        <div
+          slot="label"
+          style="display:flex;align-items: end; justify-content: end; flex-direction: column;"
+        >
+          {#if !group && groups.length}
+            <label for="css-var-{i}">General:</label>
+          {:else}
+            <label>{group}</label>
+          {/if}
+          {#key remainingVariables.length}
+            {#if remainingVariables.filter((v) => v.group == group).length > 0}
+              <Select
+                id="css-var-{i}"
+                bind:value={theVariables[group || "no-group"]}
+                --select-width="22em"
+                --menu-item-width="22em"
+                --dropdown-menu-width="22em"
+              >
+                {#each remainingVariables as variable}
+                  {#if variable.group === group}
+                    <option value={variable}>{variable.name}</option>
+                  {/if}
+                {/each}
+              </Select>
+            {/if}
+          {/key}
         </div>
-      {/if}
-    </div>
-  </FormItem>
+        {#if theVariables[group || "no-group"]}
+          {@const variable = theVariables[group || "no-group"]}
+          {#key theVariables[group]}
+            <input
+              type="text"
+              placeholder={variable.placeholder}
+              bind:value={variableValues[variable.name]}
+              on:input={(e) => {
+                for (let v in variableValues) {
+                  if (variableValues[v] === "") {
+                    delete variableValues[v];
+                  }
+                }
+                onSetVariables(variableValues);
+              }}
+            />
+          {/key}
+        {/if}
+        <div slot="after">
+          {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
+            {@const variable = theVariables[group || "no-group"]}
+            <div style="display:flex;justify-content:end;">
+              <MiniButton
+                primary
+                on:click={() => {
+                  customizedVariables = [...customizedVariables, variable.name];
+                }}>+</MiniButton
+              >
+            </div>
+          {/if}
+        </div>
+      </FormItem>
+    {/if}
+  {/each}
 
   {#each customizedVariables as varName}
     {@const variable = variables.find((v) => v.name === varName)}
-    <FormItem>
-      <span slot="label">{variable?.name}</span>
-      <input
-        type="text"
-        placeholder={variable?.placeholder}
-        bind:value={variableValues[variable?.name]}
-        on:input={(e) => {
-          console.log("Update vars", variableValues);
-          for (let v in variableValues) {
-            if (variableValues[v] === "") {
-              delete variableValues[v];
+    {#if variable}
+      <FormItem>
+        <span slot="label">{variable?.name}</span>
+        <input
+          type="text"
+          placeholder={variable?.placeholder}
+          bind:value={variableValues[variable.name]}
+          on:input={(e) => {
+            console.log("Update vars", variableValues);
+            for (let v in variableValues) {
+              if (variableValues[v] === "") {
+                delete variableValues[v];
+              }
             }
-          }
-          onSetVariables(variableValues);
-        }}
-      />
-      <MiniButton
-        slot="after"
-        on:click={() => {
-          if (variable?.name) {
-            delete variableValues[variable.name];
-            customizedVariables = customizedVariables.filter(
-              (v) => v !== variable.name
-            );
             onSetVariables(variableValues);
-          }
-        }}>-</MiniButton
-      >
-    </FormItem>
+          }}
+        />
+        <MiniButton
+          slot="after"
+          on:click={() => {
+            if (variable?.name) {
+              delete variableValues[variable.name];
+              customizedVariables = customizedVariables.filter(
+                (v) => v !== variable.name
+              );
+              onSetVariables(variableValues);
+            }
+          }}>-</MiniButton
+        >
+      </FormItem>
+    {/if}
   {/each}
 </Container>
