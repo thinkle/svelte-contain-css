@@ -100,9 +100,9 @@
         <Card {fixedHeight}>
           <div>Simplest possible card</div>
           {#if fixedHeight}
-            <p>(fixed height)</p>
+            <div>(fixed height)</div>
           {:else}
-            <p>(dynamic height)</p>
+            <div>(dynamic height)</div>
           {/if}
         </Card>
         <Card {fixedHeight}>
