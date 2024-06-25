@@ -38,6 +38,8 @@
     @include typography-container-props(tile);
     @include box-shadow(tile, container);
     width: var(--tile-width, calc(var(--space-lg) * 24));
+    /* Override typography max-width */
+    max-width: var(--tile-width, calc(var(--space-lg) * 24));
 
     display: inline-flex;
     flex-direction: column;

@@ -30,12 +30,14 @@
   @import "$lib/sass/_mixins.scss";
   section {
     margin: auto;
-    max-width: var-with-fallbacks(--max-width, container, block, 900px);
+
     box-sizing: border-box;
     padding: var-with-fallbacks(--padding, container, 8px);
     @include color-props(container, block);
     @include box-props(container, block);
     @include typography-container-props(container, block);
+    /* Override typography max-width */
+    max-width: var-with-fallbacks(--max-width, container, block, 900px);
     margin-top: var-with-fallbacks(--margin, container, block, var(--gap));
     margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
     /* Why is this suddenly causing a scroll? */
