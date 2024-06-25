@@ -105,15 +105,15 @@
 
 <TextLayout>
   <h2>Bar</h2>
-  <div>
+  <p>
     The bar component is a simple flex container that can be used for menu bars,
     nav bars, footers, headers and more.
-  </div>
-  <div>
+  </p>
+  <p>
     By default, the bar automatically spaces items out, but you can adjust that
     behavior either by adding left or right margins to children or by changing
     the CSS variables that control the justification on the flex container.
-  </div>
+  </p>
 </TextLayout>
 <Container --container-border="1px solid #ccc">
   <h3>Example</h3>
