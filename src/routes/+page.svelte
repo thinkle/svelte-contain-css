@@ -134,7 +134,9 @@
         <DropdownMenu>
           <span slot="label">Jump to Component</span>
           {#each ["Card", "RadioButton", "Bar"] as component}
-            <a href="{base}/{component}" target="_blank">{component}</a>
+            <a href="{base}/component/{component}" target="_blank"
+              >{component}</a
+            >
           {/each}
         </DropdownMenu>
       </li>
