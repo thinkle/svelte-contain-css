@@ -5,4 +5,5 @@ export type CSSVariable = {
   defaultValue: string;
   unit?: string;
   options?: string[]; // For 'picklist' type
+  group?: string;
 };
