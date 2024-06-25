@@ -22,13 +22,15 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   .hero {
+    --hero-font-size: calc(var(--font-size) * 2);
     @include color-props(hero, container);
     @include typography-container-props(hero, container);
+    @include typography-props-bare(hero, container);
     display: grid;
     place-content: center;
     width: var(--hero-width, 100%);
     height: var(--hero-height, 100vh);
-    font-size: var(--hero-font-size, 2rem);
+    /* font-size: var(--hero-font-size, 2rem); */
     box-sizing: border-box;
     animation-name: fade-in;
     animation-duration: var(--hero-animation-duration, 1s);

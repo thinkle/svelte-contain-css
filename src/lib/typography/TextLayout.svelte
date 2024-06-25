@@ -6,6 +6,7 @@
   @import "$lib/sass/_mixins.scss";
   div {
     @include typography-container-props(body, text);
+    @include typography-props(body, text);
     width: var(--text-width, var(--body-width, 100%));
   }
 

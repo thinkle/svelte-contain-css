@@ -1,0 +1,5 @@
+:root {
+  --first-line-font-variant: small-caps;
+  --first-letter-font-weight: bold;
+  --first-letter-fg: var(--primary-bg);
+}

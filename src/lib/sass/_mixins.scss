@@ -28,45 +28,117 @@
   // e.g., var(--card-bg, var(--container-bg, var(--bg, white)))
   @return #{$result};
 }
+
+@function var-no-fallbacks($base-var, $args...) {
+  // Remove the initial -- from the base variable for concatenation purposes
+  $base-var-name: str-slice($base-var, 3);  
+
+  // Initialize the result with the final fallback value
+  $result: var($base-var);
+
+  // Iterate through the prefixes in reverse order
+  @for $i from length($args) through 1 {
+    $prefix: nth($args, $i);
+    // Construct the variable name by concatenating the prefix and base variable name
+    // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
+    $prefixed-var: unquote('--#{$prefix}-#{$base-var-name}');
+    // Nest the current prefixed variable as a fallback to the current result
+    $result: var(#{$prefixed-var}, #{$result});
+  }
+
+  // Return the final CSS var() function with all fallbacks
+  // e.g., var(--card-bg, var(--container-bg, var(--bg))
+  @return #{$result};
+}
+
+
 @function generate-var-name($prefix, $suffix) {
   @return unquote('--#{$prefix}-#{$suffix}');
 }
 
+@function map-prefixes($base, $prefixes) {
+  $result: (
+  );
+
+  @each $prefix in $prefixes {
+    $result: append($result, unquote('#{$prefix}-#{$base}'), comma);
+  }
+
+  @return $result;
+}
+
+@function vars ($suffix, $args...) {
+  // Initialize the result with the first prefixed variable
+  $prefix: nth($args, length($args));
+  $result: var(generate-var-name($prefix, $suffix));
+
+  // Iterate through the rest of the prefixes
+  @for $i from length($args) through 1 {
+    $prefix: nth($args, $i);
+    $prefixed-var: generate-var-name($prefix,$suffix);
+    // Nest the current prefixed variable as a fallback to the current result
+    $result: var(#{$prefixed-var}, #{$result});
+  }
+
+  // Return the final CSS var() function with all fallbacks
+  @return #{$result};
+}
+
 @mixin color-props ($prefixes...) {
-  background: var-with-fallbacks(--bg, append($prefixes,white)...);
-  color: var-with-fallbacks(--fg, append($prefixes,black)...);
+  background: var-no-fallbacks(--bg, $prefixes...);
+  color: var-no-fallbacks(--fg, $prefixes...);
   //text-shadow: var-with-fallbacks(--text-shadow,append($prefixes,#0000));  
-  --link-bg: var(#{generate-var-name(nth($prefixes, 1), 'link-bg')}, unset);
-  --link-fg: var(#{generate-var-name(nth($prefixes, 1), 'link-fg')}, unset);
+  --link-bg: vars(link-bg, $prefixes...);
+  --link-fg: vars(link-fg, $prefixes...);
+}
+
+@mixin typography-props-bare($prefixes...) {
+  font-family: vars(font-family, $prefixes...);
+  text-transform: vars(text-transform, $prefixes...);
+  text-decoration: vars(text-decoration, $prefixes...);
+  font-size: vars(font-size, $prefixes...);
+  font-weight: vars(font-weight, $prefixes...);
+  line-height: vars(line-height, $prefixes...);
+  letter-spacing: vars(letter-spacing, $prefixes...);
+  margin-block-start: vars(margin-top, $prefixes...);
+  margin-block-end: vars(margin-bottom, $prefixes...);
+  text-indent: vars(indent, $prefixes...);
+  font-variant: vars(font-variant, $prefixes...);
+  text-align: vars(text-align, $prefixes...);
 }
 
 @mixin typography-props ($prefixes...) {
-  font-family: var-with-fallbacks(--font-family, append($prefixes, sans-serif)...);
-  text-transform: var-with-fallbacks(--text-transform, append($prefixes, none)...);
-  text-decoration: var-with-fallbacks(--text-decoration, append($prefixes, none)...);
-  font-size: var-with-fallbacks(--font-size, append($prefixes, 1em)...);
-  font-weight: var-with-fallbacks(--font-weight, append($prefixes, 400)...);
-  line-height: var-with-fallbacks(--line-height, append($prefixes, 1.2)...);
-  letter-spacing: var-with-fallbacks(--letter-spacing, append($prefixes, 0)...);
-  margin-top: var-with-fallbacks(--margin, append($prefixes, 0)...);
-  margin-top: var-with-fallbacks(--margin-top, append($prefixes, 0)...);
-  margin-bottom: var-with-fallbacks(--margin, append($prefixes, 0)...);
-  margin-bottom: var-with-fallbacks(--margin-bottom, append($prefixes, 0)...);
-  text-indent: var-with-fallbacks(--indent, append($prefixes, 0)...);
-  font-variant: var-with-fallbacks(--font-variant, append($prefixes, normal)...);
-  text-align: var-with-fallbacks(--text-align, append($prefixes, left)...);
+  font-family: var-no-fallbacks(--font-family, $prefixes...);
+  text-transform: var-no-fallbacks(--text-transform, $prefixes...);
+  text-decoration: var-no-fallbacks(--text-decoration, $prefixes...);
+  font-size: var-no-fallbacks(--font-size, $prefixes...);
+  font-weight: var-no-fallbacks(--font-weight, $prefixes...);
+  line-height: var-no-fallbacks(--line-height, $prefixes...);
+  letter-spacing: var-no-fallbacks(--letter-spacing, $prefixes...);
+  margin-top: var-no-fallbacks(--margin, $prefixes...);
+  margin-top: var-no-fallbacks(--margin-top, $prefixes...);
+  margin-bottom: var-no-fallbacks(--margin, $prefixes...);
+  margin-bottom: var-no-fallbacks(--margin-bottom, $prefixes...);
+  text-indent: var-no-fallbacks(--indent, $prefixes...);
+  font-variant: var-no-fallbacks(--font-variant, $prefixes...);
+  text-align: var-no-fallbacks(--text-align, $prefixes...);
 }
 
 @mixin typography-container-props ($prefixes...) {
 
+  max-width: var-with-fallbacks(--line-width, append($prefixes, unset)...);
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
+
   @include typography-props($prefixes...);  
-  & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol) {
+  & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol), {
     max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
     font-family: var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
     line-height: var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
     margin-left: auto;
     margin-right: auto;
-    font-weight: var-with-fallbacks(--body-font-weight, append($prefixes, var(--normal))...);
+    font-weight: var-no-fallbacks(--body-font-weight, $prefixes...);
   }  
   & :global(h1),
    :global(h2),
@@ -74,12 +146,19 @@
    :global(h4),
    :global(h5),
    :global(h6) {
-    @include typography-props(heading);
+    
     @include color-props(heading);
-    max-width: var-with-fallbacks(--line-width, append($prefixes, 40em)...);
+    max-width: var-with-fallbacks(--line-width, append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;
   }  
+  & :global(p) {
+    @include typography-props-bare(
+      append(map-prefixes(
+          paragraph,
+          $prefixes
+      ),paragraph)...);
+  }
   &   :global(p:first-of-type),
     :global(h1 + p),
     :global(h2 + p),
@@ -87,24 +166,30 @@
     :global(h4 + p),
     :global(h5 + p),
     :global(h6 + p) {
-    margin-top: var-with-fallbacks(--first-paragraph-margin-top, append($prefixes, unset)...);
-    padding-top: var-with-fallbacks(--first-paragraph-padding-top, append($prefixes, unset)...);
-    font-variant: var-with-fallbacks(--first-paragraph-font-variant, append($prefixes, unset)...);
-    font-family: var-with-fallbacks(--first-paragraph-font-family, append($prefixes, unset)...);
-    font-style: var-with-fallbacks(--first-paragraph-font-style, append($prefixes, unset)...);
+    @include typography-props-bare(
+      append(map-prefixes(
+          first-paragraph,
+          $prefixes
+      ),first-paragraph)...);
     }
   & :global(p:first-of-type::first-line) {
-    font-variant: var-with-fallbacks(--first-line-font-variant, append($prefixes, unset)...);
-    font-size: var-with-fallbacks(--first-line-size, append($prefixes, unset)...);
-    text-transform: var-with-fallbacks(--first-line-text-transform, append($prefixes, unset)...);
+    @include typography-props-bare(
+      append(map-prefixes(
+          first-line,
+          $prefixes
+      ),first-line)...);
+    
   }
 
-  & :global(p:first-of-type::first-letter) {
-    @include typography-props(first-letter,
-      paragraph,
-      text,
-      body,
-      container);  
+  & :global(p:first-of-type::first-letter) {    
+    @include typography-props-bare(
+      map-prefixes(
+        first-letter,
+        $prefixes
+      )...);
+    @include color-props(first-letter,
+      first-line,
+      );
   }  
 }
 

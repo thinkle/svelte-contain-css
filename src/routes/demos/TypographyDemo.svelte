@@ -7,7 +7,8 @@
   import type { CSSVariable } from "./types";
   let cssVariables: CSSVariable[] = [
     {
-      name: "--text-size",
+      name: "--font-size",
+      group: "Typography",
       type: "length",
       placeholder: "e.g., 1.2rem",
       defaultValue: "1.2rem",
@@ -15,6 +16,7 @@
     },
     {
       name: "--body-font-family",
+      group: "Typography",
       type: "text",
       placeholder: "e.g., Garamond, serif",
       defaultValue: "Garamond, serif",
@@ -23,6 +25,7 @@
     {
       name: "--line-height",
       type: "number",
+      group: "Typography",
       placeholder: "e.g., 1.4",
       defaultValue: "1.4",
       unit: "",
@@ -30,23 +33,27 @@
     {
       name: "--line-width",
       type: "length",
+      group: "Typography",
       placeholder: "e.g., 30rem",
       defaultValue: "30rem",
       unit: "rem",
     },
     {
+      group: "Heading",
       name: "--heading-font-variant",
       type: "text",
       placeholder: "e.g., small-caps",
       defaultValue: "small-caps",
     },
     {
-      name: "--first-paragraph-first-line-text-transform",
+      group: "Paragraphs",
+      name: "--first-line-text-transform",
       type: "text",
       placeholder: "e.g., uppercase",
       defaultValue: "uppercase",
     },
     {
+      group: "Typography",
       name: "--font-family",
       type: "text",
       placeholder: "e.g., Arial, sans-serif",
@@ -54,6 +61,7 @@
       unit: "",
     },
     {
+      group: "Heading",
       name: "--heading-font-family",
       type: "text",
       placeholder: "e.g., Arial, sans-serif",
@@ -61,6 +69,7 @@
       unit: "",
     },
     {
+      group: "Heading",
       name: "--heading-text-decoration",
       type: "decoration",
       placeholder: "e.g., underline",
@@ -69,6 +78,7 @@
     },
 
     {
+      group: "UI",
       name: "--ui-font-family",
       type: "text",
       placeholder: "e.g., Arial, sans-serif",
@@ -76,6 +86,7 @@
       unit: "",
     },
     {
+      group: "Code",
       name: "--code-font-family",
       type: "text",
       placeholder: "e.g., Courier, monospace",
@@ -83,6 +94,7 @@
       unit: "",
     },
     {
+      group: "Code",
       name: "--code-font-size",
       type: "length",
       placeholder: "e.g., 0.9em",
@@ -91,6 +103,7 @@
     },
 
     {
+      group: "Font Variants",
       name: "--bold",
       type: "text",
       placeholder: "e.g., bold",
@@ -98,6 +111,7 @@
       unit: "",
     },
     {
+      group: "Headings",
       name: "--heading-margin",
       type: "length",
       placeholder: "e.g., 0.5em 0",
@@ -105,6 +119,7 @@
       unit: "em",
     },
     {
+      group: "Headings",
       name: "--first-heading-margin",
       type: "length",
       placeholder: "e.g., 0",
@@ -112,6 +127,7 @@
       unit: "",
     },
     {
+      group: "Headings",
       name: "--heading-bg",
       type: "color",
       placeholder: "e.g., #ffffff",
@@ -119,6 +135,7 @@
       unit: "",
     },
     {
+      group: "Headings",
       name: "--heading-fg",
       type: "color",
       placeholder: "e.g., #000000",
@@ -126,6 +143,7 @@
       unit: "",
     },
     {
+      group: "Headings",
       name: "--heading-padding",
       type: "length",
       placeholder: "var(--space)",
@@ -133,12 +151,14 @@
       unit: "",
     },
     {
+      group: "Paragraphs",
       name: "--paragraph-indent",
       type: "length",
       placeholder: "e.g., 1em",
       defaultValue: "none",
     },
     {
+      group: "Paragraphs",
       name: "--first-paragraph-indent",
       type: "length",
       placeholder: "e.g., 1em",
@@ -146,6 +166,7 @@
       unit: "em",
     },
     {
+      group: "Paragraphs",
       name: "--paragraph-margin",
       type: "length",
       placeholder: "e.g., 0",

@@ -8,6 +8,7 @@
   import dark from "$lib/vars/themes/dark.css?raw";
   import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
   import boxy from "$lib/vars/boxy.css?raw";
+  import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
   let typographyThemes = [
     { name: "Defaults", css: "", file: "" },
     {
@@ -34,6 +35,11 @@
   let extraThemes = [
     { name: "Responsive Typography", css: responsiveTypography, file: "" },
     { name: "Sharp Edges", css: boxy, file: "boxy.css" },
+    {
+      name: "Fancy Paragraphs",
+      css: fancyParagraphs,
+      file: "fancy-paragraphs.css",
+    },
   ];
   let enabledExtraThemes = {
     0: false,
