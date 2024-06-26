@@ -70,7 +70,7 @@
 @function vars ($suffix, $args...) {
   // Initialize the result with the first prefixed variable
   $prefix: nth($args, length($args));
-  $result: var(generate-var-name($prefix, $suffix));
+  $result: var(generate-var-name($prefix, $suffix), inherit);
 
   // Iterate through the rest of the prefixes
   @for $i from length($args) through 1 {
