@@ -46,6 +46,15 @@
     selectElement.dispatchEvent(new Event("change"));
     activeOption = options[idx];
   }
+
+  function updateOption(value: any) {
+    if (selectElement) {
+      selectElement.selectedIndex = options.findIndex((o) => o.value == value);
+      activeOption = options[selectElement.selectedIndex];
+    }
+  }
+
+  $: updateOption(value);
 </script>
 
 <select bind:value on:change bind:this={selectElement}>
@@ -72,11 +81,11 @@
   .dropdown-wrapper {
     @include box-props-square-border(select, input, menu, control, container);
     @include color-props(select, input, menu, control, container);
-    width: var(--select-width, var(--dropdown-menu-width, 12em));
+    width: var(--select-width, var(--dropdown-menu-width, min(12em, 100cw)));
   }
   .select-dropdown {
     display: inline-flex;
-    width: var(--select-width, var(--dropdown-menu-width, 12em));
+    width: var(--select-width, var(--dropdown-menu-width, min(12em, 100cw)));
     box-sizing: border-box;
   }
   .dropdown-wrapper {
