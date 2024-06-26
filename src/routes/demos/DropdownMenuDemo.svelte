@@ -3,7 +3,11 @@
   import Menu from "$lib/dropdowns/DropdownMenu.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import FormItem from "$lib/layout/FormItem.svelte";
+  import Code from "$lib/misc/Code.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
   let longList: string[] = [];
+  let constrainedWidth = "80px";
   function randomWord() {
     let words = [
       "apple",
@@ -34,10 +38,11 @@
   for (let i = 0; i < 30; i++) {
     longList.push(`${randomWord()} ${i}`);
   }
-  let val = { val: 2 };
+  let val = 2;
 </script>
 
-<Container>
+<TextLayout>
+  <h2>Dropdown Menus</h2>
   <Bar>
     <Menu>
       <span slot="label">Left Menu</span>
@@ -62,14 +67,86 @@
       <li><button>Bang</button></li>
     </Menu>
   </Bar>
-  <Select bind:value={val}>
-    <option value={{ val: 1 }}>Option A</option>
-    <option value={{ val: 2 }}><b>Strong</b> B</option>
-    <option value={{ val: 3 }}><em>Fancy</em> C</option>
-    <option value={{ val: 4 }}><span style="color:red">Red</span> D</option>
-  </Select>
   <p>
-    Well look, they selected {val.val}
+    Our basic dropdowns work well, even if the contents are longer than the
+    contents of the page (see "long menu" example).
   </p>
-  Selection:<input type="number" bind:value={val} />
-</Container>
+  <Code
+    code={`
+  <Menu>
+    <span slot="label">Menu Title</span>
+    <li><button>Foo</button></li>
+    <li><button>Bar</button></li>
+    <li><button>Baz</button></li>
+    <li><button>Bang</button></li>
+  </Menu>
+  `}
+  />
+</TextLayout>
+<TextLayout>
+  <h2>Select</h2>
+  <p>
+    Our <code>&lt;Select&gt;</code> element creates the select element we always
+    wish we had, with styling allowed inside of the &lt;option&gt; tag. On small
+    screens, we will fall back to acting like a standard select, but when there's
+    enough space for our custom element, we'll use a dropdown menu to render a select
+    button with markup allowed internally.
+  </p>
+  <FormItem>
+    <span slot="label">Select an option:</span>
+    <Select bind:value={val}>
+      <option value={1}>Option A</option>
+      <option value={2}><b>Strong</b> B</option>
+      <option value={3}><em>Fancy</em> C</option>
+      <option value={4}><span style="color:red">Red</span> D</option>
+    </Select>
+  </FormItem>
+  <Code
+    code={`
+<Select bind:value={val}>
+  <option value={1}>Option A</option>
+  <option value={2}><b>Strong</b> B</option>
+  <option value={3}><em>Fancy</em> C</option>
+  <option value={4}><span style="color:red">Red</span> D</option>
+</Select>
+  `}
+  />
+  <p>
+    Well look, they selected {val}
+  </p>
+  <div>
+    <p>Show off two way binding by changing the option here as well:</p>
+    <FormItem>
+      <span slot="label">Option #</span>
+      <input type="number" bind:value={val} />
+    </FormItem>
+  </div>
+  <h2>Controlling width</h2>
+  <p>
+    Here it is using the --select-width variable to constrain the select size.
+    <FormItem>
+      <span slot="label">--select-width</span>
+      <input bind:value={constrainedWidth} />
+    </FormItem>
+    <FormItem>
+      <span slot="label">A narrower select:</span>
+      <Select --select-width={constrainedWidth} bind:value={val}>
+        <option value={1}>Option A</option>
+        <option value={2}><b>Strong</b> B</option>
+        <option value={3}><em>Fancy</em> C</option>
+        <option value={4}><span style="color:red">Red</span> D</option>
+      </Select>
+    </FormItem>
+    <Code
+      code={`
+<Select --select-width="${constrainedWidth}" ...>
+  ...
+</Select>
+  `}
+    />
+  </p>
+
+  <TextLayout>
+    <p></p>
+  </TextLayout>
+</TextLayout>

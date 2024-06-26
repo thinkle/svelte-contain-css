@@ -38,6 +38,16 @@
       });
     }
     activeOption = options[selectElement.selectedIndex];
+    setTimeout(() => {
+      let maxWidth = 0;
+      for (let button of optionButtons) {
+        // measure the width of each button...
+        if (button.offsetWidth > maxWidth) {
+          maxWidth = button.offsetWidth;
+        }
+      }
+      targetWidth = maxWidth;
+    }, 10);
   }
 
   function setValue(idx: number) {
@@ -55,21 +65,25 @@
   }
 
   $: updateOption(value);
+  let targetWidth = 10;
+  let optionButtons: HTMLButtonElement[] = [];
 </script>
 
 <select bind:value on:change bind:this={selectElement}>
   <slot />
 </select>
-<div class="dropdown-wrapper">
+<div class="dropdown-wrapper" style:--target-width="{targetWidth}px">
   <DropdownMenu>
     <span class="select-dropdown" slot="label">
-      <span>
+      <span class="select-dropdown-label">
         {#if activeOption}{@html activeOption.html}{:else}-{/if}
       </span>
     </span>
     {#each options as option, index}
-      <li>
-        <button on:click={() => setValue(index)}>{@html option.html} </button>
+      <li bind:this={optionButtons[index]}>
+        <button on:click={() => setValue(index)}>
+          <span>{@html option.html}</span>
+        </button>
       </li>
     {/each}
   </DropdownMenu>
@@ -78,14 +92,25 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   select,
-  .dropdown-wrapper {
+  /* This is a little ugly -- relies on knowing how we implement
+  DropdownMenu and will have to change if that code changes */
+  .dropdown-wrapper > :global(.dropdown-menu > button) {
     @include box-props-square-border(select, input, menu, control, container);
     @include color-props(select, input, menu, control, container);
-    width: var(--select-width, var(--dropdown-menu-width, min(12em, 100cw)));
+    width: var(
+      --select-width,
+      var(--target-width, var(--dropdown-menu-width, min(12em, 100cw)))
+    );
+    text-overflow: ellipsis;
+  }
+  .select-dropdown-label {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
   }
   .select-dropdown {
     display: inline-flex;
-    width: var(--select-width, var(--dropdown-menu-width, min(12em, 100cw)));
+    width: 100%;
     box-sizing: border-box;
   }
   .dropdown-wrapper {
@@ -101,14 +126,19 @@
   .select-dropdown::after {
     content: var(--select-arrow, "⌄"); /* ↓ */
     margin-left: auto;
-    transform: scaleX(1.5) translateY(-50%);
+    transform: var(--select-arrow-transform, scaleX(1.5) translateY(-70%));
     display: inline-grid;
-    width: 1em;
+    width: var(--select-dropdown-arrow-width, 1em);
     place-content: center;
     position: absolute;
-    right: var(--padding);
+    right: var(--select-arrow-right-offset, calc(-1 * var(--padding)));
     top: 50%;
   }
+
+  .select-dropdown-label {
+    padding-right: var(--select-dropdown-arrow-width, 1em);
+  }
+
   :global(.open) .select-dropdown::after {
     transform: rotate(180deg) scaleX(1.5);
   }
