@@ -49,13 +49,15 @@
 <Container>
   {#each groups as group, i}
     {#if remainingVariables.filter((v) => v.group == group).length > 0}
-      <FormItem --form-label-width="20em" --form-label-align="end">
+      <FormItem --form-label-align="end">
         <div
           slot="label"
           style="display:flex;align-items: end; justify-content: end; flex-direction: column;"
         >
-          {#if !group && groups.length}
-            <label for="css-var-{i}">General:</label>
+          {#if !group}
+            {#if groups.length > 1}
+              <label for="css-var-{i}">General:</label>
+            {/if}
           {:else}
             <label>{group}</label>
           {/if}
@@ -64,9 +66,6 @@
               <Select
                 id="css-var-{i}"
                 bind:value={theVariables[group || "no-group"]}
-                --select-width="22em"
-                --menu-item-width="22em"
-                --dropdown-menu-width="22em"
               >
                 {#each remainingVariables as variable}
                   {#if variable.group === group}
