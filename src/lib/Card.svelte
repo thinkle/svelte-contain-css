@@ -106,20 +106,18 @@
     align-items: center;
     height: var-with-fallbacks(--height, card-header, bar, 2em);
   }
-  header :global(h1),
-  :global(h2),
-  :global(h3),
-  :global(h4),
-  :global(h5),
-  :global(h6),
-  footer :global(h1),
-  :global(h2),
-  :global(h3),
-  :global(h4),
-  :global(h5),
-  :global(h6) {
-    margin: 0;
-    @include color-props(card-header, secondary);
+
+  header,
+  footer {
+    :global(h1),
+    :global(h2),
+    :global(h3),
+    :global(h4),
+    :global(h5),
+    :global(h6) {
+      margin: 0;
+      @include color-props(card-header, secondary);
+    }
   }
   footer {
     @include color-props(card-footer, secondary);
