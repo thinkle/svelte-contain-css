@@ -34,9 +34,10 @@
   @import "$lib/sass/_mixins.scss";
   .menu {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    @include padding-props(menu, container);
     @include color-props(menu, container);
+    margin-block-start: 0;
+    margin-block-end: 0;
   }
 
   .menu {
