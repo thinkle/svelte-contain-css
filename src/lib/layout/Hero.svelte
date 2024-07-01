@@ -25,10 +25,11 @@
     --hero-font-size: calc(var(--font-size) * 2);
     @include color-props(hero, container);
     @include typography-container-props(hero, container);
-    @include typography-props-bare(hero, container);
+
     display: grid;
     place-content: center;
     width: var(--hero-width, 100%);
+    max-width: var(--hero-width, 100%);
     height: var(--hero-height, 100vh);
     /* font-size: var(--hero-font-size, 2rem); */
     box-sizing: border-box;
