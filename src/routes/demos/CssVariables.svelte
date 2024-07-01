@@ -84,12 +84,18 @@
               placeholder={variable.placeholder}
               bind:value={variableValues[variable.name]}
               on:input={(e) => {
+                console.log("input", e);
                 for (let v in variableValues) {
                   if (variableValues[v] === "") {
                     delete variableValues[v];
                   }
                 }
                 onSetVariables(variableValues);
+              }}
+              on:keyup={(e) => {
+                if (e.key === "Enter") {
+                  customizedVariables = [...customizedVariables, variable.name];
+                }
               }}
             />
           {/key}

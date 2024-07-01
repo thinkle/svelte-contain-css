@@ -34,7 +34,7 @@
   $base-var-name: str-slice($base-var, 3);  
 
   // Initialize the result with the final fallback value
-  $result: var($base-var);
+  $result: var($base-var, inherit);
 
   // Iterate through the prefixes in reverse order
   @for $i from length($args) through 1 {
@@ -85,11 +85,10 @@
 }
 
 @mixin color-props ($prefixes...) {
-  background: var-no-fallbacks(--bg, $prefixes...);
-  color: var-no-fallbacks(--fg, $prefixes...);
-  //text-shadow: var-with-fallbacks(--text-shadow,append($prefixes,#0000));  
-  --link-bg: vars(link-bg, $prefixes...);
-  --link-fg: vars(link-fg, $prefixes...);
+  background: vars(bg, $prefixes...);
+  color: vars(fg, $prefixes...);  
+  --link-bg: #{vars(link-bg, $prefixes...)};
+  --link-fg: #{vars(link-fg, $prefixes...)};
 }
 
 @mixin typography-props-bare($prefixes...) {
@@ -224,7 +223,7 @@
   }
 }
 @mixin border-props-none ($prefixes...) {
-  border: var-with-fallbacks(--border, append($prefixes,none)...);
+  border: var-with-fallbacks(--border, append($prefixes,inherit)...);
   $directions: (
     top,
     right,
@@ -273,7 +272,7 @@ $rectProps : (border);
   box-sizing: border-box;
   @include border-props-border($prefixes..., var(--border-width, 1px) var(--border-style, solid) var(--border-color, var(--fg)));
   @include padding-props($prefixes...);
-  border-radius: var-with-fallbacks(--radius, append($prefixes, 0)...);
+  border-radius: var-with-fallbacks(--radius, append($prefixes, 0)...); 
 }
 
 @mixin box-props-bottom ($prefixes...) {
@@ -303,8 +302,8 @@ $rectProps : (border);
 }
 
 @mixin clickable($prefixes...) {
-  cursor: pointer;
-  transition: filter,transform var-with-fallbacks(--transition,button,control,300ms);
+  cursor: var-with-fallbacks(--cursor,append($prefixes, pointer)...);
+  transition: filter,transform var-with-fallbacks(--transition,append($prefixes,300ms)...);
   &:hover {
     filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.4))...);
     transform: var-with-fallbacks(--hover-transform, append($prefixes, none)...);

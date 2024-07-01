@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import purple from "$lib/vars/themes/purple.css?raw";
   import browser from "$lib/vars/themes/typography-browser.css?raw";
   import airy from "$lib/vars/themes/typography-airy.css?raw";
@@ -46,6 +46,8 @@
     1: false,
   };
 
+  let rawCss = "";
+
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import { onMount } from "svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
@@ -71,6 +73,7 @@
 
   $: injectStyle("typography", typographyThemes[typographyTheme].css);
   $: injectStyle("color", colorThemes[colorTheme].css);
+  $: injectStyle("extra-raw", `:root { ${rawCss} }`);
 
   $: for (let i = 0; i < extraThemes.length; i++) {
     if (enabledExtraThemes[i]) {
@@ -85,14 +88,35 @@
       "defaults.css",
       ...themes.map((theme) => theme && theme.file).filter((file) => file),
     ];
-    return themeFiles
-      .map((theme) => `import "contain-css-svelte/vars/${theme}";`)
+    let themeImports = themeFiles
+      .map((theme) => `\timport "contain-css-svelte/vars/${theme}";`)
       .join("\n");
+
+    let scriptTag =
+      "<scri" +
+      `pt>
+  ${themeImports}
+  </scri` +
+      "pt>";
+    let styleTag = "";
+    if (rawCss) {
+      styleTag =
+        `\n\n<sty` +
+        `le>
+:root {
+  ${rawCss.replace("\n", "\n\t")}
+}
+</sty` +
+        "le>";
+    }
+
+    return scriptTag + styleTag;
   }
 
   let themeCode = buildThemeCode();
 
   $: themeCode = buildThemeCode(
+    rawCss,
     typographyThemes[typographyTheme],
     colorThemes[colorTheme],
     ...extraThemes
@@ -123,9 +147,13 @@
     <Checkbox bind:checked={enabledExtraThemes[i]}>{theme.name}</Checkbox>
   {/each}
 </FormItem>
+<FormItem>
+  <span slot="label">Extra Variables</span>
+  <textarea placeholder="--bg : red;" bind:value={rawCss}></textarea>
+</FormItem>
 <FormItem fullWidth>
   <Checkbox bind:checked={showCode}>Show code</Checkbox>
 </FormItem>
 {#if showCode}
-  <Code code={themeCode} language="js" />
+  <Code code={themeCode} language="html" />
 {/if}

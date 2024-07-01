@@ -76,7 +76,9 @@
   }
 
   /* Global Input Styles */
-  .globalInputStyles :global(input) {
+  .globalInputStyles :global(input),
+  .globalInputStyles :global(select),
+  .globalInputStyles :global(textarea) {
     @include typography-props(form-input, input, ui);
     @include box-props-square(form-input, input, ui);
   }

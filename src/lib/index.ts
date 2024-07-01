@@ -25,6 +25,7 @@ import Tile from "./layout/Tile.svelte";
 import Code from "./misc/Code.svelte";
 import TextLayout from "./typography/TextLayout.svelte";
 import Sidebar from "./layout/Sidebar.svelte";
+import Dialog from "./overlays/Dialog.svelte";
 
 export { Hero };
 export { TabItem };
@@ -33,3 +34,4 @@ export { Bar, Container, GridLayout, MenuList, Page, ResponsiveText, TabBar };
 export { TextLayout, Code };
 export { Card, Tile, FormItem };
 export { Row, Column, Columns, SplitPane, Sidebar };
+export { Dialog };

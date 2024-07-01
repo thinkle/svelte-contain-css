@@ -13,6 +13,9 @@
   --stripe-bg: #3a3a3a;
   --shadow-color: #eeeeee0f;
   --border-color: #e9e9e9;
+  --warning-bg: var(--material-color-red-600);
+  --warning-fg: var(--white);
+  --warning-text-transform: uppercase;
 }
 
 body {

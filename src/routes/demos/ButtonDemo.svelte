@@ -4,97 +4,10 @@
   import Container from "$lib/layout/Container.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Code from "$lib/misc/Code.svelte";
+  import CssVariableDemo from "./CssVariableDemo.svelte";
   import CssVariables from "./CssVariables.svelte";
   import CssWrapper from "./CssWrapper.svelte";
-
-  const buttonCSSVariables = [
-    {
-      name: "--button-border-radius",
-      type: "length",
-      placeholder: "e.g., 4px",
-      defaultValue: "var(--border-radius)",
-      unit: "px",
-    },
-    {
-      name: "--button-bg",
-      type: "color",
-      placeholder: "e.g., #007bff",
-      defaultValue: "var(--secondary-bg)",
-      unit: "",
-    },
-    {
-      name: "--button-fg",
-      type: "color",
-      placeholder: "e.g., #ffffff",
-      defaultValue: "var(--secondary-fg)",
-      unit: "",
-    },
-    {
-      name: "--button-font",
-      type: "text",
-      placeholder: "e.g., Arial",
-      defaultValue: "var(--ui-font)",
-      unit: "",
-    },
-    {
-      name: "--button-hover-transform",
-      type: "text",
-      placeholder: "e.g., scale(1.1)",
-      defaultValue: "var(--hover-transform)",
-      unit: "",
-    },
-    {
-      name: "--button-hover-filter",
-      type: "text",
-      placeholder: "e.g., brightness(1.2)",
-      defaultValue: "var(--hover-filter)",
-      unit: "",
-    },
-    {
-      name: "--button-active-transform",
-      type: "text",
-      placeholder: "e.g., scale(0.9)",
-      defaultValue: "var(--active-transform)",
-      unit: "",
-    },
-    {
-      name: "--button-active-filter",
-      type: "text",
-      placeholder: "e.g., brightness(0.8)",
-      defaultValue: "var(--active-filter)",
-      unit: "",
-    },
-    {
-      name: "--button-transition",
-      type: "text",
-      placeholder: "e.g., all 0.3s",
-      defaultValue: "var(--transition)",
-      unit: "",
-    },
-    {
-      name: "--button-padding",
-      type: "text",
-      placeholder: "16px",
-      defaultValue: "var(--padding)",
-      unit: "",
-    },
-    {
-      name: "--button-box-shadow-color",
-      type: "color",
-      placeholder: "e.g., #0003",
-    },
-    {
-      name: "--button-box-shadow-distance",
-      type: "distance",
-      placeholder: "var(--space-lg)",
-    },
-    {
-      name: "--mini-button-size",
-      type: "distance",
-      placeholder: "48px",
-    },
-  ];
-  let cssValues = {};
+  import { buttonVars } from "./cssVariableDefs";
 </script>
 
 <Container border>
@@ -111,20 +24,15 @@
 <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
   />
   <h3>Try Customizing Some Buttons...</h3>
-  <CssVariables
-    variables={buttonCSSVariables}
-    onSetVariables={(variables) => {
-      cssValues = variables;
-    }}
-  />
-
-  <CssWrapper variables={cssValues}>
+  <CssVariableDemo variables={buttonVars}>
     <Button>Standard Button</Button>
     <Button>
       Icon Button
       <div slot="icon">▶</div>
     </Button>
+    <Button warning={true}>Warning Button</Button>
     <Button primary={true}>Primary Button</Button>
+
     <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
-  </CssWrapper>
+  </CssVariableDemo>
 </Container>

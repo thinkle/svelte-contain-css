@@ -1,11 +1,13 @@
 <script lang="ts">
   import Bar from "$lib/layout/Bar.svelte";
+
   import Menu from "$lib/dropdowns/DropdownMenu.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Container from "$lib/layout/Container.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
+  import Button from "$lib/controls/Button.svelte";
   let longList: string[] = [];
   let constrainedWidth = "80px";
   function randomWord() {
@@ -39,6 +41,14 @@
     longList.push(`${randomWord()} ${i}`);
   }
   let val = 2;
+
+  let people = [
+    { name: "John", age: 30, label: "John (aged 30)" },
+    { name: "Jane", age: 25, label: "Jane (aged 25)" },
+    { name: "Jim", age: 40, label: "Jim (aged 40)" },
+    { name: "Jill", age: 35, label: "Jill (aged 35)" },
+  ];
+  let selectedPerson = people[0];
 </script>
 
 <TextLayout>
@@ -92,6 +102,22 @@
     enough space for our custom element, we'll use a dropdown menu to render a select
     button with markup allowed internally.
   </p>
+
+  <FormItem>
+    <span slot="label">Select a person:</span>
+    <Select bind:value={selectedPerson}>
+      {#each people as person}
+        <option value={person}>{person.label}</option>
+      {/each}
+    </Select>
+    <Button
+      on:click={() =>
+        (selectedPerson = people[Math.floor(Math.random() * people.length)])}
+      >Select Random Person</Button
+    >
+  </FormItem>
+  <p>You selected {selectedPerson.name}, aged {selectedPerson.age}!</p>
+
   <FormItem>
     <span slot="label">Select an option:</span>
     <Select bind:value={val}>

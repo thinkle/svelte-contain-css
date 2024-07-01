@@ -34,21 +34,25 @@
 
   button.has-icon {
     display: flex;
-    gap: var(--space);
+    gap: var(--button-icon-gap, var(--space));
   }
   button {
     width: var(--button-width);
     height: var(--button-height);
     @include box-props(button, control, secondary);
+    @include border-props-none(button);
     @include color-props(button, control, secondary);
-    font-family: var(--button-font);
+    @include box-shadow(button, control);
+    @include typography-props-bare(button, control);
     @include clickable(button, clickable);
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
   button.primary {
     @include color-props(primary, button, control);
+    @include typography-props-bare(primary, button);
   }
   button.warning {
     @include color-props(warning, button, control);
+    @include typography-props-bare(warning, button);
   }
 </style>

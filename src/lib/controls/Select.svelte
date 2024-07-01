@@ -57,9 +57,11 @@
     activeOption = options[idx];
   }
 
-  function updateOption(value: any) {
+  async function updateOption(value: any) {
+    /* Wait for svelte to update its internal select component */
+    await tick();
     if (selectElement) {
-      selectElement.selectedIndex = options.findIndex((o) => o.value == value);
+      /* Use svelte's magic to update our option */
       activeOption = options[selectElement.selectedIndex];
     }
   }
