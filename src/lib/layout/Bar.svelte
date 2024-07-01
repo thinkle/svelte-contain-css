@@ -68,5 +68,6 @@
   .bar :global(h5),
   .bar :global(h6) {
     margin: 0;
+    @include color-props(bar, container);
   }
 </style>
