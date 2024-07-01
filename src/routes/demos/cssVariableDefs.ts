@@ -332,6 +332,27 @@ function boxPropsBorder(prefix: string): CSSVariable[] {
   let group = "Box";
   return [...boxProps(prefix)];
 }
+
+function shadowProps(prefix: string): CSSVariable[] {
+  let group = "Box Shadow";
+  return [
+    {
+      name: `--${prefix}-shadow-blur`,
+      ...defaults.shadow,
+      group,
+    },
+    {
+      name: `--${prefix}-shadow-color`,
+      ...defaults.color,
+      group,
+    },
+    {
+      name: `--${prefix}-shadow-distance`,
+      ...defaults.distance,
+      group,
+    },
+  ];
+}
 /* Component variables */
 
 export let buttonVars: CSSVariable[] = [
@@ -343,6 +364,7 @@ export let buttonVars: CSSVariable[] = [
   ...typographyProps("primary"),
   ...clickableProps("button"),
   ...boxProps("button"),
+  ...shadowProps("button"),
   {
     name: "--button-border",
     defaultValue: "none",
@@ -359,8 +381,65 @@ export let buttonVars: CSSVariable[] = [
   },
 ];
 
+export let cardVars = [
+  ...shadowProps("card"),
+  ...boxProps("card"),
+  ...colorProps("card"),
+  ...colorProps("card-header"),
+  ...colorProps("card-footer"),
+  {
+    name: "--card-width",
+    defaultValue: "420px",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-height",
+    defaultValue: "300px",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-footer-height",
+    defaultValue: "2em",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-header-height",
+    defaultValue: "2em",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-width-small",
+    defaultValue: "250px",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-height-small",
+    defaultValue: "150px",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-width-large",
+    defaultValue: "600px",
+    type: "length",
+    group: "Size",
+  },
+  {
+    name: "--card-height-large",
+    defaultValue: "450px",
+    type: "length",
+    group: "Size",
+  },
+];
+
 export let components = {
   button: buttonVars,
+  card: cardVars,
 };
 
 export let vars = Object.values(components).flat();
