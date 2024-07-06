@@ -1,3 +1,5 @@
+import { cssProperties } from "./cssprops";
+
 export function injectVars(
   props: { [key: string]: string },
   prefix: string,
@@ -19,4 +21,15 @@ export function injectVars(
 }
 function toKebabCase(str: string) {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+}
+
+export function copyCSSVariables(
+  origin: HTMLElement,
+  target: HTMLElement,
+  variableList: string[] = cssProperties
+) {
+  const styles = getComputedStyle(origin);
+  for (let v of variableList) {
+    target.style.setProperty(`--${v}`, styles.getPropertyValue(`--${v}`));
+  }
 }

@@ -437,9 +437,64 @@ export let cardVars = [
   },
 ];
 
+export let dialogVars: CSSVariable[] = [
+  {
+    name: "--dialog-min-width",
+    defaultValue: "300px",
+    type: "length",
+    group: "Size",
+    placeholder: "e.g., 300px",
+  },
+  {
+    name: "--dialog-max-width",
+    defaultValue: "800px",
+    type: "length",
+    group: "Size",
+    placeholder: "e.g., 800px",
+  },
+  {
+    name: "--dialog-min-height",
+    defaultValue: "300px",
+    type: "length",
+    group: "Size",
+    placeholder: "e.g., 300px",
+  },
+  {
+    name: "--dialog-max-height",
+    defaultValue: "800px",
+    type: "length",
+    group: "Size",
+    placeholder: "e.g., 800px",
+  },
+  ...boxProps("dialog"),
+  ...shadowProps("dialog"),
+  ...colorProps("dialog"),
+  {
+    name: "--dialog-underlay-color",
+    defaultValue: "rgba(0,0,0,0.5)",
+    type: "color",
+    group: "Underlay",
+    placeholder: "e.g., rgba(0,0,0,0.5)",
+  },
+  {
+    name: "--dialog-underlay-filter",
+    defaultValue: "blur(2px)",
+    type: "text",
+    group: "Underlay",
+  },
+];
+
+export let tooltipVars = [
+  ...boxProps("tooltip"),
+  ...colorProps("tooltip"),
+  ...shadowProps("tooltip"),
+];
+
 export let components = {
   button: buttonVars,
   card: cardVars,
+  dialog: dialogVars,
 };
 
 export let vars = Object.values(components).flat();
+export let cssProperties = vars.map((v) => v.name);

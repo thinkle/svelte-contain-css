@@ -2,7 +2,7 @@
   import { afterUpdate } from "svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Container from "$lib/layout/Container.svelte";
-  import { injectVars } from "$lib/util";
+  import { copyCSSVariables, injectVars } from "$lib/util";
   export let onClose = () => {};
   export let open = true;
   export let modal = true;
@@ -11,8 +11,10 @@
     if (dialogElement) {
       if (open) {
         if (modal) {
+          //copyCSSVariables(ref, dialogElement);
           dialogElement.showModal();
         } else {
+          //copyCSSVariables(ref, dialogElement);
           dialogElement.show();
         }
       } else if (dialogElement) {
@@ -22,9 +24,11 @@
     }
   });
   let dialogElement: HTMLDialogElement;
+  let ref: HTMLDivElement;
 </script>
 
 <section {style}>
+  <div class="variable-placeholder" bind:this={ref}></div>
   <dialog bind:this={dialogElement} on:close={onClose}>
     <slot />
     <div class="close-button">
@@ -35,7 +39,9 @@
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
-
+  .variable-placeholder {
+    display: none;
+  }
   .close-button {
     position: absolute;
     top: 0;
