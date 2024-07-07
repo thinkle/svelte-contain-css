@@ -2,6 +2,7 @@
   export let tooltipText = "";
   let tooltipDiv: HTMLElement;
   let targetDiv: HTMLElement;
+  let tooltipMeasurementDiv: HTMLElement;
   export let vertical = "bottom";
   export let horizontal = "right";
   let renderedVertical = vertical;
@@ -12,18 +13,21 @@
     // with respect to our screen
 
     const targetRect = targetDiv.children[0].getBoundingClientRect();
+    let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
     renderedHorizontal = horizontal;
     renderedVertical = vertical;
 
     // Adjust vertical position based on position in window.
     if (
       renderedVertical === "top" &&
-      targetRect.top - window.scrollY < window.innerHeight / 3
+      //targetRect.top - window.scrollY < window.innerHeight / 3
+      targetRect.top < targetHeight + 32
     ) {
       renderedVertical = "bottom";
     } else if (
       renderedVertical === "bottom" &&
-      targetRect.bottom > (window.innerHeight * 2) / 3
+      //targetRect.bottom > (window.innerHeight * 2) / 3
+      targetRect.bottom + targetHeight > window.innerHeight - 32
     ) {
       renderedVertical = "top";
     }
@@ -71,6 +75,8 @@
   class="tooltip-wrapper"
   on:mouseenter={() => showPopover()}
   on:mouseleave={() => tooltipDiv.togglePopover(false)}
+  on:focusin={() => showPopover()}
+  on:focusout={() => tooltipDiv.togglePopover(false)}
   bind:this={targetDiv}
 >
   <slot />
@@ -87,6 +93,11 @@
       {tooltipText}
     </slot>
   </div>
+  <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
+    <slot name="tooltip">
+      {tooltipText}
+    </slot>
+  </div>
 </div>
 
 <style lang="scss">
@@ -99,6 +110,7 @@
     @include color-props(tooltip, secondary);
     @include box-props-square-border(tooltip);
     @include box-shadow(tooltip, container);
+    @include typography-container-props(tooltip, ui);
   }
 
   .tooltip-wrapper {
@@ -133,5 +145,9 @@
   }
   .left::after {
     right: var(--tooltip-arrow-size, 8px);
+  }
+  .invisible {
+    visibility: hidden;
+    pointer-events: none;
   }
 </style>
