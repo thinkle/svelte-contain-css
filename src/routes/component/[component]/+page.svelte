@@ -12,9 +12,9 @@
   let showThemes = false;
 </script>
 
-<Page --bar-link-fg="pink">
+<Page>
   <Bar>
-    <a href={base}>Home</a>
+    <a href={base || "/"}>Home</a>
     {$$props.data.component}
     <Checkbox bind:checked={showThemes}>Show themes</Checkbox>
   </Bar>
