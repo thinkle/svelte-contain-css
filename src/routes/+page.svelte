@@ -206,7 +206,8 @@
       </p>
       <Code
         code={`<Bar --bar-bg="#333"
-  --button-bg="#333"
+  --button-bg="var(--material-color-purple)"
+  --bar-link-fg="var(--material-color-yellow)"
   --button-fg="#eee"
   --button-height="3rem">
   <Button>Home</Button>
@@ -217,13 +218,15 @@
 
       <Bar
         --bar-bg="#333"
-        --button-bg="#333"
-        --button-fg="#eee"
+        --button-bg="var(--material-color-purple)"
+        --button-fg="white"
         --button-height="3rem"
+        --bar-link-fg="var(--material-color-yellow)"
       >
         <Button>Home</Button>
         <Button>About</Button>
         <Button>Contact</Button>
+        <a href="#">Home</a>
       </Bar>
     </Card>
     <Card fixedHeight={true}>
