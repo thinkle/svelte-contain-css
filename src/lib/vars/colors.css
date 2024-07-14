@@ -11,7 +11,7 @@
   --fg: #fffcfe;
   --stripe-fg: #eaeaea;
   --stripe-bg: #3a3a3a;
-  --shadow-color: var(--fg);
+  --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   --border-color: var(--fg);
   --warning-bg: var(--material-color-red-600);
   --warning-fg: var(--white);
