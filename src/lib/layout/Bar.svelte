@@ -58,7 +58,6 @@
     max-height: var(--bar-max-height);
     @include color-props(bar, container);
     gap: var-with-fallbacks(--gap, bar, 8px);
-    /* Add other styles like background, border, etc., as needed */
   }
 
   .bar :global(h1),
