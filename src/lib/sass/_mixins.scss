@@ -99,8 +99,6 @@
   font-weight: vars(font-weight, $prefixes...);
   line-height: vars(line-height, $prefixes...);
   letter-spacing: vars(letter-spacing, $prefixes...);
-  margin-block-start: vars(margin-top, $prefixes...);
-  margin-block-end: vars(margin-bottom, $prefixes...);
   text-indent: vars(indent, $prefixes...);
   font-variant: vars(font-variant, $prefixes...);
   text-align: vars(text-align, $prefixes...);
