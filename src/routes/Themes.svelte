@@ -16,7 +16,12 @@
       css: browser,
       file: "themes/typography-browser.css",
     },
-    { name: "Airy", css: airy, file: "themes/typography-airy.css" },
+    {
+      name: "Airy",
+      css: airy,
+      file: "themes/typography-airy.css",
+      startsActive: true,
+    },
     { name: "IBM Plex", css: ibm, file: "themes/typography-carbon.css" },
   ];
 
@@ -27,6 +32,7 @@
     {
       name: "Light or Dark (Responsive)",
       css: lightordark,
+      startsActive: true,
       file: "themes/lightordark.css",
     },
     { name: "Defaults", css: "", file: "" },
@@ -53,11 +59,15 @@
   import FormItem from "$lib/layout/FormItem.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Code from "$lib/misc/Code.svelte";
-  let typographyTheme = 0;
-  let colorTheme = 0;
+  let typographyTheme = typographyThemes.findIndex(
+    (theme) => theme.startsActive
+  );
+  let colorTheme = colorThemes.findIndex((theme) => theme.startsActive);
   let ready = false;
   onMount(() => {
     ready = true;
+    injectStyle("typography", typographyThemes[typographyTheme].css);
+    injectStyle("color", colorThemes[colorTheme].css);
   });
   function injectStyle(uid, css) {
     if (!ready) return;
