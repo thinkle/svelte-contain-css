@@ -1,24 +1,26 @@
 --active-filter
---active-transform
 --bar-align, center
 --bar-height, 3em
 --bar-justify, space-between
---bar-margin-bottom
+--bar-margin-bottom, 1em
 --bar-max-height
 --bar-min-height
 --bg
 --body-bg
 --body-fg
---body-font-family
 --bold
 --border-color
+--border-color, var
 --border-radius
 --border-style
+--border-style, solid
 --border-width
+--border-width, 1px
 --button-font
 --button-height
 --button-hover-filter
 --button-hover-transform
+--button-icon-gap, var
 --button-width
 --card-bg, var
 --card-header-border
@@ -28,22 +30,29 @@
 --card-width
 --card-width-large
 --card-width-small
---checkbox-check
---checkbox-checked-bg
---checkbox-checked-fg
---checkbox-hover-filter
---checkbox-hover-transform
+--checkbox-check, "✓"
+--checkbox-padding, var
+--checkbox-space, var
 --checkbox-transition
---code-font-family
---code-font-size
+--code-bg
+--code-fg
 --code-height, auto
+--code-tab-size, 2em
 --code-width, 100%
+--code-width, var
 --column-gap
 --container-height
+--custom-height, var
+--custom-width, var
+--dialog-max-height, 800px
+--dialog-max-width, 800px
+--dialog-min-height, 300px
+--dialog-min-width, 400px
+--dialog-underlay-color, rgba
+--dialog-underlay-filter, blur
 --dropdown-menu-width, 12em
 --dropdown-transition, 150ms
 --fg
---first-heading-margin
 --font-family
 --font-size
 --font-size-small
@@ -65,14 +74,10 @@
 --grab-bar-width
 --greyed-out-filter
 --h
---heading-bg
---heading-fg
---heading-font-family
---heading-margin
---heading-pad
 --hero-animation-duration, 1s
 --hero-font-size, 2rem
 --hero-height, 100vh
+--hero-text-align,center
 --hero-width, 100%
 --hover-filter
 --hover-transform
@@ -82,9 +87,74 @@
 --inactive-fg
 --input-width
 --label-width
---line-height
---line-width
-
+--link-bg, transparent
+--link-fg, var
+--material-color-amber
+--material-color-amber-100
+--material-color-blue
+--material-color-blue-100
+--material-color-blue-500
+--material-color-blue-grey
+--material-color-blue-grey-100
+--material-color-brown
+--material-color-brown-100
+--material-color-cyan
+--material-color-cyan-100
+--material-color-deep-orange
+--material-color-deep-orange-100
+--material-color-deep-purple
+--material-color-deep-purple-100
+--material-color-green
+--material-color-green-100
+--material-color-grey
+--material-color-grey-100
+--material-color-grey-300
+--material-color-grey-400
+--material-color-grey-800
+--material-color-grey-900
+--material-color-indigo
+--material-color-indigo-100
+--material-color-light-blue
+--material-color-light-blue-100
+--material-color-light-blue-400
+--material-color-light-blue-500
+--material-color-light-blue-900
+--material-color-light-green
+--material-color-light-purple-100
+--material-color-light-purple-500
+--material-color-lime
+--material-color-lime-100
+--material-color-orange
+--material-color-orange-100
+--material-color-pink
+--material-color-pink-100
+--material-color-purple
+--material-color-purple-100
+--material-color-purple-200
+--material-color-purple-50
+--material-color-purple-500
+--material-color-purple-600
+--material-color-purple-700
+--material-color-purple-800
+--material-color-red
+--material-color-red-100
+--material-color-red-600
+--material-color-red-800
+--material-color-teal
+--material-color-teal-100
+--material-color-white
+--material-color-yellow
+--material-color-yellow-100
+--menu-item-align, center
+--menu-item-height
+--menu-item-justify, center
+--menu-item-width, 100%
+--mini-button-border
+--mini-button-border, button-border, none
+--mini-button-hover-bg
+--mini-button-hover-fg
+--mini-button-radius, 50%
+--mini-button-size, var
 --mirror-sidebar-icons, scaleX
 --padding
 --padding, form-item, 8px
@@ -93,6 +163,7 @@
 --page-width, 100%
 --primary-bg
 --primary-fg
+--radio-button-padding, var
 --radio-button-space, var
 --resizer-border, var
 --resizer-color, var
@@ -101,8 +172,10 @@
 --resizer-grab-width, 8px
 --resizer-width, var
 --secondary-bg
---secondary-fg
---select-width, var
+--select-arrow, "⌄"
+--select-arrow-right-offset, calc
+--select-arrow-transform, scaleX
+--select-dropdown-arrow-width, 1em
 --shadow-color
 --sidebar-bg
 --sidebar-collapse, "«"
@@ -123,9 +196,15 @@
 --stripe-bg
 --tab-bar-border-left, none
 --tab-bar-gap, var
+--target-width, var
 --text
---text-size
+--text-width, var
+--tile-checkbox-check, var
+--tile-width, 200px
+--tile-width, calc
+--tooltip-arrow-color, var
+--tooltip-arrow-size, 8px
+--tooltipGap, 8px
 --transition
---ui-font
 --w
 --white
