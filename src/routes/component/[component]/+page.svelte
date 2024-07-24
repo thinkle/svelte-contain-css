@@ -4,7 +4,7 @@
   import Bar from "$lib/layout/Bar.svelte";
   import "$lib/vars/defaults.css";
   import { base } from "$app/paths";
-  import "$lib/vars/themes/purple.css";
+
   import DynamicComponent from "../../demos/DynamicComponent.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
