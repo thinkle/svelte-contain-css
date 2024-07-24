@@ -202,6 +202,7 @@
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);
+    padding: 0;
     @include box-shadow(dropdown-menu, dropdown);
   }
   nav {
@@ -221,5 +222,6 @@
     opacity: 1;
     visibility: visible;
     opacity: 1;
+    padding: 0;
   }
 </style>
