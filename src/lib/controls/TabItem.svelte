@@ -33,7 +33,8 @@
   span {
     display: contents;
   }
-  div > :global(button) {
+  div > :global(button),
+  div > :global(div > button) {
     @include color-props(tab, button, control, secondary);
     @include box-props(tab, button, control, secondary);
     border-radius: var(
@@ -42,7 +43,8 @@
     );
     margin: 0;
   }
-  div.active > :global(button) {
+  div.active > :global(button),
+  div.active > :global(div > button) {
     @include color-props(tab-active, primary, tab, button, control, secondary);
   }
 </style>
