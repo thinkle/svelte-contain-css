@@ -3,8 +3,9 @@
 	"version": "0.0.4",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build && npm run package",
-		"add-nojekyll" : "echo > build/.nojekyll",
+		"build-css": "postcss src/lib/vars/defaults.css -o dist/vars/defaults.css",
+		"build": "vite build &&  npm run build-css && npm run package",
+		"add-nojekyll": "echo > build/.nojekyll",
 		"preview": "vite preview",
 		"package": "svelte-kit sync && svelte-package && publint",
 		"deploy": "vite build && npm run add-nojekyll && gh-pages -d build -t true",
@@ -20,11 +21,11 @@
 		},
 		"./vars/*": "./dist/vars/*",
 		"./themes/*": "./dist/vars/themes/*",
-		"./controls/": "./dist/controls/",
-		"./layout/": "./dist/layout/",
-		"./dropdowns/": "./dist/dropdowns/",
-		"./typography/": "./dist/typography/",
-		"./misc": "./dist/misc/"
+		"./controls/*": "./dist/controls/*",
+		"./layout/*": "./dist/layout/*",
+		"./dropdowns/*": "./dist/dropdowns/*",
+		"./typography/*": "./dist/typography/*",
+		"./misc/*": "./dist/misc/*"
 	},
 	"files": [
 		"dist",
@@ -39,6 +40,9 @@
 		"@sveltejs/kit": "^2.5.17",
 		"@sveltejs/package": "^2.3.2",
 		"gh-pages": "^6.1.1",
+		"postcss": "^8.4.41",
+		"postcss-cli": "^11.0.0",
+		"postcss-import": "^16.1.0",
 		"publint": "^0.2.8",
 		"sass": "^1.77.6",
 		"svelte": "^4.2.18",

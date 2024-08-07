@@ -6,6 +6,7 @@
   import lightordark from "$lib/vars/themes/lightordark.css?raw";
   import light from "$lib/vars/themes/light.css?raw";
   import dark from "$lib/vars/themes/dark.css?raw";
+  import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
   import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
   import boxy from "$lib/vars/boxy.css?raw";
   import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
@@ -39,12 +40,21 @@
   ];
 
   let extraThemes = [
-    { name: "Responsive Typography", css: responsiveTypography, file: "" },
+    {
+      name: "Responsive Typography",
+      css: responsiveTypography,
+      file: "responsive-typography.css",
+    },
     { name: "Sharp Edges", css: boxy, file: "boxy.css" },
     {
       name: "Fancy Paragraphs",
       css: fancyParagraphs,
       file: "fancy-paragraphs.css",
+    },
+    {
+      name: "Bootstrap Clone",
+      css: bootstrap,
+      file: "themes/bootstrap.css",
     },
   ];
   let enabledExtraThemes = {
@@ -138,7 +148,7 @@
 </script>
 
 <FormItem fullWidth>
-  <span class="label">Typography:</span>
+  <span slot="label">Typography:</span>
   {#each typographyThemes as theme, i}
     <RadioButton bind:group={typographyTheme} value={i}
       >{theme.name}</RadioButton
@@ -146,13 +156,13 @@
   {/each}
 </FormItem>
 <FormItem fullWidth>
-  <span class="label">Color</span>
+  <span slot="label">Color</span>
   {#each colorThemes as theme, i}
     <RadioButton bind:group={colorTheme} value={i}>{theme.name}</RadioButton>
   {/each}
 </FormItem>
 <FormItem fullWidth>
-  <h3 class="label">Extra Settings</h3>
+  <span slot="label">Extra Settings</span>
   {#each extraThemes as theme, i}
     <Checkbox bind:checked={enabledExtraThemes[i]}>{theme.name}</Checkbox>
   {/each}
