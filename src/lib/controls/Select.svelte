@@ -133,7 +133,7 @@
     width: var(--select-dropdown-arrow-width, 1em);
     place-content: center;
     position: absolute;
-    right: var(--select-arrow-right-offset, calc(-1 * var(--padding)));
+    right: var(--select-arrow-right-offset, calc(-0.5 * var(--padding)));
     top: 50%;
   }
 
