@@ -186,6 +186,9 @@
     @include typography-props(menu, container);
     @include clickable(menu, button, control);
   }
+  .dropdown-menu {
+    @include typography-props(menu, container);
+  }
   .dropdown-container {
     box-sizing: border-box;
     opacity: 0;
@@ -202,8 +205,9 @@
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);
-    padding: 0;
     @include box-shadow(dropdown-menu, dropdown);
+    @include box-props-square-border(dropdown-menu, menu, container);
+    padding: 0;
   }
   nav {
     position: relative;
@@ -223,5 +227,6 @@
     visibility: visible;
     opacity: 1;
     padding: 0;
+    border: none;
   }
 </style>
