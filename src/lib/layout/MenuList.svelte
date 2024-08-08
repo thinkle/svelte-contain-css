@@ -39,6 +39,12 @@
     @include color-props(menu, container);
     margin-block-start: 0;
     margin-block-end: 0;
+    overflow: hidden;
+  }
+
+  .menu :global(li) {
+    @include clickable(menu-item);
+    overflow: hidden;
   }
 
   .menu {
