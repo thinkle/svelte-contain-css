@@ -123,6 +123,7 @@
       1px solid var(--border-color)
     );
     box-sizing: border-box;
+    border-radius: var(--checkbox-radius, 0);
   }
 
   label:has(input:checked)::before {
@@ -133,7 +134,14 @@
 
   label:has(input:checked)::after {
     content: var(--checkbox-check, "✓");
-    font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
+    font-size: var-with-fallbacks(
+      --size,
+      checkbox-check,
+      checkbox,
+      toggle,
+      font,
+      1em
+    );
     color: var-with-fallbacks(
       --fg,
       checkbox-checked,
@@ -142,7 +150,7 @@
       checkbox
     );
     position: absolute;
-    left: 0;
+    left: var(--checkbox-left-offset, 0);
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
   }
 
