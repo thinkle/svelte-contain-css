@@ -309,9 +309,9 @@ $rectProps : (border);
     color: var-with-fallbacks(--hover-fg, append($prefixes, inherit)...);
   }
   &:active {
-      filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(0.9))...);
-      transform: var-with-fallbacks(--hover-transform, append($prefixes, translate(var(--space),var(--space)))...);
-      background-color: var-with-fallbacks(--active-bg, append($prefixes, inherit));
+      filter: var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
+      transform: var-with-fallbacks(--active-transform, append($prefixes, translate(var(--space),var(--space)))...);
+      background-color: var-with-fallbacks(--active-bg, append($prefixes, inherit)...);
       color: var-with-fallbacks(--active-fg, append($prefixes, inherit));
     }
 }
