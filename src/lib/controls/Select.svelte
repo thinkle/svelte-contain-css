@@ -67,7 +67,7 @@
   }
 
   $: updateOption(value);
-  let targetWidth = 10;
+  let targetWidth;
   let optionButtons: HTMLButtonElement[] = [];
 </script>
 
