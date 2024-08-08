@@ -34,7 +34,7 @@
   $base-var-name: str-slice($base-var, 3);  
 
   // Initialize the result with the final fallback value
-  $result: var($base-var, inherit);
+  $result: var($base-var, unset);
 
   // Iterate through the prefixes in reverse order
   @for $i from length($args) through 1 {
@@ -310,7 +310,7 @@ $rectProps : (border);
   }
   &:active {
       filter: var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
-      transform: var-with-fallbacks(--active-transform, append($prefixes, translate(var(--space),var(--space)))...);
+      transform: var-with-fallbacks(--active-transform, append($prefixes, none)...);
       background-color: var-with-fallbacks(--active-bg, append($prefixes, inherit)...);
       color: var-with-fallbacks(--active-fg, append($prefixes, inherit));
     }

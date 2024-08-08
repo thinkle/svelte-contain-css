@@ -44,7 +44,6 @@
 
   .menu :global(li) {
     @include clickable(menu-item);
-    overflow: hidden;
   }
 
   .menu {
@@ -58,7 +57,7 @@
       @include typography-props(menu-item, button, ui, control);
       @include color-props(menu-item, button, control);
       @include box-props-square(menu-item, button, control);
-      @include clickable(menu-item, button, control);
+      @include clickable(menu-item);
     }
 
     & :global(.active) {
