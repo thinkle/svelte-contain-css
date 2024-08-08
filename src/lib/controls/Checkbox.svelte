@@ -134,14 +134,7 @@
 
   label:has(input:checked)::after {
     content: var(--checkbox-check, "✓");
-    font-size: var-with-fallbacks(
-      --size,
-      checkbox-check,
-      checkbox,
-      toggle,
-      font,
-      1em
-    );
+    font-size: var-with-fallbacks(--size, checkbox-check, 0.875em);
     color: var-with-fallbacks(
       --fg,
       checkbox-checked,
@@ -150,7 +143,7 @@
       checkbox
     );
     position: absolute;
-    left: var(--checkbox-left-offset, 0);
+    left: var(--checkbox-left-offset, 0.125em);
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
   }
 
