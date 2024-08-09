@@ -35,7 +35,7 @@
     // Adjust horizontal position based on position in window
     if (
       renderedHorizontal === "left" &&
-      targetRect.left - window.scrollX < window.innerWidth / 3
+      targetRect.left < window.innerWidth / 3
     ) {
       renderedHorizontal = "right";
     } else if (
@@ -48,7 +48,7 @@
     // Adjust tooltip style to match target element
     if (renderedVertical === "bottom") {
       tooltipDiv.style.bottom = "unset";
-      tooltipDiv.style.top = `${targetRect.top - window.scrollY + targetRect.height}px`;
+      tooltipDiv.style.top = `${targetRect.top + targetRect.height}px`;
       tooltipDiv.style.marginTop = "var(--tooltipGap, 8px)";
     } else if (renderedVertical == "top") {
       tooltipDiv.style.bottom = `${window.innerHeight - (targetRect.top - window.scrollY)}px`;
@@ -56,10 +56,10 @@
       tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
     }
     if (renderedHorizontal == "right") {
-      tooltipDiv.style.left = `${targetRect.left + window.scrollX + targetRect.width / 2}px`;
+      tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2}px`;
       tooltipDiv.style.right = "unset";
     } else {
-      tooltipDiv.style.right = `${window.innerWidth - (targetRect.left + window.scrollX + targetRect.width / 2)}px`;
+      tooltipDiv.style.right = `${window.innerWidth - (targetRect.left + targetRect.width / 2)}px`;
       tooltipDiv.style.left = "unset";
     }
 
