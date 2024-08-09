@@ -42,7 +42,8 @@
     overflow: hidden;
   }
 
-  .menu :global(li) {
+  .menu :global(li:has(> a)),
+  .menu :global(li:has(> button)) {
     @include clickable(menu-item);
   }
 
@@ -57,7 +58,7 @@
       @include typography-props(menu-item, button, ui, control);
       @include color-props(menu-item, button, control);
       @include box-props-square(menu-item, button, control);
-      @include clickable(menu-item);
+      /* @include clickable(menu-item); */
     }
 
     & :global(.active) {
