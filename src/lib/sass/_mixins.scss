@@ -305,14 +305,11 @@ $rectProps : (border);
   &:hover {
     filter: var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.4))...);
     transform: var-with-fallbacks(--hover-transform, append($prefixes, none)...);
-    background-color: var-with-fallbacks(--hover-bg, append($prefixes, inherit)...);
-    color: var-with-fallbacks(--hover-fg, append($prefixes, inherit)...);
+    
   }
   &:active {
       filter: var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
-      transform: var-with-fallbacks(--active-transform, append($prefixes, none)...);
-      background-color: var-with-fallbacks(--active-bg, append($prefixes, inherit)...);
-      color: var-with-fallbacks(--active-fg, append($prefixes, inherit));
+      transform: var-with-fallbacks(--active-transform, append($prefixes, none)...);      
     }
 }
 
