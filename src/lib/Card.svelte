@@ -84,6 +84,7 @@
   .card section {
     line-height: var(--line-height);
     max-width: var(--line-width);
+    width: calc(100% - var-with-fallbacks(--padding, card, container));
   }
 
   .card.fixedHeight {
