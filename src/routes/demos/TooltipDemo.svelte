@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Code from "$lib/misc/Code.svelte";
   import Tooltip from "$lib/overlays/Tooltip.svelte";
@@ -31,9 +32,12 @@
       </Tooltip>
     </p>
     <p>
-      Tooltips are triggered by mouseover events and by focus, so tooltips will
-      show up for keyboard users. Because they're popovers, they are escape-key
-      dismissable as well as disappearing when focus or the mouse moves.
+      <Tooltip tooltipText="Also without an element"
+        ><span>Tooltips</span></Tooltip
+      >
+      are triggered by mouseover events and by focus, so tooltips will show up for
+      keyboard users. Because they're popovers, they are escape-key dismissable as
+      well as disappearing when focus or the mouse moves.
     </p>
     <p>
       The tooltip will automatically adjust positions. You can change the
@@ -88,7 +92,7 @@
     </p>
     <Tooltip>
       <Button>Fancy Tooltip Button</Button>
-      <div slot="tooltip">
+      <div slot="tooltip" style="display:block">
         <p>This button is <i>extra fancy</i> and contains a list:</p>
         <ul>
           <li>Item 1</li>
@@ -112,6 +116,20 @@
 `}
     />
   </TextLayout>
+  <p>Let's add a Tooltip in a Card!</p>
+  <Card>
+    <Tooltip>
+      <Button>Fancy Tooltip Button</Button>
+      <div slot="tooltip">
+        <p>This button is <i>extra fancy</i> and contains a list:</p>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+      </div>
+    </Tooltip>
+  </Card>
 </CssVariableDemo>
 
 <style>

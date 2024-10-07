@@ -58,8 +58,6 @@
 	"dependencies": {
 		"@sveltejs/adapter-static": "^3.0.2",
 		"prismjs": "^1.29.0",
-		"svelte-actions-resize": "^0.1.1",
-		"svelte-portal": "^2.2.1",
 		"svelte-prism": "^1.1.6"
 	}
 }
