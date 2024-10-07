@@ -43,7 +43,7 @@
     /* Why is this suddenly causing a scroll? */
     container-type: inline-size;
     overflow-x: hidden;
-    height: var(--container-height);
+    height: var(--container-height, 100%);
     overflow-y: auto;
     @include custom-scrollbar(container);
   }
