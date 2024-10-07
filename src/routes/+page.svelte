@@ -1,7 +1,5 @@
-<script lang="ts">
-	import { index } from './../../.svelte-kit/output/server/nodes/4.js';
+<script lang="ts">	
   import IntroOverview from "./IntroOverview.svelte";
-
   import "$lib/vars/defaults.css";
   import "$lib/vars/themes/lightordark.css";
   import Bar from "$lib/layout/Bar.svelte";
