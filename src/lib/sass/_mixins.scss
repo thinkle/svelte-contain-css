@@ -148,6 +148,8 @@
     max-width: var-with-fallbacks(--line-width, append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: var-with-fallbacks(--heading-margin-bottom, append($prefixes, 0)...);
+    margin-top: var-with-fallbacks(--heading-margin-top, append($prefixes, 1.5em)...);
   }  
   & :global(p) {
     @include typography-props-bare(
