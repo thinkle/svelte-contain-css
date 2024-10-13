@@ -116,7 +116,7 @@
     <div class="icon"></div>
     <h1><em>ContainCSS</em></h1>
     <div class="info" 
-      style:--button-bg="transparent" 
+      style:--button-bg="var(--bar-bg, var(--container-bg))" 
       style:--button-drop-shadow="none" 
       style:--button-border="none"
       style:--button-shadow-color="transparent">
@@ -134,7 +134,7 @@
           </span>
           
           {#each menu as item,idx}            
-            <Button value={idx} on:click={()=>changeItem(idx)}>{item.name}</Button>
+            <li><Button value={idx} on:click={()=>changeItem(idx)}>{item.name}</Button></li>
           {/each}
         </DropdownMenu>
         
@@ -205,9 +205,20 @@
        <svelte:component this={theDemo} /> 
     {/if}
   </div>
+  <!-- Help Svelte Pre-Render routes... -->
+  <div class="hidden">
+  {#each menu as item}
+    {#if item.demo}
+      <a href="{base}/component/{item.demo}" target="_blank">{item.name}</a>       
+    {/if}|
+  {/each}
+  </div>
 </Page>
 
 <style>
+  .hidden {
+    visibility: none;
+  }
   .info {
     display: flex;
     align-items: center;
