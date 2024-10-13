@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';    	
+  const browser = typeof window !== "undefined";
   import type { SvelteComponent } from 'svelte';
   export let code: string; 
   export let inline = false;
@@ -15,7 +15,7 @@
 </script>
 
 {#if browser && component}
-  <svelte:component this={component} {language} {code} />
+  <svelte:component this={component} {language} {code} {inline}/>
 {/if}
 
 
