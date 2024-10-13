@@ -6,8 +6,7 @@
   import Page from "$lib/layout/Page.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
-  import GridLayout from "$lib/layout/GridLayout.svelte";
-
+  
   import BarDemo from "./demos/BarDemo.svelte";
 
   import { onMount, tick } from "svelte";  
@@ -30,10 +29,8 @@
   import TileDemo from "./demos/TileDemo.svelte";
   import RowsAndColumnsDemo from "./demos/RowsAndColumnsDemo.svelte";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
-  import { base } from "$app/paths";
-  import Dialog from "$lib/overlays/Dialog.svelte";
-  import Installation from "./Installation.svelte";
-  import CssVariableDemo from "./demos/CssVariableDemo.svelte";
+  import { base } from "$app/paths";  
+  import Installation from "./Installation.svelte";  
   import TooltipDemo from "./demos/TooltipDemo.svelte";
   import DialogDemo from "./demos/DialogDemo.svelte";
   
@@ -88,7 +85,7 @@
 
   let theDemo : SvelteComponent | null = null;
   let theItem = 0;
-  $: theDemo = menu[theItem].component;
+  $: theDemo = menu[theItem].component || menu.find((m) => m.component)?.component;
   
   function changeItem (newIndex : number) {
     let delta = newIndex - theItem;
@@ -157,18 +154,7 @@
     >
   </Bar>
   <Sidebar slot="sidebar" {right}>
-    <MenuList>
-      <li>
-        <Button
-          on:click={() => {
-            right = !right;
-          }}
-        >
-          Move Sidebar to
-          {#if right}Left{:else}Right{/if}
-          {#if right}👈{:else}👉{/if}
-        </Button>
-      </li>
+    <MenuList>      
       {#each menu as item} 
         {#if item.link}
           <li>
@@ -199,10 +185,24 @@
   <div id="demo-area">    
     
     {#if theDemo}          
-      {#if menu[theItem].demo}
-        <a href="/component/{menu[theItem].demo}" target="_blank">Open separate page to experiment with theming</a>
+      {#if menu[theItem].demo}      
+        <a href="/component/{menu[theItem].demo}" target="_blank">Open separate page to experiment with theming</a>      
       {/if}
        <svelte:component this={theDemo} /> 
+       {#if theItem < menu.length - 1}
+       {@const nextItem = menu.find((m,i) => i > theItem && m.component)}
+       {#if nextItem}
+        <Bar --bar-justify="end">        
+          <Button
+            on:click={() => 
+              changeItem(menu.indexOf(nextItem))
+            }
+          >
+            Next: {nextItem.name}
+          </Button>
+        </Bar>
+        {/if}
+       {/if}
     {/if}
   </div>
   <!-- Help Svelte Pre-Render routes... -->
@@ -217,7 +217,7 @@
 
 <style>
   .hidden {
-    visibility: none;
+    visibility: hidden;    
   }
   .info {
     display: flex;
