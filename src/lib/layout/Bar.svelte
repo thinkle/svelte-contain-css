@@ -66,7 +66,8 @@
   .bar :global(h4),
   .bar :global(h5),
   .bar :global(h6) {
-    margin: 0;
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
     @include color-props(bar, container);
   }
 </style>

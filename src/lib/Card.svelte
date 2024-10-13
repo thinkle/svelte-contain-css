@@ -116,7 +116,8 @@
     :global(h4),
     :global(h5),
     :global(h6) {
-      margin: 0;
+      margin-block-start: 0 !important;
+      margin-block-end: 0 !important;
       @include color-props(card-header, secondary);
     }
   }
