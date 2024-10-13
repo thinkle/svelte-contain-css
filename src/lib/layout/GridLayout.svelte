@@ -1,9 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   let grid: HTMLDivElement;
+  export let id="";
 </script>
 
-<div class="grid-layout">
+<div class="grid-layout" {id}>
   <slot />
 </div>
 

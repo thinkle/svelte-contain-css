@@ -1,4 +1,7 @@
-<div>
+<script>
+  export let id = "";
+</script>
+<div {id}>
   <slot />
 </div>
 
