@@ -174,7 +174,7 @@
   .right .side-by-side {
     flex-direction: row-reverse;
   }
-  .page .content {
+  .page > div > .content {
     container-type: size;
     height: 100%;
     width: 100%;    
