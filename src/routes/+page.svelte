@@ -10,7 +10,7 @@
 
   import BarDemo from "./demos/BarDemo.svelte";
 
-  import { onMount } from "svelte";  
+  import { onMount, tick } from "svelte";  
   import ButtonDemo from "./demos/ButtonDemo.svelte";
   import TypographyDemo from "./demos/TypographyDemo.svelte";
   import SplitPaneDemo from "./demos/SplitPaneDemo.svelte";
@@ -23,7 +23,7 @@
   import Hero from "$lib/layout/Hero.svelte";
   import PageDemo from "./demos/PageDemo.svelte";
   import TabDemo from "./demos/TabDemo.svelte";
-  import Container from "$lib/layout/Container.svelte";
+  
   import DropdownMenuDemo from "./demos/DropdownMenuDemo.svelte";
   import Themes from "./Themes.svelte";
   import CardDemo from "./demos/CardDemo.svelte";
@@ -36,6 +36,7 @@
   import CssVariableDemo from "./demos/CssVariableDemo.svelte";
   import TooltipDemo from "./demos/TooltipDemo.svelte";
   import DialogDemo from "./demos/DialogDemo.svelte";
+  
   
 
   let hash: string = "";
@@ -54,39 +55,53 @@
   let right: boolean = false;
 
   let menu : 
-    {name : string, link? : string, component? : any}[]
+    {name : string, link? : string, component? : any, demo? : string}[]
   = [
     { name: "Intro", link : '#Intro' },
     { name: "Installation", link : '#Installation'},    
     { name: "Layout"},
-    { name : 'Typography', component: TypographyDemo},
-    { name : 'Grid Layout', component: GridLayout},
-    { name : 'Split Pane', component: SplitPaneDemo},
-    { name : 'Bar', component: BarDemo},
-    { name : 'Page', component: PageDemo},
+    { name : 'Typography', component: TypographyDemo, demo: 'Typography'},    
+    { name : 'Split Pane', component: SplitPaneDemo, demo: 'SplitPane'},
+    
+    { name : 'Tabs', component: TabDemo, demo : 'Tab'},
+    { name : 'Bar', component: BarDemo, demo : 'Bar'},
+    { name : 'Page', component: PageDemo, demo : 'Page'},
     {name : 'Components'},
-    { name : 'Card', component: CardDemo},
-    { name : 'Tile', component: TileDemo},
-    { name : 'Rows and Columns', component: RowsAndColumnsDemo},
+    { name : 'Card', component: CardDemo, demo : 'Card'},
+    { name : 'Tile', component: TileDemo, demo : 'Tile'},
+    { name : 'Rows and Columns', component: RowsAndColumnsDemo, demo : "RowsAndColumns"},
     { name: "Controls"},
-    { name : 'Button', component: ButtonDemo},
-    { name : 'Checkbox', component: CheckboxDemo},
-    { name : 'Radio Button', component: RadioButtonDemo},
+    { name : 'Button', component: ButtonDemo, demo : "Button"},
+    { name : 'Checkbox', component: CheckboxDemo, demo : "Checkbox"},
+    { name : 'Radio Button', component: RadioButtonDemo, demo : "RadioButton"},
     { name : 'Slider', component: Slider},
-    { name : 'Form Item', component: FormItemDemo},
+    { name : 'Form Item', component: FormItemDemo, demo : "FormItem"},
     { name: "Overlays"},
-    { name : 'Dialog', component: DialogDemo},
-    { name : 'Tooltip', component: TooltipDemo},
+    { name : 'Dialog', component: DialogDemo, demo : "Dialog"},
+    { name : 'Tooltip', component: TooltipDemo, demo : "Tooltip"},
     { name: "Dropdowns"},
-    { name : 'Dropdown Menu', component: DropdownMenuDemo},
+    { name : 'Dropdown Menu', component: DropdownMenuDemo, demo : "DropdownMenu"},
     { name: "Miscellaneous"},
     { name : 'Themes', component: Themes},
-    { name : 'Variables', component: VariableDemo},
+    { name : 'Variables', component: VariableDemo, demo : "Variable"},
   ];
 
   let theDemo : SvelteComponent | null = null;
   let theItem = 0;
   $: theDemo = menu[theItem].component;
+  
+  function changeItem (newIndex : number) {
+    let delta = newIndex - theItem;
+    let direction = delta > 0 ? 1 : -1;
+    theItem = newIndex;
+    // Skip over any headings that aren't actual items
+    if (menu[theItem] && !menu[theItem].link && !menu[theItem].component) {
+      theItem += direction;
+    }
+    let theLink = menu[theItem].link || '#demo-area';
+    tick().then(()=>document.querySelector(theLink)?.scrollIntoView())
+  }
+
 </script>
 
 <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
@@ -105,27 +120,28 @@
       style:--button-drop-shadow="none" 
       style:--button-border="none"
       style:--button-shadow-color="transparent">
-      {#if theItem > 3} 
+      {#if theItem > 0} 
         <Button
-          on:click={() => {
-            theItem -= 1;
-            if (theItem > 0 && !menu[theItem].link && !menu[theItem].component) {
-              theItem -= 1;
-            }
-          }}
+          on:click={() => changeItem(theItem - 1)}
         >
-          &lt;
+          <span style="transform:rotate(180deg);display:inline-block;">⮕</span>
         </Button>
       {/if}
-      <div>{menu[theItem].name}</div>      
+      
+        <DropdownMenu --bg="#222">
+          <span slot="label">
+            {menu[theItem].name}
+          </span>
+          
+          {#each menu as item,idx}            
+            <Button value={idx} on:click={()=>changeItem(idx)}>{item.name}</Button>
+          {/each}
+        </DropdownMenu>
+        
+        
       <Button
-        on:click={() => {
-          theItem += 1;
-          if (theItem < menu.length - 1 && !menu[theItem].link && !menu[theItem].component) {
-            theItem += 1;
-          }
-        }}>&gt;</Button>
-    </div>
+        on:click={() => changeItem(theItem + 1)}>⮕</Button>
+    
     
   </Bar>
   <Bar
@@ -178,10 +194,14 @@
       {/each}
     </MenuList>
   </Sidebar>
-  <IntroOverview />
-  <Installation/>
+  <IntroOverview id="Intro" />
+  <Installation id="Installation"/>
   <div id="demo-area">    
-    {#if theDemo}    
+    
+    {#if theDemo}          
+      {#if menu[theItem].demo}
+        <a href="/component/{menu[theItem].demo}" target="_blank">Open separate page to experiment with theming</a>
+      {/if}
        <svelte:component this={theDemo} /> 
     {/if}
   </div>
@@ -192,4 +212,5 @@
     display: flex;
     align-items: center;
   }
+
 </style>
