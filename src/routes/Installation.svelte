@@ -1,9 +1,9 @@
-<script lang="ts">
+<script>
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";  
-  
+  export let id='Installation';
 </script>
-<TextLayout>
+<TextLayout {id}>
   <h1>Installation</h1>
   <p>Start by installing our library:</p>
   <Code language="none"
