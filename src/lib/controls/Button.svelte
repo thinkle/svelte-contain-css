@@ -34,6 +34,7 @@
 
   button.has-icon {
     display: flex;
+    align-items: center;
     gap: var(--button-icon-gap, var(--space));
   }
   button {
