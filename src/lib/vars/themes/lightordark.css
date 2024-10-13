@@ -2,8 +2,6 @@
 @media (prefers-color-scheme: light) {
   /* light mode */
 
-  @import url("./code-light.css");
-
   :root {
     --fg: var(--material-color-grey-800);
     --bg: #fafafa;
