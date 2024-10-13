@@ -132,7 +132,7 @@
   }
 
   .page {
-    @include color-props(page);
+    @include color-props(page, content, container);
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
@@ -153,6 +153,7 @@
   .content {
     @include custom-scrollbar(page-content, page);
     @include box-props(page-content);
+    @include color-props(page-content, page, container);
   }
   .aside {
     flex: 0 0 auto;
@@ -176,9 +177,7 @@
   .page .content {
     container-type: size;
     height: 100%;
-    width: 100%;
-    background: var(--bg);
-    color: var(--text);
+    width: 100%;    
   }
   .page.sticky.freeze :global(*) {
     overflow: hidden;
