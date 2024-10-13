@@ -85,8 +85,8 @@
 }
 
 @mixin color-props ($prefixes...) {
-  background: vars(bg, $prefixes...);
-  color: vars(fg, $prefixes...);  
+  background: var-no-fallbacks(--bg, $prefixes...);
+  color: var-no-fallbacks(--fg, $prefixes...);  
   --link-bg: #{vars(link-bg, $prefixes...)};
   --link-fg: #{vars(link-fg, $prefixes...)};
 }
