@@ -21,6 +21,8 @@
   <div slot="icon">▶</div>
 </Button>
 <Button primary={true}>Primary Button</Button>
+<Button disabled>Disabled Button</Button>
+<MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
 <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
   />
   <h3>Try Customizing Some Buttons...</h3>
@@ -32,7 +34,8 @@
     </Button>
     <Button warning={true}>Warning Button</Button>
     <Button primary={true}>Primary Button</Button>
-
+    <Button disabled>Disabled Button</Button>
+    <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
     <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
   </CssVariableDemo>
 </Container>
