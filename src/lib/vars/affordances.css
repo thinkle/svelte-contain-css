@@ -22,5 +22,10 @@
   --grab-bar-active-bg: #fff4;
   --grab-bar-hover-filter: drop-shadow(0 0 2px #fff);
   --grab-bar-active-filter: drop-shdaow(0 0 4px #fff);
-  --greyed-out-filter: blur(2px) grayscale(0.5);
+  --greyed-out-filter: blur(2px) grayscale(0.5);      
+  --disabled-hover-transform: none;
+  --disabled-transform: none;
+  --disabled-filter: brightness(0.9)grayscale(0.5)blur(0.5px);
+  --disabled-shadow-distance: var(--button-shadow-distance);
+  --disabled-shadow-color: var(--button-shadow-color);
 }
