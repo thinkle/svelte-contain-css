@@ -313,6 +313,11 @@ $rectProps : (border);
       filter: var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
       transform: var-with-fallbacks(--active-transform, append($prefixes, none)...);      
     }
+  &:disabled {
+    cursor: var-with-fallbacks(--disabled-cursor, append($prefixes, not-allowed)...);
+    transform: var-with-fallbacks(--disabled-transform, append($prefixes, none)...);
+    filter: var-with-fallbacks(--disabled-filter, append($prefixes, grayscale(0.5))...);
+  }
 }
 
 @mixin custom-scrollbar($prefixes...) {
