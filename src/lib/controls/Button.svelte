@@ -24,6 +24,7 @@
   class:primary
   class:warning
   class:has-icon={iconSlotted}
+  {...$$restProps}
 >
   <span class="content"><slot /></span>
   <span class:hidden={!iconSlotted} class="icon"><slot name="icon" /></span>

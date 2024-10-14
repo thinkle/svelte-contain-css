@@ -30,7 +30,8 @@
 
 <div class="label-sizing-box">
   <label class="checkbox-item">
-    <input type="checkbox" bind:checked />
+    <input type="checkbox" bind:checked
+    {...$$restProps} />
     <span bind:this={ref}><slot /></span>
   </label>
   <label class="invisible">

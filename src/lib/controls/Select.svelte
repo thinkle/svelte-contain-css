@@ -71,7 +71,8 @@
   let optionButtons: HTMLButtonElement[] = [];
 </script>
 
-<select bind:value on:change bind:this={selectElement}>
+<select bind:value on:change bind:this={selectElement}
+{...$$restProps}>
   <slot />
 </select>
 <div class="dropdown-wrapper" style:--target-width="{targetWidth}px">

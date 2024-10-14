@@ -25,6 +25,7 @@
   on:focus
   on:keydown
   on:keyup
+  {...$$restProps}
 >
   <slot />
 </button>

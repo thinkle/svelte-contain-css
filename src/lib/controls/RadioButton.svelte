@@ -29,7 +29,8 @@
 
 <div class="label-sizing-box">
   <label class="radio-item">
-    <input {value} type="radio" bind:group />
+    <input {value} type="radio" bind:group 
+    {...$$restProps}/>
     <span bind:this={ref}><slot /></span>
   </label>
   <label class="invisible">
