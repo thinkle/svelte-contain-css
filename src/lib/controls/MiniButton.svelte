@@ -44,6 +44,9 @@
     margin: var-with-fallbacks(--margin, button, control, var(--space));
     width: var(--mini-button-size, var(--icon-size, 1em));
     height: var(--mini-button-size, var(--icon-size, 1em));
+    /* Make sure we don't shrink in a flex container */
+    min-width: var(--mini-button-size, var(--icon-size, 1em));
+    min-height: var(--mini-button-size, var(--icon-size, 1em));
     border-radius: var(--mini-button-radius, 50%);
     border: var(--mini-button-border, button-border, none);
     display: inline-grid;
@@ -55,4 +58,5 @@
   button.warning {
     @include color-props(warning, button, control);
   }
+ 
 </style>
