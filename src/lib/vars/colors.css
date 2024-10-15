@@ -17,6 +17,7 @@
   --warning-fg: var(--white);
   --warning-text-transform: uppercase;
   --container-link-fg: var(--primary-bg);
+  --menu-item-bg: var(--menu-bg);
 }
 
 body {
