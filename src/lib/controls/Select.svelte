@@ -5,6 +5,10 @@
   export let value: any;
   let selectElement: HTMLSelectElement;
   let observer: MutationObserver;
+  let resizeObserver: ResizeObserver;
+  let targetWidth = 0;
+  let optionButtons: HTMLButtonElement[] = [];
+
   onMount(async () => {
     await tick(); // Ensure slot content is rendered
     updateOptions();
@@ -19,8 +23,17 @@
     });
 
     observer.observe(selectElement, { childList: true });
-    return () => observer.disconnect();
+
+    // Observe size changes in option buttons
+    resizeObserver = new ResizeObserver(() => updateTargetWidth());
+    optionButtons.forEach(button => resizeObserver.observe(button));
+
+    return () => {
+      observer.disconnect();
+      resizeObserver.disconnect();
+    };
   });
+
   let options: { value: string; html: string }[] = [];
   let activeOption: { value: string; html: string } | null = null;
 
@@ -30,7 +43,6 @@
     }
     options = [];
     let optionEls = selectElement.querySelectorAll("option");
-    let newOptions = [];
     for (let optionEl of optionEls) {
       options.push({
         value: optionEl.value,
@@ -38,41 +50,36 @@
       });
     }
     activeOption = options[selectElement.selectedIndex];
-    setTimeout(() => {
-      let maxWidth = 0;
-      for (let button of optionButtons) {
-        // measure the width of each button...
-        if (button.offsetWidth > maxWidth) {
-          maxWidth = button.offsetWidth;
-        }
+    updateTargetWidth();
+  }
+
+  function updateTargetWidth() {
+    let maxWidth = 0;
+    for (let button of optionButtons) {
+      if (button.offsetWidth > maxWidth) {
+        maxWidth = button.offsetWidth;
       }
-      targetWidth = maxWidth;
-    }, 10);
+    }
+    targetWidth = maxWidth || 150; // Fallback width if measurement fails
   }
 
   function setValue(idx: number) {
-    console.log("Button to set", idx);
     selectElement.selectedIndex = idx;
     selectElement.dispatchEvent(new Event("change"));
     activeOption = options[idx];
   }
 
   async function updateOption(value: any) {
-    /* Wait for svelte to update its internal select component */
     await tick();
     if (selectElement) {
-      /* Use svelte's magic to update our option */
       activeOption = options[selectElement.selectedIndex];
     }
   }
 
   $: updateOption(value);
-  let targetWidth;
-  let optionButtons: HTMLButtonElement[] = [];
 </script>
 
-<select bind:value on:change bind:this={selectElement}
-{...$$restProps}>
+<select bind:value on:change bind:this={selectElement} {...$$restProps}>
   <slot />
 </select>
 <div class="dropdown-wrapper" style:--target-width="{targetWidth}px">
@@ -95,20 +102,20 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   select,
-  /* This is a little ugly -- relies on knowing how we implement
-  DropdownMenu and will have to change if that code changes */
   .dropdown-wrapper > :global(.dropdown-menu > button) {
     @include box-props-square-border(select, input, menu, control, container);
     @include color-props(select, input, menu, control, container);
     width: var(
       --select-width,
-      var(--target-width, var(--dropdown-menu-width, min(12em, 100cw)))
+      var(--target-width, var(--dropdown-menu-width, min(12em, 100vw)))
     );
     text-overflow: ellipsis;
+    @include typography-props(select, input, ui);
+    
   }
   .select-dropdown-label {
     overflow: hidden;
-    text-wrap: nowrap;
+    white-space: nowrap;
     text-overflow: ellipsis;
   }
   .select-dropdown {
@@ -127,7 +134,7 @@
     position: relative;
   }
   .select-dropdown::after {
-    content: var(--select-arrow, "⌄"); /* ↓ */
+    content: var(--select-arrow, "⌄");
     margin-left: auto;
     transform: var(--select-arrow-transform, scaleX(1.5) translateY(-70%));
     display: inline-grid;
