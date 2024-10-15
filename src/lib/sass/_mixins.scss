@@ -150,7 +150,19 @@
     margin-right: auto;
     margin-bottom: var-with-fallbacks(--heading-margin-bottom, append($prefixes, 0)...);
     margin-top: var-with-fallbacks(--heading-margin-top, append($prefixes, 1.5em)...);
+    /* Typography */
+    @include typography-props-bare(append(map-prefixes(heading, $prefixes), heading)...);
+    /* font-family: var(--heading-font-family, var(--body-font-family, var(--font-family, inherit)));
+    font-size: var(--heading-font-size, inherit);
+    font-weight: var(--heading-font-weight, var(--body-font-weight, var(--font-weight, inherit)));
+    line-height: var(--heading-line-height, var(--body-line-height, var(--line-height, inherit)));
+    letter-spacing: var(--heading-letter-spacing, var(--body-letter-spacing, var(--letter-spacing, inherit)));
+    text-indent: var(--heading-indent, var(--body-indent, var(--indent, inherit)));
+    font-variant: var(--heading-font-variant, var(--body-font-variant, var(--font-variant, inherit)));
+    text-align: var(--heading-text-align, var(--body-text-align, var(--text-align, inherit))); */
   }  
+  
+
   & :global(p) {
     @include typography-props-bare(
       append(map-prefixes(
