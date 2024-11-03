@@ -44,6 +44,7 @@
       }
     }
   }
+
 </script>
 
 <Container>
@@ -52,7 +53,7 @@
       <FormItem --form-label-align="end">
         <div
           slot="label"
-          style="display:flex;align-items: end; justify-content: end; flex-direction: column;"
+          
         >
           {#if !group}
             {#if groups.length > 1}
@@ -64,7 +65,7 @@
           {#key remainingVariables.length}
             {#if remainingVariables.filter((v) => v.group == group).length > 0}
               <Select
-                id="css-var-{i}"
+                id="css-var-{i}"                
                 bind:value={theVariables[group || "no-group"]}
               >
                 {#each remainingVariables as variable}
