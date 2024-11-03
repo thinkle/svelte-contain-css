@@ -98,7 +98,7 @@
     let theLink = menu[theItem].link || '#demo-area';
     tick().then(()=>document.querySelector(theLink)?.scrollIntoView())
   }
-
+  let sideWidth = 50;
 </script>
 
 <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
@@ -109,10 +109,11 @@
   </p>
 </Hero>
 <Page {right} sticky>
-  <Bar slot="header" --bar-border-top="none">
-    <div class="icon"></div>
+  <Bar slot="header" --bar-border-top="none" --side-width="{sideWidth}px">
+    <div class="icon equal-width"></div>
     <h1><em>ContainCSS</em></h1>
-    <div class="info" 
+    <div class="info equal-width" 
+      bind:clientWidth={sideWidth}
       style:--button-bg="var(--bar-bg, var(--container-bg))" 
       style:--button-drop-shadow="none" 
       style:--button-border="none"
@@ -182,11 +183,10 @@
   </Sidebar>
   <IntroOverview id="Intro" />
   <Installation id="Installation"/>
-  <div id="demo-area">    
-    
+  <div id="demo-area">        
     {#if theDemo}          
       {#if menu[theItem].demo}      
-        <a href="/component/{menu[theItem].demo}" target="_blank">Open separate page to experiment with theming</a>      
+        <a href="{base}/component/{menu[theItem].demo}" target="_blank">Open separate page to experiment with theming</a>      
       {/if}
        <svelte:component this={theDemo} /> 
        {#if theItem < menu.length - 1}
@@ -221,7 +221,11 @@
   }
   .info {
     display: flex;
+    justify-content: end;;
     align-items: center;
+  }
+  .equal-width {
+    min-width: var(--side-width);
   }
 
 </style>

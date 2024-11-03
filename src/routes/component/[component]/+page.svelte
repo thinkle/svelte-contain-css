@@ -9,7 +9,9 @@
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Themes from "../../Themes.svelte";
+  import { fade, fly } from "svelte/transition";
   let showThemes = false;
+  
 </script>
 
 <Page>
@@ -19,9 +21,11 @@
     <Checkbox bind:checked={showThemes}>Show themes</Checkbox>
   </Bar>
   {#if showThemes}
-    <Container>
+    <div in:fly={{y:-300}} out:fade>
+    <Container height='auto'>
       <Themes />
     </Container>
+    </div>
   {/if}
   <DynamicComponent component={$$props.data.component} />
 </Page>

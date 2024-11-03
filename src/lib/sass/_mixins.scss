@@ -67,6 +67,19 @@
   @return $result;
 }
 
+@function map-prefixes-include-base ($base, $prefixes) {
+  $result: (
+    $base
+  );
+
+@each $prefix in $prefixes {
+  $result: append($result, unquote('#{$prefix}-#{$base}'), comma);
+}
+
+@return $result;
+}
+
+
 @function vars ($suffix, $args...) {
   // Initialize the result with the first prefixed variable
   $prefix: nth($args, length($args));
@@ -76,6 +89,23 @@
   @for $i from length($args) through 1 {
     $prefix: nth($args, $i);
     $prefixed-var: generate-var-name($prefix,$suffix);
+    // Nest the current prefixed variable as a fallback to the current result
+    $result: var(#{$prefixed-var}, #{$result});
+  }
+
+  // Return the final CSS var() function with all fallbacks
+  @return #{$result};
+}
+
+@function vars-suffix-fallback ($suffix, $args...) {
+  // Initialize the result with the first prefixed variable
+  $prefix: nth($args, length($args));
+  $result: var(--#{$suffix}, inherit);
+
+  // Iterate through the rest of the prefixes
+  @for $i from length($args) through 1 {
+    $prefix: nth($args, $i);
+    $prefixed-var: generate-var-name($prefix, $suffix);
     // Nest the current prefixed variable as a fallback to the current result
     $result: var(#{$prefixed-var}, #{$result});
   }
@@ -185,7 +215,7 @@
     }
   & :global(p:first-of-type::first-line) {
     @include typography-props-bare(
-      append(map-prefixes(
+      append(map-prefixes-include-base(
           first-line,
           $prefixes
       ),first-line)...);
@@ -194,13 +224,14 @@
 
   & :global(p:first-of-type::first-letter) {    
     @include typography-props-bare(
-      map-prefixes(
+      map-prefixes-include-base(
         first-letter,
         $prefixes
       )...);
-    @include color-props(first-letter,
-      first-line,
-      );
+    --link-bg: #{vars(link-bg, $prefixes...)};
+    --link-fg: #{vars(link-fg, $prefixes...)};
+    background: #{vars-suffix-fallback(first-letter-bg, $prefixes...)};
+    color: #{vars-suffix-fallback(first-letter-fg, $prefixes...)};  
   }  
 }
 
