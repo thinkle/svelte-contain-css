@@ -1,0 +1,8 @@
+@use 'functions' as fn;
+
+@mixin color-props ($prefixes...) {
+    background: fn.var-no-fallbacks(--bg, $prefixes...);
+    color: fn.var-no-fallbacks(--fg, $prefixes...);  
+    --link-bg: #{fn.vars(link-bg, $prefixes...)};
+    --link-fg: #{fn.vars(link-fg, $prefixes...)};
+  }

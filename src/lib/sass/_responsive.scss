@@ -1,0 +1,75 @@
+
+/* Warning: because we define a fallback
+  media query, the media query can override the container
+  if we stack a bunch of these in a row and aren't thoughtful about the order.
+  Put min-width queries *after* max-width queries so that smaller
+  container queries don't get their styles overridden by large media queries.
+  */
+  @mixin responsive-content($max-width: null, $min-width: null, $max-height: null, $min-height: null) {
+
+    // Max-width and Max-height
+    @if $max-width and $max-height {
+      @media (max-width: #{$max-width}) and (max-height: #{$max-height}) {
+        @content;
+      }
+
+      @container (max-width: #{$max-width}) and (max-height: #{$max-height}) {
+        @content;
+      }
+    }
+
+    // Max-width only
+    @else if $max-width {
+      @media (max-width: #{$max-width}) {
+        @content;
+      }
+
+      @container (max-width: #{$max-width}) {
+        @content;
+      }
+    }
+
+    // Max-height only
+    @else if $max-height {
+      @media (max-height: #{$max-height}) {
+        @content;
+      }
+
+      @container (max-height: #{$max-height}) {
+        @content;
+      }
+    }
+
+    // Min-width and Min-height
+    @if $min-width and $min-height {
+      @media (min-width: #{$min-width}) and (min-height: #{$min-height}) {
+        @content;
+      }
+
+      @container (min-width: #{$min-width}) and (min-height: #{$min-height}) {
+        @content;
+      }
+    }
+
+    // Min-width only
+    @else if $min-width {
+      @media (min-width: #{$min-width}) {
+        @content;
+      }
+
+      @container (min-width: #{$min-width}) {
+        @content;
+      }
+    }
+
+    // Min-height only
+    @else if $min-height {
+      @media (min-height: #{$min-height}) {
+        @content;
+      }
+
+      @container (min-height: #{$min-height}) {
+        @content;
+      }
+    }
+  }

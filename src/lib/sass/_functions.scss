@@ -1,0 +1,113 @@
+
+@function var-with-fallbacks($base-var, $args...) {
+    // Remove the initial -- from the base variable for concatenation purposes
+    $base-var-name: str-slice($base-var, 3);
+    $fallback : nth($args,length($args));
+  
+    // Initialize the result with the final fallback value
+    $result: var($base-var,$fallback);
+  
+    // Check if only one argument (apart from $base-var) is provided
+    @if length($args)==1 {
+      // Only one argument means it's the fallback value
+      @return var(#{$base-var}, #{$fallback});
+    }
+  
+    // Iterate through the prefixes in reverse order
+    @for $i from length($args)-1 through 1 {
+      $prefix: nth($args,$i);
+      // Construct the variable name by concatenating the prefix and base variable name
+      // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
+      $prefixed-var: unquote('--#{$prefix}-#{$base-var-name}');
+      // Nest the current prefixed variable as a fallback to the current result
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  
+    // Return the final CSS var() function with all fallbacks
+    // e.g., var(--card-bg, var(--container-bg, var(--bg, white)))
+    @return #{$result};
+  }
+  
+  @function var-no-fallbacks($base-var, $args...) {
+    // Remove the initial -- from the base variable for concatenation purposes
+    $base-var-name: str-slice($base-var, 3);  
+  
+    // Initialize the result with the final fallback value
+    $result: var($base-var, unset);
+  
+    // Iterate through the prefixes in reverse order
+    @for $i from length($args) through 1 {
+      $prefix: nth($args, $i);
+      // Construct the variable name by concatenating the prefix and base variable name
+      // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
+      $prefixed-var: unquote('--#{$prefix}-#{$base-var-name}');
+      // Nest the current prefixed variable as a fallback to the current result
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  
+    // Return the final CSS var() function with all fallbacks
+    // e.g., var(--card-bg, var(--container-bg, var(--bg))
+    @return #{$result};
+  }
+  
+  @function generate-var-name($prefix, $suffix) {
+    @return unquote('--#{$prefix}-#{$suffix}');
+  }
+  
+  @function map-prefixes($base, $prefixes) {
+    $result: (
+    );
+  
+    @each $prefix in $prefixes {
+      $result: append($result, unquote('#{$prefix}-#{$base}'), comma);
+    }
+  
+    @return $result;
+  }
+  
+  @function map-prefixes-include-base ($base, $prefixes) {
+    $result: (
+      $base
+    );
+  
+  @each $prefix in $prefixes {
+    $result: append($result, unquote('#{$prefix}-#{$base}'), comma);
+  }
+  
+  @return $result;
+  }
+  
+  
+  @function vars ($suffix, $args...) {
+    // Initialize the result with the first prefixed variable
+    $prefix: nth($args, length($args));
+    $result: var(generate-var-name($prefix, $suffix), inherit);
+  
+    // Iterate through the rest of the prefixes
+    @for $i from length($args) through 1 {
+      $prefix: nth($args, $i);
+      $prefixed-var: generate-var-name($prefix,$suffix);
+      // Nest the current prefixed variable as a fallback to the current result
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  
+    // Return the final CSS var() function with all fallbacks
+    @return #{$result};
+  }
+  
+  @function vars-suffix-fallback ($suffix, $args...) {
+    // Initialize the result with the first prefixed variable
+    $prefix: nth($args, length($args));
+    $result: var(--#{$suffix}, inherit);
+  
+    // Iterate through the rest of the prefixes
+    @for $i from length($args) through 1 {
+      $prefix: nth($args, $i);
+      $prefixed-var: generate-var-name($prefix, $suffix);
+      // Nest the current prefixed variable as a fallback to the current result
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  
+    // Return the final CSS var() function with all fallbacks
+    @return #{$result};
+  }

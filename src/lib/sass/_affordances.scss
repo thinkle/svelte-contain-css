@@ -1,0 +1,51 @@
+
+@use 'functions' as fn;
+
+@mixin clickable($prefixes...) {
+    cursor: fn.var-with-fallbacks(--cursor,append($prefixes, pointer)...);
+    transition: filter,transform fn.var-with-fallbacks(--transition,append($prefixes,300ms)...);
+    &:hover {
+      filter: fn.var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.4))...);
+      transform: fn.var-with-fallbacks(--hover-transform, append($prefixes, none)...);
+      
+    }
+    &:active {
+        filter: fn.var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
+        transform: fn.var-with-fallbacks(--active-transform, append($prefixes, none)...);      
+      }
+    &:disabled {
+      cursor: fn.var-with-fallbacks(--disabled-cursor, append($prefixes, not-allowed)...);
+      transform: fn.var-with-fallbacks(--disabled-transform, append($prefixes, none)...);
+      filter: fn.var-with-fallbacks(--disabled-filter, append($prefixes, grayscale(0.5))...);
+    }
+  }
+  
+  @mixin custom-scrollbar($prefixes...) {
+    overflow-y: auto;
+  
+    // Customizing the scrollbar
+    &::-webkit-scrollbar {
+      width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, var(--space-md))...);
+      height: fn.var-with-fallbacks(--scrollbar-height, append($prefixes, var(--gap))...);
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: fn.var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--bg))...);
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: fn.var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, var(--stripe-bg))...);
+  
+      border-radius: fn.var-with-fallbacks(--scrollbar-thumb-radius, append($prefixes, var(--border-radius))...);
+  
+      &:hover {
+        background: fn.var-with-fallbacks(--scrollbar-thumb-hover-bg, append($prefixes, var(--secondary-bg))...);
+        
+      }
+    }
+  
+    // For Firefox
+    scrollbar-width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, thin)...);
+    scrollbar-color: fn.var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, #888)...) fn.var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--border-color))...);
+  }
+  
