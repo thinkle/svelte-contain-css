@@ -212,6 +212,7 @@
           first-paragraph,
           $prefixes
       ),first-paragraph)...);
+      margin-block-start: var-with-fallbacks(--first-paragraph-margin-top, append($prefixes, 0)...);
     }
   & :global(p:first-of-type::first-line) {
     @include typography-props-bare(
