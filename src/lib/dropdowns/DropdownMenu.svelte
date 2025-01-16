@@ -38,31 +38,17 @@
     if (dropdownTop + dropdownRect.height > window.innerHeight) {
       dropdownTop = Math.max(0, window.innerHeight - dropdownRect.height);
     }
-
-    dropdownMaxHeight = window.innerHeight - dropdownTop;
-
-    console.log(
-      "Computed top",
-      dropdownTop,
-      "left",
-      dropdownLeft,
-      "maxHeight",
-      dropdownMaxHeight
-    );
+    dropdownMaxHeight = window.innerHeight - dropdownTop;    
   }
 
-  function triggerMenu(e) {
-    console.log("Triggered...");
-    let isOpen = popoverDiv.matches(":popover-open");
-    console.log("Popover is currently open?", isOpen);
-    if (!isOpen) {
-      console.log("Opening popover");
+  function triggerMenu(e) {    
+    let isOpen = popoverDiv.matches(":popover-open");    
+    if (!isOpen) {    
       injectVariablesIntoDropdown();
       computePosition();
     }
   }
-  function dismissPopover(e) {
-    console.log("Dismissing popover");
+  function dismissPopover(e) {    
     popoverDiv.hidePopover();
   }
 
@@ -87,8 +73,7 @@
       }
     }
   }
-  function maybeFocusMatch(searchString: string) {
-    console.log("Maybe focus", searchString);
+  function maybeFocusMatch(searchString: string) {    
     let focusableItems = dropdownContentElement.querySelectorAll(
       "a,button,[tabindex]"
     );
@@ -96,8 +81,7 @@
       if (
         element.textContent &&
         element.textContent.toLowerCase().startsWith(searchString.toLowerCase())
-      ) {
-        console.log("Found", element);
+      ) {        
         if (element.focus) {
           element.focus();
           return;
