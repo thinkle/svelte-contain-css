@@ -17,7 +17,7 @@
     width: var(--code-width, var(--line-width, 90%));
     height: var(--code-height, auto);
     box-sizing: border-box;
-    margin: auto;
+    margin: auto;    
   }
 
   div > :global(pre) {
@@ -30,7 +30,7 @@
   .code :global(pre[class*="language-"]) {
     tab-size: var(--code-tab-size, 2em);
     @include color-props(code, container);
-    @include typography-container-props(code, container);
+    @include typography-props(code, container);
   }
 
   .code :global(pre[class*="language-"]) {
