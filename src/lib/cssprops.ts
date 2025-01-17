@@ -200,4 +200,3 @@ for (let c of components) {
   cssProperties.push(...c.props);
 }
 cssProperties.sort();
-console.log(cssProperties);
