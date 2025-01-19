@@ -33,6 +33,7 @@
   import Installation from "./Installation.svelte";  
   import TooltipDemo from "./demos/TooltipDemo.svelte";
   import DialogDemo from "./demos/DialogDemo.svelte";
+  import ProgressDemo from "./demos/ProgressDemo.svelte";
   
   
 
@@ -79,6 +80,7 @@
     { name: "Dropdowns"},
     { name : 'Dropdown Menu', component: DropdownMenuDemo, demo : "DropdownMenu"},
     { name: "Miscellaneous"},
+    { name: 'Progress', component: ProgressDemo, demo : "Progress"},
     { name : 'Themes', component: Themes},
     { name : 'Variables', component: VariableDemo, demo : "Variable"},
   ];
@@ -155,11 +157,12 @@
     >
   </Bar>
   <Sidebar slot="sidebar" {right}>
-    <MenuList>      
+    <MenuList --menu-item-justify="start" --menu-item-padding="var(--padding) var(--padding) var(--padding) calc(4*var(--padding))">      
       {#each menu as item} 
         {#if item.link}
           <li>
             <a href={item.link}
+            class:active={theItem === menu.indexOf(item)}
               on:click={() => {
                 theItem = menu.indexOf(item);
               }}
@@ -167,12 +170,14 @@
           </li>
         {:else if item.component}
           <li><a href="#demo-area"
+            class:active={theItem === menu.indexOf(item)}
             on:click={() => {
               theItem = menu.indexOf(item);
             }}>{item.name}</a>
           </li>
         {:else}
           <li class="subheader"
+            class:active={theItem === menu.indexOf(item)}
             on:click={() => {
               theItem = menu.indexOf(item) + 1;
             }}
@@ -226,6 +231,11 @@
   }
   .equal-width {
     min-width: var(--side-width);
+  }
+  .subheader {
+    background-color: var(--secondary-bg);
+    color: var(--secondary-fg);
+    padding: var(--padding);
   }
 
 </style>
