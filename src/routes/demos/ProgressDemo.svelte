@@ -18,6 +18,9 @@
       { name: "--progress-height", label: "Height of the progress bar" },
       { name: "--progress-bar-color", label: "Fill color of the bar" },
       { name: "--progress-track-bg", label: "Track background color" },
+      { name: "--progress-track-stripe-bg", label: "Track background color" },
+      { name: "--progress-fg", label : "Text color (over empty)"},
+      { name: "--progress-half-fg", label : "Text color (over bar)"},
     ];
   
     let state: "uninitiated" | "inprogress" | "complete" = "inprogress";

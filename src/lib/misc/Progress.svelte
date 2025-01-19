@@ -73,10 +73,10 @@
     // Diagonal stripes from off-white to white
     $track-stripes: repeating-linear-gradient(
       135deg,
-      var(--secondary-bg, #f9f9f9) 0,
-      var(--secondary-bg, #f9f9f9) 20px,
-      var(--white, #fff) 20px,
-      var(--white, #fff) 40px
+      var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 0,
+      var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 20px,
+      var(--progress-track-stripe-bg, var(--white, #fff)) 20px,
+      var(--progress-track-stripe-bg, var(--white, #fff)) 40px
     );
   
     @keyframes track-stripes {
@@ -108,8 +108,7 @@
       }
   
       .progress-track {
-        position: relative;
-        --progress-track-height: 2em;
+        position: relative;        
         @include box-props(progress-track, progress, control);
         height: var(--progress-track-height, var(--progress-height, 2em));
         background: var(--progress-track-bg, var(--secondary-bg, var(--white)));
@@ -151,11 +150,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--progress-overlay-fg, var(--secondary-fg, var(--white)));
-        font-weight: var(--progress-overlay-font-weight, 500);        
+        color: var(--progress-fg, var(--secondary-fg, var(--white)));        
+        text-shadow: 1px 1px var(--progress-half-fg, var(--primary-fg, var(--white)));
+        
       }
       .half-full .progress-text {
-        color: var(--progress-overlay-fg-half, var(--primary-fg, var(--white)));
+        color: var(--progress-half-fg, var(--primary-fg, var(--white)));
+        text-shadow: 1px 1px var(--progress-fg, var(--secondary-fg, var(--white)));        
       }
 
     }
