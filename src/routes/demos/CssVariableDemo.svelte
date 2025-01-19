@@ -10,10 +10,18 @@
   function handleSetVariables(updatedVariables: { [key: string]: string }) {
     cssValues = updatedVariables;
   }
+  
+  import Sidebar from "$lib/layout/Sidebar.svelte";
+  import Page from "$lib/layout/Page.svelte";
+  import Container from "$lib/layout/Container.svelte";
+  
 </script>
 
-<CssVariables {variables} onSetVariables={handleSetVariables} />
+  <Container height="auto">
+    <CssVariables {variables} onSetVariables={handleSetVariables} />  
+  </Container>
+  <CssWrapper variables={cssValues} >
+    <slot />
+  </CssWrapper>
 
-<CssWrapper variables={cssValues}>
-  <slot />
-</CssWrapper>
+
