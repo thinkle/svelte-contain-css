@@ -34,6 +34,6 @@
     container-type: inline-size;
     overflow: auto;
     justify-content: start;
-    align-items: center;
+    align-items: var(--column-align, center);
   }
 </style>
