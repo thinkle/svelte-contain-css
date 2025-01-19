@@ -51,6 +51,7 @@
     border: var(--mini-button-border, button-border, none);
     display: inline-grid;
     place-content: center;
+    flex-shrink: 0; /* Don't shrink any more */
   }
   button.primary {
     @include color-props(primary, button, control);
