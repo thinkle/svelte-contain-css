@@ -67,7 +67,7 @@
   --button-height="3rem">  
   <Button>About</Button>
   <Button>Contact</Button>
-  <Button>Home</Button>
+  <a href="/">Home</a>
 </Bar>`}
     />
 
