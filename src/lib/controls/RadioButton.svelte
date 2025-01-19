@@ -85,6 +85,7 @@
     box-sizing: border-box;
     user-select: none;
     gap: var(--radio-button-space, var(--toggle-space, var(--space-md)));
+    white-space: nowrap;
 
     @include clickable(radio-button, clickable);
   }
@@ -131,8 +132,7 @@
     @include color-props(
       radio-button-checked,
       toggle-on,
-      primary,
-      radio-button
+      primary,      
     );
     border: var-with-fallbacks(
       --border,
