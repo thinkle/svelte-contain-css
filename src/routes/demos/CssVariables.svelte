@@ -47,10 +47,10 @@
 
 </script>
 
-<Container>
+<Container --form-item-width="30em">
   {#each groups as group, i}
     {#if remainingVariables.filter((v) => v.group == group).length > 0}
-      <FormItem --form-label-align="end">
+      <FormItem --form-label-align="end" --label-width="200px" --select-width="200px">
         <div
           slot="label"
           
@@ -85,7 +85,6 @@
               placeholder={variable.placeholder}
               bind:value={variableValues[variable.name]}
               on:input={(e) => {
-                console.log("input", e);
                 for (let v in variableValues) {
                   if (variableValues[v] === "") {
                     delete variableValues[v];
@@ -128,7 +127,6 @@
           placeholder={variable?.placeholder}
           bind:value={variableValues[variable.name]}
           on:input={(e) => {
-            console.log("Update vars", variableValues);
             for (let v in variableValues) {
               if (variableValues[v] === "") {
                 delete variableValues[v];
