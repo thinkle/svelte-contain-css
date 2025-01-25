@@ -20,7 +20,7 @@ import "contain-css-svelte/vars/defaults.css";
 /* Optional color theme */
 import "contain-css-svelte/themes/purple.css";
 /* Optional typography theme */
-import "contain-css-svelte/typography/airy.css";
+import "contain-css-svelte/themes/typography-airy.css";
 `}
     />
   <p>Now you're ready to import and use our components
