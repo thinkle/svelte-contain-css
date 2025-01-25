@@ -316,6 +316,18 @@ function paddingProps(prefix: string): CSSVariable[] {
   ];
 }
 
+function boxPropsSquare (prefix: string): CSSVariable[] {
+  let group = "Box";
+  return [
+    ...paddingProps(prefix),
+    {
+      name: `--${prefix}-square-radius`,
+      ...defaults.borderRadius,
+      group,
+    },
+  ];
+}
+
 function boxProps(prefix: string): CSSVariable[] {
   let group = "Box";
   return [
@@ -490,6 +502,66 @@ export let tooltipVars = [
   ...shadowProps("tooltip"),
 ];
 
+export let tableVars = [
+  ...boxPropsBorder('table'),
+  ...colorProps('table'),
+  ...shadowProps('table'),  
+  {
+    name : '--table-first-row-bottom-border',
+    defaultValue: '3px solid var(--table-first-row-border-color, var(--secondary-bg))',
+    type: 'border',
+    group: 'Table',
+  },
+  {
+    name : '--table-border',
+    defaultValue: '1px solid var(--table-border-color)',
+    type: 'border',
+    group: 'Table',
+  },
+  {
+    name: '--table-border-color',
+    defaultValue: 'var(--secondary-color)',
+    type: 'color',
+  },
+  {
+    name : '--table-first-row-border-color',
+    defaultValue: 'var(--secondary-bg)',
+    type: 'color',
+  },
+  ...colorProps('table-head'),
+  ...typographyProps('table-head'),
+]
+
+
+export let accordionVars = [
+
+  ...typographyProps('accordion'),
+  ...typographyProps('accordion-summary'),
+  ...typographyProps('accordion-summary-open'),
+  ...colorProps('accordion'),
+  ...colorProps('accordion-summary'),
+  ...colorProps('accordion-summary-open'),
+  ...boxPropsSquare('accordion-wrapper'),
+  ...boxPropsSquare('accordion-summary'),
+  {
+    name : '--accordion-icon',
+    defaultValue: '"▼"',
+  },
+  { name : '--accordion-gap',
+    defaultValue: 'var(--space)',
+  },
+  {
+    name : "--accordion-icon-transform",
+    defaultValue: "rotateX(180deg)",
+  },
+  {
+    name: "--accordion-open-icon",
+    defaultValue: "var(--accordion-icon)",
+  }
+]
+
+
+
 export let components = {
   button: buttonVars,
   card: cardVars,
@@ -498,3 +570,4 @@ export let components = {
 
 export let vars = Object.values(components).flat();
 export let cssProperties = vars.map((v) => v.name);
+

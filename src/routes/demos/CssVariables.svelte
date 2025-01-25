@@ -2,9 +2,11 @@
   import Button from "$lib/controls/Button.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Select from "$lib/controls/Select.svelte";
+  import Accordion from "$lib/layout/Accordion.svelte";
   import Container from "$lib/layout/Container.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import type { CSSVariable } from "./types";
+  
 
   export let variables: CSSVariable[];
   export let customizedVariables: string[] = [];
@@ -47,21 +49,17 @@
 
 </script>
 
-<Container --form-item-width="30em">
+<h2>Set CSS Variables</h2>
+  <Accordion --form-item-width="30em" highlanderMode={false}>
   {#each groups as group, i}
     {#if remainingVariables.filter((v) => v.group == group).length > 0}
-      <FormItem --form-label-align="end" --label-width="200px" --select-width="200px">
+    <details>
+      <summary>{#if group}{group}{:else}General Variables{/if}</summary>      
+      <FormItem --form-label-align="end" --form-label-width="260px" --select-width="260px">
         <div
           slot="label"
           
-        >
-          {#if !group}
-            {#if groups.length > 1}
-              <label for="css-var-{i}">General:</label>
-            {/if}
-          {:else}
-            <label>{group}</label>
-          {/if}
+        >          
           {#key remainingVariables.length}
             {#if remainingVariables.filter((v) => v.group == group).length > 0}
               <Select
@@ -82,7 +80,7 @@
           {#key theVariables[group]}
             <input
               type="text"
-              placeholder={variable.placeholder}
+              placeholder={variable.placeholder || variable.defaultValue}
               bind:value={variableValues[variable.name]}
               on:input={(e) => {
                 for (let v in variableValues) {
@@ -114,9 +112,12 @@
           {/if}
         </div>
       </FormItem>
+      </details>
     {/if}
   {/each}
-
+  <details>
+    <summary>Customized Variables</summary>
+  
   {#each customizedVariables as varName}
     {@const variable = variables.find((v) => v.name === varName)}
     {#if variable}
@@ -150,4 +151,6 @@
       </FormItem>
     {/if}
   {/each}
-</Container>
+  </details>
+</Accordion>
+

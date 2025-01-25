@@ -12,6 +12,19 @@
     font-variant: fn.vars(font-variant, $prefixes...);
     text-align: fn.vars(text-align, $prefixes...);
   }
+
+  @mixin typography-props-bold($prefixes...) {
+    font-family: fn.vars(font-family, $prefixes...);
+    text-transform: fn.vars(text-transform, $prefixes...);
+    text-decoration: fn.vars(text-decoration, $prefixes...);
+    font-size: fn.vars(font-size, $prefixes...);    
+    font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, bold)...);
+    line-height: fn.vars(line-height, $prefixes...);
+    letter-spacing: fn.vars(letter-spacing, $prefixes...);
+    text-indent: fn.vars(indent, $prefixes...);
+    font-variant: fn.vars(font-variant, $prefixes...);
+    text-align: fn.vars(text-align, $prefixes...);
+  }
   
   @mixin typography-props ($prefixes...) {
     font-family: fn.var-no-fallbacks(--font-family, $prefixes...);

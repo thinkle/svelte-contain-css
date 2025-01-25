@@ -26,12 +26,19 @@ import Code from "./misc/Code.svelte";
 import TextLayout from "./typography/TextLayout.svelte";
 import Sidebar from "./layout/Sidebar.svelte";
 import Dialog from "./overlays/Dialog.svelte";
+import Progress from "./misc/Progress.svelte";
+import Tooltip from "./overlays/Tooltip.svelte";
+import Table from "./layout/Table.svelte";
+import Accordion from "./layout/Accordion.svelte";
+
 
 export { Hero };
 export { TabItem };
 export { Button, Checkbox, Input, Slider, RadioButton, MiniButton, Select };
 export { Bar, Container, GridLayout, MenuList, Page, ResponsiveText, TabBar };
-export { TextLayout, Code };
+export { TextLayout, Code, Accordion };
 export { Card, Tile, FormItem };
 export { Row, Column, Columns, SplitPane, Sidebar };
 export { Dialog };
+export { Progress, Tooltip };
+export { Table }

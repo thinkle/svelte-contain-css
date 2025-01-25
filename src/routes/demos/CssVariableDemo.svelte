@@ -11,17 +11,46 @@
     cssValues = updatedVariables;
   }
   
-  import Sidebar from "$lib/layout/Sidebar.svelte";
-  import Page from "$lib/layout/Page.svelte";
-  import Container from "$lib/layout/Container.svelte";
-  
-</script>
 
-  <Container height="auto">
+
+
+  import Dialog from "$lib/overlays/Dialog.svelte";
+  import Button from "$lib/controls/Button.svelte";
+  
+  let modalIsOpen = false;
+</script>
+  
+  <div class="popup-wrap" class:visible={modalIsOpen}>
+  
+  <Dialog
+  --dialog-underlay-filter="none"
+  --dialog-underlay-color="transparent"
+    
+    modal={false}
+    onClose={() => (modalIsOpen = false)}
+    
+  >
     <CssVariables {variables} onSetVariables={handleSetVariables} />  
-  </Container>
+  </Dialog>
+</div>
+  
+  <Button on:click={() => (modalIsOpen = true)}>Set CSS Variables</Button>
   <CssWrapper variables={cssValues} >
     <slot />
   </CssWrapper>
 
 
+<style>
+  .popup-wrap {
+    position: fixed;
+    width: 100vw;
+    right: var(--padding);
+    top: var(--padding);
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .popup-wrap.visible {
+    visibility: visible;
+    pointer-events: auto;
+  }
+</style>

@@ -34,6 +34,8 @@
   import TooltipDemo from "./demos/TooltipDemo.svelte";
   import DialogDemo from "./demos/DialogDemo.svelte";
   import ProgressDemo from "./demos/ProgressDemo.svelte";
+  import TableDemo from "./demos/TableDemo.svelte";
+  import AccordionDemo from "./demos/AccordionDemo.svelte";
   
   
 
@@ -62,8 +64,10 @@
     { name : 'Split Pane', component: SplitPaneDemo, demo: 'SplitPane'},
     
     { name : 'Tabs', component: TabDemo, demo : 'Tab'},
+    { name : 'Accordion', component: AccordionDemo, demo : 'Accordion'},
     { name : 'Bar', component: BarDemo, demo : 'Bar'},
     { name : 'Page', component: PageDemo, demo : 'Page'},
+    {name : 'Table', component : TableDemo, demo : 'Table'},
     {name : 'Components'},
     { name : 'Card', component: CardDemo, demo : 'Card'},
     { name : 'Tile', component: TileDemo, demo : 'Tile'},
