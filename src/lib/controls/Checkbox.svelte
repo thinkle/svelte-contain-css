@@ -31,6 +31,7 @@
 <div class="label-sizing-box">
   <label class="checkbox-item">
     <input type="checkbox" bind:checked
+    on:change on:click on:blur on:focus on:focusin on:focusout
     {...$$restProps} />
     <span bind:this={ref}><slot /></span>
   </label>
