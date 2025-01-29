@@ -27,12 +27,7 @@
   $: hasSidebar = $$slots.sidebar && !hideSidebar;
   $: hasHeader = $$slots.header && !hideHeader;
   $: hasFooter = $$slots.footer && !hideFooter;
-  $: console.log(
-    "Update to flags: header,footer,sidebar=",
-    hasHeader,
-    hasFooter,
-    hasSidebar
-  );
+
   // Start "unfrozen" so i.e. scrolling on reload
   // or hash link works properly
   let freeze = false;
@@ -49,19 +44,15 @@
         getComputedStyle(pageElement).getPropertyValue("top");
       const computedTop = parseFloat(computedTopStyle);
       const isSticking = rect.top <= computedTop;
-      console.log("Freeze = ", !isSticking);
       freeze = !isSticking;
     }
   }
 
   onMount(() => {
-    console.log("onMount is called!");
     if (sticky) {
-      console.log("Add scroll handler in a sec");
       if (window.location.hash) {
         let el = document.querySelector(window.location.hash);
         if (el) {
-          console.log("Hash", window.location.hash, "points to ", el);
           el?.scrollIntoView();
         }
       }
@@ -177,7 +168,7 @@
   .page > div > .content {
     container-type: size;
     height: 100%;
-    width: 100%;    
+    width: 100%;
   }
   .page.sticky.freeze :global(*) {
     overflow: hidden;

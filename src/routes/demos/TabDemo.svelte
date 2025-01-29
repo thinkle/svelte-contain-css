@@ -79,7 +79,6 @@
       {active}
       sticky
       on:change={(e) => {
-        console.log(e);
         active = e.detail.value;
       }}
     ></TabBar></CssWrapper

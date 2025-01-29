@@ -3,7 +3,6 @@
   export let interactive = false; // Prop to make the tile clickable or not
   export let selectable = false;
   export let checked = false;
-  $: console.log("Checked=>", checked);
 </script>
 
 {#if selectable}

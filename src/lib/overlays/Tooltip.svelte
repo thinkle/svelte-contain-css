@@ -66,7 +66,6 @@
     // Top and Left will put us OVER the element (matching top and left corner)
     // Let's use the margin to adjust positioning...
 
-    console.log(tooltipDiv.style);
     tooltipDiv.togglePopover(true);
   }
 </script>
