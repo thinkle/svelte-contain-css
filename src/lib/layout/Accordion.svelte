@@ -5,17 +5,34 @@
 
   function onAccordionClicked(e: MouseEvent) {
     if (!highlanderMode) {
-        console.log('Not in highlander mode, no click handler');
-        return;
+      return;
     }
+
     const target = e.target as HTMLElement;
+
+    // Ensure the click is within the current accordion wrapper
+    if (target.closest(".accordion-wrapper") !== wrapper) {
+      return;
+    }
+
+    // Check if the clicked element is a <summary>
     if (target.tagName === "SUMMARY") {
-      // If we clicked summary -- make sure to close the others
       const details = target.parentElement as HTMLDetailsElement;
-      let otherDetails = wrapper.querySelectorAll("details");
-      otherDetails.forEach((details) => {
-        if (details !== target.parentElement) {
-          details.open = false;
+
+      // Check if this <details> is nested inside another <details>
+      const parentDetails = details.parentElement?.closest("details");
+      if (
+        parentDetails &&
+        parentDetails.closest(".accordion-wrapper") === wrapper
+      ) {
+        return;
+      }
+
+      // Close all other <details> within the same wrapper
+      const allDetails = wrapper.querySelectorAll("details");
+      allDetails.forEach((d) => {
+        if (d !== details) {
+          d.open = false;
         }
       });
     }

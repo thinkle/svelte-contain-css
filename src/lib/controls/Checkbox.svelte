@@ -1,7 +1,5 @@
 <script lang="ts">
   export let checked: boolean;
-  export let value;
-  export let group: string;
 
   /* Styling properties */
   import { injectVars } from "$lib/util";
@@ -30,9 +28,17 @@
 
 <div class="label-sizing-box">
   <label class="checkbox-item">
-    <input type="checkbox" bind:checked
-    on:change on:click on:blur on:focus on:focusin on:focusout
-    {...$$restProps} />
+    <input
+      type="checkbox"
+      bind:checked
+      on:change
+      on:click
+      on:blur
+      on:focus
+      on:focusin
+      on:focusout
+      {...$$restProps}
+    />
     <span bind:this={ref}><slot /></span>
   </label>
   <label class="invisible">
