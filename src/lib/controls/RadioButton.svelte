@@ -32,6 +32,8 @@
     <input {value} type="radio" bind:group {...$$restProps} />
     <span bind:this={ref}><slot /></span>
   </label>
+  <!-- Hidden label determines how much space we occupy -- that way we can apply e.g. bold font without 
+   reflowing the UI when checked/unchecked -->
   <label class="invisible radio-item">
     <input type="radio" checked="true" />
     <span>{@html labelContent}</span>
