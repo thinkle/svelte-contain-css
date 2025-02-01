@@ -36,5 +36,4 @@ body {
 
 :root {
   --sidebar-width: 256px;
-  --sidebar-border: 1px solid var(--fg);
 }
