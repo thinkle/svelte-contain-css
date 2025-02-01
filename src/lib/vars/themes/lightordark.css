@@ -3,79 +3,115 @@
   /* light mode */
 
   :root {
-    --fg: var(--material-color-grey-800);
+    --fg: var(--material-color-blue-grey-800);
     --bg: #fafafa;
-    --container-bg: var(--material-color-grey-100);
-    --container-fg: var(--material-color-grey-800);
-    --sidebar-bg: var(--material-color-grey-100);
-    --sidebar-fg: var(--material-color-grey-900);
-    --menu-bg: var(--material-color-grey-100);
-    --menu-fg: var(--material-color-grey-900);
-    --primary-bg: var(--material-color-blue-500);
-    --primary-fg: var(--material-color-grey-100);
-    --secondary-bg: var(--material-color-grey-400);
-    --secondary-fg: var(--material-color-grey-900);
-    --stripe-bg: var(--material-color-grey-900);
-    --stripe-fg: var(--material-color-grey-100);
-    --control-bg: var(--material-color-grey-300);
-    --control-fg: var(--material-color-grey-900);
-    --border-color: var(--material-color-grey-400);
+    --container-bg: var(--material-color-blue-blue-grey-50);
+    --container-fg: var(--material-color-blue-grey-800);
+    --sidebar-bg: var(--material-color-blue-grey-50);
+    --sidebar-fg: var(--material-color-blue-grey-900);
+    --menu-bg: var(--material-color-blue-grey-50);
+    --menu-fg: var(--material-color-blue-grey-900);
+    --primary-bg: var(--material-color-blue-700);
+    --primary-fg: var(--material-color-blue-grey-50);
+    --secondary-bg: var(--material-color-blue-grey-100);
+    --secondary-fg: var(--material-color-blue-grey-900);
+    --stripe-bg: var(--material-color-blue-grey-900);
+    --stripe-fg: var(--material-color-blue-grey-50);
+    --border-color: var(--material-color-blue-grey-100);
     --input-bg: #fefefe;
-    --input-fg: var(--material-color-grey-900);
+    --input-fg: var(--material-color-blue-grey-900);
     --hover-filter: brightness(0.9) contrast(1.5);
     /* Code */
-    --code-bg: #ffffff; /* Background color for the code block */
-    --code-fg: #333333; /* Default text color */
+    --code-bg: var(--material-color-blue-grey-50); /* Softer background */
+    --code-fg: var(--material-color-blue-grey-900); /* Dark green text */
 
-    --code-comment-fg: #999999; /* Comment color */
+    --code-comment-fg: var(--material-color-green-800); /* Softer grey */
     --code-comment-bg: transparent;
 
-    --code-string-fg: #d14; /* String color */
+    --code-string-fg: var(--material-color-orange-800);
     --code-string-bg: transparent;
 
-    --code-keyword-fg: #00f; /* Keyword color */
+    --code-keyword-fg: var(--material-color-indigo-700);
     --code-keyword-bg: transparent;
 
-    --code-attr-name-fg: #ff4500; /* Attribute name color */
+    --code-attr-name-fg: var(--material-color-blue-500);
     --code-attr-name-bg: transparent;
 
-    --code-tag-fg: #170; /* Tag color */
+    --code-tag-fg: var(--material-color-light-green-800);
     --code-tag-bg: transparent;
 
-    --code-function-fg: #005cc5; /* Function name color */
+    --code-function-fg: var(--material-color-blue-700);
     --code-function-bg: transparent;
 
-    --code-variable-fg: #e90; /* Variable color */
+    --code-variable-fg: var(--material-color-amber-600);
     --code-variable-bg: transparent;
 
-    --code-operator-fg: #9a6e3a; /* Operator color */
+    --code-operator-fg: var(--material-color-brown-600);
     --code-operator-bg: transparent;
 
-    --code-prolog-fg: #999999; /* Prolog color */
+    --code-prolog-fg: var(--material-color-grey-600);
     --code-prolog-bg: transparent;
 
-    --code-doctype-fg: #999999; /* Doctype color */
+    --code-doctype-fg: var(--material-color-grey-600);
     --code-doctype-bg: transparent;
 
-    --code-cdata-fg: #999999; /* CDATA color */
+    --code-cdata-fg: var(--material-color-grey-600);
     --code-cdata-bg: transparent;
   }
 }
 /* dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    --fg: var(--material-color-grey-100);
-    --bg: var(--material-color-grey-800);
-    --body-bg: var(--material-color-grey-800);
-    --body-fg: var(--material-color-grey-100);
-    --container-bg: var(--material-color-grey-900);
-    --container-fg: var(--material-color-grey-100);
-    --primary-bg: var(--material-color-light-blue-500);
-    --primary-fg: var(--material-color-grey-100);
+    --fg: var(--material-color-blue-grey-50);
+    --bg: var(--material-color-blue-grey-800);
+    --body-bg: var(--material-color-blue-grey-800);
+    --body-fg: var(--material-color-blue-grey-50);
+    --container-bg: var(--material-color-blue-grey-900);
+    --container-fg: var(--material-color-blue-grey-50);
+    --primary-bg: var(--material-color-light-blue-100);
+    --primary-fg: var(--material-color-blue-grey-800);
     --warning-fg: var(--material-color-white);
     --warning-bg: var(--material-color-red-800);
-    --secondary-bg: var(--material-color-grey-300);
-    --secondary-fg: var(--material-color-grey-900);
+    --secondary-bg: var(--material-color-blue-grey-300);
+    --secondary-fg: var(--material-color-blue-grey-800);
+    --button-bg: var(--material-color-blue-grey-800);
+    --button-fg: var(--material-color-blue-grey-50);
     --hover-filter: brightness(1.1) contrast(1.5);
+    /* Code Block */
+    --code-bg: var(--material-color-blue-grey-800); /* Darker background */
+    --code-fg: var(--material-color-blue-grey-100); /* Lighter text */
+
+    --code-comment-fg: var(--material-color-green-300); /* Lighter green */
+    --code-comment-bg: transparent;
+
+    --code-string-fg: var(--material-color-orange-300);
+    --code-string-bg: transparent;
+
+    --code-keyword-fg: var(--material-color-indigo-300);
+    --code-keyword-bg: transparent;
+
+    --code-attr-name-fg: var(--material-color-blue-300);
+    --code-attr-name-bg: transparent;
+
+    --code-tag-fg: var(--material-color-light-green-300);
+    --code-tag-bg: transparent;
+
+    --code-function-fg: var(--material-color-blue-300);
+    --code-function-bg: transparent;
+
+    --code-variable-fg: var(--material-color-amber-300);
+    --code-variable-bg: transparent;
+
+    --code-operator-fg: var(--material-color-brown-300);
+    --code-operator-bg: transparent;
+
+    --code-prolog-fg: var(--material-color-grey-400);
+    --code-prolog-bg: transparent;
+
+    --code-doctype-fg: var(--material-color-grey-400);
+    --code-doctype-bg: transparent;
+
+    --code-cdata-fg: var(--material-color-grey-400);
+    --code-cdata-bg: transparent;
   }
 }
