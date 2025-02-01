@@ -32,7 +32,7 @@
     <input {value} type="radio" bind:group {...$$restProps} />
     <span bind:this={ref}><slot /></span>
   </label>
-  <label class="invisible">
+  <label class="invisible radio-item">
     <input type="radio" checked="true" />
     <span>{@html labelContent}</span>
   </label>
@@ -78,7 +78,7 @@
     position: absolute;
   }
 
-  label.radio-button {
+  label.radio-item {
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
@@ -89,11 +89,11 @@
     @include clickable(radio-button, clickable);
   }
 
-  label.radio-button span {
+  label.radio-item span {
     width: var(--label-width);
   }
 
-  label.radio-button:has(input:checked) {
+  label.radio-item:has(input:checked) {
     font-weight: var-with-fallbacks(
       --weight,
       radio-button-checked,
@@ -106,7 +106,7 @@
     display: none;
   }
 
-  label.radio-button::before {
+  label.radio-item::before {
     transition: all var-with-fallbacks(--transition, radio-button, control);
     display: inline-grid;
     place-content: center;
@@ -127,7 +127,7 @@
     margin-left: var(--radio-button-padding, var(--padding));
   }
 
-  label.radio-button:has(input:checked)::before {
+  label.radio-item:has(input:checked)::before {
     @include color-props(radio-button-checked, toggle-on, primary);
     border: var-with-fallbacks(
       --border,
