@@ -21,12 +21,13 @@
         }
       });
     });
-
-    observer.observe(selectElement, { childList: true });
+    if (selectElement) {
+      observer.observe(selectElement, { childList: true });
+    }
 
     // Observe size changes in option buttons
     resizeObserver = new ResizeObserver(() => updateTargetWidth());
-    optionButtons.forEach(button => resizeObserver.observe(button));
+    optionButtons.forEach((button) => resizeObserver.observe(button));
 
     return () => {
       observer.disconnect();
@@ -111,7 +112,6 @@
     );
     text-overflow: ellipsis;
     @include typography-props(select, input, ui);
-    
   }
   .select-dropdown-label {
     overflow: hidden;
