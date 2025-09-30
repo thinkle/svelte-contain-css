@@ -142,6 +142,7 @@
     display: flex;
     justify-content: center;
     align-items: stretch;
+    @include focusable();
   }
   .split-pane > .resizer::before {
     content: " ";

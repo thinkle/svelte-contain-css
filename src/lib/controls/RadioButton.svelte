@@ -105,7 +105,12 @@
   }
 
   input[type="radio"] {
-    display: none;
+    /* visually hidden but still accessible */
+    @include visually-hidden();
+  }
+
+  label.radio-item:has(input:focus-visible) {
+    @include focus-ring();
   }
 
   label.radio-item::before {

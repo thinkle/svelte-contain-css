@@ -110,14 +110,38 @@
   let val = false;
   let val2 = true;
   let val3 = false;
+
+  function updateEventInfo(event: Event) {
+    console.info("Check event: ", event);
+  }
 </script>
 
 <Container border>
   <h2>Checkboxes</h2>
+
   <CssWrapper variables={cssValues}>
-    <Checkbox bind:checked={val}>Lettuce</Checkbox>
-    <Checkbox --checkbox-checked-bg="red" bind:checked={val2}>Tomato</Checkbox>
-    <Checkbox bind:checked={val3}>Onion</Checkbox>
+    <Checkbox
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={updateEventInfo}
+      bind:checked={val}>Lettuce</Checkbox
+    >
+    <Checkbox
+      --checkbox-checked-bg="red"
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={updateEventInfo}
+      bind:checked={val2}>Tomato</Checkbox
+    >
+    <Checkbox
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={(e) => {
+        updateEventInfo(e);
+        val3 = !val3;
+      }}
+      checked={val3}>Onion</Checkbox
+    >
   </CssWrapper>
   <Code
     code={`<Checkbox --checkbox-checked-bg="red" bind:checked={val}>Option</Checkbox>`}

@@ -37,6 +37,7 @@
   div > :global(div > button) {
     @include color-props(tab, button, control, secondary);
     @include box-props(tab, button, control, secondary);
+    @include focusable();
     border-radius: var(
       --tab-border-radius,
       var(--border-radius) var(--border-radius) 0 0

@@ -47,6 +47,7 @@
     @include box-shadow(button, control);
     @include typography-props-bare(button, control);
     @include clickable(button, clickable);
+    @include focusable();
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
   button.primary {

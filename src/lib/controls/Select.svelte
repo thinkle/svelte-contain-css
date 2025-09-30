@@ -112,6 +112,7 @@
     );
     text-overflow: ellipsis;
     @include typography-props(select, input, ui);
+    @include focusable();
   }
   .select-dropdown-label {
     overflow: hidden;

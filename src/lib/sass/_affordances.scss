@@ -1,51 +1,124 @@
+@use "functions" as fn;
 
-@use 'functions' as fn;
+@mixin focus-ring {
+  outline: var(--focus-color, -webkit-focus-ring-color) auto 1px;
+  outline-offset: var(--focus-outline-offset, 2px);
+  box-shadow: var(
+    --focus-ring-box-shadow,
+    0 0 0 3px var(--focus-shadow-color, rgba(100, 150, 250, 0.5))
+  );
+}
+
+@mixin focusable($prefixes...) {
+  &:focus-visible {
+    @include focus-ring();
+  }
+}
 
 @mixin clickable($prefixes...) {
-    cursor: fn.var-with-fallbacks(--cursor,append($prefixes, pointer)...);
-    transition: filter,transform fn.var-with-fallbacks(--transition,append($prefixes,300ms)...);
+  cursor: fn.var-with-fallbacks(--cursor, append($prefixes, pointer)...);
+  transition: filter,
+    transform fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+  &:hover {
+    filter: fn.var-with-fallbacks(
+      --hover-filter,
+      append($prefixes, brightness(1.4))...
+    );
+    transform: fn.var-with-fallbacks(
+      --hover-transform,
+      append($prefixes, none)...
+    );
+  }
+  &:active {
+    filter: fn.var-with-fallbacks(
+      --active-filter,
+      append($prefixes, brightness(0.9))...
+    );
+    transform: fn.var-with-fallbacks(
+      --active-transform,
+      append($prefixes, none)...
+    );
+  }
+  &:disabled {
+    cursor: fn.var-with-fallbacks(
+      --disabled-cursor,
+      append($prefixes, not-allowed)...
+    );
+    transform: fn.var-with-fallbacks(
+      --disabled-transform,
+      append($prefixes, none)...
+    );
+    filter: fn.var-with-fallbacks(
+      --disabled-filter,
+      append($prefixes, grayscale(0.5))...
+    );
+  }
+}
+
+@mixin custom-scrollbar($prefixes...) {
+  overflow-y: auto;
+
+  // Customizing the scrollbar
+  &::-webkit-scrollbar {
+    width: fn.var-with-fallbacks(
+      --scrollbar-width,
+      append($prefixes, var(--space-md))...
+    );
+    height: fn.var-with-fallbacks(
+      --scrollbar-height,
+      append($prefixes, var(--gap))...
+    );
+  }
+
+  &::-webkit-scrollbar-track {
+    background: fn.var-with-fallbacks(
+      --scrollbar-track-bg,
+      append($prefixes, var(--bg))...
+    );
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: fn.var-with-fallbacks(
+      --scrollbar-thumb-bg,
+      append($prefixes, var(--stripe-bg))...
+    );
+
+    border-radius: fn.var-with-fallbacks(
+      --scrollbar-thumb-radius,
+      append($prefixes, var(--border-radius))...
+    );
+
     &:hover {
-      filter: fn.var-with-fallbacks(--hover-filter, append($prefixes, brightness(1.4))...);
-      transform: fn.var-with-fallbacks(--hover-transform, append($prefixes, none)...);
-      
-    }
-    &:active {
-        filter: fn.var-with-fallbacks(--active-filter, append($prefixes, brightness(0.9))...);
-        transform: fn.var-with-fallbacks(--active-transform, append($prefixes, none)...);      
-      }
-    &:disabled {
-      cursor: fn.var-with-fallbacks(--disabled-cursor, append($prefixes, not-allowed)...);
-      transform: fn.var-with-fallbacks(--disabled-transform, append($prefixes, none)...);
-      filter: fn.var-with-fallbacks(--disabled-filter, append($prefixes, grayscale(0.5))...);
+      background: fn.var-with-fallbacks(
+        --scrollbar-thumb-hover-bg,
+        append($prefixes, var(--secondary-bg))...
+      );
     }
   }
-  
-  @mixin custom-scrollbar($prefixes...) {
-    overflow-y: auto;
-  
-    // Customizing the scrollbar
-    &::-webkit-scrollbar {
-      width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, var(--space-md))...);
-      height: fn.var-with-fallbacks(--scrollbar-height, append($prefixes, var(--gap))...);
-    }
-  
-    &::-webkit-scrollbar-track {
-      background: fn.var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--bg))...);
-    }
-  
-    &::-webkit-scrollbar-thumb {
-      background: fn.var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, var(--stripe-bg))...);
-  
-      border-radius: fn.var-with-fallbacks(--scrollbar-thumb-radius, append($prefixes, var(--border-radius))...);
-  
-      &:hover {
-        background: fn.var-with-fallbacks(--scrollbar-thumb-hover-bg, append($prefixes, var(--secondary-bg))...);
-        
-      }
-    }
-  
-    // For Firefox
-    scrollbar-width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, thin)...);
-    scrollbar-color: fn.var-with-fallbacks(--scrollbar-thumb-bg, append($prefixes, #888)...) fn.var-with-fallbacks(--scrollbar-track-bg, append($prefixes, var(--border-color))...);
-  }
-  
+
+  // For Firefox
+  scrollbar-width: fn.var-with-fallbacks(
+    --scrollbar-width,
+    append($prefixes, thin)...
+  );
+  scrollbar-color: fn.var-with-fallbacks(
+      --scrollbar-thumb-bg,
+      append($prefixes, #888)...
+    )
+    fn.var-with-fallbacks(
+      --scrollbar-track-bg,
+      append($prefixes, var(--border-color))...
+    );
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: insert(50%);
+  border: 0;
+}

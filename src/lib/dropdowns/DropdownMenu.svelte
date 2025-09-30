@@ -38,17 +38,17 @@
     if (dropdownTop + dropdownRect.height > window.innerHeight) {
       dropdownTop = Math.max(0, window.innerHeight - dropdownRect.height);
     }
-    dropdownMaxHeight = window.innerHeight - dropdownTop;    
+    dropdownMaxHeight = window.innerHeight - dropdownTop;
   }
 
-  function triggerMenu(e) {    
-    let isOpen = popoverDiv.matches(":popover-open");    
-    if (!isOpen) {    
+  function triggerMenu(e) {
+    let isOpen = popoverDiv.matches(":popover-open");
+    if (!isOpen) {
       injectVariablesIntoDropdown();
       computePosition();
     }
   }
-  function dismissPopover(e) {    
+  function dismissPopover(e) {
     popoverDiv.hidePopover();
   }
 
@@ -73,7 +73,7 @@
       }
     }
   }
-  function maybeFocusMatch(searchString: string) {    
+  function maybeFocusMatch(searchString: string) {
     let focusableItems = dropdownContentElement.querySelectorAll(
       "a,button,[tabindex]"
     );
@@ -81,7 +81,7 @@
       if (
         element.textContent &&
         element.textContent.toLowerCase().startsWith(searchString.toLowerCase())
-      ) {        
+      ) {
         if (element.focus) {
           element.focus();
           return;
@@ -161,6 +161,7 @@
     @include color-props(menu, button, container);
     @include box-props-square(menu, button, container);
     @include clickable(menu, button, control);
+    @include focusable();
     position: relative;
   }
 
@@ -169,6 +170,7 @@
     @include box-props(menu);
     @include typography-props(menu, container);
     @include clickable(menu, button, control);
+    @include focusable();
   }
   .dropdown-menu {
     @include typography-props(menu, container);

@@ -58,6 +58,7 @@
       @include typography-props(menu-item, button, ui, control);
       @include color-props(menu-item, button, control);
       @include box-props-square(menu-item, button, control);
+      @include focusable();
       /* @include clickable(menu-item); */
     }
 

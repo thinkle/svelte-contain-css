@@ -62,6 +62,7 @@
     @include color-props(accordion-summary, secondary);
     @include box-props-square-border(accordion-summary, container);
     @include clickable(accordion);
+    @include focusable();
     cursor: pointer;
     @include typography-props-bare(accordion-summary);
   }

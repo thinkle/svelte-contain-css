@@ -16,8 +16,8 @@
     "height",
   ]);
 
-  let ref;
-  let labelContent;
+  let ref: HTMLElement;
+  let labelContent: string = "";
 
   $: {
     if (ref) {
@@ -42,7 +42,7 @@
     <span bind:this={ref}><slot /></span>
   </label>
   <label class="invisible">
-    <input type="checkbox" checked="true" />
+    <input type="checkbox" checked={true} />
     <span>{@html labelContent}</span>
   </label>
 </div>
@@ -94,7 +94,6 @@
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    user-select: none;
     gap: var(--checkbox-space, var(--toggle-space, var(--space-md)));
 
     @include clickable(checkbox, clickable);
@@ -114,7 +113,12 @@
   }
 
   input[type="checkbox"] {
-    display: none;
+    //display:
+    @include visually-hidden();
+  }
+
+  label:has(input:focus-visible) {
+    @include focus-ring();
   }
 
   label::before {

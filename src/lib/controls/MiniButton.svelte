@@ -41,6 +41,7 @@
     font-family: var(--button-font);
     @include clickable(mini-button, button, clickable);
     @include box-shadow(mini-button, button, control);
+    @include focusable();
     margin: var-with-fallbacks(--margin, button, control, var(--space));
     width: var(--mini-button-size, var(--icon-size, 1em));
     height: var(--mini-button-size, var(--icon-size, 1em));
@@ -59,5 +60,4 @@
   button.warning {
     @include color-props(warning, button, control);
   }
- 
 </style>

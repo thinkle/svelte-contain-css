@@ -3,8 +3,14 @@
   export let placeholder: string = "";
 </script>
 
-<input {placeholder} bind:value on:input on:change on:blur on:focus 
-{...$$restProps}
+<input
+  {placeholder}
+  bind:value
+  on:input
+  on:change
+  on:blur
+  on:focus
+  {...$$restProps}
 />
 
 <style lang="scss">
@@ -14,5 +20,6 @@
     @include box-props(input, ui);
     @include color-props(input, ui);
     width: var(--input-width);
+    @include focusable();
   }
 </style>

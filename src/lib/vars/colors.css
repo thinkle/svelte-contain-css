@@ -18,6 +18,7 @@
   --warning-text-transform: uppercase;
   --container-link-fg: var(--primary-bg);
   --menu-item-bg: var(--menu-bg);
+  --focus-color: var(--material-color-blue-a400);
 }
 
 body {

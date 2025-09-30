@@ -5,10 +5,10 @@
   export let step = 1;
 </script>
 
-<input type="range" bind:value {min} {max} {step} 
-{...$$restProps}/>
+<input type="range" bind:value {min} {max} {step} {...$$restProps} />
 
-<style>
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
   :root {
     --slider-button-color: var(--primary-bg);
     --slider-button-radius: 50%;
@@ -19,6 +19,7 @@
   input[type="range"] {
     /* Apply your custom styles here */
     background: transparent;
+    @include focusable();
   }
 
   /* Slider Thumb */
