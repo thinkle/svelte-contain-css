@@ -51,7 +51,7 @@
       tooltipDiv.style.top = `${targetRect.top + targetRect.height}px`;
       tooltipDiv.style.marginTop = "var(--tooltipGap, 8px)";
     } else if (renderedVertical == "top") {
-      tooltipDiv.style.bottom = `${window.innerHeight - (targetRect.top - window.scrollY)}px`;
+      tooltipDiv.style.bottom = `${window.innerHeight - targetRect.top}px`;
       tooltipDiv.style.top = "unset";
       tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
     }
