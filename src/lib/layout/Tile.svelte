@@ -51,9 +51,15 @@
   label.tile {
     @include clickable(tile);
   }
+  button.tile {
+    @include focusable();
+  }
   label.tile {
     @include color-props(tile-selected);
     @include typography-props(tile-selected);
+  }
+  label.tile:has(input:focus-visible) {
+    @include focus-ring();
   }
   $aspect: 1.333;
   /* Sizing code */

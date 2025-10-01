@@ -124,6 +124,7 @@
       box-sizing: border-box;
       padding: 0;
       border: none;
+      @include focusable();
     }
 
     /* Affordances */
@@ -205,6 +206,7 @@
       height: var(--icon-size, 32px);
       @include color-props(mini-button, button, control, secondary);
       @include clickable(mini-button, button, control);
+      @include focusable();
     }
     aside > button.close {
       left: calc(
