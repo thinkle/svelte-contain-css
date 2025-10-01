@@ -102,12 +102,12 @@
     @include box-props-square(accordion-summary, container);
   }
   div :global(summary::after) {
-    content: var(--accordion-icon, "▼");
+    content: var(--accordion-icon, "+");
     float: right;
     transition: transform 0.3s;
   }
   div :global(details[open] > summary::after) {
-    transform: var(--accordion-icon-transform, rotateX(180deg));
-    content: var(--accordion-open-icon, var(--accordion-icon, "▼"));
+    transform: var(--accordion-icon-transform, rotateZ(45deg));
+    content: var(--accordion-open-icon, var(--accordion-icon, "+"));
   }
 </style>
