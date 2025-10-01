@@ -32,7 +32,9 @@
       const allDetails = wrapper.querySelectorAll("details");
       allDetails.forEach((d) => {
         if (d !== details) {
-          d.open = false;
+          if (d.closest(".accordion-wrapper") === wrapper) {
+            d.open = false;
+          }
         }
       });
     }

@@ -15,6 +15,9 @@
     "width",
     "height",
   ]);
+  export let value: any = undefined;
+  // default group to an empty array so code that calls group.indexOf(...) won't throw
+  export let group: any = [];
 
   let ref: HTMLElement;
   let labelContent: string = "";
@@ -31,6 +34,8 @@
     <input
       type="checkbox"
       bind:checked
+      bind:group
+      {value}
       on:change
       on:click
       on:blur
