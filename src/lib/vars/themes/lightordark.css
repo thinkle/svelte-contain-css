@@ -5,7 +5,9 @@
   :root {
     --fg: var(--material-color-blue-grey-800);
     --bg: #fafafa;
-    --container-bg: var(--material-color-blue-blue-grey-50);
+    --body-bg: #fafafa;
+    --body-fg: var(--material-color-blue-grey-800);
+    --container-bg: var(--material-color-blue-grey-50);
     --container-fg: var(--material-color-blue-grey-800);
     --sidebar-bg: var(--material-color-blue-grey-50);
     --sidebar-fg: var(--material-color-blue-grey-900);
@@ -20,6 +22,8 @@
     --border-color: var(--material-color-blue-grey-100);
     --input-bg: #fefefe;
     --input-fg: var(--material-color-blue-grey-900);
+    --warning-bg: var(--material-color-red-600);
+    --warning-fg: var(--white);
     --hover-filter: brightness(0.9) contrast(1.5);
     /* Code */
     --code-bg: var(--material-color-blue-grey-50); /* Softer background */
@@ -68,12 +72,21 @@
     --body-fg: var(--material-color-blue-grey-50);
     --container-bg: var(--material-color-blue-grey-900);
     --container-fg: var(--material-color-blue-grey-50);
+    --sidebar-bg: var(--material-color-blue-grey-900);
+    --sidebar-fg: var(--material-color-blue-grey-50);
+    --menu-bg: var(--material-color-blue-grey-900);
+    --menu-fg: var(--material-color-blue-grey-50);
     --primary-bg: var(--material-color-light-blue-100);
     --primary-fg: var(--material-color-blue-grey-800);
-    --warning-fg: var(--material-color-white);
+    --warning-fg: var(--white);
     --warning-bg: var(--material-color-red-800);
     --secondary-bg: var(--material-color-blue-grey-300);
     --secondary-fg: var(--material-color-blue-grey-800);
+    --stripe-bg: var(--material-color-blue-grey-100);
+    --stripe-fg: var(--material-color-blue-grey-800);
+    --border-color: var(--material-color-blue-grey-600);
+    --input-bg: var(--material-color-blue-grey-700);
+    --input-fg: var(--material-color-blue-grey-50);
     --button-bg: var(--material-color-blue-grey-800);
     --button-fg: var(--material-color-blue-grey-50);
     --hover-filter: brightness(1.1) contrast(1.5);

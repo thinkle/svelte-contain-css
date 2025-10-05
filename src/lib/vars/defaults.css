@@ -12,4 +12,7 @@ body {
   font-size: var(--font-size);
   font-family: var(--font-family);
   scroll-behavior: smooth;
+  /* Ensure body colors are applied from themes or fallback */
+  background-color: var(--body-bg, var(--bg));
+  color: var(--body-fg, var(--fg));
 }
