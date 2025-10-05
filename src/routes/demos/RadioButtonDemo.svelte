@@ -1,11 +1,11 @@
 <script lang="ts">
   import RadioButton from "$lib/controls/RadioButton.svelte";
-  import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
-  import CssVariables from "./CssVariables.svelte";
-  import CssWrapper from "./CssWrapper.svelte";
+  import CssVariableDemo from "./CssVariableDemo.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
+  import type { CSSVariable } from "./types";
 
-  const radioCSSVariables = [
+  const radioCSSVariables: CSSVariable[] = [
     {
       name: "--radio-button-size",
       type: "length",
@@ -106,28 +106,24 @@
     },
   ];
 
-  let cssValues = {};
-  let val = false;
-  let val2 = true;
-  let val3 = false;
+  let val = "lettuce";
 </script>
 
-<Container border>
-  <h2>Radio Buttons</h2>
-  <CssWrapper variables={cssValues}>
-    <RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
-    <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
-    <RadioButton value="onion" bind:group={val}>Onion</RadioButton>
-  </CssWrapper>
+<CssVariableDemo variables={radioCSSVariables}>
+  <TextLayout>
+    <h2>Radio Buttons</h2>
+    <p>Customize radio button styling with CSS variables.</p>
+  </TextLayout>
+
+  <RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
+  <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
+  <RadioButton value="onion" bind:group={val}>Onion</RadioButton>
+
+  <p>Selected: {val}</p>
+
   <Code
-    code={`<radio --radio-button-checked-bg="red" bind:checked={val}>Option</radio>`}
+    code={`<RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
+<RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
+<RadioButton value="onion" bind:group={val}>Onion</RadioButton>`}
   />
-  <h3>radio CSS Variables</h3>
-  <p>Customize the style of our radioes</p>
-  <CssVariables
-    variables={radioCSSVariables}
-    onSetVariables={(variables) => {
-      cssValues = variables;
-    }}
-  />
-</Container>
+</CssVariableDemo>

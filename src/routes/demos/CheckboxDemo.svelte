@@ -2,10 +2,11 @@
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
-  import CssVariables from "./CssVariables.svelte";
-  import CssWrapper from "./CssWrapper.svelte";
+  import CssVariableDemo from "./CssVariableDemo.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
+  import type { CSSVariable } from "./types";
 
-  const checkboxCSSVariables = [
+  const checkboxCSSVariables: CSSVariable[] = [
     {
       name: "--checkbox-size",
       type: "length",
@@ -106,7 +107,6 @@
     },
   ];
 
-  let cssValues = {};
   let val = false;
   let val2 = true;
   let val3 = false;
@@ -116,42 +116,36 @@
   }
 </script>
 
-<Container border>
-  <h2>Checkboxes</h2>
+<CssVariableDemo variables={checkboxCSSVariables}>
+  <TextLayout>
+    <h2>Checkboxes</h2>
+    <p>Customize the style of checkboxes with CSS variables.</p>
+  </TextLayout>
 
-  <CssWrapper variables={cssValues}>
-    <Checkbox
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={updateEventInfo}
-      bind:checked={val}>Lettuce</Checkbox
-    >
-    <Checkbox
-      --checkbox-checked-bg="red"
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={updateEventInfo}
-      bind:checked={val2}>Tomato</Checkbox
-    >
-    <Checkbox
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={(e) => {
-        updateEventInfo(e);
-        val3 = !val3;
-      }}
-      checked={val3}>Onion</Checkbox
-    >
-  </CssWrapper>
+  <Checkbox
+    on:blur={updateEventInfo}
+    on:click={updateEventInfo}
+    on:change={updateEventInfo}
+    bind:checked={val}>Lettuce</Checkbox
+  >
+  <Checkbox
+    --checkbox-checked-bg="red"
+    on:blur={updateEventInfo}
+    on:click={updateEventInfo}
+    on:change={updateEventInfo}
+    bind:checked={val2}>Tomato</Checkbox
+  >
+  <Checkbox
+    on:blur={updateEventInfo}
+    on:click={updateEventInfo}
+    on:change={(e) => {
+      updateEventInfo(e);
+      val3 = !val3;
+    }}
+    checked={val3}>Onion</Checkbox
+  >
+
   <Code
     code={`<Checkbox --checkbox-checked-bg="red" bind:checked={val}>Option</Checkbox>`}
   />
-  <h3>Checkbox CSS Variables</h3>
-  <p>Customize the style of our checkboxes</p>
-  <CssVariables
-    variables={checkboxCSSVariables}
-    onSetVariables={(variables) => {
-      cssValues = variables;
-    }}
-  />
-</Container>
+</CssVariableDemo>
