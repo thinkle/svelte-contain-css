@@ -23,6 +23,14 @@ const config = {
     },
     // Add other preprocessors if needed
   }),
+  onwarn: (warning, handler) => {
+    // Suppress warnings about unused export properties
+    // These are intentionally exported for external styling via CSS variables
+    if (warning.code === 'unused-export-let') {
+      return;
+    }
+    handler(warning);
+  },
   kit: {
     adapter: adapter({
       // default options are shown. You can customize them as needed
