@@ -124,6 +124,8 @@
           .trim()};`;
       }
     }
+    // Set dropdown menu width to match button width
+    cssVariableContext += `--dropdown-menu-width: ${buttonStyle.width};`;
   }
   let popoverDiv: HTMLDivElement;
 </script>
