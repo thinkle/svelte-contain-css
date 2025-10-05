@@ -36,6 +36,7 @@
   import ProgressDemo from "./demos/ProgressDemo.svelte";
   import TableDemo from "./demos/TableDemo.svelte";
   import AccordionDemo from "./demos/AccordionDemo.svelte";
+  import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -67,6 +68,7 @@
       { name: "Components" },
       { name: "Card", component: CardDemo, demo: "Card" },
       { name: "Tile", component: TileDemo, demo: "Tile" },
+      { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
       {
         name: "Rows and Columns",
         component: RowsAndColumnsDemo,

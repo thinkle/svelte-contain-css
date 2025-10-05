@@ -1,80 +1,97 @@
-@use 'functions' as fn;
+@use "functions" as fn;
 
 @mixin typography-props-bare($prefixes...) {
-    font-family: fn.vars(font-family, $prefixes...);
-    text-transform: fn.vars(text-transform, $prefixes...);
-    text-decoration: fn.vars(text-decoration, $prefixes...);
-    font-size: fn.vars(font-size, $prefixes...);
-    font-weight: fn.vars(font-weight, $prefixes...);
-    line-height: fn.vars(line-height, $prefixes...);
-    letter-spacing: fn.vars(letter-spacing, $prefixes...);
-    text-indent: fn.vars(indent, $prefixes...);
-    font-variant: fn.vars(font-variant, $prefixes...);
-    text-align: fn.vars(text-align, $prefixes...);
-  }
+  font-family: fn.vars(font-family, $prefixes...);
+  text-transform: fn.vars(text-transform, $prefixes...);
+  text-decoration: fn.vars(text-decoration, $prefixes...);
+  font-size: fn.vars(font-size, $prefixes...);
+  font-weight: fn.vars(font-weight, $prefixes...);
+  line-height: fn.vars(line-height, $prefixes...);
+  letter-spacing: fn.vars(letter-spacing, $prefixes...);
+  text-indent: fn.vars(indent, $prefixes...);
+  font-variant: fn.vars(font-variant, $prefixes...);
+  text-align: fn.vars(text-align, $prefixes...);
+}
 
-  @mixin typography-props-bold($prefixes...) {
-    font-family: fn.vars(font-family, $prefixes...);
-    text-transform: fn.vars(text-transform, $prefixes...);
-    text-decoration: fn.vars(text-decoration, $prefixes...);
-    font-size: fn.vars(font-size, $prefixes...);    
-    font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, bold)...);
-    line-height: fn.vars(line-height, $prefixes...);
-    letter-spacing: fn.vars(letter-spacing, $prefixes...);
-    text-indent: fn.vars(indent, $prefixes...);
-    font-variant: fn.vars(font-variant, $prefixes...);
-    text-align: fn.vars(text-align, $prefixes...);
+@mixin typography-props-bold($prefixes...) {
+  font-family: fn.vars(font-family, $prefixes...);
+  text-transform: fn.vars(text-transform, $prefixes...);
+  text-decoration: fn.vars(text-decoration, $prefixes...);
+  font-size: fn.vars(font-size, $prefixes...);
+  font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, bold)...);
+  line-height: fn.vars(line-height, $prefixes...);
+  letter-spacing: fn.vars(letter-spacing, $prefixes...);
+  text-indent: fn.vars(indent, $prefixes...);
+  font-variant: fn.vars(font-variant, $prefixes...);
+  text-align: fn.vars(text-align, $prefixes...);
+}
+
+@mixin typography-props($prefixes...) {
+  font-family: fn.var-no-fallbacks(--font-family, $prefixes...);
+  text-transform: fn.var-no-fallbacks(--text-transform, $prefixes...);
+  text-decoration: fn.var-no-fallbacks(--text-decoration, $prefixes...);
+  font-size: fn.var-no-fallbacks(--font-size, $prefixes...);
+  font-weight: fn.var-no-fallbacks(--font-weight, $prefixes...);
+  line-height: fn.var-no-fallbacks(--line-height, $prefixes...);
+  letter-spacing: fn.var-no-fallbacks(--letter-spacing, $prefixes...);
+  margin-top: fn.var-no-fallbacks(--margin, $prefixes...);
+  margin-top: fn.var-no-fallbacks(--margin-top, $prefixes...);
+  margin-bottom: fn.var-no-fallbacks(--margin, $prefixes...);
+  margin-bottom: fn.var-no-fallbacks(--margin-bottom, $prefixes...);
+  text-indent: fn.var-no-fallbacks(--indent, $prefixes...);
+  font-variant: fn.var-no-fallbacks(--font-variant, $prefixes...);
+  text-align: fn.var-no-fallbacks(--text-align, $prefixes...);
+}
+
+@mixin typography-container-props($prefixes...) {
+  max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
+  font-family: fn.var-with-fallbacks(
+    --body-font-family,
+    append($prefixes, var(--font-family))...
+  );
+
+  @include typography-props($prefixes...);
+  & :global(p),
+  :global(blockquote),
+  :global(dl),
+  :global(ul),
+  :global(ol) {
+    max-width: fn.var-with-fallbacks(--line-width, append($prefixes, 40em)...);
+    font-family: fn.var-with-fallbacks(
+      --body-font-family,
+      append($prefixes, var(--font-family))...
+    );
+    line-height: fn.var-with-fallbacks(
+      --line-height,
+      append($prefixes, 1.5)...
+    );
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: fn.var-no-fallbacks(--body-font-weight, $prefixes...);
   }
-  
-  @mixin typography-props ($prefixes...) {
-    font-family: fn.var-no-fallbacks(--font-family, $prefixes...);
-    text-transform: fn.var-no-fallbacks(--text-transform, $prefixes...);
-    text-decoration: fn.var-no-fallbacks(--text-decoration, $prefixes...);
-    font-size: fn.var-no-fallbacks(--font-size, $prefixes...);
-    font-weight: fn.var-no-fallbacks(--font-weight, $prefixes...);
-    line-height: fn.var-no-fallbacks(--line-height, $prefixes...);
-    letter-spacing: fn.var-no-fallbacks(--letter-spacing, $prefixes...);
-    margin-top: fn.var-no-fallbacks(--margin, $prefixes...);
-    margin-top: fn.var-no-fallbacks(--margin-top, $prefixes...);
-    margin-bottom: fn.var-no-fallbacks(--margin, $prefixes...);
-    margin-bottom: fn.var-no-fallbacks(--margin-bottom, $prefixes...);
-    text-indent: fn.var-no-fallbacks(--indent, $prefixes...);
-    font-variant: fn.var-no-fallbacks(--font-variant, $prefixes...);
-    text-align: fn.var-no-fallbacks(--text-align, $prefixes...);
-  }
-  
-  @mixin typography-container-props ($prefixes...) {
-  
+  & :global(h1),
+  :global(h2),
+  :global(h3),
+  :global(h4),
+  :global(h5),
+  :global(h6) {
+    @include color-props(heading);
     max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;
-    font-family: fn.var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
-  
-    @include typography-props($prefixes...);  
-    & :global(p),:global(blockquote),:global(dl),:global(ul),:global(ol), {
-      max-width: fn.var-with-fallbacks(--line-width, append($prefixes, 40em)...);
-      font-family: fn.var-with-fallbacks(--body-font-family, append($prefixes, var(--font-family))...);
-      line-height: fn.var-with-fallbacks(--line-height, append($prefixes, 1.5)...);
-      margin-left: auto;
-      margin-right: auto;
-      font-weight: fn.var-no-fallbacks(--body-font-weight, $prefixes...);
-    }  
-    & :global(h1),
-     :global(h2),
-     :global(h3),
-     :global(h4),
-     :global(h5),
-     :global(h6) {
-      
-      @include color-props(heading);
-      max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: fn.var-with-fallbacks(--heading-margin-bottom, append($prefixes, 0)...);
-      margin-top: fn.var-with-fallbacks(--heading-margin-top, append($prefixes, 1.5em)...);
-      /* Typography */
-      @include typography-props-bare(append(map-prefixes(heading, $prefixes), heading)...);
-      /* font-family: fn.var(--heading-font-family, var(--body-font-family, var(--font-family, inherit)));
+    margin-bottom: fn.var-with-fallbacks(
+      --heading-margin-bottom,
+      append($prefixes, 0)...
+    );
+    margin-top: fn.var-with-fallbacks(
+      --heading-margin-top,
+      append($prefixes, 1.5em)...
+    );
+    /* Typography */
+    @include typography-props-bare(
+      append(map-prefixes(heading, $prefixes), heading)...
+    );
+    /* font-family: fn.var(--heading-font-family, var(--body-font-family, var(--font-family, inherit)));
       font-size: fn.var(--heading-font-size, inherit);
       font-weight: fn.var(--heading-font-weight, var(--body-font-weight, var(--font-weight, inherit)));
       line-height: fn.var(--heading-line-height, var(--body-line-height, var(--line-height, inherit)));
@@ -82,48 +99,41 @@
       text-indent: fn.var(--heading-indent, var(--body-indent, var(--indent, inherit)));
       font-variant: fn.var(--heading-font-variant, var(--body-font-variant, var(--font-variant, inherit)));
       text-align: fn.var(--heading-text-align, var(--body-text-align, var(--text-align, inherit))); */
-    }  
-    
-  
-    & :global(p) {
-      @include typography-props-bare(
-        append(map-prefixes(
-            paragraph,
-            $prefixes
-        ),paragraph)...);
-    }
-    &   :global(p:first-of-type),
-      :global(h1 + p),
-      :global(h2 + p),
-      :global(h3 + p),
-      :global(h4 + p),
-      :global(h5 + p),
-      :global(h6 + p) {
-      @include typography-props-bare(
-        append(map-prefixes(
-            first-paragraph,
-            $prefixes
-        ),first-paragraph)...);
-        margin-block-start: fn.var-with-fallbacks(--first-paragraph-margin-top, append($prefixes, 0)...);
-      }
-    & :global(p:first-of-type::first-line) {
-      @include typography-props-bare(
-        append(map-prefixes-include-base(
-            first-line,
-            $prefixes
-        ),first-line)...);
-      
-    }
-  
-    & :global(p:first-of-type::first-letter) {    
-      @include typography-props-bare(
-        map-prefixes-include-base(
-          first-letter,
-          $prefixes
-        )...);
-      --link-bg: #{fn.vars(link-bg, $prefixes...)};
-      --link-fg: #{fn.vars(link-fg, $prefixes...)};
-      background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
-      color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};  
-    }  
   }
+
+  & :global(p) {
+    @include typography-props-bare(
+      append(map-prefixes(paragraph, $prefixes), paragraph)...
+    );
+  }
+  & :global(p:first-of-type),
+  :global(h1 + p),
+  :global(h2 + p),
+  :global(h3 + p),
+  :global(h4 + p),
+  :global(h5 + p),
+  :global(h6 + p) {
+    @include typography-props-bare(
+      append(map-prefixes(first-paragraph, $prefixes), first-paragraph)...
+    );
+    margin-block-start: fn.var-with-fallbacks(
+      --first-paragraph-margin-top,
+      append($prefixes, 0)...
+    );
+  }
+  & :global(p:first-of-type::first-line) {
+    @include typography-props-bare(
+      append(map-prefixes-include-base(first-line, $prefixes), first-line)...
+    );
+  }
+
+  & :global(p:first-of-type::first-letter) {
+    @include typography-props-bare(
+      map-prefixes-include-base(first-letter, $prefixes)...
+    );
+    --link-bg: #{fn.vars(link-bg, $prefixes...)};
+    --link-fg: #{fn.vars(link-fg, $prefixes...)};
+    background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
+    color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};
+  }
+}

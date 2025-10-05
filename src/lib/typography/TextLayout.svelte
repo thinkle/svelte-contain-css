@@ -1,6 +1,7 @@
 <script>
   export let id = "";
 </script>
+
 <div {id}>
   <slot />
 </div>
@@ -11,10 +12,15 @@
     @include typography-container-props(body, text);
     @include typography-props(body, text);
     width: var(--text-width, var(--body-width, 100%));
+    margin-inline-start: auto;
+    margin-inline-end: auto;
   }
 
   div :global(a) {
-    color: var(--body-link-fg, var(--text-link-fg, var(--link-fg, currentColor)));
+    color: var(
+      --body-link-fg,
+      var(--text-link-fg, var(--link-fg, currentColor))
+    );
     background-color: var(
       --body-link-bg,
       var(--text-link-bg, var(--link-bg, transparent))
@@ -31,7 +37,9 @@
       --body-link-underline-offset,
       var(--text-link-underline-offset, 0.2em)
     );
-    transition: color 120ms ease, background-color 120ms ease;
+    transition:
+      color 120ms ease,
+      background-color 120ms ease;
     @include focusable();
   }
 
@@ -39,11 +47,17 @@
   div :global(a:focus-visible) {
     color: var(
       --body-link-hover-fg,
-      var(--text-link-hover-fg, var(--link-hover-fg, var(--link-fg, currentColor)))
+      var(
+        --text-link-hover-fg,
+        var(--link-hover-fg, var(--link-fg, currentColor))
+      )
     );
     background-color: var(
       --body-link-hover-bg,
-      var(--text-link-hover-bg, var(--link-hover-bg, var(--link-bg, transparent)))
+      var(
+        --text-link-hover-bg,
+        var(--link-hover-bg, var(--link-bg, transparent))
+      )
     );
   }
 
