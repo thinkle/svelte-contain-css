@@ -42,22 +42,65 @@
   const updateHash = () => {
     hash = window.location.hash;
   };
+  let intersectionObserver: IntersectionObserver;
+
   onMount(() => {
     updateHash();
     window.addEventListener("hashchange", updateHash);
+
+    // Wait for initial render to complete
+
+    // Use Intersection Observer to watch when sections come into view
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const link = entry.target.id ? `#${entry.target.id}` : null;
+            if (link) {
+              const menuItem = menu.find((item) => item.link === link);
+              if (menuItem) {
+                theItem = menu.indexOf(menuItem);
+              }
+            }
+          }
+        });
+      },
+      {
+        rootMargin: "-100px 0px -50% 0px", // Trigger when element is 100px from top and 50% visible
+        threshold: 0,
+      }
+    );
+
+    // Observe all menu items with links
+    menu.forEach((item) => {
+      if (item.link && item.link.startsWith("#")) {
+        const element = document.querySelector(item.link);
+        if (element) {
+          intersectionObserver.observe(element);
+        }
+      }
+    });
+
     return () => {
       window.removeEventListener("hashchange", updateHash);
+      intersectionObserver.disconnect();
     };
   });
 
   let right: boolean = false;
+  let showHero = true;
 
   let menu: { name: string; link?: string; component?: any; demo?: string }[] =
     [
       { name: "Intro", link: "#Intro" },
       { name: "Installation", link: "#Installation" },
+      {
+        name: "Typography",
+        component: TypographyDemo,
+        demo: "Typography",
+        id: "typography",
+      },
       { name: "Layout" },
-      { name: "Typography", component: TypographyDemo, demo: "Typography" },
       { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
 
       { name: "Tabs", component: TabDemo, demo: "Tab" },
@@ -97,8 +140,7 @@
 
   let theDemo: SvelteComponent | null = null;
   let theItem = 0;
-  $: theDemo =
-    menu[theItem].component || menu.find((m) => m.component)?.component;
+  $: theDemo = menu[theItem].component;
 
   function changeItem(newIndex: number) {
     let delta = newIndex - theItem;
@@ -114,14 +156,23 @@
   let sideWidth = 50;
 </script>
 
-<Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
-  <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
-  <p>
-    The Simple Svelte Component Library that uses css variables & container
-    queries to make your life easier.
-  </p>
-</Hero>
-<Page {right} sticky>
+{#if showHero}
+  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+    <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
+    <p>
+      The Simple Svelte Component Library that uses css variables & container
+      queries to make your life easier.
+    </p>
+  </Hero>
+{/if}
+<Page
+  {right}
+  sticky
+  onStickyChange={(isSticking) => {
+    console.log("isSticking", isSticking);
+    showHero = !isSticking;
+  }}
+>
   <Bar slot="header" --bar-border-top="none" --side-width="{sideWidth}px">
     <div class="icon equal-width"></div>
     <h1><em>ContainCSS</em></h1>
@@ -218,15 +269,15 @@
         >
       {/if}
       <svelte:component this={theDemo} />
-      {#if theItem < menu.length - 1}
-        {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
-        {#if nextItem}
-          <Bar --bar-justify="end">
-            <Button on:click={() => changeItem(menu.indexOf(nextItem))}>
-              Next: {nextItem.name}
-            </Button>
-          </Bar>
-        {/if}
+    {/if}
+    {#if theItem < menu.length - 1}
+      {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
+      {#if nextItem}
+        <Bar --bar-justify="end">
+          <Button on:click={() => changeItem(menu.indexOf(nextItem))}>
+            Next: {nextItem.name}
+          </Button>
+        </Bar>
       {/if}
     {/if}
   </div>

@@ -12,6 +12,7 @@
   export let height: string | null = null;
   export let bg: string | null = null;
   export let fg: string | null = null;
+  export let onStickyChange: (stuck: boolean) => void = () => {};
 
   let style = injectVars($$props, "page", [
     "bg",
@@ -43,7 +44,15 @@
       const computedTopStyle =
         getComputedStyle(pageElement).getPropertyValue("top");
       const computedTop = parseFloat(computedTopStyle);
+      console.log("rect.top is ", rect.top, " computedTop is ", computedTop);
       const isSticking = rect.top <= computedTop;
+      if (isSticking && freeze) {
+        console.log("sticky stuck!");
+        onStickyChange(true);
+      } else if (!isSticking && !freeze) {
+        console.log("sticky unstuck!");
+        onStickyChange(false);
+      }
       freeze = !isSticking;
     }
   }
