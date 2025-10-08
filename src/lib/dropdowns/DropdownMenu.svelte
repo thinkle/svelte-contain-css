@@ -125,7 +125,7 @@
       }
     }
     // Set dropdown menu width to match button width
-    cssVariableContext += `--dropdown-menu-width: ${buttonStyle.width};`;
+    cssVariableContext += `--dropdown-menu-min-width: ${buttonStyle.width};`;
   }
   let popoverDiv: HTMLDivElement;
 </script>
@@ -193,6 +193,7 @@
   }
   .dropdown-content {
     width: var(--dropdown-menu-width, 12em);
+    min-width: var(--dropdown-menu-min-width, 12em);
     @include box-shadow(dropdown-menu, dropdown);
     @include box-props-square-border(dropdown-menu, menu, container);
     padding: 0;
