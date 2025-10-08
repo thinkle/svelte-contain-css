@@ -180,7 +180,7 @@
 <CssWrapper variables={cssValues}>
   <Container>
     <TextLayout>
-      <h2>Typography</h2>
+      <h2 id="typography">Typography</h2>
       <p>
         If you wrap an element in a
         <code>TextLayout</code> container, we will automatically apply some basic
