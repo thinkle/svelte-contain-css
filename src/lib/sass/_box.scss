@@ -1,112 +1,132 @@
+@use "functions" as fn;
 
-@use 'functions' as fn;
+@mixin padding-props($prefixes...) {
+  padding: fn.var-with-fallbacks(--padding, append($prefixes, 4px)...);
+}
 
-@mixin padding-props ($prefixes...) {
-    padding: fn.var-with-fallbacks(--padding, append($prefixes, 4px)...);
-  }
-  
-  @mixin border-props-border ($prefixes...) {
-    border: fn.var-with-fallbacks(
-      --border, 
-      append(
-        $prefixes, 
-        var(--border-width, 1px) var(--border-style, solid) var(--border-color, var(--fg))
-      )...);  
-    $directions: (
-      top,
-      right,
-      bottom,
-      left
-    );
-    $rectProps : (border);
-  
-    // Loop through each direction
-    @each $dir in $directions {
-      // Apply prop for each direction
-       @each $p in $rectProps {
-        /* #{$p}-#{$dir}: fn.var-with-fallbacks(--#{$p}-#{$dir},
+@mixin border-props-border($prefixes...) {
+  border: fn.var-with-fallbacks(
+    --border,
+    append(
+        $prefixes,
+        var(--border-width, 1px) var(--border-style, solid)
+          var(--border-color, var(--fg))
+      )...
+  );
+  $directions: (top, right, bottom, left);
+  $rectProps: (border);
+
+  // Loop through each direction
+  @each $dir in $directions {
+    // Apply prop for each direction
+    @each $p in $rectProps {
+      /* #{$p}-#{$dir}: fn.var-with-fallbacks(--#{$p}-#{$dir},
           append($prefixes,          
             fn.var-with-fallbacks(--border,$prefixes...)
           )...) */
-      } 
     }
   }
-  @mixin border-props-none ($prefixes...) {
-    border: fn.var-with-fallbacks(--border, append($prefixes,inherit)...);
-    $directions: (
-      top,
-      right,
-      bottom,
-      left
-    );
-  $rectProps : (border);
-  
+}
+@mixin border-props-none($prefixes...) {
+  border: fn.var-with-fallbacks(--border, append($prefixes, inherit)...);
+  $directions: (top, right, bottom, left);
+  $rectProps: (border);
+
   // Loop through each direction
   @each $dir in $directions {
-  
     // Apply prop for each direction
     @each $p in $rectProps {
-      #{$p}-#{$dir}: fn.var-with-fallbacks(--#{$p}-#{$dir},
-        append($prefixes,
-          fn.var-with-fallbacks(--border,append($prefixes,none)...)
-        )...);
+      #{$p}-#{$dir}: fn.var-with-fallbacks(
+        --#{$p}-#{$dir},
+        append(
+            $prefixes,
+            fn.var-with-fallbacks(--border, append($prefixes, none)...)
+          )...
+      );
     }
   }
-  }
-  
-  @mixin box-props-square-border($prefixes...) {
-    box-sizing: border-box;
-    
-    @include border-props-border($prefixes...);
-    @include padding-props($prefixes...);
-    border-radius: fn.var-with-fallbacks(--square-radius, append($prefixes, 0)...);
-  }
-  
-  @mixin box-props-square($prefixes...) {
-    box-sizing: border-box;   
-    @include border-props-none($prefixes...);
-    @include padding-props($prefixes...);
-    border-radius: fn.var-with-fallbacks(--square-radius, append($prefixes, 0)...);
-  }
-  
-  @mixin box-props($prefixes...) {
-    // Using the fn.var-with-fallbacks function for each property
-    box-sizing: border-box;
-    @include padding-props($prefixes...);
-    @include border-props-none($prefixes...);
-    border-radius: fn.var-with-fallbacks(--border-radius, append($prefixes,none)...);
-  }
-  
-  @mixin box-props-border($prefixes...) {
-    box-sizing: border-box;
-    @include border-props-border($prefixes..., var(--border-width, 1px) var(--border-style, solid) var(--border-color, var(--fg)));
-    @include padding-props($prefixes...);
-    border-radius: fn.var-with-fallbacks(--radius, append($prefixes, 0)...); 
-  }
-  
-  @mixin box-props-bottom ($prefixes...) {
-    // Using the fn.var-with-fallbacks function for each property
-    box-sizing: border-box;
-    @include padding-props($prefixes...);
-    @include border-props-none($prefixes...);
-    border-bottom-right-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
-    border-bottom-left-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
-  }
-  @mixin box-props-top ($prefixes...) {
-    // Using the fn.var-with-fallbacks function for each property
-    box-sizing: border-box;
-    @include padding-props($prefixes...);
-    @include border-props-none($prefixes...);  
-    border-top-right-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
-    border-top-left-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
-  }
-  
-  @mixin box-shadow($prefixes...) {  
-    //works:  
-    $shadow-distance: fn.var-with-fallbacks(--shadow-distance, append($prefixes, var(--space-md))...);
-    $shadow-blur: fn.var-with-fallbacks(--shadow-blur, append($prefixes, var(--space))...);
-    $shadow-color: fn.var-with-fallbacks(--shadow-color, append($prefixes, rgba(127, 127, 127, 0.4))...);
-    
-    box-shadow: $shadow-distance $shadow-distance $shadow-blur $shadow-color;
-  }
-  
+}
+
+@mixin box-props-square-border($prefixes...) {
+  box-sizing: border-box;
+
+  @include border-props-border($prefixes...);
+  @include padding-props($prefixes...);
+  border-radius: fn.var-with-fallbacks(
+    --square-radius,
+    append($prefixes, 0)...
+  );
+}
+
+@mixin box-props-square($prefixes...) {
+  box-sizing: border-box;
+  @include border-props-none($prefixes...);
+  @include padding-props($prefixes...);
+  border-radius: fn.var-with-fallbacks(
+    --square-radius,
+    append($prefixes, 0)...
+  );
+}
+
+@mixin box-props($prefixes...) {
+  // Using the fn.var-with-fallbacks function for each property
+  box-sizing: border-box;
+  @include padding-props($prefixes...);
+  @include border-props-none($prefixes...);
+  border-radius: fn.var-with-fallbacks(
+    --border-radius,
+    append($prefixes, none)...
+  );
+}
+
+@mixin box-props-border($prefixes...) {
+  box-sizing: border-box;
+  @include border-props-border(
+    $prefixes...,
+    var(--border-width, 1px) var(--border-style, solid)
+      var(--border-color, var(--fg))
+  );
+  @include padding-props($prefixes...);
+  border-radius: fn.var-with-fallbacks(--radius, append($prefixes, 0)...);
+}
+
+@mixin box-props-bottom($prefixes...) {
+  // Using the fn.var-with-fallbacks function for each property
+  box-sizing: border-box;
+  @include padding-props($prefixes...);
+  @include border-props-none($prefixes...);
+  border-bottom-right-radius: fn.var-with-fallbacks(
+    --border-radius,
+    $prefixes...
+  );
+  border-bottom-left-radius: fn.var-with-fallbacks(
+    --border-radius,
+    $prefixes...
+  );
+}
+@mixin box-props-top($prefixes...) {
+  // Using the fn.var-with-fallbacks function for each property
+  box-sizing: border-box;
+  @include padding-props($prefixes...);
+  @include border-props-none($prefixes...);
+  border-top-right-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
+  border-top-left-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
+}
+
+@mixin box-shadow($prefixes...) {
+  //works:
+  $shadow-distance: fn.var-with-fallbacks(
+    --shadow-distance,
+    append($prefixes, var(--space))...
+  );
+  $shadow-blur: fn.var-with-fallbacks(
+    --shadow-blur,
+    append($prefixes, var(--space))...
+  );
+  $shadow-color: fn.var-with-fallbacks(
+    --shadow-color,
+    append($prefixes, rgba(127, 127, 127, 0.4))...
+  );
+
+  box-shadow: $shadow-distance $shadow-distance $shadow-blur $shadow-color;
+}
