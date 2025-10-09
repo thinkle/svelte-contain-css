@@ -102,12 +102,12 @@
       right: 0;
     }
     .edge-bar {
+      @include color-props(grab-bar, sidebar);
       position: absolute;
       right: 0;
       top: 0;
       height: 100%;
       width: var(--grab-bar-width);
-      background: var(--body-bg);
       display: flex;
       flex-direction: column;
       justify-content: center;
