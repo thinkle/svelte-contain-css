@@ -112,6 +112,7 @@
   }
 
   table > :global(tbody > tr > td),
+  table > :global(tbody > tr > th),
   table > :global(thead > tr > th),
   table > :global(tr > td),
   table > :global(tr > th) {
