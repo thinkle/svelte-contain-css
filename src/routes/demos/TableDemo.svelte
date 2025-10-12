@@ -34,6 +34,22 @@
       <tr><td>Banana</td> <td>Yellow</td></tr>
       <tr><td>Orange</td> <td>Orange</td></tr>
     </Table>
+    <p>
+      If you want sticky headers, it's best to use our separate slot for
+      <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> so we can create
+      two separate tables for rendering/stacking purposes.
+    </p>
+    <Code
+      code={`
+  <Table sticky>
+    <thead slot="thead">
+      <!-- your sticky content here-->
+    </thead>
+    <tbody slot="tbody">
+      <!-- your scrollable content here-->
+  </Table>
+  `}
+    />
     <Table sticky>
       <thead slot="thead">
         <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
