@@ -1,12 +1,17 @@
 <script lang="ts">
-  export let checked: boolean;
-
+  export let checked: boolean | undefined = undefined;
+  export let name: string = "";
   /* Styling properties */
   import { injectVars } from "$lib/util";
+  /* svelte-ignore unused-export-let */
   export let bg: string | null = null;
+  /* svelte-ignore unused-export-let */
   export let fg: string | null = null;
+  /* svelte-ignore unused-export-let */
   export let padding: string | null = null;
+  /* svelte-ignore unused-export-let */
   export let width: string | null = null;
+  /* svelte-ignore unused-export-let */
   export let height: string | null = null;
   let style = injectVars($$props, "checkbox", [
     "bg",
@@ -15,9 +20,12 @@
     "width",
     "height",
   ]);
+
   export let value: any = undefined;
-  // default group to an empty array so code that calls group.indexOf(...) won't throw
-  export let group: any = [];
+  export let group: any = undefined;
+
+  // Determine if we're using group binding or checked binding
+  $: useGroup = group !== undefined && value !== undefined;
 
   let ref: HTMLElement;
   let labelContent: string = "";
@@ -31,23 +39,38 @@
 
 <div class="label-sizing-box">
   <label class="checkbox-item">
-    <input
-      type="checkbox"
-      bind:checked
-      bind:group
-      {value}
-      on:change
-      on:click
-      on:blur
-      on:focus
-      on:focusin
-      on:focusout
-      {...$$restProps}
-    />
+    {#if useGroup}
+      <input
+        name={name || undefined}
+        type="checkbox"
+        {value}
+        bind:group
+        on:change
+        on:click
+        on:blur
+        on:focus
+        on:focusin
+        on:focusout
+        {...$$restProps}
+      />
+    {:else}
+      <input
+        name={name || (ref && ref.textContent) || undefined}
+        type="checkbox"
+        bind:checked
+        on:change
+        on:click
+        on:blur
+        on:focus
+        on:focusin
+        on:focusout
+        {...$$restProps}
+      />
+    {/if}
     <span bind:this={ref}><slot /></span>
   </label>
-  <label class="invisible">
-    <input type="checkbox" checked={true} />
+  <label class="invisible" aria-hidden="true">
+    <input type="checkbox" checked={true} tabindex="-1" />
     <span>{@html labelContent}</span>
   </label>
 </div>
