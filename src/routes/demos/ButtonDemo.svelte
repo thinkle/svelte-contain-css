@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
+  import ButtonLink from "$lib/controls/ButtonLink.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Container from "$lib/layout/Container.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
@@ -22,6 +23,7 @@
 </Button>
 <Button primary={true}>Primary Button</Button>
 <Button disabled>Disabled Button</Button>
+<ButtonLink href="https://example.com" target="_blank">Link Button</ButtonLink>
 <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
 <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
   />
@@ -35,7 +37,12 @@
     <Button warning={true}>Warning Button</Button>
     <Button primary={true}>Primary Button</Button>
     <Button disabled>Disabled Button</Button>
-    <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
+    <ButtonLink href="https://example.com" target="_blank"
+      >Link Button</ButtonLink
+    >
+    <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white"
+      >+</MiniButton
+    >
     <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
   </CssVariableDemo>
 </Container>
