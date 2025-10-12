@@ -111,41 +111,90 @@
   let val2 = true;
   let val3 = false;
 
+  let toppings = [
+    "Lettuce",
+    "Tomato",
+    "Onion",
+    "Pickles",
+    "Cheese",
+    "Bacon",
+    "Avocado",
+    "Mushrooms",
+    "Jalapenos",
+    "Peppers",
+    "Olives",
+    "Spinach",
+    "Cucumber",
+    "Carrots",
+    "Sprouts",
+    "Egg",
+  ];
+  let selectedToppings = ["Bacon", "Lettuce", "Tomato"];
+
   function updateEventInfo(event: Event) {
     console.info("Check event: ", event);
   }
+  $: console.log("Selected toppings: ", selectedToppings);
 </script>
 
 <CssVariableDemo variables={checkboxCSSVariables}>
   <TextLayout>
     <h2>Checkboxes</h2>
     <p>Customize the style of checkboxes with CSS variables.</p>
+
+    <Checkbox
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={updateEventInfo}
+      bind:checked={val}>Lettuce</Checkbox
+    >
+    <Checkbox
+      --checkbox-checked-bg="red"
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={updateEventInfo}
+      bind:checked={val2}>Tomato</Checkbox
+    >
+    <Checkbox
+      on:blur={updateEventInfo}
+      on:click={updateEventInfo}
+      on:change={(e) => {
+        updateEventInfo(e);
+        val3 = !val3;
+      }}
+      checked={val3}>Onion</Checkbox
+    >
+    <p>Note, we can customize the checked state if we want!</p>
+    <Code
+      code={`<Checkbox --checkbox-checked-bg="red" bind:checked={val}>Option</Checkbox>`}
+    />
+
+    <p>
+      You can also bind <code>value</code> and <code>group</code> if you prefer and
+      get back an array of values, as with the native checkbox.
+    </p>
+    <p>So if you have...</p>
+    <Code
+      code={`let toppings = ['Lettuce', 'Tomato', 'Onion', 'Pickles', 'Cheese', 'Bacon', 'Avocado', 'Mushrooms', 'Jalapenos', 'Peppers', 'Olives', 'Spinach', 'Cucumber', 'Carrots', 'Sprouts', 'Egg'];
+  let selectedToppings = ['Bacon','Lettuce','Tomato'];`}
+      language="javascript"
+    />
+    <p>Then you can do this:</p>
+    {#each toppings as topping}
+      <Checkbox bind:group={selectedToppings} value={topping}
+        >{topping}</Checkbox
+      >
+    {/each}
+    <p>Selected: {selectedToppings.join(", ")}</p>
+    <p>Or native this would be</p>
+    {#each toppings as topping}
+      <label
+        ><input
+          type="checkbox"
+          bind:group={selectedToppings}
+          value={topping}
+        />{topping}
+      </label>
+    {/each}
   </TextLayout>
-
-  <Checkbox
-    on:blur={updateEventInfo}
-    on:click={updateEventInfo}
-    on:change={updateEventInfo}
-    bind:checked={val}>Lettuce</Checkbox
-  >
-  <Checkbox
-    --checkbox-checked-bg="red"
-    on:blur={updateEventInfo}
-    on:click={updateEventInfo}
-    on:change={updateEventInfo}
-    bind:checked={val2}>Tomato</Checkbox
-  >
-  <Checkbox
-    on:blur={updateEventInfo}
-    on:click={updateEventInfo}
-    on:change={(e) => {
-      updateEventInfo(e);
-      val3 = !val3;
-    }}
-    checked={val3}>Onion</Checkbox
-  >
-
-  <Code
-    code={`<Checkbox --checkbox-checked-bg="red" bind:checked={val}>Option</Checkbox>`}
-  />
 </CssVariableDemo>
