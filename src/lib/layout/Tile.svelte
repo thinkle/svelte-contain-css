@@ -96,7 +96,11 @@
     @include color-props(tile-checkbox, checkbox, toggle, secondary);
   }
   .checkbox input {
-    display: none;
+    @include visually-hidden();
+  }
+
+  label:has(input:focus-visible) {
+    @include focus-ring();
   }
 
   .checkbox:has(input:checked) {
@@ -111,7 +115,7 @@
   .checkbox:has(input:checked)::after {
     content: var(--tile-checkbox-check, var(--checkbox-check, "✓"));
     font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
-    color: var-with-fallbacks(--fg, checkbox-checked, toggle-on, checkbox);
+
     animation: checkbox-check var(--checkbox-transition) ease-in-out;
   }
 
