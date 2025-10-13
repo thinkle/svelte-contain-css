@@ -259,9 +259,11 @@
       {/each}
     </MenuList>
   </Sidebar>
-  <IntroOverview id="Intro" />
-  <Installation id="Installation" />
-  <div id="demo-area">
+  {#if !theDemo}
+    <IntroOverview id="Intro" />
+    <Installation id="Installation" />
+  {/if}
+  <div id="demo-area" class:empty={!theDemo}>
     {#if theDemo}
       {#if menu[theItem].demo}
         <a href="{base}/component/{menu[theItem].demo}" target="_blank"
@@ -274,13 +276,22 @@
       {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
       {#if nextItem}
         <Bar --bar-justify="end">
-          <Button on:click={() => changeItem(menu.indexOf(nextItem))}>
+          {#if theDemo}
+            <Button
+              secondary
+              on:click={() => {
+                theDemo = null;
+              }}>Back to Overview</Button
+            >
+          {/if}
+          <Button primary on:click={() => changeItem(menu.indexOf(nextItem))}>
             Next: {nextItem.name}
           </Button>
         </Bar>
       {/if}
     {/if}
   </div>
+
   <!-- Help Svelte Pre-Render routes... -->
   <div class="hidden">
     {#each menu as item}
@@ -307,5 +318,12 @@
     background-color: var(--secondary-bg);
     color: var(--secondary-fg);
     padding: var(--padding);
+  }
+  #demo-area {
+    min-height: 100dvh;
+    box-sizing: border-box;
+  }
+  #demo-area.empty {
+    min-height: 0;
   }
 </style>
