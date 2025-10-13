@@ -130,6 +130,8 @@
   let popoverDiv: HTMLDivElement;
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <nav class="dropdown-menu" on:keydown={handleKeystroke}>
   <button bind:this={buttonElement} on:click={triggerMenu} popovertarget={id}>
     <slot name="label">Menu</slot>
@@ -143,6 +145,7 @@
     style:left="{dropdownLeft}px"
     style:max-height="{dropdownMaxHeight}px"
   >
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
       class="dropdown-content"
       bind:this={dropdownContentElement}

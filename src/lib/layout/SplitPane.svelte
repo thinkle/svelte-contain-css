@@ -95,12 +95,17 @@
   <div class="left" bind:this={leftPane}>
     <slot name="left" />
   </div>
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
   <div
     bind:this={resizerDiv}
     class="resizer"
     tabindex="0"
-    aria-role="resizer"
-    on:mousedown={onMouseDown}
+    role="separator"
+    aria-orientation="vertical"
+    aria-label="Resize Pane"
+    on:pointerdown={onMouseDown}
     on:keydown={onKeyUp}
   ></div>
   <div class="right" bind:this={rightPane}>

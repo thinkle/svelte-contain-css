@@ -25,9 +25,7 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
-  .tile,
-  .tile label,
-  .tile button {
+  .tile {
     border: var(
       --tile-border,
       var(--border-width) var(--border-style) var(--border-color)
