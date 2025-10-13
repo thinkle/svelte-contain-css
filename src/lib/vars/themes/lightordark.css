@@ -11,8 +11,8 @@
     --container-fg: var(--material-color-blue-grey-800);
     --sidebar-bg: var(--material-color-blue-grey-50);
     --sidebar-fg: var(--material-color-blue-grey-900);
-    --menu-bg: var(--material-color-blue-grey-50);
-    --menu-fg: var(--material-color-blue-grey-900);
+    /* --menu-bg: var(--material-color-blue-grey-50);
+    --menu-fg: var(--material-color-blue-grey-900); */
     --primary-bg: var(--material-color-blue-700);
     --primary-fg: var(--material-color-blue-grey-50);
     --secondary-bg: var(--material-color-blue-grey-100);
@@ -74,8 +74,8 @@
     --container-fg: var(--material-color-blue-grey-50);
     --sidebar-bg: var(--material-color-blue-grey-900);
     --sidebar-fg: var(--material-color-blue-grey-50);
-    --menu-bg: var(--material-color-blue-grey-900);
-    --menu-fg: var(--material-color-blue-grey-50);
+    /* --menu-bg: var(--material-color-blue-grey-900);
+    --menu-fg: var(--material-color-blue-grey-50); */
     --primary-bg: var(--material-color-light-blue-100);
     --primary-fg: var(--material-color-blue-grey-800);
     --warning-fg: var(--white);

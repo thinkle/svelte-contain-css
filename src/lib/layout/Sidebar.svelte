@@ -231,8 +231,6 @@
       --top: calc(var(--padding) + var(--icon-size));
       left: var(--padding);
       width: var(--sidebar-width);
-      background: var(--sidebar-bg);
-      color: var(--sidebar-fg);
       z-index: 2;
     }
   }

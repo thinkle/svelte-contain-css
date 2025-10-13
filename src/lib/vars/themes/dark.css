@@ -7,6 +7,7 @@
   --container-fg: var(--material-color-grey-100);
   --primary-bg: var(--material-color-light-blue-500);
   --primary-fg: var(--material-color-grey-100);
+  --sidebar-bg: var(--material-color-grey-900);
   --secondary-bg: var(--material-color-grey-300);
   --secondary-fg: var(--material-color-grey-900);
   --hover-filter: brightness(1.1) contrast(1.5);
