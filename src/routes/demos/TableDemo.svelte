@@ -1,12 +1,14 @@
 <script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
+  import MiniButton from "$lib/controls/MiniButton.svelte";
   import Table from "$lib/layout/Table.svelte";
   import Code from "$lib/misc/Code.svelte";
 
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { tableVars } from "./cssVariableDefs";
+  let widthModifier = 0;
 </script>
 
 <CssVariableDemo variables={tableVars}>
@@ -50,12 +52,21 @@
   </Table>
   `}
     />
+    <p>
+      Click plus (<MiniButton on:click={() => (widthModifier += 1)}
+        >+</MiniButton
+      >) to change header size and watch scrolly table resize properly
+    </p>
     <Table sticky>
       <thead slot="thead">
         <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
       </thead>
       <tbody slot="tbody">
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+        <tr
+          ><th
+            >Yankees{#each Array(widthModifier) as _}~{/each}
+          </th><td>100</td><td>62</td></tr
+        >
         <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
         <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
         <tr><th>Orioles</th><td>52</td><td>110</td></tr>
