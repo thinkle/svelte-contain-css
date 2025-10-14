@@ -1,19 +1,41 @@
 <script lang="ts">
   export let sticky = false;
-  $$slots.head;
   export let column_widths: number[] | null = null;
   let columns = column_widths || [];
 
   /* Code for syncing column widths for scrolling table solution */
   let headClone: HTMLTableElement | null = null;
   let bodyClone: HTMLTableElement | null = null;
+  let resizeObserver: ResizeObserver | null = null;
+  let tableWidth = null;
   $: if (!column_widths) {
     // If no column widths provided, reset columns to empty
     columns = [];
     if ($$slots.thead && sticky && headClone && bodyClone) {
       syncColumnWidths();
+      // Set up ResizeObserver to keep columns in sync when content or size changes
+      if (
+        !resizeObserver &&
+        typeof window !== "undefined" &&
+        window.ResizeObserver
+      ) {
+        resizeObserver = new ResizeObserver(() => {
+          syncColumnWidths();
+        });
+        if (headClone) resizeObserver.observe(headClone);
+        if (bodyClone) resizeObserver.observe(bodyClone);
+      }
     }
   }
+  import { onDestroy } from "svelte";
+  onDestroy(() => {
+    if (resizeObserver) {
+      if (headClone) resizeObserver.unobserve(headClone);
+      if (bodyClone) resizeObserver.unobserve(bodyClone);
+      resizeObserver.disconnect();
+      resizeObserver = null;
+    }
+  });
 
   function syncColumnWidths() {
     // Get the first row of each table
@@ -34,14 +56,28 @@
       }
     }
     columns = maxColWidths;
-    console.log("Columns are : ", columns);
+
+    // After syncing, fit colgroup to table width if needed
+    fitTableToColGroup(columns);
+  }
+
+  function fitTableToColGroup(columns: number[]) {
+    let totalWidth = 0;
+    for (let c of columns) {
+      totalWidth += c;
+    }
+    tableWidth = totalWidth;
   }
 </script>
 
 {#if sticky}
   {#if $$slots.thead}
     <div class="scrolling-table">
-      <table class="fixed-table-head">
+      <table
+        class="fixed-table-head"
+        style:width="{tableWidth}px"
+        style:max-width="{tableWidth}px"
+      >
         <colgroup>
           {#each columns as width}
             <col style="width: {width}px" />
@@ -49,7 +85,11 @@
         </colgroup>
         <slot name="thead" />
       </table>
-      <table class="scrolling-table-body">
+      <table
+        class="scrolling-table-body"
+        style:width="{tableWidth}px"
+        style:max-width="{tableWidth}px"
+      >
         <colgroup>
           {#each columns as width}
             <col style="width: {width}px" />
