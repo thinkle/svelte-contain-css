@@ -1,15 +1,26 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
   import { injectVars } from "./util";
-  export let center: boolean = false;
-  export let fixedHeight = false;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
+  import type { Snippet } from "svelte";
 
-  let cssVars = injectVars($$props, "card", [
+  let {
+    header,
+    footer,
+    children,
+    height = "",
+    fixedHeight,
+    center,
+    ...restProps
+  }: {
+    header?: Snippet;
+    footer?: Snippet;
+    children?: Snippet;
+    center?: boolean;
+    height?: string;
+    fixedHeight?: boolean;
+    [key: string]: any;
+  } = $props();
+
+  let cssVars = injectVars({ height, ...restProps }, "card", [
     "bg",
     "fg",
     "padding",
@@ -17,23 +28,26 @@
     "height",
   ]);
 
-  $: if (height) {
-    fixedHeight = true;
-  }
+  const forceFixedHeight = (h: string) => {
+    if (h && !fixedHeight) {
+      fixedHeight = true;
+    }
+  };
+  $effect(() => forceFixedHeight(height));
 
-  let hasHeader = $$slots.header;
-  let hasFooter = $$slots.footer;
+  let hasHeader = $derived(Boolean(header));
+  let hasFooter = $derived(Boolean(footer));
 </script>
 
 <div class="card" class:center class:fixedHeight style={cssVars}>
   <header class:hide={!hasHeader}>
-    <slot name="header" />
+    {#if header}{@render header()}{/if}
   </header>
   <section>
-    <slot />
+    {#if children}{@render children()}{/if}
   </section>
   <footer class:hide={!hasFooter}>
-    <slot name="footer" />
+    {#if footer}{@render footer()}{/if}
   </footer>
 </div>
 
