@@ -258,14 +258,17 @@
   .fixed-table-head {
     margin-bottom: 0;
     padding-bottom: 0;
-    border-bottom: 0;
     box-shadow: 0;
-    border-bottom: var(--table-first-row-bottom-border, 3px) solid
-      var(--table-first-row-border-color, var(--secondary-bg));
+    border-bottom: none;
   }
   .scrolling-table-body {
     margin-top: 0;
     padding-top: 0;
+    border-top: none;
+  }
+  .scrolling-table-body :global(tbody > tr:first-child > td),
+  .scrolling-table-body :global(tbody > tr:first-child > th) {
+    border-top: none;
   }
   .visually-hidden {
     visibility: hidden;
