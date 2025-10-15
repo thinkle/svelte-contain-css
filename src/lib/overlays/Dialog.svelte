@@ -1,21 +1,35 @@
 <!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
 <script lang="ts">
-  import { afterUpdate } from "svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
-  import Container from "$lib/layout/Container.svelte";
   import { copyCSSVariables, injectVars } from "$lib/util";
-  export let onClose = () => {};
-  export let open = true;
-  export let modal = true;
-  let style = injectVars($$props, "dialog", []);
-  afterUpdate(() => {
+  import type { Snippet } from "svelte";
+
+  type PropsType = {
+    open?: boolean;
+    modal?: boolean;
+    children?: Snippet;
+    onClose?: () => void;
+  } & Record<string, unknown>;
+
+  let {
+    open = true,
+    modal = true,
+    children,
+    onClose = () => {},
+    ...restProps
+  }: PropsType = $props();
+
+  let style = injectVars(restProps, "dialog", []);
+  $effect(() => {
+    console.log("Go!");
     if (dialogElement) {
       if (open) {
+        console.log("We are open", dialogElement);
         if (modal) {
-          //copyCSSVariables(ref, dialogElement);
+          copyCSSVariables(ref, dialogElement);
           dialogElement.showModal();
         } else {
-          //copyCSSVariables(ref, dialogElement);
+          copyCSSVariables(ref, dialogElement);
           dialogElement.show();
         }
       } else if (dialogElement) {
@@ -30,8 +44,8 @@
 
 <section {style}>
   <div class="variable-placeholder" bind:this={ref}></div>
-  <dialog bind:this={dialogElement} on:close={onClose}>
-    <slot />
+  <dialog bind:this={dialogElement} onclose={onClose}>
+    {@render children?.()}
     <div class="close-button">
       <MiniButton onclick={onClose}>&times;</MiniButton>
     </div>
