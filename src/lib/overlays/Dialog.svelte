@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: Can't migrate code with afterUpdate. Please migrate by hand. -->
 <script lang="ts">
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import { copyCSSVariables, injectVars } from "$lib/util";
