@@ -1,6 +1,5 @@
 <script lang="ts">
   import Bar from "$lib/layout/Bar.svelte";
-
   import Menu from "$lib/dropdowns/DropdownMenu.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Container from "$lib/layout/Container.svelte";
@@ -8,6 +7,7 @@
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import Button from "$lib/controls/Button.svelte";
+  import Option from "$lib/controls/Option.svelte";
   let longList: string[] = [];
   let constrainedWidth = "80px";
   function randomWord() {
@@ -121,10 +121,10 @@
   <FormItem>
     <span slot="label">Select an option:</span>
     <Select bind:value={val}>
-      <option value={1}>Option A</option>
-      <option value={2}><b>Strong</b> B</option>
-      <option value={3}><em>Fancy</em> C</option>
-      <option value={4}><span style="color:red">Red</span> D</option>
+      <Option value={1}>Option A</Option>
+      <Option value={2}><b>Strong</b> B</Option>
+      <Option value={3}><em>Fancy</em> C</Option>
+      <Option value={4}><span style="color:red">Red</span> D</Option>
     </Select>
   </FormItem>
   <Code
@@ -157,10 +157,10 @@
     <FormItem>
       <span slot="label">A narrower select:</span>
       <Select --select-width={constrainedWidth} bind:value={val}>
-        <option value={1}>Option A</option>
-        <option value={2}><b>Strong</b> B</option>
-        <option value={3}><em>Fancy</em> C</option>
-        <option value={4}><span style="color:red">Red</span> D</option>
+        <Option value={1}>Option A</Option>
+        <Option value={2}><b>Strong</b> B</Option>
+        <Option value={3}><em>Fancy</em> C</Option>
+        <Option value={4}><span style="color:red">Red</span> D</Option>
       </Select>
     </FormItem>
     <Code
