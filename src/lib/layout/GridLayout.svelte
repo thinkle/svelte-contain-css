@@ -1,11 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
   let grid: HTMLDivElement;
-  export let id = "";
+  interface Props {
+    id?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { id = "", children }: Props = $props();
 </script>
 
 <div class="grid-layout" {id}>
-  <slot />
+  {@render children?.()}
 </div>
 
 <style lang="scss">

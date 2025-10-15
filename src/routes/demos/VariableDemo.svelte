@@ -91,12 +91,12 @@
     ].map((v) => ({ name: v, type: "color", placeholder: "#110042" })),
   };
   let modes = ["color", "typography", "layout"];
-  let values = {
+  let values = $state({
     typography: {},
     layout: {},
     color: {},
-  };
-  let mode: "typography" | "layout" | "color" = "layout";
+  });
+  let mode: "typography" | "layout" | "color" = $state("layout");
 </script>
 
 <CssWrapper
@@ -139,21 +139,23 @@
       </p>
     </TextLayout>
     <Page right>
-      <Sidebar slot="sidebar" right>
-        <MenuList>
-          <li>
-            <a href="#layout-vars" on:click={() => (mode = "layout")}>Layout</a>
-          </li>
-          <li>
-            <a href="#typography-vars" on:click={() => (mode = "typography")}
-              >Typography</a
-            >
-          </li>
-          <li>
-            <a href="#color-vars" on:click={() => (mode = "color")}>Colors</a>
-          </li>
-        </MenuList>
-      </Sidebar>
+      {#snippet sidebar()}
+            <Sidebar  right>
+          <MenuList>
+            <li>
+              <a href="#layout-vars" onclick={() => (mode = "layout")}>Layout</a>
+            </li>
+            <li>
+              <a href="#typography-vars" onclick={() => (mode = "typography")}
+                >Typography</a
+              >
+            </li>
+            <li>
+              <a href="#color-vars" onclick={() => (mode = "color")}>Colors</a>
+            </li>
+          </MenuList>
+        </Sidebar>
+          {/snippet}
       <Container>
         {#each modes as m}
           <div class:hide={mode !== m}>
@@ -167,7 +169,9 @@
           </div>
         {/each}
         <Card>
-          <div slot="header">Sample Card</div>
+          {#snippet header()}
+                    <div >Sample Card</div>
+                  {/snippet}
           <p>Here is a little text.</p>
           <Button primary>Primary Button</Button>
           <Button secondary>Secondary Button</Button>

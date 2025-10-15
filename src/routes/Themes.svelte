@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import purple from "$lib/vars/themes/purple.css?raw";
   import browser from "$lib/vars/themes/typography-browser.css?raw";
   import airy from "$lib/vars/themes/typography-airy.css?raw";
@@ -57,22 +59,22 @@
       file: "themes/bootstrap.css",
     },
   ];
-  let enabledExtraThemes = {
+  let enabledExtraThemes = $state({
     0: false,
     1: false,
-  };
+  });
 
-  let rawCss = "";
+  let rawCss = $state("");
 
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import { onMount } from "svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Code from "$lib/misc/Code.svelte";
-  let typographyTheme = typographyThemes.findIndex(
+  let typographyTheme = $state(typographyThemes.findIndex(
     (theme) => theme.startsActive
-  );
-  let colorTheme = colorThemes.findIndex((theme) => theme.startsActive);
+  ));
+  let colorTheme = $state(colorThemes.findIndex((theme) => theme.startsActive));
   let ready = false;
   onMount(() => {
     ready = true;
@@ -91,17 +93,25 @@
     existing.innerHTML = css;
   }
 
-  $: injectStyle("typography", typographyThemes[typographyTheme].css);
-  $: injectStyle("color", colorThemes[colorTheme].css);
-  $: injectStyle("extra-raw", `:root { ${rawCss} }`);
+  run(() => {
+    injectStyle("typography", typographyThemes[typographyTheme].css);
+  });
+  run(() => {
+    injectStyle("color", colorThemes[colorTheme].css);
+  });
+  run(() => {
+    injectStyle("extra-raw", `:root { ${rawCss} }`);
+  });
 
-  $: for (let i = 0; i < extraThemes.length; i++) {
-    if (enabledExtraThemes[i]) {
-      injectStyle(`extra-${i}`, extraThemes[i].css);
-    } else {
-      injectStyle(`extra-${i}`, "");
+  run(() => {
+    for (let i = 0; i < extraThemes.length; i++) {
+      if (enabledExtraThemes[i]) {
+        injectStyle(`extra-${i}`, extraThemes[i].css);
+      } else {
+        injectStyle(`extra-${i}`, "");
+      }
     }
-  }
+  });
 
   function buildThemeCode(...themes) {
     let themeFiles = [
@@ -133,22 +143,26 @@
     return scriptTag + styleTag;
   }
 
-  let themeCode = buildThemeCode();
+  let themeCode = $state(buildThemeCode());
 
-  $: themeCode = buildThemeCode(
-    rawCss,
-    typographyThemes[typographyTheme],
-    colorThemes[colorTheme],
-    ...extraThemes
-      .map((theme, i) => (enabledExtraThemes[i] ? theme : null))
-      .filter((theme) => theme)
-  );
+  run(() => {
+    themeCode = buildThemeCode(
+      rawCss,
+      typographyThemes[typographyTheme],
+      colorThemes[colorTheme],
+      ...extraThemes
+        .map((theme, i) => (enabledExtraThemes[i] ? theme : null))
+        .filter((theme) => theme)
+    );
+  });
 
-  let showCode = false;
+  let showCode = $state(false);
 </script>
 
 <FormItem fullWidth>
-  <span slot="label">Typography:</span>
+  {#snippet label()}
+    <span >Typography:</span>
+  {/snippet}
   {#each typographyThemes as theme, i}
     <RadioButton bind:group={typographyTheme} value={i}
       >{theme.name}</RadioButton
@@ -156,19 +170,25 @@
   {/each}
 </FormItem>
 <FormItem fullWidth>
-  <span slot="label">Color</span>
+  {#snippet label()}
+    <span >Color</span>
+  {/snippet}
   {#each colorThemes as theme, i}
     <RadioButton bind:group={colorTheme} value={i}>{theme.name}</RadioButton>
   {/each}
 </FormItem>
 <FormItem fullWidth>
-  <span slot="label">Extra Settings</span>
+  {#snippet label()}
+    <span >Extra Settings</span>
+  {/snippet}
   {#each extraThemes as theme, i}
     <Checkbox bind:checked={enabledExtraThemes[i]}>{theme.name}</Checkbox>
   {/each}
 </FormItem>
 <FormItem>
-  <span slot="label">Extra Variables</span>
+  {#snippet label()}
+    <span >Extra Variables</span>
+  {/snippet}
   <textarea placeholder="--bg : red;" bind:value={rawCss}></textarea>
 </FormItem>
 <FormItem fullWidth>

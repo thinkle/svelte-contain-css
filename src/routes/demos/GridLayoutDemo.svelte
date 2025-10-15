@@ -96,16 +96,22 @@
   </TextLayout>
   <GridLayout --item-width="var(--card-width)">
     <Card>
-      <div slot="header">Card 1</div>
+      {#snippet header()}
+            <div >Card 1</div>
+          {/snippet}
       <p>This is a card in a grid layout.</p>
       <p>Cards automatically size themselves.</p>
     </Card>
     <Card>
-      <div slot="header">Card 2</div>
+      {#snippet header()}
+            <div >Card 2</div>
+          {/snippet}
       <p>GridLayout centers all items.</p>
     </Card>
     <Card>
-      <div slot="header">Card 3</div>
+      {#snippet header()}
+            <div >Card 3</div>
+          {/snippet}
       <p>Items wrap to new lines as needed.</p>
     </Card>
   </GridLayout>

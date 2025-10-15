@@ -1,9 +1,13 @@
 <script lang="ts">
-  export let code: string;
   import "prismjs";
   import Prism from "svelte-prism";  
-  export let inline = false;
-  export let language = "html";
+  interface Props {
+    code: string;
+    inline?: boolean;
+    language?: string;
+  }
+
+  let { code, inline = false, language = "html" }: Props = $props();
 </script>
 
 <div class="code" class:inline>

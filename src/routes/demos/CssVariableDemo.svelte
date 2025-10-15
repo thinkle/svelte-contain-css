@@ -4,8 +4,7 @@
   import CssWrapper from "./CssWrapper.svelte";
   import type { CSSVariable } from "./types";
 
-  export let variables: CSSVariable[] = [];
-  let cssValues: { [key: string]: string } = {};
+  let cssValues: { [key: string]: string } = $state({});
 
   function handleSetVariables(updatedVariables: { [key: string]: string }) {
     cssValues = updatedVariables;
@@ -13,8 +12,14 @@
 
   import Dialog from "$lib/overlays/Dialog.svelte";
   import Button from "$lib/controls/Button.svelte";
+  interface Props {
+    variables?: CSSVariable[];
+    children?: import('svelte').Snippet;
+  }
 
-  let modalIsOpen = false;
+  let { variables = [], children }: Props = $props();
+
+  let modalIsOpen = $state(false);
 </script>
 
 <div class="popup-wrap" class:visible={modalIsOpen}>
@@ -30,7 +35,7 @@
 
 <Button on:click={() => (modalIsOpen = true)}>Set CSS Variables</Button>
 <CssWrapper variables={cssValues}>
-  <slot />
+  {@render children?.()}
 </CssWrapper>
 
 <style>

@@ -12,13 +12,13 @@
   import Select from "$lib/controls/Select.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import Row from "$lib/layout/Row.svelte";
-  let showThemes = false;
-  let tasks = [];
-  let newTask = {
+  let showThemes = $state(false);
+  let tasks = $state([]);
+  let newTask = $state({
     name: "",
     priority: 5,
     category: "None",
-  };
+  });
   function addTask() {
     tasks = [...tasks, newTask];
     newTask = {
@@ -30,21 +30,29 @@
 </script>
 
 <Page>
-  <Bar slot="header">
-    <h1>The Canonical To Do List</h1>
-    <Checkbox bind:checked={showThemes}>Edit Themes</Checkbox>
-  </Bar>
+  {#snippet header()}
+    <Bar >
+      <h1>The Canonical To Do List</h1>
+      <Checkbox bind:checked={showThemes}>Edit Themes</Checkbox>
+    </Bar>
+  {/snippet}
 
   <FormItem fullWidth={true}>
-    <span slot="label">Task</span>
+    {#snippet label()}
+        <span >Task</span>
+      {/snippet}
     <input type="text" id="task" bind:value={newTask.name} />
   </FormItem>
   <FormItem fullWidth={true}>
-    <span slot="label">Priority</span>
+    {#snippet label()}
+        <span >Priority</span>
+      {/snippet}
     <input type="number" min="1" max="10" bind:value={newTask.priority} />
   </FormItem>
   <FormItem fullWidth={true}>
-    <span slot="label">Category</span>
+    {#snippet label()}
+        <span >Category</span>
+      {/snippet}
     <Select bind:value={newTask.category}>
       <option value="house"> Household Chore </option>
       <option value="work"> Work Thing </option>

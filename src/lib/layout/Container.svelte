@@ -1,29 +1,34 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let margin: string | null = null;
-  export let maxWidth: string | null = null;
-  export let padding: string | null = null;
-  export let height: string | null = null;
-  export let border: boolean = false;
-  export let paddingTop: string | null = null;
-  export let borderTop: string | null = null;
+  const p children,rops = $props<{
+    bg?: string | null;
+    fg?: string | null;
+    margin?: string | null;
+    maxWidth?: string | null;
+    padding?: string | null;
+    height?: string | null;
+    border?: boolean;
+    paddingTop?: string | null;
+    borderTop?: string | null;
+  }>();
 
-  const style = injectVars($$props, "container", [
-    "bg",
-    "fg",
-    "margin",
-    "maxWidth",
-    "padding",
-    "height",
-    "paddingTop",
-    "borderTop",
-  ]);
+  const border = $derived(() => props.border ?? false);
+  const style = $derived(() =>
+    injectVars(props, "container", [
+      "bg",
+      "fg",
+      "margin",
+      "maxWidth",
+      "padding",
+      "height",
+      "paddingTop",
+      "borderTop",
+    ])
+  );
 </script>
 
-<section class:border {style}>
-  <slot />
+<section class:border={border} style={style}>
+  {@render children?.()}
 </section>
 
 <style lang="scss">

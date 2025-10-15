@@ -106,7 +106,7 @@
     },
   ];
 
-  let val = "lettuce";
+  let val = $state("lettuce");
 </script>
 
 <CssVariableDemo variables={radioCSSVariables}>

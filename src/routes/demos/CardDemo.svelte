@@ -3,7 +3,7 @@
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Container from "$lib/layout/Container.svelte";
 
-  let fixedHeight = true;
+  let fixedHeight = $state(true);
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { cardVars } from "./cssVariableDefs";
@@ -33,35 +33,47 @@
       <Checkbox bind:checked={fixedHeight}>Fixed Height</Checkbox>
     </FormItem>
     <SplitPane leftWidth="7em" rightWidth="2fr">
-      <div slot="left">Resize.</div>
-      <div slot="right">
-        <Card {fixedHeight} --text-align="center">
-          <h1>Wow, so simple</h1>
-          <p>Simplest possible card</p>
-        </Card>
-        <Card {fixedHeight}>
-          <Checkbox bind:checked={fixedHeight}>Fixed Height</Checkbox>
-        </Card>
-        <Card {fixedHeight}>
-          <div slot="header">Card Header</div>
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Pellentesque et mi orci. Donec euismod, nisl eget consectetur
-            sagittis, nisl nunc consectetur nisi, euismod aliquam nisl nunc eu
-            nisl. Donec euismod, nisl eget consectetur sagittis, nisl nunc
-            consectetur nisi, euismod aliquam nisl nunc eu nisl.
-          </div>
-          <div slot="footer">Card foot</div>
-        </Card>
-        <Card {fixedHeight}>
-          <div slot="header">Card Header</div>
-          <div>Card with no feet</div>
-        </Card>
-        <Card {fixedHeight}>
-          <div>Card with no head</div>
-          <div slot="footer">Card foot</div>
-        </Card>
-      </div>
+      {#snippet left()}
+            <div >Resize.</div>
+          {/snippet}
+      {#snippet right()}
+            <div >
+          <Card {fixedHeight} --text-align="center">
+            <h1>Wow, so simple</h1>
+            <p>Simplest possible card</p>
+          </Card>
+          <Card {fixedHeight}>
+            <Checkbox bind:checked={fixedHeight}>Fixed Height</Checkbox>
+          </Card>
+          <Card {fixedHeight}>
+            {#snippet header()}
+                    <div >Card Header</div>
+                  {/snippet}
+            <div>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Pellentesque et mi orci. Donec euismod, nisl eget consectetur
+              sagittis, nisl nunc consectetur nisi, euismod aliquam nisl nunc eu
+              nisl. Donec euismod, nisl eget consectetur sagittis, nisl nunc
+              consectetur nisi, euismod aliquam nisl nunc eu nisl.
+            </div>
+            {#snippet footer()}
+                    <div >Card foot</div>
+                  {/snippet}
+          </Card>
+          <Card {fixedHeight}>
+            {#snippet header()}
+                    <div >Card Header</div>
+                  {/snippet}
+            <div>Card with no feet</div>
+          </Card>
+          <Card {fixedHeight}>
+            <div>Card with no head</div>
+            {#snippet footer()}
+                    <div >Card foot</div>
+                  {/snippet}
+          </Card>
+        </div>
+          {/snippet}
     </SplitPane>
   </CssVariableDemo>
 </Container>

@@ -1,11 +1,19 @@
-<script>
-  export let value = 0;
-  export let min = 0;
-  export let max = 100;
-  export let step = 1;
+<script lang="ts">
+  let {
+    value = $bindable(0),
+    min = 0,
+    max = 100,
+    step = 1,
+  } = $props<{
+    value?: number;
+    min?: number;
+    max?: number;
+    step?: number;
+  }>();
+  const restProps = $restProps();
 </script>
 
-<input type="range" bind:value {min} {max} {step} {...$$restProps} />
+<input type="range" bind:value {min} {max} {step} {...restProps} />
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";

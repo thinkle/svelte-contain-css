@@ -6,14 +6,14 @@
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
   import type { CSSVariable } from "./types";
-  let active = "TabItem";
+  let active = $state("TabItem");
   let items = [
     { label: "TabItem", value: "TabItem" },
     { label: "TabBar", value: "TabBar" },
     { label: "Containers & Tabs", value: "containers" },
     { label: "Customize", value: "vars" },
   ];
-  let cssValues = {};
+  let cssValues = $state({});
   let cssVariables: CSSVariable[] = [
     {
       name: "--tab-bg",

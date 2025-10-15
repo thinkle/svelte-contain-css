@@ -1,7 +1,11 @@
 <script lang="ts">
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
-  export let id = "Installation";
+  interface Props {
+    id?: string;
+  }
+
+  let { id = "Installation" }: Props = $props();
 </script>
 
 <TextLayout {id}>
@@ -36,7 +40,7 @@ import "contain-css-svelte/themes/typography-airy.css";
     language="html"
     code={`
 <script>
-  import Button from "contain-css-svelte/Button.svelte";   
+  import { Button } from "contain-css-svelte";
 </script>
 <Button>Hello World</Button> 
 `}

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
@@ -107,9 +109,9 @@
     },
   ];
 
-  let val = false;
-  let val2 = true;
-  let val3 = false;
+  let val = $state(false);
+  let val2 = $state(true);
+  let val3 = $state(false);
 
   let toppings = [
     "Lettuce",
@@ -129,12 +131,14 @@
     "Sprouts",
     "Egg",
   ];
-  let selectedToppings = ["Bacon", "Lettuce", "Tomato"];
+  let selectedToppings = $state(["Bacon", "Lettuce", "Tomato"]);
 
   function updateEventInfo(event: Event) {
     console.info("Check event: ", event);
   }
-  $: console.log("Selected toppings: ", selectedToppings);
+  run(() => {
+    console.log("Selected toppings: ", selectedToppings);
+  });
 </script>
 
 <CssVariableDemo variables={checkboxCSSVariables}>

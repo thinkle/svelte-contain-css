@@ -1,16 +1,15 @@
 <script lang="ts">
-  export let value: string;
-  export let placeholder: string = "";
+  let {
+    value = $bindable(""),
+    placeholder = "",
+  } = $props<{ value?: string; placeholder?: string }>();
+  const restProps = $restProps();
 </script>
 
 <input
-  {placeholder}
   bind:value
-  on:input
-  on:change
-  on:blur
-  on:focus
-  {...$$restProps}
+  placeholder={placeholder}
+  {...restProps}
 />
 
 <style lang="scss">

@@ -38,6 +38,10 @@ const config = {
       assets: "build",
       fallback: null,
     }),
+    alias: {
+      $lib: "./src/lib",
+      "$lib/*": "./src/lib/*",
+    },
     paths: {
       base: "/svelte-contain-css" //process.env.NODE_ENV === "production" ? "/svelte-contain-css" : "",
     },

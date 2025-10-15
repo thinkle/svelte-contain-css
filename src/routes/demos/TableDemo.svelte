@@ -8,7 +8,7 @@
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { tableVars } from "./cssVariableDefs";
-  let widthModifier = 0;
+  let widthModifier = $state(0);
 </script>
 
 <CssVariableDemo variables={tableVars}>
@@ -58,54 +58,58 @@
       >) to change header size and watch scrolly table resize properly
     </p>
     <Table sticky>
-      <thead slot="thead">
-        <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
-      </thead>
-      <tbody slot="tbody">
-        <tr
-          ><th
-            >Yankees{#each Array(widthModifier) as _}~{/each}
-          </th><td>100</td><td>62</td></tr
-        >
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+      {#snippet thead()}
+            <thead >
+          <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+        </thead>
+          {/snippet}
+      {#snippet tbody()}
+            <tbody >
+          <tr
+            ><th
+              >Yankees{#each Array(widthModifier) as _}~{/each}
+            </th><td>100</td><td>62</td></tr
+          >
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
 
-        <tr><th>Yankees</th><td>100</td><td>62</td></tr>
-        <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
-        <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
-        <tr><th>Orioles</th><td>52</td><td>110</td></tr>
-      </tbody>
+          <tr><th>Yankees</th><td>100</td><td>62</td></tr>
+          <tr><th>Red Sox</th><td>92</td><td>70</td></tr>
+          <tr><th>Blue Jays</th><td>91</td><td>71</td></tr>
+          <tr><th>Orioles</th><td>52</td><td>110</td></tr>
+        </tbody>
+          {/snippet}
     </Table>
     <p>
       Our Table element is a simple wrapper around an HTML Table that provides

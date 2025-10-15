@@ -30,26 +30,32 @@
   </GridLayout>
   <h2>Tiles in cards</h2>
   <Card>
-    <h3 slot="header">Card</h3>
+    {#snippet header()}
+        <h3 >Card</h3>
+      {/snippet}
     <Tile>One Tile</Tile>
     <Tile>Two Tile</Tile>
   </Card>
   <h2>Tiles in a Split Pane</h2>
   <p>Slide the pane to see responsive tiles at work</p>
   <SplitPane leftWidth="3fr">
-    <div slot="left">
-      <Tile>
-        <h3>Tiles on my Left</h3>
-        <p>Look, a tile!</p>
-        <Checkbox>Check me</Checkbox>
-        <Checkbox>And me!</Checkbox>
-      </Tile>
-    </div>
-    <div slot="right">
-      <Tile>
-        <h3>Tiles on my right</h3>
-        <p>Look, a tile!</p>
-      </Tile>
-    </div>
+    {#snippet left()}
+        <div >
+        <Tile>
+          <h3>Tiles on my Left</h3>
+          <p>Look, a tile!</p>
+          <Checkbox>Check me</Checkbox>
+          <Checkbox>And me!</Checkbox>
+        </Tile>
+      </div>
+      {/snippet}
+    {#snippet right()}
+        <div >
+        <Tile>
+          <h3>Tiles on my right</h3>
+          <p>Look, a tile!</p>
+        </Tile>
+      </div>
+      {/snippet}
   </SplitPane>
 </Container>

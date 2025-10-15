@@ -1,5 +1,5 @@
-<script>
-  import { page } from "$app/stores";
+<script lang="ts">
+  import { page } from "$app/state";
   import { Page } from "$lib/index";
   import Bar from "$lib/layout/Bar.svelte";
   import "$lib/vars/defaults.css";
@@ -10,14 +10,19 @@
   import Container from "$lib/layout/Container.svelte";
   import Themes from "../../Themes.svelte";
   import { fade, fly } from "svelte/transition";
-  let showThemes = false;
+  interface Props {
+    [key: string]: any
+  }
+
+  let { ...props }: Props = $props();
+  let showThemes = $state(false);
   
 </script>
 
 <Page>
   <Bar>
     <a href={base || "/"}>Home</a>
-    {$$props.data.component}
+    {props.data.component}
     <Checkbox bind:checked={showThemes}>Show themes</Checkbox>
   </Bar>
   {#if showThemes}
@@ -27,5 +32,5 @@
     </Container>
     </div>
   {/if}
-  <DynamicComponent component={$$props.data.component} />
+  <DynamicComponent component={props.data.component} />
 </Page>

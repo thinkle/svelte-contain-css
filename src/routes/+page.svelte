@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import IntroOverview from "./IntroOverview.svelte";
   import "$lib/vars/defaults.css";
   import "$lib/vars/themes/lightordark.css";
@@ -88,7 +90,7 @@
   });
 
   let right: boolean = false;
-  let showHero = true;
+  let showHero = $state(true);
 
   let menu: { name: string; link?: string; component?: any; demo?: string }[] =
     [
@@ -138,9 +140,11 @@
       { name: "Variables", component: VariableDemo, demo: "Variable" },
     ];
 
-  let theDemo: SvelteComponent | null = null;
-  let theItem = 0;
-  $: theDemo = menu[theItem].component;
+  let theDemo: SvelteComponent | null = $state(null);
+  let theItem = $state(0);
+  run(() => {
+    theDemo = menu[theItem].component;
+  });
 
   function changeItem(newIndex: number) {
     let delta = newIndex - theItem;
@@ -153,7 +157,7 @@
     let theLink = menu[theItem].link || "#demo-area";
     tick().then(() => document.querySelector(theLink)?.scrollIntoView());
   }
-  let sideWidth = 50;
+  let sideWidth = $state(50);
 </script>
 
 {#if showHero}
@@ -173,92 +177,100 @@
     showHero = !isSticking;
   }}
 >
-  <Bar slot="header" --bar-border-top="none" --side-width="{sideWidth}px">
-    <div class="icon equal-width"></div>
-    <h1><em>ContainCSS</em></h1>
-    <div
-      class="info equal-width"
-      bind:clientWidth={sideWidth}
-      style:--button-bg="var(--bar-bg, var(--container-bg))"
-      style:--button-drop-shadow="none"
-      style:--button-border="none"
-      style:--button-shadow-color="transparent"
-    >
-      {#if theItem > 0}
-        <Button on:click={() => changeItem(theItem - 1)}>
-          <span style="transform:rotate(180deg);display:inline-block;">⮕</span>
-        </Button>
-      {/if}
-
-      <DropdownMenu --bg="#222">
-        <span slot="label">
-          {menu[theItem].name}
-        </span>
-
-        {#each menu as item, idx}
-          <li>
-            <Button value={idx} on:click={() => changeItem(idx)}
-              >{item.name}</Button
-            >
-          </li>
-        {/each}
-      </DropdownMenu>
-
-      <Button on:click={() => changeItem(theItem + 1)}>⮕</Button>
-    </div></Bar
-  >
-  <Bar
-    slot="footer"
-    --bar-justify="flex-end"
-    height="1.5em"
-    --bar-border-top="none"
-    --bar-border-bottom="none"
-    marginBottom="0"
-  >
-    <a style:color="var(--body-fg)" href="https://tomhinkle.net"
-      >by Tom Hinkle</a
-    >
-  </Bar>
-  <Sidebar slot="sidebar" {right}>
-    <MenuList
-      --menu-item-justify="start"
-      --menu-item-padding="var(--padding) var(--padding) var(--padding) calc(4*var(--padding))"
-    >
-      {#each menu as item}
-        {#if item.link}
-          <li>
-            <a
-              href={item.link}
-              class:active={theItem === menu.indexOf(item)}
-              on:click={() => {
-                theItem = menu.indexOf(item);
-              }}>{item.name}</a
-            >
-          </li>
-        {:else if item.component}
-          <li>
-            <a
-              href="#demo-area"
-              class:active={theItem === menu.indexOf(item)}
-              on:click={() => {
-                theItem = menu.indexOf(item);
-              }}>{item.name}</a
-            >
-          </li>
-        {:else}
-          <li
-            class="subheader"
-            class:active={theItem === menu.indexOf(item)}
-            on:click={() => {
-              theItem = menu.indexOf(item) + 1;
-            }}
-          >
-            {item.name}
-          </li>
+  {#snippet header()}
+    <Bar  --bar-border-top="none" --side-width="{sideWidth}px">
+      <div class="icon equal-width"></div>
+      <h1><em>ContainCSS</em></h1>
+      <div
+        class="info equal-width"
+        bind:clientWidth={sideWidth}
+        style:--button-bg="var(--bar-bg, var(--container-bg))"
+        style:--button-drop-shadow="none"
+        style:--button-border="none"
+        style:--button-shadow-color="transparent"
+      >
+        {#if theItem > 0}
+          <Button on:click={() => changeItem(theItem - 1)}>
+            <span style="transform:rotate(180deg);display:inline-block;">⮕</span>
+          </Button>
         {/if}
-      {/each}
-    </MenuList>
-  </Sidebar>
+
+        <DropdownMenu --bg="#222">
+          {#snippet label()}
+                <span >
+              {menu[theItem].name}
+            </span>
+              {/snippet}
+
+          {#each menu as item, idx}
+            <li>
+              <Button value={idx} on:click={() => changeItem(idx)}
+                >{item.name}</Button
+              >
+            </li>
+          {/each}
+        </DropdownMenu>
+
+        <Button on:click={() => changeItem(theItem + 1)}>⮕</Button>
+      </div></Bar
+    >
+  {/snippet}
+  {#snippet footer()}
+    <Bar
+      
+      --bar-justify="flex-end"
+      height="1.5em"
+      --bar-border-top="none"
+      --bar-border-bottom="none"
+      marginBottom="0"
+    >
+      <a style:color="var(--body-fg)" href="https://tomhinkle.net"
+        >by Tom Hinkle</a
+      >
+    </Bar>
+  {/snippet}
+  {#snippet sidebar()}
+    <Sidebar  {right}>
+      <MenuList
+        --menu-item-justify="start"
+        --menu-item-padding="var(--padding) var(--padding) var(--padding) calc(4*var(--padding))"
+      >
+        {#each menu as item}
+          {#if item.link}
+            <li>
+              <a
+                href={item.link}
+                class:active={theItem === menu.indexOf(item)}
+                onclick={() => {
+                  theItem = menu.indexOf(item);
+                }}>{item.name}</a
+              >
+            </li>
+          {:else if item.component}
+            <li>
+              <a
+                href="#demo-area"
+                class:active={theItem === menu.indexOf(item)}
+                onclick={() => {
+                  theItem = menu.indexOf(item);
+                }}>{item.name}</a
+              >
+            </li>
+          {:else}
+            <li
+              class="subheader"
+              class:active={theItem === menu.indexOf(item)}
+              onclick={() => {
+                theItem = menu.indexOf(item) + 1;
+              }}
+            >
+              {item.name}
+            </li>
+          {/if}
+        {/each}
+      </MenuList>
+    </Sidebar>
+  {/snippet}
   {#if !theDemo}
     <IntroOverview id="Intro" />
     <Installation id="Installation" />
@@ -270,7 +282,8 @@
           >Open separate page to experiment with theming</a
         >
       {/if}
-      <svelte:component this={theDemo} />
+      {@const SvelteComponent = theDemo}
+      <SvelteComponent />
     {/if}
     {#if theItem < menu.length - 1}
       {@const nextItem = menu.find((m, i) => i > theItem && m.component)}

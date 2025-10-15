@@ -1,12 +1,24 @@
 <script lang="ts">
-  export let tooltipText = "";
-  let tooltipDiv: HTMLElement;
-  let targetDiv: HTMLElement;
-  let tooltipMeasurementDiv: HTMLElement;
-  export let vertical = "bottom";
-  export let horizontal = "right";
-  let renderedVertical = vertical;
-  let renderedHorizontal = horizontal;
+  let tooltipDiv: HTMLElement = $state();
+  let targetDiv: HTMLElement = $state();
+  let tooltipMeasurementDiv: HTMLElement = $state();
+  interface Props {
+    tooltipText?: string;
+    vertical?: string;
+    horizontal?: string;
+    children?: import('svelte').Snippet;
+    tooltip?: import('svelte').Snippet;
+  }
+
+  let {
+    tooltipText = "",
+    vertical = "bottom",
+    horizontal = "right",
+    children,
+    tooltip
+  }: Props = $props();
+  let renderedVertical = $state(vertical);
+  let renderedHorizontal = $state(horizontal);
 
   function showPopover() {
     // Get the position of the target element
@@ -70,16 +82,16 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="tooltip-wrapper"
-  on:mouseenter={() => showPopover()}
-  on:mouseleave={() => tooltipDiv.togglePopover(false)}
-  on:focusin={() => showPopover()}
-  on:focusout={() => tooltipDiv.togglePopover(false)}
+  onmouseenter={() => showPopover()}
+  onmouseleave={() => tooltipDiv.togglePopover(false)}
+  onfocusin={() => showPopover()}
+  onfocusout={() => tooltipDiv.togglePopover(false)}
   bind:this={targetDiv}
 >
-  <slot />
+  {@render children?.()}
   <div
     popover="auto"
     class="tooltip"
@@ -89,14 +101,14 @@
     class:left={renderedHorizontal === "left"}
     class:right={renderedHorizontal === "right"}
   >
-    <slot name="tooltip">
+    {#if tooltip}{@render tooltip()}{:else}
       {tooltipText}
-    </slot>
+    {/if}
   </div>
   <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
-    <slot name="tooltip">
+    {#if tooltip}{@render tooltip()}{:else}
       {tooltipText}
-    </slot>
+    {/if}
   </div>
 </div>
 

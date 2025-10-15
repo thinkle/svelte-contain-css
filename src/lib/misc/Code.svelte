@@ -1,10 +1,14 @@
 <script lang="ts">
   const browser = typeof window !== "undefined";
   import type { SvelteComponent } from 'svelte';
-  export let code: string; 
-  export let inline = false;
-  export let language = "html";
-  let component : SvelteComponent | null = null;
+  interface Props {
+    code: string;
+    inline?: boolean;
+    language?: string;
+  }
+
+  let { code, inline = false, language = "html" }: Props = $props();
+  let component : SvelteComponent | null = $state(null);
   if (browser) {
     import("./CodeInner.svelte").then(
       ({ default: CodeInner }) => {
@@ -15,7 +19,8 @@
 </script>
 
 {#if browser && component}
-  <svelte:component this={component} {language} {code} {inline}/>
+  {@const SvelteComponent_1 = component}
+  <SvelteComponent_1 {language} {code} {inline}/>
 {/if}
 
 

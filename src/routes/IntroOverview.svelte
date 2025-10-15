@@ -19,11 +19,15 @@
   import Tooltip from "$lib/overlays/Tooltip.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
 
-  let showDialog = false;
+  let showDialog = $state(false);
   let toggleDialog = () => {
     showDialog = !showDialog;
   };
-  export let id = 'Intro';
+  interface Props {
+    id?: string;
+  }
+
+  let { id = 'Intro' }: Props = $props();
 </script>
 
 <TextLayout --code-font-size="0.8rem" --code-line-width="70em" {id}>
@@ -85,7 +89,9 @@
     <hr>
     <h2>Container Queries</h2>
     <Card>
-    <div slot="header">A Card</div>
+    {#snippet header()}
+        <div >A Card</div>
+      {/snippet}
     <div style="display: flex; position: relative;">
       <Sidebar>
         <p>
@@ -124,21 +130,23 @@
       </span>
     </p>
     <p>
-      We also use features like <a href="#dialog" on:click={toggleDialog}
+      We also use features like <a href="#dialog" onclick={toggleDialog}
         ><code>&ltdialog&gt;</code></a
       >
       and the
 
       <Tooltip>
         <Button on:click={()=>showDialog=true}>Popup API</Button>
-        <div slot="tooltip">
-          Which handles overlays for items such as tooltips and dropdown menus,
-          which we provide with
-          <code>&lt;Tooltip&gt</code>
-          and <code>&lt;DropdownMenu&gt</code>
-          as well as with a custom
-          <code>&lt;Select&gt;</code>
-        </div>
+        {#snippet tooltip()}
+            <div >
+            Which handles overlays for items such as tooltips and dropdown menus,
+            which we provide with
+            <code>&lt;Tooltip&gt</code>
+            and <code>&lt;DropdownMenu&gt</code>
+            as well as with a custom
+            <code>&lt;Select&gt;</code>
+          </div>
+          {/snippet}
       </Tooltip>
       for our overlays, so there's no need for portals or other shenanigans.
     </p>

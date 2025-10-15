@@ -18,11 +18,15 @@
   <Button warning>Warning Button</Button>
   <Card>Look a card!</Card>
   <FormItem>
-    <span slot="label">Label</span>
+    {#snippet label()}
+        <span >Label</span>
+      {/snippet}
     <input type="text" />
   </FormItem>
   <FormItem>
-    <span slot="label">Dropdown</span>
+    {#snippet label()}
+        <span >Dropdown</span>
+      {/snippet}
     <Select>
       <option>Option 1</option>
       <option>Option 2</option>
@@ -30,7 +34,9 @@
     </Select>
   </FormItem>
   <FormItem>
-    <span slot="label">Checkbox</span>
+    {#snippet label()}
+        <span >Checkbox</span>
+      {/snippet}
     <Checkbox>Hello World</Checkbox>
   </FormItem>
 </Page>

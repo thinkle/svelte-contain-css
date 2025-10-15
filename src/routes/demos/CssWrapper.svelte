@@ -1,7 +1,12 @@
 <script lang="ts">
-  export let variables: {
+  interface Props {
+    variables?: {
     [key: string]: string;
-  } = {};
+  };
+    children?: import('svelte').Snippet;
+  }
+
+  let { variables = {}, children }: Props = $props();
 
   const getStyle = (vars: { [key: string]: string }) => {
     const style = Object.entries(vars)
@@ -12,7 +17,7 @@
 </script>
 
 <div style={getStyle(variables)}>
-  <slot />
+  {@render children?.()}
 </div>
 
 <style>

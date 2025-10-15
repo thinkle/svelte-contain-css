@@ -100,7 +100,7 @@
       unit: "rem",
     },
   ];
-  let cssValues = {};
+  let cssValues = $state({});
 </script>
 
 <TextLayout>

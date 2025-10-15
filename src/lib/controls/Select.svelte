@@ -1,13 +1,22 @@
 <script lang="ts">
+  import { run, createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
-  export let value: any;
-  let selectElement: HTMLSelectElement;
+  interface Props {
+    value: any;
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
+
+  let { value = $bindable(), children, ...rest }: Props = $props();
+  let selectElement: HTMLSelectElement = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
-  let targetWidth = 0;
-  let optionButtons: HTMLButtonElement[] = [];
+  let targetWidth = $state(0);
+  let optionButtons: HTMLButtonElement[] = $state([]);
 
   onMount(async () => {
     await tick(); // Ensure slot content is rendered
@@ -35,8 +44,8 @@
     };
   });
 
-  let options: { value: string; html: string }[] = [];
-  let activeOption: { value: string; html: string } | null = null;
+  let options: { value: string; html: string }[] = $state([]);
+  let activeOption: { value: string; html: string } | null = $state(null);
 
   function updateOptions() {
     if (!selectElement) {
@@ -45,9 +54,10 @@
     options = [];
     let optionEls = selectElement.querySelectorAll("option");
     for (let optionEl of optionEls) {
+      const richHtml = optionEl.dataset.html ?? optionEl.innerHTML;
       options.push({
         value: optionEl.value,
-        html: optionEl.innerHTML,
+        html: richHtml.trim(),
       });
     }
     activeOption = options[selectElement.selectedIndex];
@@ -77,22 +87,26 @@
     }
   }
 
-  $: updateOption(value);
+  run(() => {
+    updateOption(value);
+  });
 </script>
 
-<select bind:value on:change bind:this={selectElement} {...$$restProps}>
-  <slot />
+<select bind:value onchange={bubble('change')} bind:this={selectElement} {...rest}>
+  {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width="{targetWidth}px">
   <DropdownMenu>
-    <span class="select-dropdown" slot="label">
-      <span class="select-dropdown-label">
-        {#if activeOption}{@html activeOption.html}{:else}-{/if}
+    {#snippet label()}
+        <span class="select-dropdown" >
+        <span class="select-dropdown-label">
+          {#if activeOption}{@html activeOption.html}{:else}-{/if}
+        </span>
       </span>
-    </span>
+      {/snippet}
     {#each options as option, index}
       <li bind:this={optionButtons[index]}>
-        <button on:click={() => setValue(index)}>
+        <button onclick={() => setValue(index)}>
           <span>{@html option.html}</span>
         </button>
       </li>

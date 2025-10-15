@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import "$lib/vars/defaults.css";
-  export let component;
-  let LoadedComponent;
-  let error;
+  let { component } = $props();
+  let LoadedComponent = $state();
+  let error = $state();
 
   onMount(async () => {
     try {
@@ -17,7 +17,7 @@
 </script>
 
 {#if LoadedComponent}
-  <svelte:component this={LoadedComponent} />
+  <LoadedComponent />
 {:else if error}
   <p>Failed to load the component: {error}</p>
 {:else}

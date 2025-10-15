@@ -1,6 +1,11 @@
 <script lang="ts">
-  export let size: "small" | "medium" | "large" = "medium";
-  export let customHeight: string | null = null;
+  interface Props {
+    size?: "small" | "medium" | "large";
+    customHeight?: string | null;
+    children?: import('svelte').Snippet;
+  }
+
+  let { size = "medium", customHeight = null, children }: Props = $props();
 </script>
 
 <section
@@ -10,7 +15,7 @@
   class:large={size == "large"}
   style:--custom-height={customHeight}
 >
-  <slot />
+  {@render children?.()}
 </section>
 
 <style lang="scss">

@@ -1,24 +1,37 @@
 <script lang="ts">
+  import { createBubbler } from 'svelte/legacy';
+
+  const bubble = createBubbler();
   import Checkbox from "$lib/controls/Checkbox.svelte";
-  export let interactive = false; // Prop to make the tile clickable or not
-  export let selectable = false;
-  export let checked = false;
+  interface Props {
+    interactive?: boolean; // Prop to make the tile clickable or not
+    selectable?: boolean;
+    checked?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    interactive = false,
+    selectable = false,
+    checked = $bindable(false),
+    children
+  }: Props = $props();
 </script>
 
 {#if selectable}
   <label class="tile">
     <div class="checkbox">
-      <input type="checkbox" bind:checked on:input on:change on:click />
+      <input type="checkbox" bind:checked oninput={bubble('input')} onchange={bubble('change')} onclick={bubble('click')} />
     </div>
-    <slot />
+    {@render children?.()}
   </label>
 {:else if interactive}
-  <button class="tile" on:click on:blur on:focus on:dblclick>
-    <slot />
+  <button class="tile" onclick={bubble('click')} onblur={bubble('blur')} onfocus={bubble('focus')} ondblclick={bubble('dblclick')}>
+    {@render children?.()}
   </button>
 {:else}
   <div class="tile">
-    <slot />
+    {@render children?.()}
   </div>
 {/if}
 
@@ -56,7 +69,7 @@
     @include color-props(tile-selected);
     @include typography-props(tile-selected);
   }
-  label.tile:has(input:focus-visible) {
+  label.tile:has(:global(input:focus-visible)) {
     @include focus-ring();
   }
   $aspect: 1.333;
@@ -99,11 +112,11 @@
     @include visually-hidden();
   }
 
-  label:has(input:focus-visible) {
+  label:has(:global(input:focus-visible)) {
     @include focus-ring();
   }
 
-  .checkbox:has(input:checked) {
+  .checkbox:has(:global(input:checked)) {
     @include color-props(
       tile-checkbox-checked,
       checkbox-checked,
@@ -112,7 +125,7 @@
       checkbox
     );
   }
-  .checkbox:has(input:checked)::after {
+  .checkbox:has(:global(input:checked))::after {
     content: var(--tile-checkbox-check, var(--checkbox-check, "✓"));
     font-size: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
 

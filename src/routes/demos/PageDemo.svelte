@@ -10,16 +10,16 @@
   import Code from "$lib/misc/Code.svelte";
   import TypographyDemo from "./TypographyDemo.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
-  let hasHeader = true;
-  let hasFooter = true;
-  let side = "left";
+  let hasHeader = $state(true);
+  let hasFooter = $state(true);
+  let side = $state("left");
   const headerCode = `
     <Bar slot="header">...</Bar>`;
   const footerCode = `
     <Bar slot="footer" marginBottom="0">...</Bar>`;
   const sidebarCode = `
     <Sidebar slot="sidebar">...</Sidebar>`;
-  $: code = `
+  let code = $derived(`
   <Page${side == "right" ? " right" : ""}>${hasHeader ? headerCode : ""}${
     hasFooter ? footerCode : ""
   }${
@@ -32,7 +32,7 @@
   }
     <div>Page content here</div>
   </Page>
-  `;
+  `);
 </script>
 
 <Container>
@@ -56,23 +56,29 @@
     width="100%"
     height="800px"
   >
-    <Bar slot="header">
-      <div>Header</div>
-      <div>Header</div>
-      <div>Header</div>
-    </Bar>
+    {#snippet header()}
+        <Bar >
+        <div>Header</div>
+        <div>Header</div>
+        <div>Header</div>
+      </Bar>
+      {/snippet}
 
-    <Bar slot="footer" marginBottom="0">
-      <div>Footer</div>
-      <div>Footer</div>
-      <div>Footer</div>
-    </Bar>
+    {#snippet footer()}
+        <Bar  marginBottom="0">
+        <div>Footer</div>
+        <div>Footer</div>
+        <div>Footer</div>
+      </Bar>
+      {/snippet}
 
-    <Sidebar slot="sidebar" right={side == "right"}>
-      <div>Sidebar</div>
-      <div>Sidebar</div>
-      <div>Sidebar</div>
-    </Sidebar>
+    {#snippet sidebar()}
+        <Sidebar  right={side == "right"}>
+        <div>Sidebar</div>
+        <div>Sidebar</div>
+        <div>Sidebar</div>
+      </Sidebar>
+      {/snippet}
 
     <main>
       <Container>

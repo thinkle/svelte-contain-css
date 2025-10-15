@@ -6,9 +6,9 @@
   import Input from "$lib/controls/Input.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Code from "$lib/misc/Code.svelte";
-  let leftWidth = "2fr";
-  let rightWidth = "1fr";
-  let rerender = 0;
+  let leftWidth = $state("2fr");
+  let rightWidth = $state("1fr");
+  let rerender = $state(0);
 </script>
 
 <Container maxWidth="90%">
@@ -26,11 +26,15 @@
     Finally, panes automatically stack when placed in a small enough component.
   </p>
   <FormItem>
-    <span slot="label">leftWidth</span>
+    {#snippet label()}
+        <span >leftWidth</span>
+      {/snippet}
     <Input bind:value={leftWidth} />
   </FormItem>
   <FormItem>
-    <span slot="label">rightWidth</span>
+    {#snippet label()}
+        <span >rightWidth</span>
+      {/snippet}
     <Input bind:value={rightWidth} />
   </FormItem>
   <FormItem>
@@ -38,26 +42,32 @@
   </FormItem>
   {#key rerender}
     <SplitPane {leftWidth} {rightWidth}>
-      <div slot="left">
-        These panes are rendered with:
-        <Code
-          code={`
-<SplitPane leftWidth={${leftWidth}} rightWidth={${rightWidth}}>
-  <div slot="left">...</div>
-  <div slot="right">...</div>
-</SplitPane>
-            `}
-        />
-      </div>
-      <div slot="right">
-        Oh how amazing there is also content on the right.
+      {#snippet left()}
+            <div >
+          These panes are rendered with:
+          <Code
+            code={`
+  <SplitPane leftWidth={${leftWidth}} rightWidth={${rightWidth}}>
+    <div slot="left">...</div>
+    <div slot="right">...</div>
+  </SplitPane>
+              `}
+          />
+        </div>
+          {/snippet}
+      {#snippet right()}
+            <div >
+          Oh how amazing there is also content on the right.
 
-        <Card>
-          <div slot="header"><h3>A Card!</h3></div>
-          Here is a card so we can we can see responsive behavior as the container
-          changes.
-        </Card>
-      </div>
+          <Card>
+            {#snippet header()}
+                    <div ><h3>A Card!</h3></div>
+                  {/snippet}
+            Here is a card so we can we can see responsive behavior as the container
+            changes.
+          </Card>
+        </div>
+          {/snippet}
     </SplitPane>
   {/key}
   <h2>Responsive</h2>
@@ -66,12 +76,20 @@
     responsively.
   </p>
   <SplitPane border="1px solid blue">
-    <div slot="left">Stretch to change pane on the right</div>
-    <div slot="right">
-      <SplitPane border="1px solid yellow">
-        <div slot="left">Inner left side</div>
-        <div slot="right">Inner right side</div>
-      </SplitPane>
-    </div>
+    {#snippet left()}
+        <div >Stretch to change pane on the right</div>
+      {/snippet}
+    {#snippet right()}
+        <div >
+        <SplitPane border="1px solid yellow">
+          {#snippet left()}
+                <div >Inner left side</div>
+              {/snippet}
+          {#snippet right()}
+                <div >Inner right side</div>
+              {/snippet}
+        </SplitPane>
+      </div>
+      {/snippet}
   </SplitPane>
 </Container>

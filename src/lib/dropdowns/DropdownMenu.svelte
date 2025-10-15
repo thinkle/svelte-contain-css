@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   var idPostfix = 1;
 </script>
 
@@ -8,22 +8,29 @@
   import { injectVars } from "$lib/util";
 
   import { onMount } from "svelte";
+  interface Props {
+    label?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+    [key: string]: any
+  }
+
+  let { ...props }: Props = $props();
   idPostfix++;
   let id = "contain-dropdown-menu-" + idPostfix;
-  let buttonElement: HTMLButtonElement;
-  let dropdownContentElement: HTMLDivElement;
+  let buttonElement: HTMLButtonElement = $state();
+  let dropdownContentElement: HTMLDivElement = $state();
 
   // Style injection
-  let style = injectVars($$props, "menu", [
+  let style = injectVars(props, "menu", [
     "bg",
     "fg",
     "padding",
     "width",
     "height",
   ]);
-  let dropdownTop: number;
-  let dropdownLeft: number;
-  let dropdownMaxHeight: number;
+  let dropdownTop: number = $state();
+  let dropdownLeft: number = $state();
+  let dropdownMaxHeight: number = $state();
 
   function computePosition() {
     let dropdownRect = dropdownContentElement.getBoundingClientRect();
@@ -113,7 +120,7 @@
     focusableItems[currentIndex]?.focus();
   }
 
-  let cssVariableContext = "";
+  let cssVariableContext = $state("");
   function injectVariablesIntoDropdown() {
     cssVariableContext = "";
     let buttonStyle = getComputedStyle(buttonElement);
@@ -127,14 +134,14 @@
     // Set dropdown menu width to match button width
     cssVariableContext += `--dropdown-menu-min-width: ${buttonStyle.width};`;
   }
-  let popoverDiv: HTMLDivElement;
+  let popoverDiv: HTMLDivElement = $state();
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-<nav class="dropdown-menu" on:keydown={handleKeystroke}>
-  <button bind:this={buttonElement} on:click={triggerMenu} popovertarget={id}>
-    <slot name="label">Menu</slot>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<nav class="dropdown-menu" onkeydown={handleKeystroke}>
+  <button bind:this={buttonElement} onclick={triggerMenu} popovertarget={id}>
+    {#if label}{@render props.label()}{:else}Menu{/if}
   </button>
   <div
     {id}
@@ -145,15 +152,15 @@
     style:left="{dropdownLeft}px"
     style:max-height="{dropdownMaxHeight}px"
   >
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
       class="dropdown-content"
       bind:this={dropdownContentElement}
       style={cssVariableContext}
-      on:click={dismissPopover}
+      onclick={dismissPopover}
     >
       <MenuList>
-        <slot />
+        {@render props.children?.()}
       </MenuList>
     </div>
   </div>

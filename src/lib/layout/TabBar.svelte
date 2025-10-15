@@ -1,11 +1,21 @@
 <script lang="ts">
-  export let sticky: boolean = false;
   import Bar from "$lib/layout/Bar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
   import { createEventDispatcher } from "svelte";
   type Item = { label: string; value: string };
-  export let active: string | Item | null = null;
-  export let items: (string | Item)[] = [];
+  interface Props {
+    sticky?: boolean;
+    active?: string | Item | null;
+    items?: (string | Item)[];
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    sticky = false,
+    active = $bindable(null),
+    items = [],
+    children
+  }: Props = $props();
 
   // dispatch a change event whenever active changes
   const dispatch = createEventDispatcher();
@@ -28,7 +38,7 @@
         {label}
       </TabItem>
     {/each}
-    <slot />
+    {@render children?.()}
   </Bar>
 </div>
 

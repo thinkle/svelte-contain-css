@@ -174,7 +174,7 @@
     },
   ];
 
-  let cssValues = {};
+  let cssValues = $state({});
 </script>
 
 <CssWrapper variables={cssValues}>

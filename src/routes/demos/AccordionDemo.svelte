@@ -8,7 +8,7 @@
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   accordionVars;
-  let highlanderMode = true;
+  let highlanderMode = $state(true);
 </script>
 
 <CssVariableDemo variables={accordionVars}>

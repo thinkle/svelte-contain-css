@@ -32,7 +32,9 @@
     <Button>Standard Button</Button>
     <Button>
       Icon Button
-      <div slot="icon">▶</div>
+      {#snippet icon()}
+            <div >▶</div>
+          {/snippet}
     </Button>
     <Button warning={true}>Warning Button</Button>
     <Button primary={true}>Primary Button</Button>

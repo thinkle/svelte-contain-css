@@ -1,7 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  export let highlanderMode: boolean = true;
-  let wrapper: HTMLDivElement;
+  interface Props {
+    highlanderMode?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let { highlanderMode = true, children }: Props = $props();
+  let wrapper: HTMLDivElement = $state();
 
   function onAccordionClicked(e: MouseEvent) {
     if (!highlanderMode) {
@@ -41,14 +46,14 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
   class="accordion-wrapper"
-  on:click={onAccordionClicked}
+  onclick={onAccordionClicked}
   bind:this={wrapper}
 >
-  <slot />
+  {@render children?.()}
 </div>
 
 <style lang="scss">

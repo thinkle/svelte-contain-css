@@ -81,9 +81,9 @@
 
   let cssValues = {};
 
-  let fullWidth = false;
-  let globalInputStyles = true;
-  let demoOrCode = "Demo";
+  let fullWidth = $state(false);
+  let globalInputStyles = $state(true);
+  let demoOrCode = $state("Demo");
 </script>
 <CssVariableDemo variables={formItemCSSVariables}>
   
@@ -106,11 +106,15 @@
           <Container maxWidth="200px">
             <h2>Log In</h2>
             <FormItem>
-              <span slot="label">Name</span>
+              {#snippet label()}
+                        <span >Name</span>
+                      {/snippet}
               <input type="text" placeholder="First Last"/>
             </FormItem>
             <FormItem>
-              <span slot="label">Password</span>
+              {#snippet label()}
+                        <span >Password</span>
+                      {/snippet}
               <input type="password" placeholder="***"/>
             </FormItem>
             <FormItem>            
@@ -188,11 +192,15 @@
           </FormItem>
         `} />
           <FormItem>
-            <span slot="label">Name</span>
+            {#snippet label()}
+                <span >Name</span>
+              {/snippet}
             <input type="text" />
-            <span slot="after">
-              <Button>Go</Button>
-            </span>
+            {#snippet after()}
+                <span >
+                <Button>Go</Button>
+              </span>
+              {/snippet}
           </FormItem>
       </details>
     </Accordion> 
@@ -223,15 +231,21 @@
       <h3>Result:</h3>
       <Container border --container-max-width="300px" --input-width="20em">
         <FormItem>
-          <span slot="label">Name</span>
+          {#snippet label()}
+                <span >Name</span>
+              {/snippet}
           <input type="text" />
         </FormItem>
         <FormItem>
-          <span slot="label">Age</span>
+          {#snippet label()}
+                <span >Age</span>
+              {/snippet}
           <input type="number" min="16" max="130" />
         </FormItem>
         <FormItem>
-          <span slot="label">Level</span>
+          {#snippet label()}
+                <span >Level</span>
+              {/snippet}
           <input type="range" />
         </FormItem>
         <FormItem>
@@ -242,22 +256,30 @@
     <Container>   
   <h3>In a wide container</h3>
   <FormItem>
-    <span slot="label">Options:</span>
+    {#snippet label()}
+            <span >Options:</span>
+          {/snippet}
     <Checkbox bind:checked={fullWidth}>fullWidth</Checkbox>
     <Checkbox bind:checked={globalInputStyles}>globalInputStyles</Checkbox>
   </FormItem>
   
     <Container border>
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Name</span>
+        {#snippet label()}
+                <span >Name</span>
+              {/snippet}
         <input type="text" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Age</span>
+        {#snippet label()}
+                <span >Age</span>
+              {/snippet}
         <input type="number" min="16" max="130" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Level</span>
+        {#snippet label()}
+                <span >Level</span>
+              {/snippet}
         <input type="range" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
@@ -267,15 +289,21 @@
     <h3>In a narrow container</h3>
     <Container border --container-max-width="300px">
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Name</span>
+        {#snippet label()}
+                <span >Name</span>
+              {/snippet}
         <input type="text" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Age</span>
+        {#snippet label()}
+                <span >Age</span>
+              {/snippet}
         <input type="number" min="16" max="130" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
-        <span slot="label">Level</span>
+        {#snippet label()}
+                <span >Level</span>
+              {/snippet}
         <input type="range" />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>

@@ -1,9 +1,14 @@
-<script>
-  export let id = "";
+<script lang="ts">
+  interface Props {
+    id?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { id = "", children }: Props = $props();
 </script>
 
 <div {id}>
-  <slot />
+  {@render children?.()}
 </div>
 
 <style lang="scss">

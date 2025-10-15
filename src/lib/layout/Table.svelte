@@ -1,33 +1,29 @@
 <script lang="ts">
-  export let sticky = false;
-  export let column_widths: number[] | null = null;
-  let columns = column_widths || [];
+  import { run } from 'svelte/legacy';
+
+  let columns = $state(column_widths || []);
 
   /* Code for syncing column widths for scrolling table solution */
-  let headClone: HTMLTableElement | null = null;
-  let bodyClone: HTMLTableElement | null = null;
-  let resizeObserver: ResizeObserver | null = null;
-  let tableWidth = null;
-  $: if (!column_widths) {
-    // If no column widths provided, reset columns to empty
-    columns = [];
-    if ($$slots.thead && sticky && headClone && bodyClone) {
-      syncColumnWidths();
-      // Set up ResizeObserver to keep columns in sync when content or size changes
-      if (
-        !resizeObserver &&
-        typeof window !== "undefined" &&
-        window.ResizeObserver
-      ) {
-        resizeObserver = new ResizeObserver(() => {
-          syncColumnWidths();
-        });
-        if (headClone) resizeObserver.observe(headClone);
-        if (bodyClone) resizeObserver.observe(bodyClone);
-      }
-    }
-  }
+  let headClone: HTMLTableElement | null = $state(null);
+  let bodyClone: HTMLTableElement | null = $state(null);
+  let resizeObserver: ResizeObserver | null = $state(null);
+  let tableWidth = $state(null);
   import { onDestroy } from "svelte";
+  interface Props {
+    sticky?: boolean;
+    column_widths?: number[] | null;
+    thead?: import('svelte').Snippet;
+    tbody?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    sticky = false,
+    column_widths = null,
+    thead,
+    tbody,
+    children
+  }: Props = $props();
   onDestroy(() => {
     if (resizeObserver) {
       if (headClone) resizeObserver.unobserve(headClone);
@@ -68,10 +64,31 @@
     }
     tableWidth = totalWidth;
   }
+  run(() => {
+    if (!column_widths) {
+      // If no column widths provided, reset columns to empty
+      columns = [];
+      if (thead && sticky && headClone && bodyClone) {
+        syncColumnWidths();
+        // Set up ResizeObserver to keep columns in sync when content or size changes
+        if (
+          !resizeObserver &&
+          typeof window !== "undefined" &&
+          window.ResizeObserver
+        ) {
+          resizeObserver = new ResizeObserver(() => {
+            syncColumnWidths();
+          });
+          if (headClone) resizeObserver.observe(headClone);
+          if (bodyClone) resizeObserver.observe(bodyClone);
+        }
+      }
+    }
+  });
 </script>
 
 {#if sticky}
-  {#if $$slots.thead}
+  {#if thead}
     <div class="scrolling-table">
       <table
         class="fixed-table-head"
@@ -83,7 +100,7 @@
             <col style="width: {width}px" />
           {/each}
         </colgroup>
-        <slot name="thead" />
+        {@render thead?.()}
       </table>
       <table
         class="scrolling-table-body"
@@ -95,20 +112,20 @@
             <col style="width: {width}px" />
           {/each}
         </colgroup>
-        <slot name="tbody" />
+        {@render tbody?.()}
         <!-- Table body content -->
-        <slot />
+        {@render children?.()}
         <!-- default slot for additional content -->
       </table>
     </div>
     <div class="visually-hidden">
       <table class="fixed-table-head" bind:this={headClone}>
-        <slot name="thead" />
+        {@render thead?.()}
       </table>
       <table class="scrolling-table-body" bind:this={bodyClone}>
-        <slot name="tbody" />
+        {@render tbody?.()}
         <!-- Table body content -->
-        <slot />
+        {@render children?.()}
         <!-- default slot for additional content -->
       </table>
     </div>
@@ -116,13 +133,13 @@
     <div class="table-container">
       <div class="veil"></div>
       <table class:sticky>
-        <slot />
+        {@render children?.()}
       </table>
     </div>
   {/if}
 {:else}
   <table>
-    <slot />
+    {@render children?.()}
   </table>
 {/if}
 

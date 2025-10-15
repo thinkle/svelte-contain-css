@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Button from "$lib/controls/Button.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Select from "$lib/controls/Select.svelte";
@@ -7,16 +9,20 @@
   import FormItem from "$lib/layout/FormItem.svelte";
   import type { CSSVariable } from "./types";
 
-  export let variables: CSSVariable[];
-  export let customizedVariables: string[] = [];
   type Callback = (variables: { [key: string]: string }) => void;
-  export let onSetVariables: Callback;
-  const variableValues: { [key: string]: string } = {};
-  let remainingVariables: CSSVariable[] = [];
+  interface Props {
+    variables: CSSVariable[];
+    customizedVariables?: string[];
+    onSetVariables: Callback;
+  }
+
+  let { variables, customizedVariables = $bindable([]), onSetVariables }: Props = $props();
+  const variableValues: { [key: string]: string } = $state({});
+  let remainingVariables: CSSVariable[] = $state([]);
   let theVariable: CSSVariable | null;
   let theVariables: {
     [key: string]: CSSVariable;
-  } = {};
+  } = $state({});
 
   function updateRemaining(customizedVariables: string[]) {
     remainingVariables = variables.filter(
@@ -34,9 +40,11 @@
     }
     //theVariables[group] = remainingVariables[0];
   }
-  $: updateRemaining(customizedVariables);
-  let groups: (string | undefined)[] = [];
-  $: {
+  run(() => {
+    updateRemaining(customizedVariables);
+  });
+  let groups: (string | undefined)[] = $state([]);
+  run(() => {
     groups = [];
     for (let variable of variables) {
       let group = variable.group;
@@ -44,7 +52,7 @@
         groups = [...groups, group];
       }
     }
-  }
+  });
 </script>
 
 <h2>Set CSS Variables</h2>
@@ -60,22 +68,24 @@
           --form-label-width="260px"
           --select-width="260px"
         >
-          <div slot="label">
-            {#key remainingVariables.length}
-              {#if remainingVariables.filter((v) => v.group == group).length > 0}
-                <Select
-                  id="css-var-{i}"
-                  bind:value={theVariables[group || "no-group"]}
-                >
-                  {#each remainingVariables as variable}
-                    {#if variable.group === group}
-                      <option value={variable}>{variable.name}</option>
-                    {/if}
-                  {/each}
-                </Select>
-              {/if}
-            {/key}
-          </div>
+          {#snippet label()}
+                    <div >
+              {#key remainingVariables.length}
+                {#if remainingVariables.filter((v) => v.group == group).length > 0}
+                  <Select
+                    id="css-var-{i}"
+                    bind:value={theVariables[group || "no-group"]}
+                  >
+                    {#each remainingVariables as variable}
+                      {#if variable.group === group}
+                        <option value={variable}>{variable.name}</option>
+                      {/if}
+                    {/each}
+                  </Select>
+                {/if}
+              {/key}
+            </div>
+                  {/snippet}
           {#if theVariables[group || "no-group"]}
             {@const variable = theVariables[group || "no-group"]}
             {#key theVariables[group]}
@@ -83,7 +93,7 @@
                 type="text"
                 placeholder={variable.placeholder || variable.defaultValue}
                 bind:value={variableValues[variable.name]}
-                on:input={(e) => {
+                oninput={(e) => {
                   for (let v in variableValues) {
                     if (variableValues[v] === "") {
                       delete variableValues[v];
@@ -91,7 +101,7 @@
                   }
                   onSetVariables(variableValues);
                 }}
-                on:keyup={(e) => {
+                onkeyup={(e) => {
                   if (e.key === "Enter") {
                     customizedVariables = [
                       ...customizedVariables,
@@ -102,22 +112,24 @@
               />
             {/key}
           {/if}
-          <div slot="after">
-            {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
-              {@const variable = theVariables[group || "no-group"]}
-              <div style="display:flex;justify-content:end;">
-                <MiniButton
-                  primary
-                  on:click={() => {
-                    customizedVariables = [
-                      ...customizedVariables,
-                      variable.name,
-                    ];
-                  }}>+</MiniButton
-                >
-              </div>
-            {/if}
-          </div>
+          {#snippet after()}
+                    <div >
+              {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
+                {@const variable = theVariables[group || "no-group"]}
+                <div style="display:flex;justify-content:end;">
+                  <MiniButton
+                    primary
+                    on:click={() => {
+                      customizedVariables = [
+                        ...customizedVariables,
+                        variable.name,
+                      ];
+                    }}>+</MiniButton
+                  >
+                </div>
+              {/if}
+            </div>
+                  {/snippet}
         </FormItem>
       </details>
     {/if}
@@ -129,12 +141,14 @@
       {@const variable = variables.find((v) => v.name === varName)}
       {#if variable}
         <FormItem>
-          <span slot="label">{variable?.name}</span>
+          {#snippet label()}
+                    <span >{variable?.name}</span>
+                  {/snippet}
           <input
             type="text"
             placeholder={variable?.placeholder}
             bind:value={variableValues[variable.name]}
-            on:input={(e) => {
+            oninput={(e) => {
               for (let v in variableValues) {
                 if (variableValues[v] === "") {
                   delete variableValues[v];
@@ -143,18 +157,20 @@
               onSetVariables(variableValues);
             }}
           />
-          <MiniButton
-            slot="after"
-            on:click={() => {
-              if (variable?.name) {
-                delete variableValues[variable.name];
-                customizedVariables = customizedVariables.filter(
-                  (v) => v !== variable.name
-                );
-                onSetVariables(variableValues);
-              }
-            }}>-</MiniButton
-          >
+          {#snippet after()}
+                    <MiniButton
+              
+              on:click={() => {
+                if (variable?.name) {
+                  delete variableValues[variable.name];
+                  customizedVariables = customizedVariables.filter(
+                    (v) => v !== variable.name
+                  );
+                  onSetVariables(variableValues);
+                }
+              }}>-</MiniButton
+            >
+                  {/snippet}
         </FormItem>
       {/if}
     {/each}

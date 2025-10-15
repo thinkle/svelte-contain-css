@@ -7,8 +7,8 @@
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { dialogVars } from "./cssVariableDefs";
 
-  let modalIsOpen = false;
-  let nonModalIsOpen = false;
+  let modalIsOpen = $state(false);
+  let nonModalIsOpen = $state(false);
 </script>
 
 <Container>

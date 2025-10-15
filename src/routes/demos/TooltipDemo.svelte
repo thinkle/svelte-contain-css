@@ -92,14 +92,16 @@
     </p>
     <Tooltip>
       <Button>Fancy Tooltip Button</Button>
-      <div slot="tooltip" style="display:block">
-        <p>This button is <i>extra fancy</i> and contains a list:</p>
-        <ul>
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
-        </ul>
-      </div>
+      {#snippet tooltip()}
+            <div  style="display:block">
+          <p>This button is <i>extra fancy</i> and contains a list:</p>
+          <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+          </ul>
+        </div>
+          {/snippet}
     </Tooltip>
     <Code
       code={`<Tooltip>
@@ -120,14 +122,16 @@
   <Card>
     <Tooltip>
       <Button>Fancy Tooltip Button</Button>
-      <div slot="tooltip">
-        <p>This button is <i>extra fancy</i> and contains a list:</p>
-        <ul>
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
-        </ul>
-      </div>
+      {#snippet tooltip()}
+            <div >
+          <p>This button is <i>extra fancy</i> and contains a list:</p>
+          <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+          </ul>
+        </div>
+          {/snippet}
     </Tooltip>
   </Card>
 </CssVariableDemo>

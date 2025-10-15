@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (xs to xs_1) making the component unusable -->
 <script lang="ts">
   export let greaterThan: "xs" | "small" | "medium" | "large" | "xl" | null =
     null;

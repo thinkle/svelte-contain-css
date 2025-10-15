@@ -9,7 +9,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Option from "$lib/controls/Option.svelte";
   let longList: string[] = [];
-  let constrainedWidth = "80px";
+  let constrainedWidth = $state("80px");
   function randomWord() {
     let words = [
       "apple",
@@ -40,7 +40,7 @@
   for (let i = 0; i < 30; i++) {
     longList.push(`${randomWord()} ${i}`);
   }
-  let val = 2;
+  let val = $state(2);
 
   let people = [
     { name: "John", age: 30, label: "John (aged 30)" },
@@ -48,21 +48,25 @@
     { name: "Jim", age: 40, label: "Jim (aged 40)" },
     { name: "Jill", age: 35, label: "Jill (aged 35)" },
   ];
-  let selectedPerson = people[0];
+  let selectedPerson = $state(people[0]);
 </script>
 
 <TextLayout>
   <h2>Dropdown Menus</h2>
   <Bar>
     <Menu>
-      <span slot="label">Left Menu</span>
+      {#snippet label()}
+            <span >Left Menu</span>
+          {/snippet}
       <li><button>Foo</button></li>
       <li><button>Bar</button></li>
       <li><button>Baz</button></li>
       <li><button>Bang</button></li>
     </Menu>
     <Menu>
-      <span slot="label">Long Menu</span>
+      {#snippet label()}
+            <span >Long Menu</span>
+          {/snippet}
       {#each longList as item}
         <li id="go-nowhere">
           <a href="#go-nowhere">{item}</a>
@@ -70,7 +74,9 @@
       {/each}
     </Menu>
     <Menu>
-      <span slot="label">Right Menu</span>
+      {#snippet label()}
+            <span >Right Menu</span>
+          {/snippet}
       <li><button>Foo</button></li>
       <li><button>Bar</button></li>
       <li><button>Baz</button></li>
@@ -104,7 +110,9 @@
   </p>
 
   <FormItem>
-    <span slot="label">Select a person:</span>
+    {#snippet label()}
+        <span >Select a person:</span>
+      {/snippet}
     <Select bind:value={selectedPerson}>
       {#each people as person}
         <option value={person}>{person.label}</option>
@@ -119,7 +127,9 @@
   <p>You selected {selectedPerson.name}, aged {selectedPerson.age}!</p>
 
   <FormItem>
-    <span slot="label">Select an option:</span>
+    {#snippet label()}
+        <span >Select an option:</span>
+      {/snippet}
     <Select bind:value={val}>
       <Option value={1}>Option A</Option>
       <Option value={2}><b>Strong</b> B</Option>
@@ -143,7 +153,9 @@
   <div>
     <p>Show off two way binding by changing the option here as well:</p>
     <FormItem>
-      <span slot="label">Option #</span>
+      {#snippet label()}
+            <span >Option #</span>
+          {/snippet}
       <input type="number" bind:value={val} />
     </FormItem>
   </div>
@@ -151,11 +163,15 @@
   <p>
     Here it is using the --select-width variable to constrain the select size.
     <FormItem>
-      <span slot="label">--select-width</span>
+      {#snippet label()}
+            <span >--select-width</span>
+          {/snippet}
       <input bind:value={constrainedWidth} />
     </FormItem>
     <FormItem>
-      <span slot="label">A narrower select:</span>
+      {#snippet label()}
+            <span >A narrower select:</span>
+          {/snippet}
       <Select --select-width={constrainedWidth} bind:value={val}>
         <Option value={1}>Option A</Option>
         <Option value={2}><b>Strong</b> B</Option>
