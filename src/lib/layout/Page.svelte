@@ -1,34 +1,40 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
   import { onDestroy, onMount } from "svelte";
 
-  export let right = false;
-  export let sticky = false;
-  export let hideSidebar = false;
-  export let hideHeader = false;
-  export let hideFooter = false;
-  export let contentPadding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let onStickyChange: (stuck: boolean) => void = () => {};
+  const {
+    right = false,
+    sticky = false,
+    hideSidebar = false,
+    hideHeader = false,
+    hideFooter = false,
+    onStickyChange = () => {},
+    header,
+    footer,
+    sidebar,
+    children,
+    ...restProps
+  }: {
+    right?: boolean;
+    sticky?: boolean;
+    hideSidebar?: boolean;
+    hideHeader?: boolean;
+    hideFooter?: boolean;
+    onStickyChange?: (stuck: boolean) => void;
+    header?: Snippet;
+    footer?: Snippet;
+    sidebar?: Snippet;
+    children?: Snippet;
+  } & Record<string, unknown> = $props();
 
-  let style = injectVars($$props, "page", [
-    "bg",
-    "fg",
-    "contentPadding",
-    "width",
-    "height",
-  ]);
+  const style = $derived(
+    injectVars(restProps, "page", ["bg", "fg", "contentPadding", "width", "height"])
+  );
 
-  let hasSidebar: boolean;
-  let hasHeader: boolean;
-  let hasFooter: boolean;
-  $: hasSidebar = $$slots.sidebar && !hideSidebar;
-  $: hasHeader = $$slots.header && !hideHeader;
-  $: hasFooter = $$slots.footer && !hideFooter;
+  const hasSidebar = $derived(Boolean(sidebar) && !hideSidebar);
+  const hasHeader = $derived(Boolean(header) && !hideHeader);
+  const hasFooter = $derived(Boolean(footer) && !hideFooter);
 
   // Start "unfrozen" so i.e. scrolling on reload
   // or hash link works properly
@@ -81,25 +87,26 @@
   class:freeze
   class:right
   class:sticky
-  class:hasHeader
-  class:hasSidebar
-  class:hasFooter
+  class:hasHeader={hasHeader}
+  class:hasSidebar={hasSidebar}
+  class:hasFooter={hasFooter}
   bind:this={pageElement}
-  {style}
+  style={style}
+  {...restProps}
 >
   <header>
-    <slot name="header" />
+    {#if hasHeader}{@render header?.()}{/if}
   </header>
   <div class="side-by-side">
     <div class="aside">
-      <slot name="sidebar" />
+      {#if hasSidebar}{@render sidebar?.()}{/if}
     </div>
     <div class="content">
-      <slot />
+      {@render children?.()}
     </div>
   </div>
   <footer>
-    <slot name="footer" />
+    {#if hasFooter}{@render footer?.()}{/if}
   </footer>
 </section>
 

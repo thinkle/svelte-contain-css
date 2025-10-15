@@ -1,5 +1,21 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
+
+  interface Props {
+    sticky?: boolean;
+    column_widths?: number[] | null;
+    thead?: import("svelte").Snippet;
+    tbody?: import("svelte").Snippet;
+    children?: import("svelte").Snippet;
+  }
+
+  let {
+    sticky = false,
+    column_widths = null,
+    thead,
+    tbody,
+    children,
+  }: Props = $props();
 
   let columns = $state(column_widths || []);
 
@@ -9,21 +25,7 @@
   let resizeObserver: ResizeObserver | null = $state(null);
   let tableWidth = $state(null);
   import { onDestroy } from "svelte";
-  interface Props {
-    sticky?: boolean;
-    column_widths?: number[] | null;
-    thead?: import('svelte').Snippet;
-    tbody?: import('svelte').Snippet;
-    children?: import('svelte').Snippet;
-  }
 
-  let {
-    sticky = false,
-    column_widths = null,
-    thead,
-    tbody,
-    children
-  }: Props = $props();
   onDestroy(() => {
     if (resizeObserver) {
       if (headClone) resizeObserver.unobserve(headClone);
@@ -64,27 +66,35 @@
     }
     tableWidth = totalWidth;
   }
-  run(() => {
-    if (!column_widths) {
-      // If no column widths provided, reset columns to empty
-      columns = [];
-      if (thead && sticky && headClone && bodyClone) {
-        syncColumnWidths();
-        // Set up ResizeObserver to keep columns in sync when content or size changes
-        if (
-          !resizeObserver &&
-          typeof window !== "undefined" &&
-          window.ResizeObserver
-        ) {
-          resizeObserver = new ResizeObserver(() => {
-            syncColumnWidths();
-          });
-          if (headClone) resizeObserver.observe(headClone);
-          if (bodyClone) resizeObserver.observe(bodyClone);
-        }
-      }
+
+  let hasInitialized = $state(false);
+  $effect(() => {
+    if (thead && sticky && !hasInitialized) {
+      setupWidths();
     }
   });
+
+  function setupWidths() {
+    if (column_widths) return;
+    // If no column widths provided, reset columns to empty
+    columns = [];
+    if (thead && sticky && headClone && bodyClone) {
+      syncColumnWidths();
+      // Set up ResizeObserver to keep columns in sync when content or size changes
+      if (
+        !resizeObserver &&
+        typeof window !== "undefined" &&
+        window.ResizeObserver
+      ) {
+        resizeObserver = new ResizeObserver(() => {
+          syncColumnWidths();
+        });
+        if (headClone) resizeObserver.observe(headClone);
+        if (bodyClone) resizeObserver.observe(bodyClone);
+      }
+      hasInitialized = true;
+    }
+  }
 </script>
 
 {#if sticky}

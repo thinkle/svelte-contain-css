@@ -1,67 +1,79 @@
-<!-- @migration-task Error while migrating Svelte code: This migration would change the name of a slot (xs to xs_1) making the component unusable -->
 <script lang="ts">
-  export let greaterThan: "xs" | "small" | "medium" | "large" | "xl" | null =
-    null;
-  export let smallerThan: "xs" | "small" | "medium" | "large" | "xl" | null =
-    null;
-  let smallerThanClasses = "";
-  let greaterThanClasses = "";
-  if (smallerThan) {
-    for (let className of ["xs", "small", "medium", "large", "xl"]) {
-      if (className === smallerThan) {
-        smallerThanClasses += ` ${className}`;
-        break;
-      }
-      smallerThanClasses += ` ${className}`;
+  import type { Snippet } from "svelte";
+
+  const breakpoints = ["xs", "small", "medium", "large", "xl"] as const;
+
+  const {
+    greaterThan = null,
+    smallerThan = null,
+    xs,
+    small,
+    medium,
+    large,
+    xl,
+    else: elseSnippet,
+    greaterThan: greaterThanSnippet,
+    smallerThan: smallerThanSnippet,
+  }: {
+    greaterThan?: (typeof breakpoints)[number] | null;
+    smallerThan?: (typeof breakpoints)[number] | null;
+    xs?: Snippet;
+    small?: Snippet;
+    medium?: Snippet;
+    large?: Snippet;
+    xl?: Snippet;
+    else?: Snippet;
+    greaterThan?: Snippet;
+    smallerThan?: Snippet;
+  } = $props();
+
+  function computeSmallerThan(value: (typeof breakpoints)[number] | null) {
+    if (!value) return "";
+    const classes: string[] = [];
+    for (const name of breakpoints) {
+      classes.push(name);
+      if (name === value) break;
     }
+    return classes.map((name) => ` ${name}`).join("");
   }
-  if (greaterThan) {
-    for (let className of ["xl", "large", "medium", "small", "xs"]) {
-      if (className === greaterThan) {
-        greaterThanClasses += ` ${className}`;
-        break;
-      }
-      greaterThanClasses += ` ${className}`;
+
+  function computeGreaterThan(value: (typeof breakpoints)[number] | null) {
+    if (!value) return "";
+    const classes: string[] = [];
+    for (const name of [...breakpoints].reverse()) {
+      classes.push(name);
+      if (name === value) break;
     }
+    return classes.map((name) => ` ${name}`).join("");
   }
-  let xs: HTMLSpanElement;
-  let small: HTMLSpanElement;
-  let medium: HTMLSpanElement;
-  let large: HTMLSpanElement;
-  let xl: HTMLSpanElement;
+
+  const smallerThanClasses = $derived(computeSmallerThan(smallerThan));
+  const greaterThanClasses = $derived(computeGreaterThan(greaterThan));
+
+  const hasXs = $derived(Boolean(xs));
+  const hasSmall = $derived(Boolean(small));
+  const hasMedium = $derived(Boolean(medium));
+  const hasLarge = $derived(Boolean(large));
+  const hasXl = $derived(Boolean(xl));
 </script>
 
-<span class="xs" bind:this={xs}>
-  <slot name="xs" />
-</span>
-<span class="small" bind:this={small}>
-  <slot name="small" />
-</span>
-<span class="medium" bind:this={medium}>
-  <slot name="medium" />
-</span>
-<span class="large" bind:this={large}>
-  <slot name="large" />
-</span>
-<span class="xl" bind:this={xl}>
-  <slot name="xl" />
-</span>
+<span class="xs">{@render xs?.()}</span>
+<span class="small">{@render small?.()}</span>
+<span class="medium">{@render medium?.()}</span>
+<span class="large">{@render large?.()}</span>
+<span class="xl">{@render xl?.()}</span>
 <span
   class="else"
-  class:xs={!$$slots.xs}
-  class:small={!$$slots.small}
-  class:medium={!$$slots.medium}
-  class:large={!$$slots.large}
-  class:xl={!$$slots.xl}
+  class:xs={!hasXs}
+  class:small={!hasSmall}
+  class:medium={!hasMedium}
+  class:large={!hasLarge}
+  class:xl={!hasXl}
 >
-  <slot name="else" />
+  {@render elseSnippet?.()}
 </span>
-<span class={greaterThanClasses}>
-  <slot name="greaterThan" />
-</span>
-<span class={smallerThanClasses}>
-  <slot name="smallerThan" />
-</span>
+<span class={greaterThanClasses}>{@render greaterThanSnippet?.()}</span>
+<span class={smallerThanClasses}>{@render smallerThanSnippet?.()}</span>
 
 <style>
   .xs,

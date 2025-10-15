@@ -1,23 +1,32 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
 
-  let cssVars = injectVars($$props, "hero", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
+  const {
+    children,
+    ...restProps
+  }: { children?: Snippet } & Record<string, unknown> = $props();
+
+  const style = $derived(
+    injectVars(restProps, "hero", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "headingFg",
+      "headingBg",
+    ])
+  );
 </script>
 
-<div class="hero" style:--text-align="var(--hero-text-align,center)">
-  <slot />
+<div
+  class="hero"
+  {style}
+  style:--text-align="var(--hero-text-align,center)"
+  {...restProps}
+>
+  {@render children?.()}
 </div>
 
 <style lang="scss">

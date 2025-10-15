@@ -75,7 +75,11 @@
   :global(h4),
   :global(h5),
   :global(h6) {
-    @include color-props(heading);
+    color: fn.var-with-fallbacks(--heading-fg, append($prefixes, unset)...);
+    background: fn.var-with-fallbacks(
+      --heading-bg,
+      append($prefixes, transparent)...
+    );
     max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;

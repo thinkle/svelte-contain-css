@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import IntroOverview from "./IntroOverview.svelte";
   import "$lib/vars/defaults.css";
@@ -161,7 +161,12 @@
 </script>
 
 {#if showHero}
-  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+  <Hero
+    center={true}
+    bg="var(--primary-bg)"
+    fg="var(--primary-fg)"
+    headingFg="var(--primary-fg)"
+  >
     <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
     <p>
       The Simple Svelte Component Library that uses css variables & container
@@ -178,7 +183,7 @@
   }}
 >
   {#snippet header()}
-    <Bar  --bar-border-top="none" --side-width="{sideWidth}px">
+    <Bar --bar-border-top="none" --side-width="{sideWidth}px">
       <div class="icon equal-width"></div>
       <h1><em>ContainCSS</em></h1>
       <div
@@ -191,16 +196,17 @@
       >
         {#if theItem > 0}
           <Button on:click={() => changeItem(theItem - 1)}>
-            <span style="transform:rotate(180deg);display:inline-block;">⮕</span>
+            <span style="transform:rotate(180deg);display:inline-block;">⮕</span
+            >
           </Button>
         {/if}
 
         <DropdownMenu --bg="#222">
           {#snippet label()}
-                <span >
+            <span>
               {menu[theItem].name}
             </span>
-              {/snippet}
+          {/snippet}
 
           {#each menu as item, idx}
             <li>
@@ -217,7 +223,6 @@
   {/snippet}
   {#snippet footer()}
     <Bar
-      
       --bar-justify="flex-end"
       height="1.5em"
       --bar-border-top="none"
@@ -230,7 +235,7 @@
     </Bar>
   {/snippet}
   {#snippet sidebar()}
-    <Sidebar  {right}>
+    <Sidebar {right}>
       <MenuList
         --menu-item-justify="start"
         --menu-item-padding="var(--padding) var(--padding) var(--padding) calc(4*var(--padding))"

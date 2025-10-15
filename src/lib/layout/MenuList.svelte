@@ -1,34 +1,33 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
-  export let fg: string | null = null;
-  export let bg: string | null = null;
-  export let itemPadding: string | null = null;
-  export let itemWidth: string | null = null;
-  export let itemHeight: string | null = null;
-  export let itemFg: string | null = null;
-  export let itemBg: string | null = null;
-  export let itemEvenFg: string | null = null;
-  export let itemEvenBg: string | null = null;
-  export let itemActiveFg: string | null = null;
-  export let itemActiveBg: string | null = null;
-  let style = injectVars($$props, "menu", [
-    "fg",
-    "bg",
-    "itemPadding",
-    "itemWidth",
-    "itemHeight",
-    "itemFg",
-    "itemBg",
-    "itemEvenFg",
-    "itemEvenBg",
-    "itemActiveFg",
-    "itemActiveBg",
-  ]);
+
+  let {
+    children,
+    striped,
+    ...restProps
+  }: { children?: Snippet; striped: boolean } & Record<string, unknown> =
+    $props();
+
+  const style = $derived(
+    injectVars(restProps, "menu", [
+      "fg",
+      "bg",
+      "itemPadding",
+      "itemWidth",
+      "itemHeight",
+      "itemFg",
+      "itemBg",
+      "itemEvenFg",
+      "itemEvenBg",
+      "itemActiveFg",
+      "itemActiveBg",
+    ])
+  );
 </script>
 
-<ul {style} class="menu">
-  <slot />
+<ul {style} class="menu" {...restProps} class:striped>
+  {@render children?.()}
 </ul>
 
 <style lang="scss">
@@ -74,8 +73,8 @@
       );
     }
   }
-
-  /* & :global(li:nth-of-type(even)) > {
+  .menu.striped {
+    & :global(li:nth-of-type(even)) > {
       @include global-buttons {
         @include color-props(
           menu-item-even,
@@ -98,5 +97,5 @@
         container
       );
     }
-  } */
+  }
 </style>

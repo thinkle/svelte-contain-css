@@ -1,17 +1,17 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
   import { injectVars } from "$lib/util";
   import { onMount } from "svelte";
-  export let leftWidth = "1fr";
-  export let rightWidth = "1fr";
-  const style = injectVars($$props, "split-pane", [
-    "bg",
-    "fg",
-    "border",
-    "height",
-    "leftWidth",
-    "rightWidth",
-  ]);
+  const restProps: Record<string, unknown> = $props();
+  const style = $derived(
+    injectVars(restProps, "split-pane", [
+      "bg",
+      "fg",
+      "border",
+      "height",
+      "leftWidth",
+      "rightWidth",
+    ])
+  );
   let resizeStyle = "";
   let startWidthLeft: number;
   let startWidthRight: number;
@@ -92,6 +92,7 @@
   class="split-pane"
   style={style + resizeStyle}
   bind:this={splitPaneContainer}
+  {...restProps}
 >
   <div class="left" bind:this={leftPane}>
     <slot name="left" />
