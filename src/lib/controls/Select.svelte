@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { run, createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
   interface Props {
     value: any;
-    children?: import('svelte').Snippet;
-    [key: string]: any
+    children?: import("svelte").Snippet;
+    [key: string]: any;
   }
 
-  let { value = $bindable(), children, ...rest }: Props = $props();
-  let selectElement: HTMLSelectElement = $state();
+  let { value = $bindable(), children, ...restProps }: Props = $props();
+  let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
   let targetWidth = $state(0);
@@ -76,7 +73,7 @@
 
   function setValue(idx: number) {
     selectElement.selectedIndex = idx;
-    selectElement.dispatchEvent(new Event("change"));
+    selectElement.dispatchEvent(new Event("change", { bubbles: true }));
     activeOption = options[idx];
   }
 
@@ -87,23 +84,23 @@
     }
   }
 
-  run(() => {
+  $effect(() => {
     updateOption(value);
   });
 </script>
 
-<select bind:value onchange={bubble('change')} bind:this={selectElement} {...rest}>
+<select bind:value bind:this={selectElement} {...restProps}>
   {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width="{targetWidth}px">
   <DropdownMenu>
     {#snippet label()}
-        <span class="select-dropdown" >
+      <span class="select-dropdown">
         <span class="select-dropdown-label">
           {#if activeOption}{@html activeOption.html}{:else}-{/if}
         </span>
       </span>
-      {/snippet}
+    {/snippet}
     {#each options as option, index}
       <li bind:this={optionButtons[index]}>
         <button onclick={() => setValue(index)}>
