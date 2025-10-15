@@ -14,7 +14,7 @@
   import Button from "$lib/controls/Button.svelte";
   interface Props {
     variables?: CSSVariable[];
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { variables = [], children }: Props = $props();
@@ -33,7 +33,7 @@
   </Dialog>
 </div>
 
-<Button on:click={() => (modalIsOpen = true)}>Set CSS Variables</Button>
+<Button onclick={() => (modalIsOpen = true)}>Set CSS Variables</Button>
 <CssWrapper variables={cssValues}>
   {@render children?.()}
 </CssWrapper>

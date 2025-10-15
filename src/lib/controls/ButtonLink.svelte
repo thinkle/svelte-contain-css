@@ -4,12 +4,8 @@
 
   let {
     primary = false,
+    secondary = false,
     warning = false,
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
     href = "#",
     id = null,
     icon,
@@ -17,39 +13,39 @@
     ...restProps
   }: {
     primary?: boolean;
+    secondary?: boolean;
     warning?: boolean;
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
     href?: string;
     id?: string | null;
     icon?: Snippet;
     children?: Snippet;
-  } = $props();
+  } & Record<string, unknown> = $props();
+
+  const { style: inlineStyle, ...elementProps } = restProps as {
+    style?: string;
+  } & Record<string, unknown>;
+
+  const style = $derived(
+    `${injectVars(
+      elementProps,
+      "button",
+      ["bg", "fg", "padding", "width", "height"]
+    )}${inlineStyle ?? ""}`
+  );
 
   const iconSlotted = $derived(Boolean(icon));
-  const style = $derived(
-    injectVars({ bg, fg, padding, width, height, ...restProps }, "button", [
-      "bg",
-      "fg",
-      "padding",
-      "width",
-      "height",
-    ])
-  );
 </script>
 
 <a
   role="button"
-  {style}
+  style={style}
   {href}
   id={id ?? undefined}
   class:primary
+  class:secondary
   class:warning
   class:has-icon={iconSlotted}
-  {...restProps}
+  {...elementProps}
 >
   <span class="content">{@render children?.()}</span>
   <span class:hidden={!iconSlotted} class="icon">

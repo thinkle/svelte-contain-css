@@ -5,11 +5,6 @@
   let {
     checked = $bindable<boolean | undefined>(undefined),
     name = "",
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
     value = undefined,
     group = $bindable<any>(undefined),
     children,
@@ -17,18 +12,13 @@
   }: {
     checked?: boolean | undefined;
     name?: string;
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
     value?: any;
     group?: any;
     children?: Snippet;
-  } = $props();
+  } & Record<string, unknown> = $props();
 
   const style = $derived(
-    injectVars({ bg, fg, padding, width, height, ...restProps }, "checkbox", [
+    injectVars(restProps, "checkbox", [
       "bg",
       "fg",
       "padding",
@@ -37,10 +27,10 @@
     ])
   );
 
-  let useGroup = $derived(group !== undefined && value !== undefined);
+  const useGroup = $derived(group !== undefined && value !== undefined);
 
   let ref: HTMLElement | null = $state(null);
-  let labelContent: string = $derived(ref ? ref.innerHTML : "");
+  const labelContent = $derived(ref ? ref.innerHTML : "");
 </script>
 
 <div class="label-sizing-box" {style}>

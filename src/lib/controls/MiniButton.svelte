@@ -1,33 +1,27 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-  export let primary: boolean = false;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
   import { injectVars } from "$lib/util";
 
-  let style = injectVars($$props, "mini-button", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
+  let {
+    primary = false,
+    warning = false,
+    ...restProps
+  }: {
+    primary?: boolean;
+    warning?: boolean;
+  } & Record<string, unknown> = $props();
+
+  const style = $derived(
+    injectVars(restProps, "mini-button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ])
+  );
 </script>
 
-<button
-  {style}
-  class:primary
-  on:click
-  on:blur
-  on:dblclick
-  on:focus
-  on:keydown
-  on:keyup
-  {...$$restProps}
->
+<button {style} class:primary class:warning {...restProps}>
   <slot />
 </button>
 

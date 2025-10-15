@@ -11,12 +11,16 @@
   - Note: Confirmed the Vite config continues to import `sveltekit` correctly and the script targets align with Vite 5; no changes required.
 
 ## Core Patterns
-- [ ] Replace all `export let` + `$$props`/`$$restProps` usage with `$props()`/destructuring and `$restProps()` (e.g. `src/lib/controls/Button.svelte`, `src/lib/layout/Bar.svelte`, `src/lib/dropdowns/DropdownMenu.svelte`).
-  - Progress: Migrated `src/lib/controls/Input.svelte`, `src/lib/controls/Slider.svelte`, and `src/lib/layout/Container.svelte` to `$props`/`$restProps`, including `$bindable` usage and dropped manual event forwarding.
+- [ ] Replace all `export let` + `$$props`/`$$restProps` usage with `$props()` destructuring and rest prop spreading (e.g. `src/lib/controls/Button.svelte`, `src/lib/layout/Bar.svelte`, `src/lib/dropdowns/DropdownMenu.svelte`).
+  - Progress: Migrated `src/lib/controls/Input.svelte`, `src/lib/controls/Slider.svelte`, `src/lib/layout/Container.svelte`, `src/lib/controls/Button.svelte`, `src/lib/controls/ButtonLink.svelte`, and `src/lib/controls/Checkbox.svelte` to rune-based `$props` destructuring with rest prop spreading and CSS variable injection.
 - [ ] Introduce typed snippet props for every former named slot, importing `Snippet` from `svelte` and removing direct `$$slots` access (`Button`, `TabItem`, `Card`, `FormItem`, `Page`, `Table`, `ResponsiveText`, `Tooltip`, `DropdownMenu`).
 - [ ] Make `injectVars` calls reactive by deriving them from the `$props()` proxy and adjust `src/lib/util.ts:3` if needed for the new prop shape.
 - [ ] Convert `$:` blocks to `$derived`/`$effect` where appropriate (`src/lib/Card.svelte:19`, `src/lib/misc/Progress.svelte:27`, `src/lib/controls/Checkbox.svelte:28`, `src/lib/controls/RadioButton.svelte:23`, `src/lib/controls/Select.svelte:80`, `src/lib/layout/Table.svelte:11`, `src/lib/layout/Page.svelte:28`).
 - [ ] Remove bare event forwarders and rely on rest prop spreading on host elements (`src/lib/controls/Button.svelte:23`, `src/lib/controls/Input.svelte:9`, `src/lib/controls/Checkbox.svelte:48`, `src/lib/controls/MiniButton.svelte:22`, `src/lib/layout/Tile.svelte:11`).
+- [ ] Clear all `@migration-task` annotations left by `sv migrate`, completing manual conversions in:
+  - `src/lib/controls/Button.svelte`, `ButtonLink.svelte`, `Checkbox.svelte`, `MiniButton.svelte`, `RadioButton.svelte`, `TabItem.svelte`
+  - `src/lib/layout/Bar.svelte`, `FormItem.svelte`, `Hero.svelte`, `MenuList.svelte`, `Page.svelte`, `ResponsiveText.svelte`, `Sidebar.svelte`, `SplitPane.svelte`
+  - `src/lib/Card.svelte`, `src/lib/misc/Progress.svelte`, `src/lib/overlays/Dialog.svelte`, `src/routes/demos/ProgressDemo.svelte`
 
 ## Component Follow-ups
 - [ ] Controls: refactor `Button`, `ButtonLink`, `MiniButton`, `Input`, `Checkbox`, `RadioButton`, `Slider`, `Select`, `TabItem` for runes, snippets, and TypeScript typings that work with two-way bindings.

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import Button from "$lib/controls/Button.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
@@ -16,7 +16,11 @@
     onSetVariables: Callback;
   }
 
-  let { variables, customizedVariables = $bindable([]), onSetVariables }: Props = $props();
+  let {
+    variables,
+    customizedVariables = $bindable([]),
+    onSetVariables,
+  }: Props = $props();
   const variableValues: { [key: string]: string } = $state({});
   let remainingVariables: CSSVariable[] = $state([]);
   let theVariable: CSSVariable | null;
@@ -69,7 +73,7 @@
           --select-width="260px"
         >
           {#snippet label()}
-                    <div >
+            <div>
               {#key remainingVariables.length}
                 {#if remainingVariables.filter((v) => v.group == group).length > 0}
                   <Select
@@ -85,7 +89,7 @@
                 {/if}
               {/key}
             </div>
-                  {/snippet}
+          {/snippet}
           {#if theVariables[group || "no-group"]}
             {@const variable = theVariables[group || "no-group"]}
             {#key theVariables[group]}
@@ -113,13 +117,13 @@
             {/key}
           {/if}
           {#snippet after()}
-                    <div >
+            <div>
               {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
                 {@const variable = theVariables[group || "no-group"]}
                 <div style="display:flex;justify-content:end;">
                   <MiniButton
                     primary
-                    on:click={() => {
+                    onclick={() => {
                       customizedVariables = [
                         ...customizedVariables,
                         variable.name,
@@ -129,7 +133,7 @@
                 </div>
               {/if}
             </div>
-                  {/snippet}
+          {/snippet}
         </FormItem>
       </details>
     {/if}
@@ -142,8 +146,8 @@
       {#if variable}
         <FormItem>
           {#snippet label()}
-                    <span >{variable?.name}</span>
-                  {/snippet}
+            <span>{variable?.name}</span>
+          {/snippet}
           <input
             type="text"
             placeholder={variable?.placeholder}
@@ -158,9 +162,8 @@
             }}
           />
           {#snippet after()}
-                    <MiniButton
-              
-              on:click={() => {
+            <MiniButton
+              onclick={() => {
                 if (variable?.name) {
                   delete variableValues[variable.name];
                   customizedVariables = customizedVariables.filter(
@@ -170,7 +173,7 @@
                 }
               }}>-</MiniButton
             >
-                  {/snippet}
+          {/snippet}
         </FormItem>
       {/if}
     {/each}

@@ -33,7 +33,7 @@
   <dialog bind:this={dialogElement} on:close={onClose}>
     <slot />
     <div class="close-button">
-      <MiniButton on:click={onClose}>&times;</MiniButton>
+      <MiniButton onclick={onClose}>&times;</MiniButton>
     </div>
   </dialog>
 </section>

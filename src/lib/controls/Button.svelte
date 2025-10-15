@@ -4,43 +4,30 @@
 
   let {
     primary = false,
+    secondary = false,
     warning = false,
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
-    icon = null,
+    icon,
     children,
     ...restProps
   }: {
     primary?: boolean;
+    secondary?: boolean;
     warning?: boolean;
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
     icon?: Snippet;
     children?: Snippet;
-  } = $props();
-
-  const iconSlotted = $derived(Boolean(icon));
+  } & Record<string, unknown> = $props();
 
   const style = $derived(
-    injectVars({ bg, fg, padding, width, height, ...restProps }, "button", [
-      "bg",
-      "fg",
-      "padding",
-      "width",
-      "height",
-    ])
+    injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"])
   );
+
+  const iconSlotted = $derived(Boolean(icon));
 </script>
 
 <button
   {style}
   class:primary
+  class:secondary
   class:warning
   class:has-icon={iconSlotted}
   {...restProps}
