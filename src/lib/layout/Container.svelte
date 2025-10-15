@@ -1,6 +1,10 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
-  const { children, ...props } = $props<{
+  const {
+    children,
+    border = false,
+    ...props
+  } = $props<{
     bg?: string | null;
     fg?: string | null;
     margin?: string | null;
@@ -12,8 +16,7 @@
     borderTop?: string | null;
   }>();
 
-  const border = $derived(() => props.border ?? false);
-  const style = $derived(() =>
+  const style = $derived(
     injectVars(props, "container", [
       "bg",
       "fg",
