@@ -1,26 +1,46 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
-<script>
+<script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
 
-  export let fullWidth = false;
-  export let globalInputStyles = true;
-  let style = injectVars($$props, "form-item", [
-    "fullWidth",
-    "globalInputStyles",
-  ]);
+  let {
+    fullWidth = false,
+    globalInputStyles = true,
+    before,
+    label,
+    after,
+    children,
+    ...restProps
+  }: {
+    fullWidth?: boolean;
+    globalInputStyles?: boolean;
+    before?: Snippet;
+    label?: Snippet;
+    after?: Snippet;
+    children?: Snippet;
+  } & Record<string, unknown> = $props();
+
+  const cssKeys = ["fullWidth", "globalInputStyles"];
+
+  const style = $derived(injectVars(restProps, "form-item", cssKeys));
 </script>
 
-<div {style} class="form-item" class:fullWidth class:globalInputStyles>
-  <slot name="before" />
+<div
+  {style}
+  class="form-item"
+  class:fullWidth
+  class:globalInputStyles
+  {...restProps}
+>
+  {@render before?.()}
   <label>
     <span class="label">
-      <slot name="label" />
+      {@render label?.()}
     </span>
     <span class="input">
-      <slot />
+      {@render children?.()}
     </span>
   </label>
-  <slot name="after" />
+  {@render after?.()}
 </div>
 
 <style lang="scss">

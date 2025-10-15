@@ -1,37 +1,36 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-  export let group: string; // Radio buttons are grouped by the 'name' attribute
-  export let value;
-
-  /* Styling properties */
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
-  let style = injectVars($$props, "radio-button", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
 
-  let ref;
-  let labelContent;
+  let {
+    group = $bindable<any>(undefined),
+    value = undefined,
+    children,
+    ...restProps
+  }: {
+    group?: any;
+    value?: any;
+    children?: Snippet;
+  } & Record<string, unknown> = $props();
 
-  $: {
-    if (ref) {
-      labelContent = ref.innerHTML;
-    }
-  }
+  let style = $derived(
+    injectVars(restProps, "radio-button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ])
+  );
+
+  let ref: HTMLElement | null = $state(null);
+  const labelContent = $derived(ref ? ref.innerHTML : "");
 </script>
 
-<div class="label-sizing-box">
+<div class="label-sizing-box" {style}>
   <label class="radio-item">
-    <input {value} type="radio" bind:group {...$$restProps} />
-    <span bind:this={ref}><slot /></span>
+    <input {value} type="radio" bind:group {...restProps} />
+    <span bind:this={ref}>{@render children?.()}</span>
   </label>
   <!-- Hidden label determines how much space we occupy -- that way we can apply e.g. bold font without 
    reflowing the UI when checked/unchecked -->

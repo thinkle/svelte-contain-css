@@ -1,7 +1,7 @@
 import { cssProperties } from "./cssprops";
 
 export function injectVars(
-  props: { [key: string]: string },
+  props: { [key: string]: any },
   prefix: string,
   varList: string[]
 ) {

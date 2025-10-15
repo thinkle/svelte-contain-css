@@ -1,30 +1,27 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
   import Button from "./Button.svelte";
-  export let primary = false;
-  export let warning = false;
-  let iconSlotted = $$slots.icon;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
-  export let active: boolean;
 
-  let style = injectVars($$props, "tab", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
+  const {
+    active = false,
+    icon,
+    children,
+    ...restProps
+  }: {
+    active?: boolean;
+    icon?: Snippet;
+    children?: Snippet;
+  } & Record<string, unknown> = $props();
+
+  const style = $derived(
+    injectVars(restProps, "tab", ["bg", "fg", "padding", "width", "height"])
+  );
 </script>
 
-<div class="tab" class:active {style}>
-  <Button on:click primary={active}>
-    <span slot="icon"><slot name="icon" /></span>
-    <span><slot /></span>
+<div class="tab" class:active {style} {...restProps}>
+  <Button primary={active} {icon}>
+    {@render children?.()}
   </Button>
 </div>
 
