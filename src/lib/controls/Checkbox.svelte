@@ -1,44 +1,49 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-  export let checked: boolean | undefined = undefined;
-  export let name: string = "";
-  /* Styling properties */
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
-  /* svelte-ignore unused-export-let */
-  export let bg: string | null = null;
-  /* svelte-ignore unused-export-let */
-  export let fg: string | null = null;
-  /* svelte-ignore unused-export-let */
-  export let padding: string | null = null;
-  /* svelte-ignore unused-export-let */
-  export let width: string | null = null;
-  /* svelte-ignore unused-export-let */
-  export let height: string | null = null;
-  let style = injectVars($$props, "checkbox", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
 
-  export let value: any = undefined;
-  export let group: any = undefined;
+  let {
+    checked = $bindable<boolean | undefined>(undefined),
+    name = "",
+    bg = null,
+    fg = null,
+    padding = null,
+    width = null,
+    height = null,
+    value = undefined,
+    group = $bindable<any>(undefined),
+    children,
+    ...restProps
+  }: {
+    checked?: boolean | undefined;
+    name?: string;
+    bg?: string | null;
+    fg?: string | null;
+    padding?: string | null;
+    width?: string | null;
+    height?: string | null;
+    value?: any;
+    group?: any;
+    children?: Snippet;
+  } = $props();
 
-  // Determine if we're using group binding or checked binding
-  $: useGroup = group !== undefined && value !== undefined;
+  const style = $derived(
+    injectVars({ bg, fg, padding, width, height, ...restProps }, "checkbox", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ])
+  );
 
-  let ref: HTMLElement;
-  let labelContent: string = "";
+  let useGroup = $derived(group !== undefined && value !== undefined);
 
-  $: {
-    if (ref) {
-      labelContent = ref.innerHTML;
-    }
-  }
+  let ref: HTMLElement | null = $state(null);
+  let labelContent: string = $derived(ref ? ref.innerHTML : "");
 </script>
 
-<div class="label-sizing-box">
+<div class="label-sizing-box" {style}>
   <label class="checkbox-item">
     {#if useGroup}
       <input
@@ -46,29 +51,17 @@
         type="checkbox"
         {value}
         bind:group
-        on:change
-        on:click
-        on:blur
-        on:focus
-        on:focusin
-        on:focusout
-        {...$$restProps}
+        {...restProps}
       />
     {:else}
       <input
         name={name || (ref && ref.textContent) || undefined}
         type="checkbox"
         bind:checked
-        on:change
-        on:click
-        on:blur
-        on:focus
-        on:focusin
-        on:focusout
-        {...$$restProps}
+        {...restProps}
       />
     {/if}
-    <span bind:this={ref}><slot /></span>
+    <span bind:this={ref}>{@render children?.()}</span>
   </label>
   <label class="invisible" aria-hidden="true">
     <input type="checkbox" checked={true} tabindex="-1" />

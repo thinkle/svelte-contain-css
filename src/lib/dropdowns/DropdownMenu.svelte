@@ -6,15 +6,15 @@
   import { cssProperties } from "$lib/cssprops";
   import MenuList from "$lib/layout/MenuList.svelte";
   import { injectVars } from "$lib/util";
-
+  import type { Snippet } from "svelte";
   import { onMount } from "svelte";
   interface Props {
-    label?: import('svelte').Snippet;
-    children?: import('svelte').Snippet;
-    [key: string]: any
+    label?: Snippet;
+    children?: Snippet;
+    [key: string]: any;
   }
 
-  let { ...props }: Props = $props();
+  let { label, children, ...props }: Props = $props();
   idPostfix++;
   let id = "contain-dropdown-menu-" + idPostfix;
   let buttonElement: HTMLButtonElement = $state();
@@ -141,7 +141,7 @@
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <nav class="dropdown-menu" onkeydown={handleKeystroke}>
   <button bind:this={buttonElement} onclick={triggerMenu} popovertarget={id}>
-    {#if label}{@render props.label()}{:else}Menu{/if}
+    {#if label}{@render label()}{:else}Menu{/if}
   </button>
   <div
     {id}

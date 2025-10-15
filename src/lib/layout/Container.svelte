@@ -1,6 +1,6 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
-  const p children,rops = $props<{
+  const { children, ...props } = $props<{
     bg?: string | null;
     fg?: string | null;
     margin?: string | null;
@@ -27,7 +27,7 @@
   );
 </script>
 
-<section class:border={border} style={style}>
+<section class:border {style}>
   {@render children?.()}
 </section>
 

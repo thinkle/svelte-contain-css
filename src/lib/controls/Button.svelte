@@ -1,41 +1,61 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
+  import type { Snippet } from "svelte";
   import { injectVars } from "$lib/util";
-  export let primary = false;
-  export let warning = false;
-  let iconSlotted = $$slots.icon;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
-  export let padding: string | null = null;
-  export let width: string | null = null;
-  export let height: string | null = null;
 
-  let cssVars = injectVars($$props, "button", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
+  let {
+    primary = false,
+    warning = false,
+    bg = null,
+    fg = null,
+    padding = null,
+    width = null,
+    height = null,
+    icon = null,
+    children,
+    ...restProps
+  }: {
+    primary?: boolean;
+    warning?: boolean;
+    bg?: string | null;
+    fg?: string | null;
+    padding?: string | null;
+    width?: string | null;
+    height?: string | null;
+    icon?: Snippet;
+    children?: Snippet;
+  } = $props();
+
+  const iconSlotted = $derived(Boolean(icon));
+
+  const style = $derived(
+    injectVars({ bg, fg, padding, width, height, ...restProps }, "button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ])
+  );
 </script>
 
 <button
-  style={cssVars}
-  on:click
+  {style}
   class:primary
   class:warning
   class:has-icon={iconSlotted}
-  {...$$restProps}
+  {...restProps}
 >
-  <span class="content"><slot /></span>
-  <span class:hidden={!iconSlotted} class="icon"><slot name="icon" /></span>
+  <span class="content">{@render children?.()}</span>
+  <span class:hidden={!iconSlotted} class="icon">
+    {@render icon?.()}
+  </span>
 </button>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
   button.has-icon {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--button-icon-gap, var(--space));
   }
