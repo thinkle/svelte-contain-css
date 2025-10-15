@@ -1,19 +1,20 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
   import { onMount } from "svelte";
   import { injectVars } from "$lib/util";
 
-  export let width: string | null = null;
-  export let bg: string | null = null;
-  export let fg: string | null = null;
+  let {
+    left,
+    right,
+    ...restProps
+  }: {
+    left?: boolean;
+    right?: boolean;
+  } = $props();
 
-  export let right = false;
-  export let left = true;
+  let style = injectVars(restProps, "sidebar", ["bg", "fg", "width"]);
 
-  let style = injectVars($$props, "sidebar", ["bg", "fg", "width"]);
-
-  let expandedHamburger = false;
-  let expandedBar = true;
+  let expandedHamburger = $state(false);
+  let expandedBar = $state(true);
 </script>
 
 <aside
@@ -27,14 +28,14 @@
   <button
     class:expander={!expandedHamburger}
     class:close={expandedHamburger}
-    on:click={() => (expandedHamburger = !expandedHamburger)}
+    onclick={() => (expandedHamburger = !expandedHamburger)}
   ></button>
   <div class="content">
     <slot />
   </div>
   <label class="edge-bar">
     <button
-      on:click={() => (expandedBar = !expandedBar)}
+      onclick={() => (expandedBar = !expandedBar)}
       class="expander"
       class:expander={!expandedBar}
       class:close={expandedBar}
