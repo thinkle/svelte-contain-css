@@ -1,7 +1,10 @@
 :root {
-  --hover-filter: brightness(1.2)
-    drop-shadow(var(--space) var(--space) var(--shadow-color));
-  --active-filter: brightness(0.9);
+  --shadow-blur: 4px;
+  --hover-filter: brightness(1.05)
+    drop-shadow(
+      var(--space) var(--space) var(--shadow-blur) var(--shadow-color)
+    );
+  --active-filter: brightness(0.95);
   /* --hover-transform: translate(var(--space), var(--space)); */
   /* --button-hover-filter: var(--hover-filter); */
   --menu-hover-filter: var(--hover-filter);
@@ -21,11 +24,11 @@
   --grab-bar-hover-bg: #fff2;
   --grab-bar-active-bg: #fff4;
   --grab-bar-hover-filter: drop-shadow(0 0 2px #fff);
-  --grab-bar-active-filter: drop-shdaow(0 0 4px #fff);
-  --greyed-out-filter: blur(2px) grayscale(0.5);      
+  --grab-bar-active-filter: drop-shadow(0 0 4px #fff);
+  --greyed-out-filter: blur(2px) grayscale(0.5);
   --disabled-hover-transform: none;
   --disabled-transform: none;
-  --disabled-filter: brightness(0.9)grayscale(0.5)blur(0.5px);
+  --disabled-filter: brightness(0.9) grayscale(0.5) blur(0.5px);
   --disabled-shadow-distance: var(--button-shadow-distance);
   --disabled-shadow-color: var(--button-shadow-color);
 }
