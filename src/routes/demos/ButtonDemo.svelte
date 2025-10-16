@@ -5,6 +5,7 @@
   import Container from "$lib/layout/Container.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Code from "$lib/misc/Code.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import CssVariables from "./CssVariables.svelte";
   import CssWrapper from "./CssWrapper.svelte";
@@ -33,8 +34,8 @@
     <Button>
       Icon Button
       {#snippet icon()}
-            <div >▶</div>
-          {/snippet}
+        <div>▶</div>
+      {/snippet}
     </Button>
     <Button warning={true}>Warning Button</Button>
     <Button primary={true}>Primary Button</Button>
@@ -42,9 +43,19 @@
     <ButtonLink href="https://example.com" target="_blank"
       >Link Button</ButtonLink
     >
+    <ButtonLink primary href="https://example.com" target="_blank"
+      >Primary Link Button</ButtonLink
+    >
     <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white"
       >+</MiniButton
     >
     <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
+    <TextLayout>
+      <p>
+        Testing out buttons inside a text layout, including <ButtonLink href="#"
+          >A Link Button</ButtonLink
+        >.
+      </p>
+    </TextLayout>
   </CssVariableDemo>
 </Container>
