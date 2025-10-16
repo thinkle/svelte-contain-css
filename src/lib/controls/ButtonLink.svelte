@@ -26,11 +26,13 @@
   } & Record<string, unknown>;
 
   const style = $derived(
-    `${injectVars(
-      elementProps,
-      "button",
-      ["bg", "fg", "padding", "width", "height"]
-    )}${inlineStyle ?? ""}`
+    `${injectVars(elementProps, "button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ])}${inlineStyle ?? ""}`
   );
 
   const iconSlotted = $derived(Boolean(icon));
@@ -38,7 +40,7 @@
 
 <a
   role="button"
-  style={style}
+  {style}
   {href}
   id={id ?? undefined}
   class:primary
@@ -61,9 +63,10 @@
     align-items: center;
     gap: var(--a-icon-gap, var(--space));
   }
-  a {
-    width: var(--a-width);
-    height: var(--a-height);
+  a[role="button"] {
+    display: inline-block;
+    width: var(--button-width);
+    height: var(--button-height);
     @include box-props(button, control, secondary);
     @include border-props-none(button);
     @include color-props(button, control, secondary);
@@ -74,8 +77,18 @@
     text-decoration: none;
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
+  a[role="button"]:hover {
+    text-decoration: none;
+    /* Override other link styles that may be outside
+    us */
+    @include color-props(button, control, secondary);
+  }
+
+  a.primary[role="button"]:hover {
+    @include color-props(primary, button, control, secondary);
+  }
   a.primary {
-    @include color-props(primary, a, control);
+    @include color-props(primary, button, control, secondary);
     @include typography-props-bare(primary, a);
   }
   a.warning {
