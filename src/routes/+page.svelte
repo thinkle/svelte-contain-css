@@ -195,7 +195,7 @@
         style:--button-shadow-color="transparent"
       >
         {#if theItem > 0}
-          <Button on:click={() => changeItem(theItem - 1)}>
+          <Button onclick={() => changeItem(theItem - 1)}>
             <span style="transform:rotate(180deg);display:inline-block;">⮕</span
             >
           </Button>
@@ -210,14 +210,14 @@
 
           {#each menu as item, idx}
             <li>
-              <Button value={idx} on:click={() => changeItem(idx)}
+              <Button value={idx} onclick={() => changeItem(idx)}
                 >{item.name}</Button
               >
             </li>
           {/each}
         </DropdownMenu>
 
-        <Button on:click={() => changeItem(theItem + 1)}>⮕</Button>
+        <Button onclick={() => changeItem(theItem + 1)}>⮕</Button>
       </div></Bar
     >
   {/snippet}
@@ -297,12 +297,12 @@
           {#if theDemo}
             <Button
               secondary
-              on:click={() => {
+              onclick={() => {
                 theDemo = null;
               }}>Back to Overview</Button
             >
           {/if}
-          <Button primary on:click={() => changeItem(menu.indexOf(nextItem))}>
+          <Button primary onclick={() => changeItem(menu.indexOf(nextItem))}>
             Next: {nextItem.name}
           </Button>
         </Bar>
