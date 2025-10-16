@@ -31,9 +31,12 @@
     --bar-gap="var(--tab-bar-gap, var(--space-md))"
     --bar-fg="var(--tab-bar-fg, var(--bar-fg))"
     --bar-bg="var(--tab-bar-bg, var(--bar-bg))"
-    --bar-border-bottom="var(--tab-bar-border-bottom, var(--bar-border-bottom))"
     --bar-align="var(--tab-bar-align, flex-end)"
     --bar-overflow="hidden"
+    --bar-border-left="var(--tab-bar-border-left, none)"
+    --bar-border-right="var(--tab-bar-border-right, none)"
+    --bar-border-top="var(--tab-bar-border-top, none)"
+    --bar-border-bottom="var(--tab-bar-border-bottom, var(--border-width) var(--border-style) var(--border-color))"
   >
     {#each items as item}
       {@const value = item.value || item}
