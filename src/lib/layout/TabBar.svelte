@@ -1,28 +1,25 @@
 <script lang="ts">
   import Bar from "$lib/layout/Bar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
-  import { createEventDispatcher } from "svelte";
+
   type Item = { label: string; value: string };
   interface Props {
     sticky?: boolean;
     active?: string | Item | null;
     items?: (string | Item)[];
-    children?: import('svelte').Snippet;
+    onchange: (value: string | Item | null) => void;
+    children?: import("svelte").Snippet;
   }
 
   let {
     sticky = false,
     active = $bindable(null),
     items = [],
-    children
+    onchange,
+    children,
   }: Props = $props();
 
-  // dispatch a change event whenever active changes
-  const dispatch = createEventDispatcher();
-  function setValue(value: any) {
-    active = value;
-    dispatch("change", { value });
-  }
+  let lastActive = $state(active);
 </script>
 
 <div class="tabs" class:sticky>
@@ -30,11 +27,18 @@
     padding="0"
     borderTop="none"
     --button-height="var(--tab-bar-height, 3em)"
+    --bar-justify="var(--tab-bar-justify, start)"
+    --bar-gap="var(--tab-bar-gap, var(--space-md))"
+    --bar-fg="var(--tab-bar-fg, var(--bar-fg))"
+    --bar-bg="var(--tab-bar-bg, var(--bar-bg))"
+    --bar-border-bottom="var(--tab-bar-border-bottom, var(--bar-border-bottom))"
+    --bar-align="var(--tab-bar-align, flex-end)"
+    --bar-overflow="hidden"
   >
     {#each items as item}
       {@const value = item.value || item}
       {@const label = item.label || item}
-      <TabItem active={value === active} on:click={() => setValue(value)}>
+      <TabItem active={value === active} onclick={() => onchange(value)}>
         {label}
       </TabItem>
     {/each}
@@ -49,7 +53,7 @@
   svelte to inject css variables */
   div > :global(div > .bar) {
     @include color-props(tab-bar, bar, container);
-    justify-content: var-with-fallbacks(--justify, tab-bar, flex-start);
+
     align-items: var-with-fallbacks(--align, tab-bar, flex-end);
     border-bottom: var(
       --tab-bar-border-bottom,

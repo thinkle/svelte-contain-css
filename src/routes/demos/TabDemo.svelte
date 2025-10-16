@@ -69,6 +69,16 @@
       defaultValue: "end",
       unit: "",
     },
+    {
+      name: "--tab-bar-fg",
+      type: "color",
+      placeholder: "e.g., #007bff",
+    },
+    {
+      name: "--tab-bar-bg",
+      type: "color",
+      placeholder: "e.g., #007bff",
+    },
   ];
 </script>
 
@@ -78,8 +88,8 @@
       {items}
       {active}
       sticky
-      on:change={(e) => {
-        active = e.detail.value;
+      onchange={(value) => {
+        active = value;
       }}
     ></TabBar></CssWrapper
   >
