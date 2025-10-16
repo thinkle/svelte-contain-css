@@ -20,7 +20,7 @@
   --border-color: var(--material-color-grey-400);
   --input-bg: #fefefe;
   --input-fg: var(--material-color-grey-900);
-  --hover-filter: brightness(0.9) contrast(1.5);
+  --hover-filter: brightness(0.9);
   /* Code */
   --code-bg: #ffffff; /* Background color for the code block */
   --code-fg: #333333; /* Default text color */

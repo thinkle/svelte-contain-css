@@ -24,7 +24,7 @@
     --input-fg: var(--material-color-blue-grey-900);
     --warning-bg: var(--material-color-red-600);
     --warning-fg: var(--white);
-    --hover-filter: brightness(0.9) contrast(1.5);
+    --hover-filter: brightness(0.9);
     /* Code */
     --code-bg: var(--material-color-blue-grey-50); /* Softer background */
     --code-fg: var(--material-color-blue-grey-900); /* Dark green text */
@@ -89,7 +89,7 @@
     --input-fg: var(--material-color-blue-grey-50);
     --button-bg: var(--material-color-blue-grey-800);
     --button-fg: var(--material-color-blue-grey-50);
-    --hover-filter: brightness(1.1) contrast(1.5);
+    --hover-filter: brightness(1.1);
     /* Code Block */
     --code-bg: var(--material-color-blue-grey-800); /* Darker background */
     --code-fg: var(--material-color-blue-grey-100); /* Lighter text */
