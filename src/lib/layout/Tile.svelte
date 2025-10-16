@@ -1,32 +1,29 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy';
-
-  const bubble = createBubbler();
-  import Checkbox from "$lib/controls/Checkbox.svelte";
   interface Props {
     interactive?: boolean; // Prop to make the tile clickable or not
     selectable?: boolean;
     checked?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let {
     interactive = false,
     selectable = false,
     checked = $bindable(false),
-    children
+    children,
+    ...restProps
   }: Props = $props();
 </script>
 
 {#if selectable}
   <label class="tile">
     <div class="checkbox">
-      <input type="checkbox" bind:checked oninput={bubble('input')} onchange={bubble('change')} onclick={bubble('click')} />
+      <input type="checkbox" bind:checked {...restProps} />
     </div>
     {@render children?.()}
   </label>
 {:else if interactive}
-  <button class="tile" onclick={bubble('click')} onblur={bubble('blur')} onfocus={bubble('focus')} ondblclick={bubble('dblclick')}>
+  <button class="tile" {...restProps}>
     {@render children?.()}
   </button>
 {:else}
