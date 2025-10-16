@@ -12,14 +12,14 @@
       "rightWidth",
     ])
   );
-  let resizeStyle = "";
-  let startWidthLeft: number;
-  let startWidthRight: number;
-  let startX: number;
-  let splitPaneContainer: HTMLElement;
-  let resizerDiv: HTMLElement;
-  let leftPane: HTMLElement;
-  let rightPane: HTMLElement;
+  let resizeStyle = $state("");
+  let startWidthLeft: number = $state();
+  let startWidthRight: number = $state();
+  let startX: number = $state();
+  let splitPaneContainer: HTMLElement = $state();
+  let resizerDiv: HTMLElement = $state();
+  let leftPane: HTMLElement = $state();
+  let rightPane: HTMLElement = $state();
 
   function onMouseDown(event: MouseEvent) {
     startX = event.clientX;
