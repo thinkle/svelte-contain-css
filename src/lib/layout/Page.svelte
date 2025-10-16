@@ -29,7 +29,13 @@
   } & Record<string, unknown> = $props();
 
   const style = $derived(
-    injectVars(restProps, "page", ["bg", "fg", "contentPadding", "width", "height"])
+    injectVars(restProps, "page", [
+      "bg",
+      "fg",
+      "contentPadding",
+      "width",
+      "height",
+    ])
   );
 
   const hasSidebar = $derived(Boolean(sidebar) && !hideSidebar);
@@ -87,11 +93,11 @@
   class:freeze
   class:right
   class:sticky
-  class:hasHeader={hasHeader}
-  class:hasSidebar={hasSidebar}
-  class:hasFooter={hasFooter}
+  class:hasHeader
+  class:hasSidebar
+  class:hasFooter
   bind:this={pageElement}
-  style={style}
+  {style}
   {...restProps}
 >
   <header>
