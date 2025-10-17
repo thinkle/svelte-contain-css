@@ -238,19 +238,21 @@
   .fixed-table-head::before {
     content: " ";
     position: absolute;
-    top: calc(
-      -1 * (var(--table-margin-top, var(--container-margin-top, var(--paragraph-margin-top, var(--margin-top, unset)))))
+    --table-top-veil-height: calc(
+      1px +
+        var(
+          --table-margin-top,
+          var(
+            --container-margin-top,
+            var(--paragraph-margin-top, var(--margin-top, unset))
+          )
+        )
     );
-    height: var(
-      --table-margin-top,
-      var(
-        --container-margin-top,
-        var(--paragraph-margin-top, var(--margin-top, unset))
-      )
-    );
+    top: calc(-1 * var(--table-top-veil-height));
+    height: var(--table-top-veil-height);
     left: calc(var(--padding) * -2);
     width: calc(100% + var(--padding) * 4);
-    @include color-props(table, container);
+    @include color-props(table-backdrop, page, container);
     z-index: -1;
   }
 
