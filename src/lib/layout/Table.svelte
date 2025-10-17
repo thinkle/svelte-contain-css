@@ -276,6 +276,6 @@
     visibility: hidden;
     /* opacity: 0.5; */
     pointer-events: none;
-    position: absolute;
+    position: fixed;
   }
 </style>
