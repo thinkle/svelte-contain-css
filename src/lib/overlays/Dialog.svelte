@@ -7,6 +7,7 @@
     open?: boolean;
     modal?: boolean;
     children?: Snippet;
+    onclose?: () => void;
     onClose?: () => void;
   } & Record<string, unknown>;
 
@@ -14,16 +15,19 @@
     open = true,
     modal = true,
     children,
-    onClose = () => {},
+    onclose = () => {},
+    onClose = onclose,
     ...restProps
   }: PropsType = $props();
 
+  if (onClose && !onclose) {
+    onclose = onClose; // backward compatibility
+  }
+
   let style = injectVars(restProps, "dialog", []);
   $effect(() => {
-    console.log("Go!");
     if (dialogElement) {
       if (open) {
-        console.log("We are open", dialogElement);
         if (modal) {
           copyCSSVariables(ref, dialogElement);
           dialogElement.showModal();
@@ -33,7 +37,7 @@
         }
       } else if (dialogElement) {
         dialogElement.close();
-        onClose();
+        onclose();
       }
     }
   });
@@ -43,10 +47,10 @@
 
 <section {style}>
   <div class="variable-placeholder" bind:this={ref}></div>
-  <dialog bind:this={dialogElement} onclose={onClose}>
+  <dialog bind:this={dialogElement} {onclose} {...restProps}>
     {@render children?.()}
     <div class="close-button">
-      <MiniButton onclick={onClose}>&times;</MiniButton>
+      <MiniButton onclick={onclose}>&times;</MiniButton>
     </div>
   </dialog>
 </section>
