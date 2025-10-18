@@ -36,26 +36,92 @@
   });
 
   function syncColumnWidths() {
-    // Get the first row of each table
     if (!headClone || !bodyClone) return;
-    const headRow = headClone.querySelector("tr");
-    const bodyRow = bodyClone.querySelector("tr");
-    let maxColWidths = [];
-    if (headRow && bodyRow) {
-      const headCells = Array.from(headRow.children) as HTMLElement[];
-      const bodyCells = Array.from(bodyRow.children) as HTMLElement[];
-      const numCols = Math.max(headCells.length, bodyCells.length);
-      for (let i = 0; i < numCols; i++) {
-        const headCell = headCells[i];
-        const bodyCell = bodyCells[i];
-        const headWidth = headCell ? headCell.offsetWidth : 0;
-        const bodyWidth = bodyCell ? bodyCell.offsetWidth : 0;
-        maxColWidths[i] = Math.max(headWidth, bodyWidth);
+
+    const getFlattenedCellWidths = (
+      row: HTMLTableRowElement | null
+    ): number[] => {
+      if (!row) return [];
+      const cells = Array.from(row.children) as HTMLElement[];
+      const colWidths: number[] = [];
+      let colIndex = 0;
+
+      for (const cell of cells) {
+        const colspan = parseInt(cell.getAttribute("colspan") || "1", 10);
+        const width = cell.offsetWidth / colspan;
+        for (let j = 0; j < colspan; j++) {
+          colWidths[colIndex++] = width;
+        }
+      }
+
+      return colWidths;
+    };
+
+    const getTotalCols = (row: HTMLTableRowElement | null): number => {
+      if (!row) return 0;
+      return Array.from(row.children).reduce(
+        (acc, cell) => acc + parseInt(cell.getAttribute("colspan") || "1", 10),
+        0
+      );
+    };
+
+    const findBestRow = (
+      table: HTMLTableElement
+    ): HTMLTableRowElement | null => {
+      const rows = Array.from(table.querySelectorAll("tr"));
+
+      // First: find a row with no colspans
+      for (const row of rows) {
+        const hasColspan = Array.from(row.children).some((cell) =>
+          cell.hasAttribute("colspan")
+        );
+        if (!hasColspan) return row;
+      }
+
+      // Otherwise: row with smallest total colspans
+      let best: HTMLTableRowElement | null = null;
+      let bestSpanCount = Infinity;
+      for (const row of rows) {
+        const spanCount = getTotalCols(row);
+        if (spanCount < bestSpanCount) {
+          bestSpanCount = spanCount;
+          best = row;
+        }
+      }
+      return best;
+    };
+
+    // Step 1: pick best candidate rows
+    let headRow = findBestRow(headClone);
+    let bodyRow = findBestRow(bodyClone);
+
+    // Step 2: if their total col counts don't match, try to find a pair that does
+    if (headRow && bodyRow && getTotalCols(headRow) !== getTotalCols(bodyRow)) {
+      const headRows = Array.from(headClone.querySelectorAll("tr"));
+      const bodyRows = Array.from(bodyClone.querySelectorAll("tr"));
+      outer: for (const hr of headRows) {
+        const hCols = getTotalCols(hr);
+        for (const br of bodyRows) {
+          if (hCols === getTotalCols(br)) {
+            headRow = hr;
+            bodyRow = br;
+            break outer;
+          }
+        }
       }
     }
-    columns = maxColWidths;
 
-    // After syncing, fit colgroup to table width if needed
+    // Step 3: flatten widths and compute max
+    const headWidths = getFlattenedCellWidths(headRow);
+    const bodyWidths = getFlattenedCellWidths(bodyRow);
+    const numCols = Math.max(headWidths.length, bodyWidths.length);
+    const maxColWidths: number[] = [];
+
+    for (let i = 0; i < numCols; i++) {
+      maxColWidths[i] = Math.max(headWidths[i] || 0, bodyWidths[i] || 0);
+    }
+
+    columns = maxColWidths;
     fitTableToColGroup(columns);
   }
 
@@ -149,6 +215,12 @@
   {/if}
 {:else}
   <table>
+    {#if thead}
+      {@render thead?.()}
+    {/if}
+    {#if tbody}
+      {@render tbody?.()}
+    {/if}
     {@render children?.()}
   </table>
 {/if}
@@ -277,5 +349,15 @@
     /* opacity: 0.5; */
     pointer-events: none;
     position: fixed;
+  }
+
+  /* Interactive affordances: target rows/cells with tabindex for keyboard accessibility */
+  table :global(tr[tabindex]) {
+    @include clickable();
+    @include focusable();
+  }
+  table :global(td[tabindex]) {
+    @include clickable();
+    @include focusable();
   }
 </style>
