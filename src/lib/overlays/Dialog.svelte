@@ -6,6 +6,7 @@
   type PropsType = {
     open?: boolean;
     modal?: boolean;
+    dismissible?: boolean;
     children?: Snippet;
     onclose?: () => void;
     onClose?: () => void;
@@ -14,29 +15,58 @@
   let {
     open = true,
     modal = true,
+    dismissible = false,
     children,
-    onclose = () => {},
-    onClose = onclose,
+    onClose,
+    onclose: oncloseProp = null,
     ...restProps
   }: PropsType = $props();
 
-  if (onClose && !onclose) {
-    onclose = onClose; // backward compatibility
-  }
+  let onclose = $derived(oncloseProp || onClose);
 
   let style = injectVars(restProps, "dialog", []);
+
+  // Handle backdrop click to close modal (click outside behavior)
+  // Clicks on the dialog element itself (the backdrop) close the dialog
+  function handleBackdropClick(event: MouseEvent) {
+    if (!dismissible) return;
+
+    // Don't close if the click target is a popover or other interactive element
+    const target = event.target as HTMLElement;
+    if (target?.hasAttribute?.("popover")) return;
+    if (target?.closest?.("[popover]")) return;
+
+    // The dialog element receives clicks on the backdrop area;
+    // we want to close only when clicking the backdrop, not dialog content.
+    // Check if the click's coordinates are outside the dialog's content box.
+    const rect = dialogElement?.getBoundingClientRect();
+    if (
+      rect &&
+      (event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom)
+    ) {
+      onclose();
+    }
+  }
+
   $effect(() => {
     if (dialogElement) {
       if (open) {
         if (modal) {
           copyCSSVariables(ref, dialogElement);
           dialogElement.showModal();
+          if (dismissible) {
+            dialogElement.addEventListener("click", handleBackdropClick);
+          }
         } else {
           copyCSSVariables(ref, dialogElement);
           dialogElement.show();
         }
       } else if (dialogElement) {
         dialogElement.close();
+        dialogElement.removeEventListener("click", handleBackdropClick);
         onclose();
       }
     }
@@ -48,10 +78,12 @@
 <section {style}>
   <div class="variable-placeholder" bind:this={ref}></div>
   <dialog bind:this={dialogElement} {onclose} {...restProps}>
-    {@render children?.()}
-    <div class="close-button">
-      <MiniButton onclick={onclose}>&times;</MiniButton>
+    <div class="close-bar">
+      <div class="close-button">
+        <MiniButton onclick={onclose}>&times;</MiniButton>
+      </div>
     </div>
+    {@render children?.()}
   </dialog>
 </section>
 
@@ -60,10 +92,17 @@
   .variable-placeholder {
     display: none;
   }
+  .close-bar {
+    position: sticky;
+    top: var(--padding, 1rem);
+    height: var(--dialog-padding, var(--padding, 8px));
+    display: flex;
+    justify-content: flex-end;
+  }
   .close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
   }
   dialog {
     @include box-props(dialog, top, container, block);
