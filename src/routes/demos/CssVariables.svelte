@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import Button from "$lib/controls/Button.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Select from "$lib/controls/Select.svelte";
@@ -22,38 +20,36 @@
     onSetVariables,
   }: Props = $props();
   const variableValues: { [key: string]: string } = $state({});
-  let remainingVariables: CSSVariable[] = $state([]);
-  let theVariable: CSSVariable | null;
   let theVariables: {
     [key: string]: CSSVariable;
   } = $state({});
 
-  function updateRemaining(customizedVariables: string[]) {
-    remainingVariables = variables.filter(
-      (v) => customizedVariables.find((cv) => cv === v.name) === undefined
+  // Compute groups from variables
+  let groups = $derived.by(() => {
+    const groupSet = new Set<string | undefined>();
+    for (let variable of variables) {
+      groupSet.add(variable.group);
+    }
+    return Array.from(groupSet);
+  });
+
+  // Compute remaining variables
+  let remainingVariables = $derived.by(() => {
+    return variables.filter(
+      (v) => !customizedVariables.find((cv) => cv === v.name)
     );
-    for (let group in theVariables) {
-      if (!remainingVariables.includes(theVariables[group])) {
+  });
+
+  // Update theVariables when remainingVariables changes
+  $effect(() => {
+    for (let group of groups) {
+      if (!theVariables[group || "no-group"]) {
         let theVariable = remainingVariables.find(
-          (v) => v.group === group || (!v.group && group == "no-group")
+          (v) => v.group === group || (!v.group && group == undefined)
         );
         if (theVariable) {
-          theVariables[group] = theVariable;
+          theVariables[group || "no-group"] = theVariable;
         }
-      }
-    }
-    //theVariables[group] = remainingVariables[0];
-  }
-  run(() => {
-    updateRemaining(customizedVariables);
-  });
-  let groups: (string | undefined)[] = $state([]);
-  run(() => {
-    groups = [];
-    for (let variable of variables) {
-      let group = variable.group;
-      if (!groups.includes(group)) {
-        groups = [...groups, group];
       }
     }
   });
@@ -90,9 +86,10 @@
               {/key}
             </div>
           {/snippet}
+
           {#if theVariables[group || "no-group"]}
             {@const variable = theVariables[group || "no-group"]}
-            {#key theVariables[group]}
+            {#key variable}
               <input
                 type="text"
                 placeholder={variable.placeholder || variable.defaultValue}
