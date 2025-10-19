@@ -12,6 +12,7 @@
 
   import Dialog from "$lib/overlays/Dialog.svelte";
   import Button from "$lib/controls/Button.svelte";
+  import Bar from "$lib/layout/Bar.svelte";
   interface Props {
     variables?: CSSVariable[];
     children?: import("svelte").Snippet;
@@ -32,8 +33,11 @@
     <CssVariables {variables} onSetVariables={handleSetVariables} />
   </Dialog>
 </div>
-
-<Button onclick={() => (modalIsOpen = true)}>Set CSS Variables</Button>
+<Bar --bar-justify="end" padding="var(--padding)">
+  <Button primary onclick={() => (modalIsOpen = true)}
+    >Customize CSS Variables</Button
+  >
+</Bar>
 <CssWrapper variables={cssValues}>
   {@render children?.()}
 </CssWrapper>
