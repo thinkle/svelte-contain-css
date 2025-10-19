@@ -14,6 +14,7 @@
     border?: boolean;
     paddingTop?: string | null;
     borderTop?: string | null;
+    children?: import("svelte").Snippet;
   }>();
 
   const style = $derived(
