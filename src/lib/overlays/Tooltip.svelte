@@ -6,8 +6,8 @@
     tooltipText?: string;
     vertical?: string;
     horizontal?: string;
-    children?: import('svelte').Snippet;
-    tooltip?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
+    tooltip?: import("svelte").Snippet;
   }
 
   let {
@@ -15,7 +15,7 @@
     vertical = "bottom",
     horizontal = "right",
     children,
-    tooltip
+    tooltip,
   }: Props = $props();
   let renderedVertical = $state(vertical);
   let renderedHorizontal = $state(horizontal);
@@ -26,6 +26,7 @@
 
     const targetRect = targetDiv.children[0].getBoundingClientRect();
     let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
+    let targetWidth = tooltipMeasurementDiv.getBoundingClientRect().width;
     renderedHorizontal = horizontal;
     renderedVertical = vertical;
 
@@ -56,7 +57,13 @@
     ) {
       renderedHorizontal = "left";
     }
-
+    const tooltipGap =
+      Number(
+        window
+          .getComputedStyle(tooltipDiv)
+          .getPropertyValue("--tooltip-arrow-size")
+          .replace("px", "")
+      ) || 8;
     // Adjust tooltip style to match target element
     if (renderedVertical === "bottom") {
       tooltipDiv.style.bottom = "unset";
@@ -68,10 +75,23 @@
       tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
     }
     if (renderedHorizontal == "right") {
-      tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2}px`;
+      /* Check if the "arrow" will not "hit" the edge... */
+      // Read value of --tooltip-gap
+
+      if (targetRect.width / 2 > tooltipGap) {
+        tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2}px`;
+      } else {
+        tooltipDiv.style.left = `${targetRect.left - tooltipGap}px`;
+      }
       tooltipDiv.style.right = "unset";
     } else {
-      tooltipDiv.style.right = `${window.innerWidth - (targetRect.left + targetRect.width / 2)}px`;
+      if (targetRect.width / 2 > tooltipGap) {
+        tooltipDiv.style.right = `${
+          window.innerWidth - (targetRect.left + targetRect.width / 2)
+        }px`;
+      } else {
+        tooltipDiv.style.right = `${window.innerWidth - (targetRect.right + tooltipGap)}px`;
+      }
       tooltipDiv.style.left = "unset";
     }
 
