@@ -8,8 +8,8 @@
     modal?: boolean;
     dismissible?: boolean;
     children?: Snippet;
-    onclose?: () => void;
-    onClose?: () => void;
+    onclose?: () => void | null;
+    onClose?: () => void | null;
   } & Record<string, unknown>;
 
   let {
