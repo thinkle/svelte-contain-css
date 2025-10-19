@@ -160,7 +160,7 @@
       onclick={dismissPopover}
     >
       <MenuList>
-        {@render props.children?.()}
+        {@render children?.()}
       </MenuList>
     </div>
   </div>
