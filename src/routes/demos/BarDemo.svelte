@@ -13,6 +13,7 @@
     {
       name: "--bar-height",
       type: "length",
+      group: "Size",
       placeholder: "e.g., 2rem",
       defaultValue: "",
       unit: "rem",
@@ -20,6 +21,7 @@
     {
       name: "--bar-bg",
       type: "color",
+      group: "Color",
       placeholder: "e.g., #ff00ff",
       defaultValue: "",
       unit: "",
@@ -27,6 +29,7 @@
     {
       name: "--bar-fg",
       type: "color",
+      group: "Color",
       placeholder: "e.g., #000000",
       defaultValue: "",
       unit: "",
@@ -36,6 +39,7 @@
       name: "--bar-justify",
       type: "picklist",
       defaultValue: "",
+      group: "Layout",
       options: [
         "flex-start",
         "flex-end",
@@ -48,18 +52,21 @@
     {
       name: "--bar-align",
       type: "picklist",
+      group: "Layout",
       defaultValue: "",
       options: ["stretch", "flex-start", "flex-end", "center", "baseline"],
     },
     {
       name: "--bar-gap",
       type: "length",
+      group: "Layout",
       defaultValue: "var(--gap)",
       placeholder: "calc(var(--gap)*2)",
     },
     {
-      name: "--bar-pad",
+      name: "--bar-padding",
       type: "length",
+      group: "Spacing",
       placeholder: "e.g., 1rem",
       defaultValue: "",
       unit: "rem",
@@ -67,6 +74,7 @@
     {
       name: "--bar-border-bottom",
       type: "text",
+      group: "Borders",
       placeholder: "e.g., 1px solid #000",
       defaultValue: "",
       unit: "",
@@ -74,6 +82,7 @@
     {
       name: "--bar-border-top",
       type: "text",
+      group: "Borders",
       placeholder: "e.g., 1px solid #000",
       defaultValue: "",
       unit: "",
@@ -81,6 +90,7 @@
     {
       name: "--bar-margin-bottom",
       type: "length",
+      group: "Spacing",
       placeholder: "e.g., 0.5rem",
       defaultValue: "",
       unit: "rem",
@@ -88,6 +98,7 @@
     {
       name: "--bar-min-height",
       type: "length",
+      group: "Size",
       placeholder: "e.g., 3rem",
       defaultValue: "",
       unit: "rem",
@@ -95,6 +106,7 @@
     {
       name: "--bar-max-height",
       type: "length",
+      group: "Size",
       placeholder: "e.g., 6rem",
       defaultValue: "",
       unit: "rem",
