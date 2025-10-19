@@ -32,6 +32,9 @@ import Progress from "./misc/Progress.svelte";
 import Tooltip from "./overlays/Tooltip.svelte";
 import Table from "./layout/Table.svelte";
 import Accordion from "./layout/Accordion.svelte";
+import Tag from "./misc/Tag.svelte";
+
+export { Tag };
 
 export { Hero };
 export { TabItem };
