@@ -162,12 +162,20 @@
       align-items: center;
       justify-content: center;
       color: var(--progress-fg, var(--secondary-fg, var(--white)));
-      text-shadow: 1px 1px
-        var(--progress-half-fg, var(--primary-fg, var(--white)));
+      text-shadow: var(
+        --progress-text-shadow,
+        1px 1px var(--progress-fg, var(--secondary-fg, var(--white)))
+      );
     }
     .half-full .progress-text {
       color: var(--progress-half-fg, var(--primary-fg, var(--white)));
-      text-shadow: 1px 1px var(--progress-fg, var(--secondary-fg, var(--white)));
+      text-shadow: var(
+        --progress-half-text-shadow,
+        var(
+          --progress-text-shadow,
+          1px 1px var(--progress-fg, var(--secondary-fg, var(--white)))
+        )
+      );
     }
   }
 </style>
