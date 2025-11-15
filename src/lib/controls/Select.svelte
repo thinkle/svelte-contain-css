@@ -12,7 +12,7 @@
   let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
-  let targetWidth = $state(0);
+  let targetWidth = $state("");
   let optionButtons: HTMLButtonElement[] = $state([]);
 
   onMount(async () => {
@@ -68,7 +68,7 @@
         maxWidth = button.offsetWidth;
       }
     }
-    targetWidth = maxWidth || 150; // Fallback width if measurement fails
+    targetWidth = maxWidth ? maxWidth + "px" : "100%"; // || 150; // Fallback width if measurement fails
   }
 
   function setValue(idx: number) {
@@ -92,7 +92,7 @@
 <select bind:value bind:this={selectElement} {...restProps}>
   {@render children?.()}
 </select>
-<div class="dropdown-wrapper" style:--target-width="{targetWidth}px">
+<div class="dropdown-wrapper" style:--target-width={targetWidth}>
   <DropdownMenu>
     {#snippet label()}
       <span class="select-dropdown">
