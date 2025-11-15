@@ -9,6 +9,7 @@
     label,
     after,
     children,
+    multiline = false,
     ...restProps
   }: {
     fullWidth?: boolean;
@@ -17,9 +18,10 @@
     label?: Snippet;
     after?: Snippet;
     children?: Snippet;
+    multiline?: boolean;
   } & Record<string, unknown> = $props();
 
-  const cssKeys = ["fullWidth", "globalInputStyles"];
+  const cssKeys = ["fullWidth", "globalInputStyles", "multiline"];
 
   const style = $derived(injectVars(restProps, "form-item", cssKeys));
 </script>
@@ -29,6 +31,7 @@
   class="form-item"
   class:fullWidth
   class:globalInputStyles
+  class:multiline
   {...restProps}
 >
   {@render before?.()}
@@ -55,6 +58,9 @@
     padding-bottom: var(--padding, form-item, 8px);
     @include typography-props(form-item, ui);
     box-sizing: border-box;
+  }
+  .form-item.multiline {
+    align-items: flex-start;
   }
   label {
     display: contents;
