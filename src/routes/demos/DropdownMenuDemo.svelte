@@ -56,8 +56,8 @@
   <Bar>
     <Menu>
       {#snippet label()}
-            <span >Left Menu</span>
-          {/snippet}
+        <span>Left Menu</span>
+      {/snippet}
       <li><button>Foo</button></li>
       <li><button>Bar</button></li>
       <li><button>Baz</button></li>
@@ -65,8 +65,8 @@
     </Menu>
     <Menu>
       {#snippet label()}
-            <span >Long Menu</span>
-          {/snippet}
+        <span>Long Menu</span>
+      {/snippet}
       {#each longList as item}
         <li id="go-nowhere">
           <a href="#go-nowhere">{item}</a>
@@ -75,8 +75,8 @@
     </Menu>
     <Menu>
       {#snippet label()}
-            <span >Right Menu</span>
-          {/snippet}
+        <span>Right Menu</span>
+      {/snippet}
       <li><button>Foo</button></li>
       <li><button>Bar</button></li>
       <li><button>Baz</button></li>
@@ -111,8 +111,8 @@
 
   <FormItem>
     {#snippet label()}
-        <span >Select a person:</span>
-      {/snippet}
+      <span>Select a person:</span>
+    {/snippet}
     <Select bind:value={selectedPerson}>
       {#each people as person}
         <option value={person}>{person.label}</option>
@@ -128,8 +128,8 @@
 
   <FormItem>
     {#snippet label()}
-        <span >Select an option:</span>
-      {/snippet}
+      <span>Select an option:</span>
+    {/snippet}
     <Select bind:value={val}>
       <Option value={1}>Option A</Option>
       <Option value={2}><b>Strong</b> B</Option>
@@ -154,8 +154,8 @@
     <p>Show off two way binding by changing the option here as well:</p>
     <FormItem>
       {#snippet label()}
-            <span >Option #</span>
-          {/snippet}
+        <span>Option #</span>
+      {/snippet}
       <input type="number" bind:value={val} />
     </FormItem>
   </div>
@@ -164,14 +164,14 @@
     Here it is using the --select-width variable to constrain the select size.
     <FormItem>
       {#snippet label()}
-            <span >--select-width</span>
-          {/snippet}
+        <span>--select-width</span>
+      {/snippet}
       <input bind:value={constrainedWidth} />
     </FormItem>
     <FormItem>
       {#snippet label()}
-            <span >A narrower select:</span>
-          {/snippet}
+        <span>A narrower select:</span>
+      {/snippet}
       <Select --select-width={constrainedWidth} bind:value={val}>
         <Option value={1}>Option A</Option>
         <Option value={2}><b>Strong</b> B</Option>
@@ -188,7 +188,29 @@
     />
   </p>
 
-  <TextLayout>
-    <p></p>
-  </TextLayout>
+  <p>Here it is inside a full-width and regular width FormItem container.</p>
+  <h3>Full Width</h3>
+  <FormItem class="fullWidth">
+    {#snippet label()}
+      <span>Full Width Select:</span>
+    {/snippet}
+    <Select bind:value={val}>
+      <Option value={1}>Option A</Option>
+      <Option value={2}><b>Strong</b> B</Option>
+      <Option value={3}><em>Fancy</em> C</Option>
+      <Option value={4}><span style="color:red">Red</span> D</Option>
+    </Select>
+  </FormItem>
+  <h3>Regular Width</h3>
+  <FormItem>
+    {#snippet label()}
+      <span>Regular Width Select:</span>
+    {/snippet}
+    <Select bind:value={val}>
+      <Option value={1}>Option A</Option>
+      <Option value={2}><b>Strong</b> B</Option>
+      <Option value={3}><em>Fancy</em> C</Option>
+      <Option value={4}><span style="color:red">Red</span> D</Option>
+    </Select>
+  </FormItem>
 </TextLayout>
