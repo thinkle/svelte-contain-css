@@ -140,13 +140,22 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <nav class="dropdown-menu" onkeydown={handleKeystroke}>
-  <button bind:this={buttonElement} onclick={triggerMenu} popovertarget={id}>
+  <button
+    bind:this={buttonElement}
+    onclick={triggerMenu}
+    popovertarget={id}
+    type="button"
+    aria-haspopup="menu"
+    aria-expanded={popoverDiv?.matches(":popover-open") ? "true" : "false"}
+    aria-controls={id}
+  >
     {#if label}{@render label()}{:else}Menu{/if}
   </button>
   <div
     {id}
     bind:this={popoverDiv}
     class="dropdown-container"
+    role="menu"
     popover
     style:top="{dropdownTop}px"
     style:left="{dropdownLeft}px"

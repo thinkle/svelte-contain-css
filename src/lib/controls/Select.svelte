@@ -103,7 +103,12 @@
     {/snippet}
     {#each options as option, index}
       <li bind:this={optionButtons[index]}>
-        <button onclick={() => setValue(index)}>
+        <button
+          type="button"
+          role="menuitemradio"
+          aria-checked={value == option.value}
+          onclick={() => setValue(index)}
+        >
           <span>{@html option.html}</span>
         </button>
       </li>
@@ -123,6 +128,9 @@
     );
     text-overflow: ellipsis;
     @include typography-props(select, input, ui);
+    @include focusable();
+  }
+  button {
     @include focusable();
   }
   .select-dropdown-label {
