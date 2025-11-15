@@ -8,6 +8,7 @@ import Input from "./controls/Input.svelte";
 import MiniButton from "./controls/MiniButton.svelte";
 import RadioButton from "./controls/RadioButton.svelte";
 import Select from "./controls/Select.svelte";
+import Option from "./controls/Option.svelte";
 import Slider from "./controls/Slider.svelte";
 import TabItem from "./controls/TabItem.svelte";
 import Bar from "./layout/Bar.svelte";
@@ -47,6 +48,7 @@ export {
   RadioButton,
   MiniButton,
   Select,
+  Option,
 };
 export { Bar, Container, GridLayout, MenuList, Page, ResponsiveText, TabBar };
 export { TextLayout, Code, Accordion };
