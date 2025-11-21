@@ -4,10 +4,14 @@
   let {
     primary = false,
     warning = false,
+    type = "button",
+    children,
     ...restProps
   }: {
     primary?: boolean;
     warning?: boolean;
+    type?: "button" | "submit" | "reset";
+    children?: import("svelte").Snippet;
   } & Record<string, unknown> = $props();
 
   const style = $derived(
@@ -21,8 +25,8 @@
   );
 </script>
 
-<button {style} class:primary class:warning {...restProps}>
-  <slot />
+<button {style} {type} class:primary class:warning {...restProps}>
+  {@render children?.()}
 </button>
 
 <style lang="scss">
