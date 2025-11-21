@@ -106,9 +106,9 @@
 <div
   class="tooltip-wrapper"
   onmouseenter={() => showPopover()}
-  onmouseleave={() => tooltipDiv.togglePopover(false)}
+  onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
   onfocusin={() => showPopover()}
-  onfocusout={() => tooltipDiv.togglePopover(false)}
+  onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
   bind:this={targetDiv}
 >
   {@render children?.()}
