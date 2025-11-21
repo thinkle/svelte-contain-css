@@ -22,21 +22,18 @@
       "height",
     ])
   );
-
-  let ref: HTMLElement | null = $state(null);
-  const labelContent = $derived(ref ? ref.innerHTML : "");
 </script>
 
 <div class="label-sizing-box" {style}>
   <label class="radio-item">
     <input {value} type="radio" bind:group {...restProps} />
-    <span bind:this={ref}>{@render children?.()}</span>
+    <span>{@render children?.()}</span>
   </label>
   <!-- Hidden label determines how much space we occupy -- that way we can apply e.g. bold font without 
    reflowing the UI when checked/unchecked -->
   <label class="invisible radio-item">
-    <input type="radio" checked="true" />
-    <span>{@html labelContent}</span>
+    <input type="radio" checked={true} />
+    <span>{@render children?.()}</span>
   </label>
 </div>
 
