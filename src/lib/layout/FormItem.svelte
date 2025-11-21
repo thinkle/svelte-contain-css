@@ -10,6 +10,9 @@
     after,
     children,
     multiline = false,
+    layout = "side",
+    above = false,
+    below = false,
     ...restProps
   }: {
     fullWidth?: boolean;
@@ -19,11 +22,18 @@
     after?: Snippet;
     children?: Snippet;
     multiline?: boolean;
+    layout?: "side" | "above" | "below";
+    above?: boolean;
+    below?: boolean;
   } & Record<string, unknown> = $props();
 
   const cssKeys = ["fullWidth", "globalInputStyles", "multiline"];
 
   const style = $derived(injectVars(restProps, "form-item", cssKeys));
+
+  const effectiveLayout = $derived<"side" | "above" | "below">(
+    above ? "above" : below ? "below" : layout
+  );
 </script>
 
 <div
@@ -32,6 +42,9 @@
   class:fullWidth
   class:globalInputStyles
   class:multiline
+  class:layout-side={effectiveLayout === "side"}
+  class:layout-above={effectiveLayout === "above"}
+  class:layout-below={effectiveLayout === "below"}
   {...restProps}
 >
   {@render before?.()}
@@ -59,6 +72,26 @@
     @include typography-props(form-item, ui);
     box-sizing: border-box;
   }
+  .form-item.layout-above {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--form-label-vertical-gap, var(--space));
+    --form-label-width: auto;
+    --form-label-text-align: left;
+    --form-label-align: flex-start;
+    --form-label-justify: flex-start;
+    font-size: var(--form-item-above-font-size, var(--font-size-small));
+  }
+  .form-item.layout-below {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: var(--form-label-vertical-gap, var(--space));
+    --form-label-width: auto;
+    --form-label-text-align: left;
+    --form-label-align: flex-start;
+    --form-label-justify: flex-start;
+    font-size: var(--form-item-below-font-size, var(--font-size-small));
+  }
   .form-item.multiline {
     align-items: flex-start;
   }
@@ -84,20 +117,20 @@
   }
 
   @container (max-width: 400px) {
-    .form-item {
+    .form-item.layout-side {
       flex-direction: column;
       align-items: flex-start;
       gap: var(--form-label-vertical-gap, var(--space));
     }
-    .label {
+    .form-item.layout-side .label {
       text-align: left;
     }
-    .form-item {
+    .form-item.layout-side {
       width: auto;
       text-align: left;
       font-size: var(--font-size-small);
     }
-    .form-item {
+    .form-item.layout-side {
       width: var(--form-input-fixed-width, var(--form-input-width));
     }
   }
