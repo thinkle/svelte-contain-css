@@ -30,7 +30,6 @@
   const useGroup = $derived(group !== undefined && value !== undefined);
 
   let ref: HTMLElement | null = $state(null);
-  const labelContent = $derived(ref ? ref.innerHTML : "");
 </script>
 
 <div class="label-sizing-box" {style}>
@@ -55,7 +54,7 @@
   </label>
   <label class="invisible" aria-hidden="true">
     <input type="checkbox" checked={true} tabindex="-1" />
-    <span>{@html labelContent}</span>
+    <span>{@render children?.()}</span>
   </label>
 </div>
 
