@@ -1,5 +1,7 @@
 <script lang="ts">
   import FormItem from "$lib/layout/FormItem.svelte";
+  import FormProvider from "$lib/layout/FormProvider.svelte";
+  import Fieldset from "$lib/layout/Fieldset.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
   import CssVariables from "./CssVariables.svelte";
@@ -11,6 +13,8 @@
   import Accordion from "$lib/layout/Accordion.svelte";
   import TabBar from "$lib/layout/TabBar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
+  import Form from "$lib/layout/Form.svelte";
+  import RadioButton from "$lib/controls/RadioButton.svelte";
 
   const formItemCSSVariables = [
     {
@@ -84,66 +88,117 @@
   let demoOrCode = $state("Demo");
   let layoutDemo = $state<"side" | "above" | "below">("side");
   $effect(() => console.log("layoutDemo", layoutDemo));
+  let containerSize = $state(200);
+  let bdate = $state("1980-08-08");
 </script>
 
 <CssVariableDemo variables={formItemCSSVariables}>
   <Accordion>
+    <details open>
+      <summary>Playground</summary>
+      <Fieldset>
+        {#snippet legend()}Form Settings{/snippet}
+        <FormItem>
+          {#snippet label()}Full Width{/snippet}
+          <Checkbox bind:checked={fullWidth} />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}Global Input Styles{/snippet}
+          <Checkbox bind:checked={globalInputStyles} />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}Layout{/snippet}
+          <RadioButton name="layoutDemo" value="side" bind:group={layoutDemo}
+            >side</RadioButton
+          >
+          <RadioButton name="layoutDemo" value="above" bind:group={layoutDemo}
+            >above</RadioButton
+          >
+          <RadioButton name="layoutDemo" value="below" bind:group={layoutDemo}
+            >below</RadioButton
+          >
+        </FormItem>
+      </Fieldset>
+      <Form {fullWidth} {globalInputStyles} layout={layoutDemo}>
+        <Fieldset>
+          {#snippet legend()}Biographical Info{/snippet}
+          <FormItem>
+            {#snippet label()}Name{/snippet}
+            <input type="text" placeholder="First Last" />
+          </FormItem>
+          <FormItem>
+            {#snippet label()}Birthday{/snippet}
+            <input type="date" bind:value={bdate} />
+            {#snippet after()}
+              <div>
+                Age: {(() => {
+                  const today = new Date();
+                  const birth = new Date(bdate);
+                  let age = today.getFullYear() - birth.getFullYear();
+                  const m = today.getMonth() - birth.getMonth();
+                  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+                    age--;
+                  }
+                  return age;
+                })()}
+              </div>
+            {/snippet}
+          </FormItem>
+        </Fieldset>
+      </Form>
+    </details>
     <details open>
       <summary>Form Items</summary>
       <TextLayout
         ><p>
           Our FormItem component is the heart of a simple approach to form
           layout. In a wide container, it puts labels side-by-side with inputs.
-          In a narrow container, it puts labels above inputs. A number of CSS
-          variables allow easy customization.
+          By default, in a narrow container, it puts labels above inputs. A
+          number of CSS variables allow easy customization.
         </p>
       </TextLayout>
-      <TabBar>
-        <TabItem
-          active={demoOrCode == "Demo"}
-          on:click={() => (demoOrCode = "Demo")}>Demo</TabItem
-        >
-        <TabItem
-          active={demoOrCode == "Code"}
-          on:click={() => (demoOrCode = "Code")}>Code</TabItem
-        >
-      </TabBar>
-      {#if demoOrCode == "Demo"}
-        <Container maxWidth="200px">
-          <h2>Log In</h2>
-          <FormItem>
-            {#snippet label()}
-              <span>Name</span>
-            {/snippet}
-            <input type="text" placeholder="First Last" />
-          </FormItem>
-          <FormItem>
-            {#snippet label()}
-              <span>Password</span>
-            {/snippet}
-            <input type="password" placeholder="***" />
-          </FormItem>
-          <FormItem>
-            <input type="submit" value="Login" />
-          </FormItem>
-        </Container>
-      {:else}
-        <Code
-          code={`
+      <FormItem>
+        {#snippet label()}Container size (px){/snippet}
+        <input type="number" bind:value={containerSize} />
+        {#snippet after()}
+          <Button onclick={() => (containerSize = 800)}>Wide</Button>
+          <Button onclick={() => (containerSize = 200)}>Narrow</Button>
+        {/snippet}
+      </FormItem>
+      <Container maxWidth={containerSize + "px"} border>
+        <h2>Log In</h2>
+        <FormItem>
+          {#snippet label()}
+            <span>Name</span>
+          {/snippet}
+          <input type="text" placeholder="First Last" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Password</span>
+          {/snippet}
+          <input type="password" placeholder="***" />
+        </FormItem>
+        <FormItem>
+          <input type="submit" value="Login" />
+        </FormItem>
+      </Container>
+
+      <Code
+        code={`
             <FormItem>
-              <span slot="label">Name</span>
+              {#snippet label()}Name{/snippet}
               <input type="text" placeholder="First Last"/>
             </FormItem>
             <FormItem>
-              <span slot="label">Password</span>
+              {#snippet label()}Password{/snippet}
               <input type="password" placeholder="***"/>
             </FormItem>
             <FormItem>            
               <input type="submit" value="Login"/>
             </FormItem>
           `}
-        />
-      {/if}
+      />
     </details>
     <details>
       <summary>Bare Inputs</summary>
@@ -161,11 +216,11 @@
       <Code
         code={`
           <FormItem>
-            <span slot="label">Name</span>
+            {#snippet label()}Name{/snippet}
             <input type="text" /> <!-- gets styles -->
           </FormItem>
           <FormItem globalInputStyles="false">
-            <span slot="label">Name</span>
+            {#snippet label()}Name{/snippet}
             <input type="text" /> <!-- Vanilla input -->
           </FormItem>
         `}
@@ -197,11 +252,11 @@
       <Code
         code={`
           <FormItem>
-            <span slot="label">Name</span>
+            {#snippet label()}Name{/snippet}
             <input type="text" />
-            <span slot="after">
+            {#snippet after()}
               <Button>Go</Button>
-            </span>
+            {/snippet}
           </FormItem>
         `}
       />
@@ -220,7 +275,7 @@
   </Accordion>
 
   <Container>
-    <h3>Sample Code:</h3>
+    <h3>Code:</h3>
     <Code
       code={`
       <Container border --container-max-width="300px" --input-width="20em">      
@@ -327,8 +382,10 @@
     <h3>Layout options</h3>
     <TextLayout>
       <p>
-        You can control label placement per item with props:
-        use <code>&lt;FormItem&gt;</code> (default, label to the left),
+        You can control label placement per item with props: use <code
+          >&lt;FormItem&gt;</code
+        >
+        (default, label to the left),
         <code>&lt;FormItem above&gt;</code> (label above), or
         <code>&lt;FormItem below&gt;</code> (label below). You can also pass
         <code>layout="side | above | below"</code> explicitly.
@@ -373,6 +430,149 @@
           <input type="email" />
         </FormItem>
       {/key}
+    </Container>
+
+    <h3>FormProvider for DRY defaults</h3>
+    <TextLayout>
+      <p>
+        Use <code>FormProvider</code> to set defaults for all nested
+        <code>FormItem</code>s. This is perfect when you want all form items in
+        a section to share the same layout without repeating props on each one.
+      </p>
+    </TextLayout>
+
+    <Code
+      code={`<FormProvider layout="below" fullWidth={true}>
+  <FormItem>
+    <span slot="label">Name</span>
+    <input type="text" />
+  </FormItem>
+  <FormItem>
+    <span slot="label">Email</span>
+    <input type="email" />
+  </FormItem>
+  <!-- Both inherit layout="below" and fullWidth={true} -->
+</FormProvider>`}
+    />
+
+    <Container border>
+      <h4>Without FormProvider (repetitive)</h4>
+      <FormItem layout="below" fullWidth>
+        {#snippet label()}
+          <span>Name</span>
+        {/snippet}
+        <input type="text" />
+      </FormItem>
+      <FormItem layout="below" fullWidth>
+        {#snippet label()}
+          <span>Email</span>
+        {/snippet}
+        <input type="email" />
+      </FormItem>
+      <FormItem layout="below" fullWidth>
+        {#snippet label()}
+          <span>Phone</span>
+        {/snippet}
+        <input type="tel" />
+      </FormItem>
+    </Container>
+
+    <Container border>
+      <h4>With FormProvider (DRY)</h4>
+      <FormProvider layout="below" fullWidth={true}>
+        <FormItem>
+          {#snippet label()}
+            <span>Name</span>
+          {/snippet}
+          <input type="text" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Email</span>
+          {/snippet}
+          <input type="email" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Phone</span>
+          {/snippet}
+          <input type="tel" />
+        </FormItem>
+        <!-- Individual items can still override -->
+        <FormItem layout="side">
+          {#snippet label()}
+            <span>Override</span>
+          {/snippet}
+          <input type="text" placeholder="This one uses 'side' layout" />
+        </FormItem>
+      </FormProvider>
+    </Container>
+
+    <h3>Fieldset Component</h3>
+    <TextLayout>
+      <p>
+        Use <code>Fieldset</code> for semantic form grouping with a legend. It
+        combines <code>&lt;fieldset&gt;</code> semantics with Container-like styling
+        and automatically acts as a FormProvider for nested FormItems.
+      </p>
+    </TextLayout>
+
+    <Code
+      code={`<Fieldset layout="below" border padding="1rem">
+  <span slot="legend">Personal Information</span>
+  <FormItem>
+    <span slot="label">First Name</span>
+    <input type="text" />
+  </FormItem>
+  <FormItem>
+    <span slot="label">Last Name</span>
+    <input type="text" />
+  </FormItem>
+</Fieldset>`}
+    />
+
+    <Container border>
+      <Fieldset layout="below" border padding="1rem">
+        {#snippet legend()}
+          <span>Personal Information</span>
+        {/snippet}
+        <FormItem>
+          {#snippet label()}
+            <span>First Name</span>
+          {/snippet}
+          <input type="text" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Last Name</span>
+          {/snippet}
+          <input type="text" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Email</span>
+          {/snippet}
+          <input type="email" />
+        </FormItem>
+      </Fieldset>
+
+      <Fieldset layout="side" border padding="1rem" margin="1rem 0 0 0">
+        {#snippet legend()}
+          <span>Preferences</span>
+        {/snippet}
+        <FormItem>
+          {#snippet label()}
+            <span>Newsletter</span>
+          {/snippet}
+          <input type="checkbox" />
+        </FormItem>
+        <FormItem>
+          {#snippet label()}
+            <span>Notifications</span>
+          {/snippet}
+          <input type="checkbox" />
+        </FormItem>
+      </Fieldset>
     </Container>
   </Container>
 </CssVariableDemo>

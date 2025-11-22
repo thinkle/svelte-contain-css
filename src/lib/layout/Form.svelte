@@ -1,0 +1,105 @@
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import { injectVars } from "$lib/util";
+  import FormProvider from "./FormProvider.svelte";
+
+  let {
+    children,
+    // FormProvider props
+    layout,
+    fullWidth,
+    globalInputStyles,
+    multiline,
+    // Container-like props
+    bg,
+    fg,
+    padding,
+    border,
+    borderRadius,
+    margin,
+    maxWidth,
+    minWidth,
+    width,
+    // Form-specific props
+    action,
+    method,
+    onsubmit,
+    ...restProps
+  }: {
+    children?: Snippet;
+    // FormProvider context props
+    layout?: "side" | "above" | "below";
+    fullWidth?: boolean;
+    globalInputStyles?: boolean;
+    multiline?: boolean;
+    // Container styling props
+    bg?: string;
+    fg?: string;
+    padding?: string;
+    border?: string | boolean;
+    borderRadius?: string;
+    margin?: string;
+    maxWidth?: string;
+    minWidth?: string;
+    width?: string;
+    // Form attributes
+    action?: string;
+    method?: "get" | "post" | "dialog";
+    onsubmit?: (event: SubmitEvent) => void;
+  } & Record<string, unknown> = $props();
+
+  const style = $derived(
+    injectVars(
+      {
+        bg,
+        fg,
+        padding,
+        border,
+        borderRadius,
+        margin,
+        maxWidth,
+        minWidth,
+        width,
+        ...restProps,
+      },
+      "form",
+      [
+        "bg",
+        "fg",
+        "padding",
+        "border",
+        "borderRadius",
+        "margin",
+        "maxWidth",
+        "minWidth",
+        "width",
+      ]
+    )
+  );
+</script>
+
+<FormProvider {layout} {fullWidth} {globalInputStyles} {multiline}>
+  <form {style} {action} {method} {onsubmit} {...restProps}>
+    {@render children?.()}
+  </form>
+</FormProvider>
+
+<style lang="scss">
+  @import "$lib/sass/_mixins.scss";
+
+  form {
+    @include color-props(form, container);
+    @include box-props(form, container);
+
+    border: var-with-fallbacks(--border, form, container, none);
+    border-radius: var-with-fallbacks(--border-radius, form, container, 0);
+    padding: var-with-fallbacks(--padding, form, container, 0);
+    margin: var-with-fallbacks(--margin, form, 0);
+
+    max-width: var(--form-max-width, var(--container-max-width, 100%));
+    min-width: var(--form-min-width, var(--container-min-width, auto));
+    width: var(--form-width, var(--container-width, auto));
+
+    box-sizing: border-box;
+  }
+</style>
