@@ -1,7 +1,11 @@
 <script lang="ts">
-  let { value = $bindable(0), ...restProps } = $props<{
-    value?: number;
-  }>();
+  import type { HTMLAttributes } from "svelte/elements";
+
+  let { value = $bindable(0), ...restProps } = $props<
+    {
+      value?: number;
+    } & HTMLAttributes<HTMLInputElement>
+  >();
 </script>
 
 <input type="range" bind:value {...restProps} />

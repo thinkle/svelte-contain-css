@@ -1,5 +1,7 @@
 <script lang="ts">
-  interface Props {
+  import type { HTMLAttributes } from "svelte/elements";
+
+  interface Props extends HTMLAttributes<HTMLElement> {
     interactive?: boolean; // Prop to make the tile clickable or not
     selectable?: boolean;
     checked?: boolean;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
   import FormProvider from "./FormProvider.svelte";
 
@@ -46,7 +47,7 @@
     action?: string;
     method?: "get" | "post" | "dialog";
     onsubmit?: (event: SubmitEvent) => void;
-  } & Record<string, unknown> = $props();
+  } & HTMLAttributes<HTMLFormElement> = $props();
 
   const style = $derived(
     injectVars(

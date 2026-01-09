@@ -5,6 +5,7 @@
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Tile from "$lib/layout/Tile.svelte";
+  import Code from "$lib/misc/Code.svelte";
 </script>
 
 <Container>
@@ -23,16 +24,26 @@
       <h3>Selectable Tile</h3>
       <p>Just a selectable tile.</p>
     </Tile>
-    <Tile interactive>
+    <Tile interactive onclick={() => alert("Tile clicked!")}>
       <h3>Interactive Tile</h3>
       <p>Just an interactive tile.</p>
     </Tile>
   </GridLayout>
+  <h2>Interactive Tile</h2>
+  <Code
+    code={`
+    <Tile interactive onclick={() => alert("Tile clicked!")}>
+      <h3>Interactive Tile</h3>
+      <p>Just an interactive tile.</p>
+    </Tile>
+  `}
+  ></Code>
+
   <h2>Tiles in cards</h2>
   <Card>
     {#snippet header()}
-        <h3 >Card</h3>
-      {/snippet}
+      <h3>Card</h3>
+    {/snippet}
     <Tile>One Tile</Tile>
     <Tile>Two Tile</Tile>
   </Card>
@@ -40,7 +51,7 @@
   <p>Slide the pane to see responsive tiles at work</p>
   <SplitPane leftWidth="3fr">
     {#snippet left()}
-        <div >
+      <div>
         <Tile>
           <h3>Tiles on my Left</h3>
           <p>Look, a tile!</p>
@@ -48,14 +59,14 @@
           <Checkbox>And me!</Checkbox>
         </Tile>
       </div>
-      {/snippet}
+    {/snippet}
     {#snippet right()}
-        <div >
+      <div>
         <Tile>
           <h3>Tiles on my right</h3>
           <p>Look, a tile!</p>
         </Tile>
       </div>
-      {/snippet}
+    {/snippet}
   </SplitPane>
 </Container>

@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
 
   const {
     children,
     ...restProps
-  }: { children?: Snippet } & Record<string, unknown> = $props();
+  }: { children?: Snippet } & HTMLAttributes<HTMLElement> = $props();
 
   const cssKeys = [
     "bg",

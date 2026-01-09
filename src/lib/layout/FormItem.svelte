@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
   import { getContext } from "svelte";
 
@@ -33,7 +34,7 @@
     layout?: "side" | "above" | "below";
     above?: boolean;
     below?: boolean;
-  } & Record<string, unknown> = $props();
+  } & HTMLAttributes<HTMLElement> = $props();
 
   // Use $derived to reactively compute values from context
   const effectiveFullWidth = $derived(
