@@ -412,6 +412,31 @@ Example: FormItem switches from stacked to side-by-side layout based on containe
 
 ---
 
+## Layout Context Variables
+
+Some CSS variables only make sense in certain layout contexts. Horizontal layout containers should reset variables that assume vertical stacking:
+
+```scss
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+
+  /* Reset form label width - fixed widths don't make sense in horizontal layouts */
+  --form-label-width: unset;
+}
+```
+
+**Components that reset `--form-label-width: unset`:**
+
+- `Bar` - always horizontal flex
+- `Row` - horizontal flex container
+
+**Why:** `FormItem` has a default `--form-label-width: 12em` for nice vertical form alignment, but fixed label widths cause awkward layouts in horizontal contexts.
+
+**The cascade still works:** Users can override with `<Bar --form-label-width="8em">` if they specifically want fixed widths.
+
+---
+
 ## Accessibility (a11y)
 
 ### Focus Management
