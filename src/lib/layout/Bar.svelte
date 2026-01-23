@@ -54,6 +54,9 @@
     @include color-props(bar, container);
     gap: var-with-fallbacks(--gap, bar, 8px);
     overflow: var(--bar-overflow, visible);
+
+    /* Reset form label width in horizontal context */
+    --form-label-width: unset;
   }
 
   .bar :global(h1),

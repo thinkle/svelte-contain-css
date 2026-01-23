@@ -2,7 +2,7 @@
   interface Props {
     size?: "small" | "medium" | "large";
     customHeight?: string | null;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { size = "medium", customHeight = null, children }: Props = $props();
@@ -39,5 +39,8 @@
     container-type: size;
     overflow: auto;
     align-items: flex-start;
+
+    /* Reset form label width in horizontal context */
+    --form-label-width: unset;
   }
 </style>
