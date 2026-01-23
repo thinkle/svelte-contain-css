@@ -6,6 +6,9 @@
     primary = false,
     secondary = false,
     warning = false,
+    danger = false,
+    success = false,
+    info = false,
     href = "#",
     id = null,
     icon,
@@ -15,6 +18,9 @@
     primary?: boolean;
     secondary?: boolean;
     warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
     href?: string;
     id?: string | null;
     icon?: Snippet;
@@ -46,6 +52,9 @@
   class:primary
   class:secondary
   class:warning
+  class:danger
+  class:success
+  class:info
   class:has-icon={iconSlotted}
   {...elementProps}
 >
@@ -94,5 +103,17 @@
   a.warning {
     @include color-props(warning, a, control);
     @include typography-props-bare(warning, a);
+  }
+  a.danger {
+    @include color-props(danger, a, control);
+    @include typography-props-bare(danger, a);
+  }
+  a.success {
+    @include color-props(success, a, control);
+    @include typography-props-bare(success, a);
+  }
+  a.info {
+    @include color-props(info, a, control);
+    @include typography-props-bare(info, a);
   }
 </style>

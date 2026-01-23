@@ -4,12 +4,18 @@
   let {
     primary = false,
     warning = false,
+    danger = false,
+    success = false,
+    info = false,
     type = "button",
     children,
     ...restProps
   }: {
     primary?: boolean;
     warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
     type?: "button" | "submit" | "reset";
     children?: import("svelte").Snippet;
   } & Record<string, unknown> = $props();
@@ -25,7 +31,7 @@
   );
 </script>
 
-<button {style} {type} class:primary class:warning {...restProps}>
+<button {style} {type} class:primary class:warning class:danger class:success class:info {...restProps}>
   {@render children?.()}
 </button>
 
@@ -58,5 +64,14 @@
   }
   button.warning {
     @include color-props(warning, button, control);
+  }
+  button.danger {
+    @include color-props(danger, button, control);
+  }
+  button.success {
+    @include color-props(success, button, control);
+  }
+  button.info {
+    @include color-props(info, button, control);
   }
 </style>

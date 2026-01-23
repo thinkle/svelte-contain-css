@@ -22,8 +22,14 @@
     --border-color: var(--material-color-blue-grey-100);
     --input-bg: #fefefe;
     --input-fg: var(--material-color-blue-grey-900);
-    --warning-bg: var(--material-color-red-600);
+    --warning-bg: var(--material-color-orange-600);
     --warning-fg: var(--white);
+    --danger-bg: var(--material-color-red-600);
+    --danger-fg: var(--white);
+    --success-bg: var(--material-color-green-600);
+    --success-fg: var(--white);
+    --info-bg: var(--material-color-light-blue-600);
+    --info-fg: var(--white);
     --hover-filter: brightness(0.9);
     /* Code */
     --code-bg: var(--material-color-blue-grey-50); /* Softer background */
@@ -79,7 +85,13 @@
     --primary-bg: var(--material-color-light-blue-100);
     --primary-fg: var(--material-color-blue-grey-800);
     --warning-fg: var(--white);
-    --warning-bg: var(--material-color-red-800);
+    --warning-bg: var(--material-color-orange-400);
+    --danger-bg: var(--material-color-red-400);
+    --danger-fg: var(--material-color-blue-grey-900);
+    --success-bg: var(--material-color-green-400);
+    --success-fg: var(--material-color-blue-grey-900);
+    --info-bg: var(--material-color-light-blue-300);
+    --info-fg: var(--material-color-blue-grey-900);
     --secondary-bg: var(--material-color-blue-grey-300);
     --secondary-fg: var(--material-color-blue-grey-800);
     --stripe-bg: var(--material-color-blue-grey-100);

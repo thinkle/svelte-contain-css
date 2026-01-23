@@ -5,12 +5,18 @@
     children,
     primary,
     warning,
+    danger,
+    success,
+    info,
     onclose = null,
     ...restProps
   }: {
     children?: import("svelte").Snippet;
     primary?: boolean;
     warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
     onclose?: (() => void) | null;
   } & Record<string, unknown> = $props();
   let style = $derived(
@@ -31,6 +37,9 @@
   {...restProps}
   class:primary
   class:warning
+  class:danger
+  class:success
+  class:info
 >
   {@render children?.()}
   {#if onclose}
@@ -77,5 +86,14 @@
   }
   .tag.warning {
     @include color-props(tag-warning, warning);
+  }
+  .tag.danger {
+    @include color-props(tag-danger, danger);
+  }
+  .tag.success {
+    @include color-props(tag-success, success);
+  }
+  .tag.info {
+    @include color-props(tag-info, info);
   }
 </style>

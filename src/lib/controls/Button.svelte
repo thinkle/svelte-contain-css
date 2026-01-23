@@ -6,6 +6,9 @@
     primary = false,
     secondary = false,
     warning = false,
+    danger = false,
+    success = false,
+    info = false,
     icon,
     children,
     ...restProps
@@ -13,6 +16,9 @@
     primary?: boolean;
     secondary?: boolean;
     warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
     icon?: Snippet;
     children?: Snippet;
   } & Record<string, unknown> = $props();
@@ -29,6 +35,9 @@
   class:primary
   class:secondary
   class:warning
+  class:danger
+  class:success
+  class:info
   class:has-icon={iconSlotted}
   {...restProps}
 >
@@ -65,5 +74,17 @@
   button.warning {
     @include color-props(warning, button, control);
     @include typography-props-bare(warning, button);
+  }
+  button.danger {
+    @include color-props(danger, button, control);
+    @include typography-props-bare(danger, button);
+  }
+  button.success {
+    @include color-props(success, button, control);
+    @include typography-props-bare(success, button);
+  }
+  button.info {
+    @include color-props(info, button, control);
+    @include typography-props-bare(info, button);
   }
 </style>

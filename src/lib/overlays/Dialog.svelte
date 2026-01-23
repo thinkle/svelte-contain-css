@@ -95,7 +95,10 @@
   .close-bar {
     position: sticky;
     top: var(--padding, 1rem);
-    height: var(--dialog-padding, var(--padding, 8px));
+    height: var(
+      --dialog-padding,
+      var(--mini-button-size, var(--icon-size, 32px))
+    );
     display: flex;
     justify-content: flex-end;
   }
