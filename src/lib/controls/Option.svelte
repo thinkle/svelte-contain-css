@@ -1,5 +1,5 @@
 <script lang="ts">
-  /* 
+  /*
     This is an ugly solution.
 
     We want to support basically writing...
@@ -24,7 +24,14 @@
     To do this, we render our text to a hidden div, extract the innerHTML and textContent, and then pass those in to the <option> tag.
 
   */
-  let { children, value, ...restProps } = $props();
+  import type { HTMLOptionAttributes } from "svelte/elements";
+
+  type Props = {
+    children?: import("svelte").Snippet;
+    value?: any;
+  } & Omit<HTMLOptionAttributes, "value">;
+
+  let { children, value, ...restProps }: Props = $props();
 
   let template: HTMLDivElement | null = $state(null);
 

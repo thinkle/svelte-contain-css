@@ -1,17 +1,20 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLInputAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    group?: any;
+    value?: any;
+    children?: Snippet;
+  } & Omit<HTMLInputAttributes, "value">;
 
   let {
     group = $bindable<any>(undefined),
     value = undefined,
     children,
     ...restProps
-  }: {
-    group?: any;
-    value?: any;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
 
   let style = $derived(
     injectVars(restProps, "radio-button", [
@@ -20,7 +23,7 @@
       "padding",
       "width",
       "height",
-    ])
+    ]),
   );
 </script>
 

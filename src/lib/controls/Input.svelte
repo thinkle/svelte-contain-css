@@ -1,16 +1,19 @@
 <script lang="ts">
+  import type { HTMLInputAttributes } from "svelte/elements";
+
+  type Props = {
+    value?: string;
+    placeholder?: string;
+  } & HTMLInputAttributes;
+
   let {
     value = $bindable(""),
     placeholder = "",
-  } = $props<{ value?: string; placeholder?: string }>();
-  const restProps = $restProps();
+    ...restProps
+  }: Props = $props();
 </script>
 
-<input
-  bind:value
-  placeholder={placeholder}
-  {...restProps}
-/>
+<input bind:value {placeholder} {...restProps} />
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";

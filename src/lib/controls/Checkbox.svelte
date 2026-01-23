@@ -1,6 +1,15 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLInputAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    checked?: boolean | undefined;
+    name?: string;
+    value?: any;
+    group?: any;
+    children?: Snippet;
+  } & Omit<HTMLInputAttributes, "value">;
 
   let {
     checked = $bindable<boolean | undefined>(undefined),
@@ -9,13 +18,7 @@
     group = $bindable<any>(undefined),
     children,
     ...restProps
-  }: {
-    checked?: boolean | undefined;
-    name?: string;
-    value?: any;
-    group?: any;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "checkbox", [
@@ -24,7 +27,7 @@
       "padding",
       "width",
       "height",
-    ])
+    ]),
   );
 
   const useGroup = $derived(group !== undefined && value !== undefined);

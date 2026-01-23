@@ -1,21 +1,19 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
   import Button from "./Button.svelte";
 
-  const {
-    active = false,
-    icon,
-    children,
-    ...restProps
-  }: {
+  type Props = {
     active?: boolean;
     icon?: Snippet;
     children?: Snippet;
-  } & Record<string, unknown> = $props();
+  } & HTMLAttributes<HTMLDivElement>;
+
+  const { active = false, icon, children, ...restProps }: Props = $props();
 
   const style = $derived(
-    injectVars(restProps, "tab", ["bg", "fg", "padding", "width", "height"])
+    injectVars(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
   );
 </script>
 

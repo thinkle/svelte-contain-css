@@ -1,12 +1,12 @@
 <script lang="ts">
+  import type { HTMLSelectAttributes } from "svelte/elements";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
-  interface Props {
-    value: any;
+  type Props = {
+    value?: any;
     children?: import("svelte").Snippet;
-    [key: string]: any;
-  }
+  } & HTMLSelectAttributes;
 
   let { value = $bindable(), children, ...restProps }: Props = $props();
   let selectElement: HTMLSelectElement | undefined = $state();
