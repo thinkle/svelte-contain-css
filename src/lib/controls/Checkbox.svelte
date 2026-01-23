@@ -8,7 +8,7 @@
     checked?: boolean | undefined;
     name?: string;
     value?: any;
-    group?: any;
+    group?: any[];
     children?: Snippet;
   } & BaseStyleProps &
     Omit<HTMLInputAttributes, "value">;
@@ -17,7 +17,7 @@
     checked = $bindable<boolean | undefined>(undefined),
     name = "",
     value = undefined,
-    group = $bindable<any>(undefined),
+    group = $bindable<any[] | undefined>(undefined),
     children,
     ...restProps
   }: Props = $props();
@@ -34,6 +34,27 @@
 
   const useGroup = $derived(group !== undefined && value !== undefined);
 
+  // For group mode, compute checked state from group array
+  const isChecked = $derived(
+    useGroup ? (group?.includes(value) ?? false) : checked,
+  );
+
+  // Handle group changes manually since bind:group doesn't work well with $bindable
+  function handleGroupChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!group) return;
+
+    if (input.checked) {
+      // Add value to group if not already present
+      if (!group.includes(value)) {
+        group = [...group, value];
+      }
+    } else {
+      // Remove value from group
+      group = group.filter((v: any) => v !== value);
+    }
+  }
+
   let ref: HTMLElement | null = $state(null);
 </script>
 
@@ -44,7 +65,8 @@
         name={name || undefined}
         type="checkbox"
         {value}
-        bind:group
+        checked={isChecked}
+        onchange={handleGroupChange}
         {...restProps}
       />
     {:else}

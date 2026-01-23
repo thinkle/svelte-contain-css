@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
@@ -136,9 +134,6 @@
   function updateEventInfo(event: Event) {
     console.info("Check event: ", event);
   }
-  run(() => {
-    console.log("Selected toppings: ", selectedToppings);
-  });
 </script>
 
 <CssVariableDemo variables={checkboxCSSVariables}>
@@ -147,22 +142,22 @@
     <p>Customize the style of checkboxes with CSS variables.</p>
 
     <Checkbox
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={updateEventInfo}
+      onblur={updateEventInfo}
+      onclick={updateEventInfo}
+      onchange={updateEventInfo}
       bind:checked={val}>Lettuce</Checkbox
     >
     <Checkbox
       --checkbox-checked-bg="red"
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={updateEventInfo}
+      onblur={updateEventInfo}
+      onclick={updateEventInfo}
+      onchange={updateEventInfo}
       bind:checked={val2}>Tomato</Checkbox
     >
     <Checkbox
-      on:blur={updateEventInfo}
-      on:click={updateEventInfo}
-      on:change={(e) => {
+      onblur={updateEventInfo}
+      onclick={updateEventInfo}
+      onchange={(e) => {
         updateEventInfo(e);
         val3 = !val3;
       }}
@@ -173,32 +168,47 @@
       code={`<Checkbox --checkbox-checked-bg="red" bind:checked={val}>Option</Checkbox>`}
     />
 
+    <h3>Checkbox Groups with bind:group</h3>
     <p>
-      You can also bind <code>value</code> and <code>group</code> if you prefer and
-      get back an array of values, as with the native checkbox.
+      You can bind <code>value</code> and <code>group</code> to get back an array
+      of selected values. This works just like native checkbox groups in Svelte.
     </p>
-    <p>So if you have...</p>
+
     <Code
-      code={`let toppings = ['Lettuce', 'Tomato', 'Onion', 'Pickles', 'Cheese', 'Bacon', 'Avocado', 'Mushrooms', 'Jalapenos', 'Peppers', 'Olives', 'Spinach', 'Cucumber', 'Carrots', 'Sprouts', 'Egg'];
-  let selectedToppings = ['Bacon','Lettuce','Tomato'];`}
-      language="javascript"
+      code={`<script>
+  let toppings = ['Lettuce', 'Tomato', 'Onion', 'Pickles', 'Cheese'];
+  let selectedToppings = $state(['Tomato']); // Pre-select Tomato
+</script>
+
+{#each toppings as topping}
+  <Checkbox bind:group={selectedToppings} value={topping}>
+    {topping}
+  </Checkbox>
+{/each}
+
+<p>Selected: {selectedToppings.join(', ')}</p>`}
+      language="svelte"
     />
-    <p>Then you can do this:</p>
+
+    <p><strong>Try it:</strong></p>
     {#each toppings as topping}
       <Checkbox bind:group={selectedToppings} value={topping}
         >{topping}</Checkbox
       >
     {/each}
     <p>Selected: {selectedToppings.join(", ")}</p>
-    <p>Or native this would be</p>
-    {#each toppings as topping}
-      <label
-        ><input
-          type="checkbox"
-          bind:group={selectedToppings}
-          value={topping}
-        />{topping}
-      </label>
-    {/each}
+
+    <h3>Single Checkbox with bind:checked</h3>
+    <p>For a single boolean toggle, use <code>bind:checked</code>:</p>
+    <Code
+      code={`<script>
+  let agreeToTerms = $state(false);
+</script>
+
+<Checkbox bind:checked={agreeToTerms}>
+  I agree to the terms and conditions
+</Checkbox>`}
+      language="svelte"
+    />
   </TextLayout>
 </CssVariableDemo>

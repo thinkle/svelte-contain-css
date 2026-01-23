@@ -271,6 +271,78 @@ Use `FormProvider` to set defaults for all FormItems:
 </FormProvider>
 ```
 
+### Checkboxes and RadioButtons
+
+**Single Checkbox with `bind:checked`:**
+
+```svelte
+<script>
+  import { Checkbox } from "svelte-contain-css";
+
+  let agreeToTerms = $state(false);
+</script>
+
+<Checkbox bind:checked={agreeToTerms}>
+  I agree to the terms and conditions
+</Checkbox>
+```
+
+**Checkbox Groups with `bind:group`:**
+
+Use `value` and `bind:group` to create a group where multiple items can be selected. The `group` will be an array of selected values:
+
+```svelte
+<script>
+  import { Checkbox } from "svelte-contain-css";
+
+  let toppings = ['Lettuce', 'Tomato', 'Onion', 'Pickles', 'Cheese'];
+  let selectedToppings = $state(['Tomato']); // Pre-select Tomato
+</script>
+
+{#each toppings as topping}
+  <Checkbox bind:group={selectedToppings} value={topping}>
+    {topping}
+  </Checkbox>
+{/each}
+
+<p>Selected: {selectedToppings.join(', ')}</p>
+```
+
+**RadioButton Groups:**
+
+RadioButtons work similarly but only allow one selection. The `group` will be a single value:
+
+```svelte
+<script>
+  import { RadioButton } from "svelte-contain-css";
+
+  let sizes = ['Small', 'Medium', 'Large'];
+  let selectedSize = $state('Medium');
+</script>
+
+{#each sizes as size}
+  <RadioButton bind:group={selectedSize} value={size}>
+    {size}
+  </RadioButton>
+{/each}
+
+<p>Selected size: {selectedSize}</p>
+```
+
+**Styling Checkboxes:**
+
+```svelte
+<!-- Custom colors -->
+<Checkbox --checkbox-checked-bg="green" bind:checked={val}>
+  Custom checked color
+</Checkbox>
+
+<!-- Key CSS variables -->
+<!-- --checkbox-bg, --checkbox-fg (unchecked state) -->
+<!-- --checkbox-checked-bg, --checkbox-checked-fg (checked state) -->
+<!-- --checkbox-size (defaults to font-size) -->
+```
+
 ### Modal Dialogs
 
 ```svelte

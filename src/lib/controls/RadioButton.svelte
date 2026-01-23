@@ -27,11 +27,25 @@
       "height",
     ]),
   );
+
+  // Compute checked state from group comparison
+  const isChecked = $derived(group === value);
+
+  // Handle radio selection - for radio buttons, group becomes the selected value
+  function handleChange() {
+    group = value;
+  }
 </script>
 
 <div class="label-sizing-box" {style}>
   <label class="radio-item">
-    <input {value} type="radio" bind:group {...restProps} />
+    <input
+      {value}
+      type="radio"
+      checked={isChecked}
+      onchange={handleChange}
+      {...restProps}
+    />
     <span>{@render children?.()}</span>
   </label>
   <!-- Hidden label determines how much space we occupy -- that way we can apply e.g. bold font without 
