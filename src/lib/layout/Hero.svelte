@@ -2,11 +2,14 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import { injectVars } from "$lib/util";
+  import type { HeroStyleProps } from "$lib/types";
 
-  const {
-    children,
-    ...restProps
-  }: { children?: Snippet } & HTMLAttributes<HTMLElement> = $props();
+  type Props = {
+    children?: Snippet;
+  } & HeroStyleProps &
+    HTMLAttributes<HTMLElement>;
+
+  const { children, ...restProps }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "hero", [
@@ -17,7 +20,7 @@
       "height",
       "headingFg",
       "headingBg",
-    ])
+    ]),
   );
 </script>
 

@@ -8,11 +8,14 @@
   import { injectVars } from "$lib/util";
   import type { Snippet } from "svelte";
   import { onMount } from "svelte";
-  interface Props {
+  import type { DropdownMenuStyleProps } from "$lib/types";
+  import type { HTMLAttributes } from "svelte/elements";
+
+  type Props = {
     label?: Snippet;
     children?: Snippet;
-    [key: string]: any;
-  }
+  } & DropdownMenuStyleProps &
+    HTMLAttributes<HTMLDivElement>;
 
   let { label, children, ...props }: Props = $props();
   idPostfix++;
@@ -82,7 +85,7 @@
   }
   function maybeFocusMatch(searchString: string) {
     let focusableItems = dropdownContentElement.querySelectorAll(
-      "a,button,[tabindex]"
+      "a,button,[tabindex]",
     );
     for (let element of focusableItems) {
       if (
@@ -103,11 +106,11 @@
     }
     const focusableItems = Array.from(
       dropdownContentElement.querySelectorAll(
-        "button, a, [tabindex]:not([tabindex='-1'])"
-      )
+        "button, a, [tabindex]:not([tabindex='-1'])",
+      ),
     );
     let currentIndex = focusableItems.findIndex(
-      (item) => item === document.activeElement
+      (item) => item === document.activeElement,
     );
 
     if (direction === "ArrowDown") {

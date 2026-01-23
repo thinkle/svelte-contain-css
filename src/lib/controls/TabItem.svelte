@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
   import Button from "./Button.svelte";
 
@@ -8,7 +9,8 @@
     active?: boolean;
     icon?: Snippet;
     children?: Snippet;
-  } & HTMLAttributes<HTMLDivElement>;
+  } & BaseStyleProps &
+    HTMLAttributes<HTMLDivElement>;
 
   const { active = false, icon, children, ...restProps }: Props = $props();
 

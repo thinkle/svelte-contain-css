@@ -422,11 +422,11 @@ Some CSS variables only make sense in certain layout contexts. Horizontal layout
   flex-direction: row;
 
   /* Reset form label width - fixed widths don't make sense in horizontal layouts */
-  --form-label-width: unset;
+  --form-label-width: auto;
 }
 ```
 
-**Components that reset `--form-label-width: unset`:**
+**Components that reset `--form-label-width: auto`:**
 
 - `Bar` - always horizontal flex
 - `Row` - horizontal flex container

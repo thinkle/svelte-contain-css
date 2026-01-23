@@ -1,6 +1,20 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    primary?: boolean;
+    secondary?: boolean;
+    warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
+    icon?: Snippet;
+    children?: Snippet;
+  } & BaseStyleProps &
+    HTMLButtonAttributes;
 
   let {
     primary = false,
@@ -12,16 +26,7 @@
     icon,
     children,
     ...restProps
-  }: {
-    primary?: boolean;
-    secondary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    icon?: Snippet;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"]),

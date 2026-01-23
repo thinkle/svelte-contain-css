@@ -1,5 +1,18 @@
 <script lang="ts">
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { TagStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    children?: import("svelte").Snippet;
+    primary?: boolean;
+    warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
+    onclose?: (() => void) | null;
+  } & TagStyleProps &
+    HTMLAttributes<HTMLSpanElement>;
 
   let {
     children,
@@ -10,15 +23,8 @@
     info,
     onclose = null,
     ...restProps
-  }: {
-    children?: import("svelte").Snippet;
-    primary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    onclose?: (() => void) | null;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
+
   let style = $derived(
     injectVars(restProps, "tag", [
       "bg",

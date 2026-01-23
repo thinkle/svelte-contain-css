@@ -1,5 +1,18 @@
 <script lang="ts">
+  import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    primary?: boolean;
+    warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
+    type?: "button" | "submit" | "reset";
+    children?: import("svelte").Snippet;
+  } & BaseStyleProps &
+    HTMLButtonAttributes;
 
   let {
     primary = false,
@@ -10,15 +23,7 @@
     type = "button",
     children,
     ...restProps
-  }: {
-    primary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    type?: "button" | "submit" | "reset";
-    children?: import("svelte").Snippet;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "mini-button", [

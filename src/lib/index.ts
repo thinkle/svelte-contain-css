@@ -38,6 +38,19 @@ import Table from "./layout/Table.svelte";
 import Accordion from "./layout/Accordion.svelte";
 import Tag from "./misc/Tag.svelte";
 
+// Export types for consumers
+export type {
+  BaseStyleProps,
+  ContainerStyleProps,
+  BarStyleProps,
+  MenuStyleProps,
+  CardStyleProps,
+  TagStyleProps,
+  SidebarStyleProps,
+  HeroStyleProps,
+  DropdownMenuStyleProps,
+} from "./types";
+
 export { Tag };
 
 export { Hero };

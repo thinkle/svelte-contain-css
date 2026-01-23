@@ -1,6 +1,22 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAnchorAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
+
+  type Props = {
+    primary?: boolean;
+    secondary?: boolean;
+    warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
+    href?: string;
+    id?: string | null;
+    icon?: Snippet;
+    children?: Snippet;
+  } & BaseStyleProps &
+    HTMLAnchorAttributes;
 
   let {
     primary = false,
@@ -14,18 +30,7 @@
     icon,
     children,
     ...restProps
-  }: {
-    primary?: boolean;
-    secondary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    href?: string;
-    id?: string | null;
-    icon?: Snippet;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: Props = $props();
 
   const { style: inlineStyle, ...elementProps } = restProps as {
     style?: string;

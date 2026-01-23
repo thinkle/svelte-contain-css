@@ -1,13 +1,15 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
   type Props = {
     group?: any;
     value?: any;
     children?: Snippet;
-  } & Omit<HTMLInputAttributes, "value">;
+  } & BaseStyleProps &
+    Omit<HTMLInputAttributes, "value">;
 
   let {
     group = $bindable<any>(undefined),

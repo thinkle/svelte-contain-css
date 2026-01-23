@@ -1,12 +1,15 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { BarStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
-  const {
-    children,
-    ...restProps
-  }: { children?: Snippet } & HTMLAttributes<HTMLElement> = $props();
+  type Props = {
+    children?: Snippet;
+  } & BarStyleProps &
+    HTMLAttributes<HTMLElement>;
+
+  const { children, ...restProps }: Props = $props();
 
   const cssKeys = [
     "bg",
@@ -56,7 +59,7 @@
     overflow: var(--bar-overflow, visible);
 
     /* Reset form label width in horizontal context */
-    --form-label-width: unset;
+    --form-label-width: auto;
   }
 
   .bar :global(h1),

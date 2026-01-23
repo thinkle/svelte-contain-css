@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { injectVars } from "$lib/util";
+  import type { SidebarStyleProps } from "$lib/types";
+  import type { HTMLAttributes } from "svelte/elements";
 
-  let {
-    left,
-    right,
-    ...restProps
-  }: {
+  type Props = {
     left?: boolean;
     right?: boolean;
-  } = $props();
+  } & SidebarStyleProps &
+    HTMLAttributes<HTMLElement>;
+
+  let { left, right, ...restProps }: Props = $props();
 
   let style = injectVars(restProps, "sidebar", ["bg", "fg", "width"]);
 

@@ -1,6 +1,18 @@
 <script lang="ts">
-  import { injectVars } from "./util";
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { CardStyleProps } from "$lib/types";
+  import { injectVars } from "./util";
+
+  type Props = {
+    header?: Snippet;
+    footer?: Snippet;
+    children?: Snippet;
+    center?: boolean;
+    height?: string;
+    fixedHeight?: boolean;
+  } & CardStyleProps &
+    HTMLAttributes<HTMLElement>;
 
   let {
     header,
@@ -10,15 +22,7 @@
     fixedHeight,
     center,
     ...restProps
-  }: {
-    header?: Snippet;
-    footer?: Snippet;
-    children?: Snippet;
-    center?: boolean;
-    height?: string;
-    fixedHeight?: boolean;
-    [key: string]: any;
-  } = $props();
+  }: Props = $props();
 
   let cssVars = injectVars({ height, ...restProps }, "card", [
     "bg",

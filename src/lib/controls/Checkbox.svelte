@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
   type Props = {
@@ -9,7 +10,8 @@
     value?: any;
     group?: any;
     children?: Snippet;
-  } & Omit<HTMLInputAttributes, "value">;
+  } & BaseStyleProps &
+    Omit<HTMLInputAttributes, "value">;
 
   let {
     checked = $bindable<boolean | undefined>(undefined),

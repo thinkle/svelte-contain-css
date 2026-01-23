@@ -1,13 +1,16 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { MenuStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
-  let {
-    children,
-    striped,
-    ...restProps
-  }: { children?: Snippet; striped: boolean } & Record<string, unknown> =
-    $props();
+  type Props = {
+    children?: Snippet;
+    striped?: boolean;
+  } & MenuStyleProps &
+    HTMLAttributes<HTMLUListElement>;
+
+  let { children, striped = false, ...restProps }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "menu", [
@@ -22,7 +25,7 @@
       "itemEvenBg",
       "itemActiveFg",
       "itemActiveBg",
-    ])
+    ]),
   );
 </script>
 

@@ -41,6 +41,6 @@
     align-items: flex-start;
 
     /* Reset form label width in horizontal context */
-    --form-label-width: unset;
+    --form-label-width: auto;
   }
 </style>
