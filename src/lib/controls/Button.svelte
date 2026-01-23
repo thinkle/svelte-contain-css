@@ -24,7 +24,7 @@
   } & Record<string, unknown> = $props();
 
   const style = $derived(
-    injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"])
+    injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"]),
   );
 
   const iconSlotted = $derived(Boolean(icon));

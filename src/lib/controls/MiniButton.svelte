@@ -27,11 +27,20 @@
       "padding",
       "width",
       "height",
-    ])
+    ]),
   );
 </script>
 
-<button {style} {type} class:primary class:warning class:danger class:success class:info {...restProps}>
+<button
+  {style}
+  {type}
+  class:primary
+  class:warning
+  class:danger
+  class:success
+  class:info
+  {...restProps}
+>
   {@render children?.()}
 </button>
 

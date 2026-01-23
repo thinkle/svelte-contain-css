@@ -138,6 +138,7 @@ All components that accept style props **must** use the `injectVars` utility fro
 3. Returns a style string to apply to the component's root element
 
 **Example transformation:**
+
 ```svelte
 <!-- User writes: -->
 <Button fg="red" padding="1rem" --custom-thing="blue">
@@ -185,13 +186,13 @@ All components that accept style props **must** use the `injectVars` utility fro
 export function injectVars(
   props: { [key: string]: any },
   prefix: string,
-  varList: string[]
+  varList: string[],
 ) {
   let cssVars = "";
   // Convert listed props to prefixed CSS variables
   varList.forEach((v) => {
     if (props[v]) {
-      const cssVarName = toKebabCase(v);  // e.g., "maxWidth" → "max-width"
+      const cssVarName = toKebabCase(v); // e.g., "maxWidth" → "max-width"
       cssVars += `--${prefix}-${cssVarName}: ${props[v]};`;
     }
   });
@@ -216,6 +217,7 @@ Variables follow a hierarchical fallback pattern:
 3. `--global-property` (least specific, e.g., `--primary-bg`)
 
 Example from Button component:
+
 - `--button-bg` falls back to `--control-bg` falls back to `--secondary-bg`
 
 ### Semantic Color Variants
@@ -223,6 +225,7 @@ Example from Button component:
 The design system includes semantic color variables that components can use via boolean props:
 
 **CSS Variables (defined in `src/lib/vars/colors.css`):**
+
 ```css
 --primary-bg / --primary-fg     /* Main actions - Blue */
 --secondary-bg / --secondary-fg /* Less emphasis - Gray */
@@ -235,6 +238,7 @@ The design system includes semantic color variables that components can use via 
 **Implementing semantic variants in a component:**
 
 1. Add boolean props:
+
 ```svelte
 let {
   primary = false,
@@ -245,11 +249,13 @@ let {
 ```
 
 2. Add class bindings:
+
 ```svelte
 <button class:primary class:danger class:success>
 ```
 
 3. Add SCSS rules using the semantic prefix:
+
 ```scss
 button.primary {
   @include color-props(primary, button, control);
@@ -263,6 +269,7 @@ button.success {
 ```
 
 **Components currently supporting semantic variants:**
+
 - `Button`, `ButtonLink`, `MiniButton` - all six variants
 - `Tag` - all six variants
 
@@ -289,10 +296,10 @@ Use the provided mixins from `$lib/sass/_mixins.scss` for consistent styling:
 
     // Box shadow
     @include box-shadow(my-component, container);
-    
+
     // Interactive states (hover, active, disabled)
     @include clickable(my-component);
-    
+
     // Focus states
     @include focusable();
   }
@@ -372,7 +379,7 @@ Standard component file structure:
     @include focusable();
     // ... other styles
   }
-  
+
   .component-name.primary {
     @include color-props(primary, component-name);
   }
@@ -546,16 +553,19 @@ let derived = $derived(value * 2); // New
 ## Testing & Development
 
 ### Development Server
+
 ```bash
 npm run dev
 ```
 
 ### Building the Library
+
 ```bash
 npm run package
 ```
 
 ### Building Demo Site
+
 ```bash
 npm run build
 ```

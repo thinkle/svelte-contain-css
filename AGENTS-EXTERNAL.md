@@ -50,6 +50,7 @@ Or import in your CSS:
 ### Available Components
 
 **Controls:**
+
 - `Button`, `ButtonLink`, `MiniButton` - Buttons and link-styled buttons
 - `Input`, `Select`, `Option` - Form inputs
 - `Checkbox`, `RadioButton` - Selection controls
@@ -57,6 +58,7 @@ Or import in your CSS:
 - `TabItem` - Tab navigation items
 
 **Layout:**
+
 - `Container` - Centered, max-width container with padding
 - `Page` - Full-page layout wrapper
 - `Row`, `Column`, `Columns` - Flexbox layout helpers
@@ -73,11 +75,13 @@ Or import in your CSS:
 - `ResponsiveText` - Container-query responsive text
 
 **Overlays:**
+
 - `Dialog` - Modal/non-modal dialog (uses `<dialog>`)
 - `Tooltip` - Tooltips (uses `popover`)
 - `DropdownMenu` - Dropdown menus
 
 **Misc:**
+
 - `Card` - Card container
 - `Code` - Syntax-highlighted code blocks
 - `Progress` - Progress bar
@@ -174,20 +178,20 @@ Define themes in your stylesheets:
 
 These affect all components unless overridden:
 
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `--bg` | Background color | - |
-| `--fg` | Foreground/text color | - |
-| `--primary-bg` | Primary action background | - |
-| `--primary-fg` | Primary action foreground | - |
-| `--secondary-bg` | Secondary background | - |
-| `--padding` | Default padding | - |
-| `--gap` | Default gap/spacing | - |
-| `--border-radius` | Default border radius | - |
-| `--border-color` | Default border color | - |
-| `--border-width` | Default border width | `1px` |
-| `--font-family` | Base font family | - |
-| `--font-size` | Base font size | - |
+| Variable          | Purpose                   | Default |
+| ----------------- | ------------------------- | ------- |
+| `--bg`            | Background color          | -       |
+| `--fg`            | Foreground/text color     | -       |
+| `--primary-bg`    | Primary action background | -       |
+| `--primary-fg`    | Primary action foreground | -       |
+| `--secondary-bg`  | Secondary background      | -       |
+| `--padding`       | Default padding           | -       |
+| `--gap`           | Default gap/spacing       | -       |
+| `--border-radius` | Default border radius     | -       |
+| `--border-color`  | Default border color      | -       |
+| `--border-width`  | Default border width      | `1px`   |
+| `--font-family`   | Base font family          | -       |
+| `--font-size`     | Base font size            | -       |
 
 ### Component-Specific Variables
 
@@ -200,21 +204,25 @@ Components cascade through category variables. For example, `Button`:
 ```
 
 **Button:**
+
 - `--button-bg`, `--button-fg`, `--button-padding`
 - `--button-width`, `--button-height`
 - `--button-hover-filter`, `--button-hover-transform`
 
 **Dialog:**
+
 - `--dialog-min-width`, `--dialog-max-width` (default: 400px, 800px)
 - `--dialog-min-height`, `--dialog-max-height` (default: 300px, 800px)
 - `--dialog-underlay-color` (backdrop color)
 - `--dialog-underlay-filter` (backdrop blur, default: `blur(2px)`)
 
 **Container:**
+
 - `--container-height`, `--container-max-width`
 - `--container-padding`, `--container-bg`
 
 **Form/FormItem:**
+
 - `--form-label-width` (default: 12em)
 - `--form-label-align`, `--form-label-justify`
 - `--form-input-width`
@@ -239,12 +247,12 @@ FormItem provides responsive label/input layouts:
     {#snippet label()}Username{/snippet}
     <Input type="text" placeholder="Enter username" />
   </FormItem>
-  
+
   <FormItem>
     {#snippet label()}Password{/snippet}
     <Input type="password" />
   </FormItem>
-  
+
   <FormItem>
     {#snippet label()}&nbsp;{/snippet}
     <Button primary>Submit</Button>
@@ -268,14 +276,14 @@ Use `FormProvider` to set defaults for all FormItems:
 ```svelte
 <script>
   import { Dialog, Button } from "svelte-contain-css";
-  
+
   let showDialog = $state(false);
 </script>
 
 <Button onclick={() => showDialog = true}>Open Dialog</Button>
 
-<Dialog 
-  open={showDialog} 
+<Dialog
+  open={showDialog}
   modal={true}
   dismissible={true}
   onclose={() => showDialog = false}
@@ -343,7 +351,7 @@ Uses native `popover` attribute:
 ```svelte
 <script>
   import { TabBar, TabItem } from "svelte-contain-css";
-  
+
   let activeTab = $state("home");
 </script>
 
@@ -398,16 +406,17 @@ For common use cases like actions and status, use the built-in semantic props:
 
 **Available semantic variants:**
 
-| Prop | Use Case | Default Color |
-|------|----------|---------------|
-| `primary` | Main/important action | Blue |
-| `secondary` | Less emphasis | Gray |
-| `warning` | Caution needed | Orange |
-| `danger` | Destructive action | Red |
-| `success` | Positive/confirmation | Green |
-| `info` | Informational | Light Blue |
+| Prop        | Use Case              | Default Color |
+| ----------- | --------------------- | ------------- |
+| `primary`   | Main/important action | Blue          |
+| `secondary` | Less emphasis         | Gray          |
+| `warning`   | Caution needed        | Orange        |
+| `danger`    | Destructive action    | Red           |
+| `success`   | Positive/confirmation | Green         |
+| `info`      | Informational         | Light Blue    |
 
 **Components supporting semantic variants:**
+
 - `Button`, `ButtonLink`, `MiniButton`
 - `Tag`
 
@@ -436,16 +445,16 @@ Override the semantic color variables in your app's CSS:
   /* Customize the semantic colors for your brand */
   --primary-bg: #0066cc;
   --primary-fg: #ffffff;
-  
+
   --danger-bg: #dc3545;
   --danger-fg: #ffffff;
-  
+
   --success-bg: #28a745;
   --success-fg: #ffffff;
-  
+
   --warning-bg: #ffc107;
   --warning-fg: #000000;
-  
+
   --info-bg: #17a2b8;
   --info-fg: #ffffff;
 }
@@ -514,12 +523,12 @@ Contain CSS components are built with accessibility in mind:
 
 If upgrading from a Svelte 4 project:
 
-| Svelte 4 | Svelte 5 |
-|----------|----------|
-| `<slot />` | `{@render children?.()}` |
+| Svelte 4                 | Svelte 5                                 |
+| ------------------------ | ---------------------------------------- |
+| `<slot />`               | `{@render children?.()}`                 |
 | `<slot name="header" />` | `{@render header?.()}` with snippet prop |
-| `on:click={handler}` | `onclick={handler}` |
-| `export let prop` | `let { prop } = $props()` |
+| `on:click={handler}`     | `onclick={handler}`                      |
+| `export let prop`        | `let { prop } = $props()`                |
 
 Example transformation:
 
@@ -551,7 +560,7 @@ Example transformation:
     Input, Select, Option,
     Checkbox, RadioButton, Slider,
     TabItem,
-    
+
     // Layout
     Container, Page, Row, Column, Columns,
     GridLayout, SplitPane, Sidebar,
@@ -559,10 +568,10 @@ Example transformation:
     Form, FormItem, FormProvider, Fieldset,
     Accordion, Table, Tile, Hero,
     ResponsiveText,
-    
+
     // Overlays
     Dialog, Tooltip, DropdownMenu,
-    
+
     // Misc
     Card, Code, Progress, Tag, TextLayout
   } from "svelte-contain-css";
@@ -576,7 +585,7 @@ Example transformation:
   /* Base Colors */
   --bg: #ffffff;
   --fg: #333333;
-  
+
   /* Semantic Colors */
   --primary-bg: #0066cc;
   --primary-fg: #ffffff;
@@ -590,15 +599,15 @@ Example transformation:
   --warning-fg: #ffffff;
   --info-bg: #03a9f4;
   --info-fg: #ffffff;
-  
+
   /* Spacing */
   --padding: 1rem;
   --gap: 0.5rem;
-  
+
   /* Typography */
   --font-family: system-ui, sans-serif;
   --font-size: 16px;
-  
+
   /* Borders */
   --border-radius: 4px;
   --border-color: #ddd;

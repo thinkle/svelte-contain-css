@@ -38,7 +38,7 @@
       "padding",
       "width",
       "height",
-    ])}${inlineStyle ?? ""}`
+    ])}${inlineStyle ?? ""}`,
   );
 
   const iconSlotted = $derived(Boolean(icon));

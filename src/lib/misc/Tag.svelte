@@ -26,7 +26,7 @@
       "padding",
       "borderRadius",
       "fontSize",
-    ])
+    ]),
   );
 </script>
 

@@ -5,6 +5,7 @@ This project has two agent instruction files depending on your context:
 ## 📦 [AGENTS-EXTERNAL.md](AGENTS-EXTERNAL.md) - For Library Consumers
 
 Use this when **using** the Contain CSS Svelte library in your project:
+
 - Component API reference and usage patterns
 - CSS variable customization and theming
 - Common patterns (forms, dialogs, layouts)
@@ -13,6 +14,7 @@ Use this when **using** the Contain CSS Svelte library in your project:
 ## 🔧 [AGENTS-INTERNAL.md](AGENTS-INTERNAL.md) - For Library Contributors
 
 Use this when **developing or contributing to** the library itself:
+
 - Svelte 5 runes patterns ($props, $state, $derived, $effect)
 - SCSS mixin system and CSS variable architecture
 - Component structure templates
@@ -32,7 +34,7 @@ Contain CSS is built on three core principles:
 
 ## Original Internal Documentation
 
-*The following is the original internal development documentation. For the full organized version, see [AGENTS-INTERNAL.md](AGENTS-INTERNAL.md).*
+_The following is the original internal development documentation. For the full organized version, see [AGENTS-INTERNAL.md](AGENTS-INTERNAL.md)._
 
 ---
 
