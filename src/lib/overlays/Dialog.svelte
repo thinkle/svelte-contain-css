@@ -1,39 +1,76 @@
 <script lang="ts">
-  import { afterUpdate } from "svelte";
+  import { afterUpdate, onDestroy } from "svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
-  import Container from "$lib/layout/Container.svelte";
   import { copyCSSVariables, injectVars } from "$lib/util";
+
   export let onClose = () => {};
   export let open = true;
   export let modal = true;
+  export let dismissible = false;
+
   let style = injectVars($$props, "dialog", []);
+  let dialogElement: HTMLDialogElement;
+  let ref: HTMLDivElement;
+
+  // Handle backdrop click to close modal (click outside behavior)
+  function handleBackdropClick(event: MouseEvent) {
+    if (!dismissible) return;
+
+    // Don't close if the click target is a popover or other interactive element
+    const target = event.target as HTMLElement;
+    if (target?.hasAttribute?.("popover")) return;
+    if (target?.closest?.("[popover]")) return;
+
+    // Check if click is outside the dialog content box (on backdrop)
+    const rect = dialogElement?.getBoundingClientRect();
+    if (
+      rect &&
+      (event.clientX < rect.left ||
+        event.clientX > rect.right ||
+        event.clientY < rect.top ||
+        event.clientY > rect.bottom)
+    ) {
+      onClose();
+    }
+  }
+
   afterUpdate(() => {
     if (dialogElement) {
       if (open) {
         if (modal) {
-          //copyCSSVariables(ref, dialogElement);
+          copyCSSVariables(ref, dialogElement);
           dialogElement.showModal();
+          if (dismissible) {
+            dialogElement.addEventListener("click", handleBackdropClick);
+          }
         } else {
-          //copyCSSVariables(ref, dialogElement);
+          copyCSSVariables(ref, dialogElement);
           dialogElement.show();
         }
       } else if (dialogElement) {
         dialogElement.close();
+        dialogElement.removeEventListener("click", handleBackdropClick);
         onClose();
       }
     }
   });
-  let dialogElement: HTMLDialogElement;
-  let ref: HTMLDivElement;
+
+  onDestroy(() => {
+    if (dialogElement) {
+      dialogElement.removeEventListener("click", handleBackdropClick);
+    }
+  });
 </script>
 
 <section {style}>
   <div class="variable-placeholder" bind:this={ref}></div>
   <dialog bind:this={dialogElement} on:close={onClose}>
-    <slot />
-    <div class="close-button">
-      <MiniButton on:click={onClose}>&times;</MiniButton>
+    <div class="close-bar">
+      <div class="close-button">
+        <MiniButton on:click={onClose}>&times;</MiniButton>
+      </div>
     </div>
+    <slot />
   </dialog>
 </section>
 
@@ -42,10 +79,20 @@
   .variable-placeholder {
     display: none;
   }
+  .close-bar {
+    position: sticky;
+    top: var(--padding, 1rem);
+    height: var(
+      --dialog-padding,
+      var(--mini-button-size, var(--icon-size, 32px))
+    );
+    display: flex;
+    justify-content: flex-end;
+  }
   .close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
   }
   dialog {
     @include box-props(dialog, top, container, block);

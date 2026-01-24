@@ -16,9 +16,18 @@
   --stripe-bg: #3a3a3a;
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   --border-color: var(--fg);
-  --warning-bg: var(--material-color-red-600);
+  --warning-bg: var(--material-color-orange-600);
   --warning-fg: var(--white);
   --warning-text-transform: uppercase;
+
+  /* Semantic color variants */
+  --danger-bg: var(--material-color-red-600);
+  --danger-fg: var(--white);
+  --success-bg: var(--material-color-green-600);
+  --success-fg: var(--white);
+  --info-bg: var(--material-color-light-blue-600);
+  --info-fg: var(--white);
+
   --container-link-fg: var(--primary-bg);
   --menu-item-bg: var(--menu-bg);
   --focus-color: var(--material-color-blue-a400);
