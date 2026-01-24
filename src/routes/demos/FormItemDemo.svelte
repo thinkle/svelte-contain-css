@@ -278,23 +278,23 @@
     <h3>Code:</h3>
     <Code
       code={`
-      <Container border --container-max-width="300px" --input-width="20em">      
+      <Container border --container-max-width="300px" --input-width="20em">
         <FormItem>
-          <span slot="label">Name</span>
+          {#snippet label()}Name{/snippet}
           <input type="text" />
         </FormItem>
         <FormItem>
-          <span slot="label">Age</span>
+          {#snippet label()}Age{/snippet}
           <input type="number" min="16" max="130" />
         </FormItem>
         <FormItem>
-          <span slot="label">Level</span>
+          {#snippet label()}Level{/snippet}
           <input type="range" />
         </FormItem>
         <FormItem>
-          <Button primary>Add</Button>  
+          <Button primary>Add</Button>
         </FormItem>
-      </Container>    
+      </Container>
       `}
     />
     <h3>Result:</h3>
@@ -444,11 +444,11 @@
     <Code
       code={`<FormProvider layout="below" fullWidth={true}>
   <FormItem>
-    <span slot="label">Name</span>
+    {#snippet label()}Name{/snippet}
     <input type="text" />
   </FormItem>
   <FormItem>
-    <span slot="label">Email</span>
+    {#snippet label()}Email{/snippet}
     <input type="email" />
   </FormItem>
   <!-- Both inherit layout="below" and fullWidth={true} -->
@@ -519,13 +519,13 @@
 
     <Code
       code={`<Fieldset layout="below" border padding="1rem">
-  <span slot="legend">Personal Information</span>
+  {#snippet legend()}Personal Information{/snippet}
   <FormItem>
-    <span slot="label">First Name</span>
+    {#snippet label()}First Name{/snippet}
     <input type="text" />
   </FormItem>
   <FormItem>
-    <span slot="label">Last Name</span>
+    {#snippet label()}Last Name{/snippet}
     <input type="text" />
   </FormItem>
 </Fieldset>`}

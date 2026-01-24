@@ -61,7 +61,7 @@
     </Select>
   </FormItem>
   <FormItem fullWidth
-    ><Button primary on:click={addTask}>Add Task to List</Button></FormItem
+    ><Button primary onclick={addTask}>Add Task to List</Button></FormItem
   >
 
   <Row>

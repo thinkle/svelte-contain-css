@@ -2,6 +2,7 @@
   import Card from "$lib/Card.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import Code from "$lib/misc/Code.svelte";
 
   let fixedHeight = $state(true);
   import Checkbox from "$lib/controls/Checkbox.svelte";
@@ -23,11 +24,41 @@
         Cards usually come with some box-shadow, coloring, and so forth, and
         have responsive sizing out of the box.
       </p>
+
+      <h3>Basic Card</h3>
+      <Code
+        code={`<Card>
+  <h1>Card Title</h1>
+  <p>Card content goes here.</p>
+</Card>`}
+      />
+
+      <h3>Card with Header and Footer</h3>
+      <Code
+        code={`<Card>
+  {#snippet header()}
+    <div>Card Header</div>
+  {/snippet}
+  <div>Card content here...</div>
+  {#snippet footer()}
+    <div>Card Footer</div>
+  {/snippet}
+</Card>`}
+      />
+
+      <h3>Fixed Height Cards</h3>
+      <p>Cards can be set to fixedHeight true or false.</p>
+      <Code
+        code={`<Card fixedHeight={true}>
+  <p>This card has a fixed height.</p>
+</Card>`}
+      />
+
+      <h3>Interactive Example</h3>
       <p>
         Here are some cards with and without headers inside resizable panes so
         you can see them acting responsively.
       </p>
-      <p>Cards can be set to fixedHeight true or false.</p>
     </TextLayout>
     <FormItem>
       <Checkbox bind:checked={fixedHeight}>Fixed Height</Checkbox>

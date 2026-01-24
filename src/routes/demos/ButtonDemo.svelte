@@ -20,7 +20,9 @@
 <Button bg="transparent">Transparent Button</Button>
 <Button>
   Icon Button
-  <div slot="icon">▶</div>
+  {#snippet icon()}
+    <div>▶</div>
+  {/snippet}
 </Button>
 <Button primary={true}>Primary Button</Button>
 <Button disabled>Disabled Button</Button>

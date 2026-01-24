@@ -54,7 +54,7 @@
             <Tooltip
               {vertical}
               {horizontal}
-              tooltipText={`This is a ${vertical}|${horizontal} tooltip`}
+              tooltipText={`<Tooltip vertical="${vertical}" horizontal="${horizontal}">`}
             >
               <Button>{`${vertical}|${horizontal}`}</Button>
             </Tooltip>
@@ -64,16 +64,13 @@
 
       <Code
         language="svelte"
-        code={`
-<Tooltip
+        code={`<Tooltip
   vertical="top"
   horizontal="left"
-  tooltipText="This is a top|left tooltip"
+  tooltipText="Your tooltip text here"
 >
-  <Button>...</Button>
-</Tooltip>
-
-      `}
+  <Button>top|left</Button>
+</Tooltip>`}
       />
     </p>
     <p>
@@ -102,14 +99,16 @@
     <Code
       code={`<Tooltip>
     <Button>Fancy Tooltip Button</Button>
-    <div slot="tooltip">
-      <p>This button is <i>extra fancy</i> and contains a list:</p>
-      <ul>
-        <li>Item 1</li>
-        <li>Item 2</li>
-        <li>Item 3</li>
-      </ul>
-    </div>
+    {#snippet tooltip()}
+      <div>
+        <p>This button is <i>extra fancy</i> and contains a list:</p>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+      </div>
+    {/snippet}
   </Tooltip>
 `}
     />
@@ -144,6 +143,23 @@
         </Tooltip>
       {/each}
     </div>
+    <Code
+      code={`<Tooltip
+  tooltipText="Tooltip for tiny element"
+  horizontal="left"
+>
+  <div class="blip" tabindex="0"></div>
+</Tooltip>
+
+<style>
+  .blip {
+    width: 16px;
+    height: 16px;
+    background-color: var(--material-color-blue-500);
+    border-radius: 50%;
+  }
+</style>`}
+    />
   </TextLayout>
 </CssVariableDemo>
 

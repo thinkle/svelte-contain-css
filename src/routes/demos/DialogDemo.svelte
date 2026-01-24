@@ -75,11 +75,11 @@
       <Code
         language="svelte"
         code={`
-<Button 
-  on:click={() => (modalIsOpen = !modalIsOpen)}
+<Button
+  onclick={() => (modalIsOpen = !modalIsOpen)}
   >
   Open Modal Dialog
-</Button>    
+</Button>
 <Dialog
   modal={true}
   onClose={() => (modalIsOpen = false)}

@@ -90,7 +90,9 @@
   <Code
     code={`
   <Menu>
-    <span slot="label">Menu Title</span>
+    {#snippet label()}
+      <span>Menu Title</span>
+    {/snippet}
     <li><button>Foo</button></li>
     <li><button>Bar</button></li>
     <li><button>Baz</button></li>
@@ -119,7 +121,7 @@
       {/each}
     </Select>
     <Button
-      on:click={() =>
+      onclick={() =>
         (selectedPerson = people[Math.floor(Math.random() * people.length)])}
       >Select Random Person</Button
     >

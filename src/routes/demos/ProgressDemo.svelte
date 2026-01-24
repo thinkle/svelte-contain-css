@@ -49,7 +49,7 @@
 
   <!-- 1) State selection (buttons) -->
   <FormItem>
-    <span slot="label">State</span>
+    {#snippet label()}State{/snippet}
     <Column --column-align="flex-start">
       <RadioButton value="uninitiated" bind:group={state}
         >Uninitiated</RadioButton
@@ -63,7 +63,7 @@
 
   <!-- 2) Value slider -->
   <FormItem>
-    <span slot="label">Value: {value} / {max}</span>
+    {#snippet label()}Value: {value} / {max}{/snippet}
     <input
       type="range"
       min="0"
@@ -76,7 +76,7 @@
 
   <!-- 3) Max slider -->
   <FormItem>
-    <span slot="label">Max: {max}</span>
+    {#snippet label()}Max: {max}{/snippet}
     <input
       type="range"
       min="10"
@@ -92,7 +92,7 @@
     <Checkbox bind:checked={indeterminate}>Indeterminate</Checkbox>
   </FormItem>
   <FormItem>
-    <span slot="label">Slot Content</span>
+    {#snippet label()}Slot Content{/snippet}
     <input type="text" bind:value={slotContent} style="width: 12rem;" />
   </FormItem>
 

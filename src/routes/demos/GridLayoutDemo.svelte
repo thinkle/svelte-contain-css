@@ -82,13 +82,17 @@
     <h2>Grid with Cards</h2>
 
     <Code
-      code={`<GridLayout --item-width="var(--card-width)">    
+      code={`<GridLayout --item-width="var(--card-width)">
   <Card>
-    <div slot="header">Card 1</div>
+    {#snippet header()}
+      <div>Card 1</div>
+    {/snippet}
     <p>Card content</p>
   </Card>
   <Card>
-    <div slot="header">Card 2</div>
+    {#snippet header()}
+      <div>Card 2</div>
+    {/snippet}
     <p>Card content</p>
   </Card>
 </GridLayout>`}

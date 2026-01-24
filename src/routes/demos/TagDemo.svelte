@@ -109,6 +109,17 @@
 
     <h3>Status Tags</h3>
     <p>Use tags to display status information:</p>
+    <Code
+      code={`<Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
+  ✓ Active
+</Tag>
+<Tag --tag-bg="var(--material-color-orange-600)" --tag-fg="white">
+  ⚠ Pending
+</Tag>
+<Tag --tag-bg="var(--material-color-grey-600)" --tag-fg="white">
+  ✕ Inactive
+</Tag>`}
+    />
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
       <Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
         ✓ Active
@@ -123,6 +134,16 @@
 
     <h3>Tags in Context</h3>
     <p>Tags work well alongside other content:</p>
+    <Code
+      code={`<div>
+  <strong>Article: Introduction to Web Components</strong>
+  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+    <Tag>Web Components</Tag>
+    <Tag>JavaScript</Tag>
+    <Tag>Tutorial</Tag>
+  </div>
+</div>`}
+    />
     <div style="display: flex; flex-direction: column; gap: 1rem;">
       <div>
         <strong>Article: Introduction to Web Components</strong>

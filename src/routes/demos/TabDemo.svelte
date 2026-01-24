@@ -147,12 +147,12 @@
       "change" event which can be listened for to get the currently active tab.
     </p>
     <Code
-      code={`   
+      code={`
       <TabBar
         items={[{label: "Foo", value: "foo"}, {label: "Bar", value: "bar"}]}
         {active}
-        on:change={(e) => {          
-          active = e.detail.value;
+        onchange={(value) => {
+          active = value;
         }}
         />
       `}

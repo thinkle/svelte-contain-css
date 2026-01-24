@@ -136,7 +136,7 @@
       and the
 
       <Tooltip>
-        <Button on:click={()=>showDialog=true}>Popup API</Button>
+        <Button onclick={()=>showDialog=true}>Popup API</Button>
         {#snippet tooltip()}
             <div >
             Which handles overlays for items such as tooltips and dropdown menus,

@@ -44,11 +44,16 @@
     <Code
       code={`
   <Table sticky>
-    <thead slot="thead">
-      <!-- your sticky content here-->
-    </thead>
-    <tbody slot="tbody">
-      <!-- your scrollable content here-->
+    {#snippet thead()}
+      <thead>
+        <!-- your sticky content here-->
+      </thead>
+    {/snippet}
+    {#snippet tbody()}
+      <tbody>
+        <!-- your scrollable content here-->
+      </tbody>
+    {/snippet}
   </Table>
   `}
     />

@@ -14,20 +14,26 @@
   let hasFooter = $state(true);
   let side = $state("left");
   const headerCode = `
-    <Bar slot="header">...</Bar>`;
+    {#snippet header()}
+      <Bar>...</Bar>
+    {/snippet}`;
   const footerCode = `
-    <Bar slot="footer" marginBottom="0">...</Bar>`;
+    {#snippet footer()}
+      <Bar marginBottom="0">...</Bar>
+    {/snippet}`;
   const sidebarCode = `
-    <Sidebar slot="sidebar">...</Sidebar>`;
+    {#snippet sidebar()}
+      <Sidebar>...</Sidebar>
+    {/snippet}`;
   let code = $derived(`
   <Page${side == "right" ? " right" : ""}>${hasHeader ? headerCode : ""}${
     hasFooter ? footerCode : ""
   }${
     side != "none"
       ? `
-    <Sidebar slot="sidebar" ${
-      (side == "right" && 'right"') || ""
-    }>...</Sidebar>`
+    {#snippet sidebar()}
+      <Sidebar${side == "right" ? " right" : ""}>...</Sidebar>
+    {/snippet}`
       : ""
   }
     <div>Page content here</div>

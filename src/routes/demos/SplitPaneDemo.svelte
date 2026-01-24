@@ -38,7 +38,7 @@
     <Input bind:value={rightWidth} />
   </FormItem>
   <FormItem>
-    <Button on:click={() => rerender++}>Rerender Pane</Button>
+    <Button onclick={() => rerender++}>Rerender Pane</Button>
   </FormItem>
   {#key rerender}
     <SplitPane {leftWidth} {rightWidth}>
@@ -48,8 +48,12 @@
           <Code
             code={`
   <SplitPane leftWidth={${leftWidth}} rightWidth={${rightWidth}}>
-    <div slot="left">...</div>
-    <div slot="right">...</div>
+    {#snippet left()}
+      <div>...</div>
+    {/snippet}
+    {#snippet right()}
+      <div>...</div>
+    {/snippet}
   </SplitPane>
               `}
           />
