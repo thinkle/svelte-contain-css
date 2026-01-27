@@ -56,7 +56,7 @@ jobs:
       - name: Patch legacy config for BASE_PATH support
         working-directory: legacy-src
         run: |
-          sed -i 's|base: "/svelte-contain-css"|base: process.env.BASE_PATH || "/svelte-contain-css"|' svelte.config.js
+          sed -i 's#base: "/svelte-contain-css"#base: process.env.BASE_PATH || "/svelte-contain-css"#' svelte.config.js
 
       - name: Build legacy docs
         working-directory: legacy-src
