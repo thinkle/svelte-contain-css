@@ -29,11 +29,11 @@
     </p>
 
     <div class="version-buttons">
-      <ButtonLink href="./legacy/" secondary>
+      <ButtonLink href="./legacy/" secondary rel="external">
         Legacy: Svelte 4 & Earlier
         <span class="btn-label">v0.x - for existing Svelte 4 projects</span>
       </ButtonLink>
-      <ButtonLink href="./svelte5/" primary>
+      <ButtonLink href="./svelte5/" primary rel="external">
         The Latest: Svelte 5
         <span class="btn-label">v1.x - for new projects</span>
       </ButtonLink>
@@ -71,22 +71,5 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 2rem;
-  }
-
-  .version-buttons :global(a[role="button"]) {
-    padding: 1rem 1.5rem;
-    font-size: 1.1rem;
-  }
-
-  .btn-label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 400;
-    opacity: 0.8;
-    margin-top: 0.25rem;
-  }
-
-  a {
-    color: var(--link-fg, var(--primary-bg));
   }
 </style>
