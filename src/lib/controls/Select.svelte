@@ -95,14 +95,20 @@
 <div class="dropdown-wrapper" style:--target-width={targetWidth}>
   <DropdownMenu>
     {#snippet label()}
-      <span class="select-dropdown">
+      <span
+        class="select-dropdown"
+        style:--fg="var(--select-fg, var(--control-fg, var(--fg)))"
+      >
         <span class="select-dropdown-label">
           {#if activeOption}{@html activeOption.html}{:else}-{/if}
         </span>
       </span>
     {/snippet}
     {#each options as option, index}
-      <li bind:this={optionButtons[index]}>
+      <li
+        bind:this={optionButtons[index]}
+        style:--fg="var(--menu-fg, var(--control-fg, var(--fg)))"
+      >
         <button
           type="button"
           role="menuitemradio"
