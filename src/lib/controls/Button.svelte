@@ -1,7 +1,11 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
   export let primary = false;
+  export let secondary = false;
   export let warning = false;
+  export let danger = false;
+  export let success = false;
+  export let info = false;
   let iconSlotted = $$slots.icon;
   export let bg: string | null = null;
   export let fg: string | null = null;
@@ -22,7 +26,11 @@
   style={cssVars}
   on:click
   class:primary
+  class:secondary
   class:warning
+  class:danger
+  class:success
+  class:info
   class:has-icon={iconSlotted}
   {...$$restProps}
 >
@@ -34,7 +42,7 @@
   @import "$lib/sass/_mixins.scss";
 
   button.has-icon {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--button-icon-gap, var(--space));
   }
@@ -57,5 +65,17 @@
   button.warning {
     @include color-props(warning, button, control);
     @include typography-props-bare(warning, button);
+  }
+  button.danger {
+    @include color-props(danger, button, control);
+    @include typography-props-bare(danger, button);
+  }
+  button.success {
+    @include color-props(success, button, control);
+    @include typography-props-bare(success, button);
+  }
+  button.info {
+    @include color-props(info, button, control);
+    @include typography-props-bare(info, button);
   }
 </style>

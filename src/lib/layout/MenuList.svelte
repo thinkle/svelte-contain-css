@@ -1,5 +1,6 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
+  export let striped = false;
   export let fg: string | null = null;
   export let bg: string | null = null;
   export let itemPadding: string | null = null;
@@ -26,7 +27,7 @@
   ]);
 </script>
 
-<ul {style} class="menu">
+<ul {style} class="menu" class:striped>
   <slot />
 </ul>
 
@@ -74,7 +75,8 @@
     }
   }
 
-  /* & :global(li:nth-of-type(even)) > {
+  .menu.striped {
+    & :global(li:nth-of-type(even)) > {
       @include global-buttons {
         @include color-props(
           menu-item-even,
@@ -97,5 +99,5 @@
         container
       );
     }
-  } */
+  }
 </style>
