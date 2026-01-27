@@ -1,0 +1,227 @@
+# Workflow for deploying both Svelte 5 and legacy docs to GitHub Pages
+name: Deploy Multi-Version Docs
+
+on:
+  push:
+    branches: ["svelte5", "main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Build Svelte 5 version
+      - name: Checkout svelte5 branch
+        uses: actions/checkout@v4
+        with:
+          ref: svelte5
+          path: svelte5-src
+
+      - name: Install dependencies (svelte5)
+        working-directory: svelte5-src
+        run: npm ci
+
+      - name: Build svelte5 docs
+        working-directory: svelte5-src
+        env:
+          BASE_PATH: /svelte-contain-css/svelte5
+          NODE_ENV: production
+        run: npm run build
+
+      # Build legacy version
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: legacy-src
+
+      - name: Install dependencies (legacy)
+        working-directory: legacy-src
+        run: npm ci
+
+      - name: Patch legacy config for BASE_PATH support
+        working-directory: legacy-src
+        run: |
+          sed -i 's|base: "/svelte-contain-css"|base: process.env.BASE_PATH || "/svelte-contain-css"|' svelte.config.js
+
+      - name: Build legacy docs
+        working-directory: legacy-src
+        env:
+          BASE_PATH: /svelte-contain-css/legacy
+          NODE_ENV: production
+        run: npm run build
+
+      # Combine builds
+      - name: Create combined output
+        run: |
+          mkdir -p combined
+          cp -r svelte5-src/build combined/svelte5
+          cp -r legacy-src/build combined/legacy
+
+      # Create landing page
+      - name: Create landing page
+        run: |
+          cat > combined/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Svelte Contain CSS</title>
+            <style>
+              :root {
+                --bg: #1a1a2e;
+                --card-bg: #16213e;
+                --accent: #e94560;
+                --accent-hover: #ff6b6b;
+                --text: #eaeaea;
+                --text-muted: #a0a0a0;
+              }
+              * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+              }
+              body {
+                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+              }
+              .container {
+                text-align: center;
+                max-width: 600px;
+              }
+              h1 {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+                background: linear-gradient(135deg, var(--accent), #ff8a5c);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+              }
+              .tagline {
+                color: var(--text-muted);
+                margin-bottom: 3rem;
+                font-size: 1.1rem;
+              }
+              .version-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                max-width: 320px;
+                margin: 0 auto;
+              }
+              .version-btn {
+                display: block;
+                padding: 1.25rem 2rem;
+                border-radius: 12px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 1.1rem;
+                transition: all 0.2s ease;
+              }
+              .version-btn.primary {
+                background: var(--accent);
+                color: white;
+              }
+              .version-btn.primary:hover {
+                background: var(--accent-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3);
+              }
+              .version-btn.secondary {
+                background: var(--card-bg);
+                color: var(--text);
+                border: 1px solid rgba(255,255,255,0.1);
+              }
+              .version-btn.secondary:hover {
+                background: #1e2d4d;
+                transform: translateY(-2px);
+              }
+              .version-label {
+                display: block;
+                font-size: 0.85rem;
+                font-weight: 400;
+                opacity: 0.8;
+                margin-top: 0.25rem;
+              }
+              footer {
+                margin-top: 3rem;
+                color: var(--text-muted);
+                font-size: 0.9rem;
+              }
+              footer a {
+                color: var(--accent);
+                text-decoration: none;
+              }
+              footer a:hover {
+                text-decoration: underline;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Svelte Contain CSS</h1>
+              <p class="tagline">A CSS component library for Svelte</p>
+
+              <div class="version-buttons">
+                <a href="./svelte5/" class="version-btn primary">
+                  The Latest: Svelte 5
+                  <span class="version-label">v1.x - Recommended for new projects</span>
+                </a>
+                <a href="./legacy/" class="version-btn secondary">
+                  Legacy: Svelte 4 &amp; Earlier
+                  <span class="version-label">v0.x - For existing Svelte 4 projects</span>
+                </a>
+              </div>
+
+              <footer>
+                <a href="https://github.com/thinkle/svelte-contain-css">View on GitHub</a>
+              </footer>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Add .nojekyll
+        run: touch combined/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: combined
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

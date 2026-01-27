@@ -47,7 +47,7 @@ const config = {
       "$lib/*": "./src/lib/*",
     },
     paths: {
-      base: "/svelte-contain-css" //process.env.NODE_ENV === "production" ? "/svelte-contain-css" : "",
+      base: process.env.BASE_PATH || "/svelte-contain-css",
     },
     prerender: {
       handleMissingId: "ignore", // or 'ignore' or a custom function
