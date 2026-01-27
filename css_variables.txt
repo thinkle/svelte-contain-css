@@ -51,7 +51,12 @@
 --dialog-underlay-color, rgba
 --dialog-underlay-filter, blur
 --dropdown-menu-width, 12em
+--dropdown-menu-min-width, sets the minimum width of the dropdown menu (inherited from trigger)
 --dropdown-transition, 150ms
+--dropdown-wrap-mode, wrap | Controls text wrapping in dropdown menu items
+  - wrap (default): Text wraps naturally to multiple lines
+  - nowrap: Text stays on a single line with ellipsis truncation
+
 --fg
 --font-family
 --font-size

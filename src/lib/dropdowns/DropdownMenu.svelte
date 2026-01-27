@@ -205,6 +205,7 @@
     pointer-events: none;
     transition: var(--dropdown-transition, 150ms) opacity;
     @include custom-scrollbar(dropdown-menu, menu);
+    overflow: hidden;
   }
 
   .dropdown-container:popover-open {
@@ -212,13 +213,41 @@
     pointer-events: all;
     position: fixed;
     inset: unset;
+    overflow: hidden;
   }
   .dropdown-content {
-    width: var(--dropdown-menu-width, 12em);
+    // Ensure menu is at least trigger width, but allow wider requested widths
+    width: max(
+      var(--dropdown-menu-min-width, 12em),
+      var(--dropdown-menu-width, 12em)
+    );
     min-width: var(--dropdown-menu-min-width, 12em);
     @include box-shadow(dropdown-menu, dropdown);
     @include box-props-square-border(dropdown-menu, menu, container);
     padding: 0;
+  }
+
+  // Support wrap mode control via --dropdown-wrap-mode CSS variable
+  // When --dropdown-wrap-mode: nowrap is set on a parent, text won't wrap
+  .dropdown-content :global(button),
+  .dropdown-content :global(a) {
+    white-space: var(--dropdown-wrap-mode, wrap);
+    min-width: 0;
+  }
+
+  // Apply ellipsis only in nowrap mode - when white-space is nowrap,
+  // the container's overflow: hidden will force ellipsis
+  .dropdown-content :global([style*="--dropdown-wrap-mode: nowrap"] button),
+  .dropdown-content :global([style*="--dropdown-wrap-mode: nowrap"] a) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  // Also handle nested spans inside buttons that might contain text
+  .dropdown-content :global(button span),
+  .dropdown-content :global(a span) {
+    white-space: var(--dropdown-wrap-mode, wrap);
+    min-width: 0;
   }
   nav {
     position: relative;
