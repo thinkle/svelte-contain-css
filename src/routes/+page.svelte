@@ -35,7 +35,7 @@
   import Installation from "./Installation.svelte";
   import TooltipDemo from "./demos/TooltipDemo.svelte";
   import DialogDemo from "./demos/DialogDemo.svelte";
-    import ProgressDemo from "./demos/ProgressDemo.svelte";
+  import ProgressDemo from "./demos/ProgressDemo.svelte";
   import TableDemo from "./demos/TableDemo.svelte";
   import AccordionDemo from "./demos/AccordionDemo.svelte";
   import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
@@ -70,7 +70,7 @@
       {
         rootMargin: "-100px 0px -50% 0px", // Trigger when element is 100px from top and 50% visible
         threshold: 0,
-      }
+      },
     );
 
     // Observe all menu items with links
@@ -333,9 +333,8 @@
     min-width: var(--side-width);
   }
   .subheader {
-    background-color: var(--secondary-bg);
-    color: var(--secondary-fg);
     padding: var(--padding);
+    font-weight: bold;
   }
   #demo-area {
     min-height: 100dvh;
