@@ -46,9 +46,14 @@ jobs:
       - name: Save landing page
         run: |
           mkdir -p landing-build
-          cp -r svelte5-src/build/landing/* landing-build/ || true
+          echo "=== Contents of build folder ==="
+          ls -la svelte5-src/build/
+          echo "=== Contents of build/landing folder ==="
+          ls -la svelte5-src/build/landing/ || echo "No landing folder!"
+          # Copy landing page (index.html becomes root index)
+          cp svelte5-src/build/landing/index.html landing-build/index.html
           # Also grab the _app assets needed for the landing page
-          cp -r svelte5-src/build/_app landing-build/_app || true
+          cp -r svelte5-src/build/_app landing-build/_app
 
       # Second build: full svelte5 docs
       - name: Build svelte5 docs
