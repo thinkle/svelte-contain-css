@@ -6,11 +6,14 @@
 
 <TextLayout {id}>
   <h1>Installation</h1>
-  <p>Start by installing our library:</p>
+  <p>
+    This is the legacy version for Svelte 4 and earlier. If you're starting a new
+    project with Svelte 5, check out the <a href="../svelte5/">Svelte 5 documentation</a>.
+  </p>
+  <p>Start by installing our library (v0.x for Svelte 4):</p>
   <Code
     language="none"
-    code={`npm install contain-
-  css-svelte`}
+    code={`npm install contain-css-svelte@"<1"`}
   />
   <p>
     Once you have that, you will need to make sure to import our styles
@@ -36,9 +39,9 @@ import "contain-css-svelte/themes/typography-airy.css";
     language="html"
     code={`
 <script>
-  import Button from "contain-css-svelte/Button.svelte";   
+  import { Button } from "contain-css-svelte";
 </script>
-<Button>Hello World</Button> 
+<Button>Hello World</Button>
 `}
   />
   <p>
