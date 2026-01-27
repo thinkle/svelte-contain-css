@@ -44,8 +44,14 @@
         name={name || undefined}
         type="checkbox"
         {value}
-        bind:group
-        on:change
+        checked={Array.isArray(group) && group.includes(value)}
+        on:change={(e) => {
+          if (e.currentTarget.checked) {
+            group = [...(group || []), value];
+          } else {
+            group = (group || []).filter(v => v !== value);
+          }
+        }}
         on:click
         on:blur
         on:focus

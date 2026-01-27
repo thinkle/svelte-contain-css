@@ -29,7 +29,13 @@
 
 <div class="label-sizing-box">
   <label class="radio-item">
-    <input {value} type="radio" bind:group {...$$restProps} />
+    <input
+      {value}
+      type="radio"
+      checked={group === value}
+      on:change={() => { group = value; }}
+      {...$$restProps}
+    />
     <span bind:this={ref}><slot /></span>
   </label>
   <!-- Hidden label determines how much space we occupy -- that way we can apply e.g. bold font without 
