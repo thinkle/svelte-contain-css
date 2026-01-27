@@ -58,57 +58,66 @@
 @mixin custom-scrollbar($prefixes...) {
   overflow-y: auto;
 
-  // Customizing the scrollbar
+  // Reserve scrollbar space to prevent layout shift
+  // For Firefox: thin scrollbar with transparent thumb by default
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  // For WebKit: reserve space with transparent thumb
   &::-webkit-scrollbar {
     width: fn.var-with-fallbacks(
       --scrollbar-width,
-      append($prefixes, var(--space-md))...
+      append($prefixes, 6px)...
     );
     height: fn.var-with-fallbacks(
       --scrollbar-height,
-      append($prefixes, var(--gap))...
+      append($prefixes, 6px)...
     );
   }
 
   &::-webkit-scrollbar-track {
     background: fn.var-with-fallbacks(
       --scrollbar-track-bg,
-      append($prefixes, var(--bg))...
+      append($prefixes, transparent)...
     );
   }
 
   &::-webkit-scrollbar-thumb {
-    background: fn.var-with-fallbacks(
-      --scrollbar-thumb-bg,
-      append($prefixes, var(--stripe-bg))...
-    );
-
+    background: transparent;
     border-radius: fn.var-with-fallbacks(
       --scrollbar-thumb-radius,
-      append($prefixes, var(--border-radius))...
+      append($prefixes, 3px)...
     );
-
-    &:hover {
-      background: fn.var-with-fallbacks(
-        --scrollbar-thumb-hover-bg,
-        append($prefixes, var(--secondary-bg))...
-      );
-    }
+    transition: background fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
   }
 
-  // For Firefox
-  scrollbar-width: fn.var-with-fallbacks(
-    --scrollbar-width,
-    append($prefixes, thin)...
-  );
-  scrollbar-color: fn.var-with-fallbacks(
-      --scrollbar-thumb-bg,
-      append($prefixes, #888)...
-    )
-    fn.var-with-fallbacks(
-      --scrollbar-track-bg,
-      append($prefixes, var(--border-color))...
-    );
+  // Show scrollbar thumb on hover
+  &:hover {
+    // Firefox: show thumb on hover
+    scrollbar-color: fn.var-with-fallbacks(
+        --scrollbar-thumb-bg,
+        append($prefixes, rgba(0, 0, 0, 0.3))...
+      )
+      fn.var-with-fallbacks(
+        --scrollbar-track-bg,
+        append($prefixes, transparent)...
+      );
+
+    // WebKit: show thumb on hover
+    &::-webkit-scrollbar-thumb {
+      background: fn.var-with-fallbacks(
+        --scrollbar-thumb-bg,
+        append($prefixes, rgba(0, 0, 0, 0.3))...
+      );
+
+      &:hover {
+        background: fn.var-with-fallbacks(
+          --scrollbar-thumb-hover-bg,
+          append($prefixes, rgba(0, 0, 0, 0.5))...
+        );
+      }
+    }
+  }
 }
 
 @mixin visually-hidden {
