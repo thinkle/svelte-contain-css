@@ -9,6 +9,7 @@
 
   let modalIsOpen = false;
   let nonModalIsOpen = false;
+  let dismissibleIsOpen = false;
 </script>
 
 <Container>
@@ -54,6 +55,38 @@
   ...content
 </Dialog>
 `}
+      />
+
+      <h3>Dismissible Dialog</h3>
+      <p>
+        Add the <code>dismissible</code> prop to allow closing the dialog by clicking
+        outside of it (on the backdrop).
+      </p>
+      <Button on:click={() => (dismissibleIsOpen = !dismissibleIsOpen)}
+        >Open Dismissible Dialog</Button
+      >
+      <Dialog
+        modal={true}
+        dismissible={true}
+        onClose={() => (dismissibleIsOpen = false)}
+        open={dismissibleIsOpen}
+      >
+        <h3>Dismissible Dialog</h3>
+        <p>
+          Click outside this dialog (on the backdrop) to close it, or use the
+          close button.
+        </p>
+      </Dialog>
+      <Code
+        language="svelte"
+        code={`<Dialog
+  modal={true}
+  dismissible={true}
+  onClose={() => (open = false)}
+  open={open}
+>
+  ...content
+</Dialog>`}
       />
 
       <h3>Non-Modal Dialog</h3>

@@ -8,7 +8,7 @@
   <h1>Installation</h1>
   <p>
     This is the legacy version for Svelte 4 and earlier. If you're starting a new
-    project with Svelte 5, check out the <a href="../svelte5/">Svelte 5 documentation</a>.
+    project with Svelte 5, check out the <a href="../svelte5/" rel="external">Svelte 5 documentation</a>.
   </p>
   <p>Start by installing our library (v0.x for Svelte 4):</p>
   <Code

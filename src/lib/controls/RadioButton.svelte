@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let group: string; // Radio buttons are grouped by the 'name' attribute
-  export let value;
+  export let group: any = undefined;
+  export let value: any;
 
   /* Styling properties */
   import { injectVars } from "$lib/util";

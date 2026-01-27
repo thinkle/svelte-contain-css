@@ -37,6 +37,7 @@
   import TableDemo from "./demos/TableDemo.svelte";
   import AccordionDemo from "./demos/AccordionDemo.svelte";
   import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
+  import TagDemo from "./demos/TagDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -133,6 +134,7 @@
         demo: "DropdownMenu",
       },
       { name: "Miscellaneous" },
+      { name: "Tag", component: TagDemo, demo: "Tag" },
       { name: "Progress", component: ProgressDemo, demo: "Progress" },
       { name: "Themes", component: Themes },
       { name: "Variables", component: VariableDemo, demo: "Variable" },
