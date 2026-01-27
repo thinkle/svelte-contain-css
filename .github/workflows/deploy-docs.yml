@@ -48,10 +48,8 @@ jobs:
           mkdir -p landing-build
           echo "=== Contents of build folder ==="
           ls -la svelte5-src/build/
-          echo "=== Contents of build/landing folder ==="
-          ls -la svelte5-src/build/landing/ || echo "No landing folder!"
-          # Copy landing page (index.html becomes root index)
-          cp svelte5-src/build/landing/index.html landing-build/index.html
+          # SvelteKit builds /landing route as landing.html, rename to index.html
+          cp svelte5-src/build/landing.html landing-build/index.html
           # Also grab the _app assets needed for the landing page
           cp -r svelte5-src/build/_app landing-build/_app
 
