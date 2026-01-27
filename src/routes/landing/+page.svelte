@@ -72,4 +72,12 @@
     gap: 1rem;
     margin-top: 2rem;
   }
+
+  .btn-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 0.25rem;
+  }
 </style>
