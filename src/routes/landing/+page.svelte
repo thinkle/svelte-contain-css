@@ -19,7 +19,6 @@
   style:--secondary-fg="var(--material-color-purple-900)"
 >
   <Hero
-    center={true}
     bg="var(--material-color-yellow-100)"
     fg="var(--material-color-purple-900)"
   >
