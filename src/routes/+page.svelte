@@ -69,7 +69,7 @@
       {
         rootMargin: "-100px 0px -50% 0px", // Trigger when element is 100px from top and 50% visible
         threshold: 0,
-      }
+      },
     );
 
     // Observe all menu items with links
@@ -317,8 +317,6 @@
     min-width: var(--side-width);
   }
   .subheader {
-    background-color: var(--secondary-bg);
-    color: var(--secondary-fg);
     padding: var(--padding);
   }
   #demo-area {

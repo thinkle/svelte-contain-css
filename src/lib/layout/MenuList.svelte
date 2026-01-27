@@ -37,7 +37,7 @@
     list-style: none;
     /* @include padding-props(menu, container); */
     padding: 0;
-    @include color-props(menu, container);
+    @include color-props(menu, control, container);
     margin-block-start: 0;
     margin-block-end: 0;
     overflow: hidden;
