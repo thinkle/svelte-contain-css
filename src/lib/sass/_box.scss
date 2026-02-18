@@ -130,3 +130,13 @@
 
   box-shadow: $shadow-distance $shadow-distance $shadow-blur $shadow-color;
 }
+
+@mixin box-size-props($prefixes...) {
+  // Sizing properties for explicit control over element dimensions
+  width: fn.var-with-fallbacks(--width, append($prefixes, auto)...);
+  min-width: fn.var-with-fallbacks(--min-width, append($prefixes, auto)...);
+  max-width: fn.var-with-fallbacks(--max-width, append($prefixes, none)...);
+  height: fn.var-with-fallbacks(--height, append($prefixes, auto)...);
+  min-height: fn.var-with-fallbacks(--min-height, append($prefixes, auto)...);
+  max-height: fn.var-with-fallbacks(--max-height, append($prefixes, none)...);
+}
