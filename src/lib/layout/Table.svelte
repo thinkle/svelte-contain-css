@@ -39,7 +39,7 @@
     if (!headClone || !bodyClone) return;
 
     const getFlattenedCellWidths = (
-      row: HTMLTableRowElement | null
+      row: HTMLTableRowElement | null,
     ): number[] => {
       if (!row) return [];
       const cells = Array.from(row.children) as HTMLElement[];
@@ -61,19 +61,19 @@
       if (!row) return 0;
       return Array.from(row.children).reduce(
         (acc, cell) => acc + parseInt(cell.getAttribute("colspan") || "1", 10),
-        0
+        0,
       );
     };
 
     const findBestRow = (
-      table: HTMLTableElement
+      table: HTMLTableElement,
     ): HTMLTableRowElement | null => {
       const rows = Array.from(table.querySelectorAll("tr"));
 
       // First: find a row with no colspans
       for (const row of rows) {
         const hasColspan = Array.from(row.children).some((cell) =>
-          cell.hasAttribute("colspan")
+          cell.hasAttribute("colspan"),
         );
         if (!hasColspan) return row;
       }
@@ -232,6 +232,7 @@
     @include color-props(table, container);
     @include typography-container-props(table, container, paragraph);
     @include box-props-square-border(table, container, paragraph);
+    @include box-size-props(table);
     border-collapse: collapse;
     @include box-shadow(table, container);
     margin-inline-start: auto;
@@ -255,7 +256,7 @@
   table > :global(thead > tr > th),
   table > :global(tr > td),
   table > :global(tr > th) {
-    @include box-props-square-border(table-cell, cell, table);
+    @include box-props-square-border(table-cell, cell);
     border-left: var(
       --table-border,
       1px solid var(--table-border-color, var(--secondary-bg))
