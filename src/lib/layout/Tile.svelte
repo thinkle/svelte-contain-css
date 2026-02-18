@@ -1,36 +1,78 @@
 <script lang="ts">
-  import type { HTMLAttributes } from "svelte/elements";
+  import type { Snippet } from "svelte";
+  import type {
+    HTMLAttributes,
+    HTMLButtonAttributes,
+    HTMLInputAttributes,
+  } from "svelte/elements";
 
-  interface Props extends HTMLAttributes<HTMLElement> {
-    interactive?: boolean; // Prop to make the tile clickable or not
-    selectable?: boolean;
-    checked?: boolean;
-    children?: import("svelte").Snippet;
+  type BaseProps = {
+    children?: Snippet;
+  };
+
+  type StaticTileProps = BaseProps &
+    HTMLAttributes<HTMLDivElement> & {
+      interactive?: false;
+      selectable?: false;
+      checked?: never;
+    };
+
+  type InteractiveTileProps = BaseProps &
+    HTMLButtonAttributes & {
+      interactive: true;
+      selectable?: false;
+      checked?: never;
+    };
+
+  type SelectableTileProps = BaseProps &
+    HTMLInputAttributes & {
+      selectable: true;
+      interactive?: false;
+      checked?: boolean;
+    };
+
+  type Props = StaticTileProps | InteractiveTileProps | SelectableTileProps;
+  type RenderProps = Omit<Props, "checked">;
+
+  let { checked = $bindable(false), ...props }: Props = $props();
+
+  function getSelectableInputProps(value: RenderProps): HTMLInputAttributes {
+    const {
+      selectable: _selectable,
+      interactive: _interactive,
+      children: _children,
+      ...inputProps
+    } = value as Omit<SelectableTileProps, "checked">;
+
+    return inputProps;
   }
 
-  let {
-    interactive = false,
-    selectable = false,
-    checked = $bindable(false),
-    children,
-    ...restProps
-  }: Props = $props();
+  function getInteractiveButtonProps(value: RenderProps): HTMLButtonAttributes {
+    const {
+      selectable: _selectable,
+      interactive: _interactive,
+      children: _children,
+      ...buttonProps
+    } = value as InteractiveTileProps;
+
+    return buttonProps;
+  }
 </script>
 
-{#if selectable}
+{#if props.selectable}
   <label class="tile">
     <div class="checkbox">
-      <input type="checkbox" bind:checked {...restProps} />
+      <input type="checkbox" bind:checked {...getSelectableInputProps(props)} />
     </div>
-    {@render children?.()}
+    {@render props.children?.()}
   </label>
-{:else if interactive}
-  <button class="tile" {...restProps}>
-    {@render children?.()}
+{:else if props.interactive}
+  <button class="tile" {...getInteractiveButtonProps(props)}>
+    {@render props.children?.()}
   </button>
 {:else}
   <div class="tile">
-    {@render children?.()}
+    {@render props.children?.()}
   </div>
 {/if}
 
@@ -76,7 +118,7 @@
 
   .tile {
     width: var(--tile-width, 200px);
-    height: calc(var(--tile-width, 200px) * $aspect);
+    height: var(--tile-height, calc(var(--tile-width, 200px) * $aspect));
   }
 
   /* Checkbox code */
