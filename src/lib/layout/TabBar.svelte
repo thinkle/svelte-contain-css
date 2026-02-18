@@ -7,7 +7,7 @@
     sticky?: boolean;
     active?: string | Item | null;
     items?: (string | Item)[];
-    onchange: (value: string | Item | null) => void;
+    onchange?: (value: string | Item | null) => void;
     children?: import("svelte").Snippet;
   }
 
@@ -41,7 +41,13 @@
     {#each items as item}
       {@const value = item.value || item}
       {@const label = item.label || item}
-      <TabItem active={value === active} onclick={() => onchange(value)}>
+      <TabItem
+        active={value === active}
+        onclick={() => {
+          if (onchange) onchange(value);
+          active = value;
+        }}
+      >
         {label}
       </TabItem>
     {/each}
