@@ -10,7 +10,7 @@
     icon?: Snippet;
     children?: Snippet;
   } & BaseStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+    HTMLAttributes<HTMLButtonElement>;
 
   const { active = false, icon, children, ...restProps }: Props = $props();
 
@@ -19,8 +19,8 @@
   );
 </script>
 
-<div class="tab" class:active {style} {...restProps}>
-  <Button primary={active} {icon}>
+<div class="tab" class:active {style}>
+  <Button primary={active} {icon} {...restProps}>
     {@render children?.()}
   </Button>
 </div>
