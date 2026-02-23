@@ -41,14 +41,34 @@
       // Don't allow too small of widths
       return;
     }
-    let containerWidth = splitPaneContainer.getBoundingClientRect().width;
-    let resizerWidth = resizerDiv.getBoundingClientRect().width;
-    if (newLeftWidth + newRightWidth + resizerWidth > containerWidth) {
-      // Don't allow the panes to overflow the container
-      // Keep the left and shrink the right...
-      newRightWidth = containerWidth - newLeftWidth - resizerWidth;
+    const containerStyle = getComputedStyle(splitPaneContainer);
+    const columnGap = Number.parseFloat(containerStyle.columnGap || "0") || 0;
+    const totalGap = columnGap * 2; // 3 columns => 2 gaps
+    const resizerWidth = resizerDiv.getBoundingClientRect().width;
+    const availableWidth = splitPaneContainer.clientWidth - totalGap;
+    const minRequired = resizerWidth + MIN_SIZE * 2;
+
+    if (availableWidth <= minRequired) {
+      return;
     }
-    resizeStyle = `grid-template-columns: ${newLeftWidth}px 8px ${newRightWidth}px`;
+
+    if (newLeftWidth + newRightWidth + resizerWidth > availableWidth) {
+      // Don't allow panes to overflow the available grid track width.
+      // Keep the left and shrink the right.
+      newRightWidth = availableWidth - newLeftWidth - resizerWidth;
+    }
+
+    if (newRightWidth < MIN_SIZE) {
+      // If right becomes too small after clamping, keep both panes usable.
+      newRightWidth = MIN_SIZE;
+      newLeftWidth = availableWidth - resizerWidth - newRightWidth;
+    }
+
+    if (newLeftWidth < MIN_SIZE) {
+      newLeftWidth = MIN_SIZE;
+      newRightWidth = availableWidth - resizerWidth - newLeftWidth;
+    }
+    resizeStyle = `grid-template-columns: ${newLeftWidth}px ${resizerWidth}px ${newRightWidth}px`;
   }
 
   function onMouseUp() {
@@ -138,6 +158,7 @@
     container-type: inline-size;
     display: flex;
     flex-direction: column;
+    min-width: 0;
   }
 
   /* Resizer */
