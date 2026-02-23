@@ -3,6 +3,7 @@
   import { Page } from "$lib/index";
   import Bar from "$lib/layout/Bar.svelte";
   import "$lib/vars/defaults.css";
+  import "$lib/vars/themes/lightordark.css";
   import { base } from "$app/paths";
 
   import DynamicComponent from "../../demos/DynamicComponent.svelte";
