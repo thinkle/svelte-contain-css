@@ -18,4 +18,8 @@
   --first-heading-padding: 0;
   --paragraph-padding: 0;
   --paragraph-margin-top: 1em;
+
+  /* DataList defaults: denser than global heading/paragraph text */
+  --data-list-heading-font-size: var(--font-size);
+  --data-list-paragraph-font-size: var(--font-size-small);
 }
