@@ -15,6 +15,8 @@ import Bar from "./layout/Bar.svelte";
 import Column from "./layout/Column.svelte";
 import Columns from "./layout/Columns.svelte";
 import Container from "./layout/Container.svelte";
+import DataList from "./layout/DataList.svelte";
+import DataListItem from "./layout/DataListItem.svelte";
 import Fieldset from "./layout/Fieldset.svelte";
 import Form from "./layout/Form.svelte";
 import FormItem from "./layout/FormItem.svelte";
@@ -69,6 +71,7 @@ export {
 export { Bar, Container, GridLayout, MenuList, Page, ResponsiveText, TabBar };
 export { TextLayout, Code, Accordion };
 export { Card, Tile, Form, FormItem, FormProvider, Fieldset };
+export { DataList, DataListItem };
 export { Row, Column, Columns, SplitPane, Sidebar };
 export { Dialog };
 export { Progress, Tooltip };

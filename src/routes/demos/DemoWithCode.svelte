@@ -1,0 +1,248 @@
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import { injectVars } from "$lib/util";
+  import Container from "$lib/layout/Container.svelte";
+  import TabBar from "$lib/layout/TabBar.svelte";
+  import SplitPane from "$lib/layout/SplitPane.svelte";
+  import Code from "$lib/misc/Code.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
+
+  type Props = {
+    code?: string;
+    scriptSource?: string;
+    markupSource?: string;
+    styleSource?: string;
+    language?: string;
+    summary?: string;
+    open?: boolean;
+    width?: string | null;
+    codeWidth?: string | null;
+    bg?: string | null;
+    fg?: string | null;
+    border?: string | null;
+    borderRadius?: string | null;
+    shadow?: string | null;
+    padding?: string | null;
+    gap?: string | null;
+    heading?: Snippet;
+    children?: Snippet;
+  };
+
+  let {
+    code = "",
+    scriptSource = "",
+    markupSource = "",
+    styleSource = "",
+    language = "html",
+    summary = "See Code",
+    open = false,
+    width = null,
+    codeWidth = null,
+    bg = null,
+    fg = null,
+    border = null,
+    borderRadius = null,
+    shadow = null,
+    padding = null,
+    gap = null,
+    heading,
+    children,
+  }: Props = $props();
+
+  const openScriptTag = '\x3Cscript lang="ts">';
+  const closeScriptTag = "\x3C/script>";
+  const openStyleTag = "\x3Cstyle>";
+  const closeStyleTag = "\x3C/style>";
+
+  const resolvedCode = $derived(
+    code.trim().length
+      ? code
+      : [
+          scriptSource.trim().length
+            ? `${openScriptTag}\n${scriptSource.trim()}\n${closeScriptTag}`
+            : "",
+          markupSource.trim(),
+          styleSource.trim().length
+            ? `${openStyleTag}\n${styleSource.trim()}\n${closeStyleTag}`
+            : "",
+        ]
+          .filter(Boolean)
+          .join("\n\n"),
+  );
+  const hasSource = $derived(Boolean(resolvedCode.trim().length));
+  let activeTab = $state(open ? "source" : "demo");
+  const tabItems = $derived(
+    hasSource
+      ? [
+          { label: "Demo", value: "demo" },
+          { label: "Source", value: "source" },
+          { label: "Side by Side", value: "split" },
+        ]
+      : [{ label: "Demo", value: "demo" }],
+  );
+
+  $effect(() => {
+    if (!hasSource && activeTab !== "demo") {
+      activeTab = "demo";
+    }
+    if (hasSource && !["demo", "source", "split"].includes(activeTab)) {
+      activeTab = open ? "source" : "demo";
+    }
+  });
+
+  const style = $derived(
+    injectVars(
+      {
+        width,
+        codeWidth,
+        bg,
+        fg,
+        border,
+        borderRadius,
+        shadow,
+        padding,
+        gap,
+      },
+      "demo-with-code",
+      [
+        "width",
+        "codeWidth",
+        "bg",
+        "fg",
+        "border",
+        "borderRadius",
+        "shadow",
+        "padding",
+        "gap",
+      ],
+    ),
+  );
+</script>
+
+<Container margin="0" maxWidth="none" height="auto" padding="0">
+  <div class="demo-with-code" {style}>
+    {#if heading}
+      <div class="demo-heading">
+        <TextLayout>
+          {@render heading()}
+        </TextLayout>
+      </div>
+    {/if}
+    <div class="demo-body">
+      <TabBar
+        items={tabItems}
+        active={activeTab}
+        onchange={(value) => {
+          activeTab = typeof value === "string" ? value : (value?.value ?? "demo");
+        }}
+        --tab-bar-gap="0"
+      />
+      {#if activeTab === "demo"}
+        <div class="tab-panel demo-panel">
+          {@render children?.()}
+        </div>
+      {:else if activeTab === "source"}
+        <div class="tab-panel source-panel">
+          <div class="code-wrap">
+            <Code code={resolvedCode} {language} />
+          </div>
+        </div>
+      {:else}
+        <div class="tab-panel split-panel">
+          <SplitPane
+            leftWidth="1fr"
+            rightWidth="1fr"
+            height="var(--demo-with-code-split-height, min(70vh, 640px))"
+            --split-pane-border="none"
+            --split-pane-content-padding="var(--space-md)"
+          >
+            {#snippet left()}
+              {@render children?.()}
+            {/snippet}
+            {#snippet right()}
+              <div class="code-wrap split-code-wrap">
+                <Code code={resolvedCode} {language} />
+              </div>
+            {/snippet}
+          </SplitPane>
+        </div>
+      {/if}
+    </div>
+  </div>
+</Container>
+
+<style>
+  .demo-with-code {
+    box-sizing: border-box;
+    display: grid;
+    gap: var(--demo-with-code-gap, var(--space-lg));
+    width: min(100%, var(--demo-with-code-width, 72rem));
+    margin-inline: auto;
+    padding: var(--demo-with-code-padding, var(--padding, 8px));
+    background: var(
+      --demo-with-code-bg,
+      var(--container-bg, var(--bg, rgba(255, 255, 255, 0.8)))
+    );
+    color: var(--demo-with-code-fg, var(--container-fg, var(--fg, inherit)));
+    border: var(
+      --demo-with-code-border,
+      1px solid color-mix(in srgb, var(--fg, #222) 12%, transparent)
+    );
+    border-radius: var(
+      --demo-with-code-border-radius,
+      var(--container-border-radius, var(--border-radius, 8px))
+    );
+    box-shadow: var(
+      --demo-with-code-shadow,
+      0 3px 12px color-mix(in srgb, var(--fg, #222) 14%, transparent)
+    );
+  }
+
+  .demo-heading {
+    min-width: 0;
+  }
+
+  .demo-body {
+    min-width: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .tab-panel {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: var(--space-md);
+    border: var(
+      --demo-with-code-panel-border,
+      1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent)
+    );
+    border-radius: var(
+      --demo-with-code-panel-border-radius,
+      var(--border-radius, 8px)
+    );
+    background: var(
+      --demo-with-code-panel-bg,
+      color-mix(in srgb, var(--demo-with-code-bg, transparent) 60%, white 40%)
+    );
+    overflow: hidden;
+  }
+
+  .code-wrap {
+    box-sizing: border-box;
+    width: min(100%, var(--demo-with-code-code-width, 60rem));
+    margin-inline: auto;
+    --code-width: 100%;
+  }
+
+  .split-panel {
+    padding: 0;
+  }
+
+  .split-panel :global(.split-pane) {
+    border: none;
+  }
+
+  .split-code-wrap {
+    width: 100%;
+  }
+</style>

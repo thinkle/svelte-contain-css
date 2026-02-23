@@ -532,6 +532,175 @@ export let tableVars = [
   ...typographyProps('table-head'),
 ]
 
+export let dataListVars = [
+  ...boxPropsBorder("data-list"),
+  ...colorProps("data-list"),
+  ...shadowProps("data-list"),
+  ...colorProps("data-list-item"),
+  ...typographyProps("data-list-item"),
+  {
+    name: "--data-list-heading-font-size",
+    defaultValue: "var(--font-size)",
+    type: "text",
+    group: "Typography",
+  },
+  {
+    name: "--data-list-paragraph-font-size",
+    defaultValue: "var(--font-size-small)",
+    type: "text",
+    group: "Typography",
+  },
+  {
+    name: "--data-list-gap",
+    defaultValue: "var(--space)",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-width",
+    defaultValue: "100%",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-margin-inline",
+    defaultValue: "auto",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-margin-left",
+    defaultValue: "var(--data-list-margin-inline, auto)",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-margin-right",
+    defaultValue: "var(--data-list-margin-inline, auto)",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-min-width",
+    defaultValue: "0",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-max-width",
+    defaultValue: "none",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-item-padding",
+    defaultValue: "var(--padding)",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-item-min-height",
+    defaultValue: "4.5rem",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-item-border",
+    defaultValue: "1px solid var(--border-color, rgba(127, 127, 127, 0.4))",
+    type: "border",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-selection-color",
+    defaultValue: "var(--primary-bg)",
+    type: "color",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-selected-bg",
+    defaultValue: "color-mix(in srgb, var(--primary-bg) 15%, transparent)",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-selected-fg",
+    defaultValue: "var(--data-list-fg, var(--fg, unset))",
+    type: "color",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-selected-outline",
+    defaultValue: "none",
+    type: "border",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-selected-border",
+    defaultValue: "var(--data-list-selected-outline, none)",
+    type: "border",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-icon-width",
+    defaultValue: "var(--data-list-icon-size, 2.5rem)",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-icon-size",
+    defaultValue: "2.5rem",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-icon-border-radius",
+    defaultValue: "0.375rem",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-width",
+    defaultValue: "auto",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-gap",
+    defaultValue: "var(--space)",
+    type: "length",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-flex-direction",
+    defaultValue: "row",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-wrap",
+    defaultValue: "nowrap",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-compact-flex-direction",
+    defaultValue: "row",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-compact-wrap",
+    defaultValue: "wrap",
+    type: "text",
+    group: "Layout",
+  },
+  {
+    name: "--data-list-action-mobile-justify",
+    defaultValue: "flex-start",
+    type: "text",
+    group: "Layout",
+  },
+];
 
 export let accordionVars = [
 
@@ -566,8 +735,8 @@ export let components = {
   button: buttonVars,
   card: cardVars,
   dialog: dialogVars,
+  dataList: dataListVars,
 };
 
 export let vars = Object.values(components).flat();
 export let cssProperties = vars.map((v) => v.name);
-
