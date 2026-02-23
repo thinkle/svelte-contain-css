@@ -151,6 +151,7 @@
   }
   .dropdown-wrapper {
     @include color-props(select, input, menu, control, container);
+    --menu-item-justify: var(--select-menu-item-justify, flex-start);
   }
   .dropdown-menu :global(.dropdown-menu) > :global(button) {
     background-color: inherit;

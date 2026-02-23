@@ -1,6 +1,6 @@
 {
   "name": "contain-css-svelte",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "scripts": {
     "dev": "vite dev",
     "build-css": "postcss src/lib/vars/defaults.css -o dist/vars/defaults.css",
@@ -18,7 +18,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js",
-      "css": "./dist/vars/defaults.css"
+      "css": "./dist/vars/defaults.css",
+      "default": "./dist/index.js"
     },
     "./vars/*": "./dist/vars/*",
     "./themes/*": "./dist/vars/themes/*",

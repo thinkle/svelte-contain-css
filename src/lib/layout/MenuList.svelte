@@ -45,9 +45,23 @@
     overflow: hidden;
   }
 
-  .menu :global(li:has(> a)),
-  .menu :global(li:has(> button)) {
+  // Ensure direct interactive children fill the full row width.
+  .menu :global(li > a),
+  .menu :global(li > button),
+  .menu :global(li > input[type="submit"]),
+  .menu :global(li > .button) {
+    width: 100%;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+  }
+
+  // Support row-level interactive list items (for menu headers/subsections).
+  .menu :global(li.subheader),
+  .menu :global(li.interactive),
+  .menu :global(li[role="button"]),
+  .menu :global(li[tabindex]:not([tabindex="-1"])) {
     @include clickable(menu-item);
+    @include focusable();
   }
 
   .menu {
@@ -59,10 +73,40 @@
       height: var(--menu-item-height);
       text-decoration: none;
       @include typography-props(menu-item, button, ui, control);
-      @include color-props(menu-item, button, control);
+      @include color-props(menu-item, menu, button, control);
       @include box-props-square(menu-item, button, control);
+      margin: 0;
       @include focusable();
-      /* @include clickable(menu-item); */
+      @include clickable(menu-item);
+    }
+
+    // Make hover/active feedback visible across the whole row by default.
+    & :global(li:hover > a:not(.active)),
+    & :global(li:hover > button:not(.active)),
+    & :global(li:hover > input[type="submit"]:not(.active)),
+    & :global(li:hover > .button:not(.active)) {
+      background: var(
+        --menu-item-hover-bg,
+        var(--menu-item-bg, var(--menu-bg, var(--bg, unset)))
+      );
+      color: var(
+        --menu-item-hover-fg,
+        var(--menu-item-fg, var(--menu-fg, var(--fg, inherit)))
+      );
+    }
+
+    & :global(li:active > a:not(.active)),
+    & :global(li:active > button:not(.active)),
+    & :global(li:active > input[type="submit"]:not(.active)),
+    & :global(li:active > .button:not(.active)) {
+      background: var(
+        --menu-item-active-bg,
+        var(--menu-item-bg, var(--menu-bg, var(--bg, unset)))
+      );
+      color: var(
+        --menu-item-active-fg,
+        var(--menu-item-fg, var(--menu-fg, var(--fg, inherit)))
+      );
     }
 
     & :global(.active) {

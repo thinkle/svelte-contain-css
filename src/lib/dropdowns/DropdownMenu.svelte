@@ -205,7 +205,7 @@
     pointer-events: none;
     transition: var(--dropdown-transition, 150ms) opacity;
     @include custom-scrollbar(dropdown-menu, menu);
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .dropdown-container:popover-open {
@@ -213,7 +213,8 @@
     pointer-events: all;
     position: fixed;
     inset: unset;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .dropdown-content {
     // Ensure menu is at least trigger width, but allow wider requested widths

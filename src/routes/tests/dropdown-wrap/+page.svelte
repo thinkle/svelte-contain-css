@@ -53,6 +53,11 @@
       label: "Duis aute irure dolor in reprehenderit in voluptate",
     },
   ];
+
+  const tallOptions = Array.from({ length: 48 }, (_, idx) => ({
+    value: `item-${idx + 1}`,
+    label: `Scrollable item ${idx + 1}`,
+  }));
 </script>
 
 <Page>
@@ -209,6 +214,27 @@
               going and going without any natural stopping points whatsoever
             </button>
           </li>
+        </DropdownMenu>
+      </div>
+    </section>
+
+    <!-- Test 6: Vertical Overflow / Scrollbar -->
+    <section data-testid="test-vertical-scroll">
+      <h3>Test 6: Vertical Overflow Should Scroll</h3>
+      <p>
+        This menu intentionally has many items so the popover must constrain to
+        viewport height and scroll internally.
+      </p>
+      <div
+        style="max-width: 180px; border: 1px solid var(--primary-fg); padding: 1em;"
+      >
+        <DropdownMenu>
+          {#snippet label()}Tall Menu{/snippet}
+          {#each tallOptions as option}
+            <li>
+              <button type="button">{option.label}</button>
+            </li>
+          {/each}
         </DropdownMenu>
       </div>
     </section>

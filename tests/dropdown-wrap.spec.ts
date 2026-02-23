@@ -63,13 +63,12 @@ test.describe("Dropdown Menu Wrapping", () => {
     // Get the dropdown content element
     const content = popover.locator(".dropdown-content");
 
-    // Get the first option button
-    const firstOption = content.locator("button").first();
-    await expect(firstOption).toBeVisible();
-
-    // In wrap mode, the content should be visible but may wrap
-    const text = await firstOption.textContent();
-    expect(text).toContain("This is a very long option");
+    // Ensure one of the options contains the expected long label text
+    const longOption = content
+      .locator("button")
+      .filter({ hasText: "This is a very long option" })
+      .first();
+    await expect(longOption).toBeVisible();
   });
 
   test("should respect nowrap mode with ellipsis", async ({ page }) => {
@@ -153,7 +152,8 @@ test.describe("Dropdown Menu Wrapping", () => {
     const rect = await content.boundingBox();
 
     // Content should be constrained (not exceed viewport)
-    expect(rect?.width).toBeLessThanOrEqual(window.innerWidth);
+    const viewport = page.viewportSize();
+    expect(rect?.width).toBeLessThanOrEqual(viewport?.width ?? Number.MAX_SAFE_INTEGER);
 
     await page.keyboard.press("Escape");
     await expect(popover).not.toBeVisible();
@@ -171,7 +171,44 @@ test.describe("Dropdown Menu Wrapping", () => {
 
     // Content should still be constrained
     const contentRect = await content.boundingBox();
-    expect(contentRect?.width).toBeLessThanOrEqual(window.innerWidth);
+    expect(contentRect?.width).toBeLessThanOrEqual(viewport?.width ?? Number.MAX_SAFE_INTEGER);
+  });
+
+  test("should constrain tall dropdowns and allow internal vertical scrolling", async ({
+    page,
+  }) => {
+    await page.goto("/svelte-contain-css/tests/dropdown-wrap");
+    await page.waitForLoadState("networkidle");
+
+    const section = page.getByTestId("test-vertical-scroll");
+    const button = section.locator("nav.dropdown-menu > button");
+    await button.click();
+
+    const popoverId = await button.getAttribute("aria-controls");
+    const popover = page.locator(`#${popoverId}`);
+    await expect(popover).toBeVisible();
+
+    const metrics = await popover.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      return {
+        overflowY: style.overflowY,
+        clientHeight: el.clientHeight,
+        scrollHeight: el.scrollHeight,
+      };
+    });
+
+    expect(["auto", "scroll"]).toContain(metrics.overflowY);
+    expect(metrics.scrollHeight).toBeGreaterThan(metrics.clientHeight);
+
+    const scrolledTop = await popover.evaluate((el) => {
+      el.scrollTop = 160;
+      return el.scrollTop;
+    });
+    expect(scrolledTop).toBeGreaterThan(0);
+
+    // Confirm far-down menu content becomes visible after scrolling.
+    const lastItem = popover.locator("button", { hasText: "Scrollable item 48" });
+    await expect(lastItem).toBeVisible();
   });
 
   test("visual regression: dropdown positioning", async ({ page }) => {

@@ -9,6 +9,14 @@
   /* --button-hover-filter: var(--hover-filter); */
   --menu-hover-filter: var(--hover-filter);
   --menu-hover-transform: var(--hover-transform);
+  /* Menu items are often on light backgrounds; brighten can look invisible there. */
+  --menu-item-hover-filter: brightness(0.95)
+    drop-shadow(
+      var(--space) var(--space) var(--shadow-blur) var(--shadow-color)
+    );
+  /* Default menu items to the menu surface so row-wide filters read clearly. */
+  --menu-item-bg: var(--menu-bg, var(--bg));
+  --menu-item-active-filter: brightness(0.92);
   /* --button-hover-transform: var(var(--button-hover-transform));
   --button-hover-filter: var(var(--button-hover-filter)); */
   --transition: 300ms;
