@@ -120,6 +120,29 @@
     @include typography-props-bare(
       append(map-prefixes(first-paragraph, $prefixes), first-paragraph)...
     );
+    font-size: fn.var-with-fallbacks(
+      --first-paragraph-font-size,
+      append(
+        map-prefixes(first-paragraph, $prefixes),
+        fn.var-with-fallbacks(
+          --paragraph-font-size,
+          append($prefixes, fn.var-with-fallbacks(--font-size, append($prefixes, inherit)...))...
+        )
+      )...
+    );
+    line-height: fn.var-with-fallbacks(
+      --first-paragraph-line-height,
+      append(
+        map-prefixes(first-paragraph, $prefixes),
+        fn.var-with-fallbacks(
+          --paragraph-line-height,
+          append(
+            $prefixes,
+            fn.var-with-fallbacks(--line-height, append($prefixes, inherit)...)
+          )...
+        )
+      )...
+    );
     margin-block-start: fn.var-with-fallbacks(
       --first-paragraph-margin-top,
       append($prefixes, 0)...
