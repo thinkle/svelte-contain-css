@@ -1,6 +1,7 @@
 <script>
   import { setContext, getContext } from "svelte";
-  import { writable, derived } from "svelte/store";
+  import { writable } from "svelte/store";
+  import { get } from "svelte/store";
 
   export let layout = undefined;
   export let fullWidth = undefined;
@@ -19,11 +20,9 @@
 
   // Update store reactively when props or parent change
   $: {
-    const parent = parentStore;
     let parentVal = undefined;
-    // If parentStore is a store, try to read it (subscribe synchronously)
-    if (parent && typeof parent.subscribe === 'function') {
-      parent.subscribe(v => { parentVal = v; })();
+    if (parentStore && typeof parentStore.subscribe === 'function') {
+      parentVal = get(parentStore);
     }
     store.set({
       layout: layout ?? parentVal?.layout,

@@ -1,6 +1,7 @@
 <script>
   import { injectVars } from "$lib/util";
   import { getContext } from "svelte";
+  import { get } from "svelte/store";
 
   export let fullWidth = undefined;
   export let globalInputStyles = undefined;
@@ -12,7 +13,7 @@
   const contextStore = getContext("formItemDefaults");
 
   $: contextDefaults = contextStore && typeof contextStore.subscribe === 'function'
-    ? (() => { let val; contextStore.subscribe(v => { val = v; })(); return val; })()
+    ? get(contextStore)
     : contextStore;
 
   $: effectiveFullWidth = fullWidth ?? contextDefaults?.fullWidth ?? false;
