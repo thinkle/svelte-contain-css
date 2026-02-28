@@ -26,9 +26,23 @@
   --hover-filter: none;
   --button-hover-filter: brightness(0.9);
 
-  --button-active-filter: brightness(0.9);
+  --button-active-filter: brightness(0.85);
   --active-transform: none;
   --transition: 0.15s ease-in-out;
+
+  /* Bootstrap does not uppercase warning text */
+  --warning-text-transform: none;
+
+  /* Container / Card styling */
+  --container-bg: #ffffff;
+  --container-fg: #212529;
+  --card-header-bg: rgba(0, 0, 0, 0.03);
+  --card-footer-bg: rgba(0, 0, 0, 0.03);
+  --card-footer-border: 1px solid #dee2e6;
+  --shadow-color: rgba(0, 0, 0, 0.075);
+
+  /* Link color */
+  --link-fg: #007bff;
 
   /* Typography */
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -42,8 +56,9 @@
   --ui-font-weight: 400;
 
   /* Code */
-  --code-font-family: "Courier New", Courier, monospace;
-  --code-font-size: 1rem;
+  --code-font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  --code-font-size: 87.5%;
   --code-bg: #f8f9fa;
   --code-fg: #212529;
   --code-comment-fg: #6c757d;
@@ -59,14 +74,14 @@
   --code-cdata-fg: #6c757d;
 
   /* Spacing */
-  --gap: 1rem; /* Using 1rem as a base gap */
-  --padding: 1rem; /* Using 1rem for padding */
+  --gap: 1rem;
+  --padding: 1rem;
   --control-padding: 0.375rem 0.75rem;
   --input-padding: 0.375rem 0.75rem;
-  --bar-margin-bottom: 1rem;
+  --bar-margin-bottom: 0.5rem;
 
   /* Layout */
-  --bar-height: 3em;
+  --bar-height: 3.5em;
   --bar-align: center;
   --bar-justify: space-between;
   --bar-max-height: auto;
@@ -81,4 +96,14 @@
   --checkbox-check-mark: "✔";
   --checkbox-check-size: 0.75em;
   --checkbox-left-offset: 0.25em;
+
+  /* Tame default affordances for Bootstrap feel */
+  --checkbox-hover-filter: brightness(0.95);
+  --checkbox-hover-transform: none;
+  --checkbox-active-filter: brightness(0.9);
+  --checkbox-active-transform: none;
+
+  /* Progress bar */
+  --progress-bar-color: #007bff;
+  --progress-track-bg: #e9ecef;
 }
