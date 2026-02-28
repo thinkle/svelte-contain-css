@@ -11,7 +11,8 @@
     "deploy": "NODE_ENV=production vite build && npm run add-nojekyll && gh-pages -d build -t true",
     "prepublishOnly": "npm run package && npm run build-css",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "test:screenshots": "npx playwright test tests/theme-screenshots.spec.ts"
   },
   "exports": {
     ".": {
@@ -36,6 +37,7 @@
     "svelte": "^3.0.0 || ^4.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@sveltejs/adapter-auto": "^3.2.2",
     "@sveltejs/kit": "^2.5.17",
     "@sveltejs/package": "^2.3.2",
@@ -45,7 +47,7 @@
     "postcss-import": "^16.1.0",
     "publint": "^0.2.8",
     "sass": "^1.77.6",
-    "svelte": "^3.0.0",
+    "svelte": "^4.2.20",
     "svelte-check": "^3.8.1",
     "svelte-preprocess": "^6.0.1",
     "tslib": "^2.6.3",

@@ -7,6 +7,7 @@
   import light from "$lib/vars/themes/light.css?raw";
   import dark from "$lib/vars/themes/dark.css?raw";
   import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
+  import tailwind from "$lib/vars/themes/tailwind.css?raw";
   import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
   import boxy from "$lib/vars/boxy.css?raw";
   import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
@@ -55,6 +56,11 @@
       name: "Bootstrap Clone",
       css: bootstrap,
       file: "themes/bootstrap.css",
+    },
+    {
+      name: "Tailwind Defaults",
+      css: tailwind,
+      file: "themes/tailwind.css",
     },
   ];
   let enabledExtraThemes = {
