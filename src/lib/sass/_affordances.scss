@@ -22,7 +22,7 @@
   &:hover {
     filter: fn.var-with-fallbacks(
       --hover-filter,
-      append($prefixes, brightness(1.4))...
+      append($prefixes, brightness(1.05))...
     );
     transform: fn.var-with-fallbacks(
       --hover-transform,

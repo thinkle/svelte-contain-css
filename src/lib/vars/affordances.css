@@ -31,4 +31,5 @@
   --disabled-filter: brightness(0.9) grayscale(0.5) blur(0.5px);
   --disabled-shadow-distance: var(--button-shadow-distance);
   --disabled-shadow-color: var(--button-shadow-color);
+  --scrollbar-track-bg: transparent;
 }

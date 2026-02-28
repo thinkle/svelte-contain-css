@@ -45,9 +45,10 @@
     options = [];
     let optionEls = selectElement.querySelectorAll("option");
     for (let optionEl of optionEls) {
+      const richHtml = optionEl.dataset.html ?? optionEl.innerHTML;
       options.push({
         value: optionEl.value,
-        html: optionEl.innerHTML,
+        html: richHtml.trim(),
       });
     }
     activeOption = options[selectElement.selectedIndex];
@@ -66,7 +67,7 @@
 
   function setValue(idx: number) {
     selectElement.selectedIndex = idx;
-    selectElement.dispatchEvent(new Event("change"));
+    selectElement.dispatchEvent(new Event("change", { bubbles: true }));
     activeOption = options[idx];
   }
 
@@ -112,6 +113,9 @@
     );
     text-overflow: ellipsis;
     @include typography-props(select, input, ui);
+    @include focusable();
+  }
+  button {
     @include focusable();
   }
   .select-dropdown-label {
