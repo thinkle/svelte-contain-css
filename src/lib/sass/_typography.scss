@@ -117,38 +117,53 @@
   :global(h4 + p),
   :global(h5 + p),
   :global(h6 + p) {
+    $first-paragraph-prefixes: map-prefixes(first-paragraph, $prefixes);
+    $paragraph-prefixes: append(map-prefixes(paragraph, $prefixes), paragraph);
+    $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
+
+    @each $prefix in $paragraph-prefixes {
+      $first-paragraph-fallback-prefixes: append(
+        $first-paragraph-fallback-prefixes,
+        $prefix,
+        comma
+      );
+    }
+
     @include typography-props-bare(
-      append(map-prefixes(first-paragraph, $prefixes), first-paragraph)...
+      append($first-paragraph-fallback-prefixes, first-paragraph)...
     );
     font-size: fn.var-with-fallbacks(
       --first-paragraph-font-size,
       append(
-        map-prefixes(first-paragraph, $prefixes),
-        fn.var-with-fallbacks(
-          --paragraph-font-size,
-          append($prefixes, fn.var-with-fallbacks(--font-size, append($prefixes, inherit)...))...
-        )
-      )...
+          map-prefixes(first-paragraph, $prefixes),
+          fn.vars(
+            font-size,
+            append(map-prefixes(paragraph, $prefixes), paragraph)...
+          )
+        )...
     );
     line-height: fn.var-with-fallbacks(
       --first-paragraph-line-height,
       append(
-        map-prefixes(first-paragraph, $prefixes),
-        fn.var-with-fallbacks(
-          --paragraph-line-height,
-          append(
-            $prefixes,
-            fn.var-with-fallbacks(--line-height, append($prefixes, inherit)...)
-          )...
-        )
-      )...
+          map-prefixes(first-paragraph, $prefixes),
+          fn.vars(
+            line-height,
+            append(map-prefixes(paragraph, $prefixes), paragraph)...
+          )
+        )...
     );
     margin-block-start: fn.var-with-fallbacks(
       --first-paragraph-margin-top,
       append($prefixes, 0)...
     );
   }
-  & :global(p:first-of-type::first-line) {
+  & :global(p:first-of-type::first-line),
+  :global(h1 + p::first-line),
+  :global(h2 + p::first-line),
+  :global(h3 + p::first-line),
+  :global(h4 + p::first-line),
+  :global(h5 + p::first-line),
+  :global(h6 + p::first-line) {
     @include typography-props-bare(
       append(map-prefixes-include-base(first-line, $prefixes), first-line)...
     );
