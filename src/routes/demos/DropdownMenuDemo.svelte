@@ -54,6 +54,7 @@
 <TextLayout>
   <h2>Dropdown Menus</h2>
   <Bar>
+    <div data-testid="dropdown-left-menu">
     <Menu>
       {#snippet label()}
         <span>Left Menu</span>
@@ -63,6 +64,8 @@
       <li><button>Baz</button></li>
       <li><button>Bang</button></li>
     </Menu>
+    </div>
+    <div data-testid="dropdown-long-menu">
     <Menu>
       {#snippet label()}
         <span>Long Menu</span>
@@ -73,6 +76,8 @@
         </li>
       {/each}
     </Menu>
+    </div>
+    <div data-testid="dropdown-right-menu">
     <Menu>
       {#snippet label()}
         <span>Right Menu</span>
@@ -82,6 +87,7 @@
       <li><button>Baz</button></li>
       <li><button>Bang</button></li>
     </Menu>
+    </div>
   </Bar>
   <p>
     Our basic dropdowns work well, even if the contents are longer than the
@@ -115,7 +121,7 @@
     {#snippet label()}
       <span>Select a person:</span>
     {/snippet}
-    <Select bind:value={selectedPerson}>
+    <Select data-testid="person-select" bind:value={selectedPerson}>
       {#each people as person}
         <option value={person}>{person.label}</option>
       {/each}
@@ -132,7 +138,7 @@
     {#snippet label()}
       <span>Select an option:</span>
     {/snippet}
-    <Select bind:value={val}>
+    <Select data-testid="styled-option-select" bind:value={val}>
       <Option value={1}>Option A</Option>
       <Option value={2}><b>Strong</b> B</Option>
       <Option value={3}><em>Fancy</em> C</Option>
@@ -174,7 +180,11 @@
       {#snippet label()}
         <span>A narrower select:</span>
       {/snippet}
-      <Select --select-width={constrainedWidth} bind:value={val}>
+      <Select
+        data-testid="constrained-select"
+        --select-width={constrainedWidth}
+        bind:value={val}
+      >
         <Option value={1}>Option A</Option>
         <Option value={2}><b>Strong</b> B</Option>
         <Option value={3}><em>Fancy</em> C</Option>
@@ -196,7 +206,7 @@
     {#snippet label()}
       <span>Full Width Select:</span>
     {/snippet}
-    <Select bind:value={val}>
+    <Select data-testid="full-width-select" bind:value={val}>
       <Option value={1}>Option A</Option>
       <Option value={2}><b>Strong</b> B</Option>
       <Option value={3}><em>Fancy</em> C</Option>
@@ -208,7 +218,7 @@
     {#snippet label()}
       <span>Regular Width Select:</span>
     {/snippet}
-    <Select bind:value={val}>
+    <Select data-testid="regular-width-select" bind:value={val}>
       <Option value={1}>Option A</Option>
       <Option value={2}><b>Strong</b> B</Option>
       <Option value={3}><em>Fancy</em> C</Option>

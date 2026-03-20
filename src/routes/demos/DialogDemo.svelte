@@ -25,7 +25,7 @@
         A modal dialog is <em>not</em> "light dismissable" but must be explicitly
         closed.
       </p>
-      <Button onclick={() => (modalIsOpen = !modalIsOpen)}
+      <Button data-testid="open-modal-dialog" onclick={() => (modalIsOpen = !modalIsOpen)}
         >Open Modal Dialog</Button
       >
       <Dialog
@@ -95,7 +95,9 @@
         A non-modal dialog looks like a dialog, but displays like any other
         block element.
       </p>
-      <Button onclick={() => (nonModalIsOpen = !nonModalIsOpen)}
+      <Button
+        data-testid="open-non-modal-dialog"
+        onclick={() => (nonModalIsOpen = !nonModalIsOpen)}
         >Open Non-Modal Dialog</Button
       >
       <Dialog
@@ -116,7 +118,9 @@
         "light dismissal" with the <code>dismissible</code> prop to allow users to
         close by clicking outside the dialog content.
       </p>
-      <Button onclick={() => (dismissibleModalIsOpen = !dismissibleModalIsOpen)}
+      <Button
+        data-testid="open-dismissible-dialog"
+        onclick={() => (dismissibleModalIsOpen = !dismissibleModalIsOpen)}
         >Open Dismissible Modal Dialog</Button
       >
       <Dialog
