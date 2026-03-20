@@ -35,7 +35,7 @@
       "contentPadding",
       "width",
       "height",
-    ])
+    ]),
   );
 
   const hasSidebar = $derived(Boolean(sidebar) && !hideSidebar);
@@ -44,7 +44,7 @@
 
   // Start "unfrozen" so i.e. scrolling on reload
   // or hash link works properly
-  let freeze = false;
+  let freeze = $state(false);
   let pageElement: HTMLElement;
 
   function handleScroll() {
