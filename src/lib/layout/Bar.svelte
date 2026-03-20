@@ -6,10 +6,12 @@
 
   type Props = {
     children?: Snippet;
+    primary?: boolean;
+    secondary?: boolean;
   } & BarStyleProps &
     HTMLAttributes<HTMLElement>;
 
-  const { children, ...restProps }: Props = $props();
+  const { children, primary, secondary, ...restProps }: Props = $props();
 
   const cssKeys = [
     "bg",
@@ -24,9 +26,16 @@
   ];
 
   const style = $derived(injectVars(restProps, "bar", cssKeys));
+  let extraStyle = "";
+  if (primary) {
+    extraStyle += "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);";
+  } else if (secondary) {
+    extraStyle +=
+      "--bar-bg: var(--secondary-bg); --bar-fg: var(--secondary-fg);";
+  }
 </script>
 
-<div class="bar" {style} {...restProps}>
+<div class="bar" style="{style}{extraStyle}">
   {@render children?.()}
 </div>
 
