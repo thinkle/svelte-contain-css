@@ -1,61 +1,72 @@
 :root {
-  --fg: var(--material-color-grey-100);
-  --bg: var(--material-color-grey-800);
-  --body-bg: var(--material-color-grey-800);
-  --body-fg: var(--material-color-grey-100);
-  --container-bg: var(--material-color-grey-900);
-  --container-fg: var(--material-color-grey-100);
-  --primary-bg: var(--material-color-light-blue-500);
-  --primary-fg: var(--material-color-grey-100);
-  --sidebar-bg: var(--material-color-grey-900);
-  --secondary-bg: var(--material-color-grey-800);
-  --secondary-fg: var(--material-color-grey-200);
+  --fg: var(--material-color-blue-grey-50);
+  --bg: var(--material-color-blue-grey-800);
+  --body-bg: var(--material-color-blue-grey-800);
+  --body-fg: var(--material-color-blue-grey-50);
+  --container-bg: var(--material-color-blue-grey-900);
+  --container-fg: var(--material-color-blue-grey-50);
+  --sidebar-bg: var(--material-color-blue-grey-900);
+  --sidebar-fg: var(--material-color-blue-grey-50);
+  --menu-bg: var(--material-color-blue-grey-900);
+  --menu-fg: var(--material-color-blue-grey-50);
+  --primary-bg: var(--material-color-light-blue-100);
+  --primary-fg: var(--material-color-blue-grey-800);
+  --secondary-bg: var(--material-color-blue-grey-300);
+  --secondary-fg: var(--material-color-blue-grey-800);
+  --stripe-bg: var(--material-color-blue-grey-100);
+  --stripe-fg: var(--material-color-blue-grey-800);
+  --border-color: var(--material-color-blue-grey-600);
+  --input-bg: var(--material-color-blue-grey-700);
+  --input-fg: var(--material-color-blue-grey-50);
+  --button-bg: var(--material-color-blue-grey-800);
+  --button-fg: var(--material-color-blue-grey-50);
 
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);
-  --warning-fg: var(--material-color-grey-900);
+  --warning-fg: var(--white);
   --danger-bg: var(--material-color-red-400);
-  --danger-fg: var(--material-color-grey-900);
+  --danger-fg: var(--material-color-blue-grey-900);
   --success-bg: var(--material-color-green-400);
-  --success-fg: var(--material-color-grey-900);
+  --success-fg: var(--material-color-blue-grey-900);
   --info-bg: var(--material-color-light-blue-300);
-  --info-fg: var(--material-color-grey-900);
+  --info-fg: var(--material-color-blue-grey-900);
 
-  --hover-filter: brightness(1.08) contrast(1.2);
-  /* Code */
-  --code-bg: #282c34; /* Background color for the code block */
-  --code-fg: #abb2bf; /* Default text color */
+  --hover-filter: brightness(1.15);
+  --menu-item-hover-filter: brightness(1.25);
+  /* Code Block */
+  --code-bg: var(--material-color-blue-grey-800); /* Darker background */
+  --code-fg: var(--material-color-blue-grey-100); /* Lighter text */
 
-  --code-comment-fg: #5c6370; /* Comment color */
+  --code-comment-fg: var(--material-color-green-300); /* Lighter green */
   --code-comment-bg: transparent;
 
-  --code-string-fg: #98c379; /* String color */
+  --code-string-fg: var(--material-color-orange-300);
   --code-string-bg: transparent;
 
-  --code-keyword-fg: #c678dd; /* Keyword color */
+  --code-keyword-fg: var(--material-color-indigo-300);
   --code-keyword-bg: transparent;
 
-  --code-attr-name-fg: #d19a66; /* Attribute name color */
+  --code-attr-name-fg: var(--material-color-blue-300);
   --code-attr-name-bg: transparent;
 
-  --code-tag-fg: #e06c75; /* Tag color */
+  --code-tag-fg: var(--material-color-light-green-300);
   --code-tag-bg: transparent;
 
-  --code-function-fg: #61afef; /* Function name color */
+  --code-function-fg: var(--material-color-blue-300);
   --code-function-bg: transparent;
 
-  --code-variable-fg: #e06c75; /* Variable color */
+  --code-variable-fg: var(--material-color-amber-300);
   --code-variable-bg: transparent;
 
-  --code-operator-fg: #d19a66; /* Operator color */
+  --code-operator-fg: var(--material-color-brown-300);
   --code-operator-bg: transparent;
 
-  --code-prolog-fg: #5c6370; /* Prolog color */
+  --code-prolog-fg: var(--material-color-grey-400);
   --code-prolog-bg: transparent;
 
-  --code-doctype-fg: #5c6370; /* Doctype color */
+  --code-doctype-fg: var(--material-color-grey-400);
   --code-doctype-bg: transparent;
 
-  --code-cdata-fg: #5c6370; /* CDATA color */
+  --code-cdata-fg: var(--material-color-grey-400);
   --code-cdata-bg: transparent;
 }

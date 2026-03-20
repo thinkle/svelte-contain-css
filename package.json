@@ -2,6 +2,7 @@
   "name": "contain-css-svelte",
   "version": "1.0.2",
   "scripts": {
+    "capture:review": "node scripts/capture-review.mjs",
     "dev": "vite dev",
     "build-css": "postcss src/lib/vars/defaults.css -o dist/vars/defaults.css",
     "build": "NODE_ENV=production vite build && npm run package && npm run build-css",
@@ -12,6 +13,7 @@
     "prepublishOnly": "npm run package && npm run build-css",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "audit:components": "playwright test tests/component-audit.spec.ts",
     "test:e2e": "playwright test"
   },
   "exports": {

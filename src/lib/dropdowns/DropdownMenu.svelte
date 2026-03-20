@@ -14,14 +14,16 @@
   type Props = {
     label?: Snippet;
     children?: Snippet;
+    triggerAuditAction?: string | null;
   } & DropdownMenuStyleProps &
     HTMLAttributes<HTMLDivElement>;
 
-  let { label, children, ...props }: Props = $props();
+  let { label, children, triggerAuditAction = null, ...props }: Props = $props();
   idPostfix++;
   let id = "contain-dropdown-menu-" + idPostfix;
   let buttonElement: HTMLButtonElement = $state();
   let dropdownContentElement: HTMLDivElement = $state();
+  let isOpen = $state(false);
 
   // Style injection
   let style = injectVars(props, "menu", [
@@ -52,7 +54,6 @@
   }
 
   function triggerMenu(e) {
-    let isOpen = popoverDiv.matches(":popover-open");
     if (!isOpen) {
       injectVariablesIntoDropdown();
       computePosition();
@@ -60,6 +61,10 @@
   }
   function dismissPopover(e) {
     popoverDiv.hidePopover();
+  }
+
+  function handleToggle(event: ToggleEvent) {
+    isOpen = event.newState === "open";
   }
 
   let searchString = "";
@@ -142,14 +147,15 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<nav class="dropdown-menu" onkeydown={handleKeystroke}>
+<nav class="dropdown-menu" class:open={isOpen} onkeydown={handleKeystroke}>
   <button
     bind:this={buttonElement}
     onclick={triggerMenu}
     popovertarget={id}
     type="button"
+    data-audit-action={triggerAuditAction}
     aria-haspopup="menu"
-    aria-expanded={popoverDiv?.matches(":popover-open") ? "true" : "false"}
+    aria-expanded={isOpen ? "true" : "false"}
     aria-controls={id}
   >
     {#if label}{@render label()}{:else}Menu{/if}
@@ -160,6 +166,7 @@
     class="dropdown-container"
     role="menu"
     popover
+    ontoggle={handleToggle}
     style:top="{dropdownTop}px"
     style:left="{dropdownLeft}px"
     style:max-height="{dropdownMaxHeight}px"

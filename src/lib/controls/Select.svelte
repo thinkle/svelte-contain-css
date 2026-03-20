@@ -6,9 +6,15 @@
   type Props = {
     value?: any;
     children?: import("svelte").Snippet;
+    "data-audit-action"?: string | null;
   } & HTMLSelectAttributes;
 
-  let { value = $bindable(), children, ...restProps }: Props = $props();
+  let {
+    value = $bindable(),
+    children,
+    "data-audit-action": dropdownAuditAction = null,
+    ...restProps
+  }: Props = $props();
   let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
@@ -93,7 +99,7 @@
   {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width={targetWidth}>
-  <DropdownMenu>
+  <DropdownMenu triggerAuditAction={dropdownAuditAction}>
     {#snippet label()}
       <span
         class="select-dropdown"
@@ -162,10 +168,22 @@
   }
   .select-dropdown::after {
     content: var(--select-arrow, "⌄");
+    color: var(--select-arrow-fg, currentColor);
+    background-image: var(--select-arrow-image, none);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: var(--select-arrow-width, 1rem) var(--select-arrow-height, 1rem);
+    font-size: var(--select-arrow-font-size, 1em);
+    line-height: 1;
     margin-left: auto;
-    transform: var(--select-arrow-transform, scaleX(1.5) translateY(-70%));
+    transform: var(
+      --select-arrow-closed-transform,
+      var(--select-arrow-transform, translateY(-50%))
+    );
+    transform-origin: center;
     display: inline-grid;
-    width: var(--select-dropdown-arrow-width, 1em);
+    width: var(--select-dropdown-arrow-width, var(--select-arrow-width, 1em));
+    height: var(--select-dropdown-arrow-height, var(--select-arrow-height, 1em));
     place-content: center;
     position: absolute;
     right: var(--select-arrow-right-offset, calc(-0.5 * var(--padding)));
@@ -173,11 +191,17 @@
   }
 
   .select-dropdown-label {
-    padding-right: var(--select-dropdown-arrow-width, 1em);
+    padding-right: var(
+      --select-label-padding-right,
+      calc(var(--select-dropdown-arrow-width, var(--select-arrow-width, 1em)) + 0.75rem)
+    );
   }
 
-  :global(.open) .select-dropdown::after {
-    transform: rotate(180deg) scaleX(1.5);
+  :global(.dropdown-menu.open) .select-dropdown::after {
+    transform: var(
+      --select-arrow-open-transform,
+      var(--select-arrow-transform, translateY(-50%) rotate(180deg))
+    );
   }
 
   select {
