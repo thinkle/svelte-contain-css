@@ -3,6 +3,7 @@ export const reviewThemeLabels = {
   dark: "Dark",
   light: "Light",
   "light-or-dark": "Light Or Dark",
+  material: "Material",
   purple: "Purple",
 } as const;
 

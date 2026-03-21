@@ -15,6 +15,7 @@ const defaults = {
 };
 
 const options = parseArgs(process.argv.slice(2));
+const serverConfig = getServerConfig(options.baseUrl);
 const route = `/review/${options.theme}/${options.kind}/${options.scenario}`;
 const targetUrl = `${options.baseUrl}${route}`;
 const artifactDir = path.join(
@@ -30,7 +31,7 @@ let serverProcess;
 try {
   const serverWasRunning = await isServerReady(targetUrl);
   if (!serverWasRunning) {
-    serverProcess = startDevServer();
+    serverProcess = startDevServer(serverConfig);
     await waitForServer(targetUrl, serverProcess);
   }
 
@@ -150,6 +151,14 @@ function resolveColorScheme(options) {
   return "light";
 }
 
+function getServerConfig(baseUrl) {
+  const url = new URL(baseUrl);
+  return {
+    host: url.hostname,
+    port: String(url.port || (url.protocol === "https:" ? 443 : 80)),
+  };
+}
+
 async function getVisibleTargetNames(page) {
   const targetNames = await page
     .locator("[data-audit-target]")
@@ -201,10 +210,10 @@ async function isServerReady(url) {
   }
 }
 
-function startDevServer() {
+function startDevServer({ host, port }) {
   return spawn(
     "npm",
-    ["run", "dev", "--", "--port", "4173", "--strictPort", "--host", "127.0.0.1"],
+    ["run", "dev", "--", "--port", port, "--strictPort", "--host", host],
     {
       cwd: process.cwd(),
       env: process.env,

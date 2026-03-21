@@ -8,6 +8,7 @@
   import lightordark from "$lib/vars/themes/lightordark.css?raw";
   import light from "$lib/vars/themes/light.css?raw";
   import dark from "$lib/vars/themes/dark.css?raw";
+  import material from "$lib/vars/themes/material.css?raw";
   import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
   import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
   import boxy from "$lib/vars/boxy.css?raw";
@@ -29,6 +30,7 @@
   ];
 
   let colorThemes = [
+    { name: "Material", css: material, file: "themes/material.css" },
     { name: "Purple", css: purple, file: "themes/purple.css" },
     { name: "Light", css: light, file: "themes/light.css" },
     { name: "Dark", css: dark, file: "themes/dark.css" },
