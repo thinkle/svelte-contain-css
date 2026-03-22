@@ -29,6 +29,8 @@
   <button
     class:expander={!expandedHamburger}
     class:close={expandedHamburger}
+    aria-label={expandedHamburger ? "Collapse sidebar" : "Expand sidebar"}
+    data-audit-action="toggle-sidebar-sheet"
     onclick={() => (expandedHamburger = !expandedHamburger)}
   ></button>
   <div class="content">
@@ -40,7 +42,8 @@
       class="expander"
       class:expander={!expandedBar}
       class:close={expandedBar}
-      aria-label="Expand sidebar"
+      aria-label={expandedBar ? "Collapse sidebar" : "Expand sidebar"}
+      data-audit-action="toggle-sidebar-rail"
     ></button>
   </label>
 </aside>
@@ -237,11 +240,25 @@
       z-index: 2;
     }
   }
+  button::after {
+    color: var(--sidebar-icon-fg, currentColor);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-grid;
+    place-content: center;
+    width: var(--sidebar-icon-width, 0.65rem);
+    height: var(--sidebar-icon-height, 1rem);
+    font-size: var(--sidebar-icon-font-size, 1.1rem);
+    line-height: 1;
+  }
   button.expander::after {
-    content: var(--sidebar-expand, "»");
+    content: var(--sidebar-expand, "›");
+    background-image: var(--sidebar-expand-image, none);
   }
   button.close::after {
-    content: var(--sidebar-collapse, "«");
+    content: var(--sidebar-collapse, "‹");
+    background-image: var(--sidebar-collapse-image, none);
   }
   .right button::after {
     display: inline-block;

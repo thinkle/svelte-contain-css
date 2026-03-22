@@ -305,19 +305,21 @@
   /* Separate head and body fixed container logic */
   .fixed-table-head {
     position: sticky;
-    top: var(--padding);
+    top: var(--table-sticky-top, var(--padding));
     z-index: 2;
+    @include color-props(table-head, table, container);
   }
   .fixed-table-head::before {
     content: " ";
     position: absolute;
+    --table-sticky-offset: var(--table-sticky-top, var(--padding));
     --table-top-veil-height: calc(
-      1px +
+      var(--table-sticky-offset) + 1px +
         var(
           --table-margin-top,
           var(
             --container-margin-top,
-            var(--paragraph-margin-top, var(--margin-top, unset))
+            var(--paragraph-margin-top, var(--margin-top, 0px))
           )
         )
     );
@@ -327,6 +329,9 @@
     width: calc(100% + var(--padding) * 4);
     @include color-props(table-backdrop, page, container);
     z-index: -1;
+  }
+  .fixed-table-head :global(th) {
+    @include color-props(table-head, table, container);
   }
 
   /* Visually make our two tables appear as one */

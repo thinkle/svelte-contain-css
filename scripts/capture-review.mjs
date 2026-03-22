@@ -54,19 +54,16 @@ try {
     await pageTarget.screenshot({ path: pageFile });
     outputs.push({ file: "page.png", kind: "target", name: "page" });
 
-    const actionNames = await page
-      .locator("[data-audit-action]")
-      .evaluateAll((elements) =>
-        elements
-          .map((element) => element.getAttribute("data-audit-action"))
-          .filter((value) => Boolean(value)),
-      );
+    const actionNames = await getVisibleActionNames(page);
 
     for (const actionName of actionNames) {
       await gotoReviewPage(page, targetUrl, artifactDir);
-      const action = page.locator(`[data-audit-action="${actionName}"]`).first();
-      await action.click();
-      await delay(120);
+      const action = await getVisibleActionLocator(page, actionName);
+      const handled = await performAuditAction(page, action);
+      if (!handled) {
+        await action.click();
+      }
+      await settleAfterAction(page);
 
       const visibleTargets = await getVisibleTargetNames(page);
       let capturedVisibleTarget = false;
@@ -179,6 +176,40 @@ async function getVisibleTargetNames(page) {
   return visibleTargets;
 }
 
+async function getVisibleActionNames(page) {
+  const actionNames = await page
+    .locator("[data-audit-action]")
+    .evaluateAll((elements) =>
+      elements
+        .map((element) => element.getAttribute("data-audit-action"))
+        .filter((value) => Boolean(value)),
+    );
+
+  const visibleActions = [];
+  for (const actionName of new Set(actionNames)) {
+    const locator = await getVisibleActionLocator(page, actionName);
+    if (locator) {
+      visibleActions.push(actionName);
+    }
+  }
+
+  return visibleActions;
+}
+
+async function getVisibleActionLocator(page, actionName) {
+  const matches = page.locator(`[data-audit-action="${actionName}"]`);
+  const count = await matches.count();
+
+  for (let index = 0; index < count; index += 1) {
+    const locator = matches.nth(index);
+    if (await locator.isVisible()) {
+      return locator;
+    }
+  }
+
+  return null;
+}
+
 async function gotoReviewPage(page, targetUrl, artifactDir) {
   await page.goto(targetUrl);
   const pageTarget = page.locator("[data-audit-target='page']").first();
@@ -199,6 +230,78 @@ async function gotoReviewPage(page, targetUrl, artifactDir) {
   }
 
   return pageTarget;
+}
+
+async function settleAfterAction(page) {
+  await delay(250);
+  await page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(resolve);
+        });
+      }),
+  );
+}
+
+async function performAuditAction(page, action) {
+  const scrollSelector = await action.getAttribute("data-audit-scroll-selector");
+  if (!scrollSelector) return false;
+
+  const scrollOffset = Number.parseFloat(
+    (await action.getAttribute("data-audit-scroll-offset")) || "0",
+  );
+  const scrollOffsetVar =
+    (await action.getAttribute("data-audit-scroll-offset-var")) || "";
+
+  await page.evaluate(
+    ({ selector, offset, offsetVar }) => {
+      const target = document.querySelector(selector);
+      if (!(target instanceof HTMLElement)) return;
+
+      target.scrollIntoView({ block: "start" });
+
+      let resolvedOffset = offset;
+      if (offsetVar) {
+        const raw = getComputedStyle(target).getPropertyValue(offsetVar).trim();
+        if (raw.endsWith("px")) {
+          resolvedOffset += Number.parseFloat(raw);
+        } else if (raw) {
+          const probe = document.createElement("div");
+          probe.style.position = "absolute";
+          probe.style.visibility = "hidden";
+          probe.style.height = raw;
+          document.body.appendChild(probe);
+          resolvedOffset += probe.getBoundingClientRect().height;
+          probe.remove();
+        }
+      }
+
+      let current = target.parentElement;
+      while (current) {
+        const style = getComputedStyle(current);
+        const canScroll =
+          /(auto|scroll)/.test(style.overflowY) &&
+          current.scrollHeight > current.clientHeight;
+
+        if (canScroll) {
+          current.scrollTop += resolvedOffset;
+          return;
+        }
+
+        current = current.parentElement;
+      }
+
+      const scrollingElement = document.scrollingElement;
+      if (scrollingElement instanceof HTMLElement) {
+        scrollingElement.scrollTop += resolvedOffset;
+      } else {
+        window.scrollBy(0, resolvedOffset);
+      }
+    },
+    { selector: scrollSelector, offset: scrollOffset, offsetVar: scrollOffsetVar },
+  );
+  return true;
 }
 
 async function isServerReady(url) {

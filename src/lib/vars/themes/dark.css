@@ -13,8 +13,12 @@
   --primary-fg: var(--material-color-blue-grey-800);
   --secondary-bg: var(--material-color-blue-grey-300);
   --secondary-fg: var(--material-color-blue-grey-800);
-  --stripe-bg: var(--material-color-blue-grey-100);
-  --stripe-fg: var(--material-color-blue-grey-800);
+  --stripe-bg: color-mix(
+    in srgb,
+    var(--menu-bg) 88%,
+    var(--menu-fg) 12%
+  );
+  --stripe-fg: var(--menu-fg);
   --border-color: var(--material-color-blue-grey-600);
   --input-bg: var(--material-color-blue-grey-700);
   --input-fg: var(--material-color-blue-grey-50);

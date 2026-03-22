@@ -1,15 +1,22 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  let grid: HTMLDivElement;
-  interface Props {
-    id?: string;
-    children?: import('svelte').Snippet;
-  }
+  import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
 
-  let { id = "", children }: Props = $props();
+  type Props = {
+    card?: boolean;
+    tile?: boolean;
+    children?: Snippet;
+  } & HTMLAttributes<HTMLDivElement>;
+
+  let { children, card = false, tile = false, ...restProps }: Props = $props();
 </script>
 
-<div class="grid-layout" {id}>
+<div
+  class="grid-layout"
+  class:card-grid={card}
+  class:tile-grid={tile}
+  {...restProps}
+>
   {@render children?.()}
 </div>
 
@@ -25,5 +32,12 @@
     justify-content: var(--grid-justify-content, center);
     place-content: var(--grid-place-content, center);
     @include box-props(grid-layout);
+  }
+
+  .card-grid {
+    --item-width: var(--card-width, 400px);
+  }
+  .tile-grid {
+    --item-width: var(--tile-width, 200px);
   }
 </style>

@@ -130,6 +130,12 @@
   --dropdown-menu-shadow-distance: 0.375rem;
   --dropdown-menu-shadow-blur: 1.25rem;
   --dropdown-menu-shadow-color: rgba(15, 23, 42, 0.16);
+  --sidebar-expand: "";
+  --sidebar-collapse: "";
+  --sidebar-expand-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 24' fill='none'%3E%3Cpath d='M3 4.5 9 12 3 19.5' stroke='%2360708a' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --sidebar-collapse-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 24' fill='none'%3E%3Cpath d='M9 4.5 3 12l6 7.5' stroke='%2360708a' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --sidebar-icon-width: 0.65rem;
+  --sidebar-icon-height: 1rem;
 
   --checkbox-bg: #ffffff;
   --checkbox-fg: var(--material-color-blue-grey-900);

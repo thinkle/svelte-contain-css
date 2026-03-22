@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "scripts": {
     "capture:review": "node scripts/capture-review.mjs",
+    "capture:review:matrix": "node scripts/capture-review-matrix.mjs",
     "dev": "vite dev",
     "build-css": "postcss src/lib/vars/defaults.css -o dist/vars/defaults.css",
     "build": "NODE_ENV=production vite build && npm run package && npm run build-css",
