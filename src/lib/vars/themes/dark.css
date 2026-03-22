@@ -24,6 +24,12 @@
   --input-fg: var(--material-color-blue-grey-50);
   --button-bg: var(--material-color-blue-grey-800);
   --button-fg: var(--material-color-blue-grey-50);
+  --tab-bg: var(--material-color-blue-grey-700);
+  --tab-fg: var(--material-color-blue-grey-100);
+  --tab-active-bg: var(--material-color-blue-grey-200);
+  --tab-active-fg: var(--material-color-blue-grey-900);
+  --tab-bar-bg: var(--material-color-blue-grey-900);
+  --tab-bar-fg: var(--material-color-blue-grey-50);
 
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);

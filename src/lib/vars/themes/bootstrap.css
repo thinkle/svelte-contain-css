@@ -181,6 +181,12 @@
   --bar-padding: 0.75rem 1rem;
   --bar-border-top: 1px solid #dee2e6;
   --bar-border-bottom: 1px solid #dee2e6;
+  --tab-bg: #e9ecef;
+  --tab-fg: #495057;
+  --tab-active-bg: #ffffff;
+  --tab-active-fg: #212529;
+  --tab-bar-bg: #ffffff;
+  --tab-bar-fg: #212529;
 
   /* Misc */
   --border-radius: 0.375rem;

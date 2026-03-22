@@ -245,6 +245,23 @@ async function settleAfterAction(page) {
 }
 
 async function performAuditAction(page, action) {
+  const focusSelector = await action.getAttribute("data-audit-focus-selector");
+  if (focusSelector) {
+    await page.evaluate((selector) => {
+      const target = document.querySelector(selector);
+      if (target instanceof HTMLElement) {
+        target.focus();
+      }
+    }, focusSelector);
+    return true;
+  }
+
+  const focusSelf = (await action.getAttribute("data-audit-focus")) === "true";
+  if (focusSelf) {
+    await action.focus();
+    return true;
+  }
+
   const scrollSelector = await action.getAttribute("data-audit-scroll-selector");
   if (!scrollSelector) return false;
 

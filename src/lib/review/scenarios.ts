@@ -1,5 +1,6 @@
 import IncredibleAppShell from "./scenarios/IncredibleAppShell.svelte";
 import LayoutWorkbench from "./scenarios/LayoutWorkbench.svelte";
+import LaunchStudio from "./scenarios/LaunchStudio.svelte";
 import TableWorkbench from "./scenarios/TableWorkbench.svelte";
 
 export const reviewAppScenarios = {
@@ -10,6 +11,10 @@ export const reviewAppScenarios = {
   "layout-workbench": {
     title: "Layout Workbench",
     component: LayoutWorkbench,
+  },
+  "launch-studio": {
+    title: "Launch Studio",
+    component: LaunchStudio,
   },
   "table-workbench": {
     title: "Table Workbench",

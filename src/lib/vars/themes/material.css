@@ -61,6 +61,12 @@
   --bar-margin-bottom: 1.25rem;
   --bar-border-top: none;
   --bar-border-bottom: 1px solid rgba(38, 50, 56, 0.08);
+  --tab-bg: rgba(38, 50, 56, 0.08);
+  --tab-fg: var(--material-color-blue-grey-700);
+  --tab-active-bg: #ffffff;
+  --tab-active-fg: var(--material-color-indigo-700);
+  --tab-bar-bg: transparent;
+  --tab-bar-fg: var(--material-color-blue-grey-900);
 
   --button-bg: var(--material-color-indigo-500);
   --button-fg: #ffffff;
