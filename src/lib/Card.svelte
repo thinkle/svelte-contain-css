@@ -82,6 +82,16 @@
       --w: var(--card-width-small);
       --h: var(--card-height-small);
       --sidebar-width: calc(var(--card-width-small) - var(--padding) * 2);
+      /*--padding: var(--card-padding-small, calc(0.75 * var(--padding, 8px)));*/
+      --card-padding: var(
+        --card-padding-small,
+        calc(0.75 * var(--padding, 8px))
+      );
+      --font-size: var(--card-font-size-small, calc(0.875 * var(--font-size)));
+      --card-heading-font-size: var(
+        --card-heading-font-size-small,
+        calc(0.875 * var(--heading-font-size, 1.2em))
+      );
     }
   }
   @container (min-width: 1921px) {
