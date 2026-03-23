@@ -22,6 +22,16 @@
   --border-color: var(--material-color-blue-grey-600);
   --input-bg: var(--material-color-blue-grey-700);
   --input-fg: var(--material-color-blue-grey-50);
+  --slider-track-bg: color-mix(
+    in srgb,
+    var(--input-bg) 76%,
+    var(--border-color) 24%
+  );
+  --slider-fill-bg: var(--primary-bg);
+  --slider-thumb-bg: var(--material-color-light-blue-100);
+  --slider-thumb-border: 1px solid var(--material-color-light-blue-50);
+  --slider-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
+  --slider-thumb-size: 1rem;
   --button-bg: var(--material-color-blue-grey-800);
   --button-fg: var(--material-color-blue-grey-50);
   --tab-bg: var(--material-color-blue-grey-700);

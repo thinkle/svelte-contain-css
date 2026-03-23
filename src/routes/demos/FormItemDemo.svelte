@@ -15,6 +15,7 @@
   import TabItem from "$lib/controls/TabItem.svelte";
   import Form from "$lib/layout/Form.svelte";
   import RadioButton from "$lib/controls/RadioButton.svelte";
+  import Slider from "$lib/controls/Slider.svelte";
 
   const formItemCSSVariables = [
     {
@@ -93,6 +94,14 @@
 </script>
 
 <CssVariableDemo variables={formItemCSSVariables}>
+  <TextLayout>
+    <p>
+      This page is the low-level <code>FormItem</code> deep dive. If you want
+      the higher-level form stack first, use the <code>Form</code> tutorial page
+      for <code>Form</code>, <code>Fieldset</code>,
+      <code>FormProvider</code>, and how they compose together.
+    </p>
+  </TextLayout>
   <Accordion>
     <details open>
       <summary>Playground</summary>
@@ -151,10 +160,12 @@
       <summary>Form Items</summary>
       <TextLayout
         ><p>
-          Our FormItem component is the heart of a simple approach to form
-          layout. In a wide container, it puts labels side-by-side with inputs.
-          By default, in a narrow container, it puts labels above inputs. A
-          number of CSS variables allow easy customization.
+          <code>FormItem</code> is the core labeled control wrapper. In a wide
+          container, it puts labels side-by-side with inputs. In a narrow
+          container, it stacks them. The higher-level
+          <code>Form</code>, <code>Fieldset</code>, and
+          <code>FormProvider</code> components all exist mainly to set defaults
+          around nested <code>FormItem</code>s.
         </p>
       </TextLayout>
       <FormItem>
@@ -289,7 +300,7 @@
         </FormItem>
         <FormItem>
           {#snippet label()}Level{/snippet}
-          <input type="range" />
+          <Slider />
         </FormItem>
         <FormItem>
           <Button primary>Add</Button>
@@ -315,7 +326,7 @@
         {#snippet label()}
           <span>Level</span>
         {/snippet}
-        <input type="range" />
+        <Slider />
       </FormItem>
       <FormItem>
         <Button primary>Add</Button>
@@ -349,7 +360,7 @@
         {#snippet label()}
           <span>Level</span>
         {/snippet}
-        <input type="range" />
+        <Slider />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
         <Button primary>Add</Button>
@@ -373,7 +384,7 @@
         {#snippet label()}
           <span>Level</span>
         {/snippet}
-        <input type="range" />
+        <Slider />
       </FormItem>
       <FormItem {fullWidth} {globalInputStyles}>
         <Button primary>Add</Button>

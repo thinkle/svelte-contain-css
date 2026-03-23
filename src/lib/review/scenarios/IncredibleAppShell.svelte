@@ -4,13 +4,16 @@
   import Input from "$lib/controls/Input.svelte";
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Select from "$lib/controls/Select.svelte";
+  import Slider from "$lib/controls/Slider.svelte";
   import Bar from "$lib/layout/Bar.svelte";
   import DataList from "$lib/layout/DataList.svelte";
   import DataListItem from "$lib/layout/DataListItem.svelte";
   import Fieldset from "$lib/layout/Fieldset.svelte";
   import Form from "$lib/layout/Form.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import Page from "$lib/layout/Page.svelte";
+  import Stack from "$lib/layout/Stack.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
 
   let showSummary = $state(false);
@@ -18,6 +21,7 @@
   let search = $state("migration");
   let sortBy = $state("recent");
   let showAssignedOnly = $state(true);
+  let confidenceThreshold = $state(68);
   let statusMessage = $derived(
     loggedIn
       ? showSummary
@@ -60,12 +64,12 @@
 <Page data-audit-target="page">
   {#snippet header()}
     <Bar secondary>
-      <div class="brand">
+      <Stack class="brand">
         <div class="eyebrow">Contain CSS Review Harness</div>
         <h1>My Incredible App</h1>
-      </div>
+      </Stack>
 
-      <div class="header-actions">
+      <Inline class="header-actions">
         <Button
           primary
           data-audit-action="open-menu"
@@ -84,12 +88,12 @@
         <MiniButton aria-label="Log out" title="Log out" onclick={logout}>
           ×
         </MiniButton>
-      </div>
+      </Inline>
     </Bar>
   {/snippet}
 
   <TextLayout>
-    <div class="hero-copy">
+    <Stack class="hero-copy">
       <p class="kicker">Proof Of Concept</p>
       <h1>This is an incredible page</h1>
       <p>
@@ -98,7 +102,7 @@
         directly.
       </p>
       <p>{statusMessage}</p>
-    </div>
+    </Stack>
 
     <Form layout="above" fullWidth globalInputStyles>
       <Fieldset>
@@ -130,6 +134,13 @@
           {/snippet}
           <Checkbox bind:checked={showAssignedOnly}>Only show my items</Checkbox>
         </FormItem>
+
+        <FormItem>
+          {#snippet label()}
+            Confidence Threshold ({confidenceThreshold}%)
+          {/snippet}
+          <Slider bind:value={confidenceThreshold} min={0} max={100} step={1} />
+        </FormItem>
       </Fieldset>
     </Form>
 
@@ -146,7 +157,8 @@
               {/snippet}
               <p>
                 Query <strong>{search}</strong>, sorted by <strong>{sortBy}</strong>,
-                assigned only: <strong>{showAssignedOnly ? "yes" : "no"}</strong>.
+                assigned only: <strong>{showAssignedOnly ? "yes" : "no"}</strong>,
+                confidence: <strong>{confidenceThreshold}%</strong>.
               </p>
             </FormItem>
           </Fieldset>

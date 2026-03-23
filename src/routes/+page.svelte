@@ -17,7 +17,8 @@
   import SplitPaneDemo from "./demos/SplitPaneDemo.svelte";
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
   import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
-  import Slider from "$lib/controls/Slider.svelte";
+  import SliderDemo from "./demos/SliderDemo.svelte";
+  import FormDemo from "./demos/FormDemo.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
   import Button from "$lib/controls/Button.svelte";
@@ -29,6 +30,10 @@
   import Themes from "./Themes.svelte";
   import CardDemo from "./demos/CardDemo.svelte";
   import TileDemo from "./demos/TileDemo.svelte";
+  import InlineDemo from "./demos/InlineDemo.svelte";
+  import StackDemo from "./demos/StackDemo.svelte";
+  import RowContainerDemo from "./demos/RowContainerDemo.svelte";
+  import ColumnContainerDemo from "./demos/ColumnContainerDemo.svelte";
   import RowsAndColumnsDemo from "./demos/RowsAndColumnsDemo.svelte";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import { base } from "$app/paths";
@@ -109,6 +114,8 @@
       { name: "Tabs", component: TabDemo, demo: "Tab" },
       { name: "Accordion", component: AccordionDemo, demo: "Accordion" },
       { name: "Bar", component: BarDemo, demo: "Bar" },
+      { name: "Inline", component: InlineDemo, demo: "Inline" },
+      { name: "Stack", component: StackDemo, demo: "Stack" },
       { name: "Page", component: PageDemo, demo: "Page" },
       { name: "Table", component: TableDemo, demo: "Table" },
       { name: "Data List", component: DataListDemo, demo: "DataList" },
@@ -117,7 +124,17 @@
       { name: "Tile", component: TileDemo, demo: "Tile" },
       { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
       {
-        name: "Rows and Columns",
+        name: "RowContainer",
+        component: RowContainerDemo,
+        demo: "RowContainer",
+      },
+      {
+        name: "ColumnContainer",
+        component: ColumnContainerDemo,
+        demo: "ColumnContainer",
+      },
+      {
+        name: "Rows and Columns (Legacy)",
         component: RowsAndColumnsDemo,
         demo: "RowsAndColumns",
       },
@@ -125,7 +142,8 @@
       { name: "Button", component: ButtonDemo, demo: "Button" },
       { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },
       { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
-      { name: "Slider", component: Slider },
+      { name: "Slider", component: SliderDemo, demo: "Slider" },
+      { name: "Form", component: FormDemo, demo: "Form" },
       { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
       { name: "Overlays" },
       { name: "Dialog", component: DialogDemo, demo: "Dialog" },

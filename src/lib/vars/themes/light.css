@@ -42,6 +42,15 @@
   --border-color: var(--material-color-grey-400);
   --input-bg: #fefefe;
   --input-fg: var(--material-color-grey-900);
+  --slider-track-bg: color-mix(
+    in srgb,
+    var(--input-bg) 62%,
+    var(--border-color) 38%
+  );
+  --slider-fill-bg: var(--primary-bg);
+  --slider-thumb-bg: #ffffff;
+  --slider-thumb-border: 1px solid var(--primary-bg);
+  --slider-thumb-size: 1rem;
   --hover-filter: brightness(0.9);
   /* Code */
   --code-bg: #ffffff; /* Background color for the code block */

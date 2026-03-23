@@ -104,6 +104,14 @@
   --input-border: 1px solid rgba(63, 81, 181, 0.16);
   --input-square-radius: 0.875rem;
   --input-padding: 0.75rem 0.875rem;
+  --slider-track-height: 0.375rem;
+  --slider-track-bg: rgba(63, 81, 181, 0.2);
+  --slider-fill-bg: var(--material-color-indigo-500);
+  --slider-thumb-bg: #ffffff;
+  --slider-thumb-border: 2px solid var(--material-color-indigo-500);
+  --slider-thumb-size: 1rem;
+  --slider-thumb-shadow: 0 0.15rem 0.45rem rgba(15, 23, 42, 0.18);
+  --slider-thumb-hover-shadow: 0 0.25rem 0.6rem rgba(15, 23, 42, 0.2);
 
   --select-bg: var(--input-bg);
   --select-fg: var(--input-fg);

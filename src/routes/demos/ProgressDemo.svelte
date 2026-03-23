@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Card from "$lib/Card.svelte";
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -7,12 +6,11 @@
   // Your custom library components:
 
   import Progress from "$lib/misc/Progress.svelte";
-  import Button from "$lib/controls/Button.svelte"; // example button
   import FormItem from "$lib/layout/FormItem.svelte";
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
-  import Column from "$lib/layout/Column.svelte";
+  import Stack from "$lib/layout/Stack.svelte";
 
   // Example CSS variable definitions for the Progress component
   const progressVars = [
@@ -50,7 +48,7 @@
   <!-- 1) State selection (buttons) -->
   <FormItem>
     {#snippet label()}State{/snippet}
-    <Column --column-align="flex-start">
+    <Stack align="flex-start">
       <RadioButton value="uninitiated" bind:group={state}
         >Uninitiated</RadioButton
       >
@@ -58,32 +56,24 @@
         >In Progress</RadioButton
       >
       <RadioButton value="complete" bind:group={state}>Complete</RadioButton>
-    </Column>
+    </Stack>
   </FormItem>
 
   <!-- 2) Value slider -->
   <FormItem>
     {#snippet label()}Value: {value} / {max}{/snippet}
-    <input
-      type="range"
-      min="0"
-      {max}
-      bind:value
-      disabled={indeterminate}
-      style="width: 12rem;"
-    />
+    <Slider min={0} {max} bind:value disabled={indeterminate} width="12rem" />
   </FormItem>
 
   <!-- 3) Max slider -->
   <FormItem>
     {#snippet label()}Max: {max}{/snippet}
-    <input
-      type="range"
-      min="10"
-      max="200"
+    <Slider
+      min={10}
+      max={200}
       bind:value={max}
       disabled={indeterminate}
-      style="width: 12rem;"
+      width="12rem"
     />
   </FormItem>
 

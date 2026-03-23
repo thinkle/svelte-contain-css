@@ -2,7 +2,6 @@
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import Card from "$lib/Card.svelte";
-  import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -30,20 +29,21 @@
   <TextLayout>
     <p>
       GridLayout creates a centered, responsive grid that automatically wraps
-      items. To get the best results (centered grid with left-aligned last row),
-      set the
-      <code>--grid-layout-item-width</code> to match your content size.
+      items. In most cases, use the built-in <code>tile</code> and
+      <code>card</code> shorthands so the grid follows the library's default
+      widths. Use <code>--item-width</code> or
+      <code>--grid-layout-item-width</code> only when you need a custom size.
     </p>
 
     <h2>Basic Grid with Tiles</h2>
 
     <p>
-      Tiles default to 200px width, so this grid uses
-      <code>--grid-layout-item-width: 200px</code>:
+      Tiles already have a default width, so the simplest version is just
+      <code>&lt;GridLayout tile&gt;</code>:
     </p>
 
     <Code
-      code={`<GridLayout --item-width="200px">
+      code={`<GridLayout tile>
   <Tile>Item 1</Tile>
   <Tile>Item 2</Tile>
   <Tile>Item 3</Tile>
@@ -52,7 +52,7 @@
     />
   </TextLayout>
   <br />
-  <GridLayout --item-width="200px">
+  <GridLayout tile>
     <Tile>
       <h3>Tile 1</h3>
       <p>First tile in the grid</p>
@@ -81,8 +81,13 @@
   <TextLayout>
     <h2>Grid with Cards</h2>
 
+    <p>
+      Cards work the same way. Use <code>card</code> to inherit the framework's
+      default card width:
+    </p>
+
     <Code
-      code={`<GridLayout --item-width="var(--card-width)">
+      code={`<GridLayout card>
   <Card>
     {#snippet header()}
       <div>Card 1</div>
@@ -97,25 +102,30 @@
   </Card>
 </GridLayout>`}
     />
+
+    <p>
+      If you need a nonstandard layout, you can still override the item width
+      directly with <code>--item-width</code>.
+    </p>
   </TextLayout>
-  <GridLayout --item-width="var(--card-width)">
+  <GridLayout card>
     <Card>
       {#snippet header()}
-            <div >Card 1</div>
-          {/snippet}
+        <div>Card 1</div>
+      {/snippet}
       <p>This is a card in a grid layout.</p>
       <p>Cards automatically size themselves.</p>
     </Card>
     <Card>
       {#snippet header()}
-            <div >Card 2</div>
-          {/snippet}
+        <div>Card 2</div>
+      {/snippet}
       <p>GridLayout centers all items.</p>
     </Card>
     <Card>
       {#snippet header()}
-            <div >Card 3</div>
-          {/snippet}
+        <div>Card 3</div>
+      {/snippet}
       <p>Items wrap to new lines as needed.</p>
     </Card>
   </GridLayout>
