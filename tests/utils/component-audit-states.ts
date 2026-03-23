@@ -77,6 +77,19 @@ const componentStates: Record<string, ComponentAuditState[]> = {
       },
     },
   ],
+  Form: [
+    defaultState,
+    {
+      name: "select-open",
+      enabled(viewport) {
+        return viewport.width > 600;
+      },
+      async setup(page) {
+        await page.locator(".dropdown-menu > button").first().click();
+        await page.locator("[popover]:popover-open").waitFor({ state: "visible" });
+      },
+    },
+  ],
   Tab: [
     defaultState,
     {

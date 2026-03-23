@@ -39,10 +39,17 @@
     list-style: none;
     /* @include padding-props(menu, container); */
     padding: 0;
+    margin: 0;
+    margin-inline: 0;
+    padding-inline: 0;
     @include color-props(menu, ui, control);
-    margin-block-start: 0;
-    margin-block-end: 0;
     overflow: hidden;
+    width: 100%;
+  }
+
+  .menu :global(li) {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   // Ensure direct interactive children fill the full row width.

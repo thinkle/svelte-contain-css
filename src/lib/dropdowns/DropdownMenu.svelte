@@ -230,9 +230,11 @@
       var(--dropdown-menu-width, 12em)
     );
     min-width: var(--dropdown-menu-min-width, 12em);
+    @include color-props(dropdown-menu, menu, container);
     @include box-shadow(dropdown-menu, dropdown);
     @include box-props-square-border(dropdown-menu, menu, container);
     padding: 0;
+    overflow: hidden;
   }
 
   // Support wrap mode control via --dropdown-wrap-mode CSS variable
