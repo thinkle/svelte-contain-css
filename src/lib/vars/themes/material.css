@@ -73,8 +73,12 @@
   --button-border: none;
   --button-padding: 0.625rem 1rem;
   --button-border-radius: 999px;
-  --mini-button-bg: rgba(38, 50, 56, 0.12);
-  --mini-button-fg: var(--material-color-blue-grey-900);
+  --mini-button-bg: color-mix(
+    in srgb,
+    var(--container-bg, #ffffff) 82%,
+    var(--container-fg, var(--material-color-blue-grey-900)) 18%
+  );
+  --mini-button-fg: var(--container-fg, var(--material-color-blue-grey-900));
   --mini-button-border: none;
   --mini-button-radius: 999px;
   --mini-button-size: 2rem;

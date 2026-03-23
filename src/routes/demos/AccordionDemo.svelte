@@ -21,8 +21,9 @@
     </p>
   </TextLayout>
   <DemoWithCode
+    defaultTab="split"
     code={`<Accordion highlanderMode={${highlanderMode}}>
-    <details>
+    <details open>
       <summary>Hello</summary>
       <h2>Thing 1</h2>
       <p>This is the first thing</p>
@@ -43,7 +44,7 @@
       <Checkbox bind:checked={highlanderMode}>highlanderMode</Checkbox>
     {/snippet}
     <Accordion {highlanderMode}>
-      <details>
+      <details open>
         <summary>Hello</summary>
         <h2>Thing 1</h2>
         <p>This is the first thing</p>

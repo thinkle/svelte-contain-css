@@ -99,6 +99,7 @@
 
   {#if active == "TabItem"}
     <DemoWithCode
+      defaultTab="split"
       code={`<TabBar>
   <TabItem>Overview</TabItem>
   <TabItem active>States</TabItem>
@@ -115,8 +116,8 @@
           <code>active</code> to mark the selected tab.
         </p>
         <p>
-          It inherits button behavior but swaps in tab-specific variables for radius,
-          spacing, and active styling.
+          It inherits button behavior but swaps in tab-specific variables for
+          radius, spacing, and active styling.
         </p>
       {/snippet}
       <TabBar
@@ -135,6 +136,7 @@
     </DemoWithCode>
   {:else if active == "TabBar"}
     <DemoWithCode
+      defaultTab="split"
       code={`<TabBar>
   <TabItem>Foo</TabItem>
   <TabItem active>Bar</TabItem>
@@ -146,8 +148,8 @@
       {/snippet}
       {#snippet blurb()}
         <p>
-          <code>&lt;TabBar&gt;</code> is the container for tab controls. It provides the
-          aligned row, tab spacing, and optional sticky behavior.
+          <code>&lt;TabBar&gt;</code> is the container for tab controls. It provides
+          the aligned row, tab spacing, and optional sticky behavior.
         </p>
       {/snippet}
       <TabBar>
@@ -158,6 +160,7 @@
     </DemoWithCode>
 
     <DemoWithCode
+      defaultTab="split"
       code={`<TabBar
   items={[{ label: "Foo", value: "foo" }, { label: "Bar", value: "bar" }]}
   active={active}
@@ -183,12 +186,14 @@
         ]}
         active={tabBarExample}
         onchange={(value) => {
-          tabBarExample = typeof value === "string" ? value : (value?.value ?? "bar");
+          tabBarExample =
+            typeof value === "string" ? value : (value?.value ?? "bar");
         }}
       />
     </DemoWithCode>
   {:else if active == "containers"}
     <DemoWithCode
+      defaultTab="demo"
       code={`<Container border height="24rem">
   <TabBar sticky ... />
   <div>
@@ -201,12 +206,12 @@
       {/snippet}
       {#snippet blurb()}
         <p>
-          Put the tab bar and its content inside a bordered container with a fixed
-          height to avoid page reflow when tabs switch.
+          Put the tab bar and its content inside a bordered container with a
+          fixed height to avoid page reflow when tabs switch.
         </p>
         <p>
-          <code>sticky</code> keeps the tab row visible and gives it an opaque
-          background while the content scrolls.
+          <code>sticky</code> keeps the tab row visible and gives it an opaque background
+          while the content scrolls.
         </p>
       {/snippet}
       <Container border height="24rem">
@@ -227,7 +232,9 @@
           {#if containerExample === "overview"}
             <p>Overview content stays inside the fixed-height container.</p>
           {:else if containerExample === "details"}
-            <p>Details content can be longer without shifting the whole page.</p>
+            <p>
+              Details content can be longer without shifting the whole page.
+            </p>
           {:else}
             <p>Settings content works the same way.</p>
           {/if}
