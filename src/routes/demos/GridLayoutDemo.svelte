@@ -89,8 +89,8 @@
     <h2>Grid with Cards</h2>
 
     <p>
-      Cards work the same way. Use <code>card</code> to inherit the framework's
-      default card width:
+      Cards work the same way. Use <code>card</code> to inherit the framework's default
+      card width:
     </p>
 
     <p>
@@ -100,13 +100,16 @@
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout card>
-  <Card>
+  <Card fixedHeight>
+    {#snippet header()}
+      <div>Card 1</div>
+    {/snippet}
     {#snippet header()}
       <div>Card 1</div>
     {/snippet}
     <p>This is a card in a grid layout.</p>
   </Card>
-  <Card>
+  <Card fixedHeight>
     {#snippet header()}
       <div>Card 2</div>
     {/snippet}
@@ -115,20 +118,20 @@
 </GridLayout>`}
   >
     <GridLayout card>
-      <Card>
+      <Card fixedHeight>
         {#snippet header()}
           <div>Card 1</div>
         {/snippet}
         <p>This is a card in a grid layout.</p>
         <p>Cards automatically size themselves.</p>
       </Card>
-      <Card>
+      <Card fixedHeight>
         {#snippet header()}
           <div>Card 2</div>
         {/snippet}
         <p>GridLayout centers all items.</p>
       </Card>
-      <Card>
+      <Card fixedHeight>
         {#snippet header()}
           <div>Card 3</div>
         {/snippet}
