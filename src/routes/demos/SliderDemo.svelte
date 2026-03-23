@@ -2,9 +2,9 @@
   import Slider from "$lib/controls/Slider.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import Stack from "$lib/layout/Stack.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import type { CSSVariable } from "./types";
 
   const sliderCSSVariables: CSSVariable[] = [
@@ -84,37 +84,56 @@
     </p>
   </TextLayout>
 
-  <Stack gap="1rem">
-    <FormItem>
-      {#snippet label()}Volume ({volume}%){/snippet}
-      <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />
-    </FormItem>
-
-    <FormItem>
-      {#snippet label()}Balance ({balance}){/snippet}
-      <Slider bind:value={balance} min={-50} max={50} step={1} width="16rem" />
-    </FormItem>
-
-    <FormItem>
-      {#snippet label()}Density ({density}%){/snippet}
-      <Slider bind:value={density} min={0} max={100} step={5} width="16rem" />
-    </FormItem>
-
-    <FormItem>
-      {#snippet label()}Disabled{/snippet}
-      <Slider value={60} min={0} max={100} disabled width="16rem" />
-    </FormItem>
-  </Stack>
-
-  <Code
+  <DemoWithCode
     language="svelte"
     code={`<script>
   let volume = $state(38);
+  let balance = $state(0);
+  let density = $state(72);
 </script>
 
-<FormItem>
-  {#snippet label()}Volume ({volume}%){/snippet}
-  <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />
-</FormItem>`}
-  />
+<Stack gap="1rem">
+  <FormItem>
+    {#snippet label()}Volume ({volume}%){/snippet}
+    <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />
+  </FormItem>
+
+  <FormItem>
+    {#snippet label()}Balance ({balance}){/snippet}
+    <Slider bind:value={balance} min={-50} max={50} step={1} width="16rem" />
+  </FormItem>
+
+  <FormItem>
+    {#snippet label()}Density ({density}%){/snippet}
+    <Slider bind:value={density} min={0} max={100} step={5} width="16rem" />
+  </FormItem>
+
+  <FormItem>
+    {#snippet label()}Disabled{/snippet}
+    <Slider value={60} min={0} max={100} disabled width="16rem" />
+  </FormItem>
+</Stack>`}
+  >
+    <Stack gap="1rem">
+      <FormItem>
+        {#snippet label()}Volume ({volume}%){/snippet}
+        <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />
+      </FormItem>
+
+      <FormItem>
+        {#snippet label()}Balance ({balance}){/snippet}
+        <Slider bind:value={balance} min={-50} max={50} step={1} width="16rem" />
+      </FormItem>
+
+      <FormItem>
+        {#snippet label()}Density ({density}%){/snippet}
+        <Slider bind:value={density} min={0} max={100} step={5} width="16rem" />
+      </FormItem>
+
+      <FormItem>
+        {#snippet label()}Disabled{/snippet}
+        <Slider value={60} min={0} max={100} disabled width="16rem" />
+      </FormItem>
+    </Stack>
+  </DemoWithCode>
 </CssVariableDemo>
