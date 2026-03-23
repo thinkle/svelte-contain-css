@@ -86,7 +86,7 @@
     <Tooltip>
       <Button>Fancy Tooltip Button</Button>
       {#snippet tooltip()}
-        <div style="display:block">
+        <div>
           <p>This button is <i>extra fancy</i> and contains a list:</p>
           <ul>
             <li>Item 1</li>

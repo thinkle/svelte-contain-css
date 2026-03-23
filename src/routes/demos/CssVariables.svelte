@@ -5,6 +5,7 @@
   import Accordion from "$lib/layout/Accordion.svelte";
   import Container from "$lib/layout/Container.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import type { CSSVariable } from "./types";
 
   type Callback = (variables: { [key: string]: string }) => void;
@@ -117,7 +118,7 @@
             <div>
               {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
                 {@const variable = theVariables[group || "no-group"]}
-                <div style="display:flex;justify-content:end;">
+                <Inline justify="flex-end">
                   <MiniButton
                     primary
                     onclick={() => {
@@ -127,7 +128,7 @@
                       ];
                     }}>+</MiniButton
                   >
-                </div>
+                </Inline>
               {/if}
             </div>
           {/snippet}

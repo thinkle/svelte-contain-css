@@ -43,7 +43,7 @@
           dialog :)
         </p>
         <Button>Test Button</Button>
-        <div style="height: 5rem"></div>
+        <Container height="5rem" padding="0" margin="0" />
 
         <p>
           Lorem ipsum dolor sit amet. Consectetur adipiscing elit. Sed do
@@ -51,7 +51,7 @@
           great! They play with balls of yarn and chase laser pointers. Some
           cats enjoy climbing trees and others prefer lounging in sunny spots.
         </p>
-        <div style="height: 5rem"></div>
+        <Container height="5rem" padding="0" margin="0" />
 
         <p>
           Dogs are great too! They love to play fetch and go for long walks.
@@ -61,7 +61,7 @@
           Puppies are especially adorable with their playful antics and boundless
           energy.
         </p>
-        <div style="height: 5rem"></div>
+        <Container height="5rem" padding="0" margin="0" />
         <p>
           Sometimes there is space in a document apparently for the sole purpose
           of demonstrating overflow scrolling.

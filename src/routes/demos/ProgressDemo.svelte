@@ -10,6 +10,7 @@
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
+  import Input from "$lib/controls/Input.svelte";
   import Stack from "$lib/layout/Stack.svelte";
 
   // Example CSS variable definitions for the Progress component
@@ -83,7 +84,7 @@
   </FormItem>
   <FormItem>
     {#snippet label()}Slot Content{/snippet}
-    <input type="text" bind:value={slotContent} style="width: 12rem;" />
+    <Input bind:value={slotContent} width="12rem" />
   </FormItem>
 
   <!-- Code snippet -->

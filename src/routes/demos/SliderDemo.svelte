@@ -92,7 +92,7 @@
   let density = $state(72);
 </script>
 
-<Stack gap="1rem">
+<Stack>
   <FormItem>
     {#snippet label()}Volume ({volume}%){/snippet}
     <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />
@@ -114,7 +114,7 @@
   </FormItem>
 </Stack>`}
   >
-    <Stack gap="1rem">
+    <Stack>
       <FormItem>
         {#snippet label()}Volume ({volume}%){/snippet}
         <Slider bind:value={volume} min={0} max={100} step={1} width="16rem" />

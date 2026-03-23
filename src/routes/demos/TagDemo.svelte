@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Inline from "$lib/layout/Inline.svelte";
+  import Stack from "$lib/layout/Stack.svelte";
   import Tag from "$lib/misc/Tag.svelte";
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
@@ -110,17 +112,19 @@
     <h3>Status Tags</h3>
     <p>Use tags to display status information:</p>
     <Code
-      code={`<Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
+      code={`<Inline>
+  <Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
   ✓ Active
-</Tag>
-<Tag --tag-bg="var(--material-color-orange-600)" --tag-fg="white">
+  </Tag>
+  <Tag --tag-bg="var(--material-color-orange-600)" --tag-fg="white">
   ⚠ Pending
-</Tag>
-<Tag --tag-bg="var(--material-color-grey-600)" --tag-fg="white">
+  </Tag>
+  <Tag --tag-bg="var(--material-color-grey-600)" --tag-fg="white">
   ✕ Inactive
-</Tag>`}
+</Tag>
+</Inline>`}
     />
-    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+    <Inline>
       <Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
         ✓ Active
       </Tag>
@@ -130,36 +134,32 @@
       <Tag --tag-bg="var(--material-color-grey-600)" --tag-fg="white">
         ✕ Inactive
       </Tag>
-    </div>
+    </Inline>
 
     <h3>Tags in Context</h3>
     <p>Tags work well alongside other content:</p>
     <Code
-      code={`<div>
+      code={`<Stack>
   <strong>Article: Introduction to Web Components</strong>
-  <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+  <Inline>
     <Tag>Web Components</Tag>
     <Tag>JavaScript</Tag>
     <Tag>Tutorial</Tag>
-  </div>
-</div>`}
+  </Inline>
+</Stack>`}
     />
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      <div>
+    <Stack>
+      <Stack>
         <strong>Article: Introduction to Web Components</strong>
-        <div
-          style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;"
-        >
+        <Inline>
           <Tag>Web Components</Tag>
           <Tag>JavaScript</Tag>
           <Tag>Tutorial</Tag>
-        </div>
-      </div>
-      <div>
+        </Inline>
+      </Stack>
+      <Stack>
         <strong>Issue: Fix responsive layout on mobile</strong>
-        <div
-          style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;"
-        >
+        <Inline>
           <Tag
             --tag-bg="var(--material-color-red-100)"
             --tag-fg="var(--material-color-red-900)"
@@ -172,8 +172,8 @@
           >
             Mobile
           </Tag>
-        </div>
-      </div>
-    </div>
+        </Inline>
+      </Stack>
+    </Stack>
   </TextLayout>
 </CssVariableDemo>

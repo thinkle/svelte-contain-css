@@ -161,7 +161,7 @@
 />
 
 <Container border padding="1rem" margin="1rem 0">
-  <Stack gap="1rem">
+  <Stack>
     <TextLayout>
       <p>
         The outer container here is just visual framing. The shared form
