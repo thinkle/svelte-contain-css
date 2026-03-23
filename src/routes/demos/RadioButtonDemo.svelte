@@ -116,6 +116,7 @@
   </TextLayout>
 
   <DemoWithCode
+    defaultTab="split"
     code={`<RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
 <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
 <RadioButton value="onion" bind:group={val}>Onion</RadioButton>`}
