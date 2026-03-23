@@ -14,7 +14,7 @@
     styleSource?: string;
     language?: string;
     summary?: string;
-    open?: boolean;
+    defaultTab?: "demo" | "source" | "split";
     width?: string | null;
     codeWidth?: string | null;
     bg?: string | null;
@@ -25,6 +25,8 @@
     padding?: string | null;
     gap?: string | null;
     heading?: Snippet;
+    blurb?: Snippet;
+    inputArea?: Snippet;
     children?: Snippet;
   };
 
@@ -35,7 +37,7 @@
     styleSource = "",
     language = "html",
     summary = "See Code",
-    open = false,
+    defaultTab = "demo",
     width = null,
     codeWidth = null,
     bg = null,
@@ -46,6 +48,8 @@
     padding = null,
     gap = null,
     heading,
+    blurb,
+    inputArea,
     children,
   }: Props = $props();
 
@@ -70,7 +74,6 @@
           .join("\n\n"),
   );
   const hasSource = $derived(Boolean(resolvedCode.trim().length));
-  let activeTab = $state(open ? "source" : "demo");
   const tabItems = $derived(
     hasSource
       ? [
@@ -80,13 +83,22 @@
         ]
       : [{ label: "Demo", value: "demo" }],
   );
+  const resolvedDefaultTab = $derived(
+    hasSource && ["demo", "source", "split"].includes(defaultTab)
+      ? defaultTab
+      : "demo",
+  );
+
+  let activeTab = $state(resolvedDefaultTab);
 
   $effect(() => {
-    if (!hasSource && activeTab !== "demo") {
+    if (!hasSource) {
       activeTab = "demo";
+      return;
     }
-    if (hasSource && !["demo", "source", "split"].includes(activeTab)) {
-      activeTab = open ? "source" : "demo";
+
+    if (!["demo", "source", "split"].includes(activeTab)) {
+      activeTab = resolvedDefaultTab;
     }
   });
 
@@ -128,7 +140,19 @@
         </TextLayout>
       </div>
     {/if}
+    {#if blurb}
+      <div class="demo-blurb">
+        <TextLayout>
+          {@render blurb()}
+        </TextLayout>
+      </div>
+    {/if}
     <div class="demo-body">
+      {#if inputArea}
+        <div class="demo-input-area">
+          {@render inputArea()}
+        </div>
+      {/if}
       <TabBar
         items={tabItems}
         active={activeTab}
@@ -202,10 +226,33 @@
     min-width: 0;
   }
 
+  .demo-blurb {
+    min-width: 0;
+  }
+
   .demo-body {
     min-width: 0;
     display: grid;
     gap: var(--space-md);
+  }
+
+  .demo-input-area {
+    box-sizing: border-box;
+    display: grid;
+    gap: var(--space-sm, 0.5rem);
+    padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
+    border: var(
+      --demo-with-code-input-border,
+      1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent)
+    );
+    border-radius: var(
+      --demo-with-code-input-radius,
+      var(--border-radius, 8px)
+    );
+    background: var(
+      --demo-with-code-input-bg,
+      color-mix(in srgb, var(--demo-with-code-bg, transparent) 82%, white 18%)
+    );
   }
 
   .tab-panel {

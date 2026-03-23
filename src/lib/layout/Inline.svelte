@@ -5,7 +5,8 @@
   import { injectVars } from "$lib/util";
 
   type Props = {
-    expand?: boolean;
+    fill?: boolean;
+    stretch?: boolean;
     split?: boolean;
     justify?: string | null;
     align?: string | null;
@@ -16,7 +17,8 @@
     HTMLAttributes<HTMLDivElement>;
 
   let {
-    expand = false,
+    fill = false,
+    stretch = false,
     split = false,
     justify = null,
     align = null,
@@ -39,7 +41,7 @@
   );
 </script>
 
-<div class="inline" class:expand class:split {style} {...elementProps}>
+<div class="inline" class:fill class:stretch class:split {style} {...elementProps}>
   {@render children?.()}
 </div>
 
@@ -61,8 +63,12 @@
     min-width: 0;
   }
 
-  .inline.expand {
+  .inline.fill {
     width: 100%;
+  }
+
+  .inline.stretch {
+    align-self: stretch;
   }
 
   .inline.split {

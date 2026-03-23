@@ -5,8 +5,8 @@
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Tag from "$lib/misc/Tag.svelte";
   import Container from "$lib/layout/Container.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
 </script>
 
 <Container>
@@ -17,41 +17,31 @@
       when you want a flex row with wrapping, gap, and optional split spacing
       without reaching for ad hoc inline styles.
     </p>
+    <p>
+      <code>fill</code> makes an Inline span the available row width.
+      <code>stretch</code> makes it stretch across the parent cross-axis.
+    </p>
   </TextLayout>
 
   <h3>Simple grouping</h3>
-  <Inline>
-    <Tag success>Ready</Tag>
-    <Tag info>Pilot</Tag>
-    <Tag warning>Needs Review</Tag>
-  </Inline>
-
-  <Code
+  <DemoWithCode
     code={`<Inline>
   <Tag success>Ready</Tag>
   <Tag info>Pilot</Tag>
   <Tag warning>Needs Review</Tag>
 </Inline>`}
-  />
+  >
+    <Inline>
+      <Tag success>Ready</Tag>
+      <Tag info>Pilot</Tag>
+      <Tag warning>Needs Review</Tag>
+    </Inline>
+  </DemoWithCode>
 
   <h3>Inside a Bar</h3>
-  <Bar>
-    <Inline expand split>
-      <Inline>
-        <strong>Workspace</strong>
-        <span>Launch plan</span>
-      </Inline>
-      <Inline justify="flex-end">
-        <Button secondary>Share</Button>
-        <Button primary>Publish</Button>
-        <MiniButton aria-label="More actions">⋯</MiniButton>
-      </Inline>
-    </Inline>
-  </Bar>
-
-  <Code
+  <DemoWithCode
     code={`<Bar>
-  <Inline expand split>
+  <Inline fill split>
     <Inline>
       <strong>Workspace</strong>
       <span>Launch plan</span>
@@ -63,5 +53,19 @@
     </Inline>
   </Inline>
 </Bar>`}
-  />
+  >
+    <Bar>
+      <Inline fill split>
+        <Inline>
+          <strong>Workspace</strong>
+          <span>Launch plan</span>
+        </Inline>
+        <Inline justify="flex-end">
+          <Button secondary>Share</Button>
+          <Button primary>Publish</Button>
+          <MiniButton aria-label="More actions">⋯</MiniButton>
+        </Inline>
+      </Inline>
+    </Bar>
+  </DemoWithCode>
 </Container>

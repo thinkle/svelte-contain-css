@@ -131,7 +131,7 @@
 <Container --container-border="1px solid #ccc">
   <h3>Example</h3>
   <Bar --bar-bg={barBG} --bar-fg={barFG}>
-    <Inline expand split>
+    <Inline fill split>
       <Inline>
         <div>Left</div>
         <div>Center</div>
@@ -150,7 +150,7 @@
     --bar-bg="${barBG}" 
     --bar-fg="${barFG}"
     >
-    <Inline expand split>
+    <Inline fill split>
       <Inline>
         <div>Left</div>
         <div>Center</div>

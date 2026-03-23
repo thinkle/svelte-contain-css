@@ -5,7 +5,9 @@
   import { injectVars } from "$lib/util";
 
   type Props = {
-    expand?: boolean;
+    fill?: boolean;
+    stretch?: boolean;
+    split?: boolean;
     justify?: string | null;
     align?: string | null;
     gap?: string | null;
@@ -14,7 +16,9 @@
     HTMLAttributes<HTMLDivElement>;
 
   let {
-    expand = false,
+    fill = false,
+    stretch = false,
+    split = false,
     justify = null,
     align = null,
     gap = null,
@@ -27,15 +31,20 @@
   } & Record<string, unknown>;
 
   const style = $derived(
-    injectVars(
-      { justify, align, gap, ...elementProps },
-      "stack",
-      ["bg", "fg", "padding", "width", "height", "gap", "justify", "align"],
-    ) + (inlineStyle ?? ""),
+    injectVars({ justify, align, gap, ...elementProps }, "stack", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "gap",
+      "justify",
+      "align",
+    ]) + (inlineStyle ?? ""),
   );
 </script>
 
-<div class="stack" class:expand {style} {...elementProps}>
+<div class="stack" class:fill class:stretch class:split {style} {...elementProps}>
   {@render children?.()}
 </div>
 
@@ -56,7 +65,22 @@
     min-width: 0;
   }
 
-  .stack.expand {
+  .stack > :global(*) {
+    /* Spacing done by gap/flex, so we don't
+    want margins on direct children */
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+  }
+
+  .stack.fill {
     height: 100%;
+  }
+
+  .stack.stretch {
+    align-self: stretch;
+  }
+
+  .stack.split {
+    justify-content: var(--stack-split-justify, space-between);
   }
 </style>
