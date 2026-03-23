@@ -1,7 +1,7 @@
 <script lang="ts">
   import RadioButton from "$lib/controls/RadioButton.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import type { CSSVariable } from "./types";
 
@@ -115,15 +115,20 @@
     <p>Customize radio button styling with CSS variables.</p>
   </TextLayout>
 
-  <RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
-  <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
-  <RadioButton value="onion" bind:group={val}>Onion</RadioButton>
-
-  <p>Selected: {val}</p>
-
-  <Code
+  <DemoWithCode
     code={`<RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
 <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
 <RadioButton value="onion" bind:group={val}>Onion</RadioButton>`}
-  />
+  >
+    {#snippet header()}
+      <h3>Radio group</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Use <code>bind:group</code> when only one option in the set can be selected.</p>
+    {/snippet}
+    <RadioButton value="lettuce" bind:group={val}>Lettuce</RadioButton>
+    <RadioButton value="tomato" bind:group={val}>Tomato</RadioButton>
+    <RadioButton value="onion" bind:group={val}>Onion</RadioButton>
+    <p>Selected: {val}</p>
+  </DemoWithCode>
 </CssVariableDemo>

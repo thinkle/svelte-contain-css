@@ -2,9 +2,9 @@
   import Inline from "$lib/layout/Inline.svelte";
   import Stack from "$lib/layout/Stack.svelte";
   import Tag from "$lib/misc/Tag.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   let shownTags = $state(["A", "B", "C", "D", "E"]);
   let colors = [
     "var(--material-color-red-500)",
@@ -30,16 +30,21 @@
       Tags are small, inline labels used to categorize or identify content. They
       can display topics, categories, statuses, or metadata in a compact format.
     </p>
+  </TextLayout>
 
-    <h3>Basic Tags</h3>
-    <p>Simple tags with default styling:</p>
-    <Code
-      code={`
+  <DemoWithCode
+    code={`
 <Tag>JavaScript</Tag>
 <Tag>React</Tag>
 <Tag>CSS</Tag>
       `}
-    />
+  >
+    {#snippet header()}
+      <h3>Basic tags</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Simple tags with default styling.</p>
+    {/snippet}
     <p>
       <Tag>JavaScript</Tag>
       <Tag>React</Tag>
@@ -47,17 +52,21 @@
       <Tag>TypeScript</Tag>
       <Tag>Svelte</Tag>
     </p>
+  </DemoWithCode>
 
-    <h3>Closable Tags</h3>
-    <p>
-      Just provide an <code>onclose</code> prop if you want the tags to display with
-      a close button.
-    </p>
-    <Code
-      code={`
+  <DemoWithCode
+    code={`
 <Tag onclose={myCloseHandler}>Removable Tag</Tag>
       `}
-    />
+  >
+    {#snippet header()}
+      <h3>Closable tags</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Provide an <code>onclose</code> prop to add a dismiss affordance.
+      </p>
+    {/snippet}
     <p>
       {#each shownTags as tag, i (tag)}
         <Tag
@@ -69,11 +78,10 @@
         >
       {/each}
     </p>
+  </DemoWithCode>
 
-    <h3>Tags with Custom Styling</h3>
-    <p>Override colors and spacing with CSS variables:</p>
-    <Code
-      code={`
+  <DemoWithCode
+    code={`
 <Tag --tag-bg="var(--material-color-red-100)" --tag-fg="var(--material-color-red-900)">
   Bug
 </Tag>
@@ -81,7 +89,13 @@
   Feature
 </Tag>
       `}
-    />
+  >
+    {#snippet header()}
+      <h3>Custom styling</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Override colors and spacing with CSS variables.</p>
+    {/snippet}
     <p>
       <Tag
         --tag-bg="var(--material-color-red-100)"
@@ -108,11 +122,10 @@
         Documentation
       </Tag>
     </p>
+  </DemoWithCode>
 
-    <h3>Status Tags</h3>
-    <p>Use tags to display status information:</p>
-    <Code
-      code={`<Inline>
+  <DemoWithCode
+    code={`<Inline>
   <Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
   ✓ Active
   </Tag>
@@ -123,7 +136,13 @@
   ✕ Inactive
 </Tag>
 </Inline>`}
-    />
+  >
+    {#snippet header()}
+      <h3>Status tags</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Use tags to display status information inline with other UI.</p>
+    {/snippet}
     <Inline>
       <Tag --tag-bg="var(--material-color-green-600)" --tag-fg="white">
         ✓ Active
@@ -135,11 +154,10 @@
         ✕ Inactive
       </Tag>
     </Inline>
+  </DemoWithCode>
 
-    <h3>Tags in Context</h3>
-    <p>Tags work well alongside other content:</p>
-    <Code
-      code={`<Stack>
+  <DemoWithCode
+    code={`<Stack>
   <strong>Article: Introduction to Web Components</strong>
   <Inline>
     <Tag>Web Components</Tag>
@@ -147,7 +165,13 @@
     <Tag>Tutorial</Tag>
   </Inline>
 </Stack>`}
-    />
+  >
+    {#snippet header()}
+      <h3>Tags in context</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Tags work well alongside titles, issue metadata, and article labels.</p>
+    {/snippet}
     <Stack>
       <Stack>
         <strong>Article: Introduction to Web Components</strong>
@@ -175,5 +199,5 @@
         </Inline>
       </Stack>
     </Stack>
-  </TextLayout>
+  </DemoWithCode>
 </CssVariableDemo>

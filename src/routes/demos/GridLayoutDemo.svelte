@@ -2,9 +2,9 @@
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import Card from "$lib/Card.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import type { CSSVariable } from "./types";
 
   let cssVariables: CSSVariable[] = [
@@ -41,43 +41,50 @@
       Tiles already have a default width, so the simplest version is just
       <code>&lt;GridLayout tile&gt;</code>:
     </p>
-
-    <Code
-      code={`<GridLayout tile>
-  <Tile>Item 1</Tile>
-  <Tile>Item 2</Tile>
-  <Tile>Item 3</Tile>
-  <Tile>Item 4</Tile>
-</GridLayout>`}
-    />
   </TextLayout>
-  <br />
-  <GridLayout tile>
-    <Tile>
-      <h3>Tile 1</h3>
-      <p>First tile in the grid</p>
-    </Tile>
-    <Tile>
-      <h3>Tile 2</h3>
-      <p>Second tile in the grid</p>
-    </Tile>
-    <Tile>
-      <h3>Tile 3</h3>
-      <p>Third tile in the grid</p>
-    </Tile>
-    <Tile>
-      <h3>Tile 4</h3>
-      <p>Fourth tile in the grid</p>
-    </Tile>
-    <Tile>
-      <h3>Tile 5</h3>
-      <p>Fifth tile in the grid</p>
-    </Tile>
-    <Tile>
-      <h3>Tile 6</h3>
-      <p>Sixth tile in the grid</p>
-    </Tile>
-  </GridLayout>
+  <DemoWithCode
+    code={`<GridLayout tile>
+  <Tile>
+    <h3>Tile 1</h3>
+    <p>First tile in the grid</p>
+  </Tile>
+  <Tile>
+    <h3>Tile 2</h3>
+    <p>Second tile in the grid</p>
+  </Tile>
+  <Tile>
+    <h3>Tile 3</h3>
+    <p>Third tile in the grid</p>
+  </Tile>
+</GridLayout>`}
+  >
+    <GridLayout tile>
+      <Tile>
+        <h3>Tile 1</h3>
+        <p>First tile in the grid</p>
+      </Tile>
+      <Tile>
+        <h3>Tile 2</h3>
+        <p>Second tile in the grid</p>
+      </Tile>
+      <Tile>
+        <h3>Tile 3</h3>
+        <p>Third tile in the grid</p>
+      </Tile>
+      <Tile>
+        <h3>Tile 4</h3>
+        <p>Fourth tile in the grid</p>
+      </Tile>
+      <Tile>
+        <h3>Tile 5</h3>
+        <p>Fifth tile in the grid</p>
+      </Tile>
+      <Tile>
+        <h3>Tile 6</h3>
+        <p>Sixth tile in the grid</p>
+      </Tile>
+    </GridLayout>
+  </DemoWithCode>
   <TextLayout>
     <h2>Grid with Cards</h2>
 
@@ -86,47 +93,47 @@
       default card width:
     </p>
 
-    <Code
-      code={`<GridLayout card>
-  <Card>
-    {#snippet header()}
-      <div>Card 1</div>
-    {/snippet}
-    <p>Card content</p>
-  </Card>
-  <Card>
-    {#snippet header()}
-      <div>Card 2</div>
-    {/snippet}
-    <p>Card content</p>
-  </Card>
-</GridLayout>`}
-    />
-
     <p>
       If you need a nonstandard layout, you can still override the item width
       directly with <code>--item-width</code>.
     </p>
   </TextLayout>
-  <GridLayout card>
-    <Card>
-      {#snippet header()}
-        <div>Card 1</div>
-      {/snippet}
-      <p>This is a card in a grid layout.</p>
-      <p>Cards automatically size themselves.</p>
-    </Card>
-    <Card>
-      {#snippet header()}
-        <div>Card 2</div>
-      {/snippet}
-      <p>GridLayout centers all items.</p>
-    </Card>
-    <Card>
-      {#snippet header()}
-        <div>Card 3</div>
-      {/snippet}
-      <p>Items wrap to new lines as needed.</p>
-    </Card>
-  </GridLayout>
+  <DemoWithCode
+    code={`<GridLayout card>
+  <Card>
+    {#snippet header()}
+      <div>Card 1</div>
+    {/snippet}
+    <p>This is a card in a grid layout.</p>
+  </Card>
+  <Card>
+    {#snippet header()}
+      <div>Card 2</div>
+    {/snippet}
+    <p>GridLayout centers all items.</p>
+  </Card>
+</GridLayout>`}
+  >
+    <GridLayout card>
+      <Card>
+        {#snippet header()}
+          <div>Card 1</div>
+        {/snippet}
+        <p>This is a card in a grid layout.</p>
+        <p>Cards automatically size themselves.</p>
+      </Card>
+      <Card>
+        {#snippet header()}
+          <div>Card 2</div>
+        {/snippet}
+        <p>GridLayout centers all items.</p>
+      </Card>
+      <Card>
+        {#snippet header()}
+          <div>Card 3</div>
+        {/snippet}
+        <p>Items wrap to new lines as needed.</p>
+      </Card>
+    </GridLayout>
+  </DemoWithCode>
 </CssVariableDemo>

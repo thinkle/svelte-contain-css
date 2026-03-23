@@ -2,9 +2,9 @@
   import Bar from "$lib/layout/Bar.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Container from "$lib/layout/Container.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import Inline from "$lib/layout/Inline.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import CssVariables from "./CssVariables.svelte";
   import type { CSSVariable } from "./types";
   import CssWrapper from "./CssWrapper.svelte";
@@ -119,51 +119,61 @@
 <TextLayout>
   <h2>Bar</h2>
   <p>
-    The bar component is a simple flex container that can be used for menu bars,
-    nav bars, footers, headers and more.
+    Bar is a horizontal container for headers, toolbars, nav rows, and footers.
+    It lays out its direct children in a single row and handles the common
+    "content on the left, actions on the right" pattern out of the box.
   </p>
   <p>
-    By default, the bar automatically spaces items out, but you can adjust that
-    behavior either by adding left or right margins to children or by changing
-    the CSS variables that control the justification on the flex container.
+    If you want to group several related items on one side of the Bar, use
+    <code>&lt;Inline&gt;</code> inside it as a convenience helper.
   </p>
 </TextLayout>
 <Container --container-border="1px solid #ccc">
-  <h3>Example</h3>
-  <Bar --bar-bg={barBG} --bar-fg={barFG}>
-    <Inline fill split>
+  <DemoWithCode
+    code={`<Bar --bar-bg="${barBG}" --bar-fg="${barFG}">
+  <h3>My App</h3>
+  <Button secondary>Action</Button>
+</Bar>
+<div>More content after the bar...</div>`}
+  >
+    {#snippet header()}
+      <h3>Basic Bar</h3>
+    {/snippet}
+    <Bar --bar-bg={barBG} --bar-fg={barFG}>
+      <h3>My App</h3>
+      <Button secondary>Action</Button>
+    </Bar>
+    <div>More content after the bar...</div>
+  </DemoWithCode>
+
+  <DemoWithCode
+    code={`<Bar>
+  <h1>My App</h1>
+  <Inline>
+    <Button secondary>Share</Button>
+    <Button primary>Publish</Button>
+    <Button>More</Button>
+  </Inline>
+</Bar>`}
+  >
+    {#snippet header()}
+      <h3>Grouped Actions</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Use <code>&lt;Inline&gt;</code> when several related controls should stay grouped
+        on one side of the bar.
+      </p>
+    {/snippet}
+    <Bar>
+      <h1>My App</h1>
       <Inline>
-        <div>Left</div>
-        <div>Center</div>
+        <Button secondary>Share</Button>
+        <Button primary>Publish</Button>
+        <Button>More</Button>
       </Inline>
-      <Inline justify="flex-end">
-        <Button secondary>Action</Button>
-        <div>Right</div>
-      </Inline>
-    </Inline>
-  </Bar>
-  <div>More content after the bar...</div>
-  <h3>Code</h3>
-  <Code
-    code={`
-  <Bar 
-    --bar-bg="${barBG}" 
-    --bar-fg="${barFG}"
-    >
-    <Inline fill split>
-      <Inline>
-        <div>Left</div>
-        <div>Center</div>
-      </Inline>
-      <Inline justify="flex-end">
-        <Button secondary>Action</Button>
-        <div>Right</div>
-      </Inline>
-    </Inline>
-  </Bar>
-  <div>More content after the bar...</div>
-  `}
-  />
+    </Bar>
+  </DemoWithCode>
 </Container>
 <Container>
   <CssWrapper variables={cssValues}>

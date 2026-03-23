@@ -24,6 +24,7 @@
     shadow?: string | null;
     padding?: string | null;
     gap?: string | null;
+    header?: Snippet;
     heading?: Snippet;
     blurb?: Snippet;
     inputArea?: Snippet;
@@ -47,6 +48,7 @@
     shadow = null,
     padding = null,
     gap = null,
+    header,
     heading,
     blurb,
     inputArea,
@@ -133,10 +135,10 @@
 
 <Container margin="0" maxWidth="none" height="auto" padding="0">
   <div class="demo-with-code" {style}>
-    {#if heading}
+    {#if header || heading}
       <div class="demo-heading">
         <TextLayout>
-          {@render heading()}
+          {@render (header ?? heading)?.()}
         </TextLayout>
       </div>
     {/if}

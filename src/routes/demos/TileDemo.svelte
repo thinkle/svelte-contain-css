@@ -5,85 +5,152 @@
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
   import Tile from "$lib/layout/Tile.svelte";
-  import Code from "$lib/misc/Code.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
 </script>
 
 <Container>
-  <h2>Tiles</h2>
-  <p>Tiles are flat, square containers that hold content.</p>
-  <p>
-    They can be selectable or clickable to be used as buttons or checkboxes.
-  </p>
-  <h2>Basic Tile</h2>
-  <Code
+  <TextLayout>
+    <h2>Tiles</h2>
+    <p>
+      Tiles are flat containers for dense content. They can be static,
+      selectable, or interactive.
+    </p>
+  </TextLayout>
+
+  <DemoWithCode
     code={`<Tile>
   <h3>Basic Tile</h3>
   <p>Just a basic tile.</p>
-</Tile>`}
-  />
+</Tile>
 
-  <h2>Selectable Tile</h2>
-  <p>A selectable tile acts like a checkbox - click to toggle selection.</p>
-  <Code
-    code={`<Tile selectable>
+<Tile selectable>
   <h3>Selectable Tile</h3>
   <p>Click to toggle selection.</p>
-</Tile>`}
-  />
+</Tile>
 
-  <h2>Interactive Tile</h2>
-  <p>An interactive tile acts like a button - it triggers an action on click.</p>
-  <Code
-    code={`<Tile interactive onclick={() => alert("Tile clicked!")}>
+<Tile interactive onclick={() => alert("Tile clicked!")}>
   <h3>Interactive Tile</h3>
   <p>Click to trigger an action.</p>
 </Tile>`}
-  />
-
-  <h2>Tiles in a Grid</h2>
-  <GridLayout>
+  >
+    {#snippet header()}
+      <h2>Basic Tile States</h2>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Show the same tile with static, selectable, and interactive behavior.</p>
+    {/snippet}
     <Tile>
       <h3>Basic Tile</h3>
       <p>Just a basic tile.</p>
     </Tile>
+
     <Tile selectable>
       <h3>Selectable Tile</h3>
-      <p>Just a selectable tile.</p>
+      <p>Click to toggle selection.</p>
     </Tile>
+
     <Tile interactive onclick={() => alert("Tile clicked!")}>
       <h3>Interactive Tile</h3>
-      <p>Just an interactive tile.</p>
+      <p>Click to trigger an action.</p>
     </Tile>
-  </GridLayout>
+  </DemoWithCode>
 
-  <h2>Tiles in cards</h2>
-  <Card>
+  <DemoWithCode
+    code={`<GridLayout>
+  <Tile>
+    <h3>Basic Tile</h3>
+    <p>Just a basic tile.</p>
+  </Tile>
+  <Tile selectable>
+    <h3>Selectable Tile</h3>
+    <p>Just a selectable tile.</p>
+  </Tile>
+  <Tile interactive onclick={() => alert("Tile clicked!")}>
+    <h3>Interactive Tile</h3>
+    <p>Just an interactive tile.</p>
+  </Tile>
+</GridLayout>`}
+  >
     {#snippet header()}
-      <h3>Card</h3>
+      <h2>Tiles in a Grid</h2>
     {/snippet}
-    <Tile>One Tile</Tile>
-    <Tile>Two Tile</Tile>
-  </Card>
-  <h2>Tiles in a Split Pane</h2>
-  <p>Slide the pane to see responsive tiles at work</p>
-  <SplitPane leftWidth="3fr">
-    {#snippet left()}
-      <div>
+    <GridLayout>
+      <Tile>
+        <h3>Basic Tile</h3>
+        <p>Just a basic tile.</p>
+      </Tile>
+      <Tile selectable>
+        <h3>Selectable Tile</h3>
+        <p>Just a selectable tile.</p>
+      </Tile>
+      <Tile interactive onclick={() => alert("Tile clicked!")}>
+        <h3>Interactive Tile</h3>
+        <p>Just an interactive tile.</p>
+      </Tile>
+    </GridLayout>
+  </DemoWithCode>
+
+  <DemoWithCode
+    code={`<Card>
+  {#snippet header()}
+    <h3>Card</h3>
+  {/snippet}
+  <Tile>One Tile</Tile>
+  <Tile>Two Tile</Tile>
+</Card>`}
+  >
+    {#snippet header()}
+      <h2>Tiles in Cards</h2>
+    {/snippet}
+    <Card>
+      {#snippet header()}
+        <h3>Card</h3>
+      {/snippet}
+      <Tile>One Tile</Tile>
+      <Tile>Two Tile</Tile>
+    </Card>
+  </DemoWithCode>
+
+  <DemoWithCode
+    code={`<SplitPane leftWidth="3fr">
+  {#snippet left()}
+    <Tile>
+      <h3>Tiles on my Left</h3>
+      <p>Look, a tile!</p>
+      <Checkbox>Check me</Checkbox>
+      <Checkbox>And me!</Checkbox>
+    </Tile>
+  {/snippet}
+  {#snippet right()}
+    <Tile>
+      <h3>Tiles on my right</h3>
+      <p>Look, a tile!</p>
+    </Tile>
+  {/snippet}
+</SplitPane>`}
+  >
+    {#snippet header()}
+      <h2>Tiles in a Split Pane</h2>
+    {/snippet}
+    {#snippet blurb()}
+      <p>Use a split pane when one side should stay visible as the layout changes.</p>
+    {/snippet}
+    <SplitPane leftWidth="3fr">
+      {#snippet left()}
         <Tile>
           <h3>Tiles on my Left</h3>
           <p>Look, a tile!</p>
           <Checkbox>Check me</Checkbox>
           <Checkbox>And me!</Checkbox>
         </Tile>
-      </div>
-    {/snippet}
-    {#snippet right()}
-      <div>
+      {/snippet}
+      {#snippet right()}
         <Tile>
           <h3>Tiles on my right</h3>
           <p>Look, a tile!</p>
         </Tile>
-      </div>
-    {/snippet}
-  </SplitPane>
+      {/snippet}
+    </SplitPane>
+  </DemoWithCode>
 </Container>

@@ -1,12 +1,15 @@
 <script lang="ts">
   import CssWrapper from "./CssWrapper.svelte";
   import CssVariables from "./CssVariables.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
   import TabBar from "$lib/layout/TabBar.svelte";
   import Container from "$lib/layout/Container.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import type { CSSVariable } from "./types";
   let active = $state("TabItem");
+  let tabItemExample = $state("states");
+  let tabBarExample = $state("bar");
+  let containerExample = $state("details");
   let items = [
     { label: "TabItem", value: "TabItem" },
     { label: "TabBar", value: "TabBar" },
@@ -95,93 +98,142 @@
   >
 
   {#if active == "TabItem"}
-    <h3>TabItem</h3>
-    <p>TabItem is basically syntactic sugar for a special button.</p>
-    <p>We provide an active= property to set it to active or not.</p>
-    <p>
-      TabItem then overrides some of the button variables with tab variables
-      which have their own defaults, specifically:
-    </p>
-    <ul>
-      <li>
-        Button radius (defaults to rounded tops)
-        <ul>
-          <li>tab-border-bottom-right-radius</li>
-          <li>tab-border-top-right-radius</li>
-          <li>tab-border-bottom-left-radius</li>
-          <li>tab-border-top-left-radius</li>
-        </ul>
-      </li>
-      <li>
-        Button margin (default to 0 so we snuggle against a bar).
-        <br />tab-margin
-      </li>
-    </ul>
-    <Code
-      code={`<TabItem active>TabItem</TabItem>
-<TabItem>TabBar</TabItem>
-<TabItem>Containers & Tabs</TabItem>
-<TabItem>Overrides</TabItem>      `}
-    />
+    <DemoWithCode
+      code={`<TabBar>
+  <TabItem>Overview</TabItem>
+  <TabItem active>States</TabItem>
+  <TabItem>Layout</TabItem>
+  <TabItem>Tokens</TabItem>
+</TabBar>`}
+    >
+      {#snippet header()}
+        <h3>TabItem</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          <code>&lt;TabItem&gt;</code> is the tab-flavored button primitive. Use
+          <code>active</code> to mark the selected tab.
+        </p>
+        <p>
+          It inherits button behavior but swaps in tab-specific variables for radius,
+          spacing, and active styling.
+        </p>
+      {/snippet}
+      <TabBar
+        items={[
+          { label: "Overview", value: "overview" },
+          { label: "States", value: "states" },
+          { label: "Layout", value: "layout" },
+          { label: "Tokens", value: "tokens" },
+        ]}
+        active={tabItemExample}
+        onchange={(value) => {
+          tabItemExample =
+            typeof value === "string" ? value : (value?.value ?? "states");
+        }}
+      />
+    </DemoWithCode>
   {:else if active == "TabBar"}
-    <h3>TabBar</h3>
-    <p>
-      We provide a custom TabBar component which at its base is just syntactic
-      sugar for a bar with justify set to flex-start and alignment set to
-      flex-end for tabs. We also remove padding and borders for a "tab-like"
-      look.
-    </p>
-    <Code
-      code={`
+    <DemoWithCode
+      code={`<TabBar>
+  <TabItem>Foo</TabItem>
+  <TabItem active>Bar</TabItem>
+  <TabItem>Baz</TabItem>
+</TabBar>`}
+    >
+      {#snippet header()}
+        <h3>TabBar</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          <code>&lt;TabBar&gt;</code> is the container for tab controls. It provides the
+          aligned row, tab spacing, and optional sticky behavior.
+        </p>
+      {/snippet}
       <TabBar>
         <TabItem>Foo</TabItem>
         <TabItem active>Bar</TabItem>
         <TabItem>Baz</TabItem>
       </TabBar>
-      `}
-    />
-    <h2>Providing tabs as a list...</h2>
-    <p>
-      TabBar also accepts an items prop, which can be either a list of strings
-      of a list of objects with label and value props, and it will then emit a
-      "change" event which can be listened for to get the currently active tab.
-    </p>
-    <Code
-      code={`
+    </DemoWithCode>
+
+    <DemoWithCode
+      code={`<TabBar
+  items={[{ label: "Foo", value: "foo" }, { label: "Bar", value: "bar" }]}
+  active={active}
+  onchange={(value) => {
+    active = value;
+  }}
+/>`}
+    >
+      {#snippet header()}
+        <h3>Providing tabs as a list</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          You can also pass an <code>items</code> list and listen for
+          <code>onchange</code> to drive the active tab from state.
+        </p>
+      {/snippet}
       <TabBar
-        items={[{label: "Foo", value: "foo"}, {label: "Bar", value: "bar"}]}
-        {active}
+        items={[
+          { label: "Foo", value: "foo" },
+          { label: "Bar", value: "bar" },
+          { label: "Baz", value: "baz" },
+        ]}
+        active={tabBarExample}
         onchange={(value) => {
-          active = value;
+          tabBarExample = typeof value === "string" ? value : (value?.value ?? "bar");
         }}
-        />
-      `}
-    />
+      />
+    </DemoWithCode>
   {:else if active == "containers"}
-    <h3>Nesting Tabs in Containers</h3>
-    <p>
-      I recommend nestling the tab bar and content inside a
-      <code>&lt;Container&gt;</code> components. Adding a border to the container
-      and a fixed height will prevent the tabbed component from causing your page
-      to reflow when the user changes tabs.
-    </p>
-    <p>This component has the following code:</p>
-    <Code
-      code={`<Container border height="70vh">
-  <TabBar sticky .../>
+    <DemoWithCode
+      code={`<Container border height="24rem">
+  <TabBar sticky ... />
   <div>
-    <!-- Conditional logic 
-      for displaying content
-      -->
+    <!-- conditional content -->
   </div>
 </Container>`}
-    />
-
-    <p>
-      Notice that I also have included the <code>sticky</code>
-      flag, which makes the tab have an opaque background and stick to the top of
-      its container
-    </p>
+    >
+      {#snippet header()}
+        <h3>Nesting tabs in containers</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          Put the tab bar and its content inside a bordered container with a fixed
+          height to avoid page reflow when tabs switch.
+        </p>
+        <p>
+          <code>sticky</code> keeps the tab row visible and gives it an opaque
+          background while the content scrolls.
+        </p>
+      {/snippet}
+      <Container border height="24rem">
+        <TabBar
+          items={[
+            { label: "Overview", value: "overview" },
+            { label: "Details", value: "details" },
+            { label: "Settings", value: "settings" },
+          ]}
+          active={containerExample}
+          sticky
+          onchange={(value) => {
+            containerExample =
+              typeof value === "string" ? value : (value?.value ?? "details");
+          }}
+        />
+        <Container>
+          {#if containerExample === "overview"}
+            <p>Overview content stays inside the fixed-height container.</p>
+          {:else if containerExample === "details"}
+            <p>Details content can be longer without shifting the whole page.</p>
+          {:else}
+            <p>Settings content works the same way.</p>
+          {/if}
+        </Container>
+      </Container>
+    </DemoWithCode>
   {/if}
   <div class:hide={active !== "vars"}>
     <h3>Adjust variables to customize tabs</h3>

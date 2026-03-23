@@ -2,12 +2,13 @@
   import Bar from "$lib/layout/Bar.svelte";
   import Menu from "$lib/dropdowns/DropdownMenu.svelte";
   import Select from "$lib/controls/Select.svelte";
+  import Input from "$lib/controls/Input.svelte";
   import Container from "$lib/layout/Container.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Option from "$lib/controls/Option.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   let longList: string[] = [];
   let constrainedWidth = $state("80px");
   function randomWord() {
@@ -53,60 +54,67 @@
 
 <TextLayout>
   <h2>Dropdown Menus</h2>
-  <Bar>
-    <div data-testid="dropdown-left-menu">
-    <Menu>
-      {#snippet label()}
-        <span>Left Menu</span>
-      {/snippet}
-      <li><button>Foo</button></li>
-      <li><button>Bar</button></li>
-      <li><button>Baz</button></li>
-      <li><button>Bang</button></li>
-    </Menu>
-    </div>
-    <div data-testid="dropdown-long-menu">
-    <Menu>
-      {#snippet label()}
-        <span>Long Menu</span>
-      {/snippet}
-      {#each longList as item}
-        <li id="go-nowhere">
-          <a href="#go-nowhere">{item}</a>
-        </li>
-      {/each}
-    </Menu>
-    </div>
-    <div data-testid="dropdown-right-menu">
-    <Menu>
-      {#snippet label()}
-        <span>Right Menu</span>
-      {/snippet}
-      <li><button>Foo</button></li>
-      <li><button>Bar</button></li>
-      <li><button>Baz</button></li>
-      <li><button>Bang</button></li>
-    </Menu>
-    </div>
-  </Bar>
   <p>
     Our basic dropdowns work well, even if the contents are longer than the
     contents of the page (see "long menu" example).
   </p>
-  <Code
-    code={`
+</TextLayout>
+<DemoWithCode
+  code={`<Bar>
   <Menu>
     {#snippet label()}
-      <span>Menu Title</span>
+      <span>Left Menu</span>
     {/snippet}
     <li><button>Foo</button></li>
     <li><button>Bar</button></li>
     <li><button>Baz</button></li>
     <li><button>Bang</button></li>
   </Menu>
-  `}
-  />
-</TextLayout>
+  <Menu>
+    {#snippet label()}
+      <span>Long Menu</span>
+    {/snippet}
+    ...
+  </Menu>
+</Bar>`}
+>
+  <Bar>
+    <div data-testid="dropdown-left-menu">
+      <Menu>
+        {#snippet label()}
+          <span>Left Menu</span>
+        {/snippet}
+        <li><button>Foo</button></li>
+        <li><button>Bar</button></li>
+        <li><button>Baz</button></li>
+        <li><button>Bang</button></li>
+      </Menu>
+    </div>
+    <div data-testid="dropdown-long-menu">
+      <Menu>
+        {#snippet label()}
+          <span>Long Menu</span>
+        {/snippet}
+        {#each longList as item}
+          <li id="go-nowhere">
+            <a href="#go-nowhere">{item}</a>
+          </li>
+        {/each}
+      </Menu>
+    </div>
+    <div data-testid="dropdown-right-menu">
+      <Menu>
+        {#snippet label()}
+          <span>Right Menu</span>
+        {/snippet}
+        <li><button>Foo</button></li>
+        <li><button>Bar</button></li>
+        <li><button>Baz</button></li>
+        <li><button>Bang</button></li>
+      </Menu>
+    </div>
+  </Bar>
+</DemoWithCode>
 <TextLayout>
   <h2>Select</h2>
   <p>
@@ -116,36 +124,7 @@
     enough space for our custom element, we'll use a dropdown menu to render a select
     button with markup allowed internally.
   </p>
-
-  <FormItem>
-    {#snippet label()}
-      <span>Select a person:</span>
-    {/snippet}
-    <Select data-testid="person-select" bind:value={selectedPerson}>
-      {#each people as person}
-        <option value={person}>{person.label}</option>
-      {/each}
-    </Select>
-    <Button
-      onclick={() =>
-        (selectedPerson = people[Math.floor(Math.random() * people.length)])}
-      >Select Random Person</Button
-    >
-  </FormItem>
-  <p>You selected {selectedPerson.name}, aged {selectedPerson.age}!</p>
-
-  <FormItem>
-    {#snippet label()}
-      <span>Select an option:</span>
-    {/snippet}
-    <Select data-testid="styled-option-select" bind:value={val}>
-      <Option value={1}>Option A</Option>
-      <Option value={2}><b>Strong</b> B</Option>
-      <Option value={3}><em>Fancy</em> C</Option>
-      <Option value={4}><span style="color:red">Red</span> D</Option>
-    </Select>
-  </FormItem>
-  <Code
+  <DemoWithCode
     code={`
 <Select bind:value={val}>
   <option value={1}>Option A</option>
@@ -154,7 +133,36 @@
   <option value={4}><span style="color:red">Red</span> D</option>
 </Select>
   `}
-  />
+  >
+    <FormItem>
+      {#snippet label()}
+        <span>Select a person:</span>
+      {/snippet}
+      <Select data-testid="person-select" bind:value={selectedPerson}>
+        {#each people as person}
+          <option value={person}>{person.label}</option>
+        {/each}
+      </Select>
+      <Button
+        onclick={() =>
+          (selectedPerson = people[Math.floor(Math.random() * people.length)])}
+        >Select Random Person</Button
+      >
+    </FormItem>
+    <p>You selected {selectedPerson.name}, aged {selectedPerson.age}!</p>
+
+    <FormItem>
+      {#snippet label()}
+        <span>Select an option:</span>
+      {/snippet}
+      <Select data-testid="styled-option-select" bind:value={val}>
+        <Option value={1}>Option A</Option>
+        <Option value={2}><b>Strong</b> B</Option>
+        <Option value={3}><em>Fancy</em> C</Option>
+        <Option value={4}><span style="color:red">Red</span> D</Option>
+      </Select>
+    </FormItem>
+  </DemoWithCode>
   <p>
     Well look, they selected {val}
   </p>
@@ -164,18 +172,26 @@
       {#snippet label()}
         <span>Option #</span>
       {/snippet}
-      <input type="number" bind:value={val} />
+      <Input type="number" bind:value={val} />
     </FormItem>
   </div>
   <h2>Controlling width</h2>
-  <p>
-    Here it is using the --select-width variable to constrain the select size.
-    <FormItem>
-      {#snippet label()}
-        <span>--select-width</span>
-      {/snippet}
-      <input bind:value={constrainedWidth} />
-    </FormItem>
+  <p>Here it is using the --select-width variable to constrain the select size.</p>
+  <DemoWithCode
+    code={`
+<Select --select-width="${constrainedWidth}" bind:value={val}>
+  ...
+</Select>
+  `}
+  >
+    {#snippet inputArea()}
+      <FormItem>
+        {#snippet label()}
+          <span>--select-width</span>
+        {/snippet}
+        <Input bind:value={constrainedWidth} />
+      </FormItem>
+    {/snippet}
     <FormItem>
       {#snippet label()}
         <span>A narrower select:</span>
@@ -191,14 +207,7 @@
         <Option value={4}><span style="color:red">Red</span> D</Option>
       </Select>
     </FormItem>
-    <Code
-      code={`
-<Select --select-width="${constrainedWidth}" ...>
-  ...
-</Select>
-  `}
-    />
-  </p>
+  </DemoWithCode>
 
   <p>Here it is inside a full-width and regular width FormItem container.</p>
   <h3>Full Width</h3>

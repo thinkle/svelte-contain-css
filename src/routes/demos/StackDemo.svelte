@@ -50,7 +50,6 @@
     </p>
   </TextLayout>
   <DemoWithCode
-    defaultTab="split"
     code={`<Stack>
   <h3>Release Notes</h3>
   <p>Stack keeps related content in vertical rhythm.</p>  
@@ -94,7 +93,7 @@
   </Stack>
 </Inline>`}
   >
-    {#snippet heading()}
+    {#snippet header()}
       <h3><code>&lt;Stack stretch&gt;</code></h3>
     {/snippet}
     {#snippet blurb()}
@@ -157,7 +156,7 @@
   </Stack>
 </Card>`}
   >
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Using fill inside a fixed-height container</h3>
     {/snippet}
     <Card fixedHeight>

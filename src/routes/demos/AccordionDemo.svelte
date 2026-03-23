@@ -1,13 +1,10 @@
 <script lang="ts">
-  import { cssProperties } from "$lib/cssprops";
-  import Button from "$lib/controls/Button.svelte";
   import Accordion from "$lib/layout/Accordion.svelte";
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import { accordionVars } from "./cssVariableDefs";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
-  accordionVars;
+  import DemoWithCode from "./DemoWithCode.svelte";
   let highlanderMode = $state(true);
 </script>
 
@@ -23,15 +20,8 @@
       to false.
     </p>
   </TextLayout>
-  <Accordion {highlanderMode}>
-    <details>
-      <summary>Highlander Mode</summary>
-      <p>
-        When highlanderMode is true, opening one item will close any other open
-        items.
-      </p>
-      <Checkbox bind:checked={highlanderMode}>highlanderMode</Checkbox>
-    </details>
+  <DemoWithCode
+    code={`<Accordion highlanderMode={${highlanderMode}}>
     <details>
       <summary>Hello</summary>
       <h2>Thing 1</h2>
@@ -47,24 +37,27 @@
       <h2>Thing 3</h2>
       <p>This is the third thing</p>
     </details>
-  </Accordion>
-  <Code
-    code={`<Accordion>
-    <details>
+</Accordion>`}
+  >
+    {#snippet inputArea()}
+      <Checkbox bind:checked={highlanderMode}>highlanderMode</Checkbox>
+    {/snippet}
+    <Accordion {highlanderMode}>
+      <details>
         <summary>Hello</summary>
         <h2>Thing 1</h2>
         <p>This is the first thing</p>
-    </details>
-    <details>
+      </details>
+      <details>
         <summary>Goodbye</summary>
         <h2>Thing 2</h2>
         <p>This is the second thing</p>
-    </details>
-    <details>
+      </details>
+      <details>
         <summary>Goodnight</summary>
         <h2>Thing 3</h2>
         <p>This is the third thing</p>
-    </details>
-</Accordion>`}
-  />
+      </details>
+    </Accordion>
+  </DemoWithCode>
 </CssVariableDemo>

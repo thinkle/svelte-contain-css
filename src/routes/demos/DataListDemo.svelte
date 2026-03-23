@@ -193,7 +193,7 @@ ${items}
   </TextLayout>
 
   <DemoWithCode markupSource={basicListMarkup}>
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Basic Feed</h3>
       <p>
         A standard data list row with image, heading, paragraph, and a trailing
@@ -218,7 +218,7 @@ ${items}
   </DemoWithCode>
 
   <DemoWithCode markupSource={iconSizeMarkup}>
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Icon Size Variants</h3>
       <p>
         <code>iconSize</code> controls both image size and icon track width by default.
@@ -249,7 +249,7 @@ ${items}
     markupSource={responsiveTypographyMarkup}
     styleSource={responsiveTypographyStyle}
   >
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Responsive Typography (App CSS)</h3>
       <p>
         Set typography variables with container queries in your app/theme so the
@@ -285,7 +285,7 @@ ${items}
   </DemoWithCode>
 
   <DemoWithCode markupSource={interactiveRowsMarkup}>
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Interactive Rows</h3>
       <p>
         Use <code>interactive</code> when the entire row should behave like one
@@ -320,7 +320,7 @@ ${items}
   </DemoWithCode>
 
   <DemoWithCode markupSource={selectableRowsMarkup}>
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Selectable Rows</h3>
       <p>
         Use <code>selectable</code> with <code>bind:checked</code> when rows
@@ -351,7 +351,7 @@ ${items}
   </DemoWithCode>
 
   <DemoWithCode markupSource={responsiveActionMarkup}>
-    {#snippet heading()}
+    {#snippet header()}
       <h3>Responsive Action Layout</h3>
       <p>
         This section focuses on how the trailing action area adapts to narrow

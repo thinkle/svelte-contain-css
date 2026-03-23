@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
 
   // Your custom library components:
 
@@ -34,70 +34,61 @@
 <CssVariableDemo variables={progressVars}>
   <TextLayout>
     <h2>Progress Demo</h2>
-    <Progress {state} value={indeterminate ? "indeterminate" : value} {max}>
-      {@html slotContent}
-    </Progress>
     <p>
       Our <code>&lt;Progress /&gt;</code> component uses a hidden native
       <code>&lt;progress&gt;</code> element for accessibility, while providing a
       fully styled track and bar for consistent, customizable visuals.
     </p>
   </TextLayout>
-
-  <!-- Use FormItem for each control -->
-
-  <!-- 1) State selection (buttons) -->
-  <FormItem>
-    {#snippet label()}State{/snippet}
-    <Stack align="flex-start">
-      <RadioButton value="uninitiated" bind:group={state}
-        >Uninitiated</RadioButton
-      >
-      <RadioButton value="inprogress" bind:group={state}
-        >In Progress</RadioButton
-      >
-      <RadioButton value="complete" bind:group={state}>Complete</RadioButton>
-    </Stack>
-  </FormItem>
-
-  <!-- 2) Value slider -->
-  <FormItem>
-    {#snippet label()}Value: {value} / {max}{/snippet}
-    <Slider min={0} {max} bind:value disabled={indeterminate} width="12rem" />
-  </FormItem>
-
-  <!-- 3) Max slider -->
-  <FormItem>
-    {#snippet label()}Max: {max}{/snippet}
-    <Slider
-      min={10}
-      max={200}
-      bind:value={max}
-      disabled={indeterminate}
-      width="12rem"
-    />
-  </FormItem>
-
-  <!-- 4) Indeterminate checkbox -->
-  <FormItem>
-    <Checkbox bind:checked={indeterminate}>Indeterminate</Checkbox>
-  </FormItem>
-  <FormItem>
-    {#snippet label()}Slot Content{/snippet}
-    <Input bind:value={slotContent} width="12rem" />
-  </FormItem>
-
-  <!-- Code snippet -->
-  <Code
-    code={`
-  <Progress
-    state="${state}"
-    ${!indeterminate ? `value={${value}}` : ""}
-    ${!indeterminate ? `max={${max}}` : ""}
+  <DemoWithCode
+    code={`<Progress
+  state="${state}"
+  value={${indeterminate ? '"indeterminate"' : value}}
+  ${indeterminate ? "" : `max={${max}}`}
+>
+  ${slotContent}
+</Progress>`}
   >
-    ${slotContent}    
-  </Progress>
-  `}
-    language="html"
-  />
+    {#snippet inputArea()}
+      <FormItem>
+        {#snippet label()}State{/snippet}
+        <Stack align="flex-start">
+          <RadioButton value="uninitiated" bind:group={state}
+            >Uninitiated</RadioButton
+          >
+          <RadioButton value="inprogress" bind:group={state}
+            >In Progress</RadioButton
+          >
+          <RadioButton value="complete" bind:group={state}>Complete</RadioButton>
+        </Stack>
+      </FormItem>
+
+      <FormItem>
+        {#snippet label()}Value: {value} / {max}{/snippet}
+        <Slider min={0} {max} bind:value disabled={indeterminate} width="12rem" />
+      </FormItem>
+
+      <FormItem>
+        {#snippet label()}Max: {max}{/snippet}
+        <Slider
+          min={10}
+          max={200}
+          bind:value={max}
+          disabled={indeterminate}
+          width="12rem"
+        />
+      </FormItem>
+
+      <FormItem>
+        <Checkbox bind:checked={indeterminate}>Indeterminate</Checkbox>
+      </FormItem>
+      <FormItem>
+        {#snippet label()}Slot Content{/snippet}
+        <Input bind:value={slotContent} width="12rem" />
+      </FormItem>
+    {/snippet}
+    <Progress {state} value={indeterminate ? "indeterminate" : value} {max}>
+      {@html slotContent}
+    </Progress>
+  </DemoWithCode>
 </CssVariableDemo>
