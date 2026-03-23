@@ -33,15 +33,28 @@
   } & Record<string, unknown>;
 
   const style = $derived(
-    injectVars(
-      { justify, align, gap, wrap, ...elementProps },
-      "inline",
-      ["bg", "fg", "padding", "width", "height", "gap", "justify", "align", "wrap"],
-    ) + (inlineStyle ?? ""),
+    injectVars({ justify, align, gap, wrap, ...elementProps }, "inline", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "gap",
+      "justify",
+      "align",
+      "wrap",
+    ]) + (inlineStyle ?? ""),
   );
 </script>
 
-<div class="inline" class:fill class:stretch class:split {style} {...elementProps}>
+<div
+  class="inline"
+  class:fill
+  class:stretch
+  class:split
+  {style}
+  {...elementProps}
+>
   {@render children?.()}
 </div>
 
@@ -49,9 +62,9 @@
   @import "$lib/sass/_mixins.scss";
 
   .inline {
-    @include color-props(inline, container);
-    @include box-props(inline, container);
-    @include typography-container-props(inline, container);
+    @include color-props(inline);
+    @include box-props(inline);
+    @include typography-container-props(inline, container, body, text);
     display: flex;
     flex-direction: row;
     flex-wrap: var(--inline-wrap, wrap);

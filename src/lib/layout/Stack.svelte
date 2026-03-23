@@ -44,7 +44,14 @@
   );
 </script>
 
-<div class="stack" class:fill class:stretch class:split {style} {...elementProps}>
+<div
+  class="stack"
+  class:fill
+  class:stretch
+  class:split
+  {style}
+  {...elementProps}
+>
   {@render children?.()}
 </div>
 
@@ -52,9 +59,9 @@
   @import "$lib/sass/_mixins.scss";
 
   .stack {
-    @include color-props(stack, container);
-    @include box-props(stack, container);
-    @include typography-container-props(stack, container);
+    @include color-props(stack);
+    @include box-props(stack);
+    @include typography-container-props(stack, container, body, text);
     display: flex;
     flex-direction: column;
     gap: var(--stack-gap, var(--gap));
