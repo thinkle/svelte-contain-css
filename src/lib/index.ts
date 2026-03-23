@@ -13,6 +13,7 @@ import Slider from "./controls/Slider.svelte";
 import TabItem from "./controls/TabItem.svelte";
 import Bar from "./layout/Bar.svelte";
 import Column from "./layout/Column.svelte";
+import ColumnContainer from "./layout/ColumnContainer.svelte";
 import Columns from "./layout/Columns.svelte";
 import Container from "./layout/Container.svelte";
 import DataList from "./layout/DataList.svelte";
@@ -23,11 +24,14 @@ import FormItem from "./layout/FormItem.svelte";
 import FormProvider from "./layout/FormProvider.svelte";
 import GridLayout from "./layout/GridLayout.svelte";
 import Hero from "./layout/Hero.svelte";
+import Inline from "./layout/Inline.svelte";
 import MenuList from "./layout/MenuList.svelte";
 import Page from "./layout/Page.svelte";
 import ResponsiveText from "./layout/ResponsiveText.svelte";
 import Row from "./layout/Row.svelte";
+import RowContainer from "./layout/RowContainer.svelte";
 import SplitPane from "./layout/SplitPane.svelte";
+import Stack from "./layout/Stack.svelte";
 import TabBar from "./layout/TabBar.svelte";
 import Tile from "./layout/Tile.svelte";
 import Code from "./misc/Code.svelte";
@@ -68,7 +72,19 @@ export {
   Select,
   Option,
 };
-export { Bar, Container, GridLayout, MenuList, Page, ResponsiveText, TabBar };
+export {
+  Bar,
+  ColumnContainer,
+  Container,
+  GridLayout,
+  Inline,
+  MenuList,
+  Page,
+  ResponsiveText,
+  RowContainer,
+  Stack,
+  TabBar,
+};
 export { TextLayout, Code, Accordion };
 export { Card, Tile, Form, FormItem, FormProvider, Fieldset };
 export { DataList, DataListItem };

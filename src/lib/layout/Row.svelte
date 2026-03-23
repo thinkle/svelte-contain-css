@@ -1,46 +1,33 @@
-<script lang="ts">
-  interface Props {
-    size?: "small" | "medium" | "large";
-    customHeight?: string | null;
-    children?: import("svelte").Snippet;
-  }
-
-  let { size = "medium", customHeight = null, children }: Props = $props();
+<script module lang="ts">
+  let warned = false;
 </script>
 
-<section
-  class="row"
-  class:small={size == "small"}
-  class:medium={size == "medium"}
-  class:large={size == "large"}
-  style:--custom-height={customHeight}
->
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import RowContainer from "./RowContainer.svelte";
+
+  type Props = {
+    size?: "small" | "medium" | "large";
+    customHeight?: string | null;
+    children?: Snippet;
+  } & HTMLAttributes<HTMLElement>;
+
+  let {
+    size = "medium",
+    customHeight = null,
+    children,
+    ...restProps
+  }: Props = $props();
+
+  if (typeof window !== "undefined" && import.meta.env.DEV && !warned) {
+    warned = true;
+    console.warn(
+      "[ContainCSS] <Row> is deprecated. Use <RowContainer> for sized lanes or <Inline> for generic horizontal layout.",
+    );
+  }
+</script>
+
+<RowContainer {size} {customHeight} {...restProps}>
   {@render children?.()}
-</section>
-
-<style lang="scss">
-  @import "$lib/sass/_mixins.scss";
-
-  .small {
-    --h: 120px;
-  }
-  .medium {
-    --h: 240px;
-  }
-  .large {
-    --h: 360px;
-  }
-
-  section {
-    display: flex;
-    flex-direction: row;
-    height: var(--custom-height, var(--h, 200px));
-    gap: var_with_fallbacks(--gap, column, container, 8px);
-    container-type: size;
-    overflow: auto;
-    align-items: flex-start;
-
-    /* Reset form label width in horizontal context */
-    --form-label-width: auto;
-  }
-</style>
+</RowContainer>

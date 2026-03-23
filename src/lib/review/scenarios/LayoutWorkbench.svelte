@@ -4,6 +4,7 @@
   import MiniButton from "$lib/controls/MiniButton.svelte";
   import Bar from "$lib/layout/Bar.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
@@ -60,7 +61,7 @@
         <h1>Layout Workbench</h1>
       </div>
 
-      <div>
+      <Inline>
         <Button
           data-audit-action="toggle-sidebar"
           aria-expanded={!hideSidebar}
@@ -69,7 +70,7 @@
           {hideSidebar ? "Show Sidebar" : "Hide Sidebar"}
         </Button>
         <MiniButton aria-label="Notifications">3</MiniButton>
-      </div>
+      </Inline>
     </Bar>
   {/snippet}
 

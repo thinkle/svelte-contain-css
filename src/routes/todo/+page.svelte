@@ -11,7 +11,7 @@
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Tile from "$lib/layout/Tile.svelte";
-  import Row from "$lib/layout/Row.svelte";
+  import RowContainer from "$lib/layout/RowContainer.svelte";
   let showThemes = $state(false);
   let tasks = $state([]);
   let newTask = $state({
@@ -64,7 +64,7 @@
     ><Button primary onclick={addTask}>Add Task to List</Button></FormItem
   >
 
-  <Row>
+  <RowContainer>
     {#each tasks as task}
       <Tile>
         <h3>{task.name}</h3>
@@ -72,5 +72,5 @@
         <span>Category: {task.category}</span>
       </Tile>
     {/each}
-  </Row>
+  </RowContainer>
 </Page>

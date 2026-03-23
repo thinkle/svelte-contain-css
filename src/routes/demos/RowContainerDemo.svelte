@@ -1,0 +1,37 @@
+<script lang="ts">
+  import RowContainer from "$lib/layout/RowContainer.svelte";
+  import Tile from "$lib/layout/Tile.svelte";
+  import Container from "$lib/layout/Container.svelte";
+  import Code from "$lib/misc/Code.svelte";
+  import TextLayout from "$lib/typography/TextLayout.svelte";
+
+  let items = [1, 2, 3, 4, 5, 6];
+</script>
+
+<Container>
+  <TextLayout>
+    <h2>RowContainer</h2>
+    <p>
+      <code>&lt;RowContainer&gt;</code> is a sized horizontal lane. Use it when
+      you want a constrained-height, horizontally scrolling container that
+      establishes a container-query context for children.
+    </p>
+  </TextLayout>
+
+  <RowContainer size="medium" --tile-width="140px">
+    {#each items as item}
+      <Tile>
+        <h3>Tile {item}</h3>
+        <p>Lane content adapts inside a sized row container.</p>
+      </Tile>
+    {/each}
+  </RowContainer>
+
+  <Code
+    code={`<RowContainer size="medium" --tile-width="140px">
+  <Tile>Tile 1</Tile>
+  <Tile>Tile 2</Tile>
+  <Tile>Tile 3</Tile>
+</RowContainer>`}
+  />
+</Container>

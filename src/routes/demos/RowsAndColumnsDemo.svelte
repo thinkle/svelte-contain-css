@@ -1,6 +1,6 @@
 <script>
-  import Row from "$lib/layout/Row.svelte";
-  import Column from "$lib/layout/Column.svelte";
+  import RowContainer from "$lib/layout/RowContainer.svelte";
+  import ColumnContainer from "$lib/layout/ColumnContainer.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Columns from "$lib/layout/Columns.svelte";
@@ -11,93 +11,101 @@
 
 <Container>
   <TextLayout>
-    <h2>Columns</h2>
+    <h2>Legacy Rows and Columns</h2>
     <p>
-      Use <code>&lt;Columns&gt;</code> and <code>&lt;Column&gt;</code> to create
-      multi-column layouts. Columns can be sized as small, medium, or large.
+      <code>&lt;Row&gt;</code> and <code>&lt;Column&gt;</code> still work, but
+      they are being replaced by clearer names:
+      <code>&lt;RowContainer&gt;</code> and
+      <code>&lt;ColumnContainer&gt;</code>.
+    </p>
+    <p>
+      The old names were easy to misuse as generic flex wrappers. The new names
+      make it clearer that these are sized container-query regions, not just
+      arbitrary layout helpers.
     </p>
     <Code
       code={`<Columns>
-  <Column size="small">
+  <ColumnContainer size="small">
     <h3>Small Column</h3>
     <Tile>Content</Tile>
-  </Column>
-  <Column size="medium">
+  </ColumnContainer>
+  <ColumnContainer size="medium">
     <h3>Medium Column</h3>
     <Tile>Content</Tile>
-  </Column>
-  <Column size="large">
+  </ColumnContainer>
+  <ColumnContainer size="large">
     <h3>Large Column</h3>
     <Tile>Content</Tile>
-  </Column>
+  </ColumnContainer>
 </Columns>`}
     />
   </TextLayout>
 
   <Columns>
-    <Column size="small" --tile-width="80px">
+    <ColumnContainer size="small" --tile-width="80px">
       <h3>Small Column</h3>
       {#each tiles as tile}
         <Tile>
           Tile {tile}
         </Tile>
       {/each}
-    </Column>
-    <Column size="medium" --tile-width="120px">
+    </ColumnContainer>
+    <ColumnContainer size="medium" --tile-width="120px">
       <h3>Medium Column</h3>
       {#each tiles as tile}
         <Tile>
           Tile {tile}
         </Tile>
       {/each}
-    </Column>
-    <Column size="large" --tile-width="180px">
+    </ColumnContainer>
+    <ColumnContainer size="large" --tile-width="180px">
       <h3>Large Column</h3>
       {#each tiles as tile}
         <Tile>
           Tile {tile}
         </Tile>
       {/each}
-    </Column>
+    </ColumnContainer>
   </Columns>
 
   <TextLayout>
-    <h2>Rows</h2>
+    <h2>RowContainer</h2>
     <p>
-      Use <code>&lt;Row&gt;</code> to create horizontal scrolling layouts. Rows
-      can also be sized as small, medium, or large.
+      Use <code>&lt;RowContainer&gt;</code> to create horizontal scrolling
+      layouts with a sized container context. Use <code>&lt;Inline&gt;</code>
+      instead for generic horizontal layout.
     </p>
     <Code
-      code={`<Row size="medium" --tile-width="120px">
+      code={`<RowContainer size="medium" --tile-width="120px">
   <Tile>Tile 1</Tile>
   <Tile>Tile 2</Tile>
   <Tile>Tile 3</Tile>
-</Row>`}
+</RowContainer>`}
     />
   </TextLayout>
 
   <h3>Small Row</h3>
-  <Row size="small" --tile-width="80px">
+  <RowContainer size="small" --tile-width="80px">
     {#each tiles as tile}
       <Tile>
         Tile {tile}
       </Tile>
     {/each}
-  </Row>
+  </RowContainer>
   <h3>Medium Row</h3>
-  <Row size="medium" --tile-width="120px">
+  <RowContainer size="medium" --tile-width="120px">
     {#each tiles as tile}
       <Tile>
         Tile {tile}
       </Tile>
     {/each}
-  </Row>
+  </RowContainer>
   <h3>Large Row</h3>
-  <Row size="large" --tile-width="160px">
+  <RowContainer size="large" --tile-width="160px">
     {#each tiles as tile}
       <Tile>
         Tile {tile}
       </Tile>
     {/each}
-  </Row>
+  </RowContainer>
 </Container>

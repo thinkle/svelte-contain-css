@@ -12,6 +12,7 @@
   import Container from "$lib/layout/Container.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Hero from "$lib/layout/Hero.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import Page from "$lib/layout/Page.svelte";
   import ResponsiveText from "$lib/layout/ResponsiveText.svelte";
   import SplitPane from "$lib/layout/SplitPane.svelte";
@@ -54,12 +55,12 @@
       status tags, and richer control states without relying on ad hoc demo
       chrome.
     </p>
-    <p>
+    <Inline>
       <Tag success>Ready</Tag>
       <Tag info>Pilot</Tag>
       <Tag warning>Needs Comms Review</Tag>
-    </p>
-    <p>
+    </Inline>
+    <Inline>
       <Button
         primary
         data-audit-action="open-dialog"
@@ -68,11 +69,11 @@
         Open Launch Brief
       </Button>
       <ButtonLink href="#launch-plan">Jump To Plan</ButtonLink>
-    </p>
+    </Inline>
   </TextLayout>
 </Hero>
 <Page data-audit-target="page">
-  {#snippet header()}<Bar borderTop="none" borderBottom="none">
+  {#snippet header()}<Bar --bar-border-top="none" --bar-border-bottom="none">
       <div><strong>Launch Studio</strong></div>
       <div>
         <DropdownMenu triggerAuditAction="open-launch-menu">

@@ -3,6 +3,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Code from "$lib/misc/Code.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariables from "./CssVariables.svelte";
   import type { CSSVariable } from "./types";
@@ -130,9 +131,16 @@
 <Container --container-border="1px solid #ccc">
   <h3>Example</h3>
   <Bar --bar-bg={barBG} --bar-fg={barFG}>
-    <div>Left</div>
-    <div>Center</div>
-    <div>Right</div>
+    <Inline expand split>
+      <Inline>
+        <div>Left</div>
+        <div>Center</div>
+      </Inline>
+      <Inline justify="flex-end">
+        <Button secondary>Action</Button>
+        <div>Right</div>
+      </Inline>
+    </Inline>
   </Bar>
   <div>More content after the bar...</div>
   <h3>Code</h3>
@@ -142,9 +150,16 @@
     --bar-bg="${barBG}" 
     --bar-fg="${barFG}"
     >
-    <div>Left</div>
-    <div>Center</div>
-    <div>Right</div>
+    <Inline expand split>
+      <Inline>
+        <div>Left</div>
+        <div>Center</div>
+      </Inline>
+      <Inline justify="flex-end">
+        <Button secondary>Action</Button>
+        <div>Right</div>
+      </Inline>
+    </Inline>
   </Bar>
   <div>More content after the bar...</div>
   `}
