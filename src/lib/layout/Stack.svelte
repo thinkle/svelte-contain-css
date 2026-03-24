@@ -8,6 +8,7 @@
     fill?: boolean;
     stretch?: boolean;
     split?: boolean;
+    center?: boolean;
     justify?: string | null;
     align?: string | null;
     gap?: string | null;
@@ -19,6 +20,7 @@
     fill = false,
     stretch = false,
     split = false,
+    center = false,
     justify = null,
     align = null,
     gap = null,
@@ -26,12 +28,14 @@
     ...restProps
   }: Props = $props();
 
+  const resolvedAlign = $derived(align ?? (center ? "center" : null));
+
   const { style: inlineStyle, ...elementProps } = restProps as {
     style?: string;
   } & Record<string, unknown>;
 
   const style = $derived(
-    injectVars({ justify, align, gap, ...elementProps }, "stack", [
+    injectVars({ justify, align: resolvedAlign, gap, ...elementProps }, "stack", [
       "bg",
       "fg",
       "padding",
@@ -59,7 +63,6 @@
   @import "$lib/sass/_mixins.scss";
 
   .stack {
-    @include color-props(stack);
     @include box-props(stack);
     @include typography-container-props(stack, container, body, text);
     display: flex;

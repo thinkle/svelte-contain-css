@@ -71,6 +71,7 @@
     border: var(--mini-button-border, button-border, none);
     display: inline-grid;
     place-content: center;
+    line-height: 1;
     flex-shrink: 0; /* Don't shrink any more */
   }
   button.primary {

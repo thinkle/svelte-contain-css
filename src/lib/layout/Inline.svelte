@@ -62,12 +62,11 @@
   @import "$lib/sass/_mixins.scss";
 
   .inline {
-    @include color-props(inline);
     @include box-props(inline);
     @include typography-container-props(inline, container, body, text);
     display: flex;
     flex-direction: row;
-    flex-wrap: var(--inline-wrap, wrap);
+    flex-wrap: var(--inline-wrap, nowrap);
     gap: var(--inline-gap, var(--gap));
     justify-content: var(--inline-justify, flex-start);
     align-items: var(--inline-align, center);

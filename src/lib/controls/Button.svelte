@@ -32,7 +32,7 @@
     injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"]),
   );
 
-  const iconSlotted = $derived(Boolean(icon));
+
 </script>
 
 <button
@@ -43,13 +43,15 @@
   class:danger
   class:success
   class:info
-  class:has-icon={iconSlotted}
+  class:has-icon={icon}
   {...restProps}
 >
   <span class="content">{@render children?.()}</span>
-  <span class:hidden={!iconSlotted} class="icon">
-    {@render icon?.()}
-  </span>
+  {#if icon}
+    <span class="icon">
+      {@render icon()}
+    </span>
+  {/if}
 </button>
 
 <style lang="scss">
@@ -75,21 +77,32 @@
   button.primary {
     @include color-props(primary, button, control);
     @include typography-props-bare(primary, button);
+    @include clickable(primary, button, clickable);
   }
   button.warning {
     @include color-props(warning, button, control);
     @include typography-props-bare(warning, button);
+    @include clickable(warning, button, clickable);
   }
   button.danger {
     @include color-props(danger, button, control);
     @include typography-props-bare(danger, button);
+    @include clickable(danger, button, clickable);
   }
   button.success {
     @include color-props(success, button, control);
     @include typography-props-bare(success, button);
+    @include clickable(success, button, clickable);
   }
   button.info {
     @include color-props(info, button, control);
     @include typography-props-bare(info, button);
+    @include clickable(info, button, clickable);
   }
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
 </style>
