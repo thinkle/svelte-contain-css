@@ -78,22 +78,39 @@
     @include typography-container-props(card, container);
   }
   @container (max-width: 600px) {
+    /* .card queries the *parent* container — use for sizing vars */
     .card {
       --w: var(--card-width-small);
       --h: var(--card-height-small);
-      --sidebar-width: calc(var(--card-width-small) - var(--padding) * 2);
-      /*--padding: var(--card-padding-small, calc(0.75 * var(--padding, 8px)));*/
-      --card-padding: var(
-        --card-padding-small,
-        calc(0.75 * var(--padding, 8px))
+      --sidebar-width: calc(var(--card-width-small) - var(--_padding) * 2);
+    }
+  }
+
+  @container (max-width: 300px) {
+    /* Children query the *card's own* width — use for typography and padding */
+    .card header,
+    .card section {
+      padding: var(--card-padding-small, calc(0.75 * var(--_padding, 8px)));
+    }
+    .card section {
+      font-size: var(--card-font-size-small, calc(0.875 * var(--_font-size)));
+    }
+    .card header {
+      height: var(--card-header-height-small, 2.5em);
+      padding: var(
+        --card-header-padding-small,
+        calc(0.75 * var(--_padding, 8px))
       );
-      --font-size: var(--card-font-size-small, calc(0.875 * var(--font-size)));
-      --card-heading-font-size: var(
-        --card-heading-font-size-small,
-        calc(0.875 * var(--heading-font-size, 1.2em))
+    }
+    .card footer {
+      height: var(--card-footer-height-small, 2.5em);
+      padding: var(
+        --card-footer-padding-small,
+        calc(0.75 * var(--_padding, 8px))
       );
     }
   }
+
   @container (min-width: 1921px) {
     .card {
       --w: var(--card-width-large);
@@ -113,7 +130,8 @@
   .card section {
     line-height: var(--line-height);
     max-width: var(--line-width);
-    width: calc(100% - var-with-fallbacks(--padding, card, container));
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .card.fixedHeight {
@@ -154,6 +172,10 @@
     @include color-props(card-footer, secondary);
     @include box-props-bottom(card-footer, bar);
     height: var-with-fallbacks(--height, card-header, bar, 2em);
+  }
+  section {
+    @include color-props(card-content, container);
+    @include box-props(card-content);
   }
   .hide {
     display: none;
