@@ -16,6 +16,7 @@
     summary?: string;
     defaultTab?: "demo" | "source" | "split";
     width?: string | null;
+    height?: string | null;
     codeWidth?: string | null;
     bg?: string | null;
     fg?: string | null;
@@ -40,6 +41,7 @@
     summary = "See Code",
     defaultTab = "demo",
     width = null,
+    height = null,
     codeWidth = null,
     bg = null,
     fg = null,
@@ -108,6 +110,7 @@
     injectVars(
       {
         width,
+        height,
         codeWidth,
         bg,
         fg,
@@ -120,6 +123,7 @@
       "demo-with-code",
       [
         "width",
+        "height",
         "codeWidth",
         "bg",
         "fg",
@@ -150,21 +154,22 @@
       </div>
     {/if}
     <div class="demo-body">
+      <TabBar
+        items={tabItems}
+        active={activeTab}
+        onchange={(value) => {
+          activeTab =
+            typeof value === "string" ? value : (value?.value ?? "demo");
+        }}
+        --tab-bar-gap="0"
+      />
       {#if inputArea}
         <div class="demo-input-area">
           {@render inputArea()}
         </div>
       {/if}
-      <TabBar
-        items={tabItems}
-        active={activeTab}
-        onchange={(value) => {
-          activeTab = typeof value === "string" ? value : (value?.value ?? "demo");
-        }}
-        --tab-bar-gap="0"
-      />
       {#if activeTab === "demo"}
-        <div class="tab-panel demo-panel">
+        <div class="tab-panel demo-panel" style="--panel-height: var(--demo-with-code-height)">
           {@render children?.()}
         </div>
       {:else if activeTab === "source"}
@@ -178,7 +183,7 @@
           <SplitPane
             leftWidth="1fr"
             rightWidth="1fr"
-            height="var(--demo-with-code-split-height, min(70vh, 640px))"
+            height="var(--demo-with-code-height, var(--demo-with-code-split-height, min(70vh, 640px)))"
             --split-pane-border="none"
             --split-pane-content-padding="var(--space-md)"
           >
@@ -243,23 +248,12 @@
     display: grid;
     gap: var(--space-sm, 0.5rem);
     padding: var(--space-sm, 0.5rem) var(--space-md, 1rem);
-    border: var(
-      --demo-with-code-input-border,
-      1px solid color-mix(in srgb, var(--fg, #222) 8%, transparent)
-    );
-    border-radius: var(
-      --demo-with-code-input-radius,
-      var(--border-radius, 8px)
-    );
-    background: var(
-      --demo-with-code-input-bg,
-      color-mix(in srgb, var(--demo-with-code-bg, transparent) 82%, white 18%)
-    );
   }
 
   .tab-panel {
     box-sizing: border-box;
     min-width: 0;
+    min-height: var(--panel-height);
     padding: var(--space-md);
     border: var(
       --demo-with-code-panel-border,
