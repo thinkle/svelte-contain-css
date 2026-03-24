@@ -17,7 +17,9 @@
 
 @mixin clickable($prefixes...) {
   cursor: fn.var-with-fallbacks(--cursor, append($prefixes, pointer)...);
-  transition: filter,
+  transition:
+    filter,
+    background-color,
     transform fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
   &:hover {
     filter: fn.var-with-fallbacks(
@@ -28,6 +30,12 @@
       --hover-transform,
       append($prefixes, none)...
     );
+    background-color: color-mix(
+      in oklch,
+      var(--_background-color) var(--hover-base-color-percentage, 90%),
+      var(--hover-color-mix, white)
+        calc(100% - var(--hover-base-color-percentage, 90%))
+    );
   }
   &:active {
     filter: fn.var-with-fallbacks(
@@ -37,6 +45,12 @@
     transform: fn.var-with-fallbacks(
       --active-transform,
       append($prefixes, none)...
+    );
+    background-color: color-mix(
+      in oklch,
+      var(--_background-color) var(--active-base-color-percentage, 90%),
+      var(--active-color-mix, black)
+        calc(100% - var(--active-base-color-percentage, 90%))
     );
   }
   &:disabled {
@@ -52,6 +66,12 @@
       --disabled-filter,
       append($prefixes, grayscale(0.5))...
     );
+    background-color: color-mix(
+      in oklch,
+      var(--_background-color) var(--disabled-base-color-percentage, 50%),
+      var(--disabled-color-mix, gray)
+        calc(100% - var(--disabled-base-color-percentage, 50%))
+    );
   }
 }
 
@@ -65,10 +85,7 @@
 
   // For WebKit: reserve space with transparent thumb
   &::-webkit-scrollbar {
-    width: fn.var-with-fallbacks(
-      --scrollbar-width,
-      append($prefixes, 6px)...
-    );
+    width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, 6px)...);
     height: fn.var-with-fallbacks(
       --scrollbar-height,
       append($prefixes, 6px)...
@@ -88,7 +105,8 @@
       --scrollbar-thumb-radius,
       append($prefixes, 3px)...
     );
-    transition: background fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+    transition: background
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
   }
 
   // Show scrollbar thumb on hover

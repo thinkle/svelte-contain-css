@@ -1,7 +1,13 @@
 @use "functions" as fn;
 
 @mixin padding-props($prefixes...) {
-  padding: fn.var-with-fallbacks(--padding, append($prefixes, 4px)...);
+  --_padding: #{fn.var-with-fallbacks(--padding, append($prefixes, 4px)...)};
+  padding: var(--_padding);
+}
+
+@mixin gap-props($prefixes...) {
+  --_gap: #{fn.var-with-fallbacks(--gap, append($prefixes, var(--space))...)};
+  gap: var(--_gap);
 }
 
 @mixin border-props-border($prefixes...) {

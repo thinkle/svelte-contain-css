@@ -1,10 +1,11 @@
 :root {
   --shadow-blur: 4px;
+  /* Fallback: brightness conveys state change when color-mix() is unavailable */
   --hover-filter: brightness(1.05)
     drop-shadow(
       var(--space) var(--space) var(--shadow-blur) var(--shadow-color)
     );
-  --active-filter: brightness(0.95);
+  --active-filter: brightness(0.9);
   /* --hover-transform: translate(var(--space), var(--space)); */
   /* --button-hover-filter: var(--hover-filter); */
   --menu-hover-filter: var(--hover-filter);
@@ -16,7 +17,7 @@
     );
   /* Default menu items to the menu surface so row-wide filters read clearly. */
   --menu-item-bg: var(--menu-bg, var(--bg));
-  --menu-item-active-filter: brightness(0.92);
+  --menu-item-active-filter: none;
   /* --button-hover-transform: var(var(--button-hover-transform));
   --button-hover-filter: var(var(--button-hover-filter)); */
   --transition: 300ms;
@@ -36,8 +37,26 @@
   --greyed-out-filter: blur(2px) grayscale(0.5);
   --disabled-hover-transform: none;
   --disabled-transform: none;
-  --disabled-filter: brightness(0.9) grayscale(0.5) blur(0.5px);
+  --disabled-filter: brightness(0.9) grayscale(0.5) blur(0.5px); /* brightness is fallback for no color-mix */
   --disabled-shadow-distance: var(--button-shadow-distance);
   --disabled-shadow-color: var(--button-shadow-color);
   --scrollbar-track-bg: transparent;
+
+  --hover-base-color-percentage: 90%;
+  --hover-color-mix: white;
+  --active-base-color-percentage: 90%;
+  --active-color-mix: black;
+  --disabled-base-color-percentage: 50%;
+  --disabled-color-mix: gray;
+}
+
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+  :root {
+    /* color-mix handles color changes; filters for non-color effects only */
+    --hover-filter: drop-shadow(
+      var(--space) var(--space) var(--shadow-blur) var(--shadow-color)
+    );
+    --active-filter: none;
+    --disabled-filter: blur(0.5px);
+  }
 }
