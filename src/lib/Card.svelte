@@ -18,19 +18,21 @@
     header,
     footer,
     children,
-    height = "",
+    height,
     fixedHeight,
     center,
     ...restProps
   }: Props = $props();
 
-  let cssVars = injectVars({ height, ...restProps }, "card", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]);
+  const cssVars = $derived(
+    injectVars({ height, ...restProps }, "card", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ]),
+  );
 
   const forceFixedHeight = (h: string) => {
     if (h && !fixedHeight) {
@@ -57,11 +59,17 @@
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
+
+  /* ── Card shell ─────────────────────────────────────────── */
   .card {
     --w: var(--card-width);
     --h: var(--card-height);
-    @include box-shadow(card, container);
-    @include color-props(card, container);
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    container-type: inline-size;
+    width: var(--w);
+    margin: var-with-fallbacks(--margin, card, 16px);
     border-radius: var-with-fallbacks(--border-radius, card, container, 0);
     border: var-with-fallbacks(
       --border,
@@ -69,69 +77,14 @@
       container,
       var(--border-width) var(--border-style) var(--border-color)
     );
-    display: flex;
-    flex-direction: column;
-    margin: var-with-fallbacks(--margin, card, 16px);
-  }
-  .card section {
-    flex-grow: 1;
-    @include typography-container-props(card, container);
-  }
-  @container (max-width: 600px) {
-    /* .card queries the *parent* container — use for sizing vars */
-    .card {
-      --w: var(--card-width-small);
-      --h: var(--card-height-small);
-      --sidebar-width: calc(var(--card-width-small) - var(--_padding) * 2);
-    }
+    @include color-props(card, container);
+    @include box-shadow(card, container);
   }
 
-  @container (max-width: 300px) {
-    /* Children query the *card's own* width — use for typography and padding */
-    .card header,
-    .card section {
-      padding: var(--card-padding-small, calc(0.75 * var(--_padding, 8px)));
-    }
-    .card section {
-      font-size: var(--card-font-size-small, calc(0.875 * var(--_font-size)));
-    }
-    .card header {
-      height: var(--card-header-height-small, 2.5em);
-      padding: var(
-        --card-header-padding-small,
-        calc(0.75 * var(--_padding, 8px))
-      );
-    }
-    .card footer {
-      height: var(--card-footer-height-small, 2.5em);
-      padding: var(
-        --card-footer-padding-small,
-        calc(0.75 * var(--_padding, 8px))
-      );
-    }
-  }
-
-  @container (min-width: 1921px) {
-    .card {
-      --w: var(--card-width-large);
-      --h: var(--card-height-large);
-    }
-  }
-
-  .card.center {
+  .card.center section {
     display: grid;
     place-content: center;
-  }
-  .card {
-    overflow-x: hidden;
-    container-type: inline-size;
-    width: var(--w);
-  }
-  .card section {
-    line-height: var(--line-height);
-    max-width: var(--line-width);
-    width: 100%;
-    box-sizing: border-box;
+    text-align: center;
   }
 
   .card.fixedHeight {
@@ -140,19 +93,20 @@
     @include custom-scrollbar(card, container);
   }
 
-  header,
+  /* ── Card regions ───────────────────────────────────────── */
   section {
     padding: var(--padding);
     border-top-right-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     border-bottom: var(--card-header-border);
   }
+
   header {
     @include color-props(card-header, secondary);
     @include box-props-top(card-header, bar);
     display: flex;
     align-items: center;
-    height: var-with-fallbacks(--height, card-header, bar, 2em);
+    min-height: var-with-fallbacks(--height, card-header, bar, 2em);
   }
 
   header,
@@ -168,15 +122,86 @@
       @include color-props(card-header, secondary);
     }
   }
+
   footer {
     @include color-props(card-footer, secondary);
     @include box-props-bottom(card-footer, bar);
-    height: var-with-fallbacks(--height, card-header, bar, 2em);
+    min-height: var-with-fallbacks(--height, card-footer, bar, 2em);
   }
+
   section {
+    flex-grow: 1;
+    line-height: var(--line-height);
+    max-width: var(--line-width);
+    width: 100%;
+    box-sizing: border-box;
     @include color-props(card-content, container);
     @include box-props(card-content);
+    @include typography-container-props(card, container);
   }
+
+  /* ── Container queries ──────────────────────────────────── */
+  /* NOTE: .card targets the *parent* container; children target the card itself */
+
+  /* Parent context: small — adjust card sizing vars */
+  @container (max-width: 600px) {
+    .card {
+      --w: var(--card-width-small);
+      --h: var(--card-height-small);
+      --sidebar-width: calc(var(--card-width-small) - var(--_padding) * 2);
+    }
+  }
+
+  /* Card itself: narrow (≤ --card-width-small: 250px) — tighten typography and spacing */
+  @container (max-width: 300px) {
+    .card section {
+      font-size: var(--card-font-size-small, calc(0.875 * var(--_font-size)));
+    }
+    .card header,
+    .card section {
+      padding: var(--card-padding-small, calc(0.75 * var(--_padding, 8px)));
+    }
+    .card header {
+      height: var(--card-header-height-small, 2.5em);
+    }
+    .card footer {
+      height: var(--card-footer-height-small, 2.5em);
+      padding: var(
+        --card-footer-padding-small,
+        calc(0.75 * var(--_padding, 8px))
+      );
+    }
+  }
+
+  /* Card itself: wide (≥ --card-width-large: 600px) — expand typography and spacing */
+  @container (min-width: 500px) {
+    .card section {
+      font-size: var(--card-font-size-large, calc(1.125 * var(--_font-size)));
+    }
+    .card header,
+    .card section {
+      padding: var(--card-padding-large, calc(1.25 * var(--_padding, 8px)));
+    }
+    .card header {
+      height: var(--card-header-height-large, 3em);
+    }
+    .card footer {
+      height: var(--card-footer-height-large, 3em);
+      padding: var(
+        --card-footer-padding-large,
+        calc(1.25 * var(--_padding, 8px))
+      );
+    }
+  }
+
+  /* Parent context: large — expand card sizing vars */
+  @container (min-width: 1921px) {
+    .card {
+      --w: var(--card-width-large);
+      --h: var(--card-height-large);
+    }
+  }
+
   .hide {
     display: none;
   }

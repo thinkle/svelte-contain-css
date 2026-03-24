@@ -471,6 +471,9 @@
   }
 
   @container (max-width: 640px) {
+    .data-list-item {
+      font-size: var(--data-list-item-font-size-small, calc(0.9 * var(--_font-size)));
+    }
     :global(.data-list.stackable) .data-list-item.hasStart.hasEnd {
       grid-template-columns: $icon-track-width minmax(0, 1fr);
       grid-template-areas:

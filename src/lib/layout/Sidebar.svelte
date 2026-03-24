@@ -12,7 +12,7 @@
 
   let { left, right, ...restProps }: Props = $props();
 
-  let style = injectVars(restProps, "sidebar", ["bg", "fg", "width"]);
+  const style = $derived(injectVars(restProps, "sidebar", ["bg", "fg", "width"]));
 
   let expandedHamburger = $state(false);
   let expandedBar = $state(true);

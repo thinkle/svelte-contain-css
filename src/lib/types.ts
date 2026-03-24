@@ -43,6 +43,8 @@ export interface MenuStyleProps extends BaseStyleProps {
 /** Style props for card components */
 export interface CardStyleProps extends BaseStyleProps {
   borderRadius?: string | null;
+  width?: string | null;
+  height?: string | null;
 }
 
 /** Style props for tag components */

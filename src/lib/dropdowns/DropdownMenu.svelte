@@ -26,13 +26,13 @@
   let isOpen = $state(false);
 
   // Style injection
-  let style = injectVars(props, "menu", [
+  const style = $derived(injectVars(props, "menu", [
     "bg",
     "fg",
     "padding",
     "width",
     "height",
-  ]);
+  ]));
   let dropdownTop: number = $state();
   let dropdownLeft: number = $state();
   let dropdownMaxHeight: number = $state();

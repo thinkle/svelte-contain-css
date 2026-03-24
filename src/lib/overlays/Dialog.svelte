@@ -24,7 +24,7 @@
 
   let onclose = $derived(oncloseProp || onClose);
 
-  let style = injectVars(restProps, "dialog", []);
+  const style = $derived(injectVars(restProps, "dialog", []));
 
   // Handle backdrop click to close modal (click outside behavior)
   // Clicks on the dialog element itself (the backdrop) close the dialog

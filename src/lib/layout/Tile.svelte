@@ -96,6 +96,7 @@
     flex-direction: column;
     justify-content: var-with-fallbacks(--justify, tile, flex-start);
     align-items: var-with-fallbacks(--align, tile, center);
+    container-type: inline-size;
     // Add other specific styles for the tile
   }
 
