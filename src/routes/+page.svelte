@@ -2,8 +2,7 @@
   import { run } from "svelte/legacy";
 
   import IntroOverview from "./IntroOverview.svelte";
-  import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/lightordark.css";
+  import ThemeInjector from "$lib/theme/ThemeInjector.svelte";
   import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
@@ -102,13 +101,14 @@
     [
       { name: "Intro", link: "#Intro" },
       { name: "Installation", link: "#Installation" },
+      { name: "Themes", component: Themes },
+      { name: "Layout" },
       {
         name: "Typography",
         component: TypographyDemo,
         demo: "Typography",
         id: "typography",
       },
-      { name: "Layout" },
       { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
 
       { name: "Tabs", component: TabDemo, demo: "Tab" },
@@ -156,7 +156,7 @@
       },
       { name: "Miscellaneous" },
       { name: "Progress", component: ProgressDemo, demo: "Progress" },
-      { name: "Themes", component: Themes },
+
       { name: "Variables", component: VariableDemo, demo: "Variable" },
     ];
 
@@ -180,6 +180,7 @@
   let sideWidth = $state(50);
 </script>
 
+<ThemeInjector />
 {#if showHero}
   <Hero
     center={true}

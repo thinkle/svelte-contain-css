@@ -2,10 +2,9 @@
   import { page } from "$app/state";
   import { Page } from "$lib/index";
   import Bar from "$lib/layout/Bar.svelte";
-  import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/lightordark.css";
   import { base } from "$app/paths";
 
+  import ThemeInjector from "$lib/theme/ThemeInjector.svelte";
   import DynamicComponent from "../../demos/DynamicComponent.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Container from "$lib/layout/Container.svelte";
@@ -20,6 +19,7 @@
   
 </script>
 
+<ThemeInjector />
 <Page>
   <Bar>
     <a href={base || "/"}>Home</a>

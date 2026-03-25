@@ -1,11 +1,11 @@
 <script lang="ts">
-  import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/lightordark.css";
+  import ThemeInjector from "$lib/theme/ThemeInjector.svelte";
   import Hero from "$lib/layout/Hero.svelte";
   import ButtonLink from "$lib/controls/ButtonLink.svelte";
   import Bar from "$lib/layout/Bar.svelte";
 </script>
 
+<ThemeInjector />
 <svelte:head>
   <title>ContainCSS - Svelte Component Library</title>
 </svelte:head>
