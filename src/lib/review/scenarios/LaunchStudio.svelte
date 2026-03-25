@@ -45,7 +45,7 @@
 <Hero
   bg="var(--primary-bg)"
   fg="var(--primary-fg)"
-  --heading-fg="var(--primary-fg)"
+  headingFg="var(--primary-fg)"
 >
   <TextLayout>
     <p>Product Launch Scenario</p>

@@ -49,20 +49,17 @@
 }
 
 @mixin heading-box-props($prefixes...) {
-  --_heading-color: #{fn.var-with-fallbacks(--fg, append($prefixes, revert)...)};
+  --_heading-color: #{fn.vars-fallback(fg, revert, $prefixes...)};
   color: var(--_heading-color);
-  --_heading-background: #{fn.var-with-fallbacks(
-      --bg,
-      append($prefixes, transparent)...
-    )};
+  --_heading-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
   background: var(--_heading-background);
-  --_heading-padding: #{fn.var-no-fallbacks(--padding, $prefixes...)};
+  --_heading-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
   padding: var(--_heading-padding);
-  --_heading-border: #{fn.var-no-fallbacks(--border, $prefixes...)};
+  --_heading-border: #{fn.vars-fallback(border, none, $prefixes...)};
   border: var(--_heading-border);
-  --_heading-border-radius: #{fn.var-no-fallbacks(--border-radius, $prefixes...)};
+  --_heading-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
   border-radius: var(--_heading-border-radius);
-  --_heading-box-shadow: #{fn.var-no-fallbacks(--box-shadow, $prefixes...)};
+  --_heading-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
   box-shadow: var(--_heading-box-shadow);
 }
 

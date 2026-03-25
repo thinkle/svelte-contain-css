@@ -14,13 +14,13 @@
   class="landing"
   style:--primary-bg="var(--material-color-purple-700)"
   style:--primary-fg="var(--material-color-yellow-100)"
-  style:--heading-fg="var(--material-color-purple-700)"
   style:--secondary-bg="var(--material-color-yellow-600)"
   style:--secondary-fg="var(--material-color-purple-900)"
 >
   <Hero
     bg="var(--material-color-yellow-100)"
     fg="var(--material-color-purple-900)"
+    headingFg="var(--material-color-purple-700)"
   >
     <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
     <p>
