@@ -87,6 +87,10 @@
       @include clickable(menu-item);
     }
 
+    li {
+      @include clickable(menu-item);
+    }
+    /*
     // Make hover/active feedback visible across the whole row by default.
     & :global(li:hover > a:not(.active)),
     & :global(li:hover > button:not(.active)),
@@ -123,9 +127,9 @@
         menu-item,
         button,
         control,
-        container
+        surface
       );
-    }
+    } */
   }
   .menu.striped {
     & :global(li:nth-of-type(even)) > {
@@ -148,7 +152,7 @@
         menu-item,
         button,
         control,
-        container
+        surface
       );
     }
   }

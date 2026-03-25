@@ -10,7 +10,7 @@ const plainProps = [
   "--bold",
   "--font-size",
   "--font-size-small",
-  "--first-heading-margin",
+  "--first-heading-margin-top",
   "--white",
   "--black",
   "--text",
@@ -160,7 +160,19 @@ const components: {
     propnames: [...box, ...color, ...typography, ...size, ...flex],
   })),
 
-  ...["heading", "form-label", "form-item"].map((component) => ({
+  ...[
+    "heading",
+    "heading-major",
+    "heading-minor",
+    "heading-1",
+    "heading-2",
+    "heading-3",
+    "heading-4",
+    "heading-5",
+    "heading-6",
+    "form-label",
+    "form-item",
+  ].map((component) => ({
     component,
     props: [],
     propnames: [...typography, ...color, ...box],

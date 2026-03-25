@@ -132,8 +132,8 @@
   @import "$lib/sass/_mixins.scss";
   select,
   .dropdown-wrapper > :global(.dropdown-menu > button) {
-    @include box-props-square-border(select, input, menu, control, container);
-    @include color-props(select, input, menu, control, container);
+    @include box-props-square-border(select, input, menu, control, surface);
+    @include color-props(select, input, menu, control, surface);
     width: var(
       --select-width,
       var(--target-width, var(--dropdown-menu-width, min(12em, 100vw)))
@@ -156,7 +156,7 @@
     box-sizing: border-box;
   }
   .dropdown-wrapper {
-    @include color-props(select, input, menu, control, container);
+    @include color-props(select, input, menu, control, surface);
     --menu-item-justify: var(--select-menu-item-justify, flex-start);
   }
   .dropdown-menu :global(.dropdown-menu) > :global(button) {

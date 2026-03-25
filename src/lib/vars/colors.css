@@ -32,7 +32,10 @@
   --info-bg: var(--material-color-light-blue-600);
   --info-fg: var(--white);
 
-  --container-link-fg: var(--primary-bg);
+  --surface-bg: var(--bg);
+  --surface-fg: var(--fg);
+  --surface-link-fg: var(--link-fg, var(--primary-bg));
+  --container-link-fg: var(--surface-link-fg);
   --menu-item-bg: var(--menu-bg);
   --focus-color: var(--material-color-blue-a400);
   --tooltip-border: none;

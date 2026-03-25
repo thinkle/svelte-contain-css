@@ -92,7 +92,7 @@
               --slider-track-bg,
               color-mix(
                 in srgb,
-                var(--input-bg, var(--container-bg, #fff)) 72%,
+                var(--input-bg, var(--surface-bg, #fff)) 72%,
                 var(--border-color, currentColor) 28%
               )
             )
@@ -101,7 +101,7 @@
               --slider-track-bg,
               color-mix(
                 in srgb,
-                var(--input-bg, var(--container-bg, #fff)) 72%,
+                var(--input-bg, var(--surface-bg, #fff)) 72%,
                 var(--border-color, currentColor) 28%
               )
             )
@@ -163,7 +163,7 @@
         --slider-track-bg,
         color-mix(
           in srgb,
-          var(--input-bg, var(--container-bg, #fff)) 72%,
+          var(--input-bg, var(--surface-bg, #fff)) 72%,
           var(--border-color, currentColor) 28%
         )
       );

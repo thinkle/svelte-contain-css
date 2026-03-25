@@ -14,7 +14,7 @@
   --line-width: 42rem;
   --bold: bold;
   --heading-margin: 0.5rem 0;
-  --first-heading-margin: 0;
+  --first-heading-margin-top: 0;
   --heading-bg: transparent;
   --heading-fg: var(--primary-bg);
 }

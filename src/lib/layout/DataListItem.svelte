@@ -197,8 +197,8 @@
   );
 
   .data-list-item {
-    @include color-props(data-list-item, data-list, container);
-    @include typography-container-props(data-list-item, data-list, container);
+    @include color-props(data-list-item, data-list, surface);
+    @include typography-container-props(data-list-item, data-list, surface);
     display: grid;
     grid-template-columns: $icon-track-width minmax(0, 1fr)
       var-with-fallbacks(--action-width, data-list-item, data-list, auto);
@@ -294,7 +294,7 @@
         --title-font-size,
         data-list-item,
         data-list,
-        var(--heading-font-size, 1rem)
+        var(--data-list-heading-font-size, var(--font-size, 1rem))
       )
     );
     font-weight: var-with-fallbacks(

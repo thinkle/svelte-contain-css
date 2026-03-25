@@ -77,9 +77,9 @@
   @import "$lib/sass/_mixins.scss";
 
   .data-list {
-    @include color-props(data-list, container);
-    @include box-props-square-border(data-list, container);
-    @include box-shadow(data-list, container);
+    @include color-props(data-list, surface);
+    @include box-props-square-border(data-list, surface);
+    @include box-shadow(data-list, surface);
     list-style: none;
     padding: 0;
     margin: var-with-fallbacks(--margin, data-list, 0);

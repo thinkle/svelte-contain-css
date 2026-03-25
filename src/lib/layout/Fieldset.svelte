@@ -87,22 +87,22 @@
   @import "$lib/sass/_mixins.scss";
 
   fieldset {
-    @include color-props(fieldset, container);
-    @include box-props(fieldset, container);
+    @include color-props(fieldset, surface);
+    @include box-props(fieldset, surface);
 
     border: var-with-fallbacks(
       --border,
       fieldset,
-      container,
+      surface,
       1px solid var(--border-color)
     );
-    border-radius: var-with-fallbacks(--border-radius, fieldset, container, 0);
-    padding: var-with-fallbacks(--padding, fieldset, container, var(--space));
+    border-radius: var-with-fallbacks(--border-radius, fieldset, surface, 0);
+    padding: var-with-fallbacks(--padding, fieldset, surface, var(--space));
     margin: var-with-fallbacks(--margin, fieldset, 0);
 
-    max-width: var(--fieldset-max-width, var(--container-max-width, 100%));
-    min-width: var(--fieldset-min-width, var(--container-min-width, auto));
-    width: var(--fieldset-width, var(--container-width, auto));
+    max-width: var(--fieldset-max-width, var(--surface-max-width, 100%));
+    min-width: var(--fieldset-min-width, var(--surface-min-width, auto));
+    width: var(--fieldset-width, var(--surface-width, auto));
 
     box-sizing: border-box;
   }

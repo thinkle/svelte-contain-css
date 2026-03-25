@@ -14,8 +14,10 @@
   --bg: #008080;
   --body-bg: #008080;
   --body-fg: #000000;
-  --container-bg: #c0c0c0;
-  --container-fg: #000000;
+  --surface-bg: #c0c0c0;
+  --surface-fg: #000000;
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
   --page-bg: #008080;
   --page-fg: #000000;
   --page-content-bg: #c0c0c0;

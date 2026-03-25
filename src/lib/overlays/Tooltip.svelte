@@ -141,7 +141,7 @@
     overflow: visible;
     @include color-props(tooltip, secondary);
     @include box-props-square-border(tooltip);
-    @include box-shadow(tooltip, container);
+    @include box-shadow(tooltip, surface);
     @include typography-container-props(tooltip, ui);
   }
 

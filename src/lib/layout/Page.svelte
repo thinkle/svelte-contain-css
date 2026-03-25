@@ -146,7 +146,7 @@
   }
 
   .page {
-    @include color-props(page, content, container);
+    @include color-props(page, content, surface);
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
@@ -167,7 +167,7 @@
   .content {
     @include custom-scrollbar(page-content, page);
     @include box-props(page-content);
-    @include color-props(page-content, page, container);
+    @include color-props(page-content, page, surface);
   }
   .aside {
     flex: 0 0 auto;

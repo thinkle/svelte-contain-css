@@ -189,22 +189,22 @@
   @import "$lib/sass/_mixins.scss";
 
   button {
-    @include color-props(menu, button, container);
-    @include box-props-square(menu, button, container);
+    @include color-props(menu, button, surface);
+    @include box-props-square(menu, button, surface);
     @include clickable(menu, button, control);
     @include focusable();
     position: relative;
   }
 
   .menu {
-    @include color-props(menu, container);
+    @include color-props(menu, surface);
     @include box-props(menu);
-    @include typography-props(menu, container);
+    @include typography-props(menu, surface);
     @include clickable(menu, button, control);
     @include focusable();
   }
   .dropdown-menu {
-    @include typography-props(menu, container);
+    @include typography-props(menu, surface);
   }
   .dropdown-container {
     box-sizing: border-box;
@@ -230,9 +230,9 @@
       var(--dropdown-menu-width, 12em)
     );
     min-width: var(--dropdown-menu-min-width, 12em);
-    @include color-props(dropdown-menu, menu, container);
+    @include color-props(dropdown-menu, menu, surface);
     @include box-shadow(dropdown-menu, dropdown);
-    @include box-props-square-border(dropdown-menu, menu, container);
+    @include box-props-square-border(dropdown-menu, menu, surface);
     padding: 0;
     overflow: hidden;
   }

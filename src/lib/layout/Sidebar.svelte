@@ -53,19 +53,19 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   aside {
-    @include color-props(sidebar, container);
+    @include color-props(sidebar, surface);
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;
     overflow: hidden;
   }
   aside .content {
-    @include color-props(sidebar, container);
+    @include color-props(sidebar, surface);
     width: var(--sidebar-width);
     height: 100%;
     overflow-x: hidden;
     box-sizing: border-box;
-    @include custom-scrollbar(sidebar, container);
+    @include custom-scrollbar(sidebar, surface);
   }
   .right {
     border-left: var-with-fallbacks(--border, sidebar, none);
@@ -110,7 +110,9 @@
       right: 0;
     }
     .edge-bar {
-      @include color-props(grab-bar, sidebar, container);
+      @include color-props(grab-bar, sidebar, surface);
+      background: var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg)));
+      box-shadow: var(--grab-bar-box-shadow, none);
       position: absolute;
       right: 0;
       top: 0;
@@ -137,17 +139,17 @@
 
     /* Affordances */
     .edge-bar:hover {
-      filter: var(--grab-bar-hover-filter);
+      box-shadow: var(--grab-bar-hover-box-shadow, none);
       background: var(--grab-bar-hover-bg);
     }
     aside .content,
     .edge-bar {
       transition:
-        filter,
-        background var(--transition);
+        background-color var(--transition),
+        box-shadow var(--transition);
     }
-    .edge-bar:contains(:active) {
-      filter: var(--grab-bar-active-filter);
+    .edge-bar:has(button:active) {
+      box-shadow: var(--grab-bar-active-box-shadow, none);
       background: var(--grab-bar-active-bg);
     }
     aside:has(.edge-bar:hover) .content {
@@ -191,7 +193,7 @@
       height: 100%;
       opacity: 1;
       pointer-events: all;
-      @include color-props(sidebar, container);
+      @include color-props(sidebar, surface);
     }
 
     aside > button {

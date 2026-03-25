@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap");
+
+:root {
+  --font-family: "Source Serif 4", serif;
+  --body-font-family: "Source Serif 4", serif;
+  --heading-font-family: "Fraunces", serif;
+  --ui-font-family: "Inter", sans-serif;
+  --code-font-family: "JetBrains Mono", monospace;
+
+  --font-size: 17px;
+  --font-size-small: 13px;
+  --line-height: 1.65;
+  --heading-line-height: 1.05;
+  --heading-font-weight: 600;
+  --bold: 600;
+  --heading-letter-spacing: -0.015em;
+  --line-width: 40rem;
+  --heading-margin-top: 1.2em;
+  --heading-margin-bottom: 0.35em;
+}

@@ -18,8 +18,11 @@
 @mixin clickable($prefixes...) {
   cursor: fn.var-with-fallbacks(--cursor, append($prefixes, pointer)...);
   transition:
-    filter,
-    background-color,
+    filter fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    background-color
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    box-shadow
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
     transform fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
   &:hover {
     filter: fn.var-with-fallbacks(
@@ -36,6 +39,10 @@
       var(--hover-color-mix, white)
         calc(100% - var(--hover-base-color-percentage, 90%))
     );
+    box-shadow: fn.var-with-fallbacks(
+      --hover-box-shadow,
+      append($prefixes, var(--_box-shadow, none))...
+    );
   }
   &:active {
     filter: fn.var-with-fallbacks(
@@ -51,6 +58,10 @@
       var(--_background-color) var(--active-base-color-percentage, 90%),
       var(--active-color-mix, black)
         calc(100% - var(--active-base-color-percentage, 90%))
+    );
+    box-shadow: fn.var-with-fallbacks(
+      --active-box-shadow,
+      append($prefixes, var(--_box-shadow, none))...
     );
   }
   &:disabled {
@@ -71,6 +82,10 @@
       var(--_background-color) var(--disabled-base-color-percentage, 50%),
       var(--disabled-color-mix, gray)
         calc(100% - var(--disabled-base-color-percentage, 50%))
+    );
+    box-shadow: fn.var-with-fallbacks(
+      --disabled-box-shadow,
+      append($prefixes, var(--_box-shadow, none))...
     );
   }
 }

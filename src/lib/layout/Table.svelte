@@ -229,12 +229,12 @@
   @import "$lib/sass/_mixins.scss";
 
   table {
-    @include color-props(table, container);
-    @include typography-container-props(table, container, paragraph);
-    @include box-props-square-border(table, container, paragraph);
+    @include color-props(table, surface);
+    @include typography-container-props(table, surface, paragraph);
+    @include box-props-square-border(table, surface, paragraph);
     @include box-size-props(table);
     border-collapse: collapse;
-    @include box-shadow(table, container);
+    @include box-shadow(table, surface);
     margin-inline-start: auto;
     margin-inline-end: auto;
   }
@@ -307,7 +307,7 @@
     position: sticky;
     top: var(--table-sticky-top, var(--padding));
     z-index: 2;
-    @include color-props(table-head, table, container);
+    @include color-props(table-head, table, surface);
   }
   .fixed-table-head::before {
     content: " ";
@@ -318,7 +318,7 @@
         var(
           --table-margin-top,
           var(
-            --container-margin-top,
+            --surface-margin-top,
             var(--paragraph-margin-top, var(--margin-top, 0px))
           )
         )
@@ -327,11 +327,11 @@
     height: var(--table-top-veil-height);
     left: calc(var(--padding) * -2);
     width: calc(100% + var(--padding) * 4);
-    @include color-props(table-backdrop, page, container);
+    @include color-props(table-backdrop, page, surface);
     z-index: -1;
   }
   .fixed-table-head :global(th) {
-    @include color-props(table-head, table, container);
+    @include color-props(table-head, table, surface);
   }
 
   /* Visually make our two tables appear as one */

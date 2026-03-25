@@ -33,8 +33,8 @@
   .code :global(code[class*="language-"]),
   .code :global(pre[class*="language-"]) {
     tab-size: var(--code-tab-size, 2em);
-    @include color-props(code, container);
-    @include typography-props(code, container);
+    @include color-props(code, surface);
+    @include typography-props(code, surface);
   }
 
   .code :global(pre[class*="language-"]) {
@@ -42,7 +42,7 @@
     color: var(--code-fg);
     padding: 1em;
     border-radius: 0.3em;
-    @include box-shadow(code, container);
+    @include box-shadow(code, surface);
   }
 
   .code :global(.token.comment),

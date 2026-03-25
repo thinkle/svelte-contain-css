@@ -3,8 +3,10 @@
   --bg: var(--material-color-blue-grey-800);
   --body-bg: var(--material-color-blue-grey-800);
   --body-fg: var(--material-color-blue-grey-50);
-  --container-bg: var(--material-color-blue-grey-900);
-  --container-fg: var(--material-color-blue-grey-50);
+  --surface-bg: var(--material-color-blue-grey-900);
+  --surface-fg: var(--material-color-blue-grey-50);
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
   --sidebar-bg: var(--material-color-blue-grey-900);
   --sidebar-fg: var(--material-color-blue-grey-50);
   --menu-bg: var(--material-color-blue-grey-900);
@@ -51,8 +53,8 @@
   --info-bg: var(--material-color-light-blue-300);
   --info-fg: var(--material-color-blue-grey-900);
 
-  --hover-filter: brightness(1.15);
-  --menu-item-hover-filter: brightness(1.25);
+  --hover-filter-brightness-hack: brightness(1.15);
+  --menu-item-hover-filter-brightness-hack: brightness(1.25);
   /* Code Block */
   --code-bg: var(--material-color-blue-grey-800); /* Darker background */
   --code-fg: var(--material-color-blue-grey-100); /* Lighter text */

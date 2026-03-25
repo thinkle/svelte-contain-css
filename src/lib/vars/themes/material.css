@@ -10,8 +10,10 @@
   --bg: var(--material-color-grey-100);
   --body-bg: var(--material-color-grey-100);
   --body-fg: var(--material-color-blue-grey-900);
-  --container-bg: #ffffff;
-  --container-fg: var(--material-color-blue-grey-900);
+  --surface-bg: #ffffff;
+  --surface-fg: var(--material-color-blue-grey-900);
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
   --page-bg: var(--material-color-grey-100);
   --page-fg: var(--material-color-blue-grey-900);
   --page-content-bg: transparent;
@@ -75,10 +77,10 @@
   --button-border-radius: 999px;
   --mini-button-bg: color-mix(
     in srgb,
-    var(--container-bg, #ffffff) 82%,
-    var(--container-fg, var(--material-color-blue-grey-900)) 18%
+    var(--surface-bg, #ffffff) 82%,
+    var(--surface-fg, var(--material-color-blue-grey-900)) 18%
   );
-  --mini-button-fg: var(--container-fg, var(--material-color-blue-grey-900));
+  --mini-button-fg: var(--surface-fg, var(--material-color-blue-grey-900));
   --mini-button-border: none;
   --mini-button-radius: 999px;
   --mini-button-size: 2rem;

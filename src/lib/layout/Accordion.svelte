@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   interface Props {
     highlanderMode?: boolean;
-    children?: import('svelte').Snippet;
+    children?: import("svelte").Snippet;
   }
 
   let { highlanderMode = true, children }: Props = $props();
@@ -48,20 +48,16 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<div
-  class="accordion-wrapper"
-  onclick={onAccordionClicked}
-  bind:this={wrapper}
->
+<div class="accordion-wrapper" onclick={onAccordionClicked} bind:this={wrapper}>
   {@render children?.()}
 </div>
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
   div {
-    @include color-props(accordion, container);
+    @include color-props(accordion, surface);
     @include typography-props(accordion, header);
-    @include box-props-square-border(accordion-wrapper, container);
+    @include box-props-square-border(accordion-wrapper, surface);
     display: flex;
     flex-direction: column;
     gap: var(--accordion-gap, var(--gap));
@@ -69,7 +65,7 @@
 
   div :global(details > summary) {
     @include color-props(accordion-summary, secondary);
-    @include box-props-square-border(accordion-summary, container);
+    @include box-props-square-border(accordion-summary, surface);
     @include clickable(accordion);
     @include focusable();
     cursor: pointer;
@@ -106,12 +102,13 @@
   div :global(summary) {
     list-style: var(--details-list-style, none);
     @include color-props(accordion-summary, secondary);
-    @include box-props-square(accordion-summary, container);
+    @include box-props-square(accordion-summary, surface);
   }
   div :global(summary::after) {
     content: var(--accordion-icon, "+");
     float: right;
     transition: transform 0.3s;
+    padding-inline: var(--accordion-icon-gap, var(--space-md));
   }
   div :global(details[open] > summary::after) {
     transform: var(--accordion-icon-transform, rotateZ(45deg));

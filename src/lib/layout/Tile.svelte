@@ -84,10 +84,10 @@
       --tile-border,
       var(--border-width) var(--border-style) var(--border-color)
     );
-    @include box-props-square-border(tile, container);
-    @include color-props(tile, container);
-    @include typography-container-props(tile, container);
-    @include box-shadow(tile, container);
+    @include box-props-square-border(tile, surface);
+    @include color-props(tile, surface);
+    @include typography-container-props(tile, surface);
+    @include box-shadow(tile, surface);
     width: var(--tile-width, calc(var(--space-lg) * 24));
     /* Override typography max-width */
     max-width: var(--tile-width, calc(var(--space-lg) * 24));
@@ -128,8 +128,8 @@
   }
   .checkbox {
     position: absolute;
-    right: var-with-fallbacks(--padding, tile, container, 4px);
-    top: var-with-fallbacks(--padding, tile, container, 4px);
+    right: var-with-fallbacks(--padding, tile, surface, 4px);
+    top: var-with-fallbacks(--padding, tile, surface, 4px);
     display: inline-flex;
     align-items: center;
     width: var-with-fallbacks(

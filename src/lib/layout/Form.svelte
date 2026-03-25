@@ -89,17 +89,17 @@
   @import "$lib/sass/_mixins.scss";
 
   form {
-    @include color-props(form, container);
-    @include box-props(form, container);
+    @include color-props(form, surface);
+    @include box-props(form, surface);
 
-    border: var-with-fallbacks(--border, form, container, none);
-    border-radius: var-with-fallbacks(--border-radius, form, container, 0);
-    padding: var-with-fallbacks(--padding, form, container, 0);
+    border: var-with-fallbacks(--border, form, surface, none);
+    border-radius: var-with-fallbacks(--border-radius, form, surface, 0);
+    padding: var-with-fallbacks(--padding, form, surface, 0);
     margin: var-with-fallbacks(--margin, form, 0);
 
-    max-width: var(--form-max-width, var(--container-max-width, 100%));
-    min-width: var(--form-min-width, var(--container-min-width, auto));
-    width: var(--form-width, var(--container-width, auto));
+    max-width: var(--form-max-width, var(--surface-max-width, 100%));
+    min-width: var(--form-min-width, var(--surface-min-width, auto));
+    width: var(--form-width, var(--surface-width, auto));
 
     box-sizing: border-box;
   }

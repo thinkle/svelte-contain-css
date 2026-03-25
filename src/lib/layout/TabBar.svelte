@@ -61,7 +61,7 @@
   /* Account for display: contents div inserted by
   svelte to inject css variables */
   div > :global(div > .bar) {
-    @include color-props(tab-bar, bar, container);
+    @include color-props(tab-bar, bar, surface);
 
     align-items: var-with-fallbacks(--align, tab-bar, flex-end);
     border-bottom: var(
@@ -76,7 +76,7 @@
   }
   .sticky {
     position: sticky;
-    top: calc(-1 * var-with-fallbacks(--padding, container, block, 8px));
+    top: calc(-1 * var-with-fallbacks(--padding, surface, block, 8px));
     background-color: var-with-fallbacks(--bg, tab-bar, white);
   }
 </style>

@@ -108,9 +108,9 @@
     z-index: 2;
   }
   dialog {
-    @include box-props(dialog, top, container, block);
-    @include color-props(dialog, top, container, block);
-    @include box-shadow(dialog, top, container, block);
+    @include box-props(dialog, top, surface, block);
+    @include color-props(dialog, top, surface, block);
+    @include box-shadow(dialog, top, surface, block);
     min-width: min(
       calc(100vw - var(--padding) * 2),
       var(--dialog-min-width, 400px)

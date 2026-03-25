@@ -134,7 +134,9 @@
     append($prefixes, rgba(127, 127, 127, 0.4))...
   );
 
-  box-shadow: $shadow-distance $shadow-distance $shadow-blur $shadow-color;
+  --_box-shadow:
+    #{$shadow-distance} #{$shadow-distance} #{$shadow-blur} #{$shadow-color};
+  box-shadow: var(--_box-shadow);
 }
 
 @mixin box-size-props($prefixes...) {

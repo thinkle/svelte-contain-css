@@ -1,7 +1,7 @@
 :root {
   --font-size: 16px;
   --font-size-small: 12px;
-  --heading-font-size: 1.5em;
+  --heading-font-size: revert;
   --text-font-size: 1.2rem;
   --font-family: sans-serif;
   --code-font-size: 0.9em;
@@ -15,6 +15,24 @@
   --heading-bg: transparent;
   --heading-fg: var(--primary-bg);
   --heading-padding: 0;
+  --heading-box-shadow: unset;
+  --heading-border-radius: 0;
+  --heading-major-bg: var(--heading-bg);
+  --heading-major-fg: var(--heading-fg);
+  --heading-major-padding: var(--heading-padding);
+  --heading-major-box-shadow: var(--heading-box-shadow);
+  --heading-major-border-radius: var(
+    --heading-border-radius,
+    var(--border-radius-square)
+  );
+  --heading-minor-bg: var(--heading-bg);
+  --heading-minor-fg: var(--heading-fg);
+  --heading-minor-padding: var(--heading-padding);
+  --heading-minor-box-shadow: var(--heading-box-shadow);
+  --heading-minor-border-radius: var(
+    --heading-border-radius,
+    var(--border-radius-square)
+  );
   --first-heading-padding: 0;
   --paragraph-padding: 0;
   --paragraph-margin-top: 1em;

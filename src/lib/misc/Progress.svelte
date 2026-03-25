@@ -96,21 +96,21 @@
   }
 
   .progress-container {
-    @include color-props(progress, container, control, secondary);
-    @include box-props(progress, container, control, secondary);
+    @include color-props(progress, surface, control, secondary);
+    @include box-props(progress, surface, control, secondary);
     @include typography-container-props(progress, ui);
     width: var(--progress-width, var(--width, 100%));
     display: inline-block;
     position: relative;
 
     &[data-state="uninitiated"] {
-      @include color-props(progress-uninitiated, container, control, secondary);
+      @include color-props(progress-uninitiated, surface, control, secondary);
     }
     &[data-state="inprogress"] {
-      @include color-props(progress-inprogress, container, control, secondary);
+      @include color-props(progress-inprogress, surface, control, secondary);
     }
     &[data-state="complete"] {
-      @include color-props(progress-complete, container, control, secondary);
+      @include color-props(progress-complete, surface, control, secondary);
     }
 
     /* Hidden UI, but read by screen readers. */

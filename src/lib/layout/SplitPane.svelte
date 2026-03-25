@@ -151,7 +151,7 @@
     width: var(--split-pane-width, 100%);
     box-sizing: border-box;
     gap: var-with-fallbacks(--gap, split-pane, 0.5rem);
-    border: var-with-fallbacks(--border, split-pane, container, 1px solid #ccc);
+    border: var-with-fallbacks(--border, split-pane, surface, 1px solid #ccc);
   }
   .split-pane > div {
     padding: var-with-fallbacks(--padding, split-pane-content, split-pane, 8px);

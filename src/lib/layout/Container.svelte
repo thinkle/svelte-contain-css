@@ -41,25 +41,26 @@
     margin: auto;
 
     box-sizing: border-box;
-    padding: var-with-fallbacks(--padding, container, 8px);
-    @include color-props(container, block);
-    @include box-props(container, block);
-    @include typography-container-props(container, block);
+    padding: var-with-fallbacks(--padding, container, surface, 8px);
+    @include color-props(container, surface, block);
+    @include box-props(container, surface, block);
+    @include typography-container-props(container, surface, block);
     /* Override typography max-width */
-    max-width: var-with-fallbacks(--max-width, container, block, 900px);
-    margin-top: var-with-fallbacks(--margin, container, block, var(--gap));
-    margin-bottom: var-with-fallbacks(--margin, container, block, var(--gap));
+    max-width: var-with-fallbacks(--max-width, container, surface, block, 900px);
+    margin-top: var-with-fallbacks(--margin, container, surface, block, var(--gap));
+    margin-bottom: var-with-fallbacks(--margin, container, surface, block, var(--gap));
     /* Why is this suddenly causing a scroll? */
     container-type: inline-size;
     overflow-x: hidden;
     height: var(--container-height, 100%);
     overflow-y: auto;
-    @include custom-scrollbar(container);
+    @include custom-scrollbar(container, surface);
   }
   .border {
     border: var-with-fallbacks(
       --border,
       container,
+      surface,
       var(--border-width) var(--border-style) var(--border-color)
     );
   }

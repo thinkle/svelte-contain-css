@@ -63,7 +63,7 @@
     min-height: var(--bar-min-height);
     height: var(--bar-height, 3em);
     max-height: var(--bar-max-height);
-    @include color-props(bar, container);
+    @include color-props(bar, surface);
     gap: var-with-fallbacks(--gap, bar, 8px);
     overflow: var(--bar-overflow, visible);
 
@@ -79,6 +79,6 @@
   .bar :global(h6) {
     margin-block-start: 0 !important;
     margin-block-end: 0 !important;
-    @include color-props(bar, container);
+    @include color-props(bar, surface);
   }
 </style>

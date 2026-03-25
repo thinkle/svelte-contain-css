@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap");
+
+:root {
+  --font-family: "Newsreader", serif;
+  --body-font-family: "Newsreader", serif;
+  --heading-font-family: "Newsreader", serif;
+  --ui-font-family: "IBM Plex Sans", sans-serif;
+  --code-font-family: "JetBrains Mono", monospace;
+
+  --font-size: 17px;
+  --font-size-small: 13px;
+  --line-height: 1.7;
+  --heading-line-height: 1.08;
+  --heading-font-weight: 500;
+  --bold: 500;
+  --line-width: 41rem;
+  --paragraph-margin-top: 0.95em;
+  --heading-margin-top: 1.35em;
+  --heading-margin-bottom: 0.3em;
+}

@@ -70,15 +70,15 @@
     container-type: inline-size;
     width: var(--w);
     margin: var-with-fallbacks(--margin, card, 16px);
-    border-radius: var-with-fallbacks(--border-radius, card, container, 0);
+    border-radius: var-with-fallbacks(--border-radius, card, surface, 0);
     border: var-with-fallbacks(
       --border,
       card,
-      container,
+      surface,
       var(--border-width) var(--border-style) var(--border-color)
     );
-    @include color-props(card, container);
-    @include box-shadow(card, container);
+    @include color-props(card, surface);
+    @include box-shadow(card, surface);
   }
 
   .card.center section {
@@ -90,7 +90,7 @@
   .card.fixedHeight {
     height: var(--h);
     container-type: size;
-    @include custom-scrollbar(card, container);
+    @include custom-scrollbar(card, surface);
   }
 
   /* ── Card regions ───────────────────────────────────────── */
@@ -135,9 +135,9 @@
     max-width: var(--line-width);
     width: 100%;
     box-sizing: border-box;
-    @include color-props(card-content, container);
+    @include color-props(card-content, surface);
     @include box-props(card-content);
-    @include typography-container-props(card, container);
+    @include typography-container-props(card, surface);
   }
 
   /* ── Container queries ──────────────────────────────────── */

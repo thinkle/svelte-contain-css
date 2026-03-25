@@ -37,8 +37,8 @@
   @import "$lib/sass/_mixins.scss";
   .hero {
     --hero-font-size: calc(var(--font-size) * 2);
-    @include color-props(hero, container);
-    @include typography-container-props(hero, container);
+    @include color-props(hero, surface);
+    @include typography-container-props(hero, surface);
 
     display: grid;
     place-content: center;
