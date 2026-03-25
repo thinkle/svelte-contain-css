@@ -423,10 +423,9 @@
     return {
       "--heading-major-bg": "var(--primary-bg)",
       "--heading-major-fg": "var(--primary-fg)",
-      "--heading-major-padding": "0.15em 0.45em",
-      "--heading-major-border-radius": "var(--border-radius)",
+      "--heading-major-padding": "var(--padding)",
       "--heading-minor-fg": "var(--secondary-fg)",
-      "--heading-minor-text-decoration": "underline",
+      "--heading-minor-font-weight": "600",
     };
   });
 
@@ -447,9 +446,9 @@
       ? "One shared heading rule"
       : headingMode === "fixed"
         ? "Fixed shared heading size"
-      : headingMode === "three"
-        ? "Major / minor / shared"
-        : "Six explicit levels",
+        : headingMode === "three"
+          ? "Major / minor / shared"
+          : "Six explicit levels",
   );
 
   const headingExampleMarkup = $derived(
