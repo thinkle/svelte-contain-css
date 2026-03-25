@@ -19,6 +19,7 @@
     width: var(--text-width, var(--body-width, 100%));
     margin-inline-start: auto;
     margin-inline-end: auto;
+    padding-inline: var(--text-padding, var(--padding));
   }
 
   div :global(a) {

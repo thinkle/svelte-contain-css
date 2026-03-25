@@ -1,8 +1,8 @@
 :root {
   --font-size: 16px;
   --font-size-small: 12px;
-  --heading-font-size: 1.5em;
-  --text-font-size: 1.2em;
+  --heading-font-size: 1.5rem;
+  --text-font-size: 1.2rem;
   --font-family: sans-serif;
   --code-font-size: 0.9em;
   /* Basic typography... */

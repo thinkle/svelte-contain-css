@@ -12,7 +12,9 @@
 
   let { left, right, ...restProps }: Props = $props();
 
-  const style = $derived(injectVars(restProps, "sidebar", ["bg", "fg", "width"]));
+  const style = $derived(
+    injectVars(restProps, "sidebar", ["bg", "fg", "width"]),
+  );
 
   let expandedHamburger = $state(false);
   let expandedBar = $state(true);
@@ -108,7 +110,7 @@
       right: 0;
     }
     .edge-bar {
-      @include color-props(grab-bar, sidebar);
+      @include color-props(grab-bar, sidebar, container);
       position: absolute;
       right: 0;
       top: 0;
@@ -125,7 +127,7 @@
     .edge-bar button {
       display: block;
       background: transparent;
-      color: var(--body-fg);
+      color: var(--grab-bar-fg, var(--sidebar-fg, var(--fg, currentColor)));
       width: var(--grab-bar-width);
       box-sizing: border-box;
       padding: 0;
@@ -241,7 +243,7 @@
     }
   }
   button::after {
-    color: var(--sidebar-icon-fg, currentColor);
+    color: var(--sidebar-icon-fg, var(--fg, currentColor));
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
