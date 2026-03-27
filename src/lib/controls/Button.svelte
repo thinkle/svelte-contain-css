@@ -69,34 +69,34 @@
     @include border-props-none(button);
     @include color-props(button, control, secondary);
     @include box-shadow(button, control);
-    @include typography-props-bare(button, control);
+    @include typography-props-bare(button, ui, control);
     @include clickable(button, clickable);
     @include focusable();
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
   button.primary {
     @include color-props(primary, button, control);
-    @include typography-props-bare(primary, button);
+    @include typography-props-bare(primary, button, ui, control);
     @include clickable(primary, button, clickable);
   }
   button.warning {
     @include color-props(warning, button, control);
-    @include typography-props-bare(warning, button);
+    @include typography-props-bare(warning, button, ui, control);
     @include clickable(warning, button, clickable);
   }
   button.danger {
     @include color-props(danger, button, control);
-    @include typography-props-bare(danger, button);
+    @include typography-props-bare(danger, button, ui, control);
     @include clickable(danger, button, clickable);
   }
   button.success {
     @include color-props(success, button, control);
-    @include typography-props-bare(success, button);
+    @include typography-props-bare(success, button, ui, control);
     @include clickable(success, button, clickable);
   }
   button.info {
     @include color-props(info, button, control);
-    @include typography-props-bare(info, button);
+    @include typography-props-bare(info, button, ui, control);
     @include clickable(info, button, clickable);
   }
   .icon {

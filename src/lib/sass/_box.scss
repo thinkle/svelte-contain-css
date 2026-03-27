@@ -10,8 +10,14 @@
   gap: var(--_gap);
 }
 
+@mixin border-longhand-props($prefixes...) {
+  border-width: fn.prefixed-vars-optional(border-width, $prefixes...);
+  border-style: fn.prefixed-vars-optional(border-style, $prefixes...);
+  border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
+}
+
 @mixin border-props-border($prefixes...) {
-  border: fn.var-with-fallbacks(
+  $base-border: fn.var-with-fallbacks(
     --border,
     append(
         $prefixes,
@@ -19,6 +25,8 @@
           var(--border-color, var(--fg))
       )...
   );
+  border: $base-border;
+  @include border-longhand-props($prefixes...);
   $directions: (top, right, bottom, left);
   $rectProps: (border);
 
@@ -26,15 +34,20 @@
   @each $dir in $directions {
     // Apply prop for each direction
     @each $p in $rectProps {
-      /* #{$p}-#{$dir}: fn.var-with-fallbacks(--#{$p}-#{$dir},
-          append($prefixes,          
-            fn.var-with-fallbacks(--border,$prefixes...)
-          )...) */
+      #{$p}-#{$dir}: fn.var-with-fallbacks(
+        --#{$p}-#{$dir},
+        append(
+            $prefixes,
+            $base-border
+          )...
+      );
     }
   }
 }
 @mixin border-props-none($prefixes...) {
-  border: fn.var-with-fallbacks(--border, append($prefixes, inherit)...);
+  $base-border: fn.var-with-fallbacks(--border, append($prefixes, inherit)...);
+  border: $base-border;
+  @include border-longhand-props($prefixes...);
   $directions: (top, right, bottom, left);
   $rectProps: (border);
 
@@ -87,11 +100,7 @@
 
 @mixin box-props-border($prefixes...) {
   box-sizing: border-box;
-  @include border-props-border(
-    $prefixes...,
-    var(--border-width, 1px) var(--border-style, solid)
-      var(--border-color, var(--fg))
-  );
+  @include border-props-border($prefixes...);
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(--radius, append($prefixes, 0)...);
 }

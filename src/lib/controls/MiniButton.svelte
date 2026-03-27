@@ -55,9 +55,8 @@
     @include color-props(primary, button, control);
   }
   button {
-    @include typography-props(button, control);
+    @include typography-props(mini-button, button, ui, control);
     @include color-props(mini-button, button, control, secondary);
-    font-family: var(--button-font);
     @include clickable(mini-button, button, clickable);
     @include box-shadow(mini-button, button, control);
     @include focusable();

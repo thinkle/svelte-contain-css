@@ -106,6 +106,34 @@
   @return #{$result};
 }
 
+@function vars-optional($suffix, $args...) {
+  $result: var(--#{$suffix});
+
+  @if length($args) > 0 {
+    @for $i from length($args) through 1 {
+      $prefix: nth($args, $i);
+      $prefixed-var: generate-var-name($prefix, $suffix);
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  }
+
+  @return #{$result};
+}
+
+@function prefixed-vars-optional($suffix, $args...) {
+  $result: var(--__missing-#{$suffix});
+
+  @if length($args) > 0 {
+    @for $i from length($args) through 1 {
+      $prefix: nth($args, $i);
+      $prefixed-var: generate-var-name($prefix, $suffix);
+      $result: var(#{$prefixed-var}, #{$result});
+    }
+  }
+
+  @return #{$result};
+}
+
 @function vars-suffix-fallback($suffix, $args...) {
   // Initialize the result with the first prefixed variable
   $prefix: nth($args, length($args));

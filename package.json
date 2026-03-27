@@ -1,6 +1,6 @@
 {
   "name": "contain-css-svelte",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "capture:review": "node scripts/capture-review.mjs",
     "capture:review:matrix": "node scripts/capture-review-matrix.mjs",

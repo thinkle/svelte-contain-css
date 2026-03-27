@@ -425,7 +425,10 @@
       "--heading-major-fg": "var(--primary-fg)",
       "--heading-major-padding": "var(--padding)",
       "--heading-minor-fg": "var(--secondary-fg)",
-      "--heading-minor-font-weight": "600",
+      "--heading-minor-padding": "0 0 0 0.75rem",
+      "--heading-minor-border-width": "0 0 0 4px",
+      "--heading-minor-border-style": "solid",
+      "--heading-minor-border-color": "var(--secondary-fg)",
     };
   });
 

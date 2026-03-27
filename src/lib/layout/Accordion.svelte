@@ -64,16 +64,21 @@
   }
 
   div :global(details > summary) {
-    @include color-props(accordion-summary, secondary);
-    @include box-props-square-border(accordion-summary, surface);
+    @include color-props(accordion-summary, control, secondary);
+    @include box-props-square-border(accordion-summary, control, surface);
     @include clickable(accordion);
     @include focusable();
     cursor: pointer;
-    @include typography-props-bare(accordion-summary);
+    @include typography-props-bare(accordion-summary, ui, control);
   }
   div :global(details[open] > summary) {
     @include color-props(accordion-summary-open, primary);
-    @include typography-props-bare(accordion-summary-open, accordion-summary);
+    @include typography-props-bare(
+      accordion-summary-open,
+      accordion-summary,
+      ui,
+      control
+    );
   }
   div :global(details) {
     interpolate-size: allow-keywords;
@@ -101,8 +106,8 @@
   }
   div :global(summary) {
     list-style: var(--details-list-style, none);
-    @include color-props(accordion-summary, secondary);
-    @include box-props-square(accordion-summary, surface);
+    @include color-props(accordion-summary, control, secondary);
+    @include box-props-square(accordion-summary, control, surface);
   }
   div :global(summary::after) {
     content: var(--accordion-icon, "+");

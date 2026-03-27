@@ -85,7 +85,7 @@
     @include border-props-none(button);
     @include color-props(button, control, secondary);
     @include box-shadow(button, control);
-    @include typography-props-bare(button, control);
+    @include typography-props-bare(button, ui, control);
     @include clickable(button, clickable);
     @include focusable();
     text-decoration: none;
@@ -103,22 +103,22 @@
   }
   a.primary {
     @include color-props(primary, button, control, secondary);
-    @include typography-props-bare(primary, a);
+    @include typography-props-bare(primary, button, ui, control);
   }
   a.warning {
     @include color-props(warning, a, control);
-    @include typography-props-bare(warning, a);
+    @include typography-props-bare(warning, button, ui, control);
   }
   a.danger {
     @include color-props(danger, a, control);
-    @include typography-props-bare(danger, a);
+    @include typography-props-bare(danger, button, ui, control);
   }
   a.success {
     @include color-props(success, a, control);
-    @include typography-props-bare(success, a);
+    @include typography-props-bare(success, button, ui, control);
   }
   a.info {
     @include color-props(info, a, control);
-    @include typography-props-bare(info, a);
+    @include typography-props-bare(info, button, ui, control);
   }
 </style>

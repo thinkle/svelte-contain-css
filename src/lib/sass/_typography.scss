@@ -57,6 +57,9 @@
   padding: var(--_heading-padding);
   --_heading-border: #{fn.vars-fallback(border, none, $prefixes...)};
   border: var(--_heading-border);
+  border-width: fn.prefixed-vars-optional(border-width, $prefixes...);
+  border-style: fn.prefixed-vars-optional(border-style, $prefixes...);
+  border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
   --_heading-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
   border-radius: var(--_heading-border-radius);
   --_heading-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
@@ -176,11 +179,11 @@
   }
 
   & :global(h3) {
-    @include heading-props-for(heading-3, heading-minor, $prefixes...);
+    @include heading-props-for(heading-3, heading, $prefixes...);
   }
 
   & :global(h4) {
-    @include heading-props-for(heading-4, heading-minor, $prefixes...);
+    @include heading-props-for(heading-4, heading, $prefixes...);
   }
 
   & :global(h5) {
