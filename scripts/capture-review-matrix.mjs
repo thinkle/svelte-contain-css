@@ -9,6 +9,10 @@ const themes = [
   "material",
   "retro",
   "light-or-dark",
+  "canyon-modern-serif-fancy",
+  "forest-editorial-rounded",
+  "dark-ibm-layered",
+  "light-airy-solid",
 ];
 
 const scenarios = [

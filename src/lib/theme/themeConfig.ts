@@ -18,6 +18,7 @@ import flat from "$lib/vars/flat.css?raw";
 import layered from "$lib/vars/layered.css?raw";
 import solidHeadings from "$lib/vars/solid-headings.css?raw";
 import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
+import { combinedThemeEntries } from "./combinedThemes";
 
 // lightordark.css uses @import url() which won't resolve when injected at
 // runtime — build it inline from the raw light/dark sources instead.
@@ -32,6 +33,7 @@ export const fullThemes: ThemeEntry[] = [
   { name: "Bootstrap", css: bootstrap, file: "themes/bootstrap.css" },
   { name: "Material", css: material, file: "themes/material.css" },
   { name: "Retro", css: retro, file: "themes/retro.css" },
+  ...combinedThemeEntries.map(({ name, css, file }) => ({ name, css, file })),
 ];
 
 export const colorThemes: ThemeEntry[] = [

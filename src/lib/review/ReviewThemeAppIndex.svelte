@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
+  import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
   import { reviewAppScenarios } from "$lib/review/scenarios";
   import type { ReviewThemeName } from "$lib/review/themes";
 
@@ -14,15 +16,19 @@
   <title>{themeLabel} App Review Routes</title>
 </svelte:head>
 
-<h1>{themeLabel} App Review Routes</h1>
-<p>Available app scenarios for this theme.</p>
+<ReviewIndexShell
+  title={`${themeLabel} App Review Routes`}
+  description="Available app scenarios for this theme."
+>
+  <ReviewThemeSwitcher {theme} />
 
-<ul>
-  {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
-    <li>
-      <a href={`/svelte-contain-css/review/${theme}/app/${scenario}`}>
-        {entry.title}
-      </a>
-    </li>
-  {/each}
-</ul>
+  <ul>
+    {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
+      <li>
+        <a href={`/svelte-contain-css/review/${theme}/app/${scenario}`}>
+          {entry.title}
+        </a>
+      </li>
+    {/each}
+  </ul>
+</ReviewIndexShell>
