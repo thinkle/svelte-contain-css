@@ -61,8 +61,10 @@
 
   .tag {
     display: inline-block;
+    --tag-font-size: var(--font-size-small, 0.75rem);
+    --tag-padding: 0.2em 0.55em;
     @include color-props(tag, secondary);
-    @include typography-props-bare(tag, small);
+    @include typography-props-bare(tag);
     @include box-props(tag);
     margin-inline-start: var(--space);
     margin-inline-end: var(--space);
