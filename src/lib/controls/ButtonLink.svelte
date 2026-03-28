@@ -95,7 +95,7 @@
     text-decoration: none;
     /* Override other link styles that may be outside
     us */
-    @include color-props(button, control, secondary);
+    /* @include color-props(button, control, secondary); */
   }
 
   a.primary[role="button"]:hover {
