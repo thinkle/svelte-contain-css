@@ -24,6 +24,7 @@
   import Dialog from "$lib/overlays/Dialog.svelte";
   import Tooltip from "$lib/overlays/Tooltip.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
+  import Stack from "$lib/layout/Stack.svelte";
 
   let activeTab = $state("overview");
   let selectedAudience = $state("enterprise");
@@ -49,17 +50,21 @@
 >
   <TextLayout>
     <p>Product Launch Scenario</p>
-    <h1>Ship the migration control center</h1>
+
+    <Stack gap="0">
+      <div>
+        <Tag success>Ready</Tag>
+        <Tag info>Pilot</Tag>
+        <Tag warning>Needs Comms Review</Tag>
+      </div>
+      <h1>Ship the migration control center</h1>
+    </Stack>
     <p>
       This review page exercises hero treatment, tabs, split panes, overlays,
       status tags, and richer control states without relying on ad hoc demo
       chrome.
     </p>
-    <Inline>
-      <Tag success>Ready</Tag>
-      <Tag info>Pilot</Tag>
-      <Tag warning>Needs Comms Review</Tag>
-    </Inline>
+
     <Inline>
       <Button
         primary
