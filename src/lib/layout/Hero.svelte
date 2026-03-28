@@ -37,6 +37,7 @@
   @import "$lib/sass/_mixins.scss";
   .hero {
     --hero-font-size: calc(var(--font-size) * 2);
+    --hero-first-letter-fg: var(--hero-fg, var(--surface-fg, var(--fg)));
     @include color-props(hero, surface);
     @include typography-container-props(hero, surface);
 
