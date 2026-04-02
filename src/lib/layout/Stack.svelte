@@ -35,16 +35,11 @@
   } & Record<string, unknown>;
 
   const style = $derived(
-    injectVars({ justify, align: resolvedAlign, gap, ...elementProps }, "stack", [
-      "bg",
-      "fg",
-      "padding",
-      "width",
-      "height",
-      "gap",
-      "justify",
-      "align",
-    ]) + (inlineStyle ?? ""),
+    injectVars(
+      { justify, align: resolvedAlign, gap, ...elementProps },
+      "stack",
+      ["bg", "fg", "padding", "width", "height", "gap", "justify", "align"],
+    ) + (inlineStyle ?? ""),
   );
 </script>
 
@@ -64,7 +59,6 @@
 
   .stack {
     @include box-props(stack);
-    @include typography-container-props(stack, container, body, text);
     display: flex;
     flex-direction: column;
     gap: var(--stack-gap, var(--gap));

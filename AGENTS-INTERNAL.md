@@ -285,10 +285,14 @@ Use the provided mixins from `$lib/sass/_mixins.scss` for consistent styling:
     // Color properties (bg, fg)
     @include color-props(my-component, container);
 
-    // Typography (font-size, font-family, line-height, etc.)
+    // Typography (font-size, font-family, line-height, text-align, etc.)
+    // Does NOT set max-width.
     @include typography-props(my-component, ui);
 
-    // Container-level typography (width, text-align, etc.)
+    // Prose container typography: sets max-width via --line-width, applies
+    // typography-props, and styles descendant p/h1-h6/ul/ol elements.
+    // Use ONLY on content containers (e.g. TextLayout), never on layout
+    // primitives like Stack or Inline — it will impose a max-width on them.
     @include typography-container-props(my-component, container);
 
     // Box properties (padding, margin, border-radius)
