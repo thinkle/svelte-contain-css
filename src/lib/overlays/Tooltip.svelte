@@ -62,7 +62,7 @@
         window
           .getComputedStyle(tooltipDiv)
           .getPropertyValue("--tooltip-arrow-size")
-          .replace("px", "")
+          .replace("px", ""),
       ) || 8;
     // Adjust tooltip style to match target element
     if (renderedVertical === "bottom") {
