@@ -1,6 +1,7 @@
 <script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
+  import MiniButton from "$lib/controls/MiniButton.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Code from "$lib/misc/Code.svelte";
   import Tooltip from "$lib/overlays/Tooltip.svelte";
@@ -143,6 +144,12 @@
         </Tooltip>
       {/each}
     </div>
+    <p>
+      But what about a MiniButton?
+      <Tooltip tooltipText="Tooltip for mini button">
+        <MiniButton>?</MiniButton>
+      </Tooltip>
+    </p>
     <Code
       code={`<Tooltip
   tooltipText="Tooltip for tiny element"

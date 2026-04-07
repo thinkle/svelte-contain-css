@@ -75,23 +75,12 @@
       tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
     }
     if (renderedHorizontal == "right") {
-      /* Check if the "arrow" will not "hit" the edge... */
-      // Read value of --tooltip-gap
-
-      if (targetRect.width / 2 > tooltipGap) {
-        tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2}px`;
-      } else {
-        tooltipDiv.style.left = `${targetRect.left - tooltipGap}px`;
-      }
+      // Anchor so that the arrow center (at 2*tooltipGap from tooltip left) aligns with target center
+      tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2 - 2 * tooltipGap}px`;
       tooltipDiv.style.right = "unset";
     } else {
-      if (targetRect.width / 2 > tooltipGap) {
-        tooltipDiv.style.right = `${
-          window.innerWidth - (targetRect.left + targetRect.width / 2)
-        }px`;
-      } else {
-        tooltipDiv.style.right = `${window.innerWidth - (targetRect.right + tooltipGap)}px`;
-      }
+      // Anchor so that the arrow center (at 2*tooltipGap from tooltip right) aligns with target center
+      tooltipDiv.style.right = `${window.innerWidth - (targetRect.left + targetRect.width / 2) - 2 * tooltipGap}px`;
       tooltipDiv.style.left = "unset";
     }
 
