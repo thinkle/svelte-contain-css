@@ -24,11 +24,10 @@
   --input-bg: #fffdfa;
   --input-fg: #33261f;
 
-  --tab-bg: #efdccf;
+  --tab-bg: color-mix(in srgb, var(--surface-bg) 72%, var(--secondary-bg) 28%);
   --tab-fg: #5a4033;
-  --tab-active-bg: #fff8f2;
+  --tab-active-bg: var(--secondary-bg);
   --tab-active-fg: #8f472b;
-  --tab-bar-bg: #f0e1d4;
   --tab-bar-fg: #33261f;
 
   --border-color: #ccb2a1;
