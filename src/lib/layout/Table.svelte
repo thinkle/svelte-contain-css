@@ -331,7 +331,8 @@
     z-index: -1;
   }
   .fixed-table-head :global(th) {
-    @include color-props(table-head, table, surface);
+    @include color-props(table-head, text);
+    @include typography-props-bold(table-head, header);
   }
 
   /* Visually make our two tables appear as one */
@@ -359,11 +360,34 @@
 
   /* Interactive affordances: target rows/cells with tabindex for keyboard accessibility */
   table :global(tr[tabindex]) {
-    @include clickable();
+    @include clickable-cursor();
     @include focusable();
   }
+  table :global(tr[tabindex] > th),
+  table :global(tr[tabindex] > td),
+  table :global(th[tabindex]),
   table :global(td[tabindex]) {
-    @include clickable();
+    @include clickable-cursor();
+    @include clickable-affordance-transition();
+  }
+  table :global(tr[tabindex]:hover > th),
+  table :global(tr[tabindex]:hover > td),
+  table :global(tr[tabindex]:focus-visible > th),
+  table :global(tr[tabindex]:focus-visible > td),
+  table :global(th[tabindex]:hover),
+  table :global(th[tabindex]:focus-visible),
+  table :global(td[tabindex]:hover),
+  table :global(td[tabindex]:focus-visible) {
+    @include clickable-hover-affordance();
+  }
+  table :global(tr[tabindex]:active > th),
+  table :global(tr[tabindex]:active > td),
+  table :global(th[tabindex]:active),
+  table :global(td[tabindex]:active) {
+    @include clickable-active-affordance();
+  }
+  table :global(th[tabindex]),
+  table :global(td[tabindex]) {
     @include focusable();
   }
 </style>
