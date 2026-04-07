@@ -11,6 +11,7 @@ import Select from "./controls/Select.svelte";
 import Option from "./controls/Option.svelte";
 import Slider from "./controls/Slider.svelte";
 import TabItem from "./controls/TabItem.svelte";
+import Toggle from "./controls/Toggle.svelte";
 import Bar from "./layout/Bar.svelte";
 import Column from "./layout/Column.svelte";
 import ColumnContainer from "./layout/ColumnContainer.svelte";
@@ -67,6 +68,7 @@ export {
   Checkbox,
   Input,
   Slider,
+  Toggle,
   RadioButton,
   MiniButton,
   Select,

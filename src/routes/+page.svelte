@@ -17,6 +17,7 @@
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
   import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
   import SliderDemo from "./demos/SliderDemo.svelte";
+  import ToggleDemo from "./demos/ToggleDemo.svelte";
   import FormDemo from "./demos/FormDemo.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
@@ -143,6 +144,7 @@
       { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },
       { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
       { name: "Slider", component: SliderDemo, demo: "Slider" },
+      { name: "Toggle", component: ToggleDemo, demo: "Toggle" },
       { name: "Form", component: FormDemo, demo: "Form" },
       { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
       { name: "Overlays" },

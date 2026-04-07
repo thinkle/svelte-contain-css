@@ -103,8 +103,7 @@
     user-select: none;
     gap: var(--radio-button-space, var(--toggle-space, var(--space-md)));
     white-space: nowrap;
-
-    @include clickable(radio-button, clickable);
+    @include clickable-cursor(radio-button, clickable);
   }
 
   label.radio-item span {
@@ -130,7 +129,12 @@
   }
 
   label.radio-item::before {
-    transition: all var-with-fallbacks(--transition, radio-button, control);
+    @include clickable-affordance-transition(
+      radio-button,
+      clickable,
+      control,
+      180ms ease
+    );
     display: inline-grid;
     place-content: center;
     content: " ";
@@ -150,6 +154,14 @@
     margin-left: var(--radio-button-padding, var(--padding));
   }
 
+  label.radio-item:hover::before {
+    @include clickable-hover-affordance(radio-button, clickable);
+  }
+
+  label.radio-item:active::before {
+    @include clickable-active-affordance(radio-button, clickable);
+  }
+
   label.radio-item:has(input:checked)::before {
     @include color-props(radio-button-checked, toggle-on, primary);
     border: var-with-fallbacks(
@@ -161,5 +173,17 @@
     box-sizing: border-box;
     width: var-with-fallbacks(--size, radio-button, toggle, font, 1em);
     height: var-with-fallbacks(--size, radio-button, toggle, font, 1em);
+  }
+
+  label.radio-item:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: var(--radio-button-disabled-opacity, 0.6);
+    filter: grayscale(0.2);
+  }
+
+  label.radio-item:has(input:disabled):hover::before,
+  label.radio-item:has(input:disabled):active::before {
+    filter: none;
+    box-shadow: none;
   }
 </style>
