@@ -90,46 +90,6 @@
     li {
       @include clickable(menu-item);
     }
-    /*
-    // Make hover/active feedback visible across the whole row by default.
-    & :global(li:hover > a:not(.active)),
-    & :global(li:hover > button:not(.active)),
-    & :global(li:hover > input[type="submit"]:not(.active)),
-    & :global(li:hover > .button:not(.active)) {
-      background: var(
-        --menu-item-hover-bg,
-        var(--menu-item-bg, var(--menu-bg, var(--bg, unset)))
-      );
-      color: var(
-        --menu-item-hover-fg,
-        var(--menu-item-fg, var(--menu-fg, var(--fg, inherit)))
-      );
-    }
-
-    & :global(li:active > a:not(.active)),
-    & :global(li:active > button:not(.active)),
-    & :global(li:active > input[type="submit"]:not(.active)),
-    & :global(li:active > .button:not(.active)) {
-      background: var(
-        --menu-item-active-bg,
-        var(--menu-item-bg, var(--menu-bg, var(--bg, unset)))
-      );
-      color: var(
-        --menu-item-active-fg,
-        var(--menu-item-fg, var(--menu-fg, var(--fg, inherit)))
-      );
-    }
-
-    & :global(.active) {
-      @include color-props(
-        menu-item-active,
-        primary,
-        menu-item,
-        button,
-        control,
-        surface
-      );
-    } */
   }
   .menu.striped {
     & :global(li:nth-of-type(even)) > {
