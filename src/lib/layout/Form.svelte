@@ -8,6 +8,7 @@
     children,
     // FormProvider props
     layout,
+    collapseSide,
     fullWidth,
     globalInputStyles,
     multiline,
@@ -30,6 +31,7 @@
     children?: Snippet;
     // FormProvider context props
     layout?: "side" | "above" | "below";
+    collapseSide?: boolean;
     fullWidth?: boolean;
     globalInputStyles?: boolean;
     multiline?: boolean;
@@ -79,7 +81,13 @@
   );
 </script>
 
-<FormProvider {layout} {fullWidth} {globalInputStyles} {multiline}>
+<FormProvider
+  {layout}
+  {collapseSide}
+  {fullWidth}
+  {globalInputStyles}
+  {multiline}
+>
   <form {style} {action} {method} {onsubmit} {...restProps}>
     {@render children?.()}
   </form>

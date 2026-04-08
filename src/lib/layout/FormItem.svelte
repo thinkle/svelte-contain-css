@@ -6,6 +6,7 @@
 
   type FormItemDefaults = {
     layout?: "side" | "above" | "below";
+    collapseSide?: boolean;
     fullWidth?: boolean;
     globalInputStyles?: boolean;
     multiline?: boolean;
@@ -21,6 +22,7 @@
     children,
     multiline,
     layout,
+    collapseSide,
     above = false,
     below = false,
     ...restProps
@@ -32,6 +34,7 @@
     children?: Snippet;
     multiline?: boolean;
     layout?: "side" | "above" | "below";
+    collapseSide?: boolean;
     above?: boolean;
     below?: boolean;
   } & HTMLAttributes<HTMLElement> = $props();
@@ -45,6 +48,9 @@
   );
   const effectiveMultiline = $derived(
     multiline ?? contextDefaults?.multiline ?? false
+  );
+  const effectiveCollapseSide = $derived(
+    collapseSide ?? contextDefaults?.collapseSide ?? true
   );
   const effectiveLayoutFromContext = $derived(
     layout ?? contextDefaults?.layout ?? "side"
@@ -65,6 +71,7 @@
   class:fullWidth={effectiveFullWidth}
   class:globalInputStyles={effectiveGlobalInputStyles}
   class:multiline={effectiveMultiline}
+  class:collapse-side={effectiveCollapseSide}
   class:layout-side={effectiveLayout === "side"}
   class:layout-above={effectiveLayout === "above"}
   class:layout-below={effectiveLayout === "below"}
@@ -188,20 +195,20 @@
   }
 
   @container (max-width: 400px) {
-    .form-item.layout-side {
+    .form-item.layout-side.collapse-side {
       flex-direction: column;
       align-items: flex-start;
       gap: var(--form-label-vertical-gap, var(--space));
     }
-    .form-item.layout-side .label {
+    .form-item.layout-side.collapse-side .label {
       text-align: left;
     }
-    .form-item.layout-side {
+    .form-item.layout-side.collapse-side {
       width: auto;
       text-align: left;
       font-size: var(--font-size-small);
     }
-    .form-item.layout-side {
+    .form-item.layout-side.collapse-side {
       width: var(--form-input-fixed-width, var(--form-input-width));
     }
   }

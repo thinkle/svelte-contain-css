@@ -86,6 +86,7 @@
 
   let fullWidth = $state(false);
   let globalInputStyles = $state(true);
+  let collapseSide = $state(true);
   let demoOrCode = $state("Demo");
   let layoutDemo = $state<"side" | "above" | "below">("side");
   $effect(() => console.log("layoutDemo", layoutDemo));
@@ -127,8 +128,12 @@
             >below</RadioButton
           >
         </FormItem>
+        <FormItem>
+          {#snippet label()}Collapse side on narrow{/snippet}
+          <Checkbox bind:checked={collapseSide} />
+        </FormItem>
       </Fieldset>
-      <Form {fullWidth} {globalInputStyles} layout={layoutDemo}>
+      <Form {fullWidth} {globalInputStyles} {collapseSide} layout={layoutDemo}>
         <Fieldset>
           {#snippet legend()}Biographical Info{/snippet}
           <FormItem>
@@ -161,8 +166,8 @@
       <TextLayout
         ><p>
           <code>FormItem</code> is the core labeled control wrapper. In a wide
-          container, it puts labels side-by-side with inputs. In a narrow
-          container, it stacks them. The higher-level
+          container, it puts labels side-by-side with inputs. By default, in a
+          narrow container, side layout stacks them. The higher-level
           <code>Form</code>, <code>Fieldset</code>, and
           <code>FormProvider</code> components all exist mainly to set defaults
           around nested <code>FormItem</code>s.
@@ -176,15 +181,18 @@
           <Button onclick={() => (containerSize = 200)}>Narrow</Button>
         {/snippet}
       </FormItem>
+      <FormItem
+        ><Checkbox bind:checked={collapseSide}>collapseSide</Checkbox></FormItem
+      >
       <Container maxWidth={containerSize + "px"} border>
         <h2>Log In</h2>
-        <FormItem>
+        <FormItem {collapseSide}>
           {#snippet label()}
             <span>Name</span>
           {/snippet}
           <input type="text" placeholder="First Last" />
         </FormItem>
-        <FormItem>
+        <FormItem layout="side" {collapseSide}>
           {#snippet label()}
             <span>Password</span>
           {/snippet}
@@ -197,11 +205,11 @@
 
       <Code
         code={`
-            <FormItem>
+            <FormItem${!collapseSide ? " collapseSide={false}" : ""}>
               {#snippet label()}Name{/snippet}
               <input type="text" placeholder="First Last"/>
             </FormItem>
-            <FormItem>
+            <FormItem${!collapseSide ? " collapseSide={false}" : ""}>
               {#snippet label()}Password{/snippet}
               <input type="password" placeholder="***"/>
             </FormItem>
@@ -399,7 +407,9 @@
         (default, label to the left),
         <code>&lt;FormItem above&gt;</code> (label above), or
         <code>&lt;FormItem below&gt;</code> (label below). You can also pass
-        <code>layout="side | above | below"</code> explicitly.
+        <code>layout="side | above | below"</code> explicitly. If you want side
+        labels to stay side-by-side even in a tight container, use
+        <code>collapseSide={false}</code>.
       </p>
     </TextLayout>
     <FormItem>

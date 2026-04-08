@@ -4,6 +4,7 @@
 
   type FormItemDefaults = {
     layout?: "side" | "above" | "below";
+    collapseSide?: boolean;
     fullWidth?: boolean;
     globalInputStyles?: boolean;
     multiline?: boolean;
@@ -11,6 +12,7 @@
 
   let {
     layout,
+    collapseSide,
     fullWidth,
     globalInputStyles,
     multiline,
@@ -25,6 +27,7 @@
   // Make context reactive using $state, merging with parent
   let contextValue = $state<FormItemDefaults>({
     layout: layout ?? parentContext?.layout,
+    collapseSide: collapseSide ?? parentContext?.collapseSide,
     fullWidth: fullWidth ?? parentContext?.fullWidth,
     globalInputStyles: globalInputStyles ?? parentContext?.globalInputStyles,
     multiline: multiline ?? parentContext?.multiline,
@@ -33,6 +36,7 @@
   // Update context value properties when props change, falling back to parent
   $effect(() => {
     contextValue.layout = layout ?? parentContext?.layout;
+    contextValue.collapseSide = collapseSide ?? parentContext?.collapseSide;
     contextValue.fullWidth = fullWidth ?? parentContext?.fullWidth;
     contextValue.globalInputStyles =
       globalInputStyles ?? parentContext?.globalInputStyles;
