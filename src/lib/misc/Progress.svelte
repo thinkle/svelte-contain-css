@@ -36,7 +36,7 @@
       : max <= 0
         ? 0
         : Math.min(Math.max(typeof value === "number" ? value : 0, 0), max) /
-          max
+          max,
   );
 
   let animateTrack = $derived(!["uninitiated", "complete"].includes(state));
@@ -77,13 +77,29 @@
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
 
-  // Diagonal stripes from off-white to white
+  // Diagonal stripes: subtle variation on track color
   $track-stripes: repeating-linear-gradient(
     135deg,
     var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 0,
     var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 20px,
-    var(--progress-track-stripe-bg, var(--white, #fff)) 20px,
-    var(--progress-track-stripe-bg, var(--white, #fff)) 40px
+    var(
+        --progress-track-stripe-bg,
+        color-mix(
+          in srgb,
+          var(--secondary-bg, #fff) 85%,
+          var(--surface-bg, #dfdfdf) 15%
+        )
+      )
+      20px,
+    var(
+        --progress-track-stripe-bg,
+        color-mix(
+          in srgb,
+          var(--secondary-bg, #fff) 85%,
+          var(--surface-bg, #dfdfdf) 15%
+        )
+      )
+      40px
   );
 
   @keyframes track-stripes {
@@ -162,20 +178,49 @@
       align-items: center;
       justify-content: center;
       color: var(--progress-fg, var(--secondary-fg, var(--white)));
-      text-shadow: var(
-        --progress-text-shadow,
-        1px 1px var(--progress-fg, var(--secondary-fg, var(--white)))
+      /* Outline color defaults to track background so text is readable over unfilled area */
+      --_progress-outline-color: var(
+        --progress-outline-color,
+        var(--progress-track-bg, var(--secondary-bg, #dfdfdf))
       );
+      -webkit-text-stroke: var(--progress-outline-width, 1px)
+        var(--_progress-outline-color);
+      paint-order: stroke fill;
+      text-shadow: none;
+
+      @supports not (-webkit-text-stroke: 1px black) {
+        text-shadow: var(
+          --progress-text-shadow,
+          1px 0px var(--_progress-outline-color),
+          -1px 0px var(--_progress-outline-color),
+          0px -1px var(--_progress-outline-color),
+          0px 1px var(--_progress-outline-color)
+        );
+      }
     }
     .half-full .progress-text {
       color: var(--progress-half-fg, var(--primary-fg, var(--white)));
-      text-shadow: var(
-        --progress-half-text-shadow,
+      /* Outline color defaults to bar color so text is readable over the unfilled track edge */
+      --_progress-outline-color: var(
+        --progress-half-outline-color,
         var(
-          --progress-text-shadow,
-          1px 1px var(--progress-fg, var(--secondary-fg, var(--white)))
+          --progress-outline-color,
+          var(--progress-bar-color, var(--primary-bg))
         )
       );
+
+      @supports not (-webkit-text-stroke: 1px black) {
+        text-shadow: var(
+          --progress-half-text-shadow,
+          var(
+            --progress-text-shadow,
+            1px 0px var(--_progress-outline-color),
+            -1px 0px var(--_progress-outline-color),
+            0px -1px var(--_progress-outline-color),
+            0px 1px var(--_progress-outline-color)
+          )
+        );
+      }
     }
   }
 </style>

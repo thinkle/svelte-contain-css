@@ -20,7 +20,28 @@
     { name: "--progress-track-bg", label: "Track background color" },
     { name: "--progress-track-stripe-bg", label: "Track background color" },
     { name: "--progress-fg", label: "Text color (over empty)" },
-    { name: "--progress-half-fg", label: "Text color (over bar)" },
+    { name: "--progress-half-fg", label: "Text color (50-100%)" },
+    {
+      name: "--progress-outline-width",
+      label: "Width of the outline around the text for better contrast",
+    },
+    {
+      name: "--progress-outline-color",
+      label: "Color of the outline around the text for better contrast",
+    },
+    {
+      name: "--progress-half-outline-color",
+      label:
+        "Color of the outline around the text (50-100%) for better contrast",
+    },
+    {
+      name: "--progress-text-shadow",
+      label: "Text shadow for better contrast (fallback for older browsers)",
+    },
+    {
+      name: "--progress-half-text-shadow",
+      label: "Color of the text shadow (50-100%) (fallback for older browsers)",
+    },
   ];
 
   let state: "uninitiated" | "inprogress" | "complete" = "inprogress";
@@ -59,13 +80,20 @@
           <RadioButton value="inprogress" bind:group={state}
             >In Progress</RadioButton
           >
-          <RadioButton value="complete" bind:group={state}>Complete</RadioButton>
+          <RadioButton value="complete" bind:group={state}>Complete</RadioButton
+          >
         </Stack>
       </FormItem>
 
       <FormItem>
         {#snippet label()}Value: {value} / {max}{/snippet}
-        <Slider min={0} {max} bind:value disabled={indeterminate} width="12rem" />
+        <Slider
+          min={0}
+          {max}
+          bind:value
+          disabled={indeterminate}
+          width="12rem"
+        />
       </FormItem>
 
       <FormItem>
