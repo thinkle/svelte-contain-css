@@ -271,6 +271,18 @@ Use `FormProvider` to set defaults for all FormItems:
 </FormProvider>
 ```
 
+If you want `layout="side"` to stay horizontal in a narrow container, disable
+the built-in collapse:
+
+```svelte
+<FormProvider layout="side" collapseSide={false} --form-label-width="8em">
+  <FormItem fullWidth>
+    {#snippet label()}Status{/snippet}
+    <Input />
+  </FormItem>
+</FormProvider>
+```
+
 ### Checkboxes and RadioButtons
 
 **Single Checkbox with `bind:checked`:**
