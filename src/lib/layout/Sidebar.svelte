@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { injectVars } from "$lib/util";
+  import type { Snippet } from "svelte";
   import type { SidebarStyleProps } from "$lib/types";
   import type { HTMLAttributes } from "svelte/elements";
 
   type Props = {
     left?: boolean;
     right?: boolean;
+    children?: Snippet;
   } & SidebarStyleProps &
     HTMLAttributes<HTMLElement>;
 
-  let { left, right, ...restProps }: Props = $props();
+  let { left, right, children, ...restProps }: Props = $props();
 
   const style = $derived(
     injectVars(restProps, "sidebar", ["bg", "fg", "width"]),
@@ -36,7 +37,7 @@
     onclick={() => (expandedHamburger = !expandedHamburger)}
   ></button>
   <div class="content">
-    <slot />
+    {@render children?.()}
   </div>
   <label class="edge-bar">
     <button
