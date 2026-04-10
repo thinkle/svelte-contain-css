@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "functions" as fn;
 
 @mixin typography-props-bare($prefixes...) {
@@ -20,7 +21,7 @@
   text-decoration: fn.vars(text-decoration, $prefixes...);
   --_font-size: #{fn.vars(font-size, $prefixes...)};
   font-size: var(--_font-size);
-  font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, bold)...);
+  font-weight: fn.var-with-fallbacks(--font-weight, list.append($prefixes, bold)...);
   line-height: fn.vars(line-height, $prefixes...);
   letter-spacing: fn.vars(letter-spacing, $prefixes...);
   text-indent: fn.vars(indent, $prefixes...);
@@ -67,25 +68,25 @@
 }
 
 @mixin heading-typography-props($prefixes...) {
-  font-family: fn.var-with-fallbacks(--font-family, append($prefixes, revert)...);
+  font-family: fn.var-with-fallbacks(--font-family, list.append($prefixes, revert)...);
   text-transform: fn.var-with-fallbacks(
     --text-transform,
-    append($prefixes, revert)...
+    list.append($prefixes, revert)...
   );
   text-decoration: fn.var-with-fallbacks(
     --text-decoration,
-    append($prefixes, revert)...
+    list.append($prefixes, revert)...
   );
   font-size: fn.vars-fallback(font-size, revert, $prefixes...);
-  font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, revert)...);
-  line-height: fn.var-with-fallbacks(--line-height, append($prefixes, revert)...);
+  font-weight: fn.var-with-fallbacks(--font-weight, list.append($prefixes, revert)...);
+  line-height: fn.var-with-fallbacks(--line-height, list.append($prefixes, revert)...);
   letter-spacing: fn.var-with-fallbacks(
     --letter-spacing,
-    append($prefixes, revert)...
+    list.append($prefixes, revert)...
   );
-  text-indent: fn.var-with-fallbacks(--indent, append($prefixes, revert)...);
-  font-variant: fn.var-with-fallbacks(--font-variant, append($prefixes, revert)...);
-  text-align: fn.var-with-fallbacks(--text-align, append($prefixes, revert)...);
+  text-indent: fn.var-with-fallbacks(--indent, list.append($prefixes, revert)...);
+  font-variant: fn.var-with-fallbacks(--font-variant, list.append($prefixes, revert)...);
+  text-align: fn.var-with-fallbacks(--text-align, list.append($prefixes, revert)...);
 }
 
 @mixin heading-props-for($level, $group, $prefixes...) {
@@ -95,28 +96,28 @@
   $resolved-prefixes: ();
 
   @each $prefix in $level-prefixes {
-    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+    $resolved-prefixes: list.append($resolved-prefixes, $prefix, $separator: comma);
   }
   @each $prefix in $group-prefixes {
-    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+    $resolved-prefixes: list.append($resolved-prefixes, $prefix, $separator: comma);
   }
   @each $prefix in $heading-prefixes {
-    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+    $resolved-prefixes: list.append($resolved-prefixes, $prefix, $separator: comma);
   }
 
-  $resolved-prefixes: append($resolved-prefixes, $level, comma);
-  $resolved-prefixes: append($resolved-prefixes, $group, comma);
-  $resolved-prefixes: append($resolved-prefixes, heading, comma);
+  $resolved-prefixes: list.append($resolved-prefixes, $level, $separator: comma);
+  $resolved-prefixes: list.append($resolved-prefixes, $group, $separator: comma);
+  $resolved-prefixes: list.append($resolved-prefixes, heading, $separator: comma);
 
   @include heading-box-props($resolved-prefixes...);
   @include heading-typography-props($resolved-prefixes...);
 }
 
 @mixin typography-container-props($prefixes...) {
-  max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
+  max-width: fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...);
   font-family: fn.var-with-fallbacks(
     --body-font-family,
-    append($prefixes, var(--font-family))...
+    list.append($prefixes, var(--font-family))...
   );
 
   @include typography-props($prefixes...);
@@ -125,14 +126,14 @@
   :global(dl),
   :global(ul),
   :global(ol) {
-    max-width: fn.var-with-fallbacks(--line-width, append($prefixes, 40em)...);
+    max-width: fn.var-with-fallbacks(--line-width, list.append($prefixes, 40em)...);
     font-family: fn.var-with-fallbacks(
       --body-font-family,
-      append($prefixes, var(--font-family))...
+      list.append($prefixes, var(--font-family))...
     );
     line-height: fn.var-with-fallbacks(
       --line-height,
-      append($prefixes, 1.5)...
+      list.append($prefixes, 1.5)...
     );
     margin-left: auto;
     margin-right: auto;
@@ -144,17 +145,17 @@
   :global(h4),
   :global(h5),
   :global(h6) {
-    max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
+    max-width: fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
     margin-bottom: fn.var-with-fallbacks(
       --heading-margin-bottom,
-      append($prefixes, 0)...
+      list.append($prefixes, 0)...
     );
     margin-top: fn.var-with-fallbacks(
       --heading-margin-top,
-      append($prefixes, 1.5em)...
+      list.append($prefixes, 1.5em)...
     );
   }
 
@@ -166,7 +167,7 @@
   :global(h6:first-child) {
     margin-top: fn.var-with-fallbacks(
       --first-heading-margin-top,
-      append($prefixes, 0)...
+      list.append($prefixes, 0)...
     );
   }
 
@@ -196,7 +197,7 @@
 
   & :global(p) {
     @include typography-props-bare(
-      append(map-prefixes(paragraph, $prefixes), paragraph)...
+      list.append(map-prefixes(paragraph, $prefixes), paragraph)...
     );
   }
   & :global(p:first-of-type),
@@ -207,43 +208,43 @@
   :global(h5 + p),
   :global(h6 + p) {
     $first-paragraph-prefixes: map-prefixes(first-paragraph, $prefixes);
-    $paragraph-prefixes: append(map-prefixes(paragraph, $prefixes), paragraph);
+    $paragraph-prefixes: list.append(map-prefixes(paragraph, $prefixes), paragraph);
     $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
 
     @each $prefix in $paragraph-prefixes {
-      $first-paragraph-fallback-prefixes: append(
+      $first-paragraph-fallback-prefixes: list.append(
         $first-paragraph-fallback-prefixes,
         $prefix,
-        comma
+        $separator: comma
       );
     }
 
     @include typography-props-bare(
-      append($first-paragraph-fallback-prefixes, first-paragraph)...
+      list.append($first-paragraph-fallback-prefixes, first-paragraph)...
     );
     font-size: fn.var-with-fallbacks(
       --first-paragraph-font-size,
-      append(
+      list.append(
           map-prefixes(first-paragraph, $prefixes),
           fn.vars(
             font-size,
-            append(map-prefixes(paragraph, $prefixes), paragraph)...
+            list.append(map-prefixes(paragraph, $prefixes), paragraph)...
           )
         )...
     );
     line-height: fn.var-with-fallbacks(
       --first-paragraph-line-height,
-      append(
+      list.append(
           map-prefixes(first-paragraph, $prefixes),
           fn.vars(
             line-height,
-            append(map-prefixes(paragraph, $prefixes), paragraph)...
+            list.append(map-prefixes(paragraph, $prefixes), paragraph)...
           )
         )...
     );
     margin-block-start: fn.var-with-fallbacks(
       --first-paragraph-margin-top,
-      append($prefixes, 0)...
+      list.append($prefixes, 0)...
     );
   }
   & :global(p:first-of-type::first-line),
@@ -254,7 +255,7 @@
   :global(h5 + p::first-line),
   :global(h6 + p::first-line) {
     @include typography-props-bare(
-      append(map-prefixes-include-base(first-line, $prefixes), first-line)...
+      list.append(map-prefixes-include-base(first-line, $prefixes), first-line)...
     );
   }
 

@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "functions" as fn;
 
 @mixin focus-ring {
@@ -16,29 +17,29 @@
 }
 
 @mixin clickable-cursor($prefixes...) {
-  cursor: fn.var-with-fallbacks(--cursor, append($prefixes, pointer)...);
+  cursor: fn.var-with-fallbacks(--cursor, list.append($prefixes, pointer)...);
 }
 
 @mixin clickable-affordance-transition($prefixes...) {
   transition:
-    filter fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    filter fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
     background-color
-      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
     border-color
-      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
     box-shadow
-      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
-    transform fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
+    transform fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...);
 }
 
 @mixin clickable-hover-affordance($prefixes...) {
   filter: fn.var-with-fallbacks(
     --hover-filter,
-    append($prefixes, brightness(1.05))...
+    list.append($prefixes, brightness(1.05))...
   );
   transform: fn.var-with-fallbacks(
     --hover-transform,
-    append($prefixes, none)...
+    list.append($prefixes, none)...
   );
   background-color: color-mix(
     in oklch,
@@ -48,18 +49,18 @@
   );
   box-shadow: fn.var-with-fallbacks(
     --hover-box-shadow,
-    append($prefixes, var(--_box-shadow, none))...
+    list.append($prefixes, var(--_box-shadow, none))...
   );
 }
 
 @mixin clickable-active-affordance($prefixes...) {
   filter: fn.var-with-fallbacks(
     --active-filter,
-    append($prefixes, brightness(0.9))...
+    list.append($prefixes, brightness(0.9))...
   );
   transform: fn.var-with-fallbacks(
     --active-transform,
-    append($prefixes, none)...
+    list.append($prefixes, none)...
   );
   background-color: color-mix(
     in oklch,
@@ -69,7 +70,7 @@
   );
   box-shadow: fn.var-with-fallbacks(
     --active-box-shadow,
-    append($prefixes, var(--_box-shadow, none))...
+    list.append($prefixes, var(--_box-shadow, none))...
   );
 }
 
@@ -85,15 +86,15 @@
   &:disabled {
     cursor: fn.var-with-fallbacks(
       --disabled-cursor,
-      append($prefixes, not-allowed)...
+      list.append($prefixes, not-allowed)...
     );
     transform: fn.var-with-fallbacks(
       --disabled-transform,
-      append($prefixes, none)...
+      list.append($prefixes, none)...
     );
     filter: fn.var-with-fallbacks(
       --disabled-filter,
-      append($prefixes, grayscale(0.5))...
+      list.append($prefixes, grayscale(0.5))...
     );
     background-color: color-mix(
       in oklch,
@@ -103,7 +104,7 @@
     );
     box-shadow: fn.var-with-fallbacks(
       --disabled-box-shadow,
-      append($prefixes, var(--_box-shadow, none))...
+      list.append($prefixes, var(--_box-shadow, none))...
     );
   }
 }
@@ -118,17 +119,17 @@
 
   // For WebKit: reserve space with transparent thumb
   &::-webkit-scrollbar {
-    width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, 6px)...);
+    width: fn.var-with-fallbacks(--scrollbar-width, list.append($prefixes, 6px)...);
     height: fn.var-with-fallbacks(
       --scrollbar-height,
-      append($prefixes, 6px)...
+      list.append($prefixes, 6px)...
     );
   }
 
   &::-webkit-scrollbar-track {
     background: fn.var-with-fallbacks(
       --scrollbar-track-bg,
-      append($prefixes, transparent)...
+      list.append($prefixes, transparent)...
     );
   }
 
@@ -136,10 +137,10 @@
     background: transparent;
     border-radius: fn.var-with-fallbacks(
       --scrollbar-thumb-radius,
-      append($prefixes, 3px)...
+      list.append($prefixes, 3px)...
     );
     transition: background
-      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...);
   }
 
   // Show scrollbar thumb on hover
@@ -147,24 +148,24 @@
     // Firefox: show thumb on hover
     scrollbar-color: fn.var-with-fallbacks(
         --scrollbar-thumb-bg,
-        append($prefixes, rgba(0, 0, 0, 0.3))...
+        list.append($prefixes, rgba(0, 0, 0, 0.3))...
       )
       fn.var-with-fallbacks(
         --scrollbar-track-bg,
-        append($prefixes, transparent)...
+        list.append($prefixes, transparent)...
       );
 
     // WebKit: show thumb on hover
     &::-webkit-scrollbar-thumb {
       background: fn.var-with-fallbacks(
         --scrollbar-thumb-bg,
-        append($prefixes, rgba(0, 0, 0, 0.3))...
+        list.append($prefixes, rgba(0, 0, 0, 0.3))...
       );
 
       &:hover {
         background: fn.var-with-fallbacks(
           --scrollbar-thumb-hover-bg,
-          append($prefixes, rgba(0, 0, 0, 0.5))...
+          list.append($prefixes, rgba(0, 0, 0, 0.5))...
         );
       }
     }
