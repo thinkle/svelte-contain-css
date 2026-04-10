@@ -19,31 +19,51 @@
 
   let showCode = $state(false);
 
-  const themeCode = $derived.by(() => {
+  function buildThemeCode(
+    fullThemeIndex: number,
+    colorThemeIndex: number,
+    typographyThemeIndex: number,
+    enabledExtras: boolean[],
+    rawCss: string,
+  ) {
     const files: string[] = ["defaults.css"];
-    if (usingFullTheme) {
-      files.push(fullThemes[themeState.fullTheme].file);
+    if (fullThemeIndex !== 0) {
+      if (fullThemes[fullThemeIndex].file) {
+        files.push(fullThemes[fullThemeIndex].file);
+      }
     } else {
-      if (colorThemes[themeState.colorTheme].file)
-        files.push(colorThemes[themeState.colorTheme].file);
-      if (typographyThemes[themeState.typographyTheme].file)
-        files.push(typographyThemes[themeState.typographyTheme].file);
+      if (colorThemes[colorThemeIndex].file) {
+        files.push(colorThemes[colorThemeIndex].file);
+      }
+      if (typographyThemes[typographyThemeIndex].file) {
+        files.push(typographyThemes[typographyThemeIndex].file);
+      }
     }
     for (let i = 0; i < extraThemes.length; i++) {
-      if (themeState.enabledExtras[i]) files.push(extraThemes[i].file);
+      if (enabledExtras[i]) files.push(extraThemes[i].file);
     }
     const imports = files
       .map((f) => `\timport "contain-css-svelte/vars/${f}";`)
       .join("\n");
     let code = "<scri" + `pt>\n${imports}\n</scri` + "pt>";
-    if (themeState.rawCss) {
+    if (rawCss) {
       code +=
         "\n\n<sty" +
-        `le>\n:root {\n\t${themeState.rawCss.replace(/\n/g, "\n\t")}\n}\n</sty` +
+        `le>\n:root {\n\t${rawCss.replace(/\n/g, "\n\t")}\n}\n</sty` +
         "le>";
     }
     return code;
-  });
+  }
+
+  const themeCode = $derived(
+    buildThemeCode(
+      themeState.fullTheme,
+      themeState.colorTheme,
+      themeState.typographyTheme,
+      [...themeState.enabledExtras],
+      themeState.rawCss,
+    ),
+  );
 
   let { includeBlurb = true } = $props();
 </script>
