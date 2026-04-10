@@ -18,26 +18,28 @@
   } & DropdownMenuStyleProps &
     HTMLAttributes<HTMLDivElement>;
 
-  let { label, children, triggerAuditAction = null, ...props }: Props = $props();
+  let {
+    label,
+    children,
+    triggerAuditAction = null,
+    ...props
+  }: Props = $props();
   idPostfix++;
   let id = "contain-dropdown-menu-" + idPostfix;
-  let buttonElement: HTMLButtonElement = $state();
-  let dropdownContentElement: HTMLDivElement = $state();
+  let buttonElement: HTMLButtonElement | undefined = $state();
+  let dropdownContentElement: HTMLDivElement | undefined = $state();
   let isOpen = $state(false);
 
   // Style injection
-  const style = $derived(injectVars(props, "menu", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height",
-  ]));
-  let dropdownTop: number = $state();
-  let dropdownLeft: number = $state();
-  let dropdownMaxHeight: number = $state();
+  const style = $derived(
+    injectVars(props, "menu", ["bg", "fg", "padding", "width", "height"]),
+  );
+  let dropdownTop: number = $state(0);
+  let dropdownLeft: number = $state(0);
+  let dropdownMaxHeight: number = $state(0);
 
   function computePosition() {
+    if (!buttonElement || !dropdownContentElement) return;
     let dropdownRect = dropdownContentElement.getBoundingClientRect();
     let buttonRect = buttonElement.getBoundingClientRect();
     // Fix me -- we need to figure out where the dropdown goes in fixed
@@ -60,6 +62,7 @@
     }
   }
   function dismissPopover(e) {
+    if (!popoverDiv) return;
     popoverDiv.hidePopover();
   }
 
@@ -89,6 +92,7 @@
     }
   }
   function maybeFocusMatch(searchString: string) {
+    if (!dropdownContentElement) return;
     let focusableItems = dropdownContentElement.querySelectorAll(
       "a,button,[tabindex]",
     );
@@ -97,18 +101,19 @@
         element.textContent &&
         element.textContent.toLowerCase().startsWith(searchString.toLowerCase())
       ) {
-        if (element.focus) {
-          element.focus();
+        if ((element as HTMLElement).focus) {
+          (element as HTMLElement).focus();
           return;
         }
       }
     }
   }
   function navigateMenu(direction: string) {
-    if (!popoverDiv.matches(":popover-open")) {
+    if (!popoverDiv.matches(":popover-open") && buttonElement) {
       buttonElement.click();
       return;
     }
+    if (!dropdownContentElement) return;
     const focusableItems = Array.from(
       dropdownContentElement.querySelectorAll(
         "button, a, [tabindex]:not([tabindex='-1'])",
@@ -125,11 +130,12 @@
         (currentIndex - 1 + focusableItems.length) % focusableItems.length;
     }
 
-    focusableItems[currentIndex]?.focus();
+    (focusableItems[currentIndex] as HTMLElement)?.focus();
   }
 
   let cssVariableContext = $state("");
   function injectVariablesIntoDropdown() {
+    if (!buttonElement) return;
     cssVariableContext = "";
     let buttonStyle = getComputedStyle(buttonElement);
     for (let prop of cssProperties) {
@@ -142,7 +148,7 @@
     // Set dropdown menu width to match button width
     cssVariableContext += `--dropdown-menu-min-width: ${buttonStyle.width};`;
   }
-  let popoverDiv: HTMLDivElement = $state();
+  let popoverDiv: HTMLDivElement | undefined = $state();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -186,7 +192,7 @@
 </nav>
 
 <style lang="scss">
-  @use "$lib/sass/_mixins.scss" as *;
+  @import "$lib/sass/_mixins.scss";
 
   button {
     @include color-props(menu, button, surface);
