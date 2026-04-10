@@ -146,25 +146,25 @@
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout --item-width="175px">
-  <img src="https://picsum.photos/seed/1/175/175" alt="Photo 1" />
-  <img src="https://picsum.photos/seed/2/175/175" alt="Photo 2" />
-  <img src="https://picsum.photos/seed/3/175/175" alt="Photo 3" />
-  <img src="https://picsum.photos/seed/4/175/175" alt="Photo 4" />
-  <img src="https://picsum.photos/seed/5/175/175" alt="Photo 5" />
-  <img src="https://picsum.photos/seed/6/175/175" alt="Photo 6" />
-  <img src="https://picsum.photos/seed/7/175/175" alt="Photo 7" />
-  <img src="https://picsum.photos/seed/8/175/175" alt="Photo 8" />
+  <img src="https://picsum.photos/seed/1/175/175" alt="" />
+  <img src="https://picsum.photos/seed/2/175/175" alt="" />
+  <img src="https://picsum.photos/seed/3/175/175" alt="" />
+  <img src="https://picsum.photos/seed/4/175/175" alt="" />
+  <img src="https://picsum.photos/seed/5/175/175" alt="" />
+  <img src="https://picsum.photos/seed/6/175/175" alt="" />
+  <img src="https://picsum.photos/seed/7/175/175" alt="" />
+  <img src="https://picsum.photos/seed/8/175/175" alt="" />
 </GridLayout>`}
   >
     <GridLayout --item-width="175px">
-      <img src="https://picsum.photos/seed/1/175/175" alt="Photo 1" />
-      <img src="https://picsum.photos/seed/2/175/175" alt="Photo 2" />
-      <img src="https://picsum.photos/seed/3/175/175" alt="Photo 3" />
-      <img src="https://picsum.photos/seed/4/175/175" alt="Photo 4" />
-      <img src="https://picsum.photos/seed/5/175/175" alt="Photo 5" />
-      <img src="https://picsum.photos/seed/6/175/175" alt="Photo 6" />
-      <img src="https://picsum.photos/seed/7/175/175" alt="Photo 7" />
-      <img src="https://picsum.photos/seed/8/175/175" alt="Photo 8" />
+      <img src="https://picsum.photos/seed/1/175/175" alt="" />
+      <img src="https://picsum.photos/seed/2/175/175" alt="" />
+      <img src="https://picsum.photos/seed/3/175/175" alt="" />
+      <img src="https://picsum.photos/seed/4/175/175" alt="" />
+      <img src="https://picsum.photos/seed/5/175/175" alt="" />
+      <img src="https://picsum.photos/seed/6/175/175" alt="" />
+      <img src="https://picsum.photos/seed/7/175/175" alt="" />
+      <img src="https://picsum.photos/seed/8/175/175" alt="" />
     </GridLayout>
   </DemoWithCode>
 </CssVariableDemo>

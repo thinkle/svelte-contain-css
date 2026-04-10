@@ -1,6 +1,11 @@
 <script lang="ts">
-  import "prismjs";
-  import Prism from "svelte-prism";  
+  import Prism from "prismjs";
+  import "prismjs/components/prism-markup";
+  import "prismjs/components/prism-css";
+  import "prismjs/components/prism-clike";
+  import "prismjs/components/prism-javascript";
+  import "prism-svelte";
+
   interface Props {
     code: string;
     inline?: boolean;
@@ -8,10 +13,26 @@
   }
 
   let { code, inline = false, language = "html" }: Props = $props();
+  let highlightedCode = $derived.by(() => {
+    if (language === "none") {
+      return code;
+    }
+
+    const grammar = Prism.languages[language] ?? Prism.languages.markup;
+    return Prism.highlight(code, grammar, language);
+  });
 </script>
 
 <div class="code" class:inline>
-  <Prism {language} source={code} />
+  <pre class:language-none={language === "none"} class={`language-${language}`}>
+    <code class={`language-${language}`}>
+      {#if language === "none"}
+        {highlightedCode}
+      {:else}
+        {@html highlightedCode}
+      {/if}
+    </code>
+  </pre>
 </div>
 
 <style lang="scss">
@@ -28,6 +49,10 @@
     width: var(--code-width, 100%);
     box-sizing: border-box;
     overflow-x: auto;
+  }
+
+  .language-none {
+    white-space: pre-wrap;
   }
 
   .code :global(code[class*="language-"]),
