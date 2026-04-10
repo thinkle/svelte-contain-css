@@ -1,0 +1,33 @@
+:root {
+  --shadow-distance: 0;
+  --shadow-blur: 0;
+  --shadow-color: transparent;
+
+  --button-shadow-distance: 0;
+  --button-shadow-blur: 0;
+  --button-shadow-color: transparent;
+  --card-shadow-distance: 0;
+  --card-shadow-blur: 0;
+  --card-shadow-color: transparent;
+  --data-list-shadow-distance: 0;
+  --data-list-shadow-blur: 0;
+  --data-list-shadow-color: transparent;
+  --dialog-shadow-distance: 0;
+  --dialog-shadow-blur: 0;
+  --dialog-shadow-color: transparent;
+  --dropdown-menu-shadow-distance: 0;
+  --dropdown-menu-shadow-blur: 0;
+  --dropdown-menu-shadow-color: transparent;
+  --tooltip-shadow-distance: 0;
+  --tooltip-shadow-blur: 0;
+  --tooltip-shadow-color: transparent;
+
+  --slider-thumb-shadow: none;
+  --slider-thumb-hover-shadow: none;
+  --slider-thumb-active-shadow: none;
+  --table-sticky-header-box-shadow: none;
+
+  --hover-transform: none;
+  --button-hover-transform: none;
+  --menu-hover-transform: none;
+}

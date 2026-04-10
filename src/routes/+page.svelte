@@ -1,7 +1,6 @@
 <script lang="ts">
   import IntroOverview from "./IntroOverview.svelte";
   import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/lightordark.css";
   import Bar from "$lib/layout/Bar.svelte";
   import Page from "$lib/layout/Page.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
@@ -10,10 +9,12 @@
   import BarDemo from "./demos/BarDemo.svelte";
 
   import { onMount, tick } from "svelte";
+  import type { SvelteComponent } from "svelte";
   import ButtonDemo from "./demos/ButtonDemo.svelte";
   import TypographyDemo from "./demos/TypographyDemo.svelte";
   import SplitPaneDemo from "./demos/SplitPaneDemo.svelte";
   import CheckboxDemo from "./demos/CheckboxDemo.svelte";
+  import DataListDemo from "./demos/DataListDemo.svelte";
   import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
@@ -38,6 +39,7 @@
   import AccordionDemo from "./demos/AccordionDemo.svelte";
   import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
   import TagDemo from "./demos/TagDemo.svelte";
+  import ToggleDemo from "./demos/ToggleDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -99,7 +101,6 @@
         name: "Typography",
         component: TypographyDemo,
         demo: "Typography",
-        id: "typography",
       },
       { name: "Layout" },
       { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
@@ -109,6 +110,7 @@
       { name: "Bar", component: BarDemo, demo: "Bar" },
       { name: "Page", component: PageDemo, demo: "Page" },
       { name: "Table", component: TableDemo, demo: "Table" },
+      { name: "Data List", component: DataListDemo, demo: "DataList" },
       { name: "Components" },
       { name: "Card", component: CardDemo, demo: "Card" },
       { name: "Tile", component: TileDemo, demo: "Tile" },
@@ -121,6 +123,7 @@
       { name: "Controls" },
       { name: "Button", component: ButtonDemo, demo: "Button" },
       { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },
+      { name: "Toggle", component: ToggleDemo, demo: "Toggle" },
       { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
       { name: "Slider", component: Slider },
       { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
@@ -140,7 +143,7 @@
       { name: "Variables", component: VariableDemo, demo: "Variable" },
     ];
 
-  let theDemo: SvelteComponent | null = null;
+  let theDemo: typeof SvelteComponent | null = null;
   let theItem = 0;
   $: theDemo = menu[theItem].component;
 
@@ -248,22 +251,28 @@
             >
           </li>
         {:else}
-          <li
-            class="subheader"
-            class:active={theItem === menu.indexOf(item)}
-            on:click={() => {
-              theItem = menu.indexOf(item) + 1;
-            }}
-          >
-            {item.name}
+          <li class="subheader" class:active={theItem === menu.indexOf(item)}>
+            <button
+              type="button"
+              class="subheader-button"
+              on:click={() => {
+                theItem = menu.indexOf(item) + 1;
+              }}
+            >
+              {item.name}
+            </button>
           </li>
         {/if}
       {/each}
     </MenuList>
   </Sidebar>
   {#if !theDemo}
-    <IntroOverview id="Intro" />
-    <Installation id="Installation" />
+    <div id="Intro">
+      <IntroOverview />
+    </div>
+    <div id="Installation">
+      <Installation />
+    </div>
   {/if}
   <div id="demo-area" class:empty={!theDemo}>
     {#if theDemo}
@@ -317,7 +326,16 @@
     min-width: var(--side-width);
   }
   .subheader {
+    padding: 0;
+  }
+  .subheader-button {
+    width: 100%;
     padding: var(--padding);
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
   }
   #demo-area {
     min-height: 100dvh;

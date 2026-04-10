@@ -15,29 +15,88 @@
   }
 }
 
-@mixin clickable($prefixes...) {
+@mixin clickable-cursor($prefixes...) {
   cursor: fn.var-with-fallbacks(--cursor, append($prefixes, pointer)...);
-  transition: filter,
+}
+
+@mixin clickable-affordance-transition($prefixes...) {
+  transition:
+    filter fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    background-color
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    border-color
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
+    box-shadow
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...),
     transform fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+}
+
+@mixin clickable-affordance-target($target, $prefixes...) {
+  @include clickable-cursor($prefixes...);
+
+  &#{$target} {
+    @include clickable-affordance-transition($prefixes...);
+  }
+
+  &:hover#{$target} {
+    @include clickable-hover-affordance($prefixes...);
+  }
+
+  &:active#{$target} {
+    @include clickable-active-affordance($prefixes...);
+  }
+}
+
+@mixin clickable-hover-affordance($prefixes...) {
+  filter: fn.var-with-fallbacks(
+    --hover-filter,
+    append($prefixes, brightness(1.05))...
+  );
+  transform: fn.var-with-fallbacks(
+    --hover-transform,
+    append($prefixes, none)...
+  );
+  background-color: color-mix(
+    in oklch,
+    var(--_background-color) var(--hover-base-color-percentage, 90%),
+    var(--hover-color-mix, white)
+      calc(100% - var(--hover-base-color-percentage, 90%))
+  );
+  box-shadow: fn.var-with-fallbacks(
+    --hover-box-shadow,
+    append($prefixes, var(--_box-shadow, none))...
+  );
+}
+
+@mixin clickable-active-affordance($prefixes...) {
+  filter: fn.var-with-fallbacks(
+    --active-filter,
+    append($prefixes, brightness(0.9))...
+  );
+  transform: fn.var-with-fallbacks(
+    --active-transform,
+    append($prefixes, none)...
+  );
+  background-color: color-mix(
+    in oklch,
+    var(--_background-color) var(--active-base-color-percentage, 90%),
+    var(--active-color-mix, black)
+      calc(100% - var(--active-base-color-percentage, 90%))
+  );
+  box-shadow: fn.var-with-fallbacks(
+    --active-box-shadow,
+    append($prefixes, var(--_box-shadow, none))...
+  );
+}
+
+@mixin clickable($prefixes...) {
+  @include clickable-cursor($prefixes...);
+  @include clickable-affordance-transition($prefixes...);
   &:hover {
-    filter: fn.var-with-fallbacks(
-      --hover-filter,
-      append($prefixes, brightness(1.05))...
-    );
-    transform: fn.var-with-fallbacks(
-      --hover-transform,
-      append($prefixes, none)...
-    );
+    @include clickable-hover-affordance($prefixes...);
   }
   &:active {
-    filter: fn.var-with-fallbacks(
-      --active-filter,
-      append($prefixes, brightness(0.9))...
-    );
-    transform: fn.var-with-fallbacks(
-      --active-transform,
-      append($prefixes, none)...
-    );
+    @include clickable-active-affordance($prefixes...);
   }
   &:disabled {
     cursor: fn.var-with-fallbacks(
@@ -52,6 +111,16 @@
       --disabled-filter,
       append($prefixes, grayscale(0.5))...
     );
+    background-color: color-mix(
+      in oklch,
+      var(--_background-color) var(--disabled-base-color-percentage, 50%),
+      var(--disabled-color-mix, gray)
+        calc(100% - var(--disabled-base-color-percentage, 50%))
+    );
+    box-shadow: fn.var-with-fallbacks(
+      --disabled-box-shadow,
+      append($prefixes, var(--_box-shadow, none))...
+    );
   }
 }
 
@@ -65,10 +134,7 @@
 
   // For WebKit: reserve space with transparent thumb
   &::-webkit-scrollbar {
-    width: fn.var-with-fallbacks(
-      --scrollbar-width,
-      append($prefixes, 6px)...
-    );
+    width: fn.var-with-fallbacks(--scrollbar-width, append($prefixes, 6px)...);
     height: fn.var-with-fallbacks(
       --scrollbar-height,
       append($prefixes, 6px)...
@@ -88,7 +154,8 @@
       --scrollbar-thumb-radius,
       append($prefixes, 3px)...
     );
-    transition: background fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
+    transition: background
+      fn.var-with-fallbacks(--transition, append($prefixes, 300ms)...);
   }
 
   // Show scrollbar thumb on hover

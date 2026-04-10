@@ -13,6 +13,14 @@
     active = value;
     dispatch("change", { value });
   }
+
+  function getValue(item: string | Item) {
+    return typeof item === "string" ? item : item.value;
+  }
+
+  function getLabel(item: string | Item) {
+    return typeof item === "string" ? item : item.label;
+  }
 </script>
 
 <div class="tabs" class:sticky>
@@ -22,8 +30,8 @@
     --button-height="var(--tab-bar-height, 3em)"
   >
     {#each items as item}
-      {@const value = item.value || item}
-      {@const label = item.label || item}
+      {@const value = getValue(item)}
+      {@const label = getLabel(item)}
       <TabItem active={value === active} on:click={() => setValue(value)}>
         {label}
       </TabItem>

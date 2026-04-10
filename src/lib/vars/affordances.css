@@ -1,14 +1,29 @@
 :root {
   --shadow-blur: 4px;
-  --hover-filter: brightness(1.05)
-    drop-shadow(
-      var(--space) var(--space) var(--shadow-blur) var(--shadow-color)
-    );
-  --active-filter: brightness(0.95);
+  /* Fallback: brightness conveys state change when color-mix() is unavailable */
+  --hover-filter-brightness-hack: brightness(1.05);
+  --hover-filter-custom: ;
+  --hover-filter: var(--hover-filter-brightness-hack,)
+    var(--hover-filter-custom,);
+  --button-hover-filter-custom: ;
+  --active-filter-brightness-hack: brightness(0.9);
+  --active-filter-custom: ;
+  --active-filter: var(--active-filter-brightness-hack,)
+    var(--active-filter-custom,);
+  --button-active-filter-custom: ;
   /* --hover-transform: translate(var(--space), var(--space)); */
   /* --button-hover-filter: var(--hover-filter); */
   --menu-hover-filter: var(--hover-filter);
   --menu-hover-transform: var(--hover-transform);
+  /* Menu items are often on light backgrounds; brighten can look invisible there. */
+  --menu-item-hover-filter-brightness-hack: brightness(0.95);
+  --menu-item-hover-filter-custom: ;
+  --menu-item-hover-filter: var(--menu-item-hover-filter-brightness-hack,)
+    var(--menu-item-hover-filter-custom,);
+  /* Default menu items to the menu surface so row-wide filters read clearly. */
+  --menu-item-bg: var(--menu-bg, var(--bg));
+  --menu-item-active-filter-custom: ;
+  --menu-item-active-filter: var(--menu-item-active-filter-custom,);
   /* --button-hover-transform: var(var(--button-hover-transform));
   --button-hover-filter: var(var(--button-hover-filter)); */
   --transition: 300ms;
@@ -21,15 +36,61 @@
   --checkbox-active-transform: rotateY(5deg);
   --checkbox-transition: 400ms;
   --checked-weight: var(--bold);
-  --grab-bar-hover-bg: #fff2;
-  --grab-bar-active-bg: #fff4;
-  --grab-bar-hover-filter: drop-shadow(0 0 2px #fff);
-  --grab-bar-active-filter: drop-shadow(0 0 4px #fff);
+  --grab-bar-hover-base-color-percentage: 88%;
+  --grab-bar-hover-color-mix: var(--hover-color-mix, white);
+  --grab-bar-active-base-color-percentage: 80%;
+  --grab-bar-active-color-mix: var(--active-color-mix, black);
+  --grab-bar-shadow-color: color-mix(
+    in srgb,
+    var(--grab-bar-fg, var(--sidebar-fg, var(--fg))) 24%,
+    transparent
+  );
+  --grab-bar-hover-bg: color-mix(
+    in oklch,
+    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
+      var(--grab-bar-hover-base-color-percentage, 88%),
+    var(--grab-bar-hover-color-mix, white)
+      calc(100% - var(--grab-bar-hover-base-color-percentage, 88%))
+  );
+  --grab-bar-active-bg: color-mix(
+    in oklch,
+    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
+      var(--grab-bar-active-base-color-percentage, 80%),
+    var(--grab-bar-active-color-mix, black)
+      calc(100% - var(--grab-bar-active-base-color-percentage, 80%))
+  );
+  --grab-bar-hover-box-shadow: inset 0 0 0 1px var(--grab-bar-shadow-color);
+  --grab-bar-active-box-shadow:
+    inset 0 0 0 1px var(--grab-bar-shadow-color),
+    0 0 0.4rem var(--grab-bar-shadow-color);
   --greyed-out-filter: blur(2px) grayscale(0.5);
   --disabled-hover-transform: none;
   --disabled-transform: none;
-  --disabled-filter: brightness(0.9) grayscale(0.5) blur(0.5px);
+  --disabled-filter-brightness-hack: brightness(0.9);
+  --disabled-filter-custom: grayscale(0.5) blur(0.5px);
+  --disabled-filter: var(--disabled-filter-brightness-hack,)
+    var(--disabled-filter-custom,); /* brightness is fallback for no color-mix */
   --disabled-shadow-distance: var(--button-shadow-distance);
   --disabled-shadow-color: var(--button-shadow-color);
   --scrollbar-track-bg: transparent;
+
+  --hover-base-color-percentage: 90%;
+  --hover-color-mix: white;
+  --active-base-color-percentage: 90%;
+  --active-color-mix: black;
+  --disabled-base-color-percentage: 50%;
+  --disabled-color-mix: gray;
+}
+
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+  :root {
+    /* color-mix handles color changes; filters are opt-in special cases only */
+    --menu-item-hover-filter: var(--menu-item-hover-filter-custom);
+    --menu-item-active-filter: var(--menu-item-active-filter-custom);
+    --button-hover-filter: var(--button-hover-filter-custom);
+    --button-active-filter: var(--button-active-filter-custom);
+    --hover-filter: var(--hover-filter-custom);
+    --active-filter: var(--active-filter-custom);
+    --disabled-filter: var(--disabled-filter-custom);
+  }
 }

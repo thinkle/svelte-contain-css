@@ -1,0 +1,162 @@
+:root {
+  --font-family: "MS Sans Serif", Tahoma, Geneva, Verdana, sans-serif;
+  --heading-font-family: var(--font-family);
+  --ui-font-family: var(--font-family);
+  --body-font-family: var(--font-family);
+  --code-font-family: "Courier New", Courier, monospace;
+  --font-size: 14px;
+  --font-size-small: 12px;
+  --line-height: 1.3;
+  --heading-line-height: 1.2;
+  --heading-font-weight: 700;
+
+  --fg: #000000;
+  --bg: #008080;
+  --body-bg: #008080;
+  --body-fg: #000000;
+  --surface-bg: #c0c0c0;
+  --surface-fg: #000000;
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
+  --page-bg: #008080;
+  --page-fg: #000000;
+  --page-content-bg: #c0c0c0;
+  --page-content-fg: #000000;
+  --sidebar-bg: #c0c0c0;
+  --sidebar-fg: #000000;
+
+  --primary-bg: #000080;
+  --primary-fg: #ffffff;
+  --secondary-bg: #c0c0c0;
+  --secondary-fg: #000000;
+  --success-bg: #008000;
+  --success-fg: #ffffff;
+  --danger-bg: #800000;
+  --danger-fg: #ffffff;
+  --warning-bg: #ffff00;
+  --warning-fg: #000000;
+  --info-bg: #000080;
+  --info-fg: #ffffff;
+
+  --link-fg: #0000ee;
+  --link-hover-fg: #551a8b;
+  --heading-fg: #000000;
+  --border-color: #808080;
+  --border: 2px outset #c0c0c0;
+  --border-radius: 0;
+  --square-radius: 0;
+
+  --shadow-distance: 0;
+  --shadow-blur: 0;
+  --shadow-color: transparent;
+  --transition: 120ms steps(2, end);
+  --hover-filter: none;
+  --hover-transform: none;
+  --active-transform: translate(1px, 1px);
+  --button-hover-filter: none;
+  --button-active-filter: none;
+
+  --focus-color: #000000;
+  --focus-outline-offset: 0;
+  --focus-ring-box-shadow: none;
+
+  --bar-bg: #000080;
+  --bar-fg: #ffffff;
+  --bar-padding: 0.35rem 0.5rem;
+  --bar-margin-bottom: 0.5rem;
+  --bar-border-top: 2px outset #c0c0c0;
+  --bar-border-bottom: 2px outset #c0c0c0;
+
+  --button-bg: #c0c0c0;
+  --button-fg: #000000;
+  --button-border: 2px outset #c0c0c0;
+  --button-padding: 0.3rem 0.75rem;
+  --button-border-radius: 0;
+  --mini-button-bg: #c0c0c0;
+  --mini-button-fg: #000000;
+  --mini-button-border: 2px outset #c0c0c0;
+  --mini-button-radius: 0;
+  --mini-button-size: 1.8rem;
+
+  --card-bg: #c0c0c0;
+  --card-fg: #000000;
+  --card-border: 2px outset #c0c0c0;
+  --card-header-bg: #000080;
+  --card-header-fg: #ffffff;
+  --card-footer-bg: #c0c0c0;
+  --card-footer-fg: #000000;
+  --card-header-border: 0;
+  --card-footer-border: 2px inset #c0c0c0;
+
+  --fieldset-bg: #c0c0c0;
+  --fieldset-fg: #000000;
+  --fieldset-border: 2px groove #c0c0c0;
+  --fieldset-border-radius: 0;
+  --fieldset-padding: 0.75rem;
+  --legend-fg: #000000;
+  --legend-font-size: 1rem;
+  --legend-font-weight: 700;
+  --legend-padding: 0 0.25rem;
+
+  --input-bg: #ffffff;
+  --input-fg: #000000;
+  --input-border: 2px inset #c0c0c0;
+  --input-square-radius: 0;
+  --input-padding: 0.35rem 0.45rem;
+
+  --select-bg: #ffffff;
+  --select-fg: #000000;
+  --select-border: 2px inset #c0c0c0;
+  --select-square-radius: 0;
+  --select-width: 100%;
+  --select-arrow: "▼";
+  --select-arrow-fg: #000000;
+  --select-arrow-font-size: 0.75rem;
+  --select-arrow-closed-transform: translateY(-50%);
+  --select-arrow-open-transform: translateY(-50%) scaleY(-1);
+  --select-arrow-right-offset: 0.35rem;
+  --select-label-padding-right: 1.4rem;
+  --select-arrow-transition: transform 120ms steps(2, end), color 120ms steps(2, end);
+
+  --menu-bg: #ffffff;
+  --menu-fg: #000000;
+  --menu-item-bg: #ffffff;
+  --menu-item-fg: #000000;
+  --menu-item-padding: 0.25rem 0.5rem;
+  --menu-item-border: none;
+  --menu-item-square-radius: 0;
+  --menu-item-hover-bg: #000080;
+  --menu-item-hover-fg: #ffffff;
+  --menu-item-active-bg: #000080;
+  --menu-item-active-fg: #ffffff;
+  --menu-item-hover-filter: none;
+  --menu-item-active-filter: none;
+  --dropdown-menu-border: 2px outset #c0c0c0;
+  --dropdown-menu-square-radius: 0;
+  --dropdown-menu-shadow-distance: 0;
+  --dropdown-menu-shadow-blur: 0;
+  --dropdown-menu-shadow-color: transparent;
+
+  --checkbox-bg: #ffffff;
+  --checkbox-fg: #000000;
+  --checkbox-border: 2px inset #c0c0c0;
+  --checkbox-checked-border: 2px inset #c0c0c0;
+  --checkbox-radius: 0;
+  --checkbox-size: 1em;
+  --checkbox-check-mark: "✓";
+  --checkbox-check-size: 0.75em;
+
+  --code-bg: #ffffff;
+  --code-fg: #000000;
+  --code-comment-fg: #008000;
+  --code-string-fg: #800000;
+  --code-keyword-fg: #000080;
+  --code-attr-name-fg: #800080;
+  --code-tag-fg: #000080;
+  --code-function-fg: #800000;
+  --code-variable-fg: #000000;
+  --code-operator-fg: #000000;
+  --code-prolog-fg: #808080;
+  --code-doctype-fg: #808080;
+  --code-cdata-fg: #808080;
+}

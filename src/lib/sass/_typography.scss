@@ -4,7 +4,8 @@
   font-family: fn.vars(font-family, $prefixes...);
   text-transform: fn.vars(text-transform, $prefixes...);
   text-decoration: fn.vars(text-decoration, $prefixes...);
-  font-size: fn.vars(font-size, $prefixes...);
+  --_font-size: #{fn.vars(font-size, $prefixes...)};
+  font-size: var(--_font-size);
   font-weight: fn.vars(font-weight, $prefixes...);
   line-height: fn.vars(line-height, $prefixes...);
   letter-spacing: fn.vars(letter-spacing, $prefixes...);
@@ -17,7 +18,8 @@
   font-family: fn.vars(font-family, $prefixes...);
   text-transform: fn.vars(text-transform, $prefixes...);
   text-decoration: fn.vars(text-decoration, $prefixes...);
-  font-size: fn.vars(font-size, $prefixes...);
+  --_font-size: #{fn.vars(font-size, $prefixes...)};
+  font-size: var(--_font-size);
   font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, bold)...);
   line-height: fn.vars(line-height, $prefixes...);
   letter-spacing: fn.vars(letter-spacing, $prefixes...);
@@ -30,17 +32,84 @@
   font-family: fn.var-no-fallbacks(--font-family, $prefixes...);
   text-transform: fn.var-no-fallbacks(--text-transform, $prefixes...);
   text-decoration: fn.var-no-fallbacks(--text-decoration, $prefixes...);
-  font-size: fn.var-no-fallbacks(--font-size, $prefixes...);
+  --_font-size: #{fn.var-no-fallbacks(--font-size, $prefixes...)};
+  font-size: var(--_font-size);
   font-weight: fn.var-no-fallbacks(--font-weight, $prefixes...);
   line-height: fn.var-no-fallbacks(--line-height, $prefixes...);
   letter-spacing: fn.var-no-fallbacks(--letter-spacing, $prefixes...);
-  margin-top: fn.var-no-fallbacks(--margin, $prefixes...);
-  margin-top: fn.var-no-fallbacks(--margin-top, $prefixes...);
-  margin-bottom: fn.var-no-fallbacks(--margin, $prefixes...);
-  margin-bottom: fn.var-no-fallbacks(--margin-bottom, $prefixes...);
+  --_margin-top: #{fn.var-no-fallbacks(--margin, $prefixes...)};
+  --_margin-top: #{fn.var-no-fallbacks(--margin-top, $prefixes...)};
+  margin-top: var(--_margin-top);
+  --_margin-bottom: #{fn.var-no-fallbacks(--margin, $prefixes...)};
+  --_margin-bottom: #{fn.var-no-fallbacks(--margin-bottom, $prefixes...)};
+  margin-bottom: var(--_margin-bottom);
   text-indent: fn.var-no-fallbacks(--indent, $prefixes...);
   font-variant: fn.var-no-fallbacks(--font-variant, $prefixes...);
   text-align: fn.var-no-fallbacks(--text-align, $prefixes...);
+}
+
+@mixin heading-box-props($prefixes...) {
+  --_heading-color: #{fn.vars-fallback(fg, revert, $prefixes...)};
+  color: var(--_heading-color);
+  --_heading-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
+  background: var(--_heading-background);
+  --_heading-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
+  padding: var(--_heading-padding);
+  --_heading-border: #{fn.vars-fallback(border, none, $prefixes...)};
+  border: var(--_heading-border);
+  border-width: fn.prefixed-vars-optional(border-width, $prefixes...);
+  border-style: fn.prefixed-vars-optional(border-style, $prefixes...);
+  border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
+  --_heading-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
+  border-radius: var(--_heading-border-radius);
+  --_heading-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
+  box-shadow: var(--_heading-box-shadow);
+}
+
+@mixin heading-typography-props($prefixes...) {
+  font-family: fn.var-with-fallbacks(--font-family, append($prefixes, revert)...);
+  text-transform: fn.var-with-fallbacks(
+    --text-transform,
+    append($prefixes, revert)...
+  );
+  text-decoration: fn.var-with-fallbacks(
+    --text-decoration,
+    append($prefixes, revert)...
+  );
+  font-size: fn.vars-fallback(font-size, revert, $prefixes...);
+  font-weight: fn.var-with-fallbacks(--font-weight, append($prefixes, revert)...);
+  line-height: fn.var-with-fallbacks(--line-height, append($prefixes, revert)...);
+  letter-spacing: fn.var-with-fallbacks(
+    --letter-spacing,
+    append($prefixes, revert)...
+  );
+  text-indent: fn.var-with-fallbacks(--indent, append($prefixes, revert)...);
+  font-variant: fn.var-with-fallbacks(--font-variant, append($prefixes, revert)...);
+  text-align: fn.var-with-fallbacks(--text-align, append($prefixes, revert)...);
+}
+
+@mixin heading-props-for($level, $group, $prefixes...) {
+  $level-prefixes: map-prefixes($level, $prefixes);
+  $group-prefixes: map-prefixes($group, $prefixes);
+  $heading-prefixes: map-prefixes(heading, $prefixes);
+  $resolved-prefixes: ();
+
+  @each $prefix in $level-prefixes {
+    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+  }
+  @each $prefix in $group-prefixes {
+    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+  }
+  @each $prefix in $heading-prefixes {
+    $resolved-prefixes: append($resolved-prefixes, $prefix, comma);
+  }
+
+  $resolved-prefixes: append($resolved-prefixes, $level, comma);
+  $resolved-prefixes: append($resolved-prefixes, $group, comma);
+  $resolved-prefixes: append($resolved-prefixes, heading, comma);
+
+  @include heading-box-props($resolved-prefixes...);
+  @include heading-typography-props($resolved-prefixes...);
 }
 
 @mixin typography-container-props($prefixes...) {
@@ -75,14 +144,10 @@
   :global(h4),
   :global(h5),
   :global(h6) {
-    color: fn.var-with-fallbacks(--heading-fg, append($prefixes, unset)...);
-    background: fn.var-with-fallbacks(
-      --heading-bg,
-      append($prefixes, transparent)...
-    );
     max-width: fn.var-with-fallbacks(--line-width, append($prefixes, unset)...);
     margin-left: auto;
     margin-right: auto;
+    box-sizing: border-box;
     margin-bottom: fn.var-with-fallbacks(
       --heading-margin-bottom,
       append($prefixes, 0)...
@@ -91,18 +156,42 @@
       --heading-margin-top,
       append($prefixes, 1.5em)...
     );
-    /* Typography */
-    @include typography-props-bare(
-      append(map-prefixes(heading, $prefixes), heading)...
+  }
+
+  & :global(h1:first-child),
+  :global(h2:first-child),
+  :global(h3:first-child),
+  :global(h4:first-child),
+  :global(h5:first-child),
+  :global(h6:first-child) {
+    margin-top: fn.var-with-fallbacks(
+      --first-heading-margin-top,
+      append($prefixes, 0)...
     );
-    /* font-family: fn.var(--heading-font-family, var(--body-font-family, var(--font-family, inherit)));
-      font-size: fn.var(--heading-font-size, inherit);
-      font-weight: fn.var(--heading-font-weight, var(--body-font-weight, var(--font-weight, inherit)));
-      line-height: fn.var(--heading-line-height, var(--body-line-height, var(--line-height, inherit)));
-      letter-spacing: fn.var(--heading-letter-spacing, var(--body-letter-spacing, var(--letter-spacing, inherit)));
-      text-indent: fn.var(--heading-indent, var(--body-indent, var(--indent, inherit)));
-      font-variant: fn.var(--heading-font-variant, var(--body-font-variant, var(--font-variant, inherit)));
-      text-align: fn.var(--heading-text-align, var(--body-text-align, var(--text-align, inherit))); */
+  }
+
+  & :global(h1) {
+    @include heading-props-for(heading-1, heading-major, $prefixes...);
+  }
+
+  & :global(h2) {
+    @include heading-props-for(heading-2, heading-major, $prefixes...);
+  }
+
+  & :global(h3) {
+    @include heading-props-for(heading-3, heading, $prefixes...);
+  }
+
+  & :global(h4) {
+    @include heading-props-for(heading-4, heading, $prefixes...);
+  }
+
+  & :global(h5) {
+    @include heading-props-for(heading-5, heading-minor, $prefixes...);
+  }
+
+  & :global(h6) {
+    @include heading-props-for(heading-6, heading-minor, $prefixes...);
   }
 
   & :global(p) {
@@ -117,21 +206,65 @@
   :global(h4 + p),
   :global(h5 + p),
   :global(h6 + p) {
+    $first-paragraph-prefixes: map-prefixes(first-paragraph, $prefixes);
+    $paragraph-prefixes: append(map-prefixes(paragraph, $prefixes), paragraph);
+    $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
+
+    @each $prefix in $paragraph-prefixes {
+      $first-paragraph-fallback-prefixes: append(
+        $first-paragraph-fallback-prefixes,
+        $prefix,
+        comma
+      );
+    }
+
     @include typography-props-bare(
-      append(map-prefixes(first-paragraph, $prefixes), first-paragraph)...
+      append($first-paragraph-fallback-prefixes, first-paragraph)...
+    );
+    font-size: fn.var-with-fallbacks(
+      --first-paragraph-font-size,
+      append(
+          map-prefixes(first-paragraph, $prefixes),
+          fn.vars(
+            font-size,
+            append(map-prefixes(paragraph, $prefixes), paragraph)...
+          )
+        )...
+    );
+    line-height: fn.var-with-fallbacks(
+      --first-paragraph-line-height,
+      append(
+          map-prefixes(first-paragraph, $prefixes),
+          fn.vars(
+            line-height,
+            append(map-prefixes(paragraph, $prefixes), paragraph)...
+          )
+        )...
     );
     margin-block-start: fn.var-with-fallbacks(
       --first-paragraph-margin-top,
       append($prefixes, 0)...
     );
   }
-  & :global(p:first-of-type::first-line) {
+  & :global(p:first-of-type::first-line),
+  :global(h1 + p::first-line),
+  :global(h2 + p::first-line),
+  :global(h3 + p::first-line),
+  :global(h4 + p::first-line),
+  :global(h5 + p::first-line),
+  :global(h6 + p::first-line) {
     @include typography-props-bare(
       append(map-prefixes-include-base(first-line, $prefixes), first-line)...
     );
   }
 
-  & :global(p:first-of-type::first-letter) {
+  & :global(p:first-of-type::first-letter),
+  :global(h1 + p::first-letter),
+  :global(h2 + p::first-letter),
+  :global(h3 + p::first-letter),
+  :global(h4 + p::first-letter),
+  :global(h5 + p::first-letter),
+  :global(h6 + p::first-letter) {
     @include typography-props-bare(
       map-prefixes-include-base(first-letter, $prefixes)...
     );
@@ -139,5 +272,8 @@
     --link-fg: #{fn.vars(link-fg, $prefixes...)};
     background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
     color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};
+    float: var(--first-letter-float, none);
+    margin-right: var(--first-letter-margin-right, 0);
+    padding-top: var(--first-letter-padding-top, 0);
   }
 }

@@ -1,0 +1,13 @@
+:root {
+  --border-radius: 1rem;
+  --square-radius: 0;
+
+  --button-border-radius: 999px;
+  --mini-button-radius: 999px;
+
+  --card-border-radius: 1rem;
+  --fieldset-border-radius: 1.125rem;
+  --input-square-radius: 0.875rem;
+  --select-square-radius: 0.875rem;
+  --dropdown-menu-square-radius: 0;
+}

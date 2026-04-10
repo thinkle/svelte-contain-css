@@ -35,9 +35,18 @@
       labelContent = ref.innerHTML;
     }
   }
+
+  function handleGroupChange(event: Event) {
+    const input = event.currentTarget as HTMLInputElement;
+    if (input.checked) {
+      group = [...(group || []), value];
+    } else {
+      group = (group || []).filter((entry: any) => entry !== value);
+    }
+  }
 </script>
 
-<div class="label-sizing-box">
+<div class="label-sizing-box" {style}>
   <label class="checkbox-item">
     {#if useGroup}
       <input
@@ -45,13 +54,7 @@
         type="checkbox"
         {value}
         checked={Array.isArray(group) && group.includes(value)}
-        on:change={(e) => {
-          if (e.currentTarget.checked) {
-            group = [...(group || []), value];
-          } else {
-            group = (group || []).filter(v => v !== value);
-          }
-        }}
+        on:change={handleGroupChange}
         on:click
         on:blur
         on:focus
@@ -129,8 +132,7 @@
     align-items: center;
     box-sizing: border-box;
     gap: var(--checkbox-space, var(--toggle-space, var(--space-md)));
-
-    @include clickable(checkbox, clickable);
+    @include clickable-cursor(checkbox, clickable);
   }
 
   label span {
@@ -156,7 +158,6 @@
   }
 
   label::before {
-    transition: all var-with-fallbacks(--transition, checkbox, control);
     display: inline-grid;
     place-content: center;
     content: " ";
@@ -172,10 +173,26 @@
     border-radius: var(--checkbox-radius, 0);
   }
 
+  label {
+    @include clickable-affordance-target("::before", checkbox, clickable);
+  }
+
   label:has(input:checked)::before {
     @include color-props(checkbox-checked, toggle-on, primary, checkbox);
     border: var-with-fallbacks(--border, checkbox-checked, toggle-on, checkbox);
     box-sizing: border-box;
+  }
+
+  label:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: var(--checkbox-disabled-opacity, 0.6);
+    filter: grayscale(0.2);
+  }
+
+  label:has(input:disabled):hover::before,
+  label:has(input:disabled):active::before {
+    filter: none;
+    box-shadow: none;
   }
 
   label:has(input:checked)::after {

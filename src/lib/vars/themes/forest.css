@@ -1,0 +1,54 @@
+:root {
+  --fg: #1f2d26;
+  --bg: #eef3ed;
+  --body-bg: #eef3ed;
+  --body-fg: #1f2d26;
+
+  --surface-bg: #f7faf6;
+  --surface-fg: #1f2d26;
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
+
+  --sidebar-bg: #e3ece0;
+  --sidebar-fg: #1f2d26;
+  --menu-bg: #f4f8f3;
+  --menu-fg: #1f2d26;
+
+  --primary-bg: #2f6f52;
+  --primary-fg: #f8fcf9;
+  --secondary-bg: #d7e4d4;
+  --secondary-fg: #24352c;
+
+  --control-bg: #d7e4d4;
+  --control-fg: #24352c;
+  --input-bg: #fbfdfb;
+  --input-fg: #1f2d26;
+
+  --tab-bg: color-mix(in srgb, var(--surface-bg) 72%, var(--secondary-bg) 28%);
+  --tab-fg: #284032;
+  --tab-active-bg: var(--secondary-bg);
+  --tab-active-fg: #204f39;
+  --tab-bar-fg: #1f2d26;
+
+  --border-color: #a7bcae;
+  --shadow-color: color-mix(in srgb, #1f2d26 14%, transparent);
+
+  --link-fg: #1f6b52;
+  --link-hover-fg: #174f3d;
+  --heading-fg: #1f2d26;
+
+  --stripe-bg: color-mix(in srgb, var(--menu-bg) 92%, var(--menu-fg) 8%);
+  --stripe-fg: var(--menu-fg);
+
+  --warning-bg: #d4841f;
+  --warning-fg: #fffaf2;
+  --danger-bg: #b44d3d;
+  --danger-fg: #fff8f6;
+  --success-bg: #2f6f52;
+  --success-fg: #f8fcf9;
+  --info-bg: #3f7f93;
+  --info-fg: #f7fcff;
+
+  --hover-color-mix: black;
+  --active-color-mix: black;
+}

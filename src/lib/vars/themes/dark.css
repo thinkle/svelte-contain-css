@@ -1,61 +1,94 @@
 :root {
-  --fg: var(--material-color-grey-100);
-  --bg: var(--material-color-grey-800);
-  --body-bg: var(--material-color-grey-800);
-  --body-fg: var(--material-color-grey-100);
-  --container-bg: var(--material-color-grey-900);
-  --container-fg: var(--material-color-grey-100);
-  --primary-bg: var(--material-color-light-blue-500);
-  --primary-fg: var(--material-color-grey-100);
-  --sidebar-bg: var(--material-color-grey-900);
-  --secondary-bg: var(--material-color-grey-800);
-  --secondary-fg: var(--material-color-grey-200);
+  --fg: var(--material-color-blue-grey-50);
+  --bg: var(--material-color-blue-grey-800);
+  --body-bg: var(--material-color-blue-grey-800);
+  --body-fg: var(--material-color-blue-grey-50);
+  --surface-bg: var(--material-color-blue-grey-900);
+  --surface-fg: var(--material-color-blue-grey-50);
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
+  --sidebar-bg: var(--material-color-blue-grey-900);
+  --sidebar-fg: var(--material-color-blue-grey-50);
+  --menu-bg: var(--material-color-blue-grey-900);
+  --menu-fg: var(--material-color-blue-grey-50);
+  --primary-bg: var(--material-color-light-blue-100);
+  --primary-fg: var(--material-color-blue-grey-800);
+  --secondary-bg: var(--material-color-blue-grey-300);
+  --secondary-fg: var(--material-color-blue-grey-800);
+  --stripe-bg: color-mix(
+    in srgb,
+    var(--menu-bg) 88%,
+    var(--menu-fg) 12%
+  );
+  --stripe-fg: var(--menu-fg);
+  --border-color: var(--material-color-blue-grey-600);
+  --input-bg: var(--material-color-blue-grey-700);
+  --input-fg: var(--material-color-blue-grey-50);
+  --slider-track-bg: color-mix(
+    in srgb,
+    var(--input-bg) 76%,
+    var(--border-color) 24%
+  );
+  --slider-fill-bg: var(--primary-bg);
+  --slider-thumb-bg: var(--material-color-light-blue-100);
+  --slider-thumb-border: 1px solid var(--material-color-light-blue-50);
+  --slider-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
+  --slider-thumb-size: 1rem;
+  --button-bg: var(--material-color-blue-grey-800);
+  --button-fg: var(--material-color-blue-grey-50);
+  --tab-bg: var(--material-color-blue-grey-700);
+  --tab-fg: var(--material-color-blue-grey-100);
+  --tab-active-bg: var(--material-color-blue-grey-200);
+  --tab-active-fg: var(--material-color-blue-grey-900);
+  --tab-bar-bg: var(--material-color-blue-grey-900);
+  --tab-bar-fg: var(--material-color-blue-grey-50);
 
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);
-  --warning-fg: var(--material-color-grey-900);
+  --warning-fg: var(--white);
   --danger-bg: var(--material-color-red-400);
-  --danger-fg: var(--material-color-grey-900);
+  --danger-fg: var(--material-color-blue-grey-900);
   --success-bg: var(--material-color-green-400);
-  --success-fg: var(--material-color-grey-900);
+  --success-fg: var(--material-color-blue-grey-900);
   --info-bg: var(--material-color-light-blue-300);
-  --info-fg: var(--material-color-grey-900);
+  --info-fg: var(--material-color-blue-grey-900);
 
-  --hover-filter: brightness(1.08) contrast(1.2);
-  /* Code */
-  --code-bg: #282c34; /* Background color for the code block */
-  --code-fg: #abb2bf; /* Default text color */
+  --hover-filter-brightness-hack: brightness(1.15);
+  --menu-item-hover-filter-brightness-hack: brightness(1.25);
+  /* Code Block */
+  --code-bg: var(--material-color-blue-grey-800); /* Darker background */
+  --code-fg: var(--material-color-blue-grey-100); /* Lighter text */
 
-  --code-comment-fg: #5c6370; /* Comment color */
+  --code-comment-fg: var(--material-color-green-300); /* Lighter green */
   --code-comment-bg: transparent;
 
-  --code-string-fg: #98c379; /* String color */
+  --code-string-fg: var(--material-color-orange-300);
   --code-string-bg: transparent;
 
-  --code-keyword-fg: #c678dd; /* Keyword color */
+  --code-keyword-fg: var(--material-color-indigo-300);
   --code-keyword-bg: transparent;
 
-  --code-attr-name-fg: #d19a66; /* Attribute name color */
+  --code-attr-name-fg: var(--material-color-blue-300);
   --code-attr-name-bg: transparent;
 
-  --code-tag-fg: #e06c75; /* Tag color */
+  --code-tag-fg: var(--material-color-light-green-300);
   --code-tag-bg: transparent;
 
-  --code-function-fg: #61afef; /* Function name color */
+  --code-function-fg: var(--material-color-blue-300);
   --code-function-bg: transparent;
 
-  --code-variable-fg: #e06c75; /* Variable color */
+  --code-variable-fg: var(--material-color-amber-300);
   --code-variable-bg: transparent;
 
-  --code-operator-fg: #d19a66; /* Operator color */
+  --code-operator-fg: var(--material-color-brown-300);
   --code-operator-bg: transparent;
 
-  --code-prolog-fg: #5c6370; /* Prolog color */
+  --code-prolog-fg: var(--material-color-grey-400);
   --code-prolog-bg: transparent;
 
-  --code-doctype-fg: #5c6370; /* Doctype color */
+  --code-doctype-fg: var(--material-color-grey-400);
   --code-doctype-bg: transparent;
 
-  --code-cdata-fg: #5c6370; /* CDATA color */
+  --code-cdata-fg: var(--material-color-grey-400);
   --code-cdata-bg: transparent;
 }

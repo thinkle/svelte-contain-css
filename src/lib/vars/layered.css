@@ -1,0 +1,39 @@
+:root {
+  --shadow-distance: 0.125rem;
+  --shadow-blur: 0.625rem;
+  --shadow-color: rgba(15, 23, 42, 0.14);
+
+  --button-shadow-distance: 0.125rem;
+  --button-shadow-blur: 0.5rem;
+  --button-shadow-color: rgba(15, 23, 42, 0.12);
+  --button-hover-transform: none;
+  --button-active-transform: none;
+  --button-hover-box-shadow: 0 0.25rem 0.85rem rgba(15, 23, 42, 0.18);
+  --button-active-box-shadow: 0 0.125rem 0.35rem rgba(15, 23, 42, 0.16);
+
+  --card-shadow-distance: 0.25rem;
+  --card-shadow-blur: 1rem;
+  --card-shadow-color: rgba(15, 23, 42, 0.14);
+
+  --data-list-shadow-distance: 0.2rem;
+  --data-list-shadow-blur: 0.8rem;
+  --data-list-shadow-color: rgba(15, 23, 42, 0.12);
+
+  --dialog-shadow-distance: 0.75rem;
+  --dialog-shadow-blur: 2rem;
+  --dialog-shadow-color: rgba(15, 23, 42, 0.22);
+
+  --dropdown-menu-shadow-distance: 0.4rem;
+  --dropdown-menu-shadow-blur: 1.4rem;
+  --dropdown-menu-shadow-color: rgba(15, 23, 42, 0.18);
+
+  --tooltip-shadow-distance: 0.2rem;
+  --tooltip-shadow-blur: 0.75rem;
+  --tooltip-shadow-color: rgba(15, 23, 42, 0.18);
+
+  --slider-thumb-shadow: 0 0.15rem 0.45rem rgba(15, 23, 42, 0.2);
+  --slider-thumb-hover-shadow: 0 0.25rem 0.75rem rgba(15, 23, 42, 0.24);
+  --slider-thumb-active-shadow: 0 0.1rem 0.3rem rgba(15, 23, 42, 0.18);
+
+  --table-sticky-header-box-shadow: 0 0.35rem 0.85rem rgba(15, 23, 42, 0.12);
+}

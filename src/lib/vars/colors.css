@@ -12,8 +12,12 @@
   --bg: var(--material-color-grey-50);
   --fg: var(--material-color-grey-900);
 
-  --stripe-fg: #eaeaea;
-  --stripe-bg: #3a3a3a;
+  --stripe-fg: var(--menu-fg, var(--fg));
+  --stripe-bg: color-mix(
+    in srgb,
+    var(--menu-bg, var(--bg)) 94%,
+    var(--menu-fg, var(--fg)) 6%
+  );
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   --border-color: var(--fg);
   --warning-bg: var(--material-color-orange-600);
@@ -28,7 +32,10 @@
   --info-bg: var(--material-color-light-blue-600);
   --info-fg: var(--white);
 
-  --container-link-fg: var(--primary-bg);
+  --surface-bg: var(--bg);
+  --surface-fg: var(--fg);
+  --surface-link-fg: var(--link-fg, var(--primary-bg));
+  --container-link-fg: var(--surface-link-fg);
   --menu-item-bg: var(--menu-bg);
   --focus-color: var(--material-color-blue-a400);
   --tooltip-border: none;

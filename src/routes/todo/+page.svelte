@@ -6,15 +6,20 @@
   import Page from "$lib/layout/Page.svelte";
   import Themes from "../Themes.svelte";
   import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/lightordark.css";
-  import "$lib/vars/themes/typography-airy.css";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import Row from "$lib/layout/Row.svelte";
+
+  type Task = {
+    name: string;
+    priority: number;
+    category: string;
+  };
+
   let showThemes = false;
-  let tasks = [];
-  let newTask = {
+  let tasks: Task[] = [];
+  let newTask: Task = {
     name: "",
     priority: 5,
     category: "None",
