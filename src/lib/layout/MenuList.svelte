@@ -34,7 +34,7 @@
 </ul>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   .menu {
     list-style: none;
     /* @include padding-props(menu, container); */

@@ -186,7 +186,7 @@
 </nav>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   button {
     @include color-props(menu, button, surface);

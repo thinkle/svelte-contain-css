@@ -52,7 +52,7 @@
 </aside>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   aside {
     @include color-props(sidebar, surface);
     height: 100%;

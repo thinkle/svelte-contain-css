@@ -36,7 +36,7 @@
 </section>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   section {
     margin: auto;
 

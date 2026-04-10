@@ -92,7 +92,7 @@
 </FormProvider>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   fieldset {
     @include color-props(fieldset, surface);

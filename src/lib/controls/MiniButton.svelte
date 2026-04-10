@@ -50,7 +50,7 @@
 </button>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   button.primary {
     @include color-props(primary, button, control);
   }

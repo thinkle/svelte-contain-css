@@ -187,7 +187,7 @@
 </li>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   $icon-track-width: var-with-fallbacks(
     --icon-width,

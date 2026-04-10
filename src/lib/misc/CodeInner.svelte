@@ -36,7 +36,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   div {
     width: var(--code-width, var(--line-width, 90%));
