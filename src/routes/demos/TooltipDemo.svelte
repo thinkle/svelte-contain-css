@@ -23,9 +23,10 @@
       as a prop, like this:
     </p>
     <Code
-      code={`<Tooltip tooltipText="This is a tooltip">
-    <Button>Button</Button>
-  </Tooltip>`}
+      code={`
+<Tooltip tooltipText="This is a tooltip">
+  <Button>Button</Button>
+</Tooltip>`}
     />
     <p>
       Hover over this button for a tooltip:
@@ -65,7 +66,8 @@
 
       <Code
         language="svelte"
-        code={`<Tooltip
+        code={`
+<Tooltip
   vertical="top"
   horizontal="left"
   tooltipText="Your tooltip text here"
@@ -98,7 +100,8 @@
       {/snippet}
     </Tooltip>
     <Code
-      code={`<Tooltip>
+      code={`
+  <Tooltip>
     <Button>Fancy Tooltip Button</Button>
     {#snippet tooltip()}
       <div>
@@ -151,7 +154,8 @@
       </Tooltip>
     </p>
     <Code
-      code={`<Tooltip
+      code={`
+<Tooltip
   tooltipText="Tooltip for tiny element"
   horizontal="left"
 >
@@ -165,7 +169,8 @@
     background-color: var(--material-color-blue-500);
     border-radius: 50%;
   }
-</style>`}
+</style>
+`}
     />
   </TextLayout>
 </CssVariableDemo>
