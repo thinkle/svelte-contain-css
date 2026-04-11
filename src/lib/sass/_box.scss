@@ -1,12 +1,13 @@
+@use "sass:list";
 @use "functions" as fn;
 
 @mixin padding-props($prefixes...) {
-  --_padding: #{fn.var-with-fallbacks(--padding, append($prefixes, 4px)...)};
+  --_padding: #{fn.var-with-fallbacks(--padding, list.append($prefixes, 4px)...)};
   padding: var(--_padding);
 }
 
 @mixin gap-props($prefixes...) {
-  --_gap: #{fn.var-with-fallbacks(--gap, append($prefixes, var(--space))...)};
+  --_gap: #{fn.var-with-fallbacks(--gap, list.append($prefixes, var(--space))...)};
   gap: var(--_gap);
 }
 
@@ -19,7 +20,7 @@
 @mixin border-props-border($prefixes...) {
   $base-border: fn.var-with-fallbacks(
     --border,
-    append(
+    list.append(
         $prefixes,
         var(--border-width, 1px) var(--border-style, solid)
           var(--border-color, var(--fg))
@@ -36,7 +37,7 @@
     @each $p in $rectProps {
       #{$p}-#{$dir}: fn.var-with-fallbacks(
         --#{$p}-#{$dir},
-        append(
+        list.append(
             $prefixes,
             $base-border
           )...
@@ -45,7 +46,7 @@
   }
 }
 @mixin border-props-none($prefixes...) {
-  $base-border: fn.var-with-fallbacks(--border, append($prefixes, inherit)...);
+  $base-border: fn.var-with-fallbacks(--border, list.append($prefixes, inherit)...);
   border: $base-border;
   @include border-longhand-props($prefixes...);
   $directions: (top, right, bottom, left);
@@ -57,9 +58,9 @@
     @each $p in $rectProps {
       #{$p}-#{$dir}: fn.var-with-fallbacks(
         --#{$p}-#{$dir},
-        append(
+        list.append(
             $prefixes,
-            fn.var-with-fallbacks(--border, append($prefixes, none)...)
+            fn.var-with-fallbacks(--border, list.append($prefixes, none)...)
           )...
       );
     }
@@ -73,7 +74,7 @@
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --square-radius,
-    append($prefixes, 0)...
+    list.append($prefixes, 0)...
   );
 }
 
@@ -83,7 +84,7 @@
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --square-radius,
-    append($prefixes, 0)...
+    list.append($prefixes, 0)...
   );
 }
 
@@ -94,7 +95,7 @@
   @include border-props-none($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --border-radius,
-    append($prefixes, none)...
+    list.append($prefixes, none)...
   );
 }
 
@@ -102,7 +103,7 @@
   box-sizing: border-box;
   @include border-props-border($prefixes...);
   @include padding-props($prefixes...);
-  border-radius: fn.var-with-fallbacks(--radius, append($prefixes, 0)...);
+  border-radius: fn.var-with-fallbacks(--radius, list.append($prefixes, 0)...);
 }
 
 @mixin box-props-bottom($prefixes...) {
@@ -132,15 +133,15 @@
   //works:
   $shadow-distance: fn.var-with-fallbacks(
     --shadow-distance,
-    append($prefixes, var(--space))...
+    list.append($prefixes, var(--space))...
   );
   $shadow-blur: fn.var-with-fallbacks(
     --shadow-blur,
-    append($prefixes, var(--space))...
+    list.append($prefixes, var(--space))...
   );
   $shadow-color: fn.var-with-fallbacks(
     --shadow-color,
-    append($prefixes, rgba(127, 127, 127, 0.4))...
+    list.append($prefixes, rgba(127, 127, 127, 0.4))...
   );
 
   --_box-shadow:
@@ -150,10 +151,10 @@
 
 @mixin box-size-props($prefixes...) {
   // Sizing properties for explicit control over element dimensions
-  width: fn.var-with-fallbacks(--width, append($prefixes, auto)...);
-  min-width: fn.var-with-fallbacks(--min-width, append($prefixes, auto)...);
-  max-width: fn.var-with-fallbacks(--max-width, append($prefixes, none)...);
-  height: fn.var-with-fallbacks(--height, append($prefixes, auto)...);
-  min-height: fn.var-with-fallbacks(--min-height, append($prefixes, auto)...);
-  max-height: fn.var-with-fallbacks(--max-height, append($prefixes, none)...);
+  width: fn.var-with-fallbacks(--width, list.append($prefixes, auto)...);
+  min-width: fn.var-with-fallbacks(--min-width, list.append($prefixes, auto)...);
+  max-width: fn.var-with-fallbacks(--max-width, list.append($prefixes, none)...);
+  height: fn.var-with-fallbacks(--height, list.append($prefixes, auto)...);
+  min-height: fn.var-with-fallbacks(--min-height, list.append($prefixes, auto)...);
+  max-height: fn.var-with-fallbacks(--max-height, list.append($prefixes, none)...);
 }

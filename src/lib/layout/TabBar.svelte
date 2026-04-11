@@ -56,7 +56,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   div > :global(.bar),
   /* Account for display: contents div inserted by
   svelte to inject css variables */

@@ -16,7 +16,7 @@
 <input bind:value {placeholder} {...restProps} />
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   input {
     @include typography-props(input, ui);
     @include box-props(input, ui);

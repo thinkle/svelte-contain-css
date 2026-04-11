@@ -93,9 +93,16 @@
       : "demo",
   );
 
-  let activeTab = $state(resolvedDefaultTab);
+  let activeTab = $state<"demo" | "source" | "split">("demo");
+  let didInitializeTab = $state(false);
 
   $effect(() => {
+    if (!didInitializeTab) {
+      activeTab = resolvedDefaultTab;
+      didInitializeTab = true;
+      return;
+    }
+
     if (!hasSource) {
       activeTab = "demo";
       return;

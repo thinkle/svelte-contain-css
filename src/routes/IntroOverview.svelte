@@ -103,10 +103,11 @@
 
   <h2>For the Future</h2>
   <p>
-    We use modern CSS features like <code>filter</code> and
+    We use modern CSS features like <code>filter</code>, <code>color-mix</code>
+    and
     <code>transform</code>
     to handle affordances, so changing color schemes should be a snap and only require
-    changing a single value.
+    changing a single value (no separate "hover" and "active" color definitions).
   </p>
   <Code
     code={`
@@ -145,7 +146,11 @@
     for our overlays, so there's no need for portals or other shenanigans.
   </p>
   {#if showDialog}
-    <Dialog onClose={() => (showDialog = false)}>
+    <Dialog
+      onclose={() => {
+        showDialog = false;
+      }}
+    >
       <h1>Dialog</h1>
       <p id="dialog">
         Wow, a dialog! This uses the modern HTML dialog element, so it's ESC

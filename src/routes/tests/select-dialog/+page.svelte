@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import Button from "$lib/controls/Button.svelte";
   import Select from "$lib/controls/Select.svelte";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
@@ -19,9 +20,9 @@
       <h2>Header Bar Thing</h2>
       <DropdownMenu>
         {#snippet label()}Menu{/snippet}
-        <li><a href="#">Home</a></li>
-        <li><a href="#demos">Demos</a></li>
-        <li><a href="#docs">Docs</a></li>
+        <li><a href={`${base}/`}>Home</a></li>
+        <li><a href={`${base}/#demos`}>Demos</a></li>
+        <li><a href={`${base}/#docs`}>Docs</a></li>
       </DropdownMenu>
     </Bar>
   {/snippet}

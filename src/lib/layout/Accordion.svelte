@@ -53,7 +53,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   div {
     @include color-props(accordion, surface);
     @include typography-props(accordion, header);

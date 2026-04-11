@@ -1,5 +1,6 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
+  import type { Snippet } from "svelte";
 
   // migrate props via $props() so we can pick up extra CSS var props in restProps
   let {
@@ -22,7 +23,7 @@
     padding?: string | null;
     width?: string | null;
     height?: string | null;
-    children?: any;
+    children?: Snippet;
   } & Record<string, unknown> = $props();
 
   const cssKeys = ["bg", "fg", "padding", "width", "height"];
@@ -49,9 +50,9 @@
   -->
 <div class="progress-container" data-state={state} {style}>
   {#if value === "indeterminate"}
-    <progress aria-label="Progress" {max} hidden />
+    <progress aria-label="Progress" {max} hidden></progress>
   {:else}
-    <progress aria-label="Progress" {max} value={Number(value)} hidden />
+    <progress aria-label="Progress" {max} value={Number(value)} hidden></progress>
   {/if}
 
   <!-- 2) Custom track with diagonal stripes (scrolling) when animateTrack=true -->
@@ -69,13 +70,13 @@
 
     <!-- 4) Overlaid text or content -->
     <div class="progress-text">
-      <div><slot /></div>
+      <div>{@render children?.()}</div>
     </div>
   </div>
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   // Diagonal stripes: subtle variation on track color
   $track-stripes: repeating-linear-gradient(

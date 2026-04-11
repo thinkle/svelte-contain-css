@@ -23,9 +23,10 @@
       as a prop, like this:
     </p>
     <Code
-      code={`<Tooltip tooltipText="This is a tooltip">
-    <Button>Button</Button>
-  </Tooltip>`}
+      code={`
+<Tooltip tooltipText="This is a tooltip">
+  <Button>Button</Button>
+</Tooltip>`}
     />
     <p>
       Hover over this button for a tooltip:
@@ -65,7 +66,8 @@
 
       <Code
         language="svelte"
-        code={`<Tooltip
+        code={`
+<Tooltip
   vertical="top"
   horizontal="left"
   tooltipText="Your tooltip text here"
@@ -98,7 +100,8 @@
       {/snippet}
     </Tooltip>
     <Code
-      code={`<Tooltip>
+      code={`
+  <Tooltip>
     <Button>Fancy Tooltip Button</Button>
     {#snippet tooltip()}
       <div>
@@ -140,7 +143,11 @@
           tooltipText={`Tooltip for blip ${i + 1}`}
           horizontal={i % 2 === 0 ? "left" : "right"}
         >
-          <div class="blip" tabindex="0"></div>
+          <button
+            type="button"
+            class="blip"
+            aria-label={`Show tooltip for blip ${i + 1}`}
+          ></button>
         </Tooltip>
       {/each}
     </div>
@@ -151,21 +158,25 @@
       </Tooltip>
     </p>
     <Code
-      code={`<Tooltip
+      code={`
+<Tooltip
   tooltipText="Tooltip for tiny element"
   horizontal="left"
 >
-  <div class="blip" tabindex="0"></div>
+  <button type="button" class="blip" aria-label="Show tooltip for tiny element"></button>
 </Tooltip>
 
 <style>
   .blip {
     width: 16px;
     height: 16px;
+    padding: 0;
+    border: none;
     background-color: var(--material-color-blue-500);
     border-radius: 50%;
   }
-</style>`}
+</style>
+`}
     />
   </TextLayout>
 </CssVariableDemo>

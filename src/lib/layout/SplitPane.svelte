@@ -1,7 +1,16 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
   import { onMount } from "svelte";
-  const restProps: Record<string, unknown> = $props();
+  import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+
+  type Props = {
+    left?: Snippet;
+    right?: Snippet;
+  } & HTMLAttributes<HTMLElement> &
+    Record<string, unknown>;
+
+  let { left, right, ...restProps }: Props = $props();
   const style = $derived(
     injectVars(restProps, "split-pane", [
       "bg",
@@ -115,11 +124,11 @@
   {...restProps}
 >
   <div class="left" bind:this={leftPane}>
-    <slot name="left" />
+    {@render left?.()}
   </div>
-  <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <div
     bind:this={resizerDiv}
     class="resizer"
@@ -127,16 +136,16 @@
     role="separator"
     aria-orientation="vertical"
     aria-label="Resize Pane"
-    on:pointerdown={onMouseDown}
-    on:keydown={onKeyUp}
+    onpointerdown={onMouseDown}
+    onkeydown={onKeyUp}
   ></div>
   <div class="right" bind:this={rightPane}>
-    <slot name="right" />
+    {@render right?.()}
   </div>
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   .split-pane {
     display: grid;

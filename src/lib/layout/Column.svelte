@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import { BROWSER, DEV } from "esm-env";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import ColumnContainer from "./ColumnContainer.svelte";
@@ -20,7 +21,7 @@
     ...restProps
   }: Props = $props();
 
-  if (typeof window !== "undefined" && import.meta.env.DEV && !warned) {
+  if (BROWSER && DEV && !warned) {
     warned = true;
     console.warn(
       "[ContainCSS] <Column> is deprecated. Use <ColumnContainer> for sized rails or <Stack> for generic vertical layout.",

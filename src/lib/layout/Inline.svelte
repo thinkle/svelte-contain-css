@@ -59,7 +59,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   .inline {
     @include box-props(inline);

@@ -26,13 +26,13 @@
   ];
 
   const style = $derived(injectVars(restProps, "bar", cssKeys));
-  let extraStyle = "";
-  if (primary) {
-    extraStyle += "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);";
-  } else if (secondary) {
-    extraStyle +=
-      "--bar-bg: var(--secondary-bg); --bar-fg: var(--secondary-fg);";
-  }
+  const extraStyle = $derived(
+    primary
+      ? "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);"
+      : secondary
+        ? "--bar-bg: var(--secondary-bg); --bar-fg: var(--secondary-fg);"
+        : "",
+  );
 </script>
 
 <div class="bar" style="{style}{extraStyle}">
@@ -40,7 +40,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   .bar {
     display: flex;

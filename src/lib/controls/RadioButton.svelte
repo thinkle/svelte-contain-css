@@ -57,6 +57,8 @@
 </div>
 
 <style lang="scss">
+  @use "$lib/sass/_mixins.scss" as *;
+
   .label-sizing-box {
     position: relative;
     display: inline-block;
@@ -70,8 +72,6 @@
     pointer-events: none;
     visibility: hidden;
   }
-
-  @import "$lib/sass/_mixins.scss";
 
   :root {
     /* Customize these variables for radio button styling */

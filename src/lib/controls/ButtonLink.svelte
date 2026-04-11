@@ -70,7 +70,7 @@
 </a>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   a.has-icon {
     display: inline-flex;

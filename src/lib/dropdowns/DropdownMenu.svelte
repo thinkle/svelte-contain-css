@@ -192,7 +192,7 @@
 </nav>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   button {
     @include color-props(menu, button, surface);
@@ -202,9 +202,8 @@
     position: relative;
   }
 
-  .menu {
+  .dropdown-content :global(.menu) {
     @include color-props(menu, surface);
-    @include box-props(menu);
     @include typography-props(menu, surface);
     @include clickable(menu, button, control);
     @include focusable();

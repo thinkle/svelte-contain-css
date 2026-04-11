@@ -129,7 +129,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   select,
   .dropdown-wrapper > :global(.dropdown-menu > button) {
     @include box-props-square-border(select, input, menu, control, surface);

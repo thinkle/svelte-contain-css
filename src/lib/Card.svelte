@@ -58,7 +58,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   /* ── Card shell ─────────────────────────────────────────── */
   .card {

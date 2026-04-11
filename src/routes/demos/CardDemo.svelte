@@ -64,7 +64,7 @@
         {/snippet}
         <h2>Card content here...</h2>
         <div>
-          <img src="https://picsum.photos/400/200" alt="Random Photo" />
+          <img src="https://picsum.photos/400/200" alt="Random landscape" />
         </div>
         <p>Add as much content as you want</p>
         {#snippet footer()}

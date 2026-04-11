@@ -34,7 +34,7 @@
 </ul>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   .menu {
     list-style: none;
     /* @include padding-props(menu, container); */
@@ -50,6 +50,7 @@
   .menu :global(li) {
     width: 100%;
     box-sizing: border-box;
+    @include clickable(menu-item);
   }
 
   // Ensure direct interactive children fill the full row width.
@@ -63,12 +64,18 @@
   }
 
   // Support row-level interactive list items (for menu headers/subsections).
+  .menu :global(li > .subheader),
   .menu :global(li.subheader),
   .menu :global(li.interactive),
   .menu :global(li[role="button"]),
   .menu :global(li[tabindex]:not([tabindex="-1"])) {
     @include clickable(menu-item);
     @include focusable();
+  }
+
+  .menu :global(li > .subheader) {
+    padding: var(--padding);
+    font-weight: bold;
   }
 
   .menu {
@@ -84,10 +91,6 @@
       @include box-props-square(menu-item, button, control);
       margin: 0;
       @include focusable();
-      @include clickable(menu-item);
-    }
-
-    li {
       @include clickable(menu-item);
     }
   }

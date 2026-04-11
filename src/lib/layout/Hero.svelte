@@ -34,7 +34,7 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
   .hero {
     --hero-font-size: calc(var(--font-size) * 2);
     --hero-first-letter-fg: var(--hero-fg, var(--surface-fg, var(--fg)));

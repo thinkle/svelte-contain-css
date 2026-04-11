@@ -26,13 +26,12 @@
 </div>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
-  div,
-  span {
+  @use "$lib/sass/_mixins.scss" as *;
+  .tab {
     display: contents;
   }
-  div > :global(button),
-  div > :global(div > button) {
+  .tab > :global(button),
+  .tab > :global(div > button) {
     @include color-props(tab, button, control, secondary);
     @include box-props(tab, button, control, secondary);
     @include typography-props(tab, button, ui, control, secondary);
@@ -43,8 +42,8 @@
     );
     margin: 0;
   }
-  div.active > :global(button),
-  div.active > :global(div > button) {
+  .tab.active > :global(button),
+  .tab.active > :global(div > button) {
     @include color-props(tab-active, primary, tab, button, control, secondary);
     @include typography-props(
       tab-active,

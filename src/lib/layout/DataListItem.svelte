@@ -187,7 +187,7 @@
 </li>
 
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   $icon-track-width: var-with-fallbacks(
     --icon-width,
@@ -466,7 +466,7 @@
     pointer-events: none;
   }
 
-  .data-list-item.selectable.checked + .data-list-item.selectable.checked::after {
+  .data-list-item.selectable.checked + :global(.data-list-item.selectable.checked)::after {
     border-top-width: 0;
   }
 
