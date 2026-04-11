@@ -143,7 +143,11 @@
           tooltipText={`Tooltip for blip ${i + 1}`}
           horizontal={i % 2 === 0 ? "left" : "right"}
         >
-          <div class="blip" tabindex="0"></div>
+          <button
+            type="button"
+            class="blip"
+            aria-label={`Show tooltip for blip ${i + 1}`}
+          ></button>
         </Tooltip>
       {/each}
     </div>
@@ -159,13 +163,15 @@
   tooltipText="Tooltip for tiny element"
   horizontal="left"
 >
-  <div class="blip" tabindex="0"></div>
+  <button type="button" class="blip" aria-label="Show tooltip for tiny element"></button>
 </Tooltip>
 
 <style>
   .blip {
     width: 16px;
     height: 16px;
+    padding: 0;
+    border: none;
     background-color: var(--material-color-blue-500);
     border-radius: 50%;
   }
