@@ -285,14 +285,17 @@
               >
             </li>
           {:else}
-            <li
-              class="subheader"
-              class:active={theItem === menu.indexOf(item)}
-              onclick={() => {
-                theItem = menu.indexOf(item) + 1;
-              }}
-            >
-              {item.name}
+            <li>
+              <button
+                type="button"
+                class="subheader"
+                class:active={theItem === menu.indexOf(item)}
+                onclick={() => {
+                  theItem = menu.indexOf(item) + 1;
+                }}
+              >
+                {item.name}
+              </button>
             </li>
           {/if}
         {/each}
