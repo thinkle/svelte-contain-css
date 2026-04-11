@@ -50,6 +50,7 @@
   .menu :global(li) {
     width: 100%;
     box-sizing: border-box;
+    @include clickable(menu-item);
   }
 
   // Ensure direct interactive children fill the full row width.
@@ -84,10 +85,6 @@
       @include box-props-square(menu-item, button, control);
       margin: 0;
       @include focusable();
-      @include clickable(menu-item);
-    }
-
-    li {
       @include clickable(menu-item);
     }
   }

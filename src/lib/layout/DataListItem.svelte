@@ -466,7 +466,7 @@
     pointer-events: none;
   }
 
-  .data-list-item.selectable.checked + .data-list-item.selectable.checked::after {
+  .data-list-item.selectable.checked + :global(.data-list-item.selectable.checked)::after {
     border-top-width: 0;
   }
 
