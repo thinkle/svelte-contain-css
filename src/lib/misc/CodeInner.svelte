@@ -25,13 +25,7 @@
 
 <div class="code" class:inline>
   <pre class:language-none={language === "none"} class={`language-${language}`}>
-    <code class={`language-${language}`}>
-      {#if language === "none"}
-        {highlightedCode}
-      {:else}
-        {@html highlightedCode}
-      {/if}
-    </code>
+    <code class={`language-${language}`}>{#if language === "none"}{highlightedCode}{:else}{@html highlightedCode}{/if}</code>
   </pre>
 </div>
 
