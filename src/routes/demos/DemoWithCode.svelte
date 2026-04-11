@@ -161,7 +161,6 @@
           activeTab =
             typeof value === "string" ? value : (value?.value ?? "demo");
         }}
-        --tab-bar-gap="0"
       />
       {#if inputArea}
         <div class="demo-input-area">
@@ -169,7 +168,10 @@
         </div>
       {/if}
       {#if activeTab === "demo"}
-        <div class="tab-panel demo-panel" style="--panel-height: var(--demo-with-code-height)">
+        <div
+          class="tab-panel demo-panel"
+          style="--panel-height: var(--demo-with-code-height)"
+        >
           {@render children?.()}
         </div>
       {:else if activeTab === "source"}
