@@ -23,11 +23,7 @@
   });
 </script>
 
-<div class="code" class:inline>
-  <pre class:language-none={language === "none"} class={`language-${language}`}>
-    <code class={`language-${language}`}>{#if language === "none"}{highlightedCode}{:else}{@html highlightedCode}{/if}</code>
-  </pre>
-</div>
+<div class="code" class:inline><pre class:language-none={language === "none"} class={`language-${language}`}><code class={`language-${language}`}>{#if language === "none"}{highlightedCode}{:else}{@html highlightedCode}{/if}</code></pre></div>
 
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
@@ -36,7 +32,7 @@
     width: var(--code-width, var(--line-width, 90%));
     height: var(--code-height, auto);
     box-sizing: border-box;
-    margin: auto;    
+    margin: auto;
   }
 
   div > :global(pre) {
