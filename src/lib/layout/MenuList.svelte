@@ -64,12 +64,18 @@
   }
 
   // Support row-level interactive list items (for menu headers/subsections).
+  .menu :global(li > .subheader),
   .menu :global(li.subheader),
   .menu :global(li.interactive),
   .menu :global(li[role="button"]),
   .menu :global(li[tabindex]:not([tabindex="-1"])) {
     @include clickable(menu-item);
     @include focusable();
+  }
+
+  .menu :global(li > .subheader) {
+    padding: var(--padding);
+    font-weight: bold;
   }
 
   .menu {
