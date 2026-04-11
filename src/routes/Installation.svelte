@@ -11,11 +11,7 @@
 <TextLayout {id}>
   <h1>Installation</h1>
   <p>Start by installing our library:</p>
-  <Code
-    language="none"
-    code={`npm install contain-
-  css-svelte`}
-  />
+  <Code language="none" code={`npm install contain-css-svelte`} />
   <p>
     Once you have that, you will need to make sure to import our styles
     somewhere in your project, such as at the top level, in order to define the
