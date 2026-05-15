@@ -1,7 +1,7 @@
 <script lang="ts">
-  let tooltipDiv: HTMLElement = $state();
-  let targetDiv: HTMLElement = $state();
-  let tooltipMeasurementDiv: HTMLElement = $state();
+  let tooltipDiv: HTMLElement | undefined = $state();
+  let targetDiv: HTMLElement | undefined = $state();
+  let tooltipMeasurementDiv: HTMLElement | undefined = $state();
   interface Props {
     tooltipText?: string;
     vertical?: string;
@@ -23,7 +23,7 @@
   function showPopover() {
     // Get the position of the target element
     // with respect to our screen
-
+    if (!targetDiv?.children[0]) return;
     const targetRect = targetDiv.children[0].getBoundingClientRect();
     let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
     let targetWidth = tooltipMeasurementDiv.getBoundingClientRect().width;
