@@ -32,7 +32,16 @@
 
   // Style injection
   const style = $derived(
-    injectVars(props, "menu", ["bg", "fg", "padding", "width", "height"]),
+    injectVars(props, "menu", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "triggerBg",
+      "triggerFg",
+      "triggerPadding",
+    ]),
   );
   let dropdownTop: number = $state(0);
   let dropdownLeft: number = $state(0);
@@ -55,13 +64,13 @@
     dropdownMaxHeight = window.innerHeight - dropdownTop;
   }
 
-  function triggerMenu(e) {
+  function triggerMenu(_e: Event) {
     if (!isOpen) {
       injectVariablesIntoDropdown();
       computePosition();
     }
   }
-  function dismissPopover(e) {
+  function dismissPopover(_e: Event) {
     if (!popoverDiv) return;
     popoverDiv.hidePopover();
   }
@@ -109,7 +118,7 @@
     }
   }
   function navigateMenu(direction: string) {
-    if (!popoverDiv.matches(":popover-open") && buttonElement) {
+    if (!popoverDiv?.matches(":popover-open") && buttonElement) {
       buttonElement.click();
       return;
     }
@@ -195,9 +204,9 @@
   @use "$lib/sass/_mixins.scss" as *;
 
   button {
-    @include color-props(menu, button, surface);
-    @include box-props-square(menu, button, surface);
-    @include clickable(menu, button, control);
+    @include color-props(menu-trigger, menu, button, surface);
+    @include box-props-square(menu-trigger, menu, button, surface);
+    @include clickable(menu-trigger, menu, button, control);
     @include focusable();
     position: relative;
   }

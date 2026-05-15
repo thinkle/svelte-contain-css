@@ -116,6 +116,47 @@
   </Bar>
 </DemoWithCode>
 <TextLayout>
+  <p>
+    If you want a dropdown trigger to blend into a surrounding bar without also
+    recoloring the popup, use <code>--menu-trigger-bg</code> and
+    <code>--menu-trigger-fg</code>. The trigger falls back to the regular
+    <code>--menu-*</code> variables, so existing styling still works.
+  </p>
+</TextLayout>
+<DemoWithCode
+  code={`<Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5">
+  <Menu
+    --menu-trigger-bg="transparent"
+    --menu-trigger-fg="var(--bar-fg)"
+    --menu-bg="#111"
+    --menu-fg="#f5f5f5"
+  >
+    {#snippet label()}
+      <span>Window</span>
+    {/snippet}
+    <li><button>Minimize</button></li>
+    <li><button>Zoom</button></li>
+    <li><button>Bring All to Front</button></li>
+  </Menu>
+</Bar>`}
+>
+  <Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5">
+    <Menu
+      --menu-trigger-bg="transparent"
+      --menu-trigger-fg="var(--bar-fg)"
+      --menu-bg="#111"
+      --menu-fg="#f5f5f5"
+    >
+      {#snippet label()}
+        <span>Window</span>
+      {/snippet}
+      <li><button>Minimize</button></li>
+      <li><button>Zoom</button></li>
+      <li><button>Bring All to Front</button></li>
+    </Menu>
+  </Bar>
+</DemoWithCode>
+<TextLayout>
   <h2>Select</h2>
   <p>
     Our <code>&lt;Select&gt;</code> element creates the select element we always
