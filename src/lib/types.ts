@@ -72,4 +72,8 @@ export interface DialogStyleProps {
 }
 
 /** Style props for dropdown menu components */
-export interface DropdownMenuStyleProps extends BaseStyleProps {}
+export interface DropdownMenuStyleProps extends BaseStyleProps {
+  triggerBg?: string | null;
+  triggerFg?: string | null;
+  triggerPadding?: string | null;
+}
