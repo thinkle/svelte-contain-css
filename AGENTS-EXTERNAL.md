@@ -53,7 +53,7 @@ Or import in your CSS:
 
 - `Button`, `ButtonLink`, `MiniButton` - Buttons and link-styled buttons
 - `Input`, `Select`, `Option` - Form inputs
-- `Checkbox`, `RadioButton` - Selection controls
+- `Checkbox`, `RadioButton`, `Toggle` - Selection controls
 - `Slider` - Range input
 - `TabItem` - Tab navigation items
 
@@ -62,6 +62,7 @@ Or import in your CSS:
 - `Container` - Centered, max-width container with padding
 - `Page` - Full-page layout wrapper
 - `Row`, `Column`, `Columns` - Flexbox layout helpers
+- `Inline`, `Stack` - Preferred generic flex helpers (horizontal/vertical)
 - `GridLayout` - CSS Grid wrapper
 - `SplitPane` - Resizable split panels
 - `Sidebar` - Collapsible sidebar
@@ -70,9 +71,11 @@ Or import in your CSS:
 - `Accordion` - Collapsible sections (uses `<details>`)
 - `Table` - Styled tables
 - `Tile` - Card-like tiles
+- `DataList`, `DataListItem` - Rich feed/list rows with start/content/end regions
 - `Hero` - Hero section with animations
 - `MenuList` - Vertical menu list
 - `ResponsiveText` - Container-query responsive text
+- `RowContainer`, `ColumnContainer` - Specialized sized lanes/rails for predictable tile regions
 
 **Overlays:**
 
@@ -354,6 +357,92 @@ RadioButtons work similarly but only allow one selection. The `group` will be a 
 <!-- --checkbox-checked-bg, --checkbox-checked-fg (checked state) -->
 <!-- --checkbox-size (defaults to font-size) -->
 ```
+
+### Toggle
+
+`Toggle` is checkbox-backed and best for binary on/off settings.
+
+```svelte
+<script>
+  import { Toggle } from "svelte-contain-css";
+
+  let notifications = $state(true);
+  let wifi = $state(false);
+</script>
+
+<Toggle bind:checked={notifications}>
+  {#snippet onLabel()}Notifications{/snippet}
+</Toggle>
+
+<Toggle bind:checked={wifi}>
+  {#snippet offLabel()}Off{/snippet}
+  {#snippet onLabel()}Wi-Fi{/snippet}
+</Toggle>
+```
+
+Useful variables: `--toggle-width`, `--toggle-height`, `--toggle-bg`,
+`--toggle-on-bg`, `--toggle-thumb-bg`.
+
+### Inline and Stack (Preferred Generic Layout)
+
+Use `Inline` for simple horizontal grouping and `Stack` for simple vertical rhythm.
+These are the default choices for generic flex layout.
+
+```svelte
+<script>
+  import { Inline, Stack, Button, Tag } from "svelte-contain-css";
+</script>
+
+<Stack gap="1rem">
+  <h3>Release Notes</h3>
+  <p>Stack keeps related content in vertical rhythm.</p>
+  <Inline>
+    <Tag info>Draft</Tag>
+    <Button primary>Publish</Button>
+  </Inline>
+</Stack>
+```
+
+- `Inline` supports wrapping, `split`, `fill`, and `stretch`.
+- `Stack` supports `split`, `justify`, `fill`, and `stretch`.
+
+### When to Use RowContainer and ColumnContainer
+
+`RowContainer` and `ColumnContainer` are specialized, sized container-query regions
+for predictable tile lanes/rails. Avoid using them as generic flex wrappers.
+
+- Prefer `Inline` when you need a normal horizontal row of controls/content.
+- Prefer `Stack` when you need a normal vertical grouping.
+- Reach for `RowContainer`/`ColumnContainer` when you explicitly need fixed-size
+  tile lanes or rails with predictable slot sizing.
+
+### DataList for Rich Row Layouts
+
+Use `DataList` when each row is a mini-layout with leading content, rich center
+content, and trailing actions.
+
+```svelte
+<script>
+  import { DataList, DataListItem, Button } from "svelte-contain-css";
+</script>
+
+<DataList iconSize="3rem" maxWidth="800px">
+  <DataListItem>
+    {#snippet start()}
+      <img src="https://loremflickr.com/120/120/cat?lock=1" alt="Cat with yarn" />
+    {/snippet}
+    <h4>Cats And Yarn</h4>
+    <p>Why cats love string toys and safer alternatives for play time.</p>
+    {#snippet end()}
+      <span>4 min read</span>
+      <Button>Read</Button>
+    {/snippet}
+  </DataListItem>
+</DataList>
+```
+
+Choose `DataList` over `Table` when rows are content-rich, variable height, or need
+chips/actions/media per row.
 
 ### Modal Dialogs
 
@@ -642,15 +731,17 @@ Example transformation:
     // Controls
     Button, ButtonLink, MiniButton,
     Input, Select, Option,
-    Checkbox, RadioButton, Slider,
+    Checkbox, RadioButton, Toggle, Slider,
     TabItem,
 
     // Layout
     Container, Page, Row, Column, Columns,
+    Inline, Stack, RowContainer, ColumnContainer,
     GridLayout, SplitPane, Sidebar,
     Bar, TabBar, MenuList,
     Form, FormItem, FormProvider, Fieldset,
     Accordion, Table, Tile, Hero,
+    DataList, DataListItem,
     ResponsiveText,
 
     // Overlays
