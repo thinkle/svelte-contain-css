@@ -86,7 +86,7 @@ Or import in your CSS:
 - `Code` - Syntax-highlighted code blocks
 - `Progress` - Progress bar
 - `Tag` - Label/tag pills
-- `TextLayout` - Typography-optimized text container
+- `TextLayout` - Typography-optimized text container: Note, this is designed for putting readable text in, so it constrains the width to the width of a comfortable paragraph -- don't put e.g. UI Bars inside a text layout unless you want them unusually narrow).
 
 ---
 
