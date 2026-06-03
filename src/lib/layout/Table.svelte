@@ -65,23 +65,24 @@
       );
     };
 
+    const hasNoColspan = (row: HTMLTableRowElement) =>
+      !Array.from(row.children).some((cell) => cell.hasAttribute("colspan"));
+
     const findBestRow = (
       table: HTMLTableElement,
     ): HTMLTableRowElement | null => {
-      const rows = Array.from(table.querySelectorAll("tr"));
+      // Fast path: first row covers the vast majority of real tables
+      const firstRow = table.querySelector<HTMLTableRowElement>(
+        "tbody tr, tr",
+      );
+      if (firstRow && hasNoColspan(firstRow)) return firstRow;
 
-      // First: find a row with no colspans
-      for (const row of rows) {
-        const hasColspan = Array.from(row.children).some((cell) =>
-          cell.hasAttribute("colspan"),
-        );
-        if (!hasColspan) return row;
-      }
-
-      // Otherwise: row with smallest total colspans
+      // Slow path: single pass — return on first no-colspan row found,
+      // while simultaneously tracking the least-colspan row as a fallback.
       let best: HTMLTableRowElement | null = null;
       let bestSpanCount = Infinity;
-      for (const row of rows) {
+      for (const row of table.querySelectorAll<HTMLTableRowElement>("tr")) {
+        if (hasNoColspan(row)) return row;
         const spanCount = getTotalCols(row);
         if (spanCount < bestSpanCount) {
           bestSpanCount = spanCount;
@@ -146,14 +147,22 @@
     columns = [];
     if (thead && sticky && headClone && bodyClone) {
       syncColumnWidths();
-      // Set up ResizeObserver to keep columns in sync when content or size changes
+      // Set up ResizeObserver to keep columns in sync when content or size changes.
+      // Debounce via rAF so rapid Svelte updates only trigger one sync per frame.
       if (
         !resizeObserver &&
         typeof window !== "undefined" &&
         window.ResizeObserver
       ) {
+        let rafPending = false;
         resizeObserver = new ResizeObserver(() => {
-          syncColumnWidths();
+          if (!rafPending) {
+            rafPending = true;
+            requestAnimationFrame(() => {
+              rafPending = false;
+              syncColumnWidths();
+            });
+          }
         });
         if (headClone) resizeObserver.observe(headClone);
         if (bodyClone) resizeObserver.observe(bodyClone);
