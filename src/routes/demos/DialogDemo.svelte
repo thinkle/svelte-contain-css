@@ -10,6 +10,7 @@
   let modalIsOpen = $state(false);
   let nonModalIsOpen = $state(false);
   let dismissibleModalIsOpen = $state(false);
+  let addedContent = $state(false);
 </script>
 
 <Container>
@@ -25,8 +26,9 @@
         A modal dialog is <em>not</em> "light dismissable" but must be explicitly
         closed.
       </p>
-      <Button data-testid="open-modal-dialog" onclick={() => (modalIsOpen = !modalIsOpen)}
-        >Open Modal Dialog</Button
+      <Button
+        data-testid="open-modal-dialog"
+        onclick={() => (modalIsOpen = !modalIsOpen)}>Open Modal Dialog</Button
       >
       <Dialog
         modal={true}
@@ -42,35 +44,37 @@
           Here is a button that we should be able to click without closing the
           dialog :)
         </p>
-        <Button>Test Button</Button>
-        <Container height="5rem" padding="0" margin="0" />
+        <Button onclick={() => (addedContent = !addedContent)}
+          >Add Content</Button
+        >
+        {#if addedContent}
+          <p>I'm making this dialog long to test scrolling/overflow.</p>
+          <p>
+            Lorem ipsum dolor sit amet. Consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Cats are
+            great! They play with balls of yarn and chase laser pointers. Some
+            cats enjoy climbing trees and others prefer lounging in sunny spots.
+          </p>
 
-        <p>
-          Lorem ipsum dolor sit amet. Consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Cats are
-          great! They play with balls of yarn and chase laser pointers. Some
-          cats enjoy climbing trees and others prefer lounging in sunny spots.
-        </p>
-        <Container height="5rem" padding="0" margin="0" />
-
-        <p>
-          Dogs are great too! They love to play fetch and go for long walks.
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          <br />
-          Puppies are especially adorable with their playful antics and boundless
-          energy.
-        </p>
-        <Container height="5rem" padding="0" margin="0" />
-        <p>
-          Sometimes there is space in a document apparently for the sole purpose
-          of demonstrating overflow scrolling.
-        </p>
-        <p>
-          Birds are fascinating creatures with their ability to fly and sing
-          melodious tunes. They come in various colors and sizes, adding beauty
-          to our surroundings.
-        </p>
+          <p>
+            Dogs are great too! They love to play fetch and go for long walks.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+          <p>
+            Puppies are especially adorable with their playful antics and
+            boundless energy.
+          </p>
+          <p>
+            Sometimes there is space in a document apparently for the sole
+            purpose of demonstrating overflow scrolling.
+          </p>
+          <p>
+            Birds are fascinating creatures with their ability to fly and sing
+            melodious tunes. They come in various colors and sizes, adding
+            beauty to our surroundings.
+          </p>
+        {/if}
       </Dialog>
       <Code
         language="svelte"
@@ -102,7 +106,9 @@
       >
       <Dialog
         modal={false}
-        onClose={() => (nonModalIsOpen = false)}
+        onClose={() => {
+          nonModalIsOpen = false;
+        }}
         open={nonModalIsOpen}
       >
         <h3>Non-Modal Dialog</h3>
@@ -126,7 +132,9 @@
       <Dialog
         modal={true}
         dismissible={true}
-        onClose={() => (dismissibleModalIsOpen = false)}
+        onClose={() => {
+          dismissibleModalIsOpen = false;
+        }}
         open={dismissibleModalIsOpen}
       >
         <h3>Light-Dismissible Modal Dialog</h3>
