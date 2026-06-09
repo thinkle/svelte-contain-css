@@ -37,6 +37,16 @@ const defaultScenarios = [
         name: "launch-menu-open",
       },
       {
+        action: "show-tooltip",
+        target: "[popover]:popover-open",
+        name: "tooltip-open",
+      },
+      {
+        action: "open-accordion",
+        target: "[data-audit-target='accordion-open']",
+        name: "accordion-open",
+      },
+      {
         action: "switch-tab",
         target: "[data-audit-target='readiness-tab']",
         name: "readiness-tab",
@@ -65,6 +75,11 @@ const defaultScenarios = [
         action: "toggle-bulk-actions",
         target: "[data-audit-target='bulk-actions-open']",
         name: "bulk-actions-open",
+      },
+      {
+        action: "open-team-select",
+        target: "[popover]:popover-open",
+        name: "team-select-open",
       },
     ],
   },

@@ -8,6 +8,7 @@
     horizontal?: string;
     children?: import("svelte").Snippet;
     tooltip?: import("svelte").Snippet;
+    block?: boolean;
   }
 
   let {
@@ -16,6 +17,7 @@
     horizontal = "right",
     children,
     tooltip,
+    block = false,
   }: Props = $props();
   let renderedVertical = $state(vertical);
   let renderedHorizontal = $state(horizontal);
@@ -91,35 +93,67 @@
   }
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div
-  class="tooltip-wrapper"
-  onmouseenter={() => showPopover()}
-  onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
-  onfocusin={() => showPopover()}
-  onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
-  bind:this={targetDiv}
->
-  {@render children?.()}
+{#if block}
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    popover="auto"
-    class="tooltip"
-    bind:this={tooltipDiv}
-    class:bottom={renderedVertical === "bottom"}
-    class:top={renderedVertical === "top"}
-    class:left={renderedHorizontal === "left"}
-    class:right={renderedHorizontal === "right"}
+    class="tooltip-wrapper"
+    onmouseenter={() => showPopover()}
+    onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onfocusin={() => showPopover()}
+    onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    bind:this={targetDiv}
   >
-    {#if tooltip}{@render tooltip()}{:else}
-      {tooltipText}
-    {/if}
+    {@render children?.()}
+    <div
+      popover="auto"
+      class="tooltip"
+      bind:this={tooltipDiv}
+      class:bottom={renderedVertical === "bottom"}
+      class:top={renderedVertical === "top"}
+      class:left={renderedHorizontal === "left"}
+      class:right={renderedHorizontal === "right"}
+    >
+      {#if tooltip}{@render tooltip()}{:else}
+        {tooltipText}
+      {/if}
+    </div>
+    <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
+      {#if tooltip}{@render tooltip()}{:else}
+        {tooltipText}
+      {/if}
+    </div>
   </div>
-  <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
-    {#if tooltip}{@render tooltip()}{:else}
-      {tooltipText}
-    {/if}
-  </div>
-</div>
+{:else}
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <span
+    class="tooltip-wrapper"
+    onmouseenter={() => showPopover()}
+    onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onfocusin={() => showPopover()}
+    onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    bind:this={targetDiv}
+  >
+    {@render children?.()}
+    <span
+      popover="auto"
+      class="tooltip"
+      bind:this={tooltipDiv}
+      class:bottom={renderedVertical === "bottom"}
+      class:top={renderedVertical === "top"}
+      class:left={renderedHorizontal === "left"}
+      class:right={renderedHorizontal === "right"}
+    >
+      {#if tooltip}{@render tooltip()}{:else}
+        {tooltipText}
+      {/if}
+    </span>
+    <span class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
+      {#if tooltip}{@render tooltip()}{:else}
+        {tooltipText}
+      {/if}
+    </span>
+  </span>
+{/if}
 
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;

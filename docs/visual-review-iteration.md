@@ -66,8 +66,8 @@ Current component coverage across the review scenarios:
 
 Notable gaps or weaker spots:
 
-- Accordion is covered in `LaunchStudio`, but there is no dedicated accordion-heavy state capture.
-- Tooltip is covered in `LaunchStudio`, but the current suite does not explicitly hover or open a tooltip target as a named artifact.
+- Accordion is covered in `LaunchStudio`, including an open accordion state capture.
+- Tooltip is covered in `LaunchStudio`, including an open tooltip state capture.
 - SplitPane and the lower-level Row/Column/Stack/Inline layout primitives are not strongly represented in the app scenarios.
 - Fixed-height bar overflow and action collapse behavior remain architectural follow-up work.
 
@@ -93,6 +93,28 @@ Notable gaps or weaker spots:
 - Uses the existing `--sidebar-icon-width` and `--sidebar-icon-height` variables in the mobile expander sizing chain, with `--icon-size` retained as the minimum hit target.
 - Keeps the `--sidebar-expand-image` and `--sidebar-collapse-image` SVG path intact. Bootstrap uses `--sidebar-mobile-icon-filter` so its existing grey SVG remains visible on a grey mini-button.
 - Keeps this as structural layout behavior instead of introducing new small-container CSS variables.
+
+`Tooltip.svelte`
+
+- Renders inline tooltips with `span` wrappers by default, so Tooltip can be used inside paragraph text without producing invalid `<div>` descendants.
+- Adds a `block` mode for rich tooltip snippets that contain block markup.
+- Updates existing tooltip examples so inline paragraph usage stays phrasing-only, while block examples opt into `block`.
+
+## State Captures
+
+Desktop state captures now include:
+
+- Launch menu open.
+- Tooltip open.
+- Accordion item open.
+- Launch readiness tab selected.
+- Launch dialog open.
+- Table bulk actions open.
+- Table custom Select menu open.
+- Layout tile selected.
+- Visual system actions menu open.
+- Visual system primary focus state.
+- Visual system dialog open.
 
 ## Visual Results
 
@@ -141,6 +163,4 @@ npx playwright test tests/review-visual.spec.ts
 
 Result: `60 passed`
 
-Known warning still emitted during the Vite server run:
-
-- `Tooltip.svelte` renders `<div>` descendants under `TextLayout.svelte` paragraph output in at least one path. This is a markup validity issue and should be handled separately from the current layout cleanup.
+The previous Tooltip/TextLayout invalid-placement warning is resolved by the inline/default and block/rich Tooltip split.

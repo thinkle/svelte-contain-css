@@ -267,7 +267,7 @@
           {#snippet label()}
             Team
           {/snippet}
-          <Select bind:value={team}>
+          <Select bind:value={team} data-audit-action="open-team-select">
             <option value="all">All teams</option>
             <option value="Platform">Platform</option>
             <option value="Marketing">Marketing</option>

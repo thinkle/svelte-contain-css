@@ -86,7 +86,7 @@
       If you want to include markup inside a tooltip instead of just text, you
       can use the alternate slot syntax, like this:
     </p>
-    <Tooltip>
+    <Tooltip block>
       <Button>Fancy Tooltip Button</Button>
       {#snippet tooltip()}
         <div>
@@ -101,7 +101,7 @@
     </Tooltip>
     <Code
       code={`
-  <Tooltip>
+  <Tooltip block>
     <Button>Fancy Tooltip Button</Button>
     {#snippet tooltip()}
       <div>
@@ -118,7 +118,7 @@
     />
     <p>Let's add a Tooltip in a Card!</p>
     <Card>
-      <Tooltip>
+      <Tooltip block>
         <Button>Fancy Tooltip Button</Button>
         {#snippet tooltip()}
           <div>

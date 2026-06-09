@@ -133,14 +133,14 @@
     <Tooltip>
       <Button onclick={() => (showDialog = true)}>Popup API</Button>
       {#snippet tooltip()}
-        <div>
+        <span>
           Which handles overlays for items such as tooltips and dropdown menus,
           which we provide with
           <code>&lt;Tooltip&gt</code>
           and <code>&lt;DropdownMenu&gt</code>
           as well as with a custom
           <code>&lt;Select&gt;</code>
-        </div>
+        </span>
       {/snippet}
     </Tooltip>
     for our overlays, so there's no need for portals or other shenanigans.
