@@ -198,8 +198,12 @@
     }
 
     aside > button {
-      --_sidebar-expander-size: var(
-        --sidebar-expander-icon-size,
+      --_sidebar-expander-width: max(
+        var(--sidebar-icon-width, 0.65rem),
+        var(--icon-size, 32px)
+      );
+      --_sidebar-expander-height: max(
+        var(--sidebar-icon-height, 1rem),
         var(--icon-size, 32px)
       );
       transition: left var(--sidebar-transition);
@@ -217,26 +221,19 @@
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border: var(--mini-button-border);
-      width: var(--_sidebar-expander-size);
-      height: var(--_sidebar-expander-size);
+      width: var(--_sidebar-expander-width);
+      height: var(--_sidebar-expander-height);
       @include color-props(mini-button, button, control, secondary);
       @include clickable(mini-button, button, control);
       @include focusable();
     }
     aside > button::after {
       color: var(--mini-button-fg, currentColor);
-    }
-    aside > button.expander::after {
-      content: "›";
-      background-image: none;
-    }
-    aside > button.close::after {
-      content: "‹";
-      background-image: none;
+      filter: var(--sidebar-mobile-icon-filter, none);
     }
     aside > button.close {
       left: calc(
-        var(--sidebar-width) - var(--_sidebar-expander-size) + var(--padding)
+        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
       );
       border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-right-radius: 0;
@@ -250,7 +247,8 @@
 
     aside {
       width: calc(
-        var(--gap) + var(--sidebar-expander-icon-size, var(--icon-size, 32px))
+        var(--gap) +
+          max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
       );
       flex: 0 0 auto;
     }
@@ -258,7 +256,7 @@
       position: absolute;
       --top: calc(
         var(--padding) +
-          var(--sidebar-expander-icon-size, var(--icon-size, 32px))
+          max(var(--sidebar-icon-height, 1rem), var(--icon-size, 32px))
       );
       left: 0;
       width: var(--sidebar-width);

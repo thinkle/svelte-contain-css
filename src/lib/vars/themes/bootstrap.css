@@ -172,6 +172,7 @@
   --sidebar-collapse-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 24' fill='none'%3E%3Cpath d='M9 4.5 3 12l6 7.5' stroke='%236c757d' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --sidebar-icon-width: 0.65rem;
   --sidebar-icon-height: 1rem;
+  --sidebar-mobile-icon-filter: brightness(0) invert(1);
   --checkbox-bg: #ffffff;
   --checkbox-fg: #212529;
   --checkbox-border: 1px solid rgba(0, 0, 0, 0.25);

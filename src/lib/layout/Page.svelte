@@ -217,7 +217,11 @@
         var(
           --sidebar-compact-side-padding,
           calc(
-            var(--sidebar-expander-icon-size, var(--icon-size, 32px)) +
+            max(
+              var(--sidebar-icon-width, 0.65rem),
+              var(--sidebar-icon-height, 1rem),
+              var(--icon-size, 32px)
+            ) +
               var(--gap, 8px)
           )
         )
@@ -236,7 +240,11 @@
         var(
           --sidebar-compact-side-padding,
           calc(
-            var(--sidebar-expander-icon-size, var(--icon-size, 32px)) +
+            max(
+              var(--sidebar-icon-width, 0.65rem),
+              var(--sidebar-icon-height, 1rem),
+              var(--icon-size, 32px)
+            ) +
               var(--gap, 8px)
           )
         )
