@@ -119,13 +119,13 @@
         {#snippet header()}
           <h3>CTA Surface</h3>
         {/snippet}
-        <p>
+        <Inline>
           <Tooltip tooltipText="Use this to expose secondary explanatory text.">
             <Button data-audit-action="show-tooltip" data-audit-focus="true">
               Review Help Copy
             </Button>
           </Tooltip>
-        </p>
+        </Inline>
       </Card>
     </GridLayout>
   </Container>
@@ -181,10 +181,10 @@
                   <p>
                     Remaining blockers are limited to docs and rollout comms.
                   </p>
-                  <p>
+                  <Inline wrap="wrap">
                     <Tag success>QA Signed Off</Tag>
                     <Tag warning>Docs Pending</Tag>
-                  </p>
+                  </Inline>
                 </div>
               </details>
               <details>
@@ -206,7 +206,7 @@
                 <h3>Audience and rollout</h3>
               {/snippet}
 
-              <p>
+              <Stack gap="var(--space-sm)">
                 <RadioButton bind:group={selectedAudience} value="enterprise">
                   Enterprise
                 </RadioButton>
@@ -216,9 +216,9 @@
                 <RadioButton bind:group={selectedAudience} value="self-serve">
                   Self-serve
                 </RadioButton>
-              </p>
+              </Stack>
 
-              <p>
+              <div>
                 <Select bind:value={rolloutTrack}>
                   <Option value="pilot"><strong>Pilot</strong> ring</Option>
                   <Option value="canary"><strong>Canary</strong> ring</Option>
@@ -226,15 +226,15 @@
                     ><strong>General</strong> availability</Option
                   >
                 </Select>
-              </p>
+              </div>
 
               <p>
                 <strong>Rollout percentage:</strong>
                 {rolloutPercent}%
               </p>
-              <p>
+              <div>
                 <Slider bind:value={rolloutPercent} min={0} max={100} />
-              </p>
+              </div>
               <Progress state={progressState} value={rolloutPercent} max={100}>
                 {selectedAudience} · {rolloutTrack}
               </Progress>
@@ -255,21 +255,21 @@
               {#snippet header()}
                 <h3>Engineering</h3>
               {/snippet}
-              <p><Tag success>Green</Tag></p>
+              <Inline><Tag success>Green</Tag></Inline>
               <p>Rollback rehearsed and metrics alerts verified.</p>
             </Card>
             <Card>
               {#snippet header()}
                 <h3>Marketing</h3>
               {/snippet}
-              <p><Tag warning>Reviewing</Tag></p>
+              <Inline><Tag warning>Reviewing</Tag></Inline>
               <p>Announcement email still needs regional approval.</p>
             </Card>
             <Card>
               {#snippet header()}
                 <h3>Support</h3>
               {/snippet}
-              <p><Tag info>Queued</Tag></p>
+              <Inline><Tag info>Queued</Tag></Inline>
               <p>Macro updates are prepared for the pilot cohort.</p>
             </Card>
           </GridLayout>
@@ -313,13 +313,13 @@
             {#snippet header()}
               <h3>Target cohort</h3>
             {/snippet}
-            <p>{selectedAudience}</p>
+            <strong>{selectedAudience}</strong>
           </Card>
           <Card>
             {#snippet header()}
               <h3>Release track</h3>
             {/snippet}
-            <p>{rolloutTrack}</p>
+            <strong>{rolloutTrack}</strong>
           </Card>
           <Card>
             {#snippet header()}

@@ -17,8 +17,10 @@ const themes = [
 
 const scenarios = [
   "incredible-app-shell",
+  "launch-studio",
   "table-workbench",
   "layout-workbench",
+  "visual-system-board",
 ];
 
 const options = parseArgs(process.argv.slice(2));
