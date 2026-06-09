@@ -219,6 +219,17 @@
       @include clickable(mini-button, button, control);
       @include focusable();
     }
+    aside > button::after {
+      color: var(--mini-button-fg, currentColor);
+    }
+    aside > button.expander::after {
+      content: "›";
+      background-image: none;
+    }
+    aside > button.close::after {
+      content: "‹";
+      background-image: none;
+    }
     aside > button.close {
       left: calc(
         var(--sidebar-width) - var(--icon-size, 32px) + var(--padding)

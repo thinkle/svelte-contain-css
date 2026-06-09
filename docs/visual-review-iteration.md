@@ -18,6 +18,23 @@ The visual suite currently covers these scenarios across `light`, `dark`, `boots
 
 Each scenario is captured at desktop and mobile viewport sizes. Desktop captures also exercise scenario-specific interaction states such as open menus, dialogs, selected tiles, and bulk actions.
 
+## Scenario Coverage
+
+Current coverage across the review scenarios:
+
+- `IncredibleAppShell`: Bar, MiniButton, Checkbox, Select, Slider, FormItem, DataList, DataListItem.
+- `LaunchStudio`: Bar, Card, GridLayout, Accordion, TabBar, TabItem, RadioButton, Select, Slider, Progress, Tag, Dialog, Tooltip.
+- `LayoutWorkbench`: Page, Sidebar, Bar, MiniButton, GridLayout, Card, Tile.
+- `TableWorkbench`: Bar, Checkbox, Select, FormItem, Table.
+- `VisualSystemBoard`: Bar, Card, GridLayout, DataList, DataListItem, FormItem, Checkbox, RadioButton, Select, Slider, Toggle, Progress, Tag, Table, Dialog.
+
+Notable gaps or weaker spots:
+
+- Accordion is covered in `LaunchStudio`, but there is no dedicated accordion-heavy state capture.
+- Tooltip is covered in `LaunchStudio`, but the current suite does not explicitly hover or open a tooltip target as a named artifact.
+- SplitPane and the lower-level Row/Column/Stack/Inline layout primitives are not strongly represented in the app scenarios.
+- Fixed-height bar overflow and action collapse behavior remain architectural follow-up work.
+
 ## Component Fixes
 
 `Bar.svelte`
@@ -36,6 +53,8 @@ Each scenario is captured at desktop and mobile viewport sizes. Desktop captures
 
 - Adjust mobile sidebar layout so the sidebar affordance no longer reserves a clipped horizontal rail inside the page content.
 - Positions the mobile sidebar as an overlay at small container sizes.
+- Adds a small content safe inset for the mobile sidebar affordance, so the closed sidebar button is less likely to sit over the first clickable item in the page content.
+- Uses a text arrow with the mini-button foreground color for the mobile sidebar affordance, avoiding Bootstrap's grey-on-grey sidebar SVG.
 - Keeps this as structural layout behavior instead of introducing new small-container CSS variables.
 
 ## Visual Results

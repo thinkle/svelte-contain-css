@@ -211,9 +211,24 @@
       display: flex;
     }
 
+    .hasSidebar > .side-by-side > .content {
+      padding-inline-start: calc(
+        var(--_padding, var(--padding, 0px)) + var(--icon-size, 32px) +
+          var(--gap, 8px)
+      );
+    }
+
     .hasSidebar.right > .side-by-side > .aside {
       inset-inline-start: auto;
       inset-inline-end: 0;
+    }
+
+    .hasSidebar.right > .side-by-side > .content {
+      padding-inline-start: var(--_padding, var(--padding, 0px));
+      padding-inline-end: calc(
+        var(--_padding, var(--padding, 0px)) + var(--icon-size, 32px) +
+          var(--gap, 8px)
+      );
     }
 
     .page > div > .content {
