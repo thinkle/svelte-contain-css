@@ -20,13 +20,49 @@ Each scenario is captured at desktop and mobile viewport sizes. Desktop captures
 
 ## Scenario Coverage
 
-Current coverage across the review scenarios:
+Current component coverage across the review scenarios:
 
-- `IncredibleAppShell`: Bar, MiniButton, Checkbox, Select, Slider, FormItem, DataList, DataListItem.
-- `LaunchStudio`: Bar, Card, GridLayout, Accordion, TabBar, TabItem, RadioButton, Select, Slider, Progress, Tag, Dialog, Tooltip.
-- `LayoutWorkbench`: Page, Sidebar, Bar, MiniButton, GridLayout, Card, Tile.
-- `TableWorkbench`: Bar, Checkbox, Select, FormItem, Table.
-- `VisualSystemBoard`: Bar, Card, GridLayout, DataList, DataListItem, FormItem, Checkbox, RadioButton, Select, Slider, Toggle, Progress, Tag, Table, Dialog.
+| Component | App Shell | Launch | Layout | Table | System Board |
+| --- | --- | --- | --- | --- | --- |
+| Accordion |  | x |  |  |  |
+| Bar | x | x | x | x | x |
+| Button | x | x | x | x | x |
+| ButtonLink |  | x |  |  |  |
+| Card |  | x | x |  | x |
+| Checkbox | x |  |  | x | x |
+| Code |  | x |  |  |  |
+| Container |  | x |  |  | x |
+| DataList | x |  |  |  | x |
+| DataListItem | x |  |  |  | x |
+| Dialog |  | x |  |  | x |
+| DropdownMenu |  | x |  |  | x |
+| Fieldset | x |  |  | x | x |
+| Form | x |  |  | x | x |
+| FormItem | x |  |  | x | x |
+| GridLayout |  | x | x |  | x |
+| Hero |  | x |  |  |  |
+| Inline | x | x | x |  | x |
+| Input | x |  |  | x | x |
+| MenuList |  |  | x |  |  |
+| MiniButton | x |  | x |  |  |
+| Option |  | x |  |  |  |
+| Page | x | x | x | x | x |
+| Progress |  | x |  |  | x |
+| RadioButton |  | x |  |  | x |
+| ResponsiveText |  | x |  |  |  |
+| Select | x | x |  | x | x |
+| Sidebar |  |  | x |  |  |
+| Slider | x | x |  |  | x |
+| SplitPane |  | x |  |  |  |
+| Stack | x | x |  |  | x |
+| TabBar |  | x |  |  |  |
+| TabItem |  | x |  |  |  |
+| Table |  |  |  | x | x |
+| Tag |  | x |  |  | x |
+| TextLayout | x | x | x | x | x |
+| Tile |  |  | x |  |  |
+| Toggle |  |  |  |  | x |
+| Tooltip |  | x |  |  |  |
 
 Notable gaps or weaker spots:
 
