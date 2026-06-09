@@ -214,16 +214,17 @@
     .hasSidebar > .side-by-side > .content {
       padding-inline-start: max(
         var(--_padding, var(--padding, 0px)),
-        var(
-          --sidebar-compact-side-padding,
-          calc(
-            max(
-              var(--sidebar-icon-width, 0.65rem),
-              var(--sidebar-icon-height, 1rem),
-              var(--icon-size, 32px)
-            ) +
-              var(--gap, 8px)
-          )
+        calc(
+          var(
+              --sidebar-compact-side-padding,
+              calc(
+                max(
+                  var(--sidebar-icon-width, 0.65rem),
+                  var(--sidebar-icon-height, 1rem),
+                  var(--icon-size, 32px)
+                ) + var(--gap, 8px)
+              )
+            ) - var(--padding, 0px)
         )
       );
     }
@@ -237,16 +238,17 @@
       padding-inline-start: var(--_padding, var(--padding, 0px));
       padding-inline-end: max(
         var(--_padding, var(--padding, 0px)),
-        var(
-          --sidebar-compact-side-padding,
-          calc(
-            max(
-              var(--sidebar-icon-width, 0.65rem),
-              var(--sidebar-icon-height, 1rem),
-              var(--icon-size, 32px)
-            ) +
-              var(--gap, 8px)
-          )
+        calc(
+          var(
+              --sidebar-compact-side-padding,
+              calc(
+                max(
+                  var(--sidebar-icon-width, 0.65rem),
+                  var(--sidebar-icon-height, 1rem),
+                  var(--icon-size, 32px)
+                ) + var(--gap, 8px)
+              )
+            ) - var(--padding, 0px)
         )
       );
     }
