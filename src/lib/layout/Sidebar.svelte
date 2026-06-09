@@ -207,7 +207,7 @@
       display: block;
       position: absolute;
       top: var(--padding);
-      left: calc(-1 * var(--padding));
+      left: 0;
 
       border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-left-radius: 0;
@@ -240,7 +240,7 @@
     aside .content {
       position: absolute;
       --top: calc(var(--padding) + var(--icon-size));
-      left: var(--padding);
+      left: 0;
       width: var(--sidebar-width);
       z-index: 2;
     }

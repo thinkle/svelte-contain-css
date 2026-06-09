@@ -26,7 +26,10 @@
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      var-with-fallbacks(--item-width, grid-layout, 250px)
+      minmax(
+        min(100%, var-with-fallbacks(--item-width, grid-layout, 250px)),
+        1fr
+      )
     );
     gap: var-with-fallbacks(--gap, grid-layout, 8px);
     justify-content: var(--grid-justify-content, center);

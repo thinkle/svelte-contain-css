@@ -44,6 +44,8 @@
 
   .bar {
     display: flex;
+    container-type: inline-size;
+    flex-wrap: var(--bar-wrap, wrap);
     align-items: var(--bar-align, center);
     justify-content: var(--bar-justify, space-between);
     padding: var-with-fallbacks(--padding, bar, 8px);
@@ -60,8 +62,8 @@
         var-with-fallbacks(--border-color, bar, 1px)
     );
     margin-bottom: var(--bar-margin-bottom, 1em);
-    min-height: var(--bar-min-height);
-    height: var(--bar-height, 3em);
+    min-height: var(--bar-min-height, var(--bar-height, 3em));
+    height: var(--bar-height, auto);
     max-height: var(--bar-max-height);
     @include color-props(bar, surface);
     gap: var-with-fallbacks(--gap, bar, 8px);

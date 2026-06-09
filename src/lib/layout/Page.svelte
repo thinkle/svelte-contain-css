@@ -184,6 +184,7 @@
     box-sizing: border-box;
     gap: var(--column-gap);
     padding: var(--padding);
+    position: relative;
   }
   .right .side-by-side {
     flex-direction: row-reverse;
@@ -195,5 +196,28 @@
   }
   .page.sticky.freeze :global(*) {
     overflow: hidden;
+  }
+
+  @container (max-width: 600px) {
+    .side-by-side {
+      gap: 0;
+    }
+
+    .hasSidebar > .side-by-side > .aside {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: 3;
+      display: flex;
+    }
+
+    .hasSidebar.right > .side-by-side > .aside {
+      inset-inline-start: auto;
+      inset-inline-end: 0;
+    }
+
+    .page > div > .content {
+      min-width: 0;
+    }
   }
 </style>
