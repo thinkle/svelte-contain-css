@@ -198,6 +198,10 @@
     }
 
     aside > button {
+      --_sidebar-expander-size: var(
+        --sidebar-expander-icon-size,
+        var(--icon-size, 32px)
+      );
       transition: left var(--sidebar-transition);
       transform: translateX(0);
       z-index: 3;
@@ -213,8 +217,8 @@
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
       border: var(--mini-button-border);
-      width: var(--icon-size, 32px);
-      height: var(--icon-size, 32px);
+      width: var(--_sidebar-expander-size);
+      height: var(--_sidebar-expander-size);
       @include color-props(mini-button, button, control, secondary);
       @include clickable(mini-button, button, control);
       @include focusable();
@@ -232,7 +236,7 @@
     }
     aside > button.close {
       left: calc(
-        var(--sidebar-width) - var(--icon-size, 32px) + var(--padding)
+        var(--sidebar-width) - var(--_sidebar-expander-size) + var(--padding)
       );
       border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
       border-top-right-radius: 0;
@@ -245,12 +249,17 @@
     } */
 
     aside {
-      width: calc(var(--gap) + var(--icon-size));
+      width: calc(
+        var(--gap) + var(--sidebar-expander-icon-size, var(--icon-size, 32px))
+      );
       flex: 0 0 auto;
     }
     aside .content {
       position: absolute;
-      --top: calc(var(--padding) + var(--icon-size));
+      --top: calc(
+        var(--padding) +
+          var(--sidebar-expander-icon-size, var(--icon-size, 32px))
+      );
       left: 0;
       width: var(--sidebar-width);
       z-index: 2;

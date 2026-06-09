@@ -53,7 +53,8 @@ Notable gaps or weaker spots:
 
 - Adjust mobile sidebar layout so the sidebar affordance no longer reserves a clipped horizontal rail inside the page content.
 - Positions the mobile sidebar as an overlay at small container sizes.
-- Adds a small content safe inset for the mobile sidebar affordance, so the closed sidebar button is less likely to sit over the first clickable item in the page content.
+- Adds a small content safe inset for the mobile sidebar affordance, so the closed sidebar button is less likely to sit over the first clickable item in the page content. The inset uses `max()` so it does not add the expander space on top of already-large content padding.
+- Introduces `--sidebar-expander-icon-size` and `--sidebar-compact-side-padding` so the mobile expander size and reserved side padding can be themed through the normal CSS variable chain.
 - Uses a text arrow with the mini-button foreground color for the mobile sidebar affordance, avoiding Bootstrap's grey-on-grey sidebar SVG.
 - Keeps this as structural layout behavior instead of introducing new small-container CSS variables.
 
