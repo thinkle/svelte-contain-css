@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { Component } from "svelte";
   import "$lib/vars/defaults.css";
   let { component } = $props();
-  let LoadedComponent = $state();
+  let LoadedComponent: Component | undefined = $state();
   let error = $state();
 
   onMount(async () => {

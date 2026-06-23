@@ -14,34 +14,19 @@
   import Stack from "$lib/layout/Stack.svelte";
 
   // Example CSS variable definitions for the Progress component
-  const progressVars = [
-    { name: "--progress-height", label: "Height of the progress bar" },
-    { name: "--progress-bar-color", label: "Fill color of the bar" },
-    { name: "--progress-track-bg", label: "Track background color" },
-    { name: "--progress-track-stripe-bg", label: "Track background color" },
-    { name: "--progress-fg", label: "Text color (over empty)" },
-    { name: "--progress-half-fg", label: "Text color (50-100%)" },
-    {
-      name: "--progress-outline-width",
-      label: "Width of the outline around the text for better contrast",
-    },
-    {
-      name: "--progress-outline-color",
-      label: "Color of the outline around the text for better contrast",
-    },
-    {
-      name: "--progress-half-outline-color",
-      label:
-        "Color of the outline around the text (50-100%) for better contrast",
-    },
-    {
-      name: "--progress-text-shadow",
-      label: "Text shadow for better contrast (fallback for older browsers)",
-    },
-    {
-      name: "--progress-half-text-shadow",
-      label: "Color of the text shadow (50-100%) (fallback for older browsers)",
-    },
+  import type { CSSVariable } from "./types";
+  const progressVars: CSSVariable[] = [
+    { name: "--progress-height", type: "length", placeholder: "Height of the progress bar" },
+    { name: "--progress-bar-color", type: "color", placeholder: "Fill color of the bar" },
+    { name: "--progress-track-bg", type: "color", placeholder: "Track background color" },
+    { name: "--progress-track-stripe-bg", type: "color", placeholder: "Track stripe background color" },
+    { name: "--progress-fg", type: "color", placeholder: "Text color (over empty)" },
+    { name: "--progress-half-fg", type: "color", placeholder: "Text color (50-100%)" },
+    { name: "--progress-outline-width", type: "length", placeholder: "Outline width for text contrast" },
+    { name: "--progress-outline-color", type: "color", placeholder: "Outline color for text contrast" },
+    { name: "--progress-half-outline-color", type: "color", placeholder: "Outline color (50-100%)" },
+    { name: "--progress-text-shadow", type: "text", placeholder: "Text shadow for contrast" },
+    { name: "--progress-half-text-shadow", type: "color", placeholder: "Text shadow color (50-100%)" },
   ];
 
   let state: "uninitiated" | "inprogress" | "complete" = "inprogress";

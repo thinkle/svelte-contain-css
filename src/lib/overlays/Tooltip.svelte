@@ -19,13 +19,16 @@
     tooltip,
     block = false,
   }: Props = $props();
+  // svelte-ignore state_referenced_locally
   let renderedVertical = $state(vertical);
+  // svelte-ignore state_referenced_locally
   let renderedHorizontal = $state(horizontal);
 
   function showPopover() {
     // Get the position of the target element
     // with respect to our screen
     if (!targetDiv?.children[0]) return;
+    if (!tooltipDiv || !tooltipMeasurementDiv) return;
     const targetRect = targetDiv.children[0].getBoundingClientRect();
     let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
     let targetWidth = tooltipMeasurementDiv.getBoundingClientRect().width;

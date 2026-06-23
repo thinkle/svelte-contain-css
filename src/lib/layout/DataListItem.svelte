@@ -178,7 +178,7 @@
         <Checkbox
           bind:checked
           padding="0"
-          tabindex="-1"
+          tabindex={-1}
           aria-label={checked ? "Unselect row" : "Select row"}
         />
       {/if}

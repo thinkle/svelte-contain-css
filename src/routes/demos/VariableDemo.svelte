@@ -90,7 +90,7 @@
       "--menu-even-fg",
     ].map((v) => ({ name: v, type: "color", placeholder: "#110042" })),
   };
-  let modes = ["color", "typography", "layout"];
+  let modes: ("color" | "typography" | "layout")[] = ["color", "typography", "layout"];
   let values = $state({
     typography: {},
     layout: {},

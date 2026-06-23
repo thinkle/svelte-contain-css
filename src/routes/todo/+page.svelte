@@ -13,7 +13,7 @@
   import Tile from "$lib/layout/Tile.svelte";
   import RowContainer from "$lib/layout/RowContainer.svelte";
   let showThemes = $state(false);
-  let tasks = $state([]);
+  let tasks = $state<{ name: string; priority: number; category: string }[]>([]);
   let newTask = $state({
     name: "",
     priority: 5,

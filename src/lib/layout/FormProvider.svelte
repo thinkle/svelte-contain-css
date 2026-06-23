@@ -24,7 +24,9 @@
   // Get parent context if it exists
   const parentContext = getContext<FormItemDefaults>("formItemDefaults");
 
-  // Make context reactive using $state, merging with parent
+  // Make context reactive using $state, merging with parent.
+  // The $effect below keeps these in sync; the initial values are intentional.
+  // svelte-ignore state_referenced_locally
   let contextValue = $state<FormItemDefaults>({
     layout: layout ?? parentContext?.layout,
     collapseSide: collapseSide ?? parentContext?.collapseSide,

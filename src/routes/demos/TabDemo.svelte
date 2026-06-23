@@ -92,7 +92,7 @@
       {active}
       sticky
       onchange={(value) => {
-        active = value;
+        active = typeof value === "string" ? value : (value?.value ?? active ?? "TabItem");
       }}
     ></TabBar></CssWrapper
   >

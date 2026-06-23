@@ -1,10 +1,9 @@
 <script lang="ts">
   import { injectVars } from "$lib/util";
-  const {
-    children,
-    border = false,
-    ...props
-  } = $props<{
+  import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+
+  type Props = {
     bg?: string | null;
     fg?: string | null;
     margin?: string | null;
@@ -14,8 +13,14 @@
     border?: boolean;
     paddingTop?: string | null;
     borderTop?: string | null;
-    children?: import("svelte").Snippet;
-  }>();
+    children?: Snippet;
+  } & HTMLAttributes<HTMLElement>;
+
+  const {
+    children,
+    border = false,
+    ...props
+  }: Props = $props();
 
   const style = $derived(
     injectVars(props, "container", [

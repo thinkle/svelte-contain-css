@@ -19,11 +19,10 @@
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
   let targetWidth = $state("");
-  let optionButtons: HTMLButtonElement[] = $state([]);
+  let optionButtons: HTMLLIElement[] = $state([]);
 
-  onMount(async () => {
-    await tick(); // Ensure slot content is rendered
-    updateOptions();
+  onMount(() => {
+    tick().then(() => updateOptions());
 
     // Observe changes in the select element
     observer = new MutationObserver((mutations) => {
@@ -78,6 +77,7 @@
   }
 
   function setValue(idx: number) {
+    if (!selectElement) return;
     selectElement.selectedIndex = idx;
     selectElement.dispatchEvent(new Event("change", { bubbles: true }));
     activeOption = options[idx];

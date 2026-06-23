@@ -165,8 +165,9 @@
         items={tabItems}
         active={activeTab}
         onchange={(value) => {
-          activeTab =
-            typeof value === "string" ? value : (value?.value ?? "demo");
+          activeTab = (
+            typeof value === "string" ? value : (value?.value ?? "demo")
+          ) as "demo" | "source" | "split";
         }}
       />
       {#if inputArea}

@@ -32,7 +32,7 @@
     };
 
   type Props = StaticTileProps | InteractiveTileProps | SelectableTileProps;
-  type RenderProps = Omit<Props, "checked">;
+  type RenderProps = { selectable?: boolean; interactive?: boolean; children?: Snippet } & Record<string, unknown>;
 
   let { checked = $bindable(false), ...props }: Props = $props();
 

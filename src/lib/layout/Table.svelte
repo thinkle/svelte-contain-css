@@ -17,13 +17,14 @@
     children,
   }: Props = $props();
 
+  // svelte-ignore state_referenced_locally
   let columns = $state(column_widths || []);
 
   /* Code for syncing column widths for scrolling table solution */
   let headClone: HTMLTableElement | null = $state(null);
   let bodyClone: HTMLTableElement | null = $state(null);
   let resizeObserver: ResizeObserver | null = $state(null);
-  let tableWidth = $state(null);
+  let tableWidth = $state<number | null>(null);
   import { onDestroy } from "svelte";
 
   onDestroy(() => {

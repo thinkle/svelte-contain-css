@@ -14,12 +14,13 @@
     "var(--material-color-purple-500)",
     "var(--material-color-pink-500)",
   ];
-  const tagVars = [
-    "tag-bg",
-    "tag-fg",
-    "tag-padding",
-    "tag-border-radius",
-    "tag-font-size",
+  import type { CSSVariable } from "./types";
+  const tagVars: CSSVariable[] = [
+    { name: "--tag-bg", type: "color", defaultValue: "var(--secondary-bg)" },
+    { name: "--tag-fg", type: "color", defaultValue: "var(--secondary-fg)" },
+    { name: "--tag-padding", type: "length", defaultValue: "0.2em 0.5em" },
+    { name: "--tag-border-radius", type: "length", defaultValue: "0.25em" },
+    { name: "--tag-font-size", type: "length", defaultValue: "0.85em" },
   ];
 </script>
 

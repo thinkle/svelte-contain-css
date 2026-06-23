@@ -92,7 +92,7 @@
     } else {
       searchString = "";
       if (event.key === "Escape") {
-        popoverDiv.hidePopover();
+        popoverDiv?.hidePopover();
       } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault(); // Prevent default to stop scrolling the page
         navigateMenu(event.key);

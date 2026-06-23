@@ -388,7 +388,7 @@
     },
   ] as const;
 
-  const headingModeVars = $derived.by(() => {
+  const headingModeVars = $derived.by((): Record<string, string> => {
     if (headingMode === "one") {
       return {
         "--heading-fg": "var(--primary-bg)",

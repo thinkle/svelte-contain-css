@@ -33,10 +33,10 @@
 
   let { children, value, ...restProps }: Props = $props();
 
-  let template: HTMLDivElement | null = $state(null);
+  let template: HTMLDivElement | undefined = $state();
 
   // Extract text content from rendered children
-  let textContent = $derived(template ? template.textContent : "");
+  let textContent = $derived(template ? template.textContent ?? "" : "");
   let htmlContent = $derived(template ? template.innerHTML : "");
 </script>
 
@@ -44,6 +44,6 @@
   {@html textContent}
 </option>
 
-<div bind:this={template} style="display: none;" class="option-template hidden">
+<div bind:this={template} style="display: none;" class="option-template hidden" aria-hidden="true">
   {@render children?.()}
 </div>

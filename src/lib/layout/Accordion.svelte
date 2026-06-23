@@ -6,7 +6,7 @@
   }
 
   let { highlanderMode = true, children }: Props = $props();
-  let wrapper: HTMLDivElement = $state();
+  let wrapper: HTMLDivElement | undefined = $state();
 
   function onAccordionClicked(e: MouseEvent) {
     if (!highlanderMode) {

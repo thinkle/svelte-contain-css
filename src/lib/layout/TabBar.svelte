@@ -25,7 +25,6 @@
 <div class="tabs" class:sticky>
   <Bar
     padding="0"
-    borderTop="none"
     --button-height="var(--tab-bar-height, 3em)"
     --bar-justify="var(--tab-bar-justify, start)"
     --bar-gap="var(--tab-bar-gap, var(--space-md))"
@@ -39,8 +38,8 @@
     --bar-border-bottom="var(--tab-bar-border-bottom, var(--border-width) var(--border-style) var(--border-color))"
   >
     {#each items as item}
-      {@const value = item.value || item}
-      {@const label = item.label || item}
+      {@const value = typeof item === "string" ? item : item.value}
+      {@const label = typeof item === "string" ? item : item.label}
       <TabItem
         active={value === active}
         onclick={() => {

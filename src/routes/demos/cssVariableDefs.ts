@@ -713,18 +713,23 @@ export let accordionVars = [
   ...boxPropsSquare('accordion-wrapper'),
   ...boxPropsSquare('accordion-summary'),
   {
-    name : '--accordion-icon',
+    name: '--accordion-icon',
+    type: 'text',
     defaultValue: '"▼"',
   },
-  { name : '--accordion-gap',
+  {
+    name: '--accordion-gap',
+    type: 'length',
     defaultValue: 'var(--space)',
   },
   {
-    name : "--accordion-icon-transform",
+    name: "--accordion-icon-transform",
+    type: 'text',
     defaultValue: "rotateX(180deg)",
   },
   {
     name: "--accordion-open-icon",
+    type: 'text',
     defaultValue: "var(--accordion-icon)",
   }
 ]

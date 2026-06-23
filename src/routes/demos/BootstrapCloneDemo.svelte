@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
   import "$lib/vars/themes/bootstrap.css";

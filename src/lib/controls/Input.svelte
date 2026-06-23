@@ -2,7 +2,7 @@
   import type { HTMLInputAttributes } from "svelte/elements";
 
   type Props = {
-    value?: string;
+    value?: string | number;
     placeholder?: string;
   } & HTMLInputAttributes;
 

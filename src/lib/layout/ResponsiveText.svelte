@@ -12,8 +12,8 @@
     large,
     xl,
     else: elseSnippet,
-    greaterThan: greaterThanSnippet,
-    smallerThan: smallerThanSnippet,
+    greaterThanContent: greaterThanSnippet,
+    smallerThanContent: smallerThanSnippet,
   }: {
     greaterThan?: (typeof breakpoints)[number] | null;
     smallerThan?: (typeof breakpoints)[number] | null;
@@ -23,8 +23,8 @@
     large?: Snippet;
     xl?: Snippet;
     else?: Snippet;
-    greaterThan?: Snippet;
-    smallerThan?: Snippet;
+    greaterThanContent?: Snippet;
+    smallerThanContent?: Snippet;
   } = $props();
 
   function computeSmallerThan(value: (typeof breakpoints)[number] | null) {

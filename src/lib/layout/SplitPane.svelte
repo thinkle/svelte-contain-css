@@ -22,18 +22,18 @@
     ])
   );
   let resizeStyle = $state("");
-  let startWidthLeft: number = $state();
-  let startWidthRight: number = $state();
-  let startX: number = $state();
-  let splitPaneContainer: HTMLElement = $state();
-  let resizerDiv: HTMLElement = $state();
-  let leftPane: HTMLElement = $state();
-  let rightPane: HTMLElement = $state();
+  let startWidthLeft = $state(0);
+  let startWidthRight = $state(0);
+  let startX = $state(0);
+  let splitPaneContainer: HTMLElement | undefined = $state();
+  let resizerDiv: HTMLElement | undefined = $state();
+  let leftPane: HTMLElement | undefined = $state();
+  let rightPane: HTMLElement | undefined = $state();
 
   function onMouseDown(event: MouseEvent) {
     startX = event.clientX;
-    startWidthLeft = leftPane.getBoundingClientRect().width;
-    startWidthRight = rightPane.getBoundingClientRect().width;
+    startWidthLeft = leftPane!.getBoundingClientRect().width;
+    startWidthRight = rightPane!.getBoundingClientRect().width;
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
   }
@@ -50,11 +50,11 @@
       // Don't allow too small of widths
       return;
     }
-    const containerStyle = getComputedStyle(splitPaneContainer);
+    const containerStyle = getComputedStyle(splitPaneContainer!);
     const columnGap = Number.parseFloat(containerStyle.columnGap || "0") || 0;
     const totalGap = columnGap * 2; // 3 columns => 2 gaps
-    const resizerWidth = resizerDiv.getBoundingClientRect().width;
-    const availableWidth = splitPaneContainer.clientWidth - totalGap;
+    const resizerWidth = resizerDiv!.getBoundingClientRect().width;
+    const availableWidth = splitPaneContainer!.clientWidth - totalGap;
     const minRequired = resizerWidth + MIN_SIZE * 2;
 
     if (availableWidth <= minRequired) {
@@ -92,8 +92,8 @@
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       const delta = event.key === "ArrowLeft" ? -STEP_SIZE : STEP_SIZE;
       // Adjust the widths of the panes
-      startWidthLeft = leftPane.getBoundingClientRect().width;
-      startWidthRight = rightPane.getBoundingClientRect().width;
+      startWidthLeft = leftPane!.getBoundingClientRect().width;
+      startWidthRight = rightPane!.getBoundingClientRect().width;
       let newLeftWidth = startWidthLeft + delta;
       let newRightWidth = startWidthRight - delta;
       setSize(newLeftWidth, newRightWidth);
@@ -102,9 +102,9 @@
 
   function handleWindowResize() {
     if (!resizeStyle) return;
-    const existingLeftWidth = leftPane.getBoundingClientRect().width;
-    const existingRightWidth = rightPane.getBoundingClientRect().width;
-    let w = splitPaneContainer.getBoundingClientRect().width;
+    const existingLeftWidth = leftPane!.getBoundingClientRect().width;
+    const existingRightWidth = rightPane!.getBoundingClientRect().width;
+    let w = splitPaneContainer!.getBoundingClientRect().width;
     let delta = w - existingLeftWidth - existingRightWidth;
     setSize(existingLeftWidth + delta / 2, existingRightWidth + delta / 2);
   }

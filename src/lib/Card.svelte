@@ -34,7 +34,7 @@
     ]),
   );
 
-  const forceFixedHeight = (h: string) => {
+  const forceFixedHeight = (h: string | undefined) => {
     if (h && !fixedHeight) {
       fixedHeight = true;
     }

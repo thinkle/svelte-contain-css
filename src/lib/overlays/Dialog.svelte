@@ -8,8 +8,8 @@
     modal?: boolean;
     dismissible?: boolean;
     children?: Snippet;
-    onclose?: () => void | null;
-    onClose?: () => void | null;
+    onclose?: (() => void) | null;
+    onClose?: (() => void) | null;
   } & Record<string, unknown>;
 
   let {
@@ -47,7 +47,7 @@
         event.clientY < rect.top ||
         event.clientY > rect.bottom)
     ) {
-      onclose();
+      onclose?.();
     }
   }
 
@@ -67,7 +67,7 @@
       } else if (dialogElement) {
         dialogElement.close();
         dialogElement.removeEventListener("click", handleBackdropClick);
-        onclose();
+        onclose?.();
       }
     }
   });

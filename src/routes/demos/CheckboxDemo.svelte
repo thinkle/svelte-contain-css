@@ -170,7 +170,7 @@
     <Checkbox
       onblur={updateEventInfo}
       onclick={updateEventInfo}
-      onchange={(e) => {
+      onchange={(e: Event) => {
         updateEventInfo(e);
         val3 = !val3;
       }}

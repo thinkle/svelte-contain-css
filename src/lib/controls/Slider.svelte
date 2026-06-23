@@ -19,9 +19,11 @@
     ...restProps
   }: Props = $props();
 
-  const { style: inlineStyle, ...elementProps } = restProps as {
-    style?: string;
-  } & Record<string, unknown>;
+  const inlineStyle = $derived((restProps as { style?: string }).style);
+  const elementProps = $derived.by(() => {
+    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
+    return rest;
+  });
 
   const normalizedMin = $derived(Number.isFinite(min) ? min : 0);
   const normalizedMax = $derived(

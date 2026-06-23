@@ -1,5 +1,6 @@
 <script lang="ts">
   import { run } from "svelte/legacy";
+  import type { Component } from "svelte";
 
   import IntroOverview from "./IntroOverview.svelte";
   import ThemeInjector from "$lib/theme/ThemeInjector.svelte";
@@ -98,7 +99,7 @@
   let right: boolean = false;
   let showHero = $state(true);
 
-  let menu: { name: string; link?: string; component?: any; demo?: string }[] =
+  let menu: { name: string; link?: string; component?: any; demo?: string; id?: string }[] =
     [
       { name: "Intro", link: "#Intro" },
       { name: "Installation", link: "#Installation" },
@@ -162,7 +163,7 @@
       { name: "Variables", component: VariableDemo, demo: "Variable" },
     ];
 
-  let theDemo: SvelteComponent | null = $state(null);
+  let theDemo: Component | null = $state(null);
   let theItem = $state(0);
   run(() => {
     theDemo = menu[theItem].component;
@@ -185,7 +186,6 @@
 <ThemeInjector />
 {#if showHero}
   <Hero
-    center={true}
     bg="var(--primary-bg)"
     fg="var(--primary-fg)"
     headingFg="var(--primary-fg)"
@@ -304,7 +304,7 @@
   {/snippet}
   {#if !theDemo}
     <IntroOverview id="Intro" />
-    <Installation id="Installation" />
+    <Installation />
   {/if}
   <div id="demo-area" class:empty={!theDemo}>
     {#if theDemo}
