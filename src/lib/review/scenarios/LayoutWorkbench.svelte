@@ -19,29 +19,29 @@
 
   const cards: WorkspaceCard[] = [
     {
-      title: "Launch Readiness",
+      title: "Aisle Containment",
       metric: "87%",
-      detail: "Three blockers remain before release cutoff.",
+      detail: "Core storage categories remain aligned with spring reset targets.",
     },
     {
-      title: "Open Approvals",
+      title: "Drawer Dividers",
       metric: "12",
-      detail: "Legal and security still need sign-off.",
+      detail: "Twelve modular drawer programs are under assortment review.",
     },
     {
-      title: "Active Experiments",
+      title: "Elfa Experiments",
       metric: "4",
-      detail: "Two pricing variants are outperforming control.",
+      detail: "Four shelving pilots are active across closet and pantry segments.",
     },
     {
-      title: "Support Load",
+      title: "Label Maker Load",
       metric: "19",
-      detail: "Queue volume is down 8% week over week.",
+      detail: "Nineteen signage updates are queued for category managers.",
     },
   ];
 
   let hideSidebar = $state(false);
-  let selectedTile = $state("pipeline");
+  let selectedTile = $state("closet wall");
   let tileSelected = $state(false);
 
   function toggleSidebar() {
@@ -58,7 +58,7 @@
   {#snippet header()}
     <Bar primary>
       <div>
-        <h1>Layout Workbench</h1>
+        <h1>Container Store Report</h1>
       </div>
 
       <Inline>
@@ -67,7 +67,7 @@
           aria-expanded={!hideSidebar}
           onclick={toggleSidebar}
         >
-          {hideSidebar ? "Show Sidebar" : "Hide Sidebar"}
+          {hideSidebar ? "Show Aisles" : "Hide Aisles"}
         </Button>
         <MiniButton aria-label="Notifications">3</MiniButton>
       </Inline>
@@ -78,19 +78,22 @@
     <Sidebar left>
       <MenuList striped>
         <li><button class="active">Overview</button></li>
-        <li><button>Launches</button></li>
-        <li><button>Approvals</button></li>
-        <li><button>Insights</button></li>
-        <li><button>Settings</button></li>
+        <li><button>Closets</button></li>
+        <li><button>Pantries</button></li>
+        <li><button>Bins</button></li>
+        <li><button>Receipts</button></li>
       </MenuList>
     </Sidebar>
   {/snippet}
 
   <TextLayout>
-    <h1>Sidebar and card layout workbench</h1>
+    <h1>Container Store field report</h1>
     <p>
-      This scenario exercises page chrome, a collapsible sidebar, summary cards,
-      and interactive tiles in the same route.
+      The Container Store continues to position organization as a premium retail
+      service, not merely a collection of bins. Store teams report steady demand
+      for closet systems, pantry canisters, drawer programs, and labeled
+      back-of-house workflows that make small spaces feel professionally
+      governed.
     </p>
   </TextLayout>
   <GridLayout card>
@@ -102,35 +105,47 @@
 
         <h2>{card.metric}</h2>
         <p>{card.detail}</p>
-        <p><Button>Review</Button></p>
+        <p><Button>Inspect</Button></p>
       </Card>
     {/each}
   </GridLayout>
 
-  <TextLayout><h2>Interactive tiles</h2></TextLayout>
+  <TextLayout><h2>Interactive report sections</h2></TextLayout>
   <GridLayout tile>
     <Tile
       interactive
       data-audit-action="select-tile"
-      onclick={() => inspectTile("pipeline")}
+      onclick={() => inspectTile("closet wall")}
     >
-      <h3>Pipeline</h3>
-      <p>Inspect work across launch stages.</p>
+      <h3>Closet wall</h3>
+      <p>
+        Review shelving attach rates, installation capacity, and the mix of
+        drawers, rods, and upper storage in the current Elfa program.
+      </p>
     </Tile>
 
-    <Tile interactive onclick={() => inspectTile("customers")}>
-      <h3>Customers</h3>
-      <p>See which accounts need a follow-up this week.</p>
+    <Tile interactive onclick={() => inspectTile("pantry aisle")}>
+      <h3>Pantry aisle</h3>
+      <p>
+        Compare clear canisters, turntables, risers, and private-label
+        replenishment against seasonal meal-prep traffic.
+      </p>
     </Tile>
 
-    <Tile interactive onclick={() => inspectTile("experiments")}>
-      <h3>Experiments</h3>
-      <p>Review rollout status and watch for regressions.</p>
+    <Tile interactive onclick={() => inspectTile("desk drawer")}>
+      <h3>Desk drawer</h3>
+      <p>
+        Review office trays, cable boxes, desktop files, and small-item storage
+        as hybrid work demand settles into a steadier pattern.
+      </p>
     </Tile>
 
     <Tile selectable>
-      <h3>Pin this workspace</h3>
-      <p>Keep this board in the default sidebar view.</p>
+      <h3>Pin this aisle</h3>
+      <p>
+        Keep this section in the weekly merchant packet for follow-up on margin,
+        attachment, and staff training.
+      </p>
     </Tile>
   </GridLayout>
 
@@ -143,9 +158,9 @@
           {/snippet}
 
           <p>
-            The <strong>{selectedTile}</strong> workspace is now in focus. This gives
-            the review harness a second state for tiles without adding custom layout
-            chrome.
+            The <strong>{selectedTile}</strong> section is now in focus. The next
+            review should compare traffic, basket size, and installation
+            availability before making changes to the regional plan.
           </p>
         </Card>
       </div>

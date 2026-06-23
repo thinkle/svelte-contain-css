@@ -23,116 +23,116 @@
 
   const rows: QueueRow[] = [
     {
-      id: "PLT-1042",
-      task: "Stabilize SSO callback handling",
-      owner: "TS",
-      team: "Platform",
+      id: "BOX-1042",
+      task: "Define box as the square diplomat of containment",
+      owner: "BX",
+      team: "Boxes",
       priority: "P0",
       status: "Blocked",
       due: "Today",
     },
     {
-      id: "MKT-221",
-      task: "QA campaign attribution dashboard",
-      owner: "AL",
-      team: "Marketing",
+      id: "BIN-221",
+      task: "Compare open bins with lids, labels, and mild ambition",
+      owner: "BN",
+      team: "Bins",
       priority: "P1",
       status: "In Review",
       due: "Tomorrow",
     },
     {
-      id: "OPS-878",
-      task: "Backfill support SLA alerts",
-      owner: "RJ",
-      team: "Operations",
+      id: "BBL-878",
+      task: "Separate barrels from casks without starting a cellar debate",
+      owner: "BR",
+      team: "Barrels",
       priority: "P1",
       status: "In Progress",
       due: "Tue",
     },
     {
-      id: "PLT-1048",
-      task: "Ship migration retry banner copy",
-      owner: "HS",
-      team: "Platform",
+      id: "CRT-1048",
+      task: "Cross-reference crate with shipping, fruit, and stage magic",
+      owner: "CR",
+      team: "Crates",
       priority: "P2",
       status: "Ready",
       due: "Tue",
     },
     {
-      id: "DS-55",
-      task: "Audit density tokens for compact mode",
-      owner: "AL",
-      team: "Design",
+      id: "CAN-55",
+      task: "Audit canister, tin, and can for pantry precision",
+      owner: "CN",
+      team: "Cans",
       priority: "P2",
       status: "In Progress",
       due: "Wed",
     },
     {
-      id: "OPS-881",
-      task: "Resolve duplicate webhook replay jobs",
-      owner: "RJ",
-      team: "Operations",
+      id: "TUB-881",
+      task: "Resolve whether a tub is a bin taking a bath",
+      owner: "TB",
+      team: "Bins",
       priority: "P0",
       status: "Blocked",
       due: "Wed",
     },
     {
-      id: "SUP-399",
-      task: "Update admin troubleshooting macros",
-      owner: "MK",
-      team: "Support",
+      id: "JAR-399",
+      task: "Update jar notes for pickles, buttons, and tiny CSS tokens",
+      owner: "JR",
+      team: "Jars",
       priority: "P3",
       status: "Done",
       due: "Thu",
     },
     {
-      id: "PLT-1054",
-      task: "Instrument CSV export completion events",
-      owner: "TS",
-      team: "Platform",
+      id: "DRM-1054",
+      task: "Instrument drum definitions for industrial rhythm",
+      owner: "DM",
+      team: "Barrels",
       priority: "P1",
       status: "In Review",
       due: "Thu",
     },
     {
-      id: "MKT-228",
-      task: "Finalize launch checklist for webinar",
-      owner: "JD",
-      team: "Marketing",
+      id: "TTE-228",
+      task: "Finalize tote entry for handles, errands, and library books",
+      owner: "TT",
+      team: "Totes",
       priority: "P2",
       status: "Ready",
       due: "Fri",
     },
     {
-      id: "DS-61",
-      task: "Review icon sizing on navigation rails",
-      owner: "HS",
-      team: "Design",
+      id: "VLT-61",
+      task: "Review vault as the dramatic cousin of a lockbox",
+      owner: "VT",
+      team: "Boxes",
       priority: "P3",
       status: "In Progress",
       due: "Fri",
     },
     {
-      id: "OPS-889",
-      task: "Reconcile nightly inventory drift report",
-      owner: "RJ",
-      team: "Operations",
+      id: "AMP-889",
+      task: "Reconcile amphora with vase, urn, and ancient snack jar",
+      owner: "AM",
+      team: "Jars",
       priority: "P2",
       status: "In Progress",
       due: "Next Mon",
     },
     {
-      id: "SUP-405",
-      task: "Publish escalation policy revision",
-      owner: "MK",
-      team: "Support",
+      id: "PKT-405",
+      task: "Publish packet notes for envelopes, sachets, and tiny payloads",
+      owner: "PK",
+      team: "Pouches",
       priority: "P2",
       status: "Ready",
       due: "Next Mon",
     },
   ];
 
-  let query = $state("a");
+  let query = $state("");
   let team = $state("all");
   let showClosed = $state(false);
   let bulkActionsOpen = $state(false);
@@ -227,7 +227,7 @@
   {#snippet header()}
     <Bar primary>
       <div>
-        <h1>Operations Table</h1>
+        <h1>Container Reference Table</h1>
       </div>
 
       <div>
@@ -236,7 +236,7 @@
           aria-expanded={bulkActionsOpen}
           onclick={toggleBulkActions}
         >
-          {bulkActionsOpen ? "Hide Actions" : "Bulk Actions"}
+          {bulkActionsOpen ? "Hide Actions" : "Reference Actions"}
         </Button>
         <Button secondary>Refresh</Button>
       </div>
@@ -244,36 +244,44 @@
   {/snippet}
 
   <TextLayout>
-    <h1>Sticky table workbench</h1>
+    <h1>Thesaurus of things that contain other things</h1>
     <p>
-      This scenario exercises filters, an action bar, and a sticky-header table
-      with enough rows to expose scrolling behavior.
+      A container may be humble or ceremonial, disposable or heirloom, open to
+      the air or sealed against weather. This reference table catalogs boxes,
+      bins, barrels, jars, pouches, crates, drums, and every other noun that
+      wants to keep a smaller noun from rolling away.
     </p>
 
     <Form layout="above" fullWidth globalInputStyles>
       <Fieldset>
         {#snippet legend()}
-          Filters
+          Reference Filters
         {/snippet}
 
         <FormItem>
           {#snippet label()}
-            Search Queue
+            Search Terms
           {/snippet}
-          <Input bind:value={query} placeholder="Search by task, team, or owner" />
+          <Input
+            bind:value={query}
+            placeholder="Search by container, family, or curator"
+          />
         </FormItem>
 
         <FormItem>
           {#snippet label()}
-            Team
+            Family
           {/snippet}
           <Select bind:value={team} data-audit-action="open-team-select">
-            <option value="all">All teams</option>
-            <option value="Platform">Platform</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Operations">Operations</option>
-            <option value="Design">Design</option>
-            <option value="Support">Support</option>
+            <option value="all">All families</option>
+            <option value="Boxes">Boxes</option>
+            <option value="Bins">Bins</option>
+            <option value="Barrels">Barrels</option>
+            <option value="Crates">Crates</option>
+            <option value="Cans">Cans</option>
+            <option value="Jars">Jars</option>
+            <option value="Totes">Totes</option>
+            <option value="Pouches">Pouches</option>
           </Select>
         </FormItem>
 
@@ -281,7 +289,7 @@
           {#snippet label()}
             Visibility
           {/snippet}
-          <Checkbox bind:checked={showClosed}>Include completed work</Checkbox>
+          <Checkbox bind:checked={showClosed}>Include archived definitions</Checkbox>
         </FormItem>
       </Fieldset>
     </Form>
@@ -289,11 +297,11 @@
     {#if bulkActionsOpen}
       <div data-audit-target="bulk-actions-open">
         <Bar secondary>
-          <div>{filteredRows.length} selected for scheduling review</div>
+          <div>{filteredRows.length} selected for lexical containment review</div>
           <div>
-            <Button success>Assign Owner</Button>
-            <Button warning>Snooze</Button>
-            <Button danger>Escalate</Button>
+            <Button success>Assign Curator</Button>
+            <Button warning>Shelve</Button>
+            <Button danger>Dispute Term</Button>
           </div>
         </Bar>
       </div>
@@ -315,7 +323,7 @@
           >
             Scroll Preview
           </Button>
-          <Button info>Export CSV</Button>
+          <Button info>Export Glossary</Button>
         </div>
       </Bar>
 
@@ -324,9 +332,9 @@
       {#snippet thead()}
         <thead>
           <tr>
-            <th>Task</th>
-            <th>Owner</th>
-            <th>Team</th>
+            <th>Entry</th>
+            <th>Curator</th>
+            <th>Family</th>
             <th>Priority</th>
             <th>Status</th>
             <th>Due</th>

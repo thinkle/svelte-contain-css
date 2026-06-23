@@ -18,35 +18,35 @@
 
   let showSummary = $state(false);
   let loggedIn = $state(true);
-  let search = $state("migration");
-  let sortBy = $state("recent");
+  let search = $state("reefer");
+  let sortBy = $state("berth");
   let showAssignedOnly = $state(true);
   let confidenceThreshold = $state(68);
   let statusMessage = $derived(
     loggedIn
       ? showSummary
-        ? "Advanced filters are visible."
-        : "Everything looks normal."
-      : "Signed out. Header should still hold together cleanly.",
+        ? "Manifest filters are open for inspection."
+        : "All containers are lashed, logged, and behaving like responsible rectangles."
+      : "Signed out. The bridge should still hold together cleanly.",
   );
 
   const workItems = [
     {
-      title: "Rewrite onboarding email copy",
-      detail: "Marketing · Edited 42 minutes ago",
-      owner: "TS",
-      cta: "Review",
+      title: "Inspect reefer stack on bay 42",
+      detail: "Cold chain · Temperature report updated 42 minutes ago",
+      owner: "RF",
+      cta: "Inspect",
     },
     {
-      title: "Resolve design QA pass for navbar spacing",
-      detail: "Design Systems · Edited yesterday",
-      owner: "AL",
+      title: "Rebalance twist-lock notes for port rail",
+      detail: "Deck crew · Spacing review completed yesterday",
+      owner: "TL",
       cta: "Compare",
     },
     {
-      title: "Confirm analytics event names for account settings",
-      detail: "Platform · Needs input from data team",
-      owner: "RJ",
+      title: "Confirm manifest names for nested cargo cards",
+      detail: "Harbor ops · Needs input from the quay team",
+      owner: "QC",
       cta: "Open",
     },
   ];
@@ -65,8 +65,8 @@
   {#snippet header()}
     <Bar secondary>
       <Stack class="brand">
-        <div class="eyebrow">Contain CSS Review Harness</div>
-        <h1>My Incredible App</h1>
+        <div class="eyebrow">North Atlantic Harbor Desk</div>
+        <h1>Harbor Containership Console</h1>
       </Stack>
 
       <Inline class="header-actions">
@@ -80,9 +80,7 @@
         </Button>
 
         <span class="session">
-          Logged in as <span class="user"
-            >{loggedIn ? "Joe Schmoe" : "Guest"}</span
-          >
+          Logged in as <span class="user">{loggedIn ? "Captain Box" : "Guest"}</span>
         </span>
 
         <MiniButton aria-label="Log out" title="Log out" onclick={logout}>
@@ -94,12 +92,14 @@
 
   <TextLayout>
     <Stack class="hero-copy">
-      <p class="kicker">Proof Of Concept</p>
-      <h1>This is an incredible page</h1>
+      <p class="kicker">Containership Operations</p>
+      <h1>A bridge display for very opinionated cargo rectangles</h1>
       <p>
-        This route is intentionally opinionated: it shows a realistic app shell,
-        a set of form controls, and a data list using the library components
-        directly.
+        The harbor team uses this console to track reefers, dry boxes, twist
+        locks, and manifest oddities before the ship clears the breakwater. By
+        dawn, every suspicious seal, late manifest, and chilled pallet should
+        have a berth assignment, a watch officer, and a paper trail tidy enough
+        to survive a salty breeze.
       </p>
       <p>{statusMessage}</p>
     </Stack>
@@ -107,14 +107,17 @@
     <Form layout="above" fullWidth globalInputStyles>
       <Fieldset>
         {#snippet legend()}
-          Filters
+          Manifest Filters
         {/snippet}
 
         <FormItem>
           {#snippet label()}
-            Search
+            Search Cargo
           {/snippet}
-          <Input bind:value={search} placeholder="Search work items" />
+          <Input
+            bind:value={search}
+            placeholder="Search containers, bays, or crews"
+          />
         </FormItem>
 
         <FormItem>
@@ -122,22 +125,24 @@
             Sort By
           {/snippet}
           <Select bind:value={sortBy} data-audit-action="open-select">
-            <option value="recent">Recently Updated</option>
-            <option value="priority">Priority</option>
-            <option value="owner">Owner</option>
+            <option value="berth">Berth Order</option>
+            <option value="temperature">Temperature Risk</option>
+            <option value="bay">Bay Number</option>
           </Select>
         </FormItem>
 
         <FormItem>
           {#snippet label()}
-            Assigned
+            Watchlist
           {/snippet}
-          <Checkbox bind:checked={showAssignedOnly}>Only show my items</Checkbox>
+          <Checkbox bind:checked={showAssignedOnly}>
+            Only show containers on my deck watch
+          </Checkbox>
         </FormItem>
 
         <FormItem>
           {#snippet label()}
-            Confidence Threshold ({confidenceThreshold}%)
+            Seaworthiness Threshold ({confidenceThreshold}%)
           {/snippet}
           <Slider bind:value={confidenceThreshold} min={0} max={100} step={1} />
         </FormItem>
@@ -149,7 +154,7 @@
         <Form layout="above" fullWidth>
           <Fieldset>
             {#snippet legend()}
-              Summary
+              Manifest Summary
             {/snippet}
             <FormItem>
               {#snippet label()}
@@ -157,8 +162,10 @@
               {/snippet}
               <p>
                 Query <strong>{search}</strong>, sorted by <strong>{sortBy}</strong>,
-                assigned only: <strong>{showAssignedOnly ? "yes" : "no"}</strong>,
-                confidence: <strong>{confidenceThreshold}%</strong>.
+                watchlist only: <strong>{showAssignedOnly ? "yes" : "no"}</strong>,
+                seaworthiness: <strong>{confidenceThreshold}%</strong>. The manifest
+                clerk has underlined this in blue pencil, which is how serious
+                container people express whimsy.
               </p>
             </FormItem>
           </Fieldset>

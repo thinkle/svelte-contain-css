@@ -372,5 +372,5 @@ a {
 :root {
   /* shorthands... */
   --red: var(--material-color-red);
-  --deep-orange: var(var(--material-color-deep-orange));
+  --deep-orange: var(--material-color-deep-orange);
 }

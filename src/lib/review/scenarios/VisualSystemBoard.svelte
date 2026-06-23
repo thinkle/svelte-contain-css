@@ -61,10 +61,26 @@
   ];
 
   const rows = [
-    ["Buttons", "Primary, secondary, and intent surfaces", "Sealed"],
-    ["Borders", "Cards, fieldsets, table rows, and list dividers", "Inspect"],
-    ["Forms", "Inputs, select popovers, toggles, and sliders", "Sealed"],
-    ["Grouping", "Bars, cards, lists, inline controls, and tables", "Sealed"],
+    [
+      "Lids",
+      "Primary, secondary, and emergency closures for decisive sealing",
+      "Sealed",
+    ],
+    [
+      "Walls",
+      "Panel seams, bin edges, manifest rows, and dividers that hold the line",
+      "Inspect",
+    ],
+    [
+      "Manifests",
+      "Search fields, selectors, toggles, and sliders for cargo edits",
+      "Sealed",
+    ],
+    [
+      "Stacks",
+      "Bars, cards, lists, inline controls, and ledgers stacked like tidy bins",
+      "Sealed",
+    ],
   ];
 
   let plan = $state("growth");
@@ -95,7 +111,7 @@
     <Bar primary height="auto">
       <Stack gap="0">
         <small>Workspace</small>
-        <h1>Visual System Board</h1>
+        <h1>Contain Depot Board</h1>
       </Stack>
 
       <Inline wrap="wrap">
@@ -104,7 +120,7 @@
             Actions
           {/snippet}
           <li><button type="button">Share snapshot</button></li>
-          <li><button type="button">Create theme note</button></li>
+          <li><button type="button">Create inspection note</button></li>
           <li><button type="button">Export comparison</button></li>
         </DropdownMenu>
         <Button data-audit-action="open-dialog" primary onclick={openDialog}>
@@ -117,14 +133,14 @@
   <Container maxWidth="1180px">
     <Stack gap="var(--space-lg)">
       <TextLayout>
-        <h2>Theme comparison</h2>
-        <h1>Controls, borders, forms, and grouped surfaces in one cargo view</h1>
+        <h2>Contain depot board</h2>
+        <h1>Lids, walls, manifests, and stacks in one cargo view</h1>
         <p>
-          Welcome to the Contain depot, where every crate, can, backpack, and
-          shipping container gets a themed inspection before it leaves the yard.
-          This screen puts common application surfaces into one compact workflow
-          so typography, spacing, color, and container behavior have enough real
-          text to show what they are doing.
+          Welcome to the Contain depot, where ship manifests, policy memos,
+          retail storage reports, and old-fashioned box glossaries arrive at the
+          same inspection desk. Every crate earns a label, every label earns a
+          little skepticism, and every suspicious lid is asked politely to close
+          before the evening whistle.
         </p>
       </TextLayout>
 
@@ -135,10 +151,10 @@
           {/snippet}
           <h2>84%</h2>
           <p>
-            Eight of ten cargo checks are sealed and stacked. The remaining
-            issues are ordinary design-review dents: a border that needs a
-            cleaner edge, a row that needs more breathing room, and a form label
-            that should not fall off the manifest.
+            Eight of ten containment checks are sealed and stacked. The
+            remaining issues are ordinary yard dents: one crate has a soft
+            corner, one manifest line needs more breathing room, and one label
+            has been warned not to drift into international waters.
           </p>
           {#snippet footer()}
             <Inline wrap="wrap">
@@ -150,31 +166,32 @@
 
         <Card>
           {#snippet header()}
-            <h3>Control Set</h3>
+            <h3>Closure Set</h3>
           {/snippet}
           <Stack gap="var(--space)">
             <Inline wrap="wrap">
               <Button primary data-audit-action="focus-primary" data-audit-focus="true">
-                Primary
+                Seal
               </Button>
-              <Button secondary>Secondary</Button>
+              <Button secondary>Hold</Button>
             </Inline>
             <Inline wrap="wrap">
-              <Button success>Success</Button>
-              <Button warning>Warning</Button>
-              <Button danger>Danger</Button>
+              <Button success>Clear</Button>
+              <Button warning>Delay</Button>
+              <Button danger>Reject</Button>
             </Inline>
           </Stack>
         </Card>
 
         <Card>
           {#snippet header()}
-            <h3>Surface Rhythm</h3>
+            <h3>Yard Rhythm</h3>
           {/snippet}
           <p>
-            These progress rows replace the fake chart with actual Contain
-            primitives. They give each theme a chance to prove its rhythm across
-            labels, meters, spacing, and status color without a custom graphic.
+            These progress rows track the practical rhythm of the yard: contrast
+            between crates, separation between seals, density on the manifest,
+            and hierarchy in the cargo stack. A good depot never lets a barrel
+            pretend it is a filing cabinet.
           </p>
           <Stack gap="var(--space)">
             {#each rhythm as item}
@@ -204,7 +221,10 @@
                 {#snippet label()}
                   Search
                 {/snippet}
-                <Input bind:value={search} placeholder="Find a surface" />
+                <Input
+                  bind:value={search}
+                  placeholder="Find a crate, seal, or manifest"
+                />
               </FormItem>
 
               <FormItem>
@@ -249,7 +269,7 @@
                 {#snippet label()}
                   History
                 {/snippet}
-                <Checkbox bind:checked={includeArchived}>Include archived crates</Checkbox>
+                <Checkbox bind:checked={includeArchived}>Include archived containers</Checkbox>
               </FormItem>
             </Fieldset>
           </Form>
@@ -271,10 +291,10 @@
                 {/snippet}
                 <p>
                   The selected container has survived the first shake test, but
-                  the crew still needs to inspect how its label, action button,
-                  and surrounding card behave in this theme. Long-ish copy here
-                  is intentional: fancy paragraph treatments need enough words
-                  to settle into their real line length.
+                  the crew still needs to inspect its label, closure, and
+                  surrounding paperwork. Long copy is useful here because a
+                  container can look perfectly calm until a full manifest asks
+                  it to hold three more lines than planned.
                 </p>
               </Card>
             </div>
@@ -305,7 +325,7 @@
 
       <Container border data-audit-target="table-panel">
         <Bar secondary>
-          <h2>Surface Checklist</h2>
+          <h2>Seal Checklist</h2>
           <Inline wrap="wrap">
             <Tag info>{density}</Tag>
             <Tag success>{plan}</Tag>
@@ -317,7 +337,7 @@
             <thead>
               <tr>
                 <th>Area</th>
-                <th>Review Focus</th>
+                <th>Inspection Focus</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -350,12 +370,12 @@
     >
       <div data-audit-target="dialog-open">
         <TextLayout>
-          <h2>Theme preview</h2>
+          <h2>Inspection preview</h2>
           <p>
-            This modal is the inspection booth at the edge of the yard. It
-            checks elevated surfaces, focus treatment, buttons, and card
-            grouping inside an overlay, while still giving paragraph typography
-            enough room to show its personality.
+            This modal is the inspection booth at the edge of the yard. The
+            supervisor checks the selected container, confirms the handler, and
+            stamps the confidence score before the little box is allowed to
+            travel with the rest of the shipment.
           </p>
         </TextLayout>
         <GridLayout card>

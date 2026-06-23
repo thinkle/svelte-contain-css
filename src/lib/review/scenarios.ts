@@ -6,23 +6,23 @@ import VisualSystemBoard from "./scenarios/VisualSystemBoard.svelte";
 
 export const reviewAppScenarios = {
   "incredible-app-shell": {
-    title: "Incredible App Shell",
+    title: "Containership Console",
     component: IncredibleAppShell,
   },
   "layout-workbench": {
-    title: "Layout Workbench",
+    title: "Container Store Report",
     component: LayoutWorkbench,
   },
   "launch-studio": {
-    title: "Launch Studio",
+    title: "Containment Doctrine Studio",
     component: LaunchStudio,
   },
   "table-workbench": {
-    title: "Table Workbench",
+    title: "Container Thesaurus",
     component: TableWorkbench,
   },
   "visual-system-board": {
-    title: "Visual System Board",
+    title: "Contain Depot Board",
     component: VisualSystemBoard,
   },
 } as const;
