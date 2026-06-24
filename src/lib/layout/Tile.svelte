@@ -93,6 +93,7 @@
     max-width: var(--tile-width, calc(var(--space-lg) * 24));
 
     display: inline-flex;
+    vertical-align: top;
     flex-direction: column;
     justify-content: var-with-fallbacks(--justify, tile, flex-start);
     align-items: var-with-fallbacks(--align, tile, center);
