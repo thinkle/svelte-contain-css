@@ -47,6 +47,7 @@
     "@sveltejs/package": "^2.5.4",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@sveltejs/vite-plugin-svelte-inspector": "^3.0.1",
+    "@types/node": "^20.19.43",
     "gh-pages": "^6.1.1",
     "postcss": "^8.4.41",
     "postcss-cli": "^11.0.0",

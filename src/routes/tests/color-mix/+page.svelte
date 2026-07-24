@@ -33,7 +33,7 @@
 <!-- Foreground-only mix: fg must change, bg must stay equal to baseline -->
 <div
   data-testid="fg-only"
-  style="--tag-fg-mix-color: white; --tag-fg-mix-amount: 100%;"
+  style="--tag-fg-mix-color: black; --tag-fg-mix-amount: 100%;"
 >
   <Tag danger>danger</Tag>
 </div>

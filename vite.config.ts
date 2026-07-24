@@ -10,5 +10,4 @@ export default defineConfig({
       },
     },
   },
-  base: "/svelte-contain-css/", // Ensure this is set if needed
 });
