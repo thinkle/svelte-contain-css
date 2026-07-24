@@ -89,19 +89,25 @@
   .tag:last-child {
     margin-inline-end: 0;
   }
+  /* Trailing `tag` keeps the variants' chains reaching a bare `tag` fallback
+     (like the default .tag rule already does), so --tag-bg-mix-* / --tag-fg-mix-*
+     dull or remap EVERY variant at once, not just the default. It also adds a
+     --tag-bg / --tag-fg layer below the variant's own --danger-bg etc.; those
+     variant tokens are always set and win first, so colors are unchanged at
+     0% mix (asserted in tests/color-mix.spec.ts). */
   .tag.primary {
-    @include color-props(tag-primary, primary);
+    @include color-props(tag-primary, primary, tag);
   }
   .tag.warning {
-    @include color-props(tag-warning, warning);
+    @include color-props(tag-warning, warning, tag);
   }
   .tag.danger {
-    @include color-props(tag-danger, danger);
+    @include color-props(tag-danger, danger, tag);
   }
   .tag.success {
-    @include color-props(tag-success, success);
+    @include color-props(tag-success, success, tag);
   }
   .tag.info {
-    @include color-props(tag-info, info);
+    @include color-props(tag-info, info, tag);
   }
 </style>

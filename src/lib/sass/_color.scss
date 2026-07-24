@@ -1,10 +1,54 @@
 @use "functions" as fn;
+@use "sass:list";
 
 @mixin color-props($prefixes...) {
-  --_background-color: #{fn.var-no-fallbacks(--bg, $prefixes...)};
-  --_color: #{fn.var-no-fallbacks(--fg, $prefixes...)};
   --link-bg: #{fn.vars(link-bg, $prefixes...)};
   --link-fg: #{fn.vars(link-fg, $prefixes...)};
+
+  // Optional per-channel color mixing. Lets a container dull, tint, or fully
+  // remap a component's colors without restating the color itself — e.g.
+  // `--tag-bg-mix-color: gray; --tag-bg-mix-amount: 20%` for muted tags, or a
+  // white-on-black button scheme via `--button-bg-mix-color: black` (65%) +
+  // `--button-fg-mix-color: white` (100%).
+  //
+  // fg and bg are mixed INDEPENDENTLY (own amount + color each) on purpose:
+  // accessible fg/bg pairs are chosen together, and a caller often wants to
+  // touch only one channel (mute the background, leave text alone) or push
+  // them in opposite directions. Mixing is never coupled for you.
+  //
+  // Names mirror the base color tokens: --bg pairs with --bg-mix-color /
+  // --bg-mix-amount, --fg with --fg-mix-color / --fg-mix-amount. Each knob
+  // resolves along the SAME prefix chain as the color itself, most-specific
+  // first down to a bare global, e.g.
+  //   --tag-danger-bg-mix-color -> --danger-bg-mix-color
+  //     -> --tag-bg-mix-color -> --bg-mix-color
+  // The bare global tints EVERY color-props component app-wide — powerful but
+  // blunt; prefer a prefixed form unless that's the intent. Defaults (amount
+  // 0%, color transparent) make all of this a no-op:
+  // color-mix(in srgb, X, transparent 0%) === X, so callers that set nothing
+  // render byte-for-byte as before.
+  --_bg-mix-color: #{fn.var-with-fallbacks(--bg-mix-color, list.append($prefixes, transparent)...)};
+  --_bg-mix-amount: #{fn.var-with-fallbacks(--bg-mix-amount, list.append($prefixes, 0%)...)};
+  --_fg-mix-color: #{fn.var-with-fallbacks(--fg-mix-color, list.append($prefixes, transparent)...)};
+  --_fg-mix-amount: #{fn.var-with-fallbacks(--fg-mix-amount, list.append($prefixes, 0%)...)};
+
+  // The mix is folded INTO --_background-color / --_color, not just applied to
+  // the background-color/color properties. That matters because _affordances
+  // derives hover/active/disabled backgrounds from --_background-color too
+  // (its own separate color-mix). If the mix only lived on the property, a
+  // remapped-dark button would jump back toward its ORIGINAL bright hue on
+  // hover, because the affordance calc would still be reading the un-mixed
+  // base. Baking the mix into the private var keeps both systems in agreement:
+  // rest, hover, active, and disabled all derive from the same mixed color.
+  --_bg-base: #{fn.var-no-fallbacks(--bg, $prefixes...)};
+  --_fg-base: #{fn.var-no-fallbacks(--fg, $prefixes...)};
+  --_background-color: color-mix(
+    in srgb,
+    var(--_bg-base),
+    var(--_bg-mix-color) var(--_bg-mix-amount)
+  );
+  --_color: color-mix(in srgb, var(--_fg-base), var(--_fg-mix-color) var(--_fg-mix-amount));
+
   background-color: var(--_background-color);
   color: var(--_color);
 }
