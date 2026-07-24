@@ -46,6 +46,7 @@
   import AccordionDemo from "./demos/AccordionDemo.svelte";
   import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
   import DataListDemo from "./demos/DataListDemo.svelte";
+  import ColorMixDemo from "./demos/ColorMixDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -158,6 +159,7 @@
         demo: "DropdownMenu",
       },
       { name: "Miscellaneous" },
+      { name: "Color Mixing", component: ColorMixDemo, demo: "ColorMix" },
       { name: "Progress", component: ProgressDemo, demo: "Progress" },
 
       { name: "Variables", component: VariableDemo, demo: "Variable" },
