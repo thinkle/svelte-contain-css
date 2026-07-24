@@ -12,6 +12,8 @@
   import Code from "$lib/misc/Code.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import Container from "$lib/layout/Container.svelte";
+
+  const scriptTag = "script";
 </script>
 
 <Page>
@@ -24,10 +26,10 @@
         CSS variables.
       </p>
       <Code
-        code={`<script>
+        code={`<${scriptTag}>
   // Import the Bootstrap theme
   import "$lib/vars/themes/bootstrap.css";
-</script>`}
+</${scriptTag}>`}
       />
       <p>
         All components below are using the Bootstrap theme variables, giving

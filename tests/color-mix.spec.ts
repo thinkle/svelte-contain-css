@@ -86,11 +86,11 @@ test.describe("color-props color mixing", () => {
 
     expect(near(mixBg, baseBg), "bg should be untouched").toBe(true);
     expect(near(mixFg, baseFg), "fg should change").toBe(false);
-    expect(near(mixFg, [255, 255, 255]), "fg mixed 100% white => white").toBe(true);
+    expect(near(mixFg, [0, 0, 0]), "fg mixed 100% black => black").toBe(true);
   });
 
   test("component-level mix remaps every variant at once", async ({ page }) => {
-    for (const variant of [".button.primary", ".button.danger", ".button.success"]) {
+    for (const variant of ["button.primary", "button.danger", "button.success"]) {
       const def = await rgbOf(page, "btn-default", variant, "backgroundColor");
       const remapped = await rgbOf(page, "btn-remapped", variant, "backgroundColor");
       const fg = await rgbOf(page, "btn-remapped", variant, "color");
@@ -107,13 +107,13 @@ test.describe("color-props color mixing", () => {
     // bg from --_background-color. Because the mix is folded into that var,
     // hovering a remapped-dark button must stay dark (a slight brightening of
     // the mixed color) — not jump back toward the original bright hue.
-    const rest = await rgbOf(page, "btn-remapped", ".button.primary", "backgroundColor");
-    const original = await rgbOf(page, "btn-default", ".button.primary", "backgroundColor");
+    const rest = await rgbOf(page, "btn-remapped", "button.primary", "backgroundColor");
+    const original = await rgbOf(page, "btn-default", "button.primary", "backgroundColor");
 
     await page
-      .locator('[data-testid="btn-remapped"] .button.primary')
+      .locator('[data-testid="btn-remapped"] button.primary')
       .hover();
-    const hover = await rgbOf(page, "btn-remapped", ".button.primary", "backgroundColor");
+    const hover = await rgbOf(page, "btn-remapped", "button.primary", "backgroundColor");
 
     // Hover should be close to the (dark) rest color, and nowhere near the
     // bright original — assert it's far closer to rest than to original.

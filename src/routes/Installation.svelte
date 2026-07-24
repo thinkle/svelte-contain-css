@@ -5,6 +5,8 @@
     id?: string;
   }
 
+  const scriptTag = "script";
+
   let { id = "Installation" }: Props = $props();
 </script>
 
@@ -35,9 +37,9 @@ import "contain-css-svelte/themes/typography-airy.css";
   <Code
     language="html"
     code={`
-<script>
+<${scriptTag}>
   import { Button } from "contain-css-svelte";
-</script>
+</${scriptTag}>
 <Button>Hello World</Button> 
 `}
   />

@@ -7,6 +7,8 @@
   import DemoWithCode from "./DemoWithCode.svelte";
   import type { CSSVariable } from "./types";
 
+  const scriptTag = "script";
+
   const sliderCSSVariables: CSSVariable[] = [
     {
       name: "--slider-width",
@@ -86,11 +88,11 @@
 
   <DemoWithCode
     language="svelte"
-    code={`<script>
+    code={`<${scriptTag}>
   let volume = $state(38);
   let balance = $state(0);
   let density = $state(72);
-</script>
+</${scriptTag}>
 
 <Stack>
   <FormItem>

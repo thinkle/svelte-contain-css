@@ -5,6 +5,8 @@
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import type { CSSVariable } from "./types";
 
+  const scriptTag = "script";
+
   const checkboxCSSVariables: CSSVariable[] = [
     {
       name: "--checkbox-size",
@@ -180,9 +182,9 @@
 
   <DemoWithCode
     language="svelte"
-    code={`<script>
+    code={`<${scriptTag}>
   let selectedToppings = $state(["Bacon", "Lettuce", "Tomato"]);
-</script>
+</${scriptTag}>
 
 {#each toppings as topping}
   <Checkbox bind:group={selectedToppings} value={topping}>
@@ -210,9 +212,9 @@
   <DemoWithCode
     defaultTab="split"
     language="svelte"
-    code={`<script>
+    code={`<${scriptTag}>
   let agreeToTerms = $state(false);
-</script>
+</${scriptTag}>
 
 <Checkbox bind:checked={agreeToTerms}>
   I agree to the terms and conditions
