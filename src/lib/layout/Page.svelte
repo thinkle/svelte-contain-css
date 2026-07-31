@@ -147,6 +147,7 @@
 
   .page {
     @include color-props(page, content, surface);
+    @include typography-props-bare(page, surface);
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
