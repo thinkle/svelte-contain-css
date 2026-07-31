@@ -55,6 +55,7 @@
   @use "$lib/sass/_mixins.scss" as *;
   aside {
     @include color-props(sidebar, surface);
+    @include typography-props-bare(sidebar, surface);
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;

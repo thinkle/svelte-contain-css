@@ -61,6 +61,7 @@
   svelte to inject css variables */
   div > :global(div > .bar) {
     @include color-props(tab-bar, bar, surface);
+    @include typography-props-bare(tab-bar, bar, surface);
 
     align-items: var-with-fallbacks(--align, tab-bar, flex-end);
     border-bottom: var(

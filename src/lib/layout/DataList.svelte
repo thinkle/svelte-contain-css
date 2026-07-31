@@ -78,6 +78,7 @@
 
   .data-list {
     @include color-props(data-list, surface);
+    @include typography-props-bare(data-list, surface);
     @include box-props-square-border(data-list, surface);
     @include box-shadow(data-list, surface);
     list-style: none;

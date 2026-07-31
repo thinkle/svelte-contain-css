@@ -98,6 +98,7 @@
 
   form {
     @include color-props(form, surface);
+    @include typography-container-props(form, surface);
     @include box-props(form, surface);
 
     border: var-with-fallbacks(--border, form, surface, none);

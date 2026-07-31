@@ -110,6 +110,7 @@
   dialog {
     @include box-props(dialog, top, surface, block);
     @include color-props(dialog, top, surface, block);
+    @include typography-container-props(dialog, top, surface, block);
     @include box-shadow(dialog, top, surface, block);
     min-width: min(
       calc(100vw - var(--padding) * 2),
