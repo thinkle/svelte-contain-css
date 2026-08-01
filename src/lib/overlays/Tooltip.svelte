@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { tick } from "svelte";
+
   let tooltipDiv: HTMLElement | undefined = $state();
   let targetDiv: HTMLElement | undefined = $state();
   let tooltipMeasurementDiv: HTMLElement | undefined = $state();
@@ -24,7 +26,30 @@
   // svelte-ignore state_referenced_locally
   let renderedHorizontal = $state(horizontal);
 
-  function showPopover() {
+  /**
+   * Tooltip content mounts on first show, not on mount. A page with many
+   * tooltips (e.g. a grid of cells each carrying a rich tooltip snippet)
+   * would otherwise build every tooltip twice — popover + measurement copy —
+   * before the user hovers anything. Once shown, content stays mounted.
+   */
+  let hasRendered = $state(false);
+  /** Guards against the pointer/focus leaving while content mounts. */
+  let wantsShow = false;
+
+  function hidePopover() {
+    wantsShow = false;
+    tooltipDiv?.togglePopover(false);
+  }
+
+  async function showPopover() {
+    wantsShow = true;
+    if (!hasRendered) {
+      hasRendered = true;
+      // Wait for the content to exist before measuring it — positioning below
+      // reads the measurement element's height/width to decide flip direction.
+      await tick();
+      if (!wantsShow) return;
+    }
     // Get the position of the target element
     // with respect to our screen
     if (!targetDiv?.children[0]) return;
@@ -101,9 +126,9 @@
   <div
     class="tooltip-wrapper"
     onmouseenter={() => showPopover()}
-    onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
-    onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onfocusout={() => hidePopover()}
     bind:this={targetDiv}
   >
     {@render children?.()}
@@ -116,13 +141,17 @@
       class:left={renderedHorizontal === "left"}
       class:right={renderedHorizontal === "right"}
     >
-      {#if tooltip}{@render tooltip()}{:else}
-        {tooltipText}
+      {#if hasRendered}
+        {#if tooltip}{@render tooltip()}{:else}
+          {tooltipText}
+        {/if}
       {/if}
     </div>
     <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
-      {#if tooltip}{@render tooltip()}{:else}
-        {tooltipText}
+      {#if hasRendered}
+        {#if tooltip}{@render tooltip()}{:else}
+          {tooltipText}
+        {/if}
       {/if}
     </div>
   </div>
@@ -131,9 +160,9 @@
   <span
     class="tooltip-wrapper"
     onmouseenter={() => showPopover()}
-    onmouseleave={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
-    onfocusout={() => (tooltipDiv ? tooltipDiv.togglePopover(false) : null)}
+    onfocusout={() => hidePopover()}
     bind:this={targetDiv}
   >
     {@render children?.()}
@@ -146,13 +175,17 @@
       class:left={renderedHorizontal === "left"}
       class:right={renderedHorizontal === "right"}
     >
-      {#if tooltip}{@render tooltip()}{:else}
-        {tooltipText}
+      {#if hasRendered}
+        {#if tooltip}{@render tooltip()}{:else}
+          {tooltipText}
+        {/if}
       {/if}
     </span>
     <span class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
-      {#if tooltip}{@render tooltip()}{:else}
-        {tooltipText}
+      {#if hasRendered}
+        {#if tooltip}{@render tooltip()}{:else}
+          {tooltipText}
+        {/if}
       {/if}
     </span>
   </span>
