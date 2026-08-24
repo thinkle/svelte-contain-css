@@ -1,6 +1,7 @@
 {
   "name": "contain-css-svelte",
   "version": "0.0.19",
+  "license": "MIT",
   "scripts": {
     "dev": "vite dev",
     "build-css": "postcss src/lib/vars/defaults.css -o dist/vars/defaults.css",
