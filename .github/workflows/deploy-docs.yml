@@ -68,9 +68,13 @@ jobs:
           ref: main
           path: legacy-src
 
+      # The legacy branch's package-lock.json is out of sync with its
+      # package.json (lock resolves svelte 4 against a `^3.0.0` range), so
+      # `npm ci` refuses to run. Use `npm install` until the lock on `main`
+      # is regenerated.
       - name: Install dependencies (legacy)
         working-directory: legacy-src
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Patch legacy config for BASE_PATH support
         working-directory: legacy-src
