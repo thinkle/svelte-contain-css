@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
   import { reviewAppScenarios } from "$lib/review/scenarios";
@@ -25,7 +26,7 @@
   <ul>
     {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
       <li>
-        <a href={`/svelte-contain-css/review/${theme}/app/${scenario}`}>
+        <a href={`${base}/review/${theme}/app/${scenario}`}>
           {entry.title}
         </a>
       </li>

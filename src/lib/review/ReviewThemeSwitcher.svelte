@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import { page } from "$app/state";
   import {
     reviewThemeLabels,
@@ -28,7 +29,7 @@
 </script>
 
 <nav class="review-theme-switcher" aria-label="Review theme switcher">
-  <a class="utility-link" href="/svelte-contain-css/review/">All Themes</a>
+  <a class="utility-link" href={`${base}/review/`}>All Themes</a>
 
   {#each themeLinks as item}
     <a

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import { reviewThemeLabels } from "$lib/review/themes";
 </script>
@@ -14,7 +15,7 @@
   <ul>
     {#each Object.entries(reviewThemeLabels) as [theme, label]}
       <li>
-        <a href={`/svelte-contain-css/review/${theme}/`}>{label}</a>
+        <a href={`${base}/review/${theme}/`}>{label}</a>
       </li>
     {/each}
   </ul>

@@ -15,7 +15,7 @@ Contain CSS is a Svelte 5 component library built on three core principles:
 ## Installation
 
 ```bash
-npm install svelte-contain-css
+npm install contain-css-svelte
 ```
 
 ### Import CSS Variables (Required)
@@ -25,14 +25,14 @@ Add to your app's root layout or entry point:
 ```svelte
 <!-- +layout.svelte or App.svelte -->
 <script>
-  import "svelte-contain-css/vars/defaults.css";
+  import "contain-css-svelte/vars/defaults.css";
 </script>
 ```
 
 Or import in your CSS:
 
 ```css
-@import "svelte-contain-css/vars/defaults.css";
+@import "contain-css-svelte/vars/defaults.css";
 ```
 
 ---
@@ -43,7 +43,7 @@ Or import in your CSS:
 
 ```svelte
 <script>
-  import { Button, Container, FormItem, Input, Dialog } from "svelte-contain-css";
+  import { Button, Container, FormItem, Input, Dialog } from "contain-css-svelte";
 </script>
 ```
 
@@ -242,7 +242,7 @@ FormItem provides responsive label/input layouts:
 
 ```svelte
 <script>
-  import { Form, FormItem, Input, Button } from "svelte-contain-css";
+  import { Form, FormItem, Input, Button } from "contain-css-svelte";
 </script>
 
 <Form>
@@ -292,7 +292,7 @@ the built-in collapse:
 
 ```svelte
 <script>
-  import { Checkbox } from "svelte-contain-css";
+  import { Checkbox } from "contain-css-svelte";
 
   let agreeToTerms = $state(false);
 </script>
@@ -308,7 +308,7 @@ Use `value` and `bind:group` to create a group where multiple items can be selec
 
 ```svelte
 <script>
-  import { Checkbox } from "svelte-contain-css";
+  import { Checkbox } from "contain-css-svelte";
 
   let toppings = ['Lettuce', 'Tomato', 'Onion', 'Pickles', 'Cheese'];
   let selectedToppings = $state(['Tomato']); // Pre-select Tomato
@@ -329,7 +329,7 @@ RadioButtons work similarly but only allow one selection. The `group` will be a 
 
 ```svelte
 <script>
-  import { RadioButton } from "svelte-contain-css";
+  import { RadioButton } from "contain-css-svelte";
 
   let sizes = ['Small', 'Medium', 'Large'];
   let selectedSize = $state('Medium');
@@ -364,7 +364,7 @@ RadioButtons work similarly but only allow one selection. The `group` will be a 
 
 ```svelte
 <script>
-  import { Toggle } from "svelte-contain-css";
+  import { Toggle } from "contain-css-svelte";
 
   let notifications = $state(true);
   let wifi = $state(false);
@@ -390,7 +390,7 @@ These are the default choices for generic flex layout.
 
 ```svelte
 <script>
-  import { Inline, Stack, Button, Tag } from "svelte-contain-css";
+  import { Inline, Stack, Button, Tag } from "contain-css-svelte";
 </script>
 
 <Stack gap="1rem">
@@ -423,7 +423,7 @@ content, and trailing actions.
 
 ```svelte
 <script>
-  import { DataList, DataListItem, Button } from "svelte-contain-css";
+  import { DataList, DataListItem, Button } from "contain-css-svelte";
 </script>
 
 <DataList iconSize="3rem" maxWidth="800px">
@@ -448,7 +448,7 @@ chips/actions/media per row.
 
 ```svelte
 <script>
-  import { Dialog, Button } from "svelte-contain-css";
+  import { Dialog, Button } from "contain-css-svelte";
 
   let showDialog = $state(false);
 </script>
@@ -493,7 +493,7 @@ Uses native `<details>` for accessibility:
 
 ```svelte
 <script>
-  import { Accordion } from "svelte-contain-css";
+  import { Accordion } from "contain-css-svelte";
 </script>
 
 <Accordion>
@@ -508,7 +508,7 @@ Uses native `popover` attribute:
 
 ```svelte
 <script>
-  import { Tooltip, Button } from "svelte-contain-css";
+  import { Tooltip, Button } from "contain-css-svelte";
 </script>
 
 <Tooltip>
@@ -523,7 +523,7 @@ Uses native `popover` attribute:
 
 ```svelte
 <script>
-  import { TabBar, TabItem } from "svelte-contain-css";
+  import { TabBar, TabItem } from "contain-css-svelte";
 
   let activeTab = $state("home");
 </script>
@@ -542,7 +542,7 @@ Uses native `popover` attribute:
 
 ```svelte
 <script>
-  import { SplitPane } from "svelte-contain-css";
+  import { SplitPane } from "contain-css-svelte";
 </script>
 
 <SplitPane>
@@ -749,7 +749,7 @@ Example transformation:
 
     // Misc
     Card, Code, Progress, Tag, TextLayout
-  } from "svelte-contain-css";
+  } from "contain-css-svelte";
 </script>
 ```
 

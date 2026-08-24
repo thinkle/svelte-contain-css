@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
   import { reviewAppScenarios } from "$lib/review/scenarios";
   import type { ReviewThemeName } from "$lib/review/themes";
@@ -22,8 +23,8 @@
 
 <div class="review-page-header">
   <div class="review-page-links">
-    <a href={`/svelte-contain-css/review/${data.theme}/`}>{data.themeLabel} routes</a>
-    <a href={`/svelte-contain-css/review/${data.theme}/app/`}>App scenarios</a>
+    <a href={`${base}/review/${data.theme}/`}>{data.themeLabel} routes</a>
+    <a href={`${base}/review/${data.theme}/app/`}>App scenarios</a>
   </div>
 
   <ReviewThemeSwitcher theme={data.theme} />
