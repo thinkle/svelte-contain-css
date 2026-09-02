@@ -35,9 +35,37 @@
 
   let template: HTMLDivElement | undefined = $state();
 
-  // Extract text content from rendered children
-  let textContent = $derived(template ? template.textContent ?? "" : "");
-  let htmlContent = $derived(template ? template.innerHTML : "");
+  // Extracted from the rendered children, in the DOM.
+  let textContent = $state("");
+  let htmlContent = $state("");
+
+  function syncFromTemplate() {
+    if (!template) return;
+    textContent = template.textContent ?? "";
+    htmlContent = template.innerHTML;
+  }
+
+  /*
+    These have to be read back out of the DOM, and a $derived would only
+    recompute when `template` itself changed -- which it never does once the
+    element is bound. So rendering different content into the snippet (renaming
+    a label, say) left the <option> showing whatever it was first given.
+
+    Watching the template covers that: any change to the rendered children
+    re-extracts the html and text.
+  */
+  $effect(() => {
+    if (!template) return;
+    syncFromTemplate();
+    const observer = new MutationObserver(syncFromTemplate);
+    observer.observe(template, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+    });
+    return () => observer.disconnect();
+  });
 </script>
 
 <option data-html={htmlContent} {value} {...restProps}>
