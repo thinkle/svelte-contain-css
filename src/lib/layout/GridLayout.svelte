@@ -49,6 +49,19 @@
     @include box-props(grid-layout);
   }
 
+  /* Escape hatch for the things in a grid that are not items in the run: a
+     section heading, or a note explaining why the grid is empty. Both want the
+     whole row rather than one item-width column with tiles beside them.
+
+     Declared here so it travels with the component, and matched as a descendant
+     rather than a child on purpose -- a component handed a CSS custom property
+     is wrapped in a `<svelte-css-wrapper>`, so it is a grandchild of the grid
+     even though it is still the grid item. `grid-column` is inert on anything
+     that is not a grid item, so the looser match costs nothing. */
+  .grid-layout :global(.grid-full-row) {
+    grid-column: 1 / -1;
+  }
+
   .card-grid {
     --item-width: var(--card-width, 400px);
   }
