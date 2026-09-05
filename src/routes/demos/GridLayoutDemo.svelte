@@ -1,6 +1,7 @@
 <script lang="ts">
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Tile from "$lib/layout/Tile.svelte";
+  import GridRow from "$lib/layout/GridRow.svelte";
   import Card from "$lib/Card.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -165,6 +166,91 @@
       <img src="https://picsum.photos/seed/6/175/175" alt="" />
       <img src="https://picsum.photos/seed/7/175/175" alt="" />
       <img src="https://picsum.photos/seed/8/175/175" alt="" />
+    </GridLayout>
+  </DemoWithCode>
+
+  <TextLayout>
+    <h2>Full-width rows</h2>
+    <p>
+      Not everything in a grid is one of the items. A section heading, or a note
+      explaining an empty grid, wants the whole row rather than standing in a
+      single item-width column with tiles beside it. <code>GridRow</code> does
+      that, and <code>class="grid-full-row"</code> does the same thing on an
+      element you already have.
+    </p>
+    <p>
+      It sets two properties, and the second is the one that is easy to miss.
+      <code>grid-column</code> spans the tracks; <code>justify-self</code>
+      decides how the item fills the tracks it spans. Without it, a grid that
+      centres its items — a tile grid does — shrinks the row to fit its text and
+      floats it in the middle.
+    </p>
+  </TextLayout>
+  <DemoWithCode
+    code={`<GridLayout tile>
+  <GridRow><h3>My Caseload</h3></GridRow>
+  <Tile>Ella Fitzgerald</Tile>
+  <Tile>Thelonious Monk</Tile>
+  <h3 class="grid-full-row">Sections</h3>
+  <Tile>Biology A</Tile>
+  <Tile>Chemistry A</Tile>
+  <Tile>Physics A</Tile>
+  <GridRow>No other sections match the current filters.</GridRow>
+</GridLayout>`}
+  >
+    <GridLayout tile>
+      <GridRow><h3>My Caseload</h3></GridRow>
+      <Tile>Ella Fitzgerald</Tile>
+      <Tile>Thelonious Monk</Tile>
+      <h3 class="grid-full-row">Sections</h3>
+      <Tile>Biology A</Tile>
+      <Tile>Chemistry A</Tile>
+      <Tile>Physics A</Tile>
+      <GridRow>No other sections match the current filters.</GridRow>
+    </GridLayout>
+  </DemoWithCode>
+
+  <TextLayout>
+    <h2>There is always an item width</h2>
+    <p>
+      There is no size-to-content mode, and that is a limit of CSS rather than a
+      choice made here. <code>auto-fill</code> needs a <em>definite</em> track
+      size to work out how many tracks fit; hand it an intrinsic one —
+      <code>auto</code>, <code>max-content</code>, <code>minmax(min-content,
+      max-content)</code> — and the repetition count collapses to 1, so every
+      item stacks in a single column.
+    </p>
+    <p>
+      So the grid always has an item width: 250px unless you say otherwise, or
+      200px with <code>tile</code>, or 400px with <code>card</code>. If you want
+      items sized to their own content and wrapping, that is a flex row
+      (<code>display: flex; flex-wrap: wrap</code>), not this component.
+    </p>
+    <p>
+      Items narrower than the track sit inside it according to
+      <code>--grid-layout-justify-items</code>, which defaults to
+      <code>stretch</code>. Items wider than the track overflow it, so the item
+      width wants to be the widest thing you intend to put in it.
+    </p>
+  </TextLayout>
+  <DemoWithCode
+    code={`<!-- Mixed content: the track is 250px, whatever the items would prefer -->
+<GridLayout>
+  <div>short</div>
+  <div>a considerably longer run of text than the others</div>
+  <div>middling</div>
+</GridLayout>`}
+  >
+    <GridLayout>
+      <div style="background: var(--secondary-bg); padding: var(--padding)">
+        short
+      </div>
+      <div style="background: var(--secondary-bg); padding: var(--padding)">
+        a considerably longer run of text than the others
+      </div>
+      <div style="background: var(--secondary-bg); padding: var(--padding)">
+        middling
+      </div>
     </GridLayout>
   </DemoWithCode>
 </CssVariableDemo>

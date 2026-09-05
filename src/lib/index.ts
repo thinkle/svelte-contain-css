@@ -24,6 +24,7 @@ import Form from "./layout/Form.svelte";
 import FormItem from "./layout/FormItem.svelte";
 import FormProvider from "./layout/FormProvider.svelte";
 import GridLayout from "./layout/GridLayout.svelte";
+import GridRow from "./layout/GridRow.svelte";
 import Hero from "./layout/Hero.svelte";
 import Inline from "./layout/Inline.svelte";
 import MenuList from "./layout/MenuList.svelte";
@@ -79,6 +80,7 @@ export {
   ColumnContainer,
   Container,
   GridLayout,
+  GridRow,
   Inline,
   MenuList,
   Page,
