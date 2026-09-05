@@ -67,8 +67,27 @@
   }
   .tile-grid {
     --item-width: var(--tile-width, 200px);
-    /* A tile grid holds Tiles, and a Tile is a fixed width by design, so there
-       is nothing in here that wants to stretch. */
+
+    /* Fixed tracks, not `1fr` ones.
+
+       A Tile is a fixed width by design, so a stretch track cannot make it any
+       wider -- it just pads the track and leaves the extra space *between* the
+       tiles. At 900px with 200px tiles and an 8px gap that reads as a 23px gutter
+       between columns and nothing at the edges: the run looks sprung apart and
+       shoved left, rather than like a row of cards.
+
+       Sizing the track to the item instead gives the gap you actually asked for,
+       and lets `justify-content: center` above finally do its job and centre the
+       whole run -- with `1fr` tracks it never had any slack to work with. Same
+       arithmetic at every width: at 900px the four tiles sit 8px apart with 30px
+       either side; at 375px one tile centres itself with 80px either side.
+
+       Only tile grids. Cards and the default grid hold things that genuinely can
+       use the width, so they keep stretching. */
+    grid-template-columns: repeat(auto-fill, min(100%, var(--item-width)));
+
+    /* Belt and braces: the track now matches `--item-width`, so this only bites
+       when a Tile is narrower than the track it was given. */
     --justify-items: center;
   }
 </style>
