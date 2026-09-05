@@ -185,6 +185,19 @@
       centres its items — a tile grid does — shrinks the row to fit its text and
       floats it in the middle.
     </p>
+    <p>
+      <strong>A grid with full-width rows in it is a full-width grid.</strong>
+      The grid normally collapses the tracks nothing landed in, which is what
+      lets a short run of items sit centred. A row spanning
+      <code>1 / -1</code> lands in every track, so there is nothing left to
+      collapse and the items pack against the left edge — visible below, where
+      two tiles sit under a heading that is four tracks wide.
+    </p>
+    <p>
+      That is a real trade, not a bug to route around: if you want the run
+      centred, keep the headings outside and use one grid per section, as in the
+      next example.
+    </p>
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout tile>
@@ -207,6 +220,42 @@
       <Tile>Chemistry A</Tile>
       <Tile>Physics A</Tile>
       <GridRow>No other sections match the current filters.</GridRow>
+    </GridLayout>
+  </DemoWithCode>
+
+  <TextLayout>
+    <h3>The same content, headings outside</h3>
+    <p>
+      Nothing spans, so the empty tracks collapse and each run centres itself.
+      Costs a grid per section and gives up column alignment across the
+      headings; buys a centred layout.
+    </p>
+  </TextLayout>
+  <DemoWithCode
+    code={`<h3>My Caseload</h3>
+<GridLayout tile>
+  <Tile>Ella Fitzgerald</Tile>
+  <Tile>Thelonious Monk</Tile>
+</GridLayout>
+
+<h3>Sections</h3>
+<GridLayout tile>
+  <Tile>Biology A</Tile>
+  <Tile>Chemistry A</Tile>
+  <Tile>Physics A</Tile>
+</GridLayout>`}
+  >
+    <h3>My Caseload</h3>
+    <GridLayout tile>
+      <Tile>Ella Fitzgerald</Tile>
+      <Tile>Thelonious Monk</Tile>
+    </GridLayout>
+
+    <h3>Sections</h3>
+    <GridLayout tile>
+      <Tile>Biology A</Tile>
+      <Tile>Chemistry A</Tile>
+      <Tile>Physics A</Tile>
     </GridLayout>
   </DemoWithCode>
 

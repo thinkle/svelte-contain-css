@@ -37,9 +37,24 @@
        which centres the whole run. That declaration has been here all along and
        could never fire, because `1fr` tracks always consume the full width.
 
-       `min(100%, …)` keeps a track from outgrowing a narrow screen. */
+       `min(100%, …)` keeps a track from outgrowing a narrow screen.
+
+       `auto-fit`, not `auto-fill`, and the difference is the whole ballgame for
+       centring. Both lay down as many tracks as fit the container; `auto-fill`
+       keeps the empty ones at full width, so three cards in a wide container
+       leave `justify-content` no slack to work with and pack against the left.
+       `auto-fit` collapses the tracks nothing landed in, so the run shrinks to
+       the items and centres. Three 200px items in a 1400px container: 72px left
+       and 696px right under `auto-fill`, 384px either side under `auto-fit`.
+
+       One caveat worth knowing, because it is not a bug we can fix here: an item
+       spanning `1 / -1` -- a `GridRow`, a heading -- occupies every track, so
+       there is nothing left for `auto-fit` to collapse and the run goes back to
+       full width and left-packed. A grid with full-width rows in it is a
+       full-width grid. Headings kept outside the grid, one grid per section,
+       keep the centring. */
     grid-template-columns: repeat(
-      auto-fill,
+      auto-fit,
       min(100%, var-with-fallbacks(--item-width, grid-layout, 250px))
     );
     gap: var-with-fallbacks(--gap, grid-layout, 8px);
