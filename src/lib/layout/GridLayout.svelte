@@ -24,27 +24,36 @@
   @use "$lib/sass/_mixins.scss" as *;
   .grid-layout {
     display: grid;
+    /* Tracks sized to the item, not `1fr`.
+
+       `1fr` splits the leftover width between the tracks, which turns it into
+       gutter *between* the items while the edges of the run stay tight -- three
+       cards in a 900px container end up sprung apart and pushed left. That is
+       rarely what anyone means by declaring an item width: they mean "lay these
+       out at this size", and the leftover belongs at the edges.
+
+       Sizing the track to the item gives exactly the `gap` that was asked for
+       between items, and hands the remainder to `justify-content: center` below,
+       which centres the whole run. That declaration has been here all along and
+       could never fire, because `1fr` tracks always consume the full width.
+
+       `min(100%, …)` keeps a track from outgrowing a narrow screen. */
     grid-template-columns: repeat(
       auto-fill,
-      minmax(
-        min(100%, var-with-fallbacks(--item-width, grid-layout, 250px)),
-        1fr
-      )
+      min(100%, var-with-fallbacks(--item-width, grid-layout, 250px))
     );
     gap: var-with-fallbacks(--gap, grid-layout, 8px);
     justify-content: var(--grid-justify-content, center);
     place-content: var(--grid-place-content, center);
     /* Where an item sits *inside* its track -- a separate question from where
-       the tracks sit in the grid. `justify-content` and `place-content` above
-       only distribute tracks, and the tracks are `1fr`, so they always consume
-       the full width and there is never any slack for those two to distribute.
+       the tracks sit in the grid, which is `justify-content` above.
 
-       The default stays `stretch`, so anything that wants its whole track still
-       gets it. Fixed-width children are the case this exists for: `Tile` sets an
-       explicit `width`, so it cannot stretch, and in a stretch track it lands
-       hard against the left edge. On a wide grid that is invisible, because the
-       track is about as wide as the tile. At one column -- a phone -- a 200px
-       tile sits in a full-width track with every pixel of slack to its right. */
+       Mostly moot now that a track is sized to the item: there is usually no
+       room inside a track to sit anywhere. It still matters when a child is
+       narrower than the track it was handed, which happens whenever a component
+       carries its own width -- a `Tile` with a `--tile-width` smaller than the
+       grid's `--item-width`. The default stays `stretch` so anything that can
+       use its whole track still gets it. */
     justify-items: var-with-fallbacks(--justify-items, grid-layout, stretch);
     @include box-props(grid-layout);
   }
@@ -60,6 +69,17 @@
      that is not a grid item, so the looser match costs nothing. */
   .grid-layout :global(.grid-full-row) {
     grid-column: 1 / -1;
+
+    /* Spanning is only half of it. How an item fills the tracks it spans is
+       `justify-items` on the grid, which a tile grid sets to `center` -- and a
+       centred block with no width of its own shrinks to fit its content, so the
+       row it spans renders as a short centred blob rather than a full-width
+       heading. Saying `stretch` here makes the class mean the same thing in
+       every grid, whatever the container prefers for ordinary items.
+
+       A consumer spanning their own item -- `grid-column: span 2` -- owns this
+       decision themselves and will want `justify-self` alongside it. */
+    justify-self: stretch;
   }
 
   .card-grid {
@@ -68,26 +88,9 @@
   .tile-grid {
     --item-width: var(--tile-width, 200px);
 
-    /* Fixed tracks, not `1fr` ones.
-
-       A Tile is a fixed width by design, so a stretch track cannot make it any
-       wider -- it just pads the track and leaves the extra space *between* the
-       tiles. At 900px with 200px tiles and an 8px gap that reads as a 23px gutter
-       between columns and nothing at the edges: the run looks sprung apart and
-       shoved left, rather than like a row of cards.
-
-       Sizing the track to the item instead gives the gap you actually asked for,
-       and lets `justify-content: center` above finally do its job and centre the
-       whole run -- with `1fr` tracks it never had any slack to work with. Same
-       arithmetic at every width: at 900px the four tiles sit 8px apart with 30px
-       either side; at 375px one tile centres itself with 80px either side.
-
-       Only tile grids. Cards and the default grid hold things that genuinely can
-       use the width, so they keep stretching. */
-    grid-template-columns: repeat(auto-fill, min(100%, var(--item-width)));
-
-    /* Belt and braces: the track now matches `--item-width`, so this only bites
-       when a Tile is narrower than the track it was given. */
+    /* The track now matches `--item-width`, so this only bites when a Tile is
+       narrower than the track it was handed -- a `--tile-width` set smaller than
+       the grid's item width, say. */
     --justify-items: center;
   }
 </style>
