@@ -40,7 +40,9 @@
       <h2>Basic Tile States</h2>
     {/snippet}
     {#snippet blurb()}
-      <p>Show the same tile with static, selectable, and interactive behavior.</p>
+      <p>
+        Show the same tile with static, selectable, and interactive behavior.
+      </p>
     {/snippet}
     <Tile>
       <h3>Basic Tile</h3>
@@ -89,15 +91,32 @@
     {/snippet}
     {#snippet inputArea()}
       <Inline gap="var(--gap)">
-        <label>width {tileWidth}rem <Slider bind:value={tileWidth} min={6} max={24} /></label>
-        <label>height {tileHeight}rem <Slider bind:value={tileHeight} min={4} max={16} /></label>
+        <label
+          >width {tileWidth}rem <Slider
+            bind:value={tileWidth}
+            min={6}
+            max={24}
+          /></label
+        >
+        <label
+          >height {tileHeight}rem <Slider
+            bind:value={tileHeight}
+            min={4}
+            max={16}
+          /></label
+        >
       </Inline>
     {/snippet}
+    <h2>A single sized Tile</h2>
     <Tile width="{tileWidth}rem" height="{tileHeight}rem">
       {tileWidth} x {tileHeight}
     </Tile>
-
-    <GridLayout tile --tile-width="{tileWidth}rem" --tile-height="{tileHeight}rem">
+    <h2>A whole grid of tiles...</h2>
+    <GridLayout
+      tile
+      --tile-width="{tileWidth}rem"
+      --tile-height="{tileHeight}rem"
+    >
       <Tile>We</Tile>
       <Tile>Can</Tile>
       <Tile>Be</Tile>
@@ -158,8 +177,8 @@
         Props set the matching <code>--tile-*</code> variables, so
         <code>--tile-justify</code> on an ancestor still works and only the tile
         that differs has to say so. A tile already centres across, so
-        <code>center</code> sets both axes — setting only the cross axis would
-        do nothing visible.
+        <code>center</code> sets both axes — setting only the cross axis would do
+        nothing visible.
       </p>
     {/snippet}
     <GridLayout tile --tile-height="8rem">

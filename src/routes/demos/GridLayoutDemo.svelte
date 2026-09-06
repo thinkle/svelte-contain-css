@@ -9,17 +9,22 @@
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import Inline from "$lib/layout/Inline.svelte";
   import type { CSSVariable } from "./types";
+  import FormItem from "$lib/layout/FormItem.svelte";
 
   let rowJustify = $state("default");
   let runJustify = $state("default");
 
   const runAttr = $derived(
-    runJustify === "default" ? "" : ` --grid-layout-justify-content="${runJustify}"`,
+    runJustify === "default"
+      ? ""
+      : ` --grid-layout-justify-content="${runJustify}"`,
   );
 
   /* `stretch` is the default, so passing it explicitly for "default" keeps the
      demo honest without special-casing the rendered markup. */
-  const gridJustify = $derived(rowJustify === "default" ? "stretch" : rowJustify);
+  const gridJustify = $derived(
+    rowJustify === "default" ? "stretch" : rowJustify,
+  );
 
   /* The sample only spells out the variable once it differs from the default --
      which is the whole point of setting it on the grid rather than the rows. */
@@ -93,24 +98,37 @@
   >
     {#snippet blurb()}
       <p>
-        The run of items is centred in the grid by default.
+        The run of items is centered in the grid by default.
         <code>--grid-layout-justify-content</code> moves it, the same way
-        <code>--grid-row-justify</code> moves a full-width row — so cards and
-        tiles can be pushed to one side too, not just headings.
+        <code>--grid-row-justify</code> moves a full-width row — so cards and tiles
+        can be pushed to one side too, not just headings.
       </p>
     {/snippet}
     {#snippet inputArea()}
-      <Inline gap="var(--gap)">
-        <RadioButton bind:group={runJustify} value="default">default</RadioButton>
-        <RadioButton bind:group={runJustify} value="start">start</RadioButton>
-        <RadioButton bind:group={runJustify} value="center">center</RadioButton>
-        <RadioButton bind:group={runJustify} value="end">end</RadioButton>
-        <RadioButton bind:group={runJustify} value="space-between">space-between</RadioButton>
-      </Inline>
+      <FormItem --form-label-width="14em">
+        {#snippet label()}
+          --grid-layout-justify-content
+        {/snippet}
+        <Inline gap="var(--gap)">
+          <RadioButton bind:group={runJustify} value="default"
+            >default</RadioButton
+          >
+          <RadioButton bind:group={runJustify} value="start">start</RadioButton>
+          <RadioButton bind:group={runJustify} value="center"
+            >center</RadioButton
+          >
+          <RadioButton bind:group={runJustify} value="end">end</RadioButton>
+          <RadioButton bind:group={runJustify} value="space-between"
+            >space-between</RadioButton
+          >
+        </Inline>
+      </FormItem>
     {/snippet}
     <GridLayout
       tile
-      --grid-layout-justify-content={runJustify === "default" ? "center" : runJustify}
+      --grid-layout-justify-content={runJustify === "default"
+        ? "center"
+        : runJustify}
     >
       <Tile>
         <h3>Tile 1</h3>
@@ -238,8 +256,8 @@
     </p>
     <p>
       These set <code>grid-column</code> to span every track, and
-      <code>justify-self</code> to decide how the row sits in that span. Rows
-      fill their span by default.
+      <code>justify-self</code> to decide how the row sits in that span. Rows fill
+      their span by default.
     </p>
     <p>
       To move them, set <code>--grid-row-justify</code> to <code>start</code>,
@@ -272,7 +290,9 @@
     {/snippet}
     {#snippet inputArea()}
       <Inline gap="var(--gap)">
-        <RadioButton bind:group={rowJustify} value="default">default</RadioButton>
+        <RadioButton bind:group={rowJustify} value="default"
+          >default</RadioButton
+        >
         <RadioButton bind:group={rowJustify} value="start">start</RadioButton>
         <RadioButton bind:group={rowJustify} value="center">center</RadioButton>
         <RadioButton bind:group={rowJustify} value="end">end</RadioButton>
@@ -292,5 +312,4 @@
       </GridRow>
     </GridLayout>
   </DemoWithCode>
-
 </CssVariableDemo>
