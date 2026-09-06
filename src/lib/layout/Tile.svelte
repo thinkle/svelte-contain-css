@@ -6,8 +6,9 @@
     HTMLInputAttributes,
   } from "svelte/elements";
   import { injectVars } from "$lib/util";
+  import type { BaseStyleProps } from "$lib/types";
 
-  type BaseProps = {
+  type BaseProps = BaseStyleProps & {
     /** Distribution along the tile's own axis, which is vertical. */
     justify?: string | null;
     /** Cross-axis alignment, which is horizontal. Centred already. */
@@ -51,16 +52,37 @@
   /* Props to CSS variables, the way Stack, Card, Tag and the rest do it, so a
      Tile can be aimed with `<Tile center>` rather than only a raw variable. */
   const styleProps = $derived.by(() => {
-    const { justify = null, align = null, center = false } = props as BaseProps;
+    const {
+      justify = null,
+      align = null,
+      center = false,
+      bg = null,
+      fg = null,
+      padding = null,
+      width = null,
+      height = null,
+    } = props as BaseProps;
     return {
+      bg,
+      fg,
+      padding,
+      width,
+      height,
       justify: justify ?? (center ? "center" : null),
       align: align ?? (center ? "center" : null),
     };
   });
 
   const style = $derived(
-    injectVars(styleProps, "tile", ["justify", "align"]) +
-      ((props as { style?: string }).style ?? ""),
+    injectVars(styleProps, "tile", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "justify",
+      "align",
+    ]) + ((props as { style?: string }).style ?? ""),
   );
 
   /** Everything that is ours rather than the element's. */
@@ -72,6 +94,11 @@
       justify: _justify,
       align: _align,
       center: _center,
+      bg: _bg,
+      fg: _fg,
+      padding: _padding,
+      width: _width,
+      height: _height,
       style: _style,
       ...rest
     } = value as RenderProps & BaseProps & { style?: string };

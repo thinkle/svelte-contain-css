@@ -59,13 +59,19 @@
   </DemoWithCode>
 
   <DemoWithCode
-    code={`<!-- Tiles carry their own size, so a grid of them lines up
-     without any of them being measured. -->
-<GridLayout tile --tile-width="{tileWidth}rem" --tile-height="{tileHeight}rem">
-  <Tile>One</Tile>
-  <Tile>Two</Tile>
-  <Tile>Three</Tile>
-  <Tile>Four</Tile>
+    code={`<!-- On the tile itself... -->
+<Tile width="${tileWidth}rem" height="${tileHeight}rem">
+  ${tileWidth} x ${tileHeight}
+</Tile>
+
+<!-- ...or on an ancestor, leaving the tiles bare. Put the same two
+     variables in your app's stylesheet and every Tile in the project
+     follows, with no per-tile markup at all. -->
+<GridLayout tile --tile-width="${tileWidth}rem" --tile-height="${tileHeight}rem">
+  <Tile>We</Tile>
+  <Tile>Can</Tile>
+  <Tile>Be</Tile>
+  <Tile>Bare</Tile>
 </GridLayout>`}
   >
     {#snippet heading()}
@@ -73,10 +79,12 @@
     {/snippet}
     {#snippet blurb()}
       <p>
-        A Tile has a width and height of its own rather than taking them from
-        its content, which is what makes a row of them line up. Set
-        <code>--tile-width</code> and <code>--tile-height</code> to change it —
-        on the grid, as here, and every tile inside follows.
+        A Tile carries its own width and height rather than taking them from its
+        content, which is what makes a row of them line up. The
+        <code>width</code> and <code>height</code> props set
+        <code>--tile-width</code> and <code>--tile-height</code>, so the same
+        sizing works from the tile, from any ancestor, or from your stylesheet —
+        and only the tile that differs has to say anything.
       </p>
     {/snippet}
     {#snippet inputArea()}
@@ -85,11 +93,15 @@
         <label>height {tileHeight}rem <Slider bind:value={tileHeight} min={4} max={16} /></label>
       </Inline>
     {/snippet}
+    <Tile width="{tileWidth}rem" height="{tileHeight}rem">
+      {tileWidth} x {tileHeight}
+    </Tile>
+
     <GridLayout tile --tile-width="{tileWidth}rem" --tile-height="{tileHeight}rem">
-      <Tile>One</Tile>
-      <Tile>Two</Tile>
-      <Tile>Three</Tile>
-      <Tile>Four</Tile>
+      <Tile>We</Tile>
+      <Tile>Can</Tile>
+      <Tile>Be</Tile>
+      <Tile>Bare</Tile>
     </GridLayout>
   </DemoWithCode>
 
