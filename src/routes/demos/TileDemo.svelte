@@ -1,11 +1,13 @@
 <script>
-  import Card from "$lib/Card.svelte";
-  import Checkbox from "$lib/controls/Checkbox.svelte";
+  import Slider from "$lib/controls/Slider.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import Container from "$lib/layout/Container.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
-  import SplitPane from "$lib/layout/SplitPane.svelte";
   import Tile from "$lib/layout/Tile.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
+
+  let tileWidth = $state(12);
+  let tileHeight = $state(8);
   import TextLayout from "$lib/typography/TextLayout.svelte";
 </script>
 
@@ -57,6 +59,41 @@
   </DemoWithCode>
 
   <DemoWithCode
+    code={`<!-- Tiles carry their own size, so a grid of them lines up
+     without any of them being measured. -->
+<GridLayout tile --tile-width="{tileWidth}rem" --tile-height="{tileHeight}rem">
+  <Tile>One</Tile>
+  <Tile>Two</Tile>
+  <Tile>Three</Tile>
+  <Tile>Four</Tile>
+</GridLayout>`}
+  >
+    {#snippet heading()}
+      <h2>Sizing a Tile</h2>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        A Tile has a width and height of its own rather than taking them from
+        its content, which is what makes a row of them line up. Set
+        <code>--tile-width</code> and <code>--tile-height</code> to change it —
+        on the grid, as here, and every tile inside follows.
+      </p>
+    {/snippet}
+    {#snippet inputArea()}
+      <Inline gap="var(--gap)">
+        <label>width {tileWidth}rem <Slider bind:value={tileWidth} min={6} max={24} /></label>
+        <label>height {tileHeight}rem <Slider bind:value={tileHeight} min={4} max={16} /></label>
+      </Inline>
+    {/snippet}
+    <GridLayout tile --tile-width="{tileWidth}rem" --tile-height="{tileHeight}rem">
+      <Tile>One</Tile>
+      <Tile>Two</Tile>
+      <Tile>Three</Tile>
+      <Tile>Four</Tile>
+    </GridLayout>
+  </DemoWithCode>
+
+  <DemoWithCode
     code={`<GridLayout>
   <Tile>
     <h3>Basic Tile</h3>
@@ -89,69 +126,6 @@
         <p>Just an interactive tile.</p>
       </Tile>
     </GridLayout>
-  </DemoWithCode>
-
-  <DemoWithCode
-    code={`<Card>
-  {#snippet header()}
-    <h3>Card</h3>
-  {/snippet}
-  <Tile>One Tile</Tile>
-  <Tile>Two Tile</Tile>
-</Card>`}
-  >
-    {#snippet header()}
-      <h2>Tiles in Cards</h2>
-    {/snippet}
-    <Card>
-      {#snippet header()}
-        <h3>Card</h3>
-      {/snippet}
-      <Tile>One Tile</Tile>
-      <Tile>Two Tile</Tile>
-    </Card>
-  </DemoWithCode>
-
-  <DemoWithCode
-    code={`<SplitPane leftWidth="3fr">
-  {#snippet left()}
-    <Tile>
-      <h3>Tiles on my Left</h3>
-      <p>Look, a tile!</p>
-      <Checkbox>Check me</Checkbox>
-      <Checkbox>And me!</Checkbox>
-    </Tile>
-  {/snippet}
-  {#snippet right()}
-    <Tile>
-      <h3>Tiles on my right</h3>
-      <p>Look, a tile!</p>
-    </Tile>
-  {/snippet}
-</SplitPane>`}
-  >
-    {#snippet header()}
-      <h2>Tiles in a Split Pane</h2>
-    {/snippet}
-    {#snippet blurb()}
-      <p>Use a split pane when one side should stay visible as the layout changes.</p>
-    {/snippet}
-    <SplitPane leftWidth="3fr">
-      {#snippet left()}
-        <Tile>
-          <h3>Tiles on my Left</h3>
-          <p>Look, a tile!</p>
-          <Checkbox>Check me</Checkbox>
-          <Checkbox>And me!</Checkbox>
-        </Tile>
-      {/snippet}
-      {#snippet right()}
-        <Tile>
-          <h3>Tiles on my right</h3>
-          <p>Look, a tile!</p>
-        </Tile>
-      {/snippet}
-    </SplitPane>
   </DemoWithCode>
 
   <DemoWithCode

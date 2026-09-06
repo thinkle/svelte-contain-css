@@ -58,8 +58,25 @@
       min(100%, var-with-fallbacks(--item-width, grid-layout, 250px))
     );
     gap: var-with-fallbacks(--gap, grid-layout, 8px);
-    justify-content: var(--grid-justify-content, center);
-    place-content: var(--grid-place-content, center);
+    /* Where the run of tracks sits in the grid box. Both axes as longhands,
+       because `place-content` is a shorthand and was declared after
+       `justify-content` here -- so it quietly overwrote it and
+       `--grid-justify-content` never did anything at all. Only
+       `--grid-place-content` worked, and it moves both axes at once.
+
+       Named `--grid-layout-*` like everything else, with the old spellings kept
+       as fallbacks so anything already setting them keeps working -- and
+       `--grid-justify-content` starts working for the first time. */
+    justify-content: var-with-fallbacks(
+      --justify-content,
+      grid-layout,
+      var(--grid-justify-content, var(--grid-place-content, center))
+    );
+    align-content: var-with-fallbacks(
+      --align-content,
+      grid-layout,
+      var(--grid-place-content, center)
+    );
     /* Where an item sits *inside* its track -- a separate question from where
        the tracks sit in the grid, which is `justify-content` above.
 

@@ -11,6 +11,11 @@
   import type { CSSVariable } from "./types";
 
   let rowJustify = $state("default");
+  let runJustify = $state("default");
+
+  const runAttr = $derived(
+    runJustify === "default" ? "" : ` --grid-layout-justify-content="${runJustify}"`,
+  );
 
   /* `stretch` is the default, so passing it explicitly for "default" keeps the
      demo honest without special-casing the rendered markup. */
@@ -59,7 +64,7 @@
     </p>
   </TextLayout>
   <DemoWithCode
-    code={`<GridLayout tile>
+    code={`<GridLayout tile${runAttr}>
   <Tile>
     <h3>Tile 1</h3>
     <p>First tile in the grid</p>
@@ -86,7 +91,27 @@
   </Tile>
 </GridLayout>`}
   >
-    <GridLayout tile>
+    {#snippet blurb()}
+      <p>
+        The run of items is centred in the grid by default.
+        <code>--grid-layout-justify-content</code> moves it, the same way
+        <code>--grid-row-justify</code> moves a full-width row — so cards and
+        tiles can be pushed to one side too, not just headings.
+      </p>
+    {/snippet}
+    {#snippet inputArea()}
+      <Inline gap="var(--gap)">
+        <RadioButton bind:group={runJustify} value="default">default</RadioButton>
+        <RadioButton bind:group={runJustify} value="start">start</RadioButton>
+        <RadioButton bind:group={runJustify} value="center">center</RadioButton>
+        <RadioButton bind:group={runJustify} value="end">end</RadioButton>
+        <RadioButton bind:group={runJustify} value="space-between">space-between</RadioButton>
+      </Inline>
+    {/snippet}
+    <GridLayout
+      tile
+      --grid-layout-justify-content={runJustify === "default" ? "center" : runJustify}
+    >
       <Tile>
         <h3>Tile 1</h3>
         <p>First tile in the grid</p>
