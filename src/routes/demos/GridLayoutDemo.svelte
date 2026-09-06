@@ -6,7 +6,10 @@
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
+  import Checkbox from "$lib/controls/Checkbox.svelte";
   import type { CSSVariable } from "./types";
+
+  let rowCentered = $state(false);
 
   let cssVariables: CSSVariable[] = [
     {
@@ -201,8 +204,8 @@
       These set <code>grid-column</code> to span every track, and
       <code>justify-self</code> to decide how the row sits in that span. It
       fills the span by default; set <code>--grid-row-justify</code> to
-      <code>start</code>, <code>center</code> or <code>end</code> to let it
-      shrink to its content and sit to one side instead.
+      <code>start</code>, <code>center</code> or <code>end</code> to let it shrink
+      to its content and sit to one side instead.
     </p>
   </TextLayout>
   <DemoWithCode
@@ -238,26 +241,35 @@
   <TextLayout>
     <h3>Positioning a row in its span</h3>
     <p>
-      Following the usual pattern, this is a CSS variable rather than a prop:
-      <code>--grid-row-justify</code> on the row, or a bare <code>--justify</code>,
-      the same way <code>Tile</code> takes <code>--justify</code>.
+      A row fills its span by default. To let it shrink to its content and sit
+      to one side, pass <code>justify</code> —
+      <code>start</code>, <code>center</code>, <code>end</code> — or the
+      <code>center</code> shorthand, the same way <code>Stack</code> takes
+      <code>center</code>. Either sets <code>--grid-row-justify</code>, so you
+      can also reach for the variable directly.
     </p>
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout tile>
-  <GridRow><h3>Fills the span (default)</h3></GridRow>
+  <GridRow${rowCentered ? " center" : ""}><h3>Jazz Greats</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>
   <Tile>Thelonious Monk</Tile>
-  <GridRow --grid-row-justify="center">Centered in the span</GridRow>
-  <GridRow --grid-row-justify="end">Pushed to the end</GridRow>
 </GridLayout>`}
   >
+    {#snippet blurb()}
+      <p>
+        Toggle the shorthand to watch the row stop filling its span. The same
+        thing longhand is <code>justify="center"</code> or
+        <code>--grid-row-justify="center"</code>.
+      </p>
+    {/snippet}
+    {#snippet inputArea()}
+      <Checkbox bind:checked={rowCentered}>center</Checkbox>
+    {/snippet}
     <GridLayout tile>
-      <GridRow><h3>Fills the span (default)</h3></GridRow>
+      <GridRow center={rowCentered}><h3>Jazz Greats</h3></GridRow>
       <Tile>Ella Fitzgerald</Tile>
       <Tile>Thelonious Monk</Tile>
-      <GridRow --grid-row-justify="center">Centered in the span</GridRow>
-      <GridRow --grid-row-justify="end">Pushed to the end</GridRow>
     </GridLayout>
   </DemoWithCode>
 </CssVariableDemo>
