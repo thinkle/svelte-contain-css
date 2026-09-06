@@ -7,15 +7,12 @@
    * note saying why the grid is empty. Anything that belongs *in* the run of
    * items without being one of them.
    *
-   * Two properties, and the second is the one people forget. `grid-column`
-   * spans the tracks; `justify-self` decides how the item fills the tracks it
-   * spans, and a grid that centres its items -- a tile grid does -- would
-   * otherwise shrink this to fit its text and float it in the middle. Stating
-   * both means it reads the same in every grid.
-   *
-   * Equivalent to putting `class="grid-full-row"` on your own element, which is
-   * the better choice when you already have one and would rather not nest a div
-   * inside it.
+   * Carries `.grid-full-row`, which is the same thing as a class for when you
+   * already have an element and would rather not nest a div inside it. The
+   * difference is `--line-width`: a heading or paragraph placed inside this
+   * component is meant to run the width of the band, so the readable measure
+   * that typographic containers impose is lifted for its contents too. Put the
+   * class on your own heading instead and the heading keeps that measure.
    */
   type Props = {
     children?: Snippet;
@@ -24,13 +21,16 @@
   let { children, ...restProps }: Props = $props();
 </script>
 
-<div class="grid-row" {...restProps}>
+<div class="grid-full-row grid-row" {...restProps}>
   {@render children?.()}
 </div>
 
 <style lang="scss">
   .grid-row {
-    grid-column: 1 / -1;
-    justify-self: stretch;
+    /* Spanning, stretching and the margin reset all live on `.grid-full-row`,
+       in GridLayout. What this adds is releasing the measure for the content:
+       without it a heading in here is clamped to `--line-width` and centred by
+       its own auto margins, so the band spans and the words inside it do not. */
+    --line-width: none;
   }
 </style>

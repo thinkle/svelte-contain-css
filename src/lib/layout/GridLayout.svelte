@@ -95,13 +95,33 @@
        A consumer spanning their own item -- `grid-column: span 2` -- owns this
        decision themselves and will want `justify-self` alongside it. */
     justify-self: stretch;
+
+    /* And the typography has to be let go of too, which is the part that took a
+       while to see. A heading inside a typographic container gets a readable
+       measure and auto side margins -- `max-width: var(--line-width)`, 42rem by
+       default, with `margin-inline: auto` -- so it sits as a centred column of
+       text. Sensible for prose, wrong for a band that is supposed to run the
+       width of a grid.
+
+       Worse, an auto inline margin makes `justify-self: stretch` do nothing at
+       all: the spec only stretches a box whose inline margins are both
+       non-auto, so the heading fell back to shrink-to-fit. "Sections" measured
+       74px in a 1064px row, and computed style reports the *used* margin as
+       `0px`, so it does not look like margins are the culprit until you set them
+       and watch the width jump. */
+    max-width: none;
+    margin-inline: 0;
   }
 
   .card-grid {
     --item-width: var(--card-width, 400px);
   }
   .tile-grid {
-    --item-width: var(--tile-width, 200px);
+    /* Has to be the width a Tile actually defaults to, not a round number near
+       it. Tile says `calc(var(--space-lg) * 24)`, which is 192px; this said
+       200px, so every tile sat 4px inside its own track and a full-width row
+       did not line up with the tiles under it. */
+    --item-width: var(--tile-width, calc(var(--space-lg) * 24));
 
     /* The track now matches `--item-width`, so this only bites when a Tile is
        narrower than the track it was handed -- a `--tile-width` set smaller than
