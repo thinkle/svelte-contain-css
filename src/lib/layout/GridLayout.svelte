@@ -94,7 +94,7 @@
 
        A consumer spanning their own item -- `grid-column: span 2` -- owns this
        decision themselves and will want `justify-self` alongside it. */
-    justify-self: stretch;
+    justify-self: var-with-fallbacks(--justify, grid-row, stretch);
 
     /* And the typography has to be let go of too, which is the part that took a
        while to see. A heading inside a typographic container gets a readable

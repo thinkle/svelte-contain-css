@@ -12,15 +12,15 @@
     {
       name: "--grid-layout-gap",
       type: "length",
-      placeholder: "e.g., 8px",
-      defaultValue: "8px",
+      placeholder: "e.g., 16px",
+      defaultValue: "16px",
       unit: "px",
     },
     {
       name: "--grid-layout-item-width",
       type: "length",
       placeholder: "e.g., 200px",
-      defaultValue: "auto",
+      defaultValue: "250px",
       unit: "px",
     },
   ];
@@ -30,10 +30,11 @@
   <TextLayout>
     <p>
       GridLayout creates a centered, responsive grid that automatically wraps
-      items. In most cases, use the built-in <code>tile</code> and
+      items. If your layout is for a Contain <code>&lt;Card&gt;</code> or
+      <code>&lt;Tile&gt;</code>, use the built-in <code>tile</code> and
       <code>card</code> shorthands so the grid follows the library's default
       widths. Use <code>--item-width</code> or
-      <code>--grid-layout-item-width</code> only when you need a custom size.
+      <code>--grid-layout-item-width</code> to specify a different custom size.
     </p>
 
     <h2>Basic Grid with Tiles</h2>
@@ -56,6 +57,18 @@
   <Tile>
     <h3>Tile 3</h3>
     <p>Third tile in the grid</p>
+  </Tile>
+  <Tile>
+    <h3>Tile 4</h3>
+    <p>Fourth tile in the grid</p>
+  </Tile>
+  <Tile>
+    <h3>Tile 5</h3>
+    <p>Fifth tile in the grid</p>
+  </Tile>
+  <Tile>
+    <h3>Tile 6</h3>
+    <p>Sixth tile in the grid</p>
   </Tile>
 </GridLayout>`}
   >
@@ -106,12 +119,19 @@
       <div>Card 1</div>
     {/snippet}
     <p>This is a card in a grid layout.</p>
+    <p>Cards automatically size themselves.</p>
   </Card>
   <Card fixedHeight>
     {#snippet header()}
       <div>Card 2</div>
     {/snippet}
     <p>GridLayout centers all items.</p>
+  </Card>
+  <Card fixedHeight>
+    {#snippet header()}
+      <div>Card 3</div>
+    {/snippet}
+    <p>Items wrap to new lines as needed.</p>
   </Card>
 </GridLayout>`}
   >
@@ -172,134 +192,72 @@
   <TextLayout>
     <h2>Full-width rows</h2>
     <p>
-      Not everything in a grid is one of the items. A section heading, or a note
-      explaining an empty grid, wants the whole row rather than standing in a
-      single item-width column with tiles beside it. <code>GridRow</code> does
-      that, and <code>class="grid-full-row"</code> does the same thing on an
-      element you already have.
+      If you want an item to span across all the columns in a grid, we have a
+      wrapper component (<code>GridRow</code>) for that <em>or</em> a
+      convenience class (<code>class="grid-full-row"</code>) you can hang on any
+      element.
     </p>
     <p>
-      It sets two properties, and the second is the one that is easy to miss.
-      <code>grid-column</code> spans the tracks; <code>justify-self</code>
-      decides how the item fills the tracks it spans. Without it, a grid that
-      centres its items — a tile grid does — shrinks the row to fit its text and
-      floats it in the middle.
-    </p>
-    <p>
-      <strong>A grid with full-width rows in it is a full-width grid.</strong>
-      The grid normally collapses the tracks nothing landed in, which is what
-      lets a short run of items sit centred. A row spanning
-      <code>1 / -1</code> lands in every track, so there is nothing left to
-      collapse and the items pack against the left edge — visible below, where
-      two tiles sit under a heading that is four tracks wide.
-    </p>
-    <p>
-      That is a real trade, not a bug to route around: if you want the run
-      centred, keep the headings outside and use one grid per section, as in the
-      next example.
+      These set <code>grid-column</code> to span every track, and
+      <code>justify-self</code> to decide how the row sits in that span. It
+      fills the span by default; set <code>--grid-row-justify</code> to
+      <code>start</code>, <code>center</code> or <code>end</code> to let it
+      shrink to its content and sit to one side instead.
     </p>
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout tile>
-  <GridRow><h3>My Caseload</h3></GridRow>
+  <GridRow><h3>Jazz Greats</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>
   <Tile>Thelonious Monk</Tile>
-  <h3 class="grid-full-row">Sections</h3>
-  <Tile>Biology A</Tile>
-  <Tile>Chemistry A</Tile>
-  <Tile>Physics A</Tile>
-  <GridRow>No other sections match the current filters.</GridRow>
+  <h3 class="grid-full-row">Jazz Standards matching &ldquo;Moon&rdquo;</h3>
+  <Tile>Fly Me To The Moon</Tile>
+  <Tile>How High the Moon</Tile>
+  <Tile>It's Only a Paper Moon</Tile>
+  <GridRow>
+    <strong>That's All She Wrote!</strong>
+    <br />No other sections match the current filters.
+  </GridRow>
 </GridLayout>`}
   >
     <GridLayout tile>
-      <GridRow><h3>My Caseload</h3></GridRow>
+      <GridRow><h3>Jazz Greats</h3></GridRow>
       <Tile>Ella Fitzgerald</Tile>
       <Tile>Thelonious Monk</Tile>
-      <h3 class="grid-full-row">Sections</h3>
-      <Tile>Biology A</Tile>
-      <Tile>Chemistry A</Tile>
-      <Tile>Physics A</Tile>
-      <GridRow>No other sections match the current filters.</GridRow>
+      <h3 class="grid-full-row">Jazz Standards matching &ldquo;Moon&rdquo;</h3>
+      <Tile>Fly Me To The Moon</Tile>
+      <Tile>How High the Moon</Tile>
+      <Tile>It's Only a Paper Moon</Tile>
+      <GridRow>
+        <strong>That's All She Wrote!</strong>
+        <br />No other sections match the current filters.
+      </GridRow>
     </GridLayout>
   </DemoWithCode>
 
   <TextLayout>
-    <h3>The same content, headings outside</h3>
+    <h3>Positioning a row in its span</h3>
     <p>
-      Nothing spans, so the empty tracks collapse and each run centres itself.
-      Costs a grid per section and gives up column alignment across the
-      headings; buys a centred layout.
+      Following the usual pattern, this is a CSS variable rather than a prop:
+      <code>--grid-row-justify</code> on the row, or a bare <code>--justify</code>,
+      the same way <code>Tile</code> takes <code>--justify</code>.
     </p>
   </TextLayout>
   <DemoWithCode
-    code={`<h3>My Caseload</h3>
-<GridLayout tile>
+    code={`<GridLayout tile>
+  <GridRow><h3>Fills the span (default)</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>
   <Tile>Thelonious Monk</Tile>
-</GridLayout>
-
-<h3>Sections</h3>
-<GridLayout tile>
-  <Tile>Biology A</Tile>
-  <Tile>Chemistry A</Tile>
-  <Tile>Physics A</Tile>
+  <GridRow --grid-row-justify="center">Centered in the span</GridRow>
+  <GridRow --grid-row-justify="end">Pushed to the end</GridRow>
 </GridLayout>`}
   >
-    <h3>My Caseload</h3>
     <GridLayout tile>
+      <GridRow><h3>Fills the span (default)</h3></GridRow>
       <Tile>Ella Fitzgerald</Tile>
       <Tile>Thelonious Monk</Tile>
-    </GridLayout>
-
-    <h3>Sections</h3>
-    <GridLayout tile>
-      <Tile>Biology A</Tile>
-      <Tile>Chemistry A</Tile>
-      <Tile>Physics A</Tile>
-    </GridLayout>
-  </DemoWithCode>
-
-  <TextLayout>
-    <h2>There is always an item width</h2>
-    <p>
-      There is no size-to-content mode, and that is a limit of CSS rather than a
-      choice made here. <code>auto-fill</code> needs a <em>definite</em> track
-      size to work out how many tracks fit; hand it an intrinsic one —
-      <code>auto</code>, <code>max-content</code>, <code>minmax(min-content,
-      max-content)</code> — and the repetition count collapses to 1, so every
-      item stacks in a single column.
-    </p>
-    <p>
-      So the grid always has an item width: 250px unless you say otherwise, or
-      200px with <code>tile</code>, or 400px with <code>card</code>. If you want
-      items sized to their own content and wrapping, that is a flex row
-      (<code>display: flex; flex-wrap: wrap</code>), not this component.
-    </p>
-    <p>
-      Items narrower than the track sit inside it according to
-      <code>--grid-layout-justify-items</code>, which defaults to
-      <code>stretch</code>. Items wider than the track overflow it, so the item
-      width wants to be the widest thing you intend to put in it.
-    </p>
-  </TextLayout>
-  <DemoWithCode
-    code={`<!-- Mixed content: the track is 250px, whatever the items would prefer -->
-<GridLayout>
-  <div>short</div>
-  <div>a considerably longer run of text than the others</div>
-  <div>middling</div>
-</GridLayout>`}
-  >
-    <GridLayout>
-      <div style="background: var(--secondary-bg); padding: var(--padding)">
-        short
-      </div>
-      <div style="background: var(--secondary-bg); padding: var(--padding)">
-        a considerably longer run of text than the others
-      </div>
-      <div style="background: var(--secondary-bg); padding: var(--padding)">
-        middling
-      </div>
+      <GridRow --grid-row-justify="center">Centered in the span</GridRow>
+      <GridRow --grid-row-justify="end">Pushed to the end</GridRow>
     </GridLayout>
   </DemoWithCode>
 </CssVariableDemo>
