@@ -6,10 +6,21 @@
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
-  import Checkbox from "$lib/controls/Checkbox.svelte";
+  import RadioButton from "$lib/controls/RadioButton.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
   import type { CSSVariable } from "./types";
 
-  let rowCentered = $state(false);
+  let rowJustify = $state("default");
+
+  /* `center` has a shorthand; the others go through `justify`. Showing whichever
+     spelling matches the choice is the point of the sample updating at all. */
+  const rowAttr = $derived(
+    rowJustify === "default"
+      ? ""
+      : rowJustify === "center"
+        ? " center"
+        : ` justify="${rowJustify}"`,
+  );
 
   let cssVariables: CSSVariable[] = [
     {
@@ -241,33 +252,39 @@
   <TextLayout>
     <h3>Positioning a row in its span</h3>
     <p>
-      A row fills its span by default. To let it shrink to its content and sit
-      to one side, pass <code>justify</code> —
-      <code>start</code>, <code>center</code>, <code>end</code> — or the
-      <code>center</code> shorthand, the same way <code>Stack</code> takes
-      <code>center</code>. Either sets <code>--grid-row-justify</code>, so you
-      can also reach for the variable directly.
+      A row fills its span by default. Pass <code>justify</code> —
+      <code>start</code>, <code>center</code> or <code>end</code> — to let it
+      shrink to its content and sit to one side instead. <code>center</code>
+      also has a bare shorthand, the way <code>Stack</code> takes
+      <code>center</code>, and all of them set
+      <code>--grid-row-justify</code> if you would rather reach for the variable.
     </p>
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout tile>
-  <GridRow${rowCentered ? " center" : ""}><h3>Jazz Greats</h3></GridRow>
+  <GridRow${rowAttr}><h3>Jazz Greats</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>
   <Tile>Thelonious Monk</Tile>
 </GridLayout>`}
   >
     {#snippet blurb()}
       <p>
-        Toggle the shorthand to watch the row stop filling its span. The same
-        thing longhand is <code>justify="center"</code> or
-        <code>--grid-row-justify="center"</code>.
+        The sample follows the choice, so you can see which spelling each one
+        takes — note that <code>center</code> drops to the shorthand.
       </p>
     {/snippet}
     {#snippet inputArea()}
-      <Checkbox bind:checked={rowCentered}>center</Checkbox>
+      <Inline gap="var(--gap)">
+        <RadioButton bind:group={rowJustify} value="default">default</RadioButton>
+        <RadioButton bind:group={rowJustify} value="start">start</RadioButton>
+        <RadioButton bind:group={rowJustify} value="center">center</RadioButton>
+        <RadioButton bind:group={rowJustify} value="end">end</RadioButton>
+      </Inline>
     {/snippet}
     <GridLayout tile>
-      <GridRow center={rowCentered}><h3>Jazz Greats</h3></GridRow>
+      <GridRow justify={rowJustify === "default" ? null : rowJustify}>
+        <h3>Jazz Greats</h3>
+      </GridRow>
       <Tile>Ella Fitzgerald</Tile>
       <Tile>Thelonious Monk</Tile>
     </GridLayout>
