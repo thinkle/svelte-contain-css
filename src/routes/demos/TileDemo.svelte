@@ -153,4 +153,34 @@
       {/snippet}
     </SplitPane>
   </DemoWithCode>
+
+  <DemoWithCode
+    code={`<!-- A Tile stacks its children in a column: \`justify\` runs down it,
+     \`align\` runs across. \`center\` is shorthand for both. -->
+<GridLayout tile --tile-height="8rem">
+  <Tile>Default</Tile>
+  <Tile center>center</Tile>
+  <Tile justify="center">justify="center"</Tile>
+  <Tile align="flex-start">align="flex-start"</Tile>
+</GridLayout>`}
+  >
+    {#snippet heading()}
+      <h2>Aiming a Tile's contents</h2>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Props set the matching <code>--tile-*</code> variables, so
+        <code>--tile-justify</code> on an ancestor still works and only the tile
+        that differs has to say so. A tile already centres across, so
+        <code>center</code> sets both axes — setting only the cross axis would
+        do nothing visible.
+      </p>
+    {/snippet}
+    <GridLayout tile --tile-height="8rem">
+      <Tile>Default</Tile>
+      <Tile center>center</Tile>
+      <Tile justify="center">justify="center"</Tile>
+      <Tile align="flex-start">align="flex-start"</Tile>
+    </GridLayout>
+  </DemoWithCode>
 </Container>

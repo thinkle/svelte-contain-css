@@ -5,8 +5,20 @@
     HTMLButtonAttributes,
     HTMLInputAttributes,
   } from "svelte/elements";
+  import { injectVars } from "$lib/util";
 
   type BaseProps = {
+    /** Distribution along the tile's own axis, which is vertical. */
+    justify?: string | null;
+    /** Cross-axis alignment, which is horizontal. Centred already. */
+    align?: string | null;
+    /**
+     * Shorthand for centring the tile's contents. Sets both axes, unlike
+     * `Stack`'s `center`, because a Tile already centres horizontally -- setting
+     * only the cross axis here would be a no-op and `<Tile center>` would look
+     * broken.
+     */
+    center?: boolean;
     children?: Snippet;
   };
 
@@ -36,42 +48,58 @@
 
   let { checked = $bindable(false), ...props }: Props = $props();
 
-  function getSelectableInputProps(value: RenderProps): HTMLInputAttributes {
+  /* Props to CSS variables, the way Stack, Card, Tag and the rest do it, so a
+     Tile can be aimed with `<Tile center>` rather than only a raw variable. */
+  const styleProps = $derived.by(() => {
+    const { justify = null, align = null, center = false } = props as BaseProps;
+    return {
+      justify: justify ?? (center ? "center" : null),
+      align: align ?? (center ? "center" : null),
+    };
+  });
+
+  const style = $derived(
+    injectVars(styleProps, "tile", ["justify", "align"]) +
+      ((props as { style?: string }).style ?? ""),
+  );
+
+  /** Everything that is ours rather than the element's. */
+  function stripOwnProps(value: RenderProps) {
     const {
       selectable: _selectable,
       interactive: _interactive,
       children: _children,
-      ...inputProps
-    } = value as Omit<SelectableTileProps, "checked">;
+      justify: _justify,
+      align: _align,
+      center: _center,
+      style: _style,
+      ...rest
+    } = value as RenderProps & BaseProps & { style?: string };
+    return rest;
+  }
 
-    return inputProps;
+  function getSelectableInputProps(value: RenderProps): HTMLInputAttributes {
+    return stripOwnProps(value) as HTMLInputAttributes;
   }
 
   function getInteractiveButtonProps(value: RenderProps): HTMLButtonAttributes {
-    const {
-      selectable: _selectable,
-      interactive: _interactive,
-      children: _children,
-      ...buttonProps
-    } = value as InteractiveTileProps;
-
-    return buttonProps;
+    return stripOwnProps(value) as HTMLButtonAttributes;
   }
 </script>
 
 {#if props.selectable}
-  <label class="tile">
+  <label class="tile" {style}>
     <div class="checkbox">
       <input type="checkbox" bind:checked {...getSelectableInputProps(props)} />
     </div>
     {@render props.children?.()}
   </label>
 {:else if props.interactive}
-  <button class="tile" {...getInteractiveButtonProps(props)}>
+  <button class="tile" {style} {...getInteractiveButtonProps(props)}>
     {@render props.children?.()}
   </button>
 {:else}
-  <div class="tile">
+  <div class="tile" {style} {...stripOwnProps(props as RenderProps)}>
     {@render props.children?.()}
   </div>
 {/if}

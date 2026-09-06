@@ -12,14 +12,14 @@
 
   let rowJustify = $state("default");
 
-  /* `center` has a shorthand; the others go through `justify`. Showing whichever
-     spelling matches the choice is the point of the sample updating at all. */
-  const rowAttr = $derived(
-    rowJustify === "default"
-      ? ""
-      : rowJustify === "center"
-        ? " center"
-        : ` justify="${rowJustify}"`,
+  /* `stretch` is the default, so passing it explicitly for "default" keeps the
+     demo honest without special-casing the rendered markup. */
+  const gridJustify = $derived(rowJustify === "default" ? "stretch" : rowJustify);
+
+  /* The sample only spells out the variable once it differs from the default --
+     which is the whole point of setting it on the grid rather than the rows. */
+  const gridAttr = $derived(
+    rowJustify === "default" ? "" : ` --grid-row-justify="${rowJustify}"`,
   );
 
   let cssVariables: CSSVariable[] = [
@@ -213,14 +213,18 @@
     </p>
     <p>
       These set <code>grid-column</code> to span every track, and
-      <code>justify-self</code> to decide how the row sits in that span. It
-      fills the span by default; set <code>--grid-row-justify</code> to
-      <code>start</code>, <code>center</code> or <code>end</code> to let it shrink
-      to its content and sit to one side instead.
+      <code>justify-self</code> to decide how the row sits in that span. Rows
+      fill their span by default.
+    </p>
+    <p>
+      To move them, set <code>--grid-row-justify</code> to <code>start</code>,
+      <code>center</code> or <code>end</code>. Set it on the grid and every row
+      inside follows — a row only has to speak up when it differs, with
+      <code>justify="start"</code> or the bare <code>center</code> shorthand.
     </p>
   </TextLayout>
   <DemoWithCode
-    code={`<GridLayout tile>
+    code={`<GridLayout tile${gridAttr}>
   <GridRow><h3>Jazz Greats</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>
   <Tile>Thelonious Monk</Tile>
@@ -228,49 +232,17 @@
   <Tile>Fly Me To The Moon</Tile>
   <Tile>How High the Moon</Tile>
   <Tile>It's Only a Paper Moon</Tile>
-  <GridRow>
+  <GridRow justify="start">
     <strong>That's All She Wrote!</strong>
     <br />No other sections match the current filters.
   </GridRow>
 </GridLayout>`}
   >
-    <GridLayout tile>
-      <GridRow><h3>Jazz Greats</h3></GridRow>
-      <Tile>Ella Fitzgerald</Tile>
-      <Tile>Thelonious Monk</Tile>
-      <h3 class="grid-full-row">Jazz Standards matching &ldquo;Moon&rdquo;</h3>
-      <Tile>Fly Me To The Moon</Tile>
-      <Tile>How High the Moon</Tile>
-      <Tile>It's Only a Paper Moon</Tile>
-      <GridRow>
-        <strong>That's All She Wrote!</strong>
-        <br />No other sections match the current filters.
-      </GridRow>
-    </GridLayout>
-  </DemoWithCode>
-
-  <TextLayout>
-    <h3>Positioning a row in its span</h3>
-    <p>
-      A row fills its span by default. Pass <code>justify</code> —
-      <code>start</code>, <code>center</code> or <code>end</code> — to let it
-      shrink to its content and sit to one side instead. <code>center</code>
-      also has a bare shorthand, the way <code>Stack</code> takes
-      <code>center</code>, and all of them set
-      <code>--grid-row-justify</code> if you would rather reach for the variable.
-    </p>
-  </TextLayout>
-  <DemoWithCode
-    code={`<GridLayout tile>
-  <GridRow${rowAttr}><h3>Jazz Greats</h3></GridRow>
-  <Tile>Ella Fitzgerald</Tile>
-  <Tile>Thelonious Monk</Tile>
-</GridLayout>`}
-  >
     {#snippet blurb()}
       <p>
-        The sample follows the choice, so you can see which spelling each one
-        takes — note that <code>center</code> drops to the shorthand.
+        Set on the grid, so every row follows without repeating itself. The last
+        row says <code>justify="start"</code> and keeps saying it — the point of
+        the cascade being that only the exception has to speak up.
       </p>
     {/snippet}
     {#snippet inputArea()}
@@ -281,12 +253,19 @@
         <RadioButton bind:group={rowJustify} value="end">end</RadioButton>
       </Inline>
     {/snippet}
-    <GridLayout tile>
-      <GridRow justify={rowJustify === "default" ? null : rowJustify}>
-        <h3>Jazz Greats</h3>
-      </GridRow>
+    <GridLayout tile --grid-row-justify={gridJustify}>
+      <GridRow><h3>Jazz Greats</h3></GridRow>
       <Tile>Ella Fitzgerald</Tile>
       <Tile>Thelonious Monk</Tile>
+      <h3 class="grid-full-row">Jazz Standards matching &ldquo;Moon&rdquo;</h3>
+      <Tile>Fly Me To The Moon</Tile>
+      <Tile>How High the Moon</Tile>
+      <Tile>It's Only a Paper Moon</Tile>
+      <GridRow justify="start">
+        <strong>That's All She Wrote!</strong>
+        <br />No other sections match the current filters.
+      </GridRow>
     </GridLayout>
   </DemoWithCode>
+
 </CssVariableDemo>
