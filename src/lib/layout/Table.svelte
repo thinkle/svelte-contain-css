@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   interface Props {
     sticky?: boolean;
     column_widths?: number[] | null;
@@ -73,9 +71,7 @@
       table: HTMLTableElement,
     ): HTMLTableRowElement | null => {
       // Fast path: first row covers the vast majority of real tables
-      const firstRow = table.querySelector<HTMLTableRowElement>(
-        "tbody tr, tr",
-      );
+      const firstRow = table.querySelector<HTMLTableRowElement>("tbody tr, tr");
       if (firstRow && hasNoColspan(firstRow)) return firstRow;
 
       // Slow path: single pass — return on first no-colspan row found,
@@ -238,6 +234,10 @@
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
 
+  table:has(colgroup) {
+    table-layout: fixed;
+  }
+
   table {
     @include color-props(table, surface);
     @include typography-container-props(table, surface, paragraph);
@@ -288,7 +288,7 @@
     position: sticky;
     top: 0;
     z-index: 1;
-    background: var(--white);
+    background: var(--_background-color, var(--white, #fff));
     margin-inline-start: auto;
     margin-inline-end: auto;
   }
@@ -305,7 +305,7 @@
     padding: 0;
   }
   .veil {
-    background-color: var(--white, #fff);
+    background-color: var(--_background-color, var(--white, #fff));
     position: sticky;
     top: -2em;
     height: 3em;
@@ -399,5 +399,31 @@
   table :global(th[tabindex]),
   table :global(td[tabindex]) {
     @include focusable();
+  }
+
+  /* Apply thick border to column 1 in BOTH header and body tables, 
+   BUT ONLY IF the scrolling table contains row headers in its tbody */
+  .scrolling-table:has(
+      .scrolling-table-body :global(tbody > tr > th:first-child)
+    ) {
+    .fixed-table-head :global(tr > th:first-child),
+    .scrolling-table-body :global(tbody > tr > th:first-child) {
+      border-right: var(
+        --table-first-row-bottom-border,
+        var(--table-thick-border, 3px) solid
+          var(--table-first-row-border-color, var(--secondary-bg))
+      ) !important;
+    }
+  }
+  /* 2. Standard non-scrolling single <table> setup */
+  table:has(:global(tbody > tr > th:first-child)) {
+    :global(thead > tr > th:first-child),
+    :global(tbody > tr > th:first-child) {
+      border-right: var(
+        --table-first-row-bottom-border,
+        var(--table-thick-border, 3px) solid
+          var(--table-first-row-border-color, var(--secondary-bg))
+      );
+    }
   }
 </style>

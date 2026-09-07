@@ -137,14 +137,18 @@
     defaultTab="split"
     code={`        
 <Table>
-  <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
-  <tr tabindex="0" onclick={handleRowClick}>
-    <th>Yankees</th><td>100</td><td>62</td>
-  </tr>
-  <tr tabindex="0" onclick={handleRowClick}>
-    <th>Red Sox</th><td>92</td><td>70</td>
-  </tr>
-  ...
+  <thead>
+    <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+  </thead>
+  <tbody>
+    <tr tabindex="0" onclick={handleRowClick}>  
+      <th>Yankees</th><td>100</td><td>62</td>
+    </tr>
+    <tr tabindex="0" onclick={handleRowClick}>
+      <th>Red Sox</th><td>92</td><td>70</td>
+    </tr>
+    ...
+  </tbody>
 </Table>
       `}
   >
@@ -159,31 +163,39 @@
       <p><em>Hover or focus (Tab key) on rows to see the affordances.</em></p>
     {/snippet}
     <Table>
-      <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
-      <tr tabindex="0">
-        <th>Yankees</th><td>100</td><td>62</td>
-      </tr>
-      <tr tabindex="0">
-        <th>Red Sox</th><td>92</td><td>70</td>
-      </tr>
-      <tr tabindex="0">
-        <th>Blue Jays</th><td>91</td><td>71</td>
-      </tr>
-      <tr tabindex="0">
-        <th>Orioles</th><td>52</td><td>110</td>
-      </tr>
+      <thead>
+        <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+      </thead>
+      <tbody>
+        <tr tabindex="0">
+          <th>Yankees</th><td>100</td><td>62</td>
+        </tr>
+        <tr tabindex="0">
+          <th>Red Sox</th><td>92</td><td>70</td>
+        </tr>
+        <tr tabindex="0">
+          <th>Blue Jays</th><td>91</td><td>71</td>
+        </tr>
+        <tr tabindex="0">
+          <th>Orioles</th><td>52</td><td>110</td>
+        </tr>
+      </tbody>
     </Table>
   </DemoWithCode>
   <DemoWithCode
     code={`
 <Table>
-  <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
-  <tr>
-    <th>Yankees</th>
-    <td tabindex="0" onclick={handleCellClick}>100</td>
-    <td tabindex="0" onclick={handleCellClick}>62</td>
-  </tr>
-  ...
+  <thead>
+    <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Yankees</th>
+      <td tabindex="0" onclick={handleCellClick}>100</td>
+      <td tabindex="0" onclick={handleCellClick}>62</td>
+    </tr>
+    ...
+  </tbody>
 </Table>
       `}
   >
@@ -199,27 +211,31 @@
     {/snippet}
 
     <Table>
-      <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
-      <tr>
-        <th>Yankees</th>
-        <td tabindex="0">100</td>
-        <td tabindex="0">62</td>
-      </tr>
-      <tr>
-        <th>Red Sox</th>
-        <td tabindex="0">92</td>
-        <td tabindex="0">70</td>
-      </tr>
-      <tr>
-        <th>Blue Jays</th>
-        <td tabindex="0">91</td>
-        <td tabindex="0">71</td>
-      </tr>
-      <tr>
-        <th>Orioles</th>
-        <td tabindex="0">52</td>
-        <td tabindex="0">110</td>
-      </tr>
+      <thead>
+        <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Yankees</th>
+          <td tabindex="0">100</td>
+          <td tabindex="0">62</td>
+        </tr>
+        <tr>
+          <th>Red Sox</th>
+          <td tabindex="0">92</td>
+          <td tabindex="0">70</td>
+        </tr>
+        <tr>
+          <th>Blue Jays</th>
+          <td tabindex="0">91</td>
+          <td tabindex="0">71</td>
+        </tr>
+        <tr>
+          <th>Orioles</th>
+          <td tabindex="0">52</td>
+          <td tabindex="0">110</td>
+        </tr>
+      </tbody>
     </Table>
   </DemoWithCode>
 </CssVariableDemo>
