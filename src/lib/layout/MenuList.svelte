@@ -70,7 +70,7 @@
   .menu :global(li[role="button"]),
   .menu :global(li[tabindex]:not([tabindex="-1"])) {
     @include clickable(menu-item);
-    @include focusable();
+    @include focusable-as-hover(menu-item);
   }
 
   .menu :global(li > .subheader) {
@@ -90,7 +90,7 @@
       @include color-props(menu-item, menu, button, control);
       @include box-props-square(menu-item, button, control);
       margin: 0;
-      @include focusable();
+      @include focusable-as-hover(menu-item);
       @include clickable(menu-item);
     }
   }

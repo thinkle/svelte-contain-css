@@ -124,7 +124,7 @@
   </p>
 </TextLayout>
 <DemoWithCode
-  code={`<Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5">
+  code={`<Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5" --hover-color-mix="white">
   <Menu
     --menu-trigger-bg="transparent"
     --menu-trigger-fg="var(--bar-fg)"
@@ -140,7 +140,7 @@
   </Menu>
 </Bar>`}
 >
-  <Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5">
+  <Bar --bar-bg="#2a2a2a" --bar-fg="#f5f5f5" --hover-color-mix="white">
     <Menu
       --menu-trigger-bg="transparent"
       --menu-trigger-fg="var(--bar-fg)"
@@ -217,7 +217,9 @@
     </FormItem>
   </div>
   <h2>Controlling width</h2>
-  <p>Here it is using the --select-width variable to constrain the select size.</p>
+  <p>
+    Here it is using the --select-width variable to constrain the select size.
+  </p>
   <DemoWithCode
     code={`
 <Select --select-width="${constrainedWidth}" bind:value={val}>

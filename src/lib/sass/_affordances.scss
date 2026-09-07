@@ -109,6 +109,33 @@
   }
 }
 
+// Focus ring for controls living inside an overflow:hidden container
+// (menus, tab bars). Drawn with a negative outline-offset so it sits inside
+// the control and is not clipped by the container. Defined after `clickable`
+// so `clickable-hover-affordance` is in scope.
+@mixin focus-ring-inset {
+  outline: var(--focus-color, -webkit-focus-ring-color) auto 1px;
+  outline-offset: var(--focus-inset-outline-offset, -3px);
+}
+
+// Clip-safe focus indicator: just the inset ring, no fill change. For
+// controls that already carry their own resting/active styling (tabs).
+@mixin focusable-inset($prefixes...) {
+  &:focus-visible {
+    @include focus-ring-inset();
+  }
+}
+
+// As `focusable-inset`, plus the hover affordance for the fill, so keyboard
+// focus reads the same as pointer hover. For controls with no resting
+// visual weight of their own (menu items).
+@mixin focusable-as-hover($prefixes...) {
+  &:focus-visible {
+    @include clickable-hover-affordance($prefixes...);
+    @include focus-ring-inset();
+  }
+}
+
 @mixin custom-scrollbar($prefixes...) {
   overflow-y: auto;
 

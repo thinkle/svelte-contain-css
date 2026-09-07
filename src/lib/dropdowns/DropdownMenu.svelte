@@ -77,26 +77,40 @@
 
   function handleToggle(event: ToggleEvent) {
     isOpen = event.newState === "open";
+    if (!isOpen) clearSearch();
   }
 
-  let searchString = "";
-  let lastPress;
+  let searchString = $state("");
+  let clearTimer: ReturnType<typeof setTimeout> | undefined;
+  function clearSearch() {
+    clearTimeout(clearTimer);
+    clearTimer = undefined;
+    searchString = "";
+  }
+
+  const timeoutAfterMS = 2500; // 2.5 seconds seems more humane
+
+  function scheduleSearchClear() {
+    clearTimeout(clearTimer);
+    clearTimer = setTimeout(clearSearch, timeoutAfterMS);
+  }
   function handleKeystroke(event: KeyboardEvent) {
     if (event.key == "Backspace" && searchString) {
       searchString = searchString.slice(0, -1);
+      scheduleSearchClear();
     } else if (event.key.length == 1) {
       if (searchString || event.key != " ") {
         searchString += event.key;
         maybeFocusMatch(searchString);
+        scheduleSearchClear();
       }
     } else {
-      searchString = "";
+      clearSearch();
       if (event.key === "Escape") {
         popoverDiv?.hidePopover();
       } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault(); // Prevent default to stop scrolling the page
         navigateMenu(event.key);
-        searchString = "";
       }
     }
   }
@@ -186,6 +200,9 @@
     style:left="{dropdownLeft}px"
     style:max-height="{dropdownMaxHeight}px"
   >
+    {#if searchString}
+      <div class="search-hint" aria-hidden="true">{searchString}</div>
+    {/if}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
       class="dropdown-content"
@@ -249,6 +266,32 @@
     @include box-props-square-border(dropdown-menu, menu, surface);
     padding: 0;
     overflow: hidden;
+  }
+
+  // Transient echo of the type-ahead search buffer. Anchored to the popover
+  // container (position: fixed when open) so it overlays the list rather
+  // than pushing it down, and sits outside .dropdown-content's clip.
+  // Styled as a compact chip, matching Tag.svelte's conventions. Purely
+  // visual -- focus is already moved to the matched item for AT users.
+  .search-hint {
+    position: absolute;
+    top: var(--search-hint-offset, 4px);
+    right: var(--search-hint-offset, 4px);
+    z-index: 2;
+    pointer-events: none;
+    max-width: calc(100% - 2 * var(--search-hint-offset, 4px));
+    @include color-props(search-hint, tag, secondary);
+    @include typography-props-bare(search-hint, tag);
+    @include box-props(search-hint, tag);
+    font-size: var(--search-hint-font-size, var(--font-size-small, 0.75rem));
+    padding: var(--search-hint-padding, 0.2em 0.55em);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: var(--search-hint-radius, var(--border-radius, 4px));
+    @include box-shadow(search-hint, dropdown);
+    opacity: var(--search-hint-opacity, 0.95);
   }
 
   // Support wrap mode control via --dropdown-wrap-mode CSS variable

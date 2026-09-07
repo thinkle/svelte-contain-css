@@ -20,8 +20,14 @@
   --menu-item-hover-filter-custom: ;
   --menu-item-hover-filter: var(--menu-item-hover-filter-brightness-hack,)
     var(--menu-item-hover-filter-custom,);
-  /* Default menu items to the menu surface so row-wide filters read clearly. */
-  --menu-item-bg: var(--menu-bg, var(--bg));
+  /* NB: do NOT default --menu-item-bg here. Declared at :root it would freeze
+     to var(--bg) (--menu-bg is not set yet at :root) and then win the
+     color-props(menu-item, menu, ...) chain ahead of a per-instance --menu-bg,
+     breaking overrides like <Menu --menu-bg="#111">. The chain already ends at
+     --bg, and color-props now computes an always-opaque --_background-color on
+     the element (evaluated where --menu-bg is live), which the hover/active
+     filter affordances derive from -- so the "give filters an opaque surface"
+     goal is met structurally without a frozen root default. */
   --menu-item-active-filter-custom: ;
   --menu-item-active-filter: var(--menu-item-active-filter-custom,);
   /* --button-hover-transform: var(var(--button-hover-transform));

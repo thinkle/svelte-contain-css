@@ -35,7 +35,9 @@
     @include color-props(tab, button, control, secondary);
     @include box-props(tab, button, control, secondary);
     @include typography-props(tab, button, ui, control, secondary);
-    @include focusable();
+    // Tab bar clips overflow, so the standard outer focus ring would be cut
+    // off -- use the inset ring instead. See _affordances.scss.
+    @include focusable-inset(tab);
     border-radius: var(
       --tab-border-radius,
       var(--border-radius) var(--border-radius) 0 0

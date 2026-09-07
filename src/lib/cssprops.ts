@@ -138,6 +138,7 @@ const components: {
   ...[
     "button",
     "mini-button",
+    "menu",
     "menu-trigger",
     "menu-item",
     "dropdown-menu",
