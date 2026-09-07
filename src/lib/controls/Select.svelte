@@ -24,16 +24,25 @@
   onMount(() => {
     tick().then(() => updateOptions());
 
-    // Observe changes in the select element
-    observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          updateOptions();
-        }
-      });
-    });
+    /*
+      Watch the options for any change, not just being added or removed. An
+      <Option> whose content is rewritten in place -- a label being renamed --
+      updates its own data-html without touching the child list, and a
+      childList-only observer never hears about it, so the dropdown kept
+      rendering the snapshot it took on mount.
+
+      Coalesced into one pass per microtask: a single re-render can produce a
+      burst of mutations, and updateOptions() measures layout.
+    */
+    observer = new MutationObserver(() => scheduleUpdateOptions());
     if (selectElement) {
-      observer.observe(selectElement, { childList: true });
+      observer.observe(selectElement, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ["data-html", "value", "label", "selected"],
+      });
     }
 
     // Observe size changes in option buttons
@@ -48,6 +57,16 @@
 
   let options: { value: string; html: string }[] = $state([]);
   let activeOption: { value: string; html: string } | null = $state(null);
+  let updateQueued = false;
+
+  function scheduleUpdateOptions() {
+    if (updateQueued) return;
+    updateQueued = true;
+    queueMicrotask(() => {
+      updateQueued = false;
+      updateOptions();
+    });
+  }
 
   function updateOptions() {
     if (!selectElement) {
