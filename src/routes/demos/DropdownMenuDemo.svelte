@@ -8,6 +8,11 @@
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Option from "$lib/controls/Option.svelte";
+  import RadioButton from "$lib/controls/RadioButton.svelte";
+  import type {
+    MatchMode,
+    TypeaheadMode,
+  } from "$lib/dropdowns/DropdownMenu.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
   let longList: string[] = [];
   let constrainedWidth = $state("80px");
@@ -50,6 +55,38 @@
     { name: "Jill", age: 35, label: "Jill (aged 35)" },
   ];
   let selectedPerson = $state(people[0]);
+
+  // --- Type-ahead playground -------------------------------------------------
+  const iceCreamFlavors = [
+    "Vanilla Bean",
+    "Chocolate",
+    "Double Dutch Chocolate",
+    "Fresh Mint Chocolate Chip",
+    "Salted Caramel Pretzel",
+    "Strawberry Cheesecake Swirl",
+    "Cookies and Cream Dream",
+    "Roasted Banana Walnut",
+    "Black Raspberry Chip",
+    "Toasted Coconut Almond Fudge",
+    "Brown Butter Pecan",
+    "Espresso Chocolate Chunk",
+    "Honey Lavender Shortbread",
+    "Peanut Butter Cup Explosion",
+    "Maple Bourbon Candied Bacon",
+    "Lemon Blueberry Buttermilk",
+    "Matcha White Chocolate",
+    "Cinnamon Horchata",
+    "Dark Cherry Amaretto",
+    "Pistachio Rosewater",
+    "Salted Peanut Butter Chocolate",
+    "Very Berry Magic",
+    "Berry Explosion",
+    "Chocolate Fudge Brownie",
+    "Choco-tastic Swirls",
+  ];
+  let matchMode = $state<MatchMode>("word");
+  let typeaheadMode = $state<TypeaheadMode>("filter");
+  let flavor = $state(iceCreamFlavors[0]);
 </script>
 
 <TextLayout>
@@ -155,6 +192,123 @@
       <li><button>Bring All to Front</button></li>
     </Menu>
   </Bar>
+</DemoWithCode>
+<DemoWithCode
+  code={`<Menu matchMode="${matchMode}" typeaheadMode="${typeaheadMode}">
+  {#snippet label()}<span>Pick a flavor</span>{/snippet}
+  {#each iceCreamFlavors as flavor}
+    <li><button>{flavor}</button></li>
+  {/each}
+</Menu>
+
+<Select matchMode="${matchMode}" typeaheadMode="${typeaheadMode}" bind:value={selected}>
+  {#each iceCreamFlavors as flavor}
+    <option value={flavor}>{flavor}</option>
+  {/each}
+</Select>`}
+>
+  {#snippet header()}
+    <h2>Type-ahead matching &amp; filtering</h2>
+    <p>
+      Open a menu and start typing to jump to an item. Two props tune this, and
+      both work on <code>&lt;Select&gt;</code> and
+      <code>&lt;DropdownMenu&gt;</code>:
+    </p>
+    <ul>
+      <li>
+        <code>matchMode</code> &mdash; <code>"prefix"</code> (default, match the
+        start of the whole label), <code>"word"</code> (match the start of
+        <em>any</em> word, so typing <code>choc</code> finds
+        <code>"Double Dutch Chocolate"</code>), or <code>"substring"</code>
+        (match anywhere).
+      </li>
+      <li>
+        <code>typeaheadMode</code> &mdash; <code>"focus"</code> (default, move
+        focus to the first match) or <code>"filter"</code> (hide non-matching rows
+        so a long list collapses as you type; Backspace or Escape restores it, and
+        Arrow / Tab cycle the rows that are left).
+      </li>
+    </ul>
+    <p>
+      Flip the toggles, then open either control and type a fragment like
+      <code>choc</code>, <code>salted</code>, or <code>berry</code>.
+    </p>
+  {/snippet}
+  {#snippet inputArea()}
+    <FormItem>
+      {#snippet label()}
+        <span>matchMode</span>
+      {/snippet}
+      <RadioButton bind:group={matchMode} value="prefix">prefix</RadioButton>
+      <RadioButton bind:group={matchMode} value="word">word</RadioButton>
+      <RadioButton bind:group={matchMode} value="substring">
+        substring
+      </RadioButton>
+    </FormItem>
+    <FormItem>
+      {#snippet label()}
+        <span>typeaheadMode</span>
+      {/snippet}
+      <RadioButton bind:group={typeaheadMode} value="focus">focus</RadioButton>
+      <RadioButton bind:group={typeaheadMode} value="filter">
+        filter
+      </RadioButton>
+    </FormItem>
+  {/snippet}
+
+  <Bar>
+    <div data-testid="typeahead-playground-menu">
+      <Menu {matchMode} {typeaheadMode}>
+        {#snippet label()}
+          <span>Pick a flavor</span>
+        {/snippet}
+        {#each iceCreamFlavors as f}
+          <li><button type="button">{f}</button></li>
+        {/each}
+      </Menu>
+    </div>
+    <Select
+      data-testid="typeahead-playground-select"
+      {matchMode}
+      {typeaheadMode}
+      bind:value={flavor}
+    >
+      {#each iceCreamFlavors as f}
+        <option value={f}>{f}</option>
+      {/each}
+    </Select>
+  </Bar>
+  <Container --menu-justify="start">
+    <p>We've got:</p>
+    <ul>
+      <li>
+        typeaheadMode="{typeaheadMode}"
+        {#if typeaheadMode == "filter"}
+          <p>Items will disappear from the menu as you type</p>
+        {/if}
+      </li>
+      <li>
+        matchMode="{matchMode}"
+        <p>
+          {#if matchMode === "word"}
+            Typing "berry" will <em>berry</em> but not
+            <em>strawberry</em>
+          {:else if matchMode === "prefix"}
+            Typing berry will <em>only</em> match flavors that start with berry,
+            so we will match "Berry Explosion" but <em>not</em> "Very Berry Magic"
+          {:else if matchMode === "substring"}
+            Typing "berry" will match those letters <em>anywhere</em>
+            in the word, so we will match <em>strawberry</em> as well as berry.
+          {/if}
+        </p>
+      </li>
+    </ul>
+    <p>You have selected <code>{flavor}</code>.</p>
+    <p>
+      Try typing e.g. <code>berry</code>, <code>choc</code>, or
+      <code>salted</code> after opening either control.
+    </p>
+  </Container>
 </DemoWithCode>
 <TextLayout>
   <h2>Select</h2>

@@ -81,7 +81,7 @@
   .menu {
     @include global-buttons {
       display: flex;
-      justify-content: var(--menu-item-justify, center);
+      justify-content: var(--menu-item-justify, start);
       align-items: var(--menu-item-align, center);
       width: var(--menu-item-width, 100%);
       height: var(--menu-item-height);

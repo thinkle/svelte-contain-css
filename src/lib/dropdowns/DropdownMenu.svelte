@@ -1,5 +1,22 @@
 <script module lang="ts">
   var idPostfix = 1;
+
+  /**
+   * How the type-ahead search buffer is compared against each item's text.
+   *  - "prefix"    : item text must start with the query (default, classic
+   *                  <select> behavior)
+   *  - "word"      : any whitespace-delimited word in the item must start with
+   *                  the query -- typing "Boo" matches "Foo Boo Baz"
+   *  - "substring" : query may appear anywhere in the item text
+   */
+  export type MatchMode = "prefix" | "word" | "substring";
+  /**
+   * What a type-ahead match does:
+   *  - "focus"  : move focus to the first matching item (default)
+   *  - "filter" : hide non-matching items so the list shrinks as you type;
+   *               focus follows the first remaining match
+   */
+  export type TypeaheadMode = "focus" | "filter";
 </script>
 
 <script lang="ts">
@@ -15,6 +32,8 @@
     label?: Snippet;
     children?: Snippet;
     triggerAuditAction?: string | null;
+    matchMode?: MatchMode;
+    typeaheadMode?: TypeaheadMode;
   } & DropdownMenuStyleProps &
     HTMLAttributes<HTMLDivElement>;
 
@@ -22,6 +41,8 @@
     label,
     children,
     triggerAuditAction = null,
+    matchMode = "prefix",
+    typeaheadMode = "focus",
     ...props
   }: Props = $props();
   idPostfix++;
@@ -86,50 +107,132 @@
     clearTimeout(clearTimer);
     clearTimer = undefined;
     searchString = "";
+    clearFilter();
   }
 
   const timeoutAfterMS = 2500; // 2.5 seconds seems more humane
 
   function scheduleSearchClear() {
+    // In filter mode the buffer is a live filter, not a transient jump target --
+    // auto-clearing it mid-scroll would make the list flicker back to full
+    // length. It persists until Escape, close, or Backspace to empty.
+    if (typeaheadMode === "filter") return;
     clearTimeout(clearTimer);
     clearTimer = setTimeout(clearSearch, timeoutAfterMS);
   }
   function handleKeystroke(event: KeyboardEvent) {
     if (event.key == "Backspace" && searchString) {
       searchString = searchString.slice(0, -1);
+      applySearch();
       scheduleSearchClear();
     } else if (event.key.length == 1) {
       if (searchString || event.key != " ") {
         searchString += event.key;
-        maybeFocusMatch(searchString);
+        applySearch();
         scheduleSearchClear();
       }
-    } else {
+    } else if (event.key === "Escape") {
       clearSearch();
-      if (event.key === "Escape") {
-        popoverDiv?.hidePopover();
-      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        event.preventDefault(); // Prevent default to stop scrolling the page
-        navigateMenu(event.key);
-      }
+      popoverDiv?.hidePopover();
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault(); // Prevent default to stop scrolling the page
+      // In filter mode the buffer stays live so arrow keys (and Tab) cycle
+      // through the *filtered* rows -- type a few letters, then arrow down to
+      // the one you saw. In focus mode a navigation key ends the type-ahead.
+      if (typeaheadMode !== "filter") clearSearch();
+      navigateMenu(event.key);
+    } else if (typeaheadMode !== "filter") {
+      // Tab, Enter, Home/End, etc. -- end a focus-mode type-ahead session.
+      // Filter mode keeps the filter until Escape, close, or Backspace-to-empty.
+      clearSearch();
     }
   }
-  function maybeFocusMatch(searchString: string) {
-    if (!dropdownContentElement) return;
-    let focusableItems = dropdownContentElement.querySelectorAll(
-      "a,button,[tabindex]",
+
+  /** Route the current buffer to whichever behavior this menu is configured for. */
+  function applySearch() {
+    if (typeaheadMode === "filter") {
+      applyFilter(searchString);
+    }
+    if (!searchString) return;
+    const matched = maybeFocusMatch(searchString);
+    // In filter mode a filtered-out item may have been holding focus; if nothing
+    // matched, park focus on the trigger so keystrokes still reach this <nav>
+    // (Backspace to recover, Escape to close).
+    if (!matched && typeaheadMode === "filter") buttonElement?.focus();
+  }
+
+  /** Does `text` satisfy `query` under the active {@link matchMode}? */
+  function textMatches(text: string, query: string): boolean {
+    if (!query) return true;
+    const haystack = text.toLowerCase();
+    const needle = query.toLowerCase();
+    if (matchMode === "substring") return haystack.includes(needle);
+    if (matchMode === "word")
+      return haystack.split(/\s+/).some((word) => word.startsWith(needle));
+    return haystack.startsWith(needle); // "prefix"
+  }
+
+  function getFocusableItems(visibleOnly = false): HTMLElement[] {
+    if (!dropdownContentElement) return [];
+    let items = Array.from(
+      dropdownContentElement.querySelectorAll<HTMLElement>(
+        "button, a, [tabindex]:not([tabindex='-1'])",
+      ),
     );
-    for (let element of focusableItems) {
-      if (
-        element.textContent &&
-        element.textContent.toLowerCase().startsWith(searchString.toLowerCase())
-      ) {
-        if ((element as HTMLElement).focus) {
-          (element as HTMLElement).focus();
-          return;
+    if (visibleOnly) items = items.filter((el) => el.closest("[hidden]") === null);
+    return items;
+  }
+
+  /** The row we hide/show for a given item -- its wrapping <li>, or the item. */
+  function itemRow(el: HTMLElement): HTMLElement {
+    return (el.closest("li") as HTMLElement | null) ?? el;
+  }
+
+  function applyFilter(query: string) {
+    if (!dropdownContentElement) return;
+    if (!query) {
+      clearFilter();
+      return;
+    }
+    for (const el of getFocusableItems()) {
+      const row = itemRow(el);
+      if (textMatches(el.textContent ?? "", query)) {
+        if (row.dataset.typeaheadFiltered) {
+          delete row.dataset.typeaheadFiltered;
+          row.hidden = false;
+        }
+      } else if (!row.hidden) {
+        row.hidden = true;
+        row.dataset.typeaheadFiltered = "true";
+      }
+    }
+    // The popover just changed height; keep it anchored under the trigger.
+    computePosition();
+  }
+
+  /** Undo {@link applyFilter}, leaving any consumer-set `hidden` rows alone. */
+  function clearFilter() {
+    if (!dropdownContentElement) return;
+    const hiddenRows = dropdownContentElement.querySelectorAll<HTMLElement>(
+      "[data-typeahead-filtered]",
+    );
+    for (const row of hiddenRows) {
+      delete row.dataset.typeaheadFiltered;
+      row.hidden = false;
+    }
+    if (hiddenRows.length) computePosition();
+  }
+
+  function maybeFocusMatch(searchString: string): boolean {
+    for (const element of getFocusableItems(true)) {
+      if (element.textContent && textMatches(element.textContent, searchString)) {
+        if (element.focus) {
+          element.focus();
+          return true;
         }
       }
     }
+    return false;
   }
   function navigateMenu(direction: string) {
     if (!popoverDiv?.matches(":popover-open") && buttonElement) {
@@ -137,11 +240,7 @@
       return;
     }
     if (!dropdownContentElement) return;
-    const focusableItems = Array.from(
-      dropdownContentElement.querySelectorAll(
-        "button, a, [tabindex]:not([tabindex='-1'])",
-      ),
-    );
+    const focusableItems = getFocusableItems(true);
     let currentIndex = focusableItems.findIndex(
       (item) => item === document.activeElement,
     );

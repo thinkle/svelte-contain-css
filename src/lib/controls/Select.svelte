@@ -1,18 +1,25 @@
 <script lang="ts">
   import type { HTMLSelectAttributes } from "svelte/elements";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
+  import type { MatchMode, TypeaheadMode } from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
   type Props = {
     value?: any;
     children?: import("svelte").Snippet;
     "data-audit-action"?: string | null;
+    /** See {@link MatchMode} on DropdownMenu -- how type-ahead text is compared. */
+    matchMode?: MatchMode;
+    /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
+    typeaheadMode?: TypeaheadMode;
   } & HTMLSelectAttributes;
 
   let {
     value = $bindable(),
     children,
     "data-audit-action": dropdownAuditAction = null,
+    matchMode = "prefix",
+    typeaheadMode = "focus",
     ...restProps
   }: Props = $props();
   let selectElement: HTMLSelectElement | undefined = $state();
@@ -118,7 +125,11 @@
   {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width={targetWidth}>
-  <DropdownMenu triggerAuditAction={dropdownAuditAction}>
+  <DropdownMenu
+    triggerAuditAction={dropdownAuditAction}
+    {matchMode}
+    {typeaheadMode}
+  >
     {#snippet label()}
       <span
         class="select-dropdown"
