@@ -201,7 +201,9 @@
     style:max-height="{dropdownMaxHeight}px"
   >
     {#if searchString}
-      <div class="search-hint" aria-hidden="true">{searchString}</div>
+      <div class="search-hint-wrapper">
+        <div class="search-hint" aria-hidden="true">{searchString}</div>
+      </div>
     {/if}
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
@@ -273,12 +275,19 @@
   // than pushing it down, and sits outside .dropdown-content's clip.
   // Styled as a compact chip, matching Tag.svelte's conventions. Purely
   // visual -- focus is already moved to the matched item for AT users.
+  .search-hint-wrapper {
+    position: sticky;
+    top: 0;
+    right: 0;
+    height: 0;
+  }
+
   .search-hint {
-    position: absolute;
-    top: var(--search-hint-offset, 4px);
-    right: var(--search-hint-offset, 4px);
     z-index: 2;
+    position: absolute;
+    right: 0;
     pointer-events: none;
+    width: fit-content;
     max-width: calc(100% - 2 * var(--search-hint-offset, 4px));
     @include color-props(search-hint, tag, secondary);
     @include typography-props-bare(search-hint, tag);
