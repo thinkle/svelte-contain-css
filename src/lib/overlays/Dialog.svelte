@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import { copyCSSVariables, injectVars } from "$lib/util";
   import type { Snippet } from "svelte";
 
@@ -80,7 +80,7 @@
   <dialog bind:this={dialogElement} {onclose} {...restProps}>
     <div class="close-bar">
       <div class="close-button">
-        <MiniButton onclick={onclose}>&times;</MiniButton>
+        <CircleButton onclick={onclose}>&times;</CircleButton>
       </div>
     </div>
     {@render children?.()}

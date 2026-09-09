@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Bar from "$lib/layout/Bar.svelte";
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Inline from "$lib/layout/Inline.svelte";
@@ -69,7 +69,7 @@
         >
           {hideSidebar ? "Show Aisles" : "Hide Aisles"}
         </Button>
-        <MiniButton aria-label="Notifications">3</MiniButton>
+        <CircleButton aria-label="Notifications">3</CircleButton>
       </Inline>
     </Bar>
   {/snippet}

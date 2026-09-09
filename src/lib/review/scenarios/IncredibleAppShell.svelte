@@ -2,7 +2,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Input from "$lib/controls/Input.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import Bar from "$lib/layout/Bar.svelte";
@@ -83,9 +83,9 @@
           Logged in as <span class="user">{loggedIn ? "Captain Box" : "Guest"}</span>
         </span>
 
-        <MiniButton aria-label="Log out" title="Log out" onclick={logout}>
+        <CircleButton aria-label="Log out" title="Log out" onclick={logout}>
           ×
-        </MiniButton>
+        </CircleButton>
       </Inline>
     </Bar>
   {/snippet}

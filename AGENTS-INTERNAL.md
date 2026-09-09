@@ -270,7 +270,7 @@ button.success {
 
 **Components currently supporting semantic variants:**
 
-- `Button`, `ButtonLink`, `MiniButton` - all six variants
+- `Button`, `ButtonLink`, `CircleButton` - all six variants
 - `Tag` - all six variants
 
 ### Using SCSS Mixins
