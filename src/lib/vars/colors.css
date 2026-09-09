@@ -336,6 +336,17 @@ a {
   --material-color-grey-700: #616161;
   --material-color-grey-800: #424242;
   --material-color-grey-900: #212121;
+  --material-color-gray: var(--material-color-grey);
+  --material-color-gray-50: var(--material-color-grey-50);
+  --material-color-gray-100: var(--material-color-grey-100);
+  --material-color-gray-200: var(--material-color-grey-200);
+  --material-color-gray-300: var(--material-color-grey-300);
+  --material-color-gray-400: var(--material-color-grey-400);
+  --material-color-gray-500: var(--material-color-grey-500);
+  --material-color-gray-600: var(--material-color-grey-600);
+  --material-color-gray-700: var(--material-color-grey-700);
+  --material-color-gray-800: var(--material-color-grey-800);
+  --material-color-gray-900: var(--material-color-grey-900);
 
   --material-color-blue-grey: #607d8b;
   --material-color-blue-grey-50: #eceff1;
@@ -348,6 +359,17 @@ a {
   --material-color-blue-grey-700: #455a64;
   --material-color-blue-grey-800: #37474f;
   --material-color-blue-grey-900: #263238;
+  --material-color-blue-gray: var(--material-color-blue-grey);
+  --material-color-blue-gray-50: var(--material-color-blue-grey-50);
+  --material-color-blue-gray-100: var(--material-color-blue-grey-100);
+  --material-color-blue-gray-200: var(--material-color-blue-grey-200);
+  --material-color-blue-gray-300: var(--material-color-blue-grey-300);
+  --material-color-blue-gray-400: var(--material-color-blue-grey-400);
+  --material-color-blue-gray-500: var(--material-color-blue-grey-500);
+  --material-color-blue-gray-600: var(--material-color-blue-grey-600);
+  --material-color-blue-gray-700: var(--material-color-blue-grey-700);
+  --material-color-blue-gray-800: var(--material-color-blue-grey-800);
+  --material-color-blue-gray-900: var(--material-color-blue-grey-900);
 }
 
 :root {
