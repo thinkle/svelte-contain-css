@@ -288,12 +288,12 @@ ${items}
     {#snippet header()}
       <h3>Interactive Rows</h3>
       <p>
-        Use <code>interactive</code> when the entire row should behave like one
-        click target.
+        Use <code>interactive</code> when the entire row should behave like one click
+        target.
       </p>
       <p>
-        The interactive example has no trailing action controls, so the full row is
-        the click target.
+        The interactive example has no trailing action controls, so the full row
+        is the click target.
       </p>
     {/snippet}
     <DataList maxWidth="800px">
@@ -323,8 +323,8 @@ ${items}
     {#snippet header()}
       <h3>Selectable Rows</h3>
       <p>
-        Use <code>selectable</code> with <code>bind:checked</code> when rows
-        represent a selected/unselected state.
+        Use <code>selectable</code> with <code>bind:checked</code> when rows represent
+        a selected/unselected state.
       </p>
       <p>
         Selectable rows render a trailing checkbox by default unless you provide

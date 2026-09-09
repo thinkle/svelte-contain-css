@@ -74,7 +74,8 @@
   `}
     />
     <p>
-      Click plus (<CircleButton onclick={() => (widthModifier += 1)}>+</CircleButton
+      Click plus (<CircleButton onclick={() => (widthModifier += 1)}
+        >+</CircleButton
       >) to change header size and watch scrolly table resize properly
     </p>
     <Table sticky>

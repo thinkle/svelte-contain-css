@@ -37,7 +37,7 @@
   // Compute remaining variables
   let remainingVariables = $derived.by(() => {
     return variables.filter(
-      (v) => !customizedVariables.find((cv) => cv === v.name)
+      (v) => !customizedVariables.find((cv) => cv === v.name),
     );
   });
 
@@ -46,7 +46,7 @@
     for (let group of groups) {
       if (!theVariables[group || "no-group"]) {
         let theVariable = remainingVariables.find(
-          (v) => v.group === group || (!v.group && group == undefined)
+          (v) => v.group === group || (!v.group && group == undefined),
         );
         if (theVariable) {
           theVariables[group || "no-group"] = theVariable;
@@ -165,7 +165,7 @@
                 if (variable?.name) {
                   delete variableValues[variable.name];
                   customizedVariables = customizedVariables.filter(
-                    (v) => v !== variable.name
+                    (v) => v !== variable.name,
                   );
                   onSetVariables(variableValues);
                 }
