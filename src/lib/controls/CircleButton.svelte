@@ -1,0 +1,91 @@
+<script lang="ts">
+  import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { BaseStyleProps } from "$lib/types";
+  import { injectVars } from "$lib/util";
+
+  type Props = {
+    primary?: boolean;
+    warning?: boolean;
+    danger?: boolean;
+    success?: boolean;
+    info?: boolean;
+    type?: "button" | "submit" | "reset";
+    children?: import("svelte").Snippet;
+  } & BaseStyleProps &
+    HTMLButtonAttributes;
+
+  let {
+    primary = false,
+    warning = false,
+    danger = false,
+    success = false,
+    info = false,
+    type = "button",
+    children,
+    ...restProps
+  }: Props = $props();
+
+  const style = $derived(
+    injectVars(restProps, "mini-button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ]),
+  );
+</script>
+
+<button
+  {style}
+  {type}
+  class:primary
+  class:warning
+  class:danger
+  class:success
+  class:info
+  {...restProps}
+>
+  {@render children?.()}
+</button>
+
+<style lang="scss">
+  @use "$lib/sass/_mixins.scss" as *;
+  button.primary {
+    @include color-props(primary, button, control);
+  }
+  button {
+    @include typography-props(mini-button, button, ui, control);
+    @include color-props(mini-button, button, control, secondary);
+    @include clickable(mini-button, button, clickable);
+    @include box-shadow(mini-button, button, control);
+    @include focusable();
+    margin: var-with-fallbacks(--margin, button, control, var(--space));
+    width: var(--mini-button-size, var(--icon-size, 1em));
+    height: var(--mini-button-size, var(--icon-size, 1em));
+    /* Make sure we don't shrink in a flex container */
+    min-width: var(--mini-button-size, var(--icon-size, 1em));
+    min-height: var(--mini-button-size, var(--icon-size, 1em));
+    border-radius: var(--mini-button-radius, 50%);
+    border: var(--mini-button-border, button-border, none);
+    display: inline-grid;
+    place-content: center;
+    line-height: 1;
+    flex-shrink: 0; /* Don't shrink any more */
+  }
+  button.primary {
+    @include color-props(primary, button, control);
+  }
+  button.warning {
+    @include color-props(warning, button, control);
+  }
+  button.danger {
+    @include color-props(danger, button, control);
+  }
+  button.success {
+    @include color-props(success, button, control);
+  }
+  button.info {
+    @include color-props(info, button, control);
+  }
+</style>

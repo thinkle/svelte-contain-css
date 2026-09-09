@@ -4,6 +4,7 @@ import Card from "./Card.svelte";
 import Button from "./controls/Button.svelte";
 import ButtonLink from "./controls/ButtonLink.svelte";
 import Checkbox from "./controls/Checkbox.svelte";
+import CircleButton from "./controls/CircleButton.svelte";
 import Input from "./controls/Input.svelte";
 import MiniButton from "./controls/MiniButton.svelte";
 import RadioButton from "./controls/RadioButton.svelte";
@@ -66,6 +67,7 @@ export { TabItem };
 export {
   Button,
   ButtonLink,
+  CircleButton,
   Checkbox,
   Input,
   Slider,

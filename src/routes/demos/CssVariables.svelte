@@ -1,6 +1,6 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Accordion from "$lib/layout/Accordion.svelte";
   import Container from "$lib/layout/Container.svelte";
@@ -119,14 +119,14 @@
               {#if theVariables[group || "no-group"] && variableValues[theVariables[group || "no-group"].name]}
                 {@const variable = theVariables[group || "no-group"]}
                 <Inline justify="flex-end">
-                  <MiniButton
+                  <CircleButton
                     primary
                     onclick={() => {
                       customizedVariables = [
                         ...customizedVariables,
                         variable.name,
                       ];
-                    }}>+</MiniButton
+                    }}>+</CircleButton
                   >
                 </Inline>
               {/if}
@@ -160,7 +160,7 @@
             }}
           />
           {#snippet after()}
-            <MiniButton
+            <CircleButton
               onclick={() => {
                 if (variable?.name) {
                   delete variableValues[variable.name];
@@ -169,7 +169,7 @@
                   );
                   onSetVariables(variableValues);
                 }
-              }}>-</MiniButton
+              }}>-</CircleButton
             >
           {/snippet}
         </FormItem>

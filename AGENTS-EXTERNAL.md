@@ -51,7 +51,8 @@ Or import in your CSS:
 
 **Controls:**
 
-- `Button`, `ButtonLink`, `MiniButton` - Buttons and link-styled buttons
+- `Button`, `ButtonLink`, `CircleButton` - Buttons and link-styled buttons
+- `MiniButton` - Backwards-compatible alias for `CircleButton`
 - `Input`, `Select`, `Option` - Form inputs
 - `Checkbox`, `RadioButton`, `Toggle` - Selection controls
 - `Slider` - Range input
@@ -574,7 +575,7 @@ For common use cases like actions and status, use the built-in semantic props:
 <!-- Also works on other components -->
 <Tag success>Active</Tag>
 <Tag danger>Error</Tag>
-<MiniButton danger>×</MiniButton>
+<CircleButton danger>×</CircleButton>
 ```
 
 **Available semantic variants:**
@@ -590,7 +591,7 @@ For common use cases like actions and status, use the built-in semantic props:
 
 **Components supporting semantic variants:**
 
-- `Button`, `ButtonLink`, `MiniButton`
+- `Button`, `ButtonLink`, `CircleButton`
 - `Tag`
 
 ### 2. Use CSS Variable Cascade for Theming
@@ -729,7 +730,7 @@ Example transformation:
 <script>
   import {
     // Controls
-    Button, ButtonLink, MiniButton,
+    Button, ButtonLink, CircleButton,
     Input, Select, Option,
     Checkbox, RadioButton, Toggle, Slider,
     TabItem,

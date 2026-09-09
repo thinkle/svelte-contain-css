@@ -3,7 +3,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Inline from "$lib/layout/Inline.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Tag from "$lib/misc/Tag.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
@@ -50,7 +50,7 @@
   <Inline>
     <Button secondary>Share</Button>
     <Button primary>Publish</Button>
-    <MiniButton aria-label="More actions">⋯</MiniButton>
+    <CircleButton aria-label="More actions">⋯</CircleButton>
   </Inline>
 </Bar>`}
 >
@@ -68,7 +68,7 @@
     <Inline>
       <Button secondary>Share</Button>
       <Button primary>Publish</Button>
-      <MiniButton aria-label="More actions">⋯</MiniButton>
+      <CircleButton aria-label="More actions">⋯</CircleButton>
     </Inline>
   </Bar>
 </DemoWithCode>

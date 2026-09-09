@@ -265,7 +265,7 @@
         <p>
           We provide named slots for <code>label</code>, which you will usually
           want to use, and for <code>after</code>, which you can use in cases
-          where you want e.g. an input followed by a minibutton
+          where you want e.g. an input followed by a CircleButton
         </p>
       </TextLayout>
       <Code

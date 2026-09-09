@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
   import ButtonLink from "$lib/controls/ButtonLink.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Container from "$lib/layout/Container.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -10,14 +10,6 @@
 </script>
 
 <Container border>
-  <TextLayout>
-    <h2>Buttons</h2>
-    <p>
-      Buttons share the same token system as the rest of the library, so the
-      same demo can show both semantic variants and CSS-variable tuning.
-    </p>
-  </TextLayout>
-
   <DemoWithCode
     code={`<Button>Standard Button</Button>
 <Button bg="transparent">Transparent Button</Button>
@@ -30,9 +22,19 @@
 <Button primary={true}>Primary Button</Button>
 <Button disabled>Disabled Button</Button>
 <ButtonLink href="https://example.com" target="_blank">Link Button</ButtonLink>
-<MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
-<MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
+<CircleButton disabled bg="var(--material-color-deep-orange)" fg="white">+</CircleButton>
+<CircleButton bg="var(--material-color-deep-orange)" fg="white">+</CircleButton>`}
   >
+    {#snippet header()}
+      <h2>Buttons</h2>
+      <p>
+        Buttons can be tuned with CSS properties (--button-bg, --button-fg, etc)
+        and we also support a number of conveniences, such as an icon snippet,
+        shorthand for primary/warning/danger buttons, styling for disabled
+        buttons, a CircleButton component for little round buttons and a
+        ButtonLink component for links that look like buttons.
+      </p>
+    {/snippet}
     <Button>Standard Button</Button>
     <Button bg="transparent">Transparent Button</Button>
     <Button>
@@ -43,9 +45,15 @@
     </Button>
     <Button primary={true}>Primary Button</Button>
     <Button disabled>Disabled Button</Button>
-    <ButtonLink href="https://example.com" target="_blank">Link Button</ButtonLink>
-    <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
-    <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
+    <ButtonLink href="https://example.com" target="_blank"
+      >Link Button</ButtonLink
+    >
+    <CircleButton disabled bg="var(--material-color-deep-orange)" fg="white"
+      >+</CircleButton
+    >
+    <CircleButton bg="var(--material-color-deep-orange)" fg="white"
+      >+</CircleButton
+    >
   </DemoWithCode>
 
   <h3>Try Customizing Some Buttons...</h3>
@@ -57,7 +65,7 @@
 <Button disabled>Disabled Button</Button>
 <ButtonLink href="https://example.com" target="_blank">Link Button</ButtonLink>
 <ButtonLink primary href="https://example.com" target="_blank">Primary Link Button</ButtonLink>
-<MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>`}
+<CircleButton bg="var(--material-color-deep-orange)" fg="white">+</CircleButton>`}
     >
       <Button>Standard Button</Button>
       <Button>
@@ -75,14 +83,16 @@
       <ButtonLink primary href="https://example.com" target="_blank"
         >Primary Link Button</ButtonLink
       >
-      <MiniButton disabled bg="var(--material-color-deep-orange)" fg="white"
-        >+</MiniButton
+      <CircleButton disabled bg="var(--material-color-deep-orange)" fg="white"
+        >+</CircleButton
       >
-      <MiniButton bg="var(--material-color-deep-orange)" fg="white">+</MiniButton>
+      <CircleButton bg="var(--material-color-deep-orange)" fg="white"
+        >+</CircleButton
+      >
       <TextLayout>
         <p>
-          Testing out buttons inside a text layout, including <ButtonLink href="#"
-            >A Link Button</ButtonLink
+          Testing out buttons inside a text layout, including <ButtonLink
+            href="#">A Link Button</ButtonLink
           >.
         </p>
       </TextLayout>

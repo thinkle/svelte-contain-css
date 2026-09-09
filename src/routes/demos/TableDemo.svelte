@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Table from "$lib/layout/Table.svelte";
   import Code from "$lib/misc/Code.svelte";
 
@@ -74,7 +74,7 @@
   `}
     />
     <p>
-      Click plus (<MiniButton onclick={() => (widthModifier += 1)}>+</MiniButton
+      Click plus (<CircleButton onclick={() => (widthModifier += 1)}>+</CircleButton
       >) to change header size and watch scrolly table resize properly
     </p>
     <Table sticky>

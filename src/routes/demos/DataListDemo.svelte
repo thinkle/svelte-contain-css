@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
-  import MiniButton from "$lib/controls/MiniButton.svelte";
+  import CircleButton from "$lib/controls/CircleButton.svelte";
   import Slider from "$lib/controls/Slider.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import DataList from "$lib/layout/DataList.svelte";
@@ -399,8 +399,8 @@ ${items}
               </div>
               {#snippet end()}
                 <span class="meta">{item.meta}</span>
-                <MiniButton>E</MiniButton>
-                <MiniButton primary>+</MiniButton>
+                <CircleButton>E</CircleButton>
+                <CircleButton primary>+</CircleButton>
               {/snippet}
             </DataListItem>
           {/each}
