@@ -168,6 +168,10 @@
     display: inline-grid;
     place-content: center;
     content: " ";
+    /* Fixed-size flex item: without this, a narrow container (long label
+       text with nowhere to wrap) shrinks the box itself instead of only
+       wrapping the text, turning the square into a rectangle. */
+    flex-shrink: 0;
     width: var-with-fallbacks(--size, checkbox, font, 1em);
     height: var-with-fallbacks(--size, checkbox, font, 1em);
     @include color-props(checkbox, toggle, inactive, secondary);
