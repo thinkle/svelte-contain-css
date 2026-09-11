@@ -1,9 +1,13 @@
 :root {
+  --muted-color: var(--bg);
+  --muted-text-amount: 20%;
   --white: #fff;
   --black: #222;
   --primary-bg: var(--material-color-blue-600);
+  --primary-color: var(--material-color-blue-600);
   --primary-fg: var(--white);
   --secondary-bg: var(--material-color-blue-grey-100);
+  --secondary-color: var(--material-color-blue-grey-100);
   --secondary-fg: var(--material-color-grey-900);
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
@@ -21,15 +25,19 @@
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   --border-color: var(--fg);
   --warning-bg: var(--material-color-orange-600);
+  --warning-color: var(--material-color-orange-600);
   --warning-fg: var(--white);
   --warning-text-transform: uppercase;
 
   /* Semantic color variants */
   --danger-bg: var(--material-color-red-600);
+  --danger-color: var(--material-color-red-600);
   --danger-fg: var(--white);
   --success-bg: var(--material-color-green-600);
+  --success-color: var(--material-color-green-600);
   --success-fg: var(--white);
   --info-bg: var(--material-color-light-blue-600);
+  --info-color: var(--material-color-light-blue-600);
   --info-fg: var(--white);
 
   --surface-bg: var(--bg);

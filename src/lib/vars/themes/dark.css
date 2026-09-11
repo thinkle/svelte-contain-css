@@ -12,8 +12,10 @@
   --menu-bg: var(--material-color-blue-grey-900);
   --menu-fg: var(--material-color-blue-grey-50);
   --primary-bg: var(--material-color-light-blue-100);
+  --primary-color: var(--material-color-light-blue-100);
   --primary-fg: var(--material-color-blue-grey-800);
   --secondary-bg: var(--material-color-blue-grey-300);
+  --secondary-color: var(--material-color-blue-grey-300);
   --secondary-fg: var(--material-color-blue-grey-800);
   --stripe-bg: color-mix(
     in srgb,
@@ -45,12 +47,16 @@
 
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);
+  --warning-color: var(--material-color-orange-400);
   --warning-fg: var(--white);
   --danger-bg: var(--material-color-red-400);
+  --danger-color: var(--material-color-red-400);
   --danger-fg: var(--material-color-blue-grey-900);
   --success-bg: var(--material-color-green-400);
+  --success-color: var(--material-color-green-400);
   --success-fg: var(--material-color-blue-grey-900);
   --info-bg: var(--material-color-light-blue-300);
+  --info-color: var(--material-color-light-blue-300);
   --info-fg: var(--material-color-blue-grey-900);
 
   --hover-filter-brightness-hack: brightness(1.15);

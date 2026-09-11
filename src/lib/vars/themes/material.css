@@ -22,16 +22,22 @@
   --sidebar-fg: var(--material-color-blue-grey-900);
 
   --primary-bg: var(--material-color-indigo-500);
+  --primary-color: var(--material-color-indigo-500);
   --primary-fg: #ffffff;
   --secondary-bg: #ffffff;
+  --secondary-color: #ffffff;
   --secondary-fg: var(--material-color-blue-grey-900);
   --success-bg: var(--material-color-green-600);
+  --success-color: var(--material-color-green-600);
   --success-fg: #ffffff;
   --danger-bg: var(--material-color-red-600);
+  --danger-color: var(--material-color-red-600);
   --danger-fg: #ffffff;
   --warning-bg: var(--material-color-amber-500);
+  --warning-color: var(--material-color-amber-500);
   --warning-fg: var(--material-color-grey-900);
   --info-bg: var(--material-color-light-blue-500);
+  --info-color: var(--material-color-light-blue-500);
   --info-fg: #ffffff;
 
   --link-fg: var(--material-color-indigo-600);

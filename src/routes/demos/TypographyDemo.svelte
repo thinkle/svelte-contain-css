@@ -520,6 +520,40 @@ ${headingExampleMarkup}
         <code>TextLayout</code>, not on each heading directly. The demo below
         shows that pattern.
       </p>
+      <h3>--slug-text-fg convenience classes</h3>
+      <p>
+        Any time we need a <em>variant</em> text color, we have a number of pre-computed
+        convenience CSS Properties available. These are used automatically by &lt;Text&gt;
+        but can also be applied directly to other elements styling.
+      </p>
+      <ul>
+        <li style="color:var(--muted-text-fg)">
+          Muted Text Color &mdash; color: var(--muted-text-fg)
+        </li>
+        <li style="color:var(--primary-text-fg)">
+          Primary Text Color &mdash; color: var(--primary-text-fg) CSS variable
+          for
+        </li>
+        <li style="color:var(--secondary-text-fg)">
+          Secondary Text Color &mdash; color: var(--secondary-text-fg) CSS
+          variable for
+        </li>
+        <li style="color:var(--info-text-fg)">
+          Info Text Color &mdash; color: var(--info-text-fg) CSS variable for
+        </li>
+        <li style="color:var(--success-text-fg)">
+          Success Text Color &mdash; color: var(--success-text-fg) CSS variable
+          for
+        </li>
+        <li style="color:var(--warning-text-fg)">
+          Warning Text Color &mdash; color: var(--warning-text-fg) CSS variable
+          for
+        </li>
+        <li style="color:var(--danger-text-fg)">
+          Danger Text Color &mdash; color: var(--danger-text-fg) CSS variable
+          for
+        </li>
+      </ul>
     </TextLayout>
     <TypographyThemeControls />
     <DemoWithCode code={headingModeCode} defaultTab="split">

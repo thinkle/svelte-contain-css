@@ -27,10 +27,22 @@
   // 0%, color transparent) make all of this a no-op:
   // color-mix(in srgb, X, transparent 0%) === X, so callers that set nothing
   // render byte-for-byte as before.
-  --_bg-mix-color: #{fn.var-with-fallbacks(--bg-mix-color, list.append($prefixes, transparent)...)};
-  --_bg-mix-amount: #{fn.var-with-fallbacks(--bg-mix-amount, list.append($prefixes, 0%)...)};
-  --_fg-mix-color: #{fn.var-with-fallbacks(--fg-mix-color, list.append($prefixes, transparent)...)};
-  --_fg-mix-amount: #{fn.var-with-fallbacks(--fg-mix-amount, list.append($prefixes, 0%)...)};
+  --_bg-mix-color: #{fn.var-with-fallbacks(
+      --bg-mix-color,
+      list.append($prefixes, transparent)...
+    )};
+  --_bg-mix-amount: #{fn.var-with-fallbacks(
+      --bg-mix-amount,
+      list.append($prefixes, 0%)...
+    )};
+  --_fg-mix-color: #{fn.var-with-fallbacks(
+      --fg-mix-color,
+      list.append($prefixes, transparent)...
+    )};
+  --_fg-mix-amount: #{fn.var-with-fallbacks(
+      --fg-mix-amount,
+      list.append($prefixes, 0%)...
+    )};
 
   // The mix is folded INTO --_background-color / --_color, not just applied to
   // the background-color/color properties. That matters because _affordances
@@ -47,7 +59,27 @@
     var(--_bg-base),
     var(--_bg-mix-color) var(--_bg-mix-amount)
   );
-  --_color: color-mix(in srgb, var(--_fg-base), var(--_fg-mix-color) var(--_fg-mix-amount));
+  --_color: color-mix(
+    in srgb,
+    var(--_fg-base),
+    var(--_fg-mix-color) var(--_fg-mix-amount)
+  );
+  // Text tones belong to this resolved surface. Amount is the target share:
+  // 0% preserves the foreground; 100% reaches the target color.
+  // Muted targets the local surface; an explicit override can travel across
+  // nested contexts without inheriting an ancestor's computed background.
+  --muted-color: var(--muted-color-override, var(--_background-color));
+  @each $tone in primary, secondary, info, success, warning, danger, muted {
+    --#{$tone}-text-fg: var(
+      --#{$tone}-text-fg-override,
+      color-mix(
+        in srgb,
+        var(--_color),
+        var(--#{$tone}-color)
+          var(--#{$tone}-text-amount, var(--text-amount, 50%))
+      )
+    );
+  }
 
   background-color: var(--_background-color);
   color: var(--_color);

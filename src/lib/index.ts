@@ -46,6 +46,7 @@ import Tooltip from "./overlays/Tooltip.svelte";
 import Table from "./layout/Table.svelte";
 import Accordion from "./layout/Accordion.svelte";
 import Tag from "./misc/Tag.svelte";
+import Text from "./typography/Text.svelte";
 
 // Export types for consumers
 export type {
@@ -99,3 +100,4 @@ export { Dialog };
 export { Progress, Tooltip };
 export { Table };
 export { DropdownMenu };
+export { Text };

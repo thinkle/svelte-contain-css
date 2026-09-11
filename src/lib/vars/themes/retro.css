@@ -26,16 +26,22 @@
   --sidebar-fg: #000000;
 
   --primary-bg: #000080;
+  --primary-color: #000080;
   --primary-fg: #ffffff;
   --secondary-bg: #c0c0c0;
+  --secondary-color: #c0c0c0;
   --secondary-fg: #000000;
   --success-bg: #008000;
+  --success-color: #008000;
   --success-fg: #ffffff;
   --danger-bg: #800000;
+  --danger-color: #800000;
   --danger-fg: #ffffff;
   --warning-bg: #ffff00;
+  --warning-color: #ffff00;
   --warning-fg: #000000;
   --info-bg: #000080;
+  --info-color: #000080;
   --info-fg: #ffffff;
 
   --link-fg: #0000ee;

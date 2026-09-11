@@ -46,6 +46,7 @@
   import AccordionDemo from "./demos/AccordionDemo.svelte";
   import GridLayoutDemo from "./demos/GridLayoutDemo.svelte";
   import DataListDemo from "./demos/DataListDemo.svelte";
+  import TextDemo from "./demos/TextDemo.svelte";
   import ColorMixDemo from "./demos/ColorMixDemo.svelte";
 
   let hash: string = "";
@@ -100,70 +101,76 @@
   let right: boolean = false;
   let showHero = $state(true);
 
-  let menu: { name: string; link?: string; component?: any; demo?: string; id?: string }[] =
-    [
-      { name: "Intro", link: "#Intro" },
-      { name: "Installation", link: "#Installation" },
-      { name: "Themes", component: Themes },
-      { name: "Layout" },
-      {
-        name: "Typography",
-        component: TypographyDemo,
-        demo: "Typography",
-        id: "typography",
-      },
-      { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
+  let menu: {
+    name: string;
+    link?: string;
+    component?: any;
+    demo?: string;
+    id?: string;
+  }[] = [
+    { name: "Intro", link: "#Intro" },
+    { name: "Installation", link: "#Installation" },
+    { name: "Themes", component: Themes },
+    { name: "Layout" },
 
-      { name: "Tabs", component: TabDemo, demo: "Tab" },
-      { name: "Accordion", component: AccordionDemo, demo: "Accordion" },
-      { name: "Bar", component: BarDemo, demo: "Bar" },
-      { name: "Inline", component: InlineDemo, demo: "Inline" },
-      { name: "Stack", component: StackDemo, demo: "Stack" },
-      { name: "Page", component: PageDemo, demo: "Page" },
-      { name: "Table", component: TableDemo, demo: "Table" },
-      { name: "Data List", component: DataListDemo, demo: "DataList" },
-      { name: "Components" },
-      { name: "Card", component: CardDemo, demo: "Card" },
-      { name: "Tile", component: TileDemo, demo: "Tile" },
-      { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
-      {
-        name: "RowContainer",
-        component: RowContainerDemo,
-        demo: "RowContainer",
-      },
-      {
-        name: "ColumnContainer",
-        component: ColumnContainerDemo,
-        demo: "ColumnContainer",
-      },
-      {
-        name: "Rows and Columns (Legacy)",
-        component: RowsAndColumnsDemo,
-        demo: "RowsAndColumns",
-      },
-      { name: "Controls" },
-      { name: "Button", component: ButtonDemo, demo: "Button" },
-      { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },
-      { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
-      { name: "Slider", component: SliderDemo, demo: "Slider" },
-      { name: "Toggle", component: ToggleDemo, demo: "Toggle" },
-      { name: "Form", component: FormDemo, demo: "Form" },
-      { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
-      { name: "Overlays" },
-      { name: "Dialog", component: DialogDemo, demo: "Dialog" },
-      { name: "Tooltip", component: TooltipDemo, demo: "Tooltip" },
-      { name: "Dropdowns" },
-      {
-        name: "Dropdown Menu",
-        component: DropdownMenuDemo,
-        demo: "DropdownMenu",
-      },
-      { name: "Miscellaneous" },
-      { name: "Color Mixing", component: ColorMixDemo, demo: "ColorMix" },
-      { name: "Progress", component: ProgressDemo, demo: "Progress" },
+    { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
+    { name: "Tabs", component: TabDemo, demo: "Tab" },
+    { name: "Accordion", component: AccordionDemo, demo: "Accordion" },
+    { name: "Bar", component: BarDemo, demo: "Bar" },
+    { name: "Inline", component: InlineDemo, demo: "Inline" },
+    { name: "Stack", component: StackDemo, demo: "Stack" },
+    { name: "Page", component: PageDemo, demo: "Page" },
+    { name: "Table", component: TableDemo, demo: "Table" },
+    { name: "Data List", component: DataListDemo, demo: "DataList" },
+    { name: "Components" },
+    { name: "Card", component: CardDemo, demo: "Card" },
+    { name: "Tile", component: TileDemo, demo: "Tile" },
+    { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
+    {
+      name: "RowContainer",
+      component: RowContainerDemo,
+      demo: "RowContainer",
+    },
+    {
+      name: "ColumnContainer",
+      component: ColumnContainerDemo,
+      demo: "ColumnContainer",
+    },
+    {
+      name: "Rows and Columns (Legacy)",
+      component: RowsAndColumnsDemo,
+      demo: "RowsAndColumns",
+    },
+    {
+      name: "Typography",
+      component: TypographyDemo,
+      demo: "Typography",
+      id: "typography",
+    },
+    { name: "Text", component: TextDemo, demo: "Text" },
+    { name: "Controls" },
+    { name: "Button", component: ButtonDemo, demo: "Button" },
+    { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },
+    { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
+    { name: "Slider", component: SliderDemo, demo: "Slider" },
+    { name: "Toggle", component: ToggleDemo, demo: "Toggle" },
+    { name: "Form", component: FormDemo, demo: "Form" },
+    { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
+    { name: "Overlays" },
+    { name: "Dialog", component: DialogDemo, demo: "Dialog" },
+    { name: "Tooltip", component: TooltipDemo, demo: "Tooltip" },
+    { name: "Dropdowns" },
+    {
+      name: "Dropdown Menu",
+      component: DropdownMenuDemo,
+      demo: "DropdownMenu",
+    },
+    { name: "Miscellaneous" },
+    { name: "Color Mixing", component: ColorMixDemo, demo: "ColorMix" },
+    { name: "Progress", component: ProgressDemo, demo: "Progress" },
 
-      { name: "Variables", component: VariableDemo, demo: "Variable" },
-    ];
+    { name: "Variables", component: VariableDemo, demo: "Variable" },
+  ];
 
   let theDemo: Component | null = $state(null);
   let theItem = $state(0);

@@ -15,8 +15,10 @@
   --menu-fg: #1f2d26;
 
   --primary-bg: #2f6f52;
+  --primary-color: #2f6f52;
   --primary-fg: #f8fcf9;
   --secondary-bg: #d7e4d4;
+  --secondary-color: #d7e4d4;
   --secondary-fg: #24352c;
 
   --control-bg: #d7e4d4;
@@ -41,12 +43,16 @@
   --stripe-fg: var(--menu-fg);
 
   --warning-bg: #d4841f;
+  --warning-color: #d4841f;
   --warning-fg: #fffaf2;
   --danger-bg: #b44d3d;
+  --danger-color: #b44d3d;
   --danger-fg: #fff8f6;
   --success-bg: #2f6f52;
+  --success-color: #2f6f52;
   --success-fg: #f8fcf9;
   --info-bg: #3f7f93;
+  --info-color: #3f7f93;
   --info-fg: #f7fcff;
 
   --hover-color-mix: black;

@@ -1,16 +1,22 @@
 :root {
   /* Colors */
   --primary-bg: #0d6efd;
+  --primary-color: #0d6efd;
   --primary-fg: #ffffff;
   --secondary-bg: #f8f9fa;
+  --secondary-color: #f8f9fa;
   --secondary-fg: #212529;
   --success-bg: #198754;
+  --success-color: #198754;
   --success-fg: #ffffff;
   --danger-bg: #dc3545;
+  --danger-color: #dc3545;
   --danger-fg: #ffffff;
   --warning-bg: #ffc107;
+  --warning-color: #ffc107;
   --warning-fg: #212529;
   --info-bg: #0dcaf0;
+  --info-color: #0dcaf0;
   --info-fg: #212529;
   --bg: #f8f9fa;
   --fg: #212529;
