@@ -16,11 +16,7 @@
     children?: Snippet;
   } & HTMLAttributes<HTMLElement>;
 
-  const {
-    children,
-    border = false,
-    ...props
-  }: Props = $props();
+  const { children, border = false, ...props }: Props = $props();
 
   const style = $derived(
     injectVars(props, "container", [
@@ -32,7 +28,7 @@
       "height",
       "paddingTop",
       "borderTop",
-    ])
+    ]),
   );
 </script>
 
@@ -44,22 +40,42 @@
   @use "$lib/sass/_mixins.scss" as *;
   section {
     margin: auto;
-
     box-sizing: border-box;
     padding: var-with-fallbacks(--padding, container, surface, 8px);
     @include color-props(container, surface, block);
     @include box-props(container, surface, block);
     @include typography-container-props(container, surface, block);
     /* Override typography max-width */
-    max-width: var-with-fallbacks(--max-width, container, surface, block, 900px);
-    margin-top: var-with-fallbacks(--margin, container, surface, block, var(--gap));
-    margin-bottom: var-with-fallbacks(--margin, container, surface, block, var(--gap));
+    max-width: var-with-fallbacks(
+      --max-width,
+      container,
+      surface,
+      block,
+      900px
+    );
+    margin-top: var-with-fallbacks(
+      --margin,
+      container,
+      surface,
+      block,
+      var(--gap)
+    );
+    margin-bottom: var-with-fallbacks(
+      --margin,
+      container,
+      surface,
+      block,
+      var(--gap)
+    );
     /* Why is this suddenly causing a scroll? */
     container-type: inline-size;
     overflow-x: hidden;
     height: var(--container-height, 100%);
     overflow-y: auto;
     @include custom-scrollbar(container, surface);
+    /* Make container take up its width if possible: this fixes a bug where container would
+    shrink enormously if it ended up nested inside e.g. a <SplitPane> */
+    width: var(--container-width, 100%);
   }
   .border {
     border: var-with-fallbacks(
