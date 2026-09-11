@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tick } from "svelte";
+  import { onDestroy, tick } from "svelte";
 
   let tooltipDiv: HTMLElement | undefined = $state();
   let targetDiv: HTMLElement | undefined = $state();
@@ -38,23 +38,83 @@
 
   function hidePopover() {
     wantsShow = false;
+    unwatchViewport();
     tooltipDiv?.togglePopover(false);
   }
 
-  async function showPopover() {
-    wantsShow = true;
-    if (!hasRendered) {
-      hasRendered = true;
-      // Wait for the content to exist before measuring it — positioning below
-      // reads the measurement element's height/width to decide flip direction.
-      await tick();
-      if (!wantsShow) return;
+  /**
+   * Find the rect to anchor the tooltip to.
+   *
+   * We can't just measure our first element child. The target wrapper is
+   * `display: contents`, and so are several things that routinely end up inside
+   * it — none of which generate a box of their own:
+   *
+   *  - `<svelte-css-wrapper>`, which Svelte injects around any component handed
+   *    `--custom-property` props, e.g.
+   *    `<Tooltip><Button --button-border-radius="50%" /></Tooltip>`
+   *  - a consumer's own `display: contents` element
+   *  - bare text or an interpolation (`<Tooltip>{score}</Tooltip>`), where there
+   *    is no element to measure at all
+   *
+   * Measuring a boxless element yields a 0x0 rect at the viewport origin, which
+   * parks the tooltip in the top-left corner of the screen; having no element at
+   * all used to mean no tooltip appeared. So we drill *down* through boxless
+   * wrappers, measure text with a Range, and fall back to drilling *up* to the
+   * nearest ancestor with a box. A tooltip should always find an anchor.
+   */
+  function hasArea(rect: DOMRect) {
+    return rect.width > 0 || rect.height > 0;
+  }
+
+  /** Measure an element's contents (text included) rather than the element. */
+  function rectOfContents(el: Element): DOMRect | null {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const rect = range.getBoundingClientRect();
+    return hasArea(rect) ? rect : null;
+  }
+
+  /** An element's own box, or the first real box inside it. */
+  function rectOfElement(el: Element): DOMRect | null {
+    const rect = el.getBoundingClientRect();
+    if (hasArea(rect)) return rect;
+    for (const child of el.children) {
+      const childRect = rectOfElement(child);
+      if (childRect) return childRect;
     }
-    // Get the position of the target element
-    // with respect to our screen
-    if (!targetDiv?.children[0]) return;
-    if (!tooltipDiv || !tooltipMeasurementDiv) return;
-    const targetRect = targetDiv.children[0].getBoundingClientRect();
+    return rectOfContents(el);
+  }
+
+  function resolveTargetRect(): DOMRect | null {
+    if (!targetDiv) return null;
+    for (const child of targetDiv.children) {
+      const rect = rectOfElement(child);
+      if (rect) return rect;
+    }
+    // No element child with a box: bare text, an interpolation, or children that
+    // render to nothing. Measure the content where it sits.
+    const contentRect = rectOfContents(targetDiv);
+    if (contentRect) return contentRect;
+    // Still nothing to measure — anchor to the nearest ancestor that has a box
+    // so the tooltip lands near its target instead of not showing at all.
+    let parent: HTMLElement | null = targetDiv.parentElement;
+    while (parent) {
+      const rect = parent.getBoundingClientRect();
+      if (hasArea(rect)) return rect;
+      parent = parent.parentElement;
+    }
+    return null;
+  }
+
+  /**
+   * Place the tooltip against its target. Split out from showPopover so it can
+   * re-run while the tooltip is open: the tooltip is `position: fixed` against
+   * viewport coordinates, so any scroll or resize invalidates it.
+   */
+  function positionTooltip(): boolean {
+    if (!tooltipDiv || !tooltipMeasurementDiv) return false;
+    const targetRect = resolveTargetRect();
+    if (!targetRect) return false;
     let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
     let targetWidth = tooltipMeasurementDiv.getBoundingClientRect().width;
     renderedHorizontal = horizontal;
@@ -117,7 +177,58 @@
     // Top and Left will put us OVER the element (matching top and left corner)
     // Let's use the margin to adjust positioning...
 
-    tooltipDiv.togglePopover(true);
+    return true;
+  }
+
+  /**
+   * A fixed-position tooltip drifts away from its target the moment anything
+   * scrolls, so keep re-placing it while it is open. Capture phase because
+   * scroll events from a scrolling ancestor don't bubble, and rAF because a
+   * scroll fires far more often than we need to move.
+   */
+  let repositionFrame = 0;
+
+  function scheduleReposition() {
+    if (repositionFrame) return;
+    repositionFrame = requestAnimationFrame(() => {
+      repositionFrame = 0;
+      if (wantsShow) positionTooltip();
+    });
+  }
+
+  function watchViewport() {
+    window.addEventListener("scroll", scheduleReposition, {
+      passive: true,
+      capture: true,
+    });
+    window.addEventListener("resize", scheduleReposition, { passive: true });
+  }
+
+  function unwatchViewport() {
+    window.removeEventListener("scroll", scheduleReposition, { capture: true });
+    window.removeEventListener("resize", scheduleReposition);
+    if (repositionFrame) {
+      cancelAnimationFrame(repositionFrame);
+      repositionFrame = 0;
+    }
+  }
+
+  onDestroy(() => {
+    if (typeof window !== "undefined") unwatchViewport();
+  });
+
+  async function showPopover() {
+    wantsShow = true;
+    if (!hasRendered) {
+      hasRendered = true;
+      // Wait for the content to exist before measuring it — positioning reads
+      // the measurement element's height/width to decide flip direction.
+      await tick();
+      if (!wantsShow) return;
+    }
+    if (!positionTooltip()) return;
+    watchViewport();
+    tooltipDiv?.togglePopover(true);
   }
 </script>
 
@@ -129,9 +240,10 @@
     onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
     onfocusout={() => hidePopover()}
-    bind:this={targetDiv}
   >
-    {@render children?.()}
+    <div class="tooltip-target" bind:this={targetDiv}>
+      {@render children?.()}
+    </div>
     <div
       popover="auto"
       class="tooltip"
@@ -163,9 +275,10 @@
     onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
     onfocusout={() => hidePopover()}
-    bind:this={targetDiv}
   >
-    {@render children?.()}
+    <span class="tooltip-target" bind:this={targetDiv}>
+      {@render children?.()}
+    </span>
     <span
       popover="auto"
       class="tooltip"
@@ -207,6 +320,13 @@
   .tooltip-wrapper {
     display: contents;
     position: relative;
+  }
+
+  /* Boxless on purpose: wrapping the target must not change its layout. The
+     tooltip and its measurement copy live outside this element so that
+     measuring the target's contents never picks them up. */
+  .tooltip-target {
+    display: contents;
   }
 
   .bottom::after {

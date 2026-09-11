@@ -63,6 +63,9 @@ Then use components anywhere:
 <!-- becomes style="--button-bg: green; --button-fg: white; --button-height: 64px" -->
 ```
 
+(That example shows the *mechanism*. In practice you rarely dress individual
+components — you set the variable once, higher up, and let it cascade.)
+
 Because they're variables rather than hard-coded styles, the cascade still
 works — which means you can theme a whole subtree from above:
 
@@ -94,13 +97,14 @@ and screen-reader semantics come from the platform.
 
 ## What's in the box
 
-- **Controls** — `Button`, `ButtonLink`, `MiniButton`, `Input`, `Select`,
+- **Controls** — `Button`, `ButtonLink`, `CircleButton`, `Input`, `Select`,
   `Checkbox`, `RadioButton`, `Toggle`, `Slider`
 - **Layout** — `Container`, `Page`, `Row`/`Column`/`Columns`, `Stack`, `Inline`,
   `GridLayout`, `SplitPane`, `Sidebar`, `Bar`, `TabBar`, `Table`, `Tile`,
   `DataList`, `Hero`, `Accordion`, `Form`/`FormItem`/`Fieldset`
 - **Overlays** — `Dialog`, `Tooltip`, `DropdownMenu`
-- **Misc** — `Card`, `Code`, `Progress`, `Tag`, `TextLayout`, `ResponsiveText`
+- **Misc** — `Card`, `Code`, `Progress`, `Tag`, `Text`, `TextLayout`,
+  `ResponsiveText`
 
 Plus a set of ready-made themes (`light`, `dark`, `material`, `bootstrap`,
 `retro`, `purple`, `forest`, `canyon`, and several typography-only themes) under

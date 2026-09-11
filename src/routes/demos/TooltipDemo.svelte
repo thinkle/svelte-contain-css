@@ -5,6 +5,7 @@
   import GridLayout from "$lib/layout/GridLayout.svelte";
   import Code from "$lib/misc/Code.svelte";
   import Tooltip from "$lib/overlays/Tooltip.svelte";
+  import Tag from "$lib/misc/Tag.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { tooltipVars } from "./cssVariableDefs";
@@ -178,6 +179,18 @@
 </style>
 `}
     />
+
+    <p>
+      What about a <Tooltip tooltipText="Test me">tooltip on naked text</Tooltip
+      > though?
+    </p>
+    <p>
+      And what about a tooltip on a component with one of svelte's injected
+      things
+      <Tooltip tooltipText="Test this">
+        <Tag --tag-bg="black" --tag-fg="white">Test</Tag>
+      </Tooltip>
+    </p>
   </TextLayout>
 </CssVariableDemo>
 
