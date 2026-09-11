@@ -144,7 +144,7 @@
   );
 </script>
 
-<Container margin="0" maxWidth="none" height="auto" padding="0">
+<Container marginBlock="0" maxWidth="none" height="auto" padding="0">
   <div class="demo-with-code" {style}>
     {#if header || heading}
       <div class="demo-heading">

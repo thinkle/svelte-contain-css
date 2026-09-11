@@ -51,6 +51,7 @@ import Text from "./typography/Text.svelte";
 // Export types for consumers
 export type {
   BaseStyleProps,
+  MarginStyleProps,
   ContainerStyleProps,
   BarStyleProps,
   MenuStyleProps,

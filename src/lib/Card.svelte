@@ -31,6 +31,8 @@
       "padding",
       "width",
       "height",
+      "marginBlock",
+      "marginInline",
     ]),
   );
 
@@ -69,7 +71,13 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
-    margin: var-with-fallbacks(--margin, card, 16px);
+    /* Was a single `margin` shorthand (--card-margin, 16px on every side).
+       Split into block/inline -- same default on each axis, so nothing
+       visually changes for existing callers -- but now a caller who wants
+       a header Card flush against the content below it, say, can set just
+       one axis instead of fighting a 4-value margin shorthand. */
+    margin-block: var-with-fallbacks(--margin-block, card, 16px);
+    margin-inline: var-with-fallbacks(--margin-inline, card, 16px);
     border-radius: var-with-fallbacks(--border-radius, card, surface, 0);
     border: var-with-fallbacks(
       --border,

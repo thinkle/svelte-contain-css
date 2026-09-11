@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
+  import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
   type Props = {
@@ -14,6 +14,7 @@
     gap?: string | null;
     children?: Snippet;
   } & BaseStyleProps &
+    MarginStyleProps &
     HTMLAttributes<HTMLDivElement>;
 
   let {
@@ -40,7 +41,18 @@
     injectVars(
       { justify, align: resolvedAlign, gap, ...elementProps },
       "stack",
-      ["bg", "fg", "padding", "width", "height", "gap", "justify", "align"],
+      [
+        "bg",
+        "fg",
+        "padding",
+        "width",
+        "height",
+        "gap",
+        "justify",
+        "align",
+        "marginBlock",
+        "marginInline",
+      ],
     ) + (inlineStyle ?? ""),
   );
 </script>
@@ -61,6 +73,7 @@
 
   .stack {
     @include box-props(stack);
+    @include margin-props(stack);
     display: flex;
     flex-direction: column;
     gap: var(--stack-gap, var(--gap));

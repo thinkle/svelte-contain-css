@@ -6,7 +6,8 @@
   type Props = {
     bg?: string | null;
     fg?: string | null;
-    margin?: string | null;
+    marginBlock?: string | null;
+    marginInline?: string | null;
     maxWidth?: string | null;
     padding?: string | null;
     height?: string | null;
@@ -22,7 +23,8 @@
     injectVars(props, "container", [
       "bg",
       "fg",
-      "margin",
+      "marginBlock",
+      "marginInline",
       "maxWidth",
       "padding",
       "height",
@@ -39,7 +41,6 @@
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
   section {
-    margin: auto;
     box-sizing: border-box;
     padding: var-with-fallbacks(--padding, container, surface, 8px);
     @include color-props(container, surface, block);
@@ -53,15 +54,22 @@
       block,
       900px
     );
-    margin-top: var-with-fallbacks(
-      --margin,
+    /* Not the generic margin-props() mixin (_box.scss): that defaults to 0,
+       but a Container has always centred itself horizontally and kept a
+       gap's worth of vertical rhythm above/below by default. Same defaults,
+       same var-with-fallbacks() prefix chain as everything else here --
+       just block/inline now instead of one `margin` prop, so a caller can
+       set only one axis (a Container flush against a footer, say) instead
+       of fighting a single shared value for both. */
+    margin-inline: var-with-fallbacks(
+      --margin-inline,
       container,
       surface,
       block,
-      var(--gap)
+      auto
     );
-    margin-bottom: var-with-fallbacks(
-      --margin,
+    margin-block: var-with-fallbacks(
+      --margin-block,
       container,
       surface,
       block,

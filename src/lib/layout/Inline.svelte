@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
+  import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
   import { injectVars } from "$lib/util";
 
   type Props = {
@@ -14,6 +14,7 @@
     wrap?: string | null;
     children?: Snippet;
   } & BaseStyleProps &
+    MarginStyleProps &
     HTMLAttributes<HTMLDivElement>;
 
   let {
@@ -45,6 +46,8 @@
       "justify",
       "align",
       "wrap",
+      "marginBlock",
+      "marginInline",
     ]) + (inlineStyle ?? ""),
   );
 </script>
@@ -65,6 +68,7 @@
 
   .inline {
     @include box-props(inline);
+    @include margin-props(inline);
     display: flex;
     flex-direction: row;
     flex-wrap: var(--inline-wrap, nowrap);

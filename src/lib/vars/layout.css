@@ -8,11 +8,30 @@ body {
   --space: 2px;
   --space-md: calc(var(--space) * 2);
   --space-lg: calc(var(--space-md) * 2);
-  --space-xl: calc(var(--space-xl) * 2);
+  --space-xl: calc(var(--space-lg) * 2);
   --padding: calc(var(--space) * 4);
   --gap: calc(var(--padding) * 2);
   --column-gap: var(--gap);
   --row-gap: var(--gap);
+
+  /* Layout rhythm: the gap between UI elements -- toolbar items, form rows,
+     stacked sections, page margins. A separate scale from --space/--space-md/
+     --space-lg/--space-xl above on purpose: those are a micro scale (2-16px)
+     for hairline-adjacent spacing inside a control, not for laying out a page.
+     Reusing those names for both would mean "space-lg" silently means two
+     different sizes depending on context, which is exactly the confusion this
+     scale exists to avoid.
+
+     Every step is a calc() multiple of --gap, not a standalone rem value, so
+     this stays on the same unit system as --space/--padding/--gap above --
+     one theme retuning --padding moves this whole scale with it instead of
+     drifting out of sync. --gap-md is --gap itself so nothing that already
+     reads --gap changes size. */
+  --gap-xs: calc(var(--gap) * 0.25);
+  --gap-sm: calc(var(--gap) * 0.5);
+  --gap-md: var(--gap);
+  --gap-lg: calc(var(--gap) * 1.5);
+  --gap-xl: calc(var(--gap) * 2);
   --grab-bar-width: var(--padding);
   --sidebar-compact-side-padding: calc(
     max(

@@ -6,13 +6,15 @@
   import { BROWSER, DEV } from "esm-env";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { MarginStyleProps } from "$lib/types";
   import ColumnContainer from "./ColumnContainer.svelte";
 
   type Props = {
     size?: "small" | "medium" | "large";
     customWidth?: string | null;
     children?: Snippet;
-  } & HTMLAttributes<HTMLElement>;
+  } & MarginStyleProps &
+    HTMLAttributes<HTMLElement>;
 
   let {
     size = "medium",

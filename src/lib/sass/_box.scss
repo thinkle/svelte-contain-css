@@ -11,6 +11,21 @@
   gap: var(--_gap);
 }
 
+/* Logical, not top/bottom/left/right: margin-block/margin-inline already take
+   one value (both sides equal) or two (start end), so there is no separate
+   "which side" prop to remember and no 4-value shorthand order to get wrong.
+   Defaults to 0 on purpose -- unlike padding-props above, a margin that
+   appeared by default on every consumer would be a silent layout change the
+   day this mixin got added to a new component. Callers opt in with an actual
+   value. (Container does not use this mixin: it wants --gap/auto as its
+   defaults, which do not fit the "0 unless asked" contract here.) */
+@mixin margin-props($prefixes...) {
+  --_margin-block: #{fn.var-with-fallbacks(--margin-block, list.append($prefixes, 0)...)};
+  --_margin-inline: #{fn.var-with-fallbacks(--margin-inline, list.append($prefixes, 0)...)};
+  margin-block: var(--_margin-block);
+  margin-inline: var(--_margin-inline);
+}
+
 @mixin border-longhand-props($prefixes...) {
   border-width: fn.prefixed-vars-optional(border-width, $prefixes...);
   border-style: fn.prefixed-vars-optional(border-style, $prefixes...);

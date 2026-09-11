@@ -6,9 +6,9 @@
     HTMLInputAttributes,
   } from "svelte/elements";
   import { injectVars } from "$lib/util";
-  import type { BaseStyleProps } from "$lib/types";
+  import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
 
-  type BaseProps = BaseStyleProps & {
+  type BaseProps = BaseStyleProps & MarginStyleProps & {
     /** Distribution along the tile's own axis, which is vertical. */
     justify?: string | null;
     /** Cross-axis alignment, which is horizontal. Centred already. */
@@ -61,6 +61,8 @@
       padding = null,
       width = null,
       height = null,
+      marginBlock = null,
+      marginInline = null,
     } = props as BaseProps;
     return {
       bg,
@@ -68,6 +70,8 @@
       padding,
       width,
       height,
+      marginBlock,
+      marginInline,
       justify: justify ?? (center ? "center" : null),
       align: align ?? (center ? "center" : null),
     };
@@ -82,6 +86,8 @@
       "height",
       "justify",
       "align",
+      "marginBlock",
+      "marginInline",
     ]) + ((props as { style?: string }).style ?? ""),
   );
 
@@ -99,6 +105,8 @@
       padding: _padding,
       width: _width,
       height: _height,
+      marginBlock: _marginBlock,
+      marginInline: _marginInline,
       style: _style,
       ...rest
     } = value as RenderProps & BaseProps & { style?: string };
@@ -140,6 +148,7 @@
       var(--border-width) var(--border-style) var(--border-color)
     );
     @include box-props-square-border(tile, surface);
+    @include margin-props(tile, surface);
     @include color-props(tile, surface);
     @include typography-container-props(tile, surface);
     @include box-shadow(tile, surface);

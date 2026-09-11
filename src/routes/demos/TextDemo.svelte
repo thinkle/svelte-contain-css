@@ -13,7 +13,7 @@
 </script>
 
 {#snippet surface(children: Snippet)}
-  <Container {bg} {fg} padding="1.5rem" margin="0">
+  <Container {bg} {fg} padding="1.5rem" marginBlock="0">
     {@render children()}
   </Container>
 {/snippet}

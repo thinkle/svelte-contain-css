@@ -1,13 +1,23 @@
 <script lang="ts">
-  interface Props {
+  import type { MarginStyleProps } from "$lib/types";
+  import { injectVars } from "$lib/util";
+
+  interface Props extends MarginStyleProps {
     id?: string;
     children?: import("svelte").Snippet;
   }
 
-  let { id = "", children }: Props = $props();
+  let { id = "", marginBlock = null, marginInline = null, children }: Props = $props();
+
+  const style = $derived(
+    injectVars({ marginBlock, marginInline }, "text-layout", [
+      "marginBlock",
+      "marginInline",
+    ]),
+  );
 </script>
 
-<div {id}>
+<div {id} {style}>
   {@render children?.()}
 </div>
 
@@ -17,8 +27,13 @@
     @include typography-container-props(body, text);
     @include typography-props(body, text);
     width: var(--text-width, var(--body-width, 100%));
-    margin-inline-start: auto;
-    margin-inline-end: auto;
+    /* Not margin-props() (_box.scss): that defaults both axes to 0, but a
+       TextLayout has always centred itself horizontally by default. Same
+       var-with-fallbacks() shape as everywhere else, just inline defaults to
+       auto instead of 0 -- marginBlock is new and does default to 0, same as
+       every other component. */
+    margin-inline: var-with-fallbacks(--margin-inline, text-layout, auto);
+    margin-block: var-with-fallbacks(--margin-block, text-layout, 0);
     padding-inline: var(--text-padding, var(--padding));
   }
 

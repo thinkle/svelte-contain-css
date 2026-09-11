@@ -6,13 +6,15 @@
   import { BROWSER, DEV } from "esm-env";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { MarginStyleProps } from "$lib/types";
   import RowContainer from "./RowContainer.svelte";
 
   type Props = {
     size?: "small" | "medium" | "large";
     customHeight?: string | null;
     children?: Snippet;
-  } & HTMLAttributes<HTMLElement>;
+  } & MarginStyleProps &
+    HTMLAttributes<HTMLElement>;
 
   let {
     size = "medium",

@@ -1,20 +1,39 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { MarginStyleProps } from "$lib/types";
+  import { injectVars } from "$lib/util";
 
   type Props = {
     card?: boolean;
     tile?: boolean;
     children?: Snippet;
-  } & HTMLAttributes<HTMLDivElement>;
+  } & MarginStyleProps &
+    HTMLAttributes<HTMLDivElement>;
 
-  let { children, card = false, tile = false, ...restProps }: Props = $props();
+  let {
+    children,
+    card = false,
+    tile = false,
+    marginBlock = null,
+    marginInline = null,
+    style: inlineStyle,
+    ...restProps
+  }: Props = $props();
+
+  const style = $derived(
+    injectVars({ marginBlock, marginInline }, "grid-layout", [
+      "marginBlock",
+      "marginInline",
+    ]) + (inlineStyle ?? ""),
+  );
 </script>
 
 <div
   class="grid-layout"
   class:card-grid={card}
   class:tile-grid={tile}
+  {style}
   {...restProps}
 >
   {@render children?.()}
@@ -88,6 +107,7 @@
        use its whole track still gets it. */
     justify-items: var-with-fallbacks(--justify-items, grid-layout, stretch);
     @include box-props(grid-layout);
+    @include margin-props(grid-layout);
   }
 
   /* Escape hatch for the things in a grid that are not items in the run: a

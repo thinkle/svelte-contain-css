@@ -1,4 +1,9 @@
+<script module lang="ts">
+  let warnedDeprecatedMargin = false;
+</script>
+
 <script lang="ts">
+  import { BROWSER, DEV } from "esm-env";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { BarStyleProps } from "$lib/types";
@@ -11,7 +16,34 @@
   } & BarStyleProps &
     HTMLAttributes<HTMLElement>;
 
-  const { children, primary, secondary, ...restProps }: Props = $props();
+  const {
+    children,
+    primary,
+    secondary,
+    marginTop,
+    marginBottom,
+    marginBlock,
+    ...restProps
+  }: Props = $props();
+
+  $effect(() => {
+    if (BROWSER && DEV && (marginTop != null || marginBottom != null) && !warnedDeprecatedMargin) {
+      warnedDeprecatedMargin = true;
+      console.warn(
+        '[ContainCSS] Bar\'s marginTop/marginBottom props are deprecated. Use marginBlock instead -- e.g. marginBlock="0 1em" is the same as marginTop="0" marginBottom="1em" (the old default).',
+      );
+    }
+  });
+
+  /* marginBlock wins if given explicitly; otherwise compose the deprecated
+     pair into the same shape, preserving each side's old default (no space
+     above, 1em below) for whichever half was not passed. */
+  const resolvedMarginBlock = $derived(
+    marginBlock ??
+      (marginTop != null || marginBottom != null
+        ? `${marginTop ?? "0"} ${marginBottom ?? "1em"}`
+        : null),
+  );
 
   const cssKeys = [
     "bg",
@@ -21,11 +53,13 @@
     "height",
     "justify",
     "align",
-    "marginBottom",
-    "marginTop",
+    "marginBlock",
+    "marginInline",
   ];
 
-  const style = $derived(injectVars(restProps, "bar", cssKeys));
+  const style = $derived(
+    injectVars({ ...restProps, marginBlock: resolvedMarginBlock }, "bar", cssKeys),
+  );
   const extraStyle = $derived(
     primary
       ? "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);"
@@ -61,7 +95,8 @@
         var-with-fallbacks(--border-style, bar, 1px)
         var-with-fallbacks(--border-color, bar, 1px)
     );
-    margin-bottom: var(--bar-margin-bottom, 1em);
+    margin-block: var(--bar-margin-block, 0 1em);
+    margin-inline: var(--bar-margin-inline, 0);
     min-height: var(--bar-min-height, var(--bar-height, 3em));
     height: var(--bar-height, auto);
     max-height: var(--bar-max-height);

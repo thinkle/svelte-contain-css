@@ -78,7 +78,7 @@
   {#snippet header()}
     <h3>Form with fieldsets</h3>
   {/snippet}
-  <Container border padding="1rem" margin="1rem 0">
+  <Container border padding="1rem" marginBlock="1rem">
     <Form layout="above" fullWidth globalInputStyles>
       <Fieldset>
         {#snippet legend()}
@@ -171,7 +171,7 @@
       come from <code>FormProvider</code>.
     </p>
   {/snippet}
-  <Container border padding="1rem" margin="1rem 0">
+  <Container border padding="1rem" marginBlock="1rem">
     <Stack>
       <FormProvider layout="below" fullWidth globalInputStyles>
         <FormItem>
