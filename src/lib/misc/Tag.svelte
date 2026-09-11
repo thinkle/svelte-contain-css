@@ -61,6 +61,8 @@
 
   .tag {
     display: inline-block;
+    align-self: flex-start;
+    vertical-align: middle;
     @include color-props(tag, secondary);
     @include typography-props-bare(tag);
     @include box-props(tag);
