@@ -897,7 +897,12 @@ a `<span>` to a `<div>` so you aren't nesting `<p>`/`<ul>` inside inline element
 
 Tooltips show on hover _and_ on focus, and are escape-dismissable, so keyboard
 users get them for free. Tooltip content mounts lazily on first show — a grid of
-hundreds of rich tooltips costs nothing until hovered.
+hundreds of rich tooltips costs nothing until hovered — and an open tooltip keeps
+up with its target when the page scrolls.
+
+The child can be anything: an element, bare text (`<Tooltip tooltipText="Raw
+score">{student.score}</Tooltip>`), or a component you've passed custom
+properties to.
 
 ### Tab Navigation
 
