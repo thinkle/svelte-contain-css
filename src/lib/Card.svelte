@@ -76,8 +76,13 @@
        visually changes for existing callers -- but now a caller who wants
        a header Card flush against the content below it, say, can set just
        one axis instead of fighting a 4-value margin shorthand. */
-    margin-block: var-with-fallbacks(--margin-block, card, 16px);
-    margin-inline: var-with-fallbacks(--margin-inline, card, 16px);
+    /* The innermost fallback is the pre-marginBlock/marginInline escape
+       hatch (a single --card-margin applied to both axes) rather than a bare
+       16px, so anyone already setting --card-margin directly keeps working
+       unchanged -- margin-block/margin-inline just give a newer, more
+       specific override on top of it. */
+    margin-block: var-with-fallbacks(--margin-block, card, var(--card-margin, 16px));
+    margin-inline: var-with-fallbacks(--margin-inline, card, var(--card-margin, 16px));
     border-radius: var-with-fallbacks(--border-radius, card, surface, 0);
     border: var-with-fallbacks(
       --border,
