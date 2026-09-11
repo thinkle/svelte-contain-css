@@ -9,6 +9,7 @@ const plainProps = [
   "--border-width",
   "--bold",
   "--font-size",
+  "--font-size-tiny",
   "--font-size-small",
   "--first-heading-margin-top",
   "--white",

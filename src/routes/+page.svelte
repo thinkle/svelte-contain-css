@@ -10,6 +10,7 @@
   import Sidebar from "$lib/layout/Sidebar.svelte";
 
   import BarDemo from "./demos/BarDemo.svelte";
+  import TagDemo from "./demos/TagDemo.svelte";
 
   import { onMount, tick } from "svelte";
   import ButtonDemo from "./demos/ButtonDemo.svelte";
@@ -122,9 +123,17 @@
     { name: "Page", component: PageDemo, demo: "Page" },
     { name: "Table", component: TableDemo, demo: "Table" },
     { name: "Data List", component: DataListDemo, demo: "DataList" },
+    {
+      name: "Typography",
+      component: TypographyDemo,
+      demo: "Typography",
+      id: "typography",
+    },
+    { name: "Text", component: TextDemo, demo: "Text" },
     { name: "Components" },
     { name: "Card", component: CardDemo, demo: "Card" },
     { name: "Tile", component: TileDemo, demo: "Tile" },
+    { name: "Tags", component: TagDemo, demo: "Tag" },
     { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
     {
       name: "RowContainer",
@@ -141,13 +150,7 @@
       component: RowsAndColumnsDemo,
       demo: "RowsAndColumns",
     },
-    {
-      name: "Typography",
-      component: TypographyDemo,
-      demo: "Typography",
-      id: "typography",
-    },
-    { name: "Text", component: TextDemo, demo: "Text" },
+
     { name: "Controls" },
     { name: "Button", component: ButtonDemo, demo: "Button" },
     { name: "Checkbox", component: CheckboxDemo, demo: "Checkbox" },

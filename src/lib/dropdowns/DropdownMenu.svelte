@@ -391,7 +391,7 @@
     @include color-props(search-hint, tag, secondary);
     @include typography-props-bare(search-hint, tag);
     @include box-props(search-hint, tag);
-    font-size: var(--search-hint-font-size, var(--font-size-small, 0.75rem));
+    font-size: var(--search-hint-font-size, var(--font-size-tiny, 0.75em));
     padding: var(--search-hint-padding, 0.2em 0.55em);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
