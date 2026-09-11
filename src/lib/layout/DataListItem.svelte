@@ -327,7 +327,7 @@
         --body-font-size,
         data-list-item,
         data-list,
-        var(--font-size-small, 0.9em)
+        var(--font-size-small, 0.9rem)
       )
     );
     line-height: var-with-fallbacks(

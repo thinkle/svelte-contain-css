@@ -1,10 +1,15 @@
 :root {
   --font-size: 16px;
-  /* Relative units so these track --font-size at each responsive breakpoint
-     (see responsive-typography.css) and any local context set by a container
-     like Card, rather than being pinned to one absolute pixel value. */
-  --font-size-tiny: 0.75em;
-  --font-size-small: 0.9em;
+  /* rem, not em: these should track --font-size at each responsive breakpoint
+     (see responsive-typography.css, which keeps the root element's font-size
+     equal to --font-size) but stay a fixed, predictable size regardless of
+     what font-size a component happens to be nested inside -- a Tag dropped
+     into a heading shouldn't inherit the heading's scale just because em
+     resolves against the nearest ancestor's computed font-size. A component
+     that wants deliberate local-context scaling (like Card) opts in
+     explicitly via its own private --_font-size, not these tokens. */
+  --font-size-tiny: 0.75rem;
+  --font-size-small: 0.9rem;
   --heading-font-size: revert;
   --text-font-size: 1.2rem;
   --font-family: sans-serif;
