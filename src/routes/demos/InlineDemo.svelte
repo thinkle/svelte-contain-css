@@ -4,12 +4,24 @@
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Inline from "$lib/layout/Inline.svelte";
   import CircleButton from "$lib/controls/CircleButton.svelte";
+  import RadioButton from "$lib/controls/RadioButton.svelte";
   import Tag from "$lib/misc/Tag.svelte";
+  import Text from "$lib/typography/Text.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
 
   let useFill = $state(true);
   const fillAttr = $derived(useFill ? " fill" : "");
+
+  type MarginInlineMode = "fixed" | "start" | "end";
+  let marginInlineMode = $state<MarginInlineMode>("end");
+  const marginInlineValue = $derived(
+    marginInlineMode === "fixed"
+      ? "2em 2em"
+      : marginInlineMode === "start"
+        ? "0 auto"
+        : "auto 0",
+  );
 </script>
 
 <TextLayout>
@@ -100,6 +112,50 @@
       <Button primary>Publish</Button>
     </Inline>
   </div>
+</DemoWithCode>
+
+<DemoWithCode
+  code={`<Bar --bar-justify="flex-start">
+  <Tag info>Draft</Tag>
+  <Inline marginInline="${marginInlineValue}">
+    <Button secondary>Discard</Button>
+    <Button primary>Publish</Button>
+  </Inline>
+  <Text muted>v1.2</Text>
+</Bar>`}
+>
+  {#snippet header()}
+    <h3>marginInline</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      Inline has no margin by default. <code>marginInline</code> takes one
+      value (both sides equal) or two (start, end independently) -- and
+      <code>auto</code> on one side soaks up the row's leftover space,
+      pushing the Inline away from that side. Same trick as
+      <code>margin-left: auto</code>, without reaching for a raw style.
+      <code>marginBlock</code> works the same way on the vertical axis. This
+      Bar's <code>justify</code> is pinned to <code>flex-start</code> so the
+      Inline's own margin is doing the work, not Bar's default
+      <code>space-between</code>.
+    </p>
+  {/snippet}
+  {#snippet inputArea()}
+    <Inline>
+      <strong>marginInline:</strong>
+      <RadioButton bind:group={marginInlineMode} value="fixed">"2em 2em"</RadioButton>
+      <RadioButton bind:group={marginInlineMode} value="start">"0 auto"</RadioButton>
+      <RadioButton bind:group={marginInlineMode} value="end">"auto 0"</RadioButton>
+    </Inline>
+  {/snippet}
+  <Bar --bar-justify="flex-start">
+    <Tag info>Draft</Tag>
+    <Inline marginInline={marginInlineValue}>
+      <Button secondary>Discard</Button>
+      <Button primary>Publish</Button>
+    </Inline>
+    <Text muted>v1.2</Text>
+  </Bar>
 </DemoWithCode>
 
 <style>

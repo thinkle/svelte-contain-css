@@ -245,7 +245,10 @@ Other sizing details:
   with the `maxWidth` prop / `--container-max-width` fallback chain.
 - Box-sizing is border-box, so padding is included, and automatic horizontal margins
   center it when capped.
-- `margin="0"` controls top/bottom spacing only; horizontal margins remain automatic.
+- `marginBlock` (default `var(--gap)`) controls top/bottom spacing; `marginInline`
+  (default `auto`) controls the horizontal centering. Override either
+  independently — `marginBlock="0"` removes vertical rhythm without disturbing
+  centering; see [Margin: marginBlock and marginInline](#margin-marginblock-and-margininline).
 - Keep the 100% width default in column flex contexts such as SplitPane panels.
   Without it, inline-size containment plus automatic side margins can collapse the
   content width to zero. A horizontal flex row with siblings may need an explicit
@@ -259,6 +262,13 @@ via container queries. **It is not a generic panel and it will not fill its pare
 
 If a Card looks mysteriously narrow, that's the design — not a bug to patch with
 `width: 100%` on the wrapper.
+
+Both `Card` and `Container` paint a surface background and padding by default —
+that part isn't the difference. `Card` additionally always has a box-shadow.
+`Container` never does (no shadow prop exists), and only gets a border if you
+pass `border`. Reaching for `Card` to get a shadow-and-surface panel makes sense;
+reaching for it just to get a surface color, on something that should be
+full-width, is the mistake this gotcha exists to catch — that's a `Container`.
 
 ```svelte
 <!-- ✅ A card of a thing -->
@@ -306,8 +316,8 @@ It is **not** the way to put two things next to each other. That's `Inline`.
 ### Inline and Stack — the generic flex helpers
 
 `Inline` (row) and `Stack` (column) are unopinionated: display flex, a gap, no
-surface, no border, no margins. When you just need things beside or below each
-other, these are the answer.
+surface, no border, no margin by default. When you just need things beside or
+below each other, these are the answer.
 
 ```svelte
 <Stack gap="1rem">
@@ -323,6 +333,48 @@ other, these are the answer.
 - `Stack` supports `split`, `justify`, `center`, `fill`, and `stretch`.
 - `Stack` zeroes the block margins of its direct children — spacing comes from `gap`.
   That's exactly why it's wrong for prose (see below).
+
+### Margin: `marginBlock` and `marginInline`
+
+`Bar`, `Card`, `Container`, `GridLayout`, `Stack`, `Inline`, `TextLayout`,
+`RowContainer`/`Row`, `ColumnContainer`/`Column`, and `Tile` all accept
+`marginBlock` and `marginInline` props. These map straight onto the native CSS
+logical shorthands of the same name, which is the whole reason to reach for them
+instead of a raw `style="margin-top: ..."`: one value sets both sides equal, two
+space-separated values set start and end independently — no top/bottom prop pair
+to remember, no 4-value `margin` shorthand order to get wrong.
+
+```svelte
+<!-- Same space above and below -->
+<Card marginBlock="1rem">...</Card>
+
+<!-- Flush against whatever comes after it, gap above only -->
+<Bar marginBlock="var(--gap) 0">
+  <h2>Section</h2>
+</Bar>
+
+<!-- Centered horizontally, no vertical margin -->
+<Container marginInline="auto" marginBlock="0">...</Container>
+```
+
+Pair these with the `--gap-xs`/`--gap-sm`/`--gap-md`/`--gap-lg`/`--gap-xl` scale
+(4/8/16/24/32px, each a `calc()` multiple of `--gap`) rather than a one-off literal
+— `marginBlock="var(--gap-lg) 0"` reads as "large gap above, flush below" and stays
+in step with the rest of the app if `--gap`/`--padding` are ever retuned. These
+tokens exist purely as values to opt into; nothing in the library defaults to them
+internally, `gap` props still fall back to bare `--gap` (== `--gap-md`) as before.
+
+Most components default both to `0` — plain margin-free boxes, matching how they
+worked before this existed. `Container` is the exception: it has always centered
+itself horizontally and kept a `--gap`'s worth of vertical rhythm by default, so
+`marginInline` defaults to `auto` and `marginBlock` defaults to `var(--gap)` there
+specifically.
+
+`Bar` additionally still accepts the older `marginTop`/`marginBottom` props —
+**deprecated**, but composed into the same block margin under the hood (with a
+dev-mode console warning), so existing code keeps working. Prefer `marginBlock`
+in new code: `marginBlock="0 1em"` is the same as `marginTop="0" marginBottom="1em"`
+(Bar's old built-in default — flush on top, `1em` clear below).
 
 ### RowContainer and ColumnContainer
 
@@ -1055,6 +1107,11 @@ These affect all components unless overridden:
 | `--secondary-bg`  | Secondary background                | -       |
 | `--padding`       | Default padding                     | -       |
 | `--gap`           | Default gap/spacing                 | -       |
+| `--gap-xs`        | Layout rhythm step (`--gap × 0.25`) | -       |
+| `--gap-sm`        | Layout rhythm step (`--gap × 0.5`)  | -       |
+| `--gap-md`        | Layout rhythm step (== `--gap`)     | -       |
+| `--gap-lg`        | Layout rhythm step (`--gap × 1.5`)  | -       |
+| `--gap-xl`        | Layout rhythm step (`--gap × 2`)    | -       |
 | `--border-radius` | Default border radius               | -       |
 | `--border-color`  | Default border color                | -       |
 | `--border-width`  | Default border width                | `1px`   |
@@ -1098,7 +1155,11 @@ Components cascade through category variables. For example, `Button`:
 **Bar:**
 
 - `--bar-height`, `--bar-min-height` (default: 3em), `--bar-justify`,
-  `--bar-align`, `--bar-margin-bottom`, `--bar-border-top`, `--bar-border-bottom`
+  `--bar-align`, `--bar-margin-block` (default: `0 1em`), `--bar-margin-inline`,
+  `--bar-border-top`, `--bar-border-bottom`
+  (`--bar-margin-top`/`--bar-margin-bottom` also still work, composed into
+  `--bar-margin-block` if it isn't set directly — deprecated, prefer the
+  `marginBlock` prop)
 
 **TextLayout:**
 

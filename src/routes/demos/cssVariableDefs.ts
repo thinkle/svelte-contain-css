@@ -25,6 +25,13 @@ let defaults: {
     unit: "",
     group: "Box",
   },
+  margin: {
+    type: "length",
+    placeholder: "e.g., 1rem or 0 1rem",
+    defaultValue: "",
+    unit: "",
+    group: "Spacing",
+  },
   color: {
     type: "color",
     placeholder: "e.g., #ffffff",
@@ -340,6 +347,22 @@ function boxProps(prefix: string): CSSVariable[] {
   ];
 }
 
+function marginProps(prefix: string): CSSVariable[] {
+  let group = "Spacing";
+  return [
+    {
+      name: `--${prefix}-margin-block`,
+      ...defaults.margin,
+      group,
+    },
+    {
+      name: `--${prefix}-margin-inline`,
+      ...defaults.margin,
+      group,
+    },
+  ];
+}
+
 function boxPropsBorder(prefix: string): CSSVariable[] {
   let group = "Box";
   return [...boxProps(prefix)];
@@ -396,6 +419,7 @@ export let buttonVars: CSSVariable[] = [
 export let cardVars = [
   ...shadowProps("card"),
   ...boxProps("card"),
+  ...marginProps("card"),
   ...colorProps("card"),
   ...colorProps("card-header"),
   ...colorProps("card-footer"),

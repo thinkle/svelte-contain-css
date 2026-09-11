@@ -89,10 +89,18 @@
       unit: "",
     },
     {
-      name: "--bar-margin-bottom",
+      name: "--bar-margin-block",
       type: "length",
       group: "Spacing",
-      placeholder: "e.g., 0.5rem",
+      placeholder: "e.g., 0.5rem 1rem",
+      defaultValue: "",
+      unit: "rem",
+    },
+    {
+      name: "--bar-margin-inline",
+      type: "length",
+      group: "Spacing",
+      placeholder: "e.g., 1rem",
       defaultValue: "",
       unit: "rem",
     },
@@ -173,6 +181,33 @@
         <Button>More</Button>
       </Inline>
     </Bar>
+  </DemoWithCode>
+
+  <DemoWithCode
+    code={`<Bar marginBlock="0">
+  <h3>Flush Header</h3>
+  <Button secondary>Action</Button>
+</Bar>
+<div>Sits right against the bar -- no default space below.</div>`}
+  >
+    {#snippet header()}
+      <h3>marginBlock</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Bar carries a small default <code>margin-block</code> (flush on top, a
+        little space below), for the common "section header" case. Override it
+        with <code>marginBlock</code> -- one value sets both sides equal, two
+        (<code>"0 1rem"</code>) set top and bottom independently. The older
+        <code>marginTop</code>/<code>marginBottom</code> props still work but are
+        deprecated in favor of this.
+      </p>
+    {/snippet}
+    <Bar marginBlock="0">
+      <h3>Flush Header</h3>
+      <Button secondary>Action</Button>
+    </Bar>
+    <div>Sits right against the bar — no default space below.</div>
   </DemoWithCode>
 </Container>
 <Container>

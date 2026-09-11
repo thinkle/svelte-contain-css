@@ -34,6 +34,16 @@
           ? '\n    justify="flex-end"'
           : "",
   );
+
+  type MarginBlockMode = "both" | "top" | "bottom";
+  let marginBlockMode = $state<MarginBlockMode>("top");
+  const marginBlockValue = $derived(
+    marginBlockMode === "both"
+      ? "var(--gap-lg)"
+      : marginBlockMode === "top"
+        ? "var(--gap-lg) 0"
+        : "0 var(--gap-lg)",
+  );
 </script>
 
 <TextLayout>
@@ -167,4 +177,53 @@
       </Inline>
     </Stack>
   </Card>
+</DemoWithCode>
+
+<DemoWithCode
+  code={`<Stack marginBlock="${marginBlockValue}" center --stack-border="3px solid blue">
+  <h3>The moving Stack</h3>
+  <p>marginBlock: "${marginBlockValue}"</p>
+</Stack>`}
+>
+  {#snippet header()}
+    <h3>marginBlock / marginInline</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      Stack has no margin by default -- spacing between a Stack and its siblings
+      comes from wherever it lives (a parent's <code>gap</code>, most often).
+      When it does need its own space, <code>marginBlock</code> and
+      <code>marginInline</code> take one value (both sides equal) or two (start,
+      end independently). The green boxes above and below are fixed reference
+      points; watch the bordered Stack move between them as you change the value.
+    </p>
+  {/snippet}
+  {#snippet inputArea()}
+    <Inline>
+      <strong>marginBlock:</strong>
+      <RadioButton bind:group={marginBlockMode} value="both">"var(--gap-lg)"</RadioButton>
+      <RadioButton bind:group={marginBlockMode} value="top">"var(--gap-lg) 0"</RadioButton>
+      <RadioButton bind:group={marginBlockMode} value="bottom">"0 var(--gap-lg)"</RadioButton>
+    </Inline>
+  {/snippet}
+  <Stack
+    justify="center"
+    style="background-color:var(--success-bg); color:var(--success-fg); height: 100px;"
+    center
+    >A thing above
+  </Stack>
+  <Stack
+    --stack-border="3px solid blue"
+    marginBlock={marginBlockValue}
+    center
+  >
+    <h3>The moving Stack</h3>
+    <p>marginBlock: "{marginBlockValue}"</p>
+  </Stack>
+  <Stack
+    justify="center"
+    style="background-color:var(--success-bg); color:var(--success-fg); height: 100px;"
+    center
+    >A thing below
+  </Stack>
 </DemoWithCode>

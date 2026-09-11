@@ -175,5 +175,27 @@
         {/snippet}
       </Card>
     </DemoWithCode>
+
+    <DemoWithCode
+      code={`<Stack gap="0">
+  <Card marginBlock="0" marginInline="0">First, flush against the next one.</Card>
+  <Card marginBlock="0" marginInline="0">Second, no gap between them.</Card>
+</Stack>`}
+    >
+      {#snippet blurb()}
+        <p>
+          Card has a default <code>margin</code> on every side (space between it
+          and whatever's next to it). Override with <code>marginBlock</code>/
+          <code>marginInline</code> -- one value for both sides of that axis, two
+          (<code>"1rem 0"</code>) for start and end independently. Handy for
+          butting cards up against each other, as here, or against a Stack's own
+          <code>gap</code> instead of stacking both.
+        </p>
+      {/snippet}
+      <Stack gap="0">
+        <Card marginBlock="0" marginInline="0">First, flush against the next one.</Card>
+        <Card marginBlock="0" marginInline="0">Second, no gap between them.</Card>
+      </Stack>
+    </DemoWithCode>
   </CssVariableDemo>
 </Container>

@@ -380,8 +380,14 @@ Use the provided mixins from `$lib/sass/_mixins.scss` for consistent styling:
     // primitives like Stack or Inline — it will impose a max-width on them.
     @include typography-container-props(my-component, container);
 
-    // Box properties (padding, margin, border-radius)
+    // Box properties (padding, border, border-radius). Despite the name,
+    // does NOT include margin -- that's the separate mixin below.
     @include box-props(my-component);
+
+    // margin-block/margin-inline, both defaulting to 0. Opt-in only: add
+    // this to a component deliberately, not as a matter of course -- most
+    // layout primitives (Stack, Inline) should stay margin-free by default.
+    @include margin-props(my-component);
 
     // Box shadow
     @include box-shadow(my-component, container);
@@ -512,8 +518,13 @@ all remaining space. This is not solved by adding align-items: stretch to SplitP
 
 Do not hide this regression with extra wrapper divs or by removing containment.
 Check Container directly inside a SplitPane panel, a column flex layout, a normal
-block, and a horizontal flex row; verify capped maxWidth still centers. The
-`margin` prop currently controls vertical margins only.
+block, and a horizontal flex row; verify capped maxWidth still centers.
+`marginInline` (default `auto`) is what performs the centering; `marginBlock`
+(default `var(--gap)`) is unrelated vertical rhythm. These are hand-written in
+Container's own `<style>` rather than routed through the generic `margin-props`
+mixin in `_box.scss`, specifically because their defaults (`auto` / `var(--gap)`)
+differ from every other component's (`0`) — see margin-props' own comment for why
+a single mixin can't parameterize that in Sass.
 
 `maxWidth` is the friendly prop and the one consumers should reach for — it caps
 without preventing the Container from shrinking. `--container-width` is the fixed
