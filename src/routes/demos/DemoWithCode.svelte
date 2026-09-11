@@ -185,7 +185,9 @@
       {:else if activeTab === "source"}
         <div class="tab-panel source-panel">
           <div class="code-wrap">
-            <Code code={resolvedCode} {language} />
+            {#key resolvedCode}
+              <Code code={resolvedCode} {language} />
+            {/key}
           </div>
         </div>
       {:else}
@@ -202,7 +204,9 @@
             {/snippet}
             {#snippet right()}
               <div class="code-wrap split-code-wrap">
-                <Code code={resolvedCode} {language} />
+                {#key resolvedCode}
+              <Code code={resolvedCode} {language} />
+            {/key}
               </div>
             {/snippet}
           </SplitPane>
