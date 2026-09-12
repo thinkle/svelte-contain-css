@@ -26,10 +26,22 @@
   // A declaration no component sets itself, so finding it proves the caller's
   // style survived; and a variable-backed prop to prove vars survived with it.
   const STYLE = "outline-color: rgb(1, 2, 3);";
+
+  // Removed by the close button, so the click assertion is real.
+  let showClosable = $state(true);
 </script>
 
 <div data-probe="Tag" data-root-class="tag">
   <Tag data-testid="probe-Tag" id="id-Tag" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Tag</Tag>
+</div>
+<!-- A closable Tag, for tests/tag-close-button.spec.ts and for the
+     accessible-name assertion in tests/attribute-passthrough.spec.ts. -->
+<div data-closable-tag>
+  {#if showClosable}
+    <Tag onclose={() => (showClosable = false)} closeLabel="Stop filtering by Fiction">
+      Fiction
+    </Tag>
+  {/if}
 </div>
 <div data-probe="Button" data-root-class="">
   <Button data-testid="probe-Button" id="id-Button" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Button</Button>

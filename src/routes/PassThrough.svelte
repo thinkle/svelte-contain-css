@@ -8,7 +8,7 @@
   import Stack from "$lib/layout/Stack.svelte";
   import Tag from "$lib/misc/Tag.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
-  import DemoWithCode from "./DemoWithCode.svelte";
+  import DemoWithCode from "./demos/DemoWithCode.svelte";
 
   let authors = $state(["Le Guin", "Butler", "Jemisin"]);
   function drop(name: string) {
@@ -33,6 +33,7 @@
 </TextLayout>
 
 <DemoWithCode
+  defaultTab="source"
   code={`<Container id="results" aria-label="Search results" role="region">
   <Button aria-describedby="save-hint">Save</Button>
   <p id="save-hint">Saves without leaving the page.</p>
@@ -44,8 +45,8 @@
   {#snippet blurb()}
     <p>
       <code>aria-*</code>, <code>role</code>, <code>id</code> and
-      <code>tabindex</code> all reach the element. Click the button to see the
-      tag it actually rendered.
+      <code>tabindex</code> all reach the element. Click the button to see the tag
+      it actually rendered.
     </p>
   {/snippet}
   <Container id="results" aria-label="Search results" role="region">
@@ -60,6 +61,7 @@
 </DemoWithCode>
 
 <DemoWithCode
+  defaultTab="source"
   code={`<!-- Attributes land on the INPUT, which is what they describe.
      class and style land on the wrapper the CSS targets. -->
 <Checkbox name="terms" required aria-describedby="terms-hint">
@@ -72,8 +74,8 @@
   {/snippet}
   {#snippet blurb()}
     <p>
-      <code>Checkbox</code>, <code>Toggle</code> and <code>RadioButton</code> render
-      a control inside a wrapper. Your <code>required</code> and
+      <code>Checkbox</code>, <code>Toggle</code> and <code>RadioButton</code>
+      render a control inside a wrapper. Your <code>required</code> and
       <code>aria-describedby</code>
       belong on the control, so that is where they go; <code>class</code> and
       <code>style</code> go on the wrapper, which is what the component's CSS targets.
@@ -86,6 +88,7 @@
 </DemoWithCode>
 
 <DemoWithCode
+  defaultTab="source"
   code={`<!-- The default is "Remove", which tells a screen-reader user nothing.
      Say what the button actually does in YOUR app: -->
 {#each authors as author}
@@ -108,10 +111,7 @@
   {/snippet}
   <Inline gap="0.5rem" align="center">
     {#each authors as author (author)}
-      <Tag
-        onclose={() => drop(author)}
-        closeLabel="Stop filtering by {author}"
-      >
+      <Tag onclose={() => drop(author)} closeLabel="Stop filtering by {author}">
         {author}
       </Tag>
     {/each}
@@ -127,6 +127,7 @@
 </DemoWithCode>
 
 <DemoWithCode
+  defaultTab="source"
   code={`<Button data-testid="submit-order">Place order</Button>
 
 // in your test
@@ -146,14 +147,16 @@ await page.getByTestId("submit-order").click();`}
 </DemoWithCode>
 
 <DemoWithCode
+  defaultTab="source"
   code={`<Card class="featured">Highlighted</Card>
 <!-- renders class="card featured" -- your class is ADDED, not substituted -->
 
 <style>
   /* :global is required: Svelte would otherwise scope this away */
   :global(.featured) {
-    --card-bg: var(--primary-bg);
-    --card-fg: var(--primary-fg);
+    --card-content-bg: var(--primary-bg);
+    --card-content-fg: var(--primary-fg);
+    --card-font-weight: bold;
   }
 </style>`}
 >
@@ -167,8 +170,8 @@ await page.getByTestId("submit-order").click();`}
       defined with <code>:global</code>, because Svelte scopes styles to the
       component that declares them; and a class that sets
       <strong>variables</strong>
-      works with the cascade, while one that sets <code>background</code> directly
-      fights the component's own rules and will want
+      works with the cascade, while one that sets <code>background</code>
+      directly fights the component's own rules and will want
       <code>!important</code> sooner or later.
     </p>
   {/snippet}
@@ -179,8 +182,9 @@ await page.getByTestId("submit-order").click();`}
 </DemoWithCode>
 
 <DemoWithCode
-  code={`<Tag bg="rebeccapurple" style="vertical-align: baseline">Draft</Tag>
-<!-- style="--tag-bg: rebeccapurple;vertical-align: baseline" -->`}
+  defaultTab="source"
+  code={`<Tag bg="rebeccapurple" fg="white" style="vertical-align: baseline">Draft</Tag>
+<!-- style="--tag-bg: rebeccapurple;--tag-fg: white;vertical-align: baseline" -->`}
 >
   {#snippet header()}
     <h3>Inline <code>style</code></h3>
@@ -194,8 +198,9 @@ await page.getByTestId("submit-order").click();`}
     </p>
   {/snippet}
   <p>
-    Inline <Tag bg="rebeccapurple" style="vertical-align: baseline">Draft</Tag> in
-    a sentence.
+    Inline <Tag bg="rebeccapurple" fg="white" style="vertical-align: baseline"
+      >Draft</Tag
+    > in a sentence.
   </p>
 </DemoWithCode>
 
@@ -203,10 +208,11 @@ await page.getByTestId("submit-order").click();`}
   <h3>What does not forward</h3>
   <p>
     A few components have no single element to forward to, so they take no
-    attributes: <code>FormProvider</code> and <code>Code</code> render no element
-    of their own, <code>ResponsiveText</code> renders one element per breakpoint,
-    and <code>Table</code>'s sticky mode renders a hidden measuring copy of its tables
-    &mdash; an <code>id</code> would appear twice. Wrap them if you need a handle.
+    attributes: <code>FormProvider</code> and <code>Code</code> render no
+    element of their own, <code>ResponsiveText</code> renders one element per
+    breakpoint, and <code>Table</code>'s sticky mode renders a hidden measuring
+    copy of its tables &mdash; an <code>id</code> would appear twice. Wrap them if
+    you need a handle.
   </p>
 </TextLayout>
 
@@ -221,7 +227,8 @@ await page.getByTestId("submit-order").click();`}
   }
   /* Deliberately :global -- this is the point the demo above is making. */
   :global(.featured) {
-    --card-bg: var(--primary-bg);
-    --card-fg: var(--primary-fg);
+    --card-content-bg: var(--primary-bg);
+    --card-content-fg: var(--primary-fg);
+    --card-font-weight: bold;
   }
 </style>

@@ -150,6 +150,7 @@
   height="auto"
   padding="0"
   --reset-padding="var(--container-padding, var(--block-padding, var(--padding, 8px)))"
+  --reset-margin-block="var(--container-margin-block, var(--block-margin-block, var(--margin-block, var(--gap, 16px)))))"
 >
   <div class="demo-with-code" {style}>
     {#if header || heading}
@@ -166,7 +167,11 @@
         </TextLayout>
       </div>
     {/if}
-    <div class="demo-body" style:--container-padding="var(--reset-padding)">
+    <div
+      class="demo-body"
+      style:--container-padding="var(--reset-padding)"
+      style:--container-margin-block="var(--reset-margin-block)"
+    >
       <TabBar
         items={tabItems}
         active={activeTab}
