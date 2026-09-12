@@ -50,7 +50,7 @@
   import DataListDemo from "./demos/DataListDemo.svelte";
   import TextDemo from "./demos/TextDemo.svelte";
   import ColorMixDemo from "./demos/ColorMixDemo.svelte";
-  import PassThroughDemo from "./demos/PassThroughDemo.svelte";
+  import PassThrough from "./PassThrough.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -178,7 +178,7 @@
     { name: "Variables", component: VariableDemo, demo: "Variable" },
     {
       name: "Attributes & Classes",
-      component: PassThroughDemo,
+      component: PassThrough,
       demo: "PassThrough",
     },
   ];
