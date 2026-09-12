@@ -1,18 +1,26 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { CardStyleProps } from "$lib/types";
-  import { injectVars } from "./util";
+  import type { CardStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "./util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    header?: Snippet;
-    footer?: Snippet;
-    children?: Snippet;
-    center?: boolean;
-    height?: string;
-    fixedHeight?: boolean;
-  } & CardStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      header?: Snippet;
+      footer?: Snippet;
+      children?: Snippet;
+      center?: boolean;
+      fixedHeight?: boolean;
+    },
+    CardStyleProps &
+      StyleProps<typeof CARD_VARS>
+  >;
 
   let {
     header,
@@ -21,13 +29,23 @@
     height,
     fixedHeight,
     center,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const cssVars = $derived(
-    injectVars({ height, ...restProps }, "card", [
-      "bg",
-      "fg",
+  /* `height` is destructured (the $effect below reads it), so it has to be
+     handed back explicitly -- rest props no longer carry it. */
+  /* The shorthands card's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CARD_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps({ height, ...restProps }, "card", [
+      ...CARD_VARS,
       "padding",
       "width",
       "height",
@@ -36,7 +54,7 @@
     ]),
   );
 
-  const forceFixedHeight = (h: string | undefined) => {
+  const forceFixedHeight = (h: string | null | undefined) => {
     if (h && !fixedHeight) {
       fixedHeight = true;
     }
@@ -47,7 +65,7 @@
   let hasFooter = $derived(Boolean(footer));
 </script>
 
-<div class="card" class:center class:fixedHeight style={cssVars}>
+<div class={["card", className]} class:center class:fixedHeight {...el}>
   <header class:hide={!hasHeader}>
     {#if header}{@render header()}{/if}
   </header>

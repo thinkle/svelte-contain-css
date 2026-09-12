@@ -1,45 +1,70 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    children?: Snippet;
-    stackable?: boolean;
-    marginInline?: string | null;
-    marginLeft?: string | null;
-    marginRight?: string | null;
-    minWidth?: string | null;
-    maxWidth?: string | null;
-    gap?: string | null;
-    itemPadding?: string | null;
-    itemMinHeight?: string | null;
-    iconWidth?: string | null;
-    iconSize?: string | null;
-    iconBorderRadius?: string | null;
-    actionWidth?: string | null;
-    actionFlexDirection?: string | null;
-    actionWrap?: string | null;
-    actionCompactFlexDirection?: string | null;
-    actionCompactWrap?: string | null;
-    actionGap?: string | null;
-    itemBorder?: string | null;
-    selectedBg?: string | null;
-    selectedFg?: string | null;
-    selectedOutline?: string | null;
-    selectedBorder?: string | null;
-    selectionColor?: string | null;
-  } & BaseStyleProps &
-    HTMLAttributes<HTMLUListElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLUListElement>,
+    {
+      children?: Snippet;
+      stackable?: boolean;
+    },
+    BaseStyleProps & {
+      marginInline?: string | null;
+      marginLeft?: string | null;
+      marginRight?: string | null;
+      minWidth?: string | null;
+      maxWidth?: string | null;
+      gap?: string | null;
+      itemPadding?: string | null;
+      itemMinHeight?: string | null;
+      iconWidth?: string | null;
+      iconSize?: string | null;
+      iconBorderRadius?: string | null;
+      actionWidth?: string | null;
+      actionFlexDirection?: string | null;
+      actionWrap?: string | null;
+      actionCompactFlexDirection?: string | null;
+      actionCompactWrap?: string | null;
+      actionGap?: string | null;
+      itemBorder?: string | null;
+      selectedBg?: string | null;
+      selectedFg?: string | null;
+      selectedOutline?: string | null;
+      selectedBorder?: string | null;
+      selectionColor?: string | null;
+    } &
+      StyleProps<typeof DATA_LIST_VARS>
+  >;
 
-  let { children, stackable = false, ...restProps }: Props = $props();
+  let {
+    children,
+    stackable = false,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "data-list", [
-      "bg",
-      "fg",
-      "padding",
+  /* The shorthands data-list's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const DATA_LIST_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "data-list", [
+      ...DATA_LIST_VARS,
       "width",
       "marginInline",
       "marginLeft",
@@ -69,7 +94,7 @@
   );
 </script>
 
-<ul class="data-list" class:stackable {style} {...restProps}>
+<ul class={["data-list", className]} class:stackable {...el}>
   {@render children?.()}
 </ul>
 

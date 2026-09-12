@@ -1,27 +1,46 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    group?: any;
-    value?: any;
-    children?: Snippet;
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "value">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      group?: any;
+      value?: any;
+      children?: Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof RADIO_BUTTON_VARS>
+  ,
+    "value" | "type"
+  >;
 
   let {
     group = $bindable<any>(undefined),
     value = undefined,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  let style = $derived(
-    injectVars(restProps, "radio-button", [
-      "bg",
-      "fg",
+  /* The shorthands radio-button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const RADIO_BUTTON_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    splitProps(restProps, "radio-button", [
+      ...RADIO_BUTTON_VARS,
       "padding",
       "width",
       "height",
@@ -37,14 +56,14 @@
   }
 </script>
 
-<div class="label-sizing-box" {style}>
+<div class={["label-sizing-box", className]} style={el.style}>
   <label class="radio-item">
     <input
       {value}
       type="radio"
       checked={isChecked}
       onchange={handleChange}
-      {...restProps}
+      {...el.attrs}
     />
     <span>{@render children?.()}</span>
   </label>

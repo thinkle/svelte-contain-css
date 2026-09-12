@@ -25,13 +25,22 @@
 
   */
   import type { HTMLOptionAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    children?: import("svelte").Snippet;
-    value?: any;
-  } & Omit<HTMLOptionAttributes, "value">;
+  type Props = ContainProps<
+    HTMLOptionAttributes,
+    {
+      children?: import("svelte").Snippet;
+      value?: any;
+    },
+    {},
+    "value"
+  >;
 
-  let { children, value, ...restProps }: Props = $props();
+  let { children, value, class: className, ...restProps }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "option"));
 
   let template: HTMLDivElement | undefined = $state();
 
@@ -68,7 +77,7 @@
   });
 </script>
 
-<option data-html={htmlContent} {value} {...restProps}>
+<option data-html={htmlContent} {value} class={className} {...el}>
   {@html textContent}
 </option>
 

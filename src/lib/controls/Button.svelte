@@ -1,20 +1,31 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    primary?: boolean;
-    secondary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    icon?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    HTMLButtonAttributes;
+  type Props = ContainProps<
+    HTMLButtonAttributes,
+    {
+      primary?: boolean;
+      secondary?: boolean;
+      warning?: boolean;
+      danger?: boolean;
+      success?: boolean;
+      info?: boolean;
+      icon?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof BUTTON_VARS>
+  >;
 
   let {
     primary = false,
@@ -25,18 +36,31 @@
     info = false,
     icon,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"]),
+  /* The shorthands button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const BUTTON_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "button", [
+      ...BUTTON_VARS,
+      "width",
+      "height",
+    ]),
   );
-
-
 </script>
 
 <button
-  {style}
+  class={className}
   class:primary
   class:secondary
   class:warning
@@ -44,7 +68,7 @@
   class:success
   class:info
   class:has-icon={icon}
-  {...restProps}
+  {...el}
 >
   <span class="content">{@render children?.()}</span>
   {#if icon}

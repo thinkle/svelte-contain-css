@@ -1,29 +1,28 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    value?: number;
-    min?: number;
-    max?: number;
-    step?: number | "any";
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "type" | "value" | "min" | "max" | "step">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      value?: number;
+      min?: number;
+      max?: number;
+      step?: number | "any";
+    },
+    BaseStyleProps,
+    "type" | "value" | "min" | "max" | "step"
+  >;
 
   let {
     value = $bindable(0),
     min = 0,
     max = 100,
     step = 1,
+    class: className,
     ...restProps
   }: Props = $props();
-
-  const inlineStyle = $derived((restProps as { style?: string }).style);
-  const elementProps = $derived.by(() => {
-    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
-    return rest;
-  });
 
   const normalizedMin = $derived(Number.isFinite(min) ? min : 0);
   const normalizedMax = $derived(
@@ -36,20 +35,24 @@
     ((clampedValue - normalizedMin) / (normalizedMax - normalizedMin)) * 100,
   );
 
-  const style = $derived(
-    `${injectVars(elementProps, "slider", ["bg", "fg", "padding", "width", "height"])}--slider-percent: ${fillPercent}%;${inlineStyle ?? ""}`,
+  const el = $derived(
+    elementProps(
+      restProps,
+      "slider",
+      ["bg", "fg", "padding", "width", "height"],
+      `--slider-percent: ${fillPercent}%;`,
+    ),
   );
 </script>
 
 <input
-  class="slider"
+  class={["slider", className]}
   type="range"
   bind:value
   {min}
   {max}
   {step}
-  {style}
-  {...elementProps}
+  {...el}
 />
 
 <style lang="scss">

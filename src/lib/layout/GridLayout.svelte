@@ -1,40 +1,53 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MarginStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    card?: boolean;
-    tile?: boolean;
-    children?: Snippet;
-  } & MarginStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      card?: boolean;
+      tile?: boolean;
+      children?: Snippet;
+    },
+    MarginStyleProps &
+      StyleProps<typeof GRID_LAYOUT_VARS>
+  >;
 
   let {
     children,
     card = false,
     tile = false,
-    marginBlock = null,
-    marginInline = null,
-    style: inlineStyle,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars({ marginBlock, marginInline }, "grid-layout", [
-      "marginBlock",
-      "marginInline",
-    ]) + (inlineStyle ?? ""),
+  /* The shorthands grid-layout's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const GRID_LAYOUT_VARS = [
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "grid-layout", GRID_LAYOUT_VARS),
   );
 </script>
 
 <div
-  class="grid-layout"
+  class={["grid-layout", className]}
   class:card-grid={card}
   class:tile-grid={tile}
-  {style}
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </div>

@@ -1,11 +1,39 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  interface Props {
-    highlanderMode?: boolean;
-    children?: import("svelte").Snippet;
-  }
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  let { highlanderMode = true, children }: Props = $props();
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      highlanderMode?: boolean;
+      children?: import("svelte").Snippet;
+    },
+    StyleProps<typeof ACCORDION_VARS>
+  >;
+
+  let {
+    highlanderMode = true,
+    children,
+    class: className,
+    ...restProps
+  }: Props = $props();
+
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const ACCORDION_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "accordion", ACCORDION_VARS));
   let wrapper: HTMLDivElement | undefined = $state();
 
   function onAccordionClicked(e: MouseEvent) {
@@ -48,7 +76,12 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
-<div class="accordion-wrapper" onclick={onAccordionClicked} bind:this={wrapper}>
+<div
+  class={["accordion-wrapper", className]}
+  onclick={onAccordionClicked}
+  bind:this={wrapper}
+  {...el}
+>
   {@render children?.()}
 </div>
 

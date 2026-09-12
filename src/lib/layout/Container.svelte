@@ -1,32 +1,59 @@
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
 
-  type Props = {
-    bg?: string | null;
-    fg?: string | null;
-    marginBlock?: string | null;
-    marginInline?: string | null;
-    maxWidth?: string | null;
-    padding?: string | null;
-    height?: string | null;
-    border?: boolean;
-    paddingTop?: string | null;
-    borderTop?: string | null;
-    children?: Snippet;
-  } & HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      border?: boolean;
+      children?: Snippet;
+    },
+    {
+      bg?: string | null;
+      fg?: string | null;
+      marginBlock?: string | null;
+      marginInline?: string | null;
+      maxWidth?: string | null;
+      padding?: string | null;
+      height?: string | null;
+      paddingTop?: string | null;
+      borderTop?: string | null;
+    } &
+      StyleProps<typeof CONTAINER_VARS>
+  >;
 
-  const { children, border = false, ...props }: Props = $props();
+  const {
+    children,
+    border = false,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(props, "container", [
-      "bg",
-      "fg",
+  /* The shorthands container's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CONTAINER_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "container", [
+      ...CONTAINER_VARS,
       "marginBlock",
       "marginInline",
       "maxWidth",
-      "padding",
       "height",
       "paddingTop",
       "borderTop",
@@ -34,7 +61,7 @@
   );
 </script>
 
-<section class:border {style}>
+<section class={className} class:border {...el}>
   {@render children?.()}
 </section>
 

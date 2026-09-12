@@ -1,21 +1,38 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MenuStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MenuStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import { COLOR_VARS, type StyleProps } from "$lib/styleProps";
 
-  type Props = {
-    children?: Snippet;
-    striped?: boolean;
-  } & MenuStyleProps &
-    HTMLAttributes<HTMLUListElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLUListElement>,
+    {
+      children?: Snippet;
+      striped?: boolean;
+    },
+    MenuStyleProps &
+      StyleProps<typeof MENU_LIST_VARS>
+  >;
 
-  let { children, striped = false, ...restProps }: Props = $props();
+  let {
+    children,
+    striped = false,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "menu", [
-      "fg",
-      "bg",
+  /* The shorthands menu's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  /* COLOR only. `.menu`'s padding-props include is commented out and the
+     rule hardcodes `padding: 0`, so a --menu-padding would go nowhere -- the
+     shorthand is offered where the mixin is live, not where it is written. */
+  const MENU_LIST_VARS = [...COLOR_VARS] as const;
+
+  const el = $derived(
+    elementProps(restProps, "menu", [
+      ...MENU_LIST_VARS,
       "itemPadding",
       "itemWidth",
       "itemHeight",
@@ -29,7 +46,7 @@
   );
 </script>
 
-<ul {style} class="menu" {...restProps} class:striped>
+<ul class={["menu", className]} class:striped {...el}>
   {@render children?.()}
 </ul>
 

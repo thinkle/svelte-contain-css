@@ -1,18 +1,31 @@
 <script lang="ts">
   import type { HTMLSelectAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import type { MatchMode, TypeaheadMode } from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
-  type Props = {
-    value?: any;
-    children?: import("svelte").Snippet;
-    "data-audit-action"?: string | null;
-    /** See {@link MatchMode} on DropdownMenu -- how type-ahead text is compared. */
-    matchMode?: MatchMode;
-    /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
-    typeaheadMode?: TypeaheadMode;
-  } & HTMLSelectAttributes;
+  type Props = ContainProps<
+    HTMLSelectAttributes,
+    {
+      value?: any;
+      children?: import("svelte").Snippet;
+      "data-audit-action"?: string | null;
+      /** See {@link MatchMode} on DropdownMenu -- how type-ahead text is compared. */
+      matchMode?: MatchMode;
+      /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
+      typeaheadMode?: TypeaheadMode;
+    },
+    StyleProps<typeof SELECT_VARS>
+  >;
 
   let {
     value = $bindable(),
@@ -20,8 +33,21 @@
     "data-audit-action": dropdownAuditAction = null,
     matchMode = "prefix",
     typeaheadMode = "focus",
+    class: className,
     ...restProps
   }: Props = $props();
+
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const SELECT_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "select", SELECT_VARS));
   let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
@@ -121,7 +147,7 @@
   });
 </script>
 
-<select bind:value bind:this={selectElement} {...restProps}>
+<select bind:value bind:this={selectElement} class={className} {...el}>
   {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width={targetWidth}>

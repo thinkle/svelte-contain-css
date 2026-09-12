@@ -10,6 +10,9 @@
     multiline?: boolean;
   };
 
+  /* No attribute pass-through, deliberately: FormProvider renders no element
+     of its own -- it only sets context around {@render children}. There is
+     nothing for `class`, `style` or `data-*` to land on. */
   let {
     layout,
     collapseSide,

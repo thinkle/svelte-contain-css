@@ -1,17 +1,28 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    checked?: boolean | undefined;
-    name?: string;
-    value?: any;
-    group?: any[];
-    children?: Snippet;
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "value">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      checked?: boolean | undefined;
+      name?: string;
+      value?: any;
+      group?: any[];
+      children?: Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof CHECKBOX_VARS>
+  ,
+    "value" | "type"
+  >;
 
   let {
     checked = $bindable<boolean | undefined>(undefined),
@@ -19,13 +30,21 @@
     value = undefined,
     group = $bindable<any[] | undefined>(undefined),
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "checkbox", [
-      "bg",
-      "fg",
+  /* The shorthands checkbox's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CHECKBOX_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    splitProps(restProps, "checkbox", [
+      ...CHECKBOX_VARS,
       "padding",
       "width",
       "height",
@@ -58,7 +77,7 @@
   let ref: HTMLElement | null = $state(null);
 </script>
 
-<div class="label-sizing-box" {style}>
+<div class={["label-sizing-box", className]} style={el.style}>
   <label class="checkbox-item">
     {#if useGroup}
       <input
@@ -67,14 +86,14 @@
         {value}
         checked={isChecked}
         onchange={handleGroupChange}
-        {...restProps}
+        {...el.attrs}
       />
     {:else}
       <input
         name={name || (ref && ref.textContent) || undefined}
         type="checkbox"
         bind:checked
-        {...restProps}
+        {...el.attrs}
       />
     {/if}
     <span bind:this={ref}>{@render children?.()}</span>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
   /**
    * A full-width band inside a GridLayout: a section heading, an explanation, a
@@ -15,31 +16,35 @@
    * that typographic containers impose is lifted for its contents too. Put the
    * class on your own heading instead and the heading keeps that measure.
    */
-  type Props = {
-    /** How the row sits in the span it covers: start, center, end, stretch. */
-    justify?: string | null;
-    /** Shorthand for `justify="center"`, as `Stack` takes `center`. */
-    center?: boolean;
-    children?: Snippet;
-  } & HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      /** How the row sits in the span it covers: start, center, end, stretch. */
+      justify?: string | null;
+      /** Shorthand for `justify="center"`, as `Stack` takes `center`. */
+      center?: boolean;
+      children?: Snippet;
+    }
+  >;
 
-  let { justify = null, center = false, children, ...restProps }: Props = $props();
+  let {
+    justify = null,
+    center = false,
+    children,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
   const resolvedJustify = $derived(justify ?? (center ? "center" : null));
 
-  const inlineStyle = $derived((restProps as { style?: string }).style);
-  const elementProps = $derived.by(() => {
-    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
-    return rest;
-  });
-
-  const style = $derived(
-    injectVars({ justify: resolvedJustify, ...elementProps }, "grid-row", ["justify"]) +
-      (inlineStyle ?? ""),
+  const el = $derived(
+    elementProps({ justify: resolvedJustify, ...restProps }, "grid-row", [
+      "justify",
+    ]),
   );
 </script>
 
-<div class="grid-full-row grid-row" {...elementProps} {style}>
+<div class={["grid-full-row", "grid-row", className]} {...el}>
   {@render children?.()}
 </div>
 

@@ -1,42 +1,51 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MarginStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    size?: "small" | "medium" | "large";
-    customHeight?: string | null;
-    children?: Snippet;
-  } & MarginStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      size?: "small" | "medium" | "large";
+      customHeight?: string | null;
+      children?: Snippet;
+    },
+    MarginStyleProps &
+      StyleProps<typeof ROW_CONTAINER_VARS>
+  >;
 
   let {
     size = "medium",
     customHeight = null,
     children,
-    marginBlock = null,
-    marginInline = null,
-    style: inlineStyle,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars({ marginBlock, marginInline }, "row-container", [
-      "marginBlock",
-      "marginInline",
-    ]) + (inlineStyle ?? ""),
+  /* The shorthands row-container's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const ROW_CONTAINER_VARS = [
+    ...MARGIN_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "row-container", ROW_CONTAINER_VARS),
   );
 </script>
 
 <section
-  class="row-container"
+  class={["row-container", className]}
   class:small={size === "small"}
   class:medium={size === "medium"}
   class:large={size === "large"}
   style:--custom-height={customHeight}
-  {style}
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </section>

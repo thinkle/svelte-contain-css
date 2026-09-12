@@ -1,22 +1,33 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAnchorAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    primary?: boolean;
-    secondary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    href?: string;
-    id?: string | null;
-    icon?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    HTMLAnchorAttributes;
+  type Props = ContainProps<
+    HTMLAnchorAttributes,
+    {
+      primary?: boolean;
+      secondary?: boolean;
+      warning?: boolean;
+      danger?: boolean;
+      success?: boolean;
+      info?: boolean;
+      href?: string;
+      id?: string | null;
+      icon?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof BUTTON_LINK_VARS>
+  >;
 
   let {
     primary = false,
@@ -29,23 +40,26 @@
     id = null,
     icon,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const inlineStyle = $derived((restProps as { style?: string }).style);
-  const elementProps = $derived.by(() => {
-    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
-    return rest;
-  });
+  /* The shorthands button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const BUTTON_LINK_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
 
-  const style = $derived(
-    `${injectVars(elementProps, "button", [
-      "bg",
-      "fg",
-      "padding",
+  const el = $derived(
+    elementProps(restProps, "button", [
+      ...BUTTON_LINK_VARS,
       "width",
       "height",
-    ])}${inlineStyle ?? ""}`,
+    ]),
   );
 
   const iconSlotted = $derived(Boolean(icon));
@@ -53,9 +67,9 @@
 
 <a
   role="button"
-  {style}
   {href}
   id={id ?? undefined}
+  class={className}
   class:primary
   class:secondary
   class:warning
@@ -63,7 +77,7 @@
   class:success
   class:info
   class:has-icon={iconSlotted}
-  {...elementProps}
+  {...el}
 >
   <span class="content">{@render children?.()}</span>
   <span class:hidden={!iconSlotted} class="icon">

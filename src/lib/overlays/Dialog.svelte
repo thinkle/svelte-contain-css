@@ -1,16 +1,29 @@
 <script lang="ts">
   import CircleButton from "$lib/controls/CircleButton.svelte";
-  import { copyCSSVariables, injectVars } from "$lib/util";
+  import { copyCSSVariables, splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
+  import type { HTMLDialogAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
 
-  type PropsType = {
-    open?: boolean;
-    modal?: boolean;
-    dismissible?: boolean;
-    children?: Snippet;
-    onclose?: (() => void) | null;
-    onClose?: (() => void) | null;
-  } & Record<string, unknown>;
+  type PropsType = ContainProps<
+    HTMLDialogAttributes,
+    {
+      open?: boolean;
+      modal?: boolean;
+      dismissible?: boolean;
+      children?: Snippet;
+      onclose?: (() => void) | null;
+      onClose?: (() => void) | null;
+    },
+    StyleProps<typeof DIALOG_VARS>
+  >;
 
   let {
     open = true,
@@ -19,12 +32,26 @@
     children,
     onClose,
     onclose: oncloseProp = null,
+    class: className,
     ...restProps
   }: PropsType = $props();
 
   let onclose = $derived(oncloseProp || onClose);
 
-  const style = $derived(injectVars(restProps, "dialog", []));
+  /* The <section> is the variable carrier that copyCSSVariables reads through,
+     so it takes the style while the <dialog> takes the attributes -- a
+     caller's `aria-*` and `data-*` belong on the dialog itself. */
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const DIALOG_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(splitProps(restProps, "dialog", DIALOG_VARS));
 
   // Handle backdrop click to close modal (click outside behavior)
   // Clicks on the dialog element itself (the backdrop) close the dialog
@@ -75,9 +102,9 @@
   let ref: HTMLDivElement;
 </script>
 
-<section {style}>
+<section style={el.style}>
   <div class="variable-placeholder" bind:this={ref}></div>
-  <dialog bind:this={dialogElement} {onclose} {...restProps}>
+  <dialog bind:this={dialogElement} {onclose} class={className} {...el.attrs}>
     <div class="close-bar">
       <div class="close-button">
         <CircleButton onclick={onclose}>&times;</CircleButton>

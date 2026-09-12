@@ -1,18 +1,27 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    primary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    type?: "button" | "submit" | "reset";
-    children?: import("svelte").Snippet;
-  } & BaseStyleProps &
-    HTMLButtonAttributes;
+  type Props = ContainProps<
+    HTMLButtonAttributes,
+    {
+      primary?: boolean;
+      warning?: boolean;
+      danger?: boolean;
+      success?: boolean;
+      info?: boolean;
+      type?: "button" | "submit" | "reset";
+      children?: import("svelte").Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof CIRCLE_BUTTON_VARS>
+  >;
 
   let {
     primary = false,
@@ -22,13 +31,21 @@
     info = false,
     type = "button",
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "mini-button", [
-      "bg",
-      "fg",
+  /* The shorthands mini-button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CIRCLE_BUTTON_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "mini-button", [
+      ...CIRCLE_BUTTON_VARS,
       "padding",
       "width",
       "height",
@@ -37,14 +54,14 @@
 </script>
 
 <button
-  {style}
   {type}
+  class={className}
   class:primary
   class:warning
   class:danger
   class:success
   class:info
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </button>

@@ -1,7 +1,12 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import { getContext } from "svelte";
 
   type FormItemDefaults = {
@@ -25,19 +30,33 @@
     collapseSide,
     above = false,
     below = false,
+    class: className,
     ...restProps
-  }: {
-    fullWidth?: boolean;
-    globalInputStyles?: boolean;
-    label?: Snippet;
-    after?: Snippet;
-    children?: Snippet;
-    multiline?: boolean;
-    layout?: "side" | "above" | "below";
-    collapseSide?: boolean;
-    above?: boolean;
-    below?: boolean;
-  } & HTMLAttributes<HTMLElement> = $props();
+  }: ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      fullWidth?: boolean;
+      globalInputStyles?: boolean;
+      label?: Snippet;
+      after?: Snippet;
+      children?: Snippet;
+      multiline?: boolean;
+      layout?: "side" | "above" | "below";
+      collapseSide?: boolean;
+      above?: boolean;
+      below?: boolean;
+    },
+    StyleProps<typeof FORM_ITEM_VARS>
+  > = $props();
+
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const FORM_ITEM_VARS = [
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "form-item", FORM_ITEM_VARS));
 
   // Use $derived to reactively compute values from context
   const effectiveFullWidth = $derived(
@@ -56,18 +75,13 @@
     layout ?? contextDefaults?.layout ?? "side"
   );
 
-  const cssKeys = ["fullWidth", "globalInputStyles", "multiline"];
-
-  const style = $derived(injectVars(restProps, "form-item", cssKeys));
-
   const effectiveLayout = $derived<"side" | "above" | "below">(
     above ? "above" : below ? "below" : effectiveLayoutFromContext
   );
 </script>
 
 <div
-  {style}
-  class="form-item"
+  class={["form-item", className]}
   class:fullWidth={effectiveFullWidth}
   class:globalInputStyles={effectiveGlobalInputStyles}
   class:multiline={effectiveMultiline}
@@ -75,7 +89,7 @@
   class:layout-side={effectiveLayout === "side"}
   class:layout-above={effectiveLayout === "above"}
   class:layout-below={effectiveLayout === "below"}
-  {...restProps}
+  {...el}
 >
   <label>
     <span class="label">

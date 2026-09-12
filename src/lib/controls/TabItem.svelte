@@ -1,26 +1,62 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import Button from "./Button.svelte";
 
-  type Props = {
-    active?: boolean;
-    icon?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    HTMLAttributes<HTMLButtonElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLButtonElement>,
+    {
+      active?: boolean;
+      icon?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps &
+      StyleProps<typeof TAB_ITEM_VARS>
+  >;
 
-  const { active = false, icon, children, ...restProps }: Props = $props();
+  const {
+    active = false,
+    icon,
+    children,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
+  /* Everything goes to the Button, not to the wrapper. The wrapper is
+     `display: contents`, so it generates no box -- a caller's `style` put
+     there would be silently inert. The variables work on the Button too:
+     `.tab > button`'s rules read --tab-bg and friends, and a custom property
+     resolves on the element it is declared on. */
+  /* The shorthands tab's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const TAB_ITEM_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "tab", [
+      ...TAB_ITEM_VARS,
+      "width",
+      "height",
+    ]),
   );
 </script>
 
-<div class="tab" class:active {style}>
-  <Button primary={active} {icon} {...restProps}>
+<div class="tab" class:active>
+  <Button primary={active} {icon} class={className} {...el}>
     {@render children?.()}
   </Button>
 </div>

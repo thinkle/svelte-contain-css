@@ -576,7 +576,10 @@ appear ineffective. Set the token the component actually reads:
 
 ### Direct Props → CSS Variables
 
-Many components accept style-related props like `bg`, `fg`, `padding`. These become inline **custom-property declarations**, not direct `background` or `padding` declarations. The component's stylesheet reads those variables through its fallback chain:
+Many components accept style-related props like `bg`, `fg`, `padding`,
+`fontSize` and `marginBlock`. These become inline **custom-property
+declarations**, not direct `background` or `padding` declarations. The
+component's stylesheet reads those variables through its fallback chain:
 
 ```svelte
 <Button bg="blue" fg="white" padding="1rem 2rem">Styled Button</Button>
@@ -605,6 +608,28 @@ You can also pass CSS variables directly using `--variable-name` syntax. These a
 
 Use props for convenience, or explicit `--var` syntax when you need to set variables
 that aren't exposed as props.
+
+### Which shorthands does a component take?
+
+Not a list to memorise: a component accepts the shorthands its own stylesheet
+actually reads. The groups are:
+
+| Group | Props |
+| --- | --- |
+| Color | `bg`, `fg` |
+| Box | `padding`, `borderRadius` |
+| Margin | `marginBlock`, `marginInline` |
+| Gap | `gap` |
+| Typography | `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`, `textAlign`, `textTransform`, `textDecoration`, `fontFamily`, `fontVariant` |
+| Size | `width`, `minWidth`, `maxWidth`, `height`, `minHeight`, `maxHeight` |
+
+TypeScript will tell you which a given component takes, and an unsupported one
+is a type error rather than a silent no-op. Every component that renders text
+takes the typography group, so `fontSize` and `fontWeight` work on `Button`,
+`Tag`, `Container`, `Card` and the rest alike.
+
+These remain a _last resort_ for one-off adjustments. Reach for a CSS variable
+on an ancestor first.
 
 ### Wrapper/Container Theming
 
@@ -640,6 +665,127 @@ Define themes in your stylesheets — **this is where most styling should live**
   </Container>
 </div>
 ```
+
+---
+
+## Attributes, `class` and testing hooks
+
+Components forward the attributes you set to the real element underneath, so
+you can label, test and hook into them like any HTML element. This is what
+makes them usable in a real app rather than only in a demo.
+
+### Accessibility attributes
+
+`aria-*`, `role`, `id`, `tabindex` and friends all reach the element:
+
+```svelte
+<Container id="main-content" aria-label="Search results" role="region">
+  ...
+</Container>
+
+<Button aria-describedby="save-hint" aria-keyshortcuts="Control+S">Save</Button>
+<p id="save-hint">Saves without leaving the page.</p>
+```
+
+For components that wrap a control — `Checkbox`, `Toggle`, `RadioButton` —
+attributes land on the **control**, which is what your `aria-describedby` and
+`required` are describing, while `class` and `style` land on the wrapper the
+component's CSS targets:
+
+```svelte
+<Checkbox name="terms" required aria-describedby="terms-hint">
+  I accept the terms
+</Checkbox>
+<span id="terms-hint">You can withdraw consent later.</span>
+```
+
+### Naming a component's own controls
+
+Some components render a control you did not write, so setting `aria-label` on
+the component would label the wrong thing. Those take an explicit prop, and the
+default is deliberately generic — replace it with what the action means in your
+app:
+
+```svelte
+<!-- The close button is labelled "Remove" by default. Say what it removes: -->
+<Tag onclose={dropFilter} closeLabel="Stop filtering by {author}">{author}</Tag>
+
+<Progress value={pct} progressLabel="Uploading photos" />
+<SplitPane resizerLabel="Resize the preview" />
+<Sidebar expandLabel="Show filters" collapseLabel="Hide filters" />
+```
+
+A screen-reader user hearing "Remove, button" five times in a row learns
+nothing. `closeLabel="Stop filtering by Ursula Le Guin"` is what makes a row of
+tags navigable.
+
+### Test hooks
+
+`data-*` attributes pass straight through, so components are addressable from
+Playwright, Testing Library or anything else:
+
+```svelte
+<Button data-testid="submit-order">Place order</Button>
+<DataListItem data-testid="order-row" data-order-id={order.id}>...</DataListItem>
+```
+
+```ts
+await page.getByTestId("submit-order").click();
+```
+
+### Custom classes
+
+`class` is **added to** the component's own class, never replacing it, so the
+component keeps its styling:
+
+```svelte
+<Card class="featured">...</Card>
+<!-- renders: class="card featured" -->
+```
+
+Two things to know:
+
+**Your class must be defined globally.** Svelte scopes styles to the component
+that declares them, so a class you write in a page's `<style>` block will not
+apply to a component's element unless you use `:global`:
+
+```svelte
+<Card class="featured">Highlighted</Card>
+
+<style>
+  /* Without :global, Svelte scopes this away and nothing happens */
+  :global(.featured) {
+    --card-bg: var(--primary-bg);
+    --card-fg: var(--primary-fg);
+  }
+</style>
+```
+
+**Prefer setting variables to overriding properties.** A class that sets
+`--card-bg` works with the cascade; one that sets `background` fights the
+component's own rules and will need `!important` sooner or later. Use `class`
+as a *hook* — for test selectors, for third-party utility CSS, for targeting a
+group of components — and let CSS variables do the styling.
+
+### `style`
+
+An inline `style` is kept alongside the component's variables rather than
+replacing them, and your declarations win:
+
+```svelte
+<Tag bg="rebeccapurple" style="vertical-align: baseline">Draft</Tag>
+<!-- style="--tag-bg: rebeccapurple;vertical-align: baseline" -->
+```
+
+Use it for genuinely one-off positioning. Anything reusable belongs in a class
+or a variable on an ancestor.
+
+### What does not forward
+
+A few components have no single element to forward to, and take no attributes:
+`FormProvider` and `Code` render no element of their own; `ResponsiveText`
+renders one element per breakpoint; `Table`'s sticky mode renders a hidden
+measuring copy, so an `id` would appear twice. Wrap them if you need a handle.
 
 ---
 
@@ -1224,6 +1370,28 @@ Contain CSS components are built with accessibility in mind:
 - **Tooltip** uses native `popover` attribute
 - **All interactive elements** have proper focus states via `:focus-visible`
 - **Form components** maintain proper label associations
+- **`aria-*` and `role`** pass through to the underlying element — see
+  [Attributes, `class` and testing hooks](#attributes-class-and-testing-hooks)
+
+Where a component renders a control you did not write, it takes a prop for that
+control's accessible name. The defaults are generic on purpose; replace them
+with what the action means in your app:
+
+| Component | Prop | Default |
+| --- | --- | --- |
+| `Tag` | `closeLabel` | `"Remove"` |
+| `Progress` | `progressLabel` | `"Progress"` |
+| `SplitPane` | `resizerLabel` | `"Resize panes"` |
+| `Sidebar` | `expandLabel` / `collapseLabel` | `"Expand sidebar"` / `"Collapse sidebar"` |
+
+```svelte
+<Tag onclose={() => drop(author)} closeLabel="Stop filtering by {author}">
+  {author}
+</Tag>
+```
+
+A screen-reader user hearing "Remove, button" five times in a row learns
+nothing about which tag they are on.
 
 Writing semantic HTML inside Contain components (real headings, real lists, real
 table markup) is the other half of this — see [Text is HTML's job](#text-is-htmls-job).

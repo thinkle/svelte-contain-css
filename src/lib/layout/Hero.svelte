@@ -1,20 +1,36 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
-  import type { HeroStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
+  import type { ContainProps, HeroStyleProps } from "$lib/types";
 
-  type Props = {
-    children?: Snippet;
-  } & HeroStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      children?: Snippet;
+    },
+    HeroStyleProps &
+      StyleProps<typeof HERO_VARS>
+  >;
 
-  const { children, ...restProps }: Props = $props();
+  const { children, class: className, ...restProps }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "hero", [
-      "bg",
-      "fg",
+  /* The shorthands hero's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const HERO_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(restProps, "hero", [
+      ...HERO_VARS,
       "padding",
       "width",
       "height",
@@ -25,10 +41,9 @@
 </script>
 
 <div
-  class="hero"
-  {style}
+  class={["hero", className]}
   style:--text-align="var(--hero-text-align,center)"
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </div>

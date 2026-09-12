@@ -1,7 +1,15 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import FormProvider from "./FormProvider.svelte";
 
   let {
@@ -26,33 +34,51 @@
     action,
     method,
     onsubmit,
+    class: className,
     ...restProps
-  }: {
-    children?: Snippet;
-    // FormProvider context props
-    layout?: "side" | "above" | "below";
-    collapseSide?: boolean;
-    fullWidth?: boolean;
-    globalInputStyles?: boolean;
-    multiline?: boolean;
-    // Container styling props
-    bg?: string;
-    fg?: string;
-    padding?: string;
-    border?: string | boolean;
-    borderRadius?: string;
-    margin?: string;
-    maxWidth?: string;
-    minWidth?: string;
-    width?: string;
-    // Form attributes
-    action?: string;
-    method?: "get" | "post" | "dialog";
-    onsubmit?: (event: SubmitEvent) => void;
-  } & HTMLAttributes<HTMLFormElement> = $props();
+  }: ContainProps<
+    HTMLAttributes<HTMLFormElement>,
+    {
+      children?: Snippet;
+      // FormProvider context props
+      layout?: "side" | "above" | "below";
+      collapseSide?: boolean;
+      fullWidth?: boolean;
+      globalInputStyles?: boolean;
+      multiline?: boolean;
+      // Form attributes
+      action?: string;
+      method?: "get" | "post" | "dialog";
+      onsubmit?: (event: SubmitEvent) => void;
+    },
+    {
+      bg?: string;
+      fg?: string;
+      padding?: string;
+      border?: string | boolean;
+      borderRadius?: string;
+      margin?: string;
+      maxWidth?: string;
+      minWidth?: string;
+      width?: string;
+    } &
+      StyleProps<typeof FORM_VARS>
+  > = $props();
 
-  const style = $derived(
-    injectVars(
+  /* The style props are destructured above, so they have to be handed back
+     explicitly -- rest props no longer carry them. */
+  /* The shorthands form's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const FORM_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(
+    elementProps(
       {
         bg,
         fg,
@@ -67,17 +93,14 @@
       },
       "form",
       [
-        "bg",
-        "fg",
-        "padding",
-        "border",
-        "borderRadius",
-        "margin",
-        "maxWidth",
-        "minWidth",
-        "width",
-      ]
-    )
+      ...FORM_VARS,
+      "border",
+      "margin",
+      "maxWidth",
+      "minWidth",
+      "width",
+    ],
+    ),
   );
 </script>
 
@@ -88,7 +111,7 @@
   {globalInputStyles}
   {multiline}
 >
-  <form {style} {action} {method} {onsubmit} {...restProps}>
+  <form class={className} {action} {method} {onsubmit} {...el}>
     {@render children?.()}
   </form>
 </FormProvider>

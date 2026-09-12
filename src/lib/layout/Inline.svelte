@@ -1,21 +1,34 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type {
+    BaseStyleProps,
+    ContainProps,
+    MarginStyleProps,
+  } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  type Props = {
-    fill?: boolean;
-    stretch?: boolean;
-    split?: boolean;
-    justify?: string | null;
-    align?: string | null;
-    gap?: string | null;
-    wrap?: string | null;
-    children?: Snippet;
-  } & BaseStyleProps &
-    MarginStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      fill?: boolean;
+      stretch?: boolean;
+      split?: boolean;
+      justify?: string | null;
+      align?: string | null;
+      gap?: string | null;
+      wrap?: string | null;
+      children?: Snippet;
+    },
+    BaseStyleProps & MarginStyleProps &
+      StyleProps<typeof INLINE_VARS>
+  >;
 
   let {
     fill = false,
@@ -26,39 +39,40 @@
     gap = null,
     wrap = null,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const inlineStyle = $derived((restProps as { style?: string }).style);
-  const elementProps = $derived.by(() => {
-    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
-    return rest;
-  });
+  /* The shorthands inline's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const INLINE_VARS = [
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+  ] as const;
 
-  const style = $derived(
-    injectVars({ justify, align, gap, wrap, ...elementProps }, "inline", [
+  const el = $derived(
+    elementProps({ justify, align, gap, wrap, ...restProps }, "inline", [
+      ...INLINE_VARS,
       "bg",
       "fg",
-      "padding",
       "width",
       "height",
       "gap",
       "justify",
       "align",
       "wrap",
-      "marginBlock",
-      "marginInline",
-    ]) + (inlineStyle ?? ""),
+    ]),
   );
 </script>
 
 <div
-  class="inline"
+  class={["inline", className]}
   class:fill
   class:stretch
   class:split
-  {style}
-  {...elementProps}
+  {...el}
 >
   {@render children?.()}
 </div>

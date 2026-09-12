@@ -1,38 +1,72 @@
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
-  import type { SidebarStyleProps } from "$lib/types";
+  import type { ContainProps, SidebarStyleProps } from "$lib/types";
   import type { HTMLAttributes } from "svelte/elements";
 
-  type Props = {
-    left?: boolean;
-    right?: boolean;
-    children?: Snippet;
-  } & SidebarStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      left?: boolean;
+      right?: boolean;
+      children?: Snippet;
+      /**
+       * Accessible name for the button that opens the sidebar on narrow
+       * screens, and for the one that collapses it once open. What the sidebar
+       * holds is the useful thing to say -- `expandLabel="Show filters"` beats
+       * "Expand sidebar" for anyone who cannot see what it contains.
+       */
+      expandLabel?: string;
+      collapseLabel?: string;
+    },
+    SidebarStyleProps &
+      StyleProps<typeof SIDEBAR_VARS>
+  >;
 
-  let { left, right, children, ...restProps }: Props = $props();
+  let {
+    left,
+    right,
+    children,
+    expandLabel = "Expand sidebar",
+    collapseLabel = "Collapse sidebar",
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "sidebar", ["bg", "fg", "width"]),
-  );
+  /* The shorthands sidebar's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const SIDEBAR_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "sidebar", [
+      ...SIDEBAR_VARS,
+      "width",
+    ]));
 
   let expandedHamburger = $state(false);
   let expandedBar = $state(true);
 </script>
 
 <aside
-  class="sidebar"
+  class={["sidebar", className]}
   class:right
   class:left
   class:expandedHamburger
   class:expandedBar
-  {style}
+  {...el}
 >
   <button
     class:expander={!expandedHamburger}
     class:close={expandedHamburger}
-    aria-label={expandedHamburger ? "Collapse sidebar" : "Expand sidebar"}
+    aria-label={expandedHamburger ? collapseLabel : expandLabel}
     data-audit-action="toggle-sidebar-sheet"
     onclick={() => (expandedHamburger = !expandedHamburger)}
   ></button>

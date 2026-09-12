@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
 
   type Props = Omit<HTMLAttributes<HTMLSpanElement>, "color"> & {
     children?: Snippet;
@@ -33,7 +33,7 @@
     italic = false,
     color,
     amount,
-    style: inlineStyle,
+    class: className,
     ...restProps
   }: Props = $props();
 
@@ -69,23 +69,10 @@
     if (color !== undefined || amount !== undefined) return mixed;
     return `var(--${tone}-text-fg, ${mixed})`;
   });
-  const elementProps = $derived(
-    Object.fromEntries(
-      Object.entries(restProps).filter(([key]) => !key.startsWith("--")),
-    ),
-  );
-  const style = $derived(
-    injectVars(restProps, "text", []) + (inlineStyle ?? ""),
-  );
+  const el = $derived(elementProps(restProps, "text"));
 </script>
 
-<span
-  {...elementProps}
-  {style}
-  style:color={foreground}
-  class:bold
-  class:italic
->
+<span class={className} class:bold class:italic style:color={foreground} {...el}>
   {@render children?.()}
 </span>
 
