@@ -1,42 +1,39 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MarginStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    size?: "small" | "medium" | "large";
-    customHeight?: string | null;
-    children?: Snippet;
-  } & MarginStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      size?: "small" | "medium" | "large";
+      customHeight?: string | null;
+      children?: Snippet;
+    },
+    MarginStyleProps
+  >;
 
   let {
     size = "medium",
     customHeight = null,
     children,
-    marginBlock = null,
-    marginInline = null,
-    style: inlineStyle,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars({ marginBlock, marginInline }, "row-container", [
-      "marginBlock",
-      "marginInline",
-    ]) + (inlineStyle ?? ""),
+  const el = $derived(
+    elementProps(restProps, "row-container", ["marginBlock", "marginInline"]),
   );
 </script>
 
 <section
-  class="row-container"
+  class={["row-container", className]}
   class:small={size === "small"}
   class:medium={size === "medium"}
   class:large={size === "large"}
   style:--custom-height={customHeight}
-  {style}
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </section>

@@ -1,15 +1,21 @@
 <script lang="ts">
   import Bar from "$lib/layout/Bar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
   type Item = { label: string; value: string };
-  interface Props {
-    sticky?: boolean;
-    active?: string | Item | null;
-    items?: (string | Item)[];
-    onchange?: (value: string | Item | null) => void;
-    children?: import("svelte").Snippet;
-  }
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      sticky?: boolean;
+      active?: string | Item | null;
+      items?: (string | Item)[];
+      onchange?: (value: string | Item | null) => void;
+      children?: import("svelte").Snippet;
+    }
+  >;
 
   let {
     sticky = false,
@@ -17,12 +23,16 @@
     items = [],
     onchange,
     children,
+    class: className,
+    ...restProps
   }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "tab-bar"));
 
   let lastActive = $state(active);
 </script>
 
-<div class="tabs" class:sticky>
+<div class={["tabs", className]} class:sticky {...el}>
   <Bar
     padding="0"
     --button-height="var(--tab-bar-height, 3em)"

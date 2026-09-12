@@ -22,20 +22,23 @@
 <script lang="ts">
   import { cssProperties } from "$lib/cssprops";
   import MenuList from "$lib/layout/MenuList.svelte";
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
   import type { Snippet } from "svelte";
   import { onMount } from "svelte";
-  import type { DropdownMenuStyleProps } from "$lib/types";
+  import type { ContainProps, DropdownMenuStyleProps } from "$lib/types";
   import type { HTMLAttributes } from "svelte/elements";
 
-  type Props = {
-    label?: Snippet;
-    children?: Snippet;
-    triggerAuditAction?: string | null;
-    matchMode?: MatchMode;
-    typeaheadMode?: TypeaheadMode;
-  } & DropdownMenuStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      label?: Snippet;
+      children?: Snippet;
+      triggerAuditAction?: string | null;
+      matchMode?: MatchMode;
+      typeaheadMode?: TypeaheadMode;
+    },
+    DropdownMenuStyleProps
+  >;
 
   let {
     label,
@@ -43,6 +46,7 @@
     triggerAuditAction = null,
     matchMode = "prefix",
     typeaheadMode = "focus",
+    class: className,
     ...props
   }: Props = $props();
   idPostfix++;
@@ -52,8 +56,8 @@
   let isOpen = $state(false);
 
   // Style injection
-  const style = $derived(
-    injectVars(props, "menu", [
+  const el = $derived(
+    elementProps(props, "menu", [
       "bg",
       "fg",
       "padding",
@@ -275,7 +279,12 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<nav class="dropdown-menu" class:open={isOpen} onkeydown={handleKeystroke}>
+<nav
+  class={["dropdown-menu", className]}
+  class:open={isOpen}
+  onkeydown={handleKeystroke}
+  {...el}
+>
   <button
     bind:this={buttonElement}
     onclick={triggerMenu}

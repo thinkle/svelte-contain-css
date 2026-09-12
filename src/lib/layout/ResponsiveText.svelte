@@ -3,6 +3,10 @@
 
   const breakpoints = ["xs", "small", "medium", "large", "xl"] as const;
 
+  /* No attribute pass-through, deliberately: this renders one sibling span
+     per breakpoint rather than a single root, so there is no one element an
+     `id` or `data-testid` could go on without being wrong at every other
+     breakpoint. Wrap it if you need a handle. */
   const {
     greaterThan = null,
     smallerThan = null,

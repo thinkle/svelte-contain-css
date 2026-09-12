@@ -2,7 +2,7 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
-  import { splitProps } from "$lib/util";
+  import { elementProps } from "$lib/util";
   import Button from "./Button.svelte";
 
   type Props = ContainProps<
@@ -23,16 +23,18 @@
     ...restProps
   }: Props = $props();
 
-  /* The wrapper is `display: contents` and exists only to scope the tab's CSS
-     onto the Button inside it, so the variables belong on it while every
-     attribute is forwarded to the Button. */
+  /* Everything goes to the Button, not to the wrapper. The wrapper is
+     `display: contents`, so it generates no box -- a caller's `style` put
+     there would be silently inert. The variables work on the Button too:
+     `.tab > button`'s rules read --tab-bg and friends, and a custom property
+     resolves on the element it is declared on. */
   const el = $derived(
-    splitProps(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
+    elementProps(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
   );
 </script>
 
-<div class="tab" class:active style={el.style}>
-  <Button primary={active} {icon} class={className} {...el.attrs}>
+<div class="tab" class:active>
+  <Button primary={active} {icon} class={className} {...el}>
     {@render children?.()}
   </Button>
 </div>

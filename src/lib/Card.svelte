@@ -1,18 +1,20 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { CardStyleProps } from "$lib/types";
-  import { injectVars } from "./util";
+  import type { CardStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "./util";
 
-  type Props = {
-    header?: Snippet;
-    footer?: Snippet;
-    children?: Snippet;
-    center?: boolean;
-    height?: string;
-    fixedHeight?: boolean;
-  } & CardStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      header?: Snippet;
+      footer?: Snippet;
+      children?: Snippet;
+      center?: boolean;
+      fixedHeight?: boolean;
+    },
+    CardStyleProps
+  >;
 
   let {
     header,
@@ -21,11 +23,14 @@
     height,
     fixedHeight,
     center,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const cssVars = $derived(
-    injectVars({ height, ...restProps }, "card", [
+  /* `height` is destructured (the $effect below reads it), so it has to be
+     handed back explicitly -- rest props no longer carry it. */
+  const el = $derived(
+    elementProps({ height, ...restProps }, "card", [
       "bg",
       "fg",
       "padding",
@@ -36,7 +41,7 @@
     ]),
   );
 
-  const forceFixedHeight = (h: string | undefined) => {
+  const forceFixedHeight = (h: string | null | undefined) => {
     if (h && !fixedHeight) {
       fixedHeight = true;
     }
@@ -47,7 +52,7 @@
   let hasFooter = $derived(Boolean(footer));
 </script>
 
-<div class="card" class:center class:fixedHeight style={cssVars}>
+<div class={["card", className]} class:center class:fixedHeight {...el}>
   <header class:hide={!hasHeader}>
     {#if header}{@render header()}{/if}
   </header>

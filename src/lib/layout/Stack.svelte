@@ -1,21 +1,27 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type {
+    BaseStyleProps,
+    ContainProps,
+    MarginStyleProps,
+  } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    fill?: boolean;
-    stretch?: boolean;
-    split?: boolean;
-    center?: boolean;
-    justify?: string | null;
-    align?: string | null;
-    gap?: string | null;
-    children?: Snippet;
-  } & BaseStyleProps &
-    MarginStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      fill?: boolean;
+      stretch?: boolean;
+      split?: boolean;
+      center?: boolean;
+      justify?: string | null;
+      align?: string | null;
+      gap?: string | null;
+      children?: Snippet;
+    },
+    BaseStyleProps & MarginStyleProps
+  >;
 
   let {
     fill = false,
@@ -26,44 +32,38 @@
     align = null,
     gap = null,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
   const resolvedAlign = $derived(align ?? (center ? "center" : null));
 
-  const inlineStyle = $derived((restProps as { style?: string }).style);
-  const elementProps = $derived.by(() => {
-    const { style: _, ...rest } = restProps as { style?: string } & Record<string, unknown>;
-    return rest;
-  });
-
-  const style = $derived(
-    injectVars(
-      { justify, align: resolvedAlign, gap, ...elementProps },
+  const el = $derived(
+    elementProps(
+      { justify, align: resolvedAlign, gap, ...restProps },
       "stack",
       [
-        "bg",
-        "fg",
-        "padding",
-        "width",
-        "height",
-        "gap",
-        "justify",
-        "align",
-        "marginBlock",
-        "marginInline",
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+      "gap",
+      "justify",
+      "align",
+      "marginBlock",
+      "marginInline",
       ],
-    ) + (inlineStyle ?? ""),
+    ),
   );
 </script>
 
 <div
-  class="stack"
+  class={["stack", className]}
   class:fill
   class:stretch
   class:split
-  {style}
-  {...elementProps}
+  {...el}
 >
   {@render children?.()}
 </div>

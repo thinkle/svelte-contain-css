@@ -15,8 +15,11 @@ function buildVars(
   let cssVars = "";
   for (const name of varList) {
     const value = props[name];
-    // `0` is a meaningful length, so only null/undefined/"" are skipped.
-    if (value == null || value === "") continue;
+    // `0` is a meaningful length, so it is NOT skipped -- the old `if (value)`
+    // test dropped it. `false` still is: Form and Fieldset type `border` as
+    // `string | boolean`, where `false` means "no border", not the declaration
+    // `--form-border: false`.
+    if (value == null || value === "" || value === false) continue;
     cssVars += `--${prefix}-${toKebabCase(name)}: ${value};`;
   }
   for (const key in props) {

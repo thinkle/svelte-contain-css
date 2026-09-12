@@ -1,18 +1,21 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import { injectVars } from "$lib/util";
-  import type { HeroStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import type { ContainProps, HeroStyleProps } from "$lib/types";
 
-  type Props = {
-    children?: Snippet;
-  } & HeroStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      children?: Snippet;
+    },
+    HeroStyleProps
+  >;
 
-  const { children, ...restProps }: Props = $props();
+  const { children, class: className, ...restProps }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "hero", [
+  const el = $derived(
+    elementProps(restProps, "hero", [
       "bg",
       "fg",
       "padding",
@@ -25,10 +28,9 @@
 </script>
 
 <div
-  class="hero"
-  {style}
+  class={["hero", className]}
   style:--text-align="var(--hero-text-align,center)"
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </div>

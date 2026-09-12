@@ -2,11 +2,13 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import Checkbox from "$lib/controls/Checkbox.svelte";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    start?: Snippet;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLLIElement>,
+    {
+      start?: Snippet;
     end?: Snippet;
     children?: Snippet;
     interactive?: boolean;
@@ -37,9 +39,10 @@
     selectedFg?: string | null;
     selectedOutline?: string | null;
     selectedBorder?: string | null;
-    selectionColor?: string | null;
-  } & BaseStyleProps &
-    HTMLAttributes<HTMLLIElement>;
+      selectionColor?: string | null;
+    },
+    BaseStyleProps
+  >;
 
   let {
     start,
@@ -51,11 +54,12 @@
     tabindex = undefined,
     onclick = null,
     onkeydown = null,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "data-list-item", [
+  const el = $derived(
+    elementProps(restProps, "data-list-item", [
       "bg",
       "fg",
       "padding",
@@ -146,19 +150,18 @@
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <li
-  class="data-list-item"
+  class={["data-list-item", className]}
   class:hasStart
   class:hasEnd
   class:isInteractive
   class:selectable
   class:checked={selectable && checked}
-  {style}
   tabindex={rowTabIndex}
   role={rowRole}
   aria-checked={selectable ? checked : undefined}
   onclick={handleClick}
   onkeydown={handleKeydown}
-  {...restProps}
+  {...el}
 >
   {#if hasStart}
     <div class="start">

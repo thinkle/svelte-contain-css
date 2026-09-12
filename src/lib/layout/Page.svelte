@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { injectVars } from "$lib/util";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
   import { onDestroy, onMount } from "svelte";
 
   const {
@@ -14,22 +16,33 @@
     footer,
     sidebar,
     children,
+    class: className,
     ...restProps
-  }: {
-    right?: boolean;
-    sticky?: boolean;
-    hideSidebar?: boolean;
-    hideHeader?: boolean;
-    hideFooter?: boolean;
-    onStickyChange?: (stuck: boolean) => void;
-    header?: Snippet;
-    footer?: Snippet;
-    sidebar?: Snippet;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      right?: boolean;
+      sticky?: boolean;
+      hideSidebar?: boolean;
+      hideHeader?: boolean;
+      hideFooter?: boolean;
+      onStickyChange?: (stuck: boolean) => void;
+      header?: Snippet;
+      footer?: Snippet;
+      sidebar?: Snippet;
+      children?: Snippet;
+    },
+    {
+      bg?: string | null;
+      fg?: string | null;
+      contentPadding?: string | null;
+      width?: string | null;
+      height?: string | null;
+    }
+  > = $props();
 
-  const style = $derived(
-    injectVars(restProps, "page", [
+  const el = $derived(
+    elementProps(restProps, "page", [
       "bg",
       "fg",
       "contentPadding",
@@ -89,7 +102,7 @@
 </script>
 
 <section
-  class="page"
+  class={["page", className]}
   class:freeze
   class:right
   class:sticky
@@ -97,8 +110,7 @@
   class:hasSidebar
   class:hasFooter
   bind:this={pageElement}
-  {style}
-  {...restProps}
+  {...el}
 >
   <header>
     {#if hasHeader}{@render header?.()}{/if}

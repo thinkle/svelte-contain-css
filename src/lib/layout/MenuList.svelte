@@ -1,19 +1,27 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MenuStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MenuStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    children?: Snippet;
-    striped?: boolean;
-  } & MenuStyleProps &
-    HTMLAttributes<HTMLUListElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLUListElement>,
+    {
+      children?: Snippet;
+      striped?: boolean;
+    },
+    MenuStyleProps
+  >;
 
-  let { children, striped = false, ...restProps }: Props = $props();
+  let {
+    children,
+    striped = false,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "menu", [
+  const el = $derived(
+    elementProps(restProps, "menu", [
       "fg",
       "bg",
       "itemPadding",
@@ -29,7 +37,7 @@
   );
 </script>
 
-<ul {style} class="menu" {...restProps} class:striped>
+<ul class={["menu", className]} class:striped {...el}>
   {@render children?.()}
 </ul>
 

@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
 
-  // migrate props via $props() so we can pick up extra CSS var props in restProps
   let {
     state = "inprogress",
     value = 0,
@@ -13,21 +14,42 @@
     width = null,
     height = null,
     children,
+    progressLabel = "Progress",
+    class: className,
     ...restProps
-  }: {
-    state?: "uninitiated" | "inprogress" | "complete";
-    value?: number | "indeterminate";
-    max?: number;
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
-    children?: Snippet;
-  } & Record<string, unknown> = $props();
+  }: ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      state?: "uninitiated" | "inprogress" | "complete";
+      value?: number | "indeterminate";
+      max?: number;
+      children?: Snippet;
+      /**
+       * Accessible name for the native <progress> that carries this bar's
+       * semantics. Say what is progressing -- `progressLabel="Upload"` -- since
+       * "Progress" tells a screen-reader user nothing they did not already know
+       * from the role.
+       *
+       * Named `progressLabel`, not `label`, because `label` is a real HTML
+       * attribute; a style or a11y prop must never shadow one.
+       */
+      progressLabel?: string;
+    },
+    BaseStyleProps
+  > = $props();
 
   const cssKeys = ["bg", "fg", "padding", "width", "height"];
-  const style = $derived(injectVars(restProps, "progress", cssKeys));
+
+  /* Every style prop is destructured above, so they are handed back
+     explicitly. Passing `restProps` alone -- which is what this did before --
+     meant <Progress bg="red"> emitted no --progress-bg at all. */
+  const el = $derived(
+    elementProps(
+      { bg, fg, padding, width, height, ...restProps },
+      "progress",
+      cssKeys,
+    ),
+  );
 
   // Compute filled fraction (0..1). 'indeterminate' treats as 1 for the visual bar,
   // but the native <progress> should omit the value attribute for indeterminate.
@@ -48,11 +70,16 @@
     1) Hidden native <progress> for a11y. 
        If 'indeterminate', omit the value attribute entirely.
   -->
-<div class="progress-container" data-state={state} {style}>
+<div class={["progress-container", className]} data-state={state} {...el}>
   {#if value === "indeterminate"}
-    <progress aria-label="Progress" {max} hidden></progress>
+    <progress aria-label={progressLabel} {max} hidden></progress>
   {:else}
-    <progress aria-label="Progress" {max} value={Number(value)} hidden></progress>
+    <progress
+      aria-label={progressLabel}
+      {max}
+      value={Number(value)}
+      hidden
+    ></progress>
   {/if}
 
   <!-- 2) Custom track with diagonal stripes (scrolling) when animateTrack=true -->

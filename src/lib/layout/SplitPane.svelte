@@ -1,27 +1,51 @@
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
   import { onMount } from "svelte";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
 
-  type Props = {
-    left?: Snippet;
-    right?: Snippet;
-  } & HTMLAttributes<HTMLElement> &
-    Record<string, unknown>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      left?: Snippet;
+      right?: Snippet;
+      /**
+       * Accessible name for the drag handle between the panes. Name what the
+       * panes hold -- `resizerLabel="Resize the preview"` -- so it is clear
+       * what moving the handle does.
+       */
+      resizerLabel?: string;
+    },
+    {
+      bg?: string | null;
+      fg?: string | null;
+      border?: string | null;
+      height?: string | null;
+      leftWidth?: string | null;
+      rightWidth?: string | null;
+    }
+  >;
 
-  let { left, right, ...restProps }: Props = $props();
-  const style = $derived(
-    injectVars(restProps, "split-pane", [
-      "bg",
-      "fg",
-      "border",
-      "height",
-      "leftWidth",
-      "rightWidth",
-    ])
-  );
+  let {
+    left,
+    right,
+    resizerLabel = "Resize panes",
+    class: className,
+    ...restProps
+  }: Props = $props();
   let resizeStyle = $state("");
+
+  /* resizeStyle is the live drag offset, so it goes in as extraVars -- after
+     the prop variables and before the caller's own `style`. */
+  const el = $derived(
+    elementProps(
+      restProps,
+      "split-pane",
+      ["bg", "fg", "border", "height", "leftWidth", "rightWidth"],
+      resizeStyle,
+    ),
+  );
   let startWidthLeft = $state(0);
   let startWidthRight = $state(0);
   let startX = $state(0);
@@ -118,10 +142,9 @@
 </script>
 
 <div
-  class="split-pane"
-  style={style + resizeStyle}
+  class={["split-pane", className]}
   bind:this={splitPaneContainer}
-  {...restProps}
+  {...el}
 >
   <div class="left" bind:this={leftPane}>
     {@render left?.()}
@@ -135,7 +158,7 @@
     tabindex="0"
     role="separator"
     aria-orientation="vertical"
-    aria-label="Resize Pane"
+    aria-label={resizerLabel}
     onpointerdown={onMouseDown}
     onkeydown={onKeyUp}
   ></div>

@@ -1,23 +1,25 @@
 <script lang="ts">
-  import type { MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps, MarginStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  interface Props extends MarginStyleProps {
-    id?: string;
-    children?: import("svelte").Snippet;
-  }
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      id?: string;
+      children?: import("svelte").Snippet;
+    },
+    MarginStyleProps
+  >;
 
-  let { id = "", marginBlock = null, marginInline = null, children }: Props = $props();
+  let { id = "", children, class: className, ...restProps }: Props = $props();
 
-  const style = $derived(
-    injectVars({ marginBlock, marginInline }, "text-layout", [
-      "marginBlock",
-      "marginInline",
-    ]),
+  const el = $derived(
+    elementProps(restProps, "text-layout", ["marginBlock", "marginInline"]),
   );
 </script>
 
-<div {id} {style}>
+<div {id} class={className} {...el}>
   {@render children?.()}
 </div>
 

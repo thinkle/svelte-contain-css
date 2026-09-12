@@ -1,17 +1,23 @@
 <script lang="ts">
   import { onDestroy, tick } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
   let tooltipDiv: HTMLElement | undefined = $state();
   let targetDiv: HTMLElement | undefined = $state();
   let tooltipMeasurementDiv: HTMLElement | undefined = $state();
-  interface Props {
-    tooltipText?: string;
-    vertical?: string;
-    horizontal?: string;
-    children?: import("svelte").Snippet;
-    tooltip?: import("svelte").Snippet;
-    block?: boolean;
-  }
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      tooltipText?: string;
+      vertical?: string;
+      horizontal?: string;
+      children?: import("svelte").Snippet;
+      tooltip?: import("svelte").Snippet;
+      block?: boolean;
+    }
+  >;
 
   let {
     tooltipText = "",
@@ -20,7 +26,13 @@
     children,
     tooltip,
     block = false,
+    class: className,
+    ...restProps
   }: Props = $props();
+
+  /* The wrapper is the element a caller is pointing at -- the tooltip itself
+     is a popover the component owns and positions. */
+  const el = $derived(elementProps(restProps, "tooltip"));
   // svelte-ignore state_referenced_locally
   let renderedVertical = $state(vertical);
   // svelte-ignore state_referenced_locally
@@ -235,11 +247,12 @@
 {#if block}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div
-    class="tooltip-wrapper"
+    class={["tooltip-wrapper", className]}
     onmouseenter={() => showPopover()}
     onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
     onfocusout={() => hidePopover()}
+    {...el}
   >
     <div class="tooltip-target" bind:this={targetDiv}>
       {@render children?.()}
@@ -270,11 +283,12 @@
 {:else}
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <span
-    class="tooltip-wrapper"
+    class={["tooltip-wrapper", className]}
     onmouseenter={() => showPopover()}
     onmouseleave={() => hidePopover()}
     onfocusin={() => showPopover()}
     onfocusout={() => hidePopover()}
+    {...el}
   >
     <span class="tooltip-target" bind:this={targetDiv}>
       {@render children?.()}

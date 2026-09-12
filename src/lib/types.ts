@@ -1,6 +1,6 @@
 /**
  * Common CSS variable props that can be passed to components.
- * These are converted to CSS custom properties via injectVars().
+ * These are converted to CSS custom properties via elementProps().
  */
 
 /** Base style props supported by most components */

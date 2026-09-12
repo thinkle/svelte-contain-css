@@ -7,6 +7,10 @@
     children?: import("svelte").Snippet;
   }
 
+  /* No attribute pass-through, deliberately: the sticky variant renders the
+     visible tables AND a visually-hidden clone of them used to measure column
+     widths. Spreading a caller's `id` would emit it twice, which is invalid.
+     Set attributes on the <table> markup you pass in as `thead`/`tbody`. */
   let {
     sticky = false,
     column_widths = null,

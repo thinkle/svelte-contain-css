@@ -1,40 +1,37 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { MarginStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { ContainProps, MarginStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    card?: boolean;
-    tile?: boolean;
-    children?: Snippet;
-  } & MarginStyleProps &
-    HTMLAttributes<HTMLDivElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      card?: boolean;
+      tile?: boolean;
+      children?: Snippet;
+    },
+    MarginStyleProps
+  >;
 
   let {
     children,
     card = false,
     tile = false,
-    marginBlock = null,
-    marginInline = null,
-    style: inlineStyle,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars({ marginBlock, marginInline }, "grid-layout", [
-      "marginBlock",
-      "marginInline",
-    ]) + (inlineStyle ?? ""),
+  const el = $derived(
+    elementProps(restProps, "grid-layout", ["marginBlock", "marginInline"]),
   );
 </script>
 
 <div
-  class="grid-layout"
+  class={["grid-layout", className]}
   class:card-grid={card}
   class:tile-grid={tile}
-  {style}
-  {...restProps}
+  {...el}
 >
   {@render children?.()}
 </div>

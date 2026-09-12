@@ -5,7 +5,7 @@
     HTMLButtonAttributes,
     HTMLInputAttributes,
   } from "svelte/elements";
-  import { injectVars } from "$lib/util";
+  import { splitProps } from "$lib/util";
   import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
 
   type BaseProps = BaseStyleProps & MarginStyleProps & {
@@ -77,8 +77,21 @@
     };
   });
 
-  const style = $derived(
-    injectVars(styleProps, "tile", [
+  /* splitProps consumes the style props and `--*`, and keeps `style` out of
+     the attributes; the props that are Tile's own rather than the element's
+     are peeled off here first. In the selectable case the variables land on
+     the label that `.tile` styles while the attributes go to the checkbox,
+     which is what a caller's `aria-*` and `data-*` are describing. */
+  const el = $derived.by(() => {
+    const {
+      selectable: _selectable,
+      interactive: _interactive,
+      children: _children,
+      center: _center,
+      class: _class,
+      ...rest
+    } = props as RenderProps & BaseProps & { class?: unknown };
+    return splitProps({ ...rest, ...styleProps }, "tile", [
       "bg",
       "fg",
       "padding",
@@ -88,53 +101,33 @@
       "align",
       "marginBlock",
       "marginInline",
-    ]) + ((props as { style?: string }).style ?? ""),
-  );
+    ]);
+  });
 
-  /** Everything that is ours rather than the element's. */
-  function stripOwnProps(value: RenderProps) {
-    const {
-      selectable: _selectable,
-      interactive: _interactive,
-      children: _children,
-      justify: _justify,
-      align: _align,
-      center: _center,
-      bg: _bg,
-      fg: _fg,
-      padding: _padding,
-      width: _width,
-      height: _height,
-      marginBlock: _marginBlock,
-      marginInline: _marginInline,
-      style: _style,
-      ...rest
-    } = value as RenderProps & BaseProps & { style?: string };
-    return rest;
-  }
-
-  function getSelectableInputProps(value: RenderProps): HTMLInputAttributes {
-    return stripOwnProps(value) as HTMLInputAttributes;
-  }
-
-  function getInteractiveButtonProps(value: RenderProps): HTMLButtonAttributes {
-    return stripOwnProps(value) as HTMLButtonAttributes;
-  }
+  const className = $derived((props as { class?: any }).class);
 </script>
 
 {#if props.selectable}
-  <label class="tile" {style}>
+  <label class={["tile", className]} style={el.style}>
     <div class="checkbox">
-      <input type="checkbox" bind:checked {...getSelectableInputProps(props)} />
+      <input
+        type="checkbox"
+        bind:checked
+        {...el.attrs as HTMLInputAttributes}
+      />
     </div>
     {@render props.children?.()}
   </label>
 {:else if props.interactive}
-  <button class="tile" {style} {...getInteractiveButtonProps(props)}>
+  <button
+    class={["tile", className]}
+    style={el.style}
+    {...el.attrs as HTMLButtonAttributes}
+  >
     {@render props.children?.()}
   </button>
 {:else}
-  <div class="tile" {style} {...stripOwnProps(props as RenderProps)}>
+  <div class={["tile", className]} style={el.style} {...el.attrs}>
     {@render props.children?.()}
   </div>
 {/if}

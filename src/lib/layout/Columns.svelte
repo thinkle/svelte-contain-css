@@ -1,12 +1,22 @@
 <script lang="ts">
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  let { children }: Props = $props();
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      children?: import("svelte").Snippet;
+    },
+    { gap?: string | null }
+  >;
+
+  let { children, class: className, ...restProps }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "columns", ["gap"]));
 </script>
 
-<div class="columns">
+<div class={["columns", className]} {...el}>
   {@render children?.()}
 </div>
 

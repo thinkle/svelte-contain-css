@@ -6,18 +6,28 @@
   import { BROWSER, DEV } from "esm-env";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BarStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BarStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    children?: Snippet;
-    primary?: boolean;
-    secondary?: boolean;
-  } & BarStyleProps &
-    HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      children?: Snippet;
+      primary?: boolean;
+      secondary?: boolean;
+    },
+    BarStyleProps
+  >;
 
-  const { children, primary, secondary, marginTop, marginBottom, ...restProps }: Props =
-    $props();
+  const {
+    children,
+    primary,
+    secondary,
+    marginTop,
+    marginBottom,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
   $effect(() => {
     if (BROWSER && DEV && (marginTop != null || marginBottom != null) && !warnedDeprecatedMargin) {
@@ -48,19 +58,27 @@
     "marginBottom",
   ];
 
-  const style = $derived(
-    injectVars({ ...restProps, marginTop, marginBottom }, "bar", cssKeys),
-  );
-  const extraStyle = $derived(
+  const variantStyle = $derived(
     primary
       ? "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);"
       : secondary
         ? "--bar-bg: var(--secondary-bg); --bar-fg: var(--secondary-fg);"
         : "",
   );
+
+  /* marginTop/marginBottom are deprecated props destructured above, so they
+     have to be handed back explicitly -- rest props no longer carry them. */
+  const el = $derived(
+    elementProps(
+      { ...restProps, marginTop, marginBottom },
+      "bar",
+      cssKeys,
+      variantStyle,
+    ),
+  );
 </script>
 
-<div class="bar" style="{style}{extraStyle}">
+<div class={["bar", className]} {...el}>
   {@render children?.()}
 </div>
 

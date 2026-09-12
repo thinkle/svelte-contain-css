@@ -1,26 +1,37 @@
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
 
-  type Props = {
-    bg?: string | null;
-    fg?: string | null;
-    marginBlock?: string | null;
-    marginInline?: string | null;
-    maxWidth?: string | null;
-    padding?: string | null;
-    height?: string | null;
-    border?: boolean;
-    paddingTop?: string | null;
-    borderTop?: string | null;
-    children?: Snippet;
-  } & HTMLAttributes<HTMLElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLElement>,
+    {
+      border?: boolean;
+      children?: Snippet;
+    },
+    {
+      bg?: string | null;
+      fg?: string | null;
+      marginBlock?: string | null;
+      marginInline?: string | null;
+      maxWidth?: string | null;
+      padding?: string | null;
+      height?: string | null;
+      paddingTop?: string | null;
+      borderTop?: string | null;
+    }
+  >;
 
-  const { children, border = false, ...props }: Props = $props();
+  const {
+    children,
+    border = false,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(props, "container", [
+  const el = $derived(
+    elementProps(restProps, "container", [
       "bg",
       "fg",
       "marginBlock",
@@ -34,7 +45,7 @@
   );
 </script>
 
-<section class:border {style}>
+<section class={className} class:border {...el}>
   {@render children?.()}
 </section>
 

@@ -8,6 +8,8 @@
     language?: string;
   }
 
+  /* No attribute pass-through, deliberately: this renders CodeInner (loaded
+     lazily in the browser) and no element of its own. */
   let { code, inline = false, language = "html" }: Props = $props();
   let component: Component<Props> | null = $state(null);
 

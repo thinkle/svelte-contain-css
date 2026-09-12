@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import { injectVars } from "$lib/util";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
   import FormProvider from "./FormProvider.svelte";
 
   let {
@@ -22,30 +24,37 @@
     maxWidth,
     minWidth,
     width,
+    class: className,
     ...restProps
-  }: {
-    legend?: Snippet;
-    children?: Snippet;
-    // FormProvider context props
-    layout?: "side" | "above" | "below";
-    collapseSide?: boolean;
-    fullWidth?: boolean;
-    globalInputStyles?: boolean;
-    multiline?: boolean;
-    // Container styling props
-    bg?: string;
-    fg?: string;
-    padding?: string;
-    border?: string | boolean;
-    borderRadius?: string;
-    margin?: string;
-    maxWidth?: string;
-    minWidth?: string;
-    width?: string;
-  } & Record<string, unknown> = $props();
+  }: ContainProps<
+    HTMLAttributes<HTMLFieldSetElement>,
+    {
+      legend?: Snippet;
+      children?: Snippet;
+      // FormProvider context props
+      layout?: "side" | "above" | "below";
+      collapseSide?: boolean;
+      fullWidth?: boolean;
+      globalInputStyles?: boolean;
+      multiline?: boolean;
+    },
+    {
+      bg?: string;
+      fg?: string;
+      padding?: string;
+      border?: string | boolean;
+      borderRadius?: string;
+      margin?: string;
+      maxWidth?: string;
+      minWidth?: string;
+      width?: string;
+    }
+  > = $props();
 
-  const style = $derived(
-    injectVars(
+  /* The style props are destructured above, so they have to be handed back
+     explicitly -- rest props no longer carry them. */
+  const el = $derived(
+    elementProps(
       {
         bg,
         fg,
@@ -60,17 +69,17 @@
       },
       "fieldset",
       [
-        "bg",
-        "fg",
-        "padding",
-        "border",
-        "borderRadius",
-        "margin",
-        "maxWidth",
-        "minWidth",
-        "width",
-      ]
-    )
+      "bg",
+      "fg",
+      "padding",
+      "border",
+      "borderRadius",
+      "margin",
+      "maxWidth",
+      "minWidth",
+      "width",
+      ],
+    ),
   );
 </script>
 
@@ -81,7 +90,7 @@
   {globalInputStyles}
   {multiline}
 >
-  <fieldset {style} {...restProps}>
+  <fieldset class={className} {...el}>
     {#if legend}
       <legend>
         {@render legend()}
