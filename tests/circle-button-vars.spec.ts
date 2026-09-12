@@ -84,6 +84,18 @@ test("circle-button variables, with mini-button still behind them", async ({
     width: "47px",
   });
 
+  /*
+    The documented limit of the fallback. `--circle-button-bg` wins wherever it
+    is defined, even from further up the tree, because var() only reaches its
+    fallback when the name is not defined at all -- proximity does not enter
+    into it. Every bundled theme defines the new name at :root, so an app still
+    setting `--mini-button-*` on a wrapper is the one case the rename does not
+    carry over silently. Asserted so the break is a decision on record.
+  */
+  expect(await read("new-beats-old-at-distance")).toMatchObject({
+    bg: "rgb(25, 26, 27)",
+  });
+
   // The deprecated MiniButton alias renders a CircleButton and still answers
   // to the old variable name.
   expect(await read("alias-old-var")).toMatchObject({

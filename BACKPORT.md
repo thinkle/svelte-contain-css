@@ -22,14 +22,26 @@ every include and every `var()`, and `elementProps` emits the new prefix, so
 | Same treatment for the buttons that borrow the look | `src/lib/layout/Sidebar.svelte`, `src/lib/overlays/Dialog.svelte` | ⬜ todo |
 | `circle-button` added to the prefix list | `src/lib/cssprops.ts` | ⬜ todo |
 
-### ⚠️ Do NOT rename the theme tokens
+| Theme tokens renamed to `--circle-button-*` | `src/lib/vars/themes/*.css`, `src/lib/vars/soft-corners.css` | ⬜ todo |
 
-`material.css`, `retro.css` and `bootstrap.css` still define `--mini-button-*`,
-deliberately, and each carries a comment saying so. The component resolves
-`--circle-button-bg` *first*; if a theme defined that at `:root`, it would win
-over an app's existing `--mini-button-bg` override and silently break it.
-Leaving the tokens on the old name keeps the override order correct: app's new
-name → app's old name → theme.
+### ⚠️ The one behaviour that changes
+
+`var()` reaches its fallback only when the name is **not defined at all** —
+proximity does not enter into it. So a theme defining `--circle-button-bg` at
+`:root` beats an app defining `--mini-button-bg` on a wrapper:
+
+| theme sets | app sets | winner |
+|---|---|---|
+| new name | old name | **theme** ← the break |
+| old name | old name | app |
+| old name | new name | app |
+
+Every bundled theme now sets the new name, so **an app still on
+`--mini-button-*` while loading a theme must rename.** That is the deliberate
+cost of having the library's own themes teach the current name rather than the
+deprecated one. Pinned by `new-beats-old-at-distance` in
+`tests/circle-button-vars.spec.ts` so it stays a decision rather than a
+surprise.
 
 ### Note for the legacy port
 

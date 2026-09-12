@@ -110,8 +110,12 @@
     align-items: var(--form-label-align, baseline);
     justify-content: var(--form-label-justify, flex-start);
     gap: var(--form-label-horizontal-gap, var(--padding));
-    padding-top: var(--padding, form-item, 8px);
-    padding-bottom: var(--padding, form-item, 8px);
+    /* var-with-fallbacks, not var: `var(--padding, form-item, 8px)` asks for
+       `--padding` with the fallback "form-item, 8px", which is not a length --
+       so `--form-item-padding` was never consulted and an unset `--padding`
+       collapsed the padding to 0 rather than 8px. */
+    padding-top: var-with-fallbacks(--padding, form-item, 8px);
+    padding-bottom: var-with-fallbacks(--padding, form-item, 8px);
     @include typography-props(form-item, ui);
     box-sizing: border-box;
   }

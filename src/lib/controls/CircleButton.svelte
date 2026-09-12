@@ -90,12 +90,13 @@
     min-width: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
     min-height: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
     border-radius: var(--circle-button-radius, var(--mini-button-radius, 50%));
-    /* The inner fallback list is preserved verbatim rather than tidied: the
-       `button-border` token in it is not a valid border value, so when neither
-       variable is set this declaration is invalid at computed-value time and
-       the border falls back to the initial `medium none`. That is the current
-       rendering, and changing it is a separate decision from renaming. */
-    border: var(--circle-button-border, var(--mini-button-border, button-border, none));
+    /* var-with-fallbacks, not var: this was
+       `var(--mini-button-border, button-border, none)`, which reads as
+       `--mini-button-border` with the fallback "button-border, none". That is
+       not a valid border, so `--button-border` was never consulted and an
+       unset chain produced `none` only by accident (invalid at
+       computed-value time -> the initial `medium none`). */
+    border: var-with-fallbacks(--border, circle-button, mini-button, button, none);
     display: inline-grid;
     place-content: center;
     line-height: 1;

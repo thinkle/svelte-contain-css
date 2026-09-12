@@ -47,6 +47,17 @@
   <CircleButton>x</CircleButton>
 </div>
 
+<!-- The documented limit of the old name: it is a fallback, so anything that
+     defines the NEW name ahead of it wins -- including a bundled theme, which
+     defines it at :root. An app still on `--mini-button-*` while loading a
+     theme is the one case the rename does not carry over silently, so it is
+     pinned here rather than left to be discovered. -->
+<div data-testid="new-beats-old-at-distance" style="--circle-button-bg: rgb(25, 26, 27);">
+  <div style="--mini-button-bg: rgb(28, 29, 30);">
+    <CircleButton>x</CircleButton>
+  </div>
+</div>
+
 <!-- The deprecated alias still renders a CircleButton, and still answers to
      the old variable name. -->
 <div
