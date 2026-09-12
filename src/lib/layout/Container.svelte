@@ -42,9 +42,16 @@
   @use "$lib/sass/_mixins.scss" as *;
   section {
     box-sizing: border-box;
-    padding: var-with-fallbacks(--padding, container, surface, 8px);
     @include color-props(container, surface, block);
     @include box-props(container, surface, block);
+    /* box-props (above) already sets a padding, but its shared fallback (4px)
+       is generic to every component that uses the mixin, not Container's own
+       long-standing 8px default. This declaration coming AFTER box-props is
+       what makes it win -- before this fix, Container had no override here
+       at all and was silently rendering at box-props' 4px. Same
+       var-with-fallbacks() chain as box-props' own (container/surface/block),
+       just a bigger final fallback. */
+    padding: var-with-fallbacks(--padding, container, surface, block, 8px);
     @include typography-container-props(container, surface, block);
     /* Override typography max-width */
     max-width: var-with-fallbacks(
