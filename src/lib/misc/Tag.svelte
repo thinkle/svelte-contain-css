@@ -1,18 +1,34 @@
 <script lang="ts">
-  import type { HTMLAttributes } from "svelte/elements";
-  import type { TagStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { Snippet } from "svelte";
+  import type { ClassValue, HTMLAttributes } from "svelte/elements";
+  import type { ContainProps, TagStyleProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    children?: import("svelte").Snippet;
-    primary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    onclose?: (() => void) | null;
-  } & TagStyleProps &
-    HTMLAttributes<HTMLSpanElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLSpanElement>,
+    {
+      children?: Snippet;
+      primary?: boolean;
+      warning?: boolean;
+      danger?: boolean;
+      success?: boolean;
+      info?: boolean;
+      onclose?: (() => void) | null;
+      /**
+       * Accessible name for the close button.
+       *
+       * The default describes the *widget* ("close a tag"), which is rarely
+       * what the action means to a user. A tag is a filter chip in one app and
+       * a removable label in another, so say what pressing it does here:
+       * `closeLabel="Remove Fiction"`, `closeLabel="Stop searching by author"`.
+       * Including the tag's own text is what makes a list of close buttons
+       * distinguishable to a screen reader.
+       */
+      closeLabel?: string;
+      class?: ClassValue;
+    },
+    TagStyleProps
+  >;
 
   let {
     children,
@@ -22,11 +38,13 @@
     success,
     info,
     onclose = null,
+    closeLabel = "Remove",
+    class: className,
     ...restProps
   }: Props = $props();
 
-  let style = $derived(
-    injectVars(restProps, "tag", [
+  const el = $derived(
+    elementProps(restProps, "tag", [
       "bg",
       "fg",
       "padding",
@@ -37,21 +55,19 @@
 </script>
 
 <span
-  {style}
-  class="tag"
+  class={["tag", className]}
   class:closable={!!onclose}
-  {...restProps}
   class:primary
   class:warning
   class:danger
   class:success
   class:info
+  {...el}
 >
   {@render children?.()}
   {#if onclose}
-    &nbsp;
-    <button class="close-button" aria-label="Close tag" onclick={onclose}>
-      &times;
+    <button class="close-button" aria-label={closeLabel} onclick={onclose}>
+      <span aria-hidden="true">&times;</span>
     </button>
   {/if}
 </span>
@@ -71,17 +87,34 @@
     margin-inline-start: var(--space);
     margin-inline-end: var(--space);
   }
+  /* A closable tag lays its label and button out in flow rather than absolutely
+     positioning the button over the top-right corner. The old approach needed a
+     literal &nbsp; in the markup to stop the button covering the last character,
+     which still overlapped once a tag wrapped to two lines and put the button's
+     hit area outside the padding. As a flex item the button reserves its own
+     space at any length, and the gap scales with the tag's font-size. */
   .tag.closable {
-    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--tag-close-button-gap, 0.35em);
   }
-  .tag button {
+  .tag .close-button {
     background: transparent;
     color: inherit;
     box-shadow: none;
     border: none;
-    position: absolute;
-    top: 0;
-    right: 0;
+    padding: 0;
+    /* Square, so the focus ring and pointer target read as a button rather
+       than tracking the width of the glyph. */
+    inline-size: 1.25em;
+    block-size: 1.25em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--tag-close-button-border-radius, 50%);
+    font-size: inherit;
+    line-height: 1;
+    flex: none;
     @include clickable(tag-close-button, button);
     @include focusable();
   }

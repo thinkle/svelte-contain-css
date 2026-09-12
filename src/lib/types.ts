@@ -100,3 +100,52 @@ export interface DropdownMenuStyleProps extends BaseStyleProps {
   triggerFg?: string | null;
   triggerPadding?: string | null;
 }
+
+/**
+ * Props that let a caller set CSS custom properties directly on a component.
+ *
+ * NOTE: writing `<Tag --tag-bg="red">` in a template does NOT go through this
+ * type -- Svelte intercepts `--*` attributes on components itself and renders
+ * `<svelte-css-wrapper style="display: contents; --tag-bg: red;">` around the
+ * component. This type covers the remaining path, an object spread
+ * (`<Tag {...{"--tag-bg": "red"}}>`), which Svelte cannot detect statically and
+ * therefore passes through as an ordinary prop.
+ */
+export type CssVarProps = {
+  [key: `--${string}`]: string | number | null | undefined;
+};
+
+/**
+ * The standard prop type for a Contain CSS component.
+ *
+ * Composes the three things every component's props are made of, and -- the
+ * reason this exists rather than a bare `&` chain -- removes the element
+ * attributes that the style props and the component's own props shadow.
+ * `width`, `height` and `align` are real HTML attributes, so intersecting
+ * `BaseStyleProps` with `HTMLInputAttributes` the old way produced
+ * `(string | null) & (string | number | undefined)` for `width`: a type neither
+ * side meant, which silently accepted and rejected the wrong values.
+ *
+ * @typeParam Attributes - the element's attribute type, e.g. `HTMLButtonAttributes`
+ * @typeParam Own - the component's own props (snippets, variant booleans, ...)
+ * @typeParam Style - the component's style props, e.g. `BaseStyleProps`
+ * @typeParam Owned - attributes the component controls and a caller must not
+ *   set, e.g. `"type"` on Slider's range input. Spreading rest props last means
+ *   a caller's value would otherwise win over the component's own.
+ *
+ * @example
+ * type Props = ContainProps<
+ *   HTMLButtonAttributes,
+ *   { primary?: boolean; children?: Snippet },
+ *   BaseStyleProps
+ * >;
+ */
+export type ContainProps<
+  Attributes,
+  Own = {},
+  Style = {},
+  Owned extends keyof Attributes | string = never,
+> = Own &
+  Style &
+  Omit<Attributes, keyof Own | keyof Style | Owned> &
+  CssVarProps;
