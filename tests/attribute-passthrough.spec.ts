@@ -180,10 +180,10 @@ test.describe("attribute pass-through", () => {
   }) => {
     // Tag's close button had a hardcoded "Close tag" that no caller could
     // reach: aria-label in rest props lands on the outer span, not the button.
-    await page.goto("/svelte-contain-css/tests/passthrough");
-    const tagClose = page.locator('[data-probe="Tag"] .close-button');
-    if (await tagClose.count()) {
-      await expect(tagClose).toHaveAttribute("aria-label", /.+/);
-    }
+    const tagClose = page.locator("[data-closable-tag] .close-button");
+    await expect(tagClose).toHaveAttribute(
+      "aria-label",
+      "Stop filtering by Fiction",
+    );
   });
 });
