@@ -144,7 +144,13 @@
   );
 </script>
 
-<Container marginBlock="0" maxWidth="none" height="auto" padding="0">
+<Container
+  marginBlock="0"
+  maxWidth="none"
+  height="auto"
+  padding="0"
+  --reset-padding="var(--container-padding, var(--block-padding, var(--padding, 8px)))"
+>
   <div class="demo-with-code" {style}>
     {#if header || heading}
       <div class="demo-heading">
@@ -160,7 +166,7 @@
         </TextLayout>
       </div>
     {/if}
-    <div class="demo-body">
+    <div class="demo-body" style:--container-padding="var(--reset-padding)">
       <TabBar
         items={tabItems}
         active={activeTab}
@@ -205,8 +211,8 @@
             {#snippet right()}
               <div class="code-wrap split-code-wrap">
                 {#key resolvedCode}
-              <Code code={resolvedCode} {language} />
-            {/key}
+                  <Code code={resolvedCode} {language} />
+                {/key}
               </div>
             {/snippet}
           </SplitPane>
