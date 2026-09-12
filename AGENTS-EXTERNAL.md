@@ -230,13 +230,24 @@ almost always the one you want:
 ```
 
 A max-width lets the Container shrink to fit a phone, a sidebar, or a SplitPane
-panel; a fixed width does not, and will push horizontal scrolling onto any viewport
-narrower than the number you picked. Reach for `--container-width` only when you
-genuinely need a fixed-size region and you've thought about the narrow case:
+panel; a fixed width does not shrink on its own. Reach for `--container-width`
+only when you genuinely need a fixed-size region and you've thought about the
+narrow case.
+
+`max-width` always wins over `width` when the two conflict (standard CSS box
+sizing), so pairing `--container-width` with `maxWidth="100%"` does **not**
+overflow — the actual size becomes `min(--container-width, 100% of the
+parent)`, shrinking to fit a narrow parent same as ever. The `maxWidth="100%"`
+here is not a no-op alongside `--container-width`: it's what makes the fixed
+width just a _cap_, safe on any viewport, rather than a floor.
 
 ```svelte
-<!-- ⚠️ overflows any viewport under 24rem -->
+<!-- ✅ Fixed size on room to spare, shrinks on a narrow parent -- never overflows -->
 <Container --container-width="24rem" maxWidth="100%">Explicit width</Container>
+
+<!-- ⚠️ Actually overflows any viewport under 24rem: maxWidth is missing, so
+     nothing constrains --container-width down to the parent's size -->
+<Container --container-width="24rem">Explicit width</Container>
 ```
 
 Other sizing details:

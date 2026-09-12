@@ -528,9 +528,15 @@ a single mixin can't parameterize that in Sass.
 
 `maxWidth` is the friendly prop and the one consumers should reach for — it caps
 without preventing the Container from shrinking. `--container-width` is the fixed
-width override, and it is deliberately _not_ exposed as a prop: a fixed width
-forces horizontal scrolling on any viewport narrower than the value. Keep it that
-way unless there's a strong reason.
+width override, and it is deliberately _not_ exposed as a prop. Note it is only
+dangerous unpaired: `max-width` always wins over `width` when the two conflict, so
+`--container-width` alongside `maxWidth="100%"` (or any cap ≤ the fixed value)
+still shrinks fine on a narrow parent — the actual size is
+`min(--container-width, max-width)`. It forces horizontal scrolling only when
+nothing constrains `max-width` down to the parent (omitted, or set larger than
+`--container-width`). Keep `--container-width` off the props list unless there's
+a strong reason regardless — it's easy to reach for without the `maxWidth` pairing
+that makes it safe.
 
 ## Layout Context Variables
 

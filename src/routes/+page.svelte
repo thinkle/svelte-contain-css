@@ -10,6 +10,7 @@
   import Sidebar from "$lib/layout/Sidebar.svelte";
 
   import BarDemo from "./demos/BarDemo.svelte";
+  import ContainerDemo from "./demos/ContainerDemo.svelte";
   import TagDemo from "./demos/TagDemo.svelte";
 
   import { onMount, tick } from "svelte";
@@ -118,6 +119,7 @@
     { name: "Tabs", component: TabDemo, demo: "Tab" },
     { name: "Accordion", component: AccordionDemo, demo: "Accordion" },
     { name: "Bar", component: BarDemo, demo: "Bar" },
+    { name: "Container", component: ContainerDemo, demo: "Container" },
     { name: "Inline", component: InlineDemo, demo: "Inline" },
     { name: "Stack", component: StackDemo, demo: "Stack" },
     { name: "Page", component: PageDemo, demo: "Page" },
