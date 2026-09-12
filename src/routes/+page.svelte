@@ -50,6 +50,7 @@
   import DataListDemo from "./demos/DataListDemo.svelte";
   import TextDemo from "./demos/TextDemo.svelte";
   import ColorMixDemo from "./demos/ColorMixDemo.svelte";
+  import PassThroughDemo from "./demos/PassThroughDemo.svelte";
 
   let hash: string = "";
   const updateHash = () => {
@@ -175,6 +176,11 @@
     { name: "Progress", component: ProgressDemo, demo: "Progress" },
 
     { name: "Variables", component: VariableDemo, demo: "Variable" },
+    {
+      name: "Attributes & Classes",
+      component: PassThroughDemo,
+      demo: "PassThrough",
+    },
   ];
 
   let theDemo: Component | null = $state(null);

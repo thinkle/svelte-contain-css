@@ -153,39 +153,42 @@ Svelte 5 uses inline event handlers:
 
 ## CSS Variable Patterns
 
-### Variable Injection Helper
+### The prop contract: `elementProps`
 
-All components that accept style props should use the `injectVars` utility from [`$lib/util`](src/lib/util.ts):
+All components that accept style props use `elementProps` from
+[`$lib/util`](src/lib/util.ts). It handles the three kinds of prop a component
+takes at once: style shorthands become CSS variables, native attributes are
+forwarded to the element, and the caller's `class` and `style` are merged with
+the component's own rather than replacing them.
 
 ```svelte
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import { elementProps } from "$lib/util";
+  import { COLOR_VARS, PADDING_VARS, type StyleProps } from "$lib/styleProps";
 
-  let {
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null
-  }: Props = $props();
+  const BUTTON_VARS = [...COLOR_VARS, ...PADDING_VARS] as const;
 
-  // First param: component prefix
-  // Second param: array of prop names to inject as CSS variables
-  let style = injectVars($$props, "button", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height"
-  ]);
+  let { children, class: className, ...restProps }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "button", BUTTON_VARS));
 </script>
 
-<button {style} class="button">
-  <slot />
+<!-- class is MERGED; the spread goes LAST so consumers can override -->
+<button class={["button", className]} {...el}>
+  {@render children?.()}
 </button>
 ```
 
-This will create CSS variables like `--button-bg`, `--button-fg`, etc.
+This creates CSS variables like `--button-bg`, `--button-fg`, and forwards
+`id`, `aria-*`, `data-*` and handlers to the `<button>`.
+
+Do not write `{style}` beside the spread — `style` is already inside `el`,
+merged so that a caller's declarations win without erasing the variables. Do
+not spread `class` either: in Svelte 5 a spread `class` *replaces* a static
+one, which silently strips the component's own styling.
+
+See [AGENTS-INTERNAL.md](AGENTS-INTERNAL.md) for `splitProps` (wrapper +
+control components), the shorthand groups, and the full set of rules.
 
 ### CSS Variable Naming Convention
 
@@ -245,52 +248,49 @@ Standard component file structure:
 
 ```svelte
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import { COLOR_VARS, PADDING_VARS, type StyleProps } from "$lib/styleProps";
 
-  // 1. Type definitions
-  interface Props {
-    // Always include common style props
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
-    // Component-specific props
-    primary?: boolean;
-    disabled?: boolean;
-  }
+  // 1. Shorthands: one group per mixin the <style> block includes.
+  const COMPONENT_NAME_VARS = [...COLOR_VARS, ...PADDING_VARS] as const;
 
-  // 2. Props destructuring with defaults
+  // 2. Props. Never declare `class` -- HTMLAttributes already types it.
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    { primary?: boolean; disabled?: boolean; children?: Snippet },
+    StyleProps<typeof COMPONENT_NAME_VARS>
+  >;
+
+  // 3. Destructure your own props and `class`; the rest are rest props.
   let {
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
     primary = false,
-    disabled = false
+    disabled = false,
+    children,
+    class: className,
+    ...restProps
   }: Props = $props();
 
-  // 3. Style injection
-  let style = injectVars($$props, "component-name", [
-    "bg", "fg", "padding", "width", "height"
-  ]);
-
-  // 4. Component logic
+  // 4. One derived, holding the attributes to spread.
+  const el = $derived(
+    elementProps(restProps, "component-name", COMPONENT_NAME_VARS),
+  );
 </script>
 
 <!-- 5. Template -->
-<div class="component-name" {style} class:primary class:disabled>
-  <slot />
+<div class={["component-name", className]} class:primary class:disabled {...el}>
+  {@render children?.()}
 </div>
 
 <!-- 6. Styles -->
 <style lang="scss">
-  @import "$lib/sass/_mixins.scss";
+  @use "$lib/sass/_mixins.scss" as *;
 
   .component-name {
     @include color-props(component-name, category);
-    // ... other styles
+    @include box-props(component-name, category);
   }
 </style>
 ```

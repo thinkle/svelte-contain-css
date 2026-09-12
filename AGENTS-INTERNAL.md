@@ -150,95 +150,199 @@ Svelte 5 uses inline event handlers:
 
 ## CSS Variable System
 
-### Variable Injection Helper
+### The prop contract: `elementProps` and `ContainProps`
 
-Components that translate friendly surface/layout props to CSS variables **must** use the `injectVars` utility from `$lib/util`. This function converts friendly prop names into CSS custom properties, enabling the cascading variable system.
+Every component's props are three things at once, and one helper handles all
+three so each component does not re-solve it:
 
-**What `injectVars` does:**
+1. **Style shorthands** (`bg`, `padding`, `fontSize`) → CSS custom properties.
+2. **Native attributes** (`id`, `aria-*`, `data-*`, event handlers) → forwarded
+   to the element, so consumers can label, test and hook into components.
+3. **`class` and `style`** → merged with the component's own, never replacing
+   them.
 
-1. Takes props like `bg="red"` and converts them to CSS variable declarations: `--button-bg: red;`
-2. Passes through any props that are already CSS variables (e.g., `--custom-var="value"` → `--custom-var: value;`)
-3. Returns a style string to apply to the component's root element
-
-**Example transformation:**
-
-```svelte
-<!-- User writes: -->
-<Button bg="white" fg="red" padding="1rem" --custom-thing="blue">
-
-<!-- injectVars generates this style string: -->
-<!-- "--button-bg: white; --button-fg: red; --button-padding: 1rem; --custom-thing: blue;" -->
-```
-
-**Implementation pattern:**
+Use `elementProps` from `$lib/util`. It returns the attributes to spread, with
+the CSS variables and the caller's own `style` already merged into one `style`
+attribute:
 
 ```svelte
 <script lang="ts">
-  import { injectVars } from "$lib/util";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  let {
-    children,
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
-    ...restProps
-  }: Props = $props();
+  const WIDGET_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
 
-  // Parameters:
-  // 1. Recombine destructured style props with remaining custom-property inputs
-  // 2. "button" - component prefix (becomes --button-*)
-  // 3. ["bg", "fg", ...] - prop names to convert to CSS variables
-  const style = $derived(injectVars({ bg, fg, padding, width, height, ...restProps }, "button", [
-    "bg",
-    "fg",
-    "padding",
-    "width",
-    "height"
-  ]));
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    { primary?: boolean; children?: Snippet },
+    StyleProps<typeof WIDGET_VARS>
+  >;
+
+  let { primary, children, class: className, ...restProps }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "widget", WIDGET_VARS));
 </script>
 
-<button {style} class="button">
+<div class={["widget", className]} class:primary {...el}>
   {@render children?.()}
-</button>
+</div>
 ```
 
-**The `injectVars` function source:**
+Five rules, each of which was a real bug before the helper existed:
 
-```typescript
-export function injectVars(
-  props: { [key: string]: any },
-  prefix: string,
-  varList: string[],
-) {
-  let cssVars = "";
-  // Convert listed props to prefixed CSS variables
-  varList.forEach((v) => {
-    if (props[v]) {
-      const cssVarName = toKebabCase(v); // e.g., "maxWidth" → "max-width"
-      cssVars += `--${prefix}-${cssVarName}: ${props[v]};`;
-    }
-  });
-  // Pass through any explicit CSS variables (--anything)
-  for (let prop in props) {
-    if (prop[0] == "-" && prop[1] == "-") {
-      cssVars += `${prop}: ${props[prop]};`;
-    }
-  }
-  return cssVars;
-}
+**Spread LAST.** `{...el}` goes after the component's own attributes so a
+consumer can override them. Attributes the component genuinely owns are
+guarded at the type level instead, via `ContainProps`' fourth parameter
+(`"type"` on Slider's range input), not by attribute ordering — a type error
+is visible, an ordering convention is not.
+
+**Never write `{style}` next to the spread.** `style` is inside `el` already.
+Writing `{style} {...restProps}` let a consumer's `style="margin:0"` wipe out
+every injected variable, and writing them the other way round lost the
+consumer's style instead. `elementProps` concatenates: variables first, the
+caller's declarations last, so theirs win per-declaration without erasing.
+
+**Merge `class`, don't spread it.** Destructure `class: className` and write
+`class={["widget", className]}`. Verified against Svelte 5: a spread `class`
+*replaces* a static one — `<div class="widget" {...rest}>` with `class="mine"`
+renders `class="mine svelte-hash"`, and `.widget` is gone along with all its
+styling. Keeping the literal in the template is also what lets the compiler's
+CSS pruning see that `.widget` is used.
+
+**Hand destructured style props back.** `elementProps(restProps, ...)` cannot
+see a prop you destructured. `Progress` destructured `bg`/`fg`/`padding` and
+then passed only `restProps`, so `<Progress bg="red">` emitted nothing at all
+for months. If you destructure one, pass it explicitly:
+`elementProps({ bg, fg, ...restProps }, "progress", PROGRESS_VARS)`.
+
+**Do not declare `class` in your own props.** The element attribute types
+already type it as `ClassValue | null | undefined`. Redeclaring it as
+`ClassValue` narrows it and breaks forwarding between components.
+
+#### `splitProps` for wrapper + control components
+
+When a component renders a wrapper around a control (Toggle, RadioButton,
+Checkbox, Dialog, Tile), the two halves want different things: the CSS
+variables belong on the wrapper the stylesheet targets, while `aria-*`,
+`name`, `required` and `data-*` belong on the control the consumer is
+describing. `splitProps` returns them separately:
+
+```svelte
+const el = $derived(splitProps(restProps, "toggle", TOGGLE_VARS));
+...
+<label class={["toggle", className]} style={el.style}>
+  <input type="checkbox" bind:checked {...el.attrs} />
+</label>
 ```
 
-This approach means `<Button fg="red">` sets `--button-fg: red` on the element, which the component's SCSS then references via the mixin cascade system.
+One caution learned the hard way: do not put a caller's `style` on a
+`display: contents` wrapper. It generates no box, so the style is inert.
+TabItem does this — its wrapper exists only to scope CSS onto the Button
+inside — so everything goes to the Button, and the variables still work
+because a custom property resolves on the element it is declared on.
 
-Destructured props are no longer in `restProps`; pass them explicitly to
-`injectVars` or they silently stop working. Preserve reactivity with `$derived`.
-When forwarding native attributes, separate out `style` and custom-property props:
-merge styles deliberately and do not let a trailing spread overwrite the generated
-style. Follow Text's filtering pattern for `--*` inputs. See the external guide
-for consumer examples and the distinction between custom-property declarations
-and direct CSS property overrides.
+#### Components that deliberately take no attributes
+
+Not every component can pass attributes through, and each exception carries
+its reason in the source rather than being an oversight:
+
+- **FormProvider, Code** — render no element of their own.
+- **ResponsiveText** — renders one span per breakpoint, so there is no single
+  root an `id` could go on without being wrong at every other breakpoint.
+- **Table** — the sticky variant renders a visually-hidden clone of its
+  tables, so a spread `id` would be emitted twice.
+
+### Style shorthands are derived, not chosen
+
+`src/lib/styleProps.ts` names one constant per SCSS mixin. A component's
+shorthand list is the union of the groups for the mixins **its own CSS
+includes** — it is a consequence, not a decision:
+
+| Constant | Backed by | Props |
+| --- | --- | --- |
+| `COLOR_VARS` | `@include color-props` | `bg`, `fg` |
+| `PADDING_VARS` | `@include padding-props` / `box-props` family | `padding` |
+| `RADIUS_VARS` | the `box-props` family | `borderRadius` |
+| `MARGIN_VARS` | `@include margin-props` | `marginBlock`, `marginInline` |
+| `GAP_VARS` | `@include gap-props` | `gap` |
+| `TYPOGRAPHY_VARS` | `@include typography-props` and its variants | `fontSize`, `fontWeight`, `lineHeight`, `letterSpacing`, `textAlign`, `textTransform`, `textDecoration`, `fontFamily`, `fontVariant` |
+| `TYPOGRAPHY_CONTAINER_VARS` | `@include typography-container-props` | the above plus `lineWidth` |
+| `SIZE_VARS` | `@include box-size-props` | `width`, `minWidth`, `maxWidth`, `height`, `minHeight`, `maxHeight` |
+
+The Props type comes from the same array via `StyleProps<typeof X_VARS>`, so
+what a component accepts and what it emits cannot drift apart. Adding a name
+to the array is what adds the prop.
+
+Three rules when adding a group to a component:
+
+**The mixin's FIRST prefix must be the component's own.**
+`@include color-props(primary, button, control)` inside `.button.primary` is
+a variant rule; it does not make `--button-bg` readable.
+
+**A commented-out include does not count.** MenuList's `padding-props` line is
+commented out with `padding: 0` hardcoded below it, so MenuList takes `COLOR`
+only. A `--menu-padding` would go nowhere.
+
+**Prove it in the browser.** `tests/style-shorthands.spec.ts` asserts the value
+reaches *computed CSS*, not that a variable was emitted. Emitting
+`--button-font-weight` proves nothing if no rule consumes it. This is the
+guard against the "typed but never read" bug that `MarginStyleProps` exists to
+stop repeating.
+
+`SIZE_VARS` is deliberately applied per component rather than folded into
+another group. `width` and `height` are real HTML attributes on `<input>`,
+`<img>`, `<canvas>` and `<iframe>`, and `ContainProps` resolves such a clash by
+dropping the attribute — correct for a deprecated one, wrong for a semantic
+one. The general rule:
+
+> A style shorthand is safe only when the element the component renders has no
+> HTML attribute of that name.
+
+This is also why Progress's accessible-name prop is `progressLabel` and not
+`label`: `label` is a real attribute on `<option>`, `<optgroup>` and `<track>`.
+
+### Accessible names belong to the consumer
+
+Any string a component puts in an `aria-label` needs a prop, because the
+component cannot know what the control means in an app. Tag's close button
+said "Close tag" — which names the widget, not the action — and was
+unreachable: `aria-label` in rest props lands on the outer span, never on the
+button.
+
+```svelte
+closeLabel?: string;   // Tag           default "Remove"
+progressLabel?: string; // Progress     default "Progress"
+resizerLabel?: string;  // SplitPane    default "Resize panes"
+expandLabel?: string;   // Sidebar      default "Expand sidebar"
+```
+
+Defaults should describe the action, and the doc comment should tell a
+consumer to replace it: `closeLabel="Stop searching by author"` is what makes
+a list of close buttons distinguishable to a screen reader.
+
+### `injectVars` (legacy)
+
+Still exported for the rare case with no element to spread onto. Prefer
+`elementProps`, which handles the attribute hygiene `injectVars` alone does
+not: on its own it leaves style props (`<button bg="red">`) and spread custom
+properties (`--tag-bg="red"`) to render as invalid attributes.
+
+Note that `<Tag --tag-bg="red">` in a template never reaches your props at
+all — Svelte intercepts `--*` attributes on components and renders
+`<svelte-css-wrapper style="display: contents; --tag-bg: red;">` around them.
+The `--*` handling in these helpers covers only the object-spread path, which
+Svelte cannot detect statically.
 
 ### Variable Naming Convention & Fallback Cascade
 
@@ -420,47 +524,55 @@ Standard component file structure:
 
 ```svelte
 <script lang="ts">
-  import { injectVars } from "$lib/util";
   import type { Snippet } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
-  // 1. Type definitions
-  interface Props {
-    // Expose only style props that fit this component; Text does not establish a surface.
-    bg?: string | null;
-    fg?: string | null;
-    padding?: string | null;
-    width?: string | null;
-    height?: string | null;
-    // Component-specific props
-    primary?: boolean;
-    disabled?: boolean;
-    // Snippets for content
-    children?: Snippet;
-  }
+  // 1. Shorthands, one group per mixin the <style> block below includes.
+  //    The Props type is derived from this array, so the two cannot drift.
+  const COMPONENT_NAME_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+  ] as const;
 
-  // 2. Props destructuring with defaults + rest props
+  // 2. Props: element attributes, the component's own props, the shorthands.
+  //    Never declare `class` -- HTMLAttributes already types it.
+  type Props = ContainProps<
+    HTMLAttributes<HTMLDivElement>,
+    {
+      primary?: boolean;
+      disabled?: boolean;
+      children?: Snippet;
+    },
+    StyleProps<typeof COMPONENT_NAME_VARS>
+  >;
+
+  // 3. Destructure your own props and `class`; everything else is rest props.
   let {
-    bg = null,
-    fg = null,
-    padding = null,
-    width = null,
-    height = null,
     primary = false,
     disabled = false,
     children,
+    class: className,
     ...restProps
-  }: Props & Record<string, unknown> = $props();
+  }: Props = $props();
 
-  // 3. Style injection (use $derived for reactive updates)
-  const style = $derived(injectVars({ bg, fg, padding, width, height, ...restProps }, "component-name", [
-    "bg", "fg", "padding", "width", "height"
-  ]));
-
-  // 4. Component logic
+  // 4. One derived: attributes to spread, with the variables and the caller's
+  //    own `style` already merged into a single style attribute.
+  const el = $derived(
+    elementProps(restProps, "component-name", COMPONENT_NAME_VARS),
+  );
 </script>
 
-<!-- 5. Template -->
-<div class="component-name" {style} class:primary class:disabled {...restProps}>
+<!-- 5. Template: merge class, spread LAST so consumers can override. -->
+<div class={["component-name", className]} class:primary class:disabled {...el}>
   {@render children?.()}
 </div>
 
@@ -469,6 +581,8 @@ Standard component file structure:
   @use "$lib/sass/_mixins.scss" as *;
 
   .component-name {
+    /* These includes are what justify COLOR_VARS / PADDING_VARS / RADIUS_VARS
+       above. Remove an include and you must remove its group too. */
     @include color-props(component-name, category);
     @include box-props(component-name, category);
     @include focusable();
@@ -476,10 +590,19 @@ Standard component file structure:
   }
 
   .component-name.primary {
+    /* A variant rule: the first prefix is `primary`, not `component-name`,
+       so this does NOT make --component-name-bg readable and does not
+       justify a shorthand group. */
     @include color-props(primary, component-name);
   }
 </style>
 ```
+
+Before you finish, add the component to
+`src/routes/tests/passthrough/+page.svelte`. That fixture drives
+`tests/attribute-passthrough.spec.ts`, which reads its cases off the DOM, so a
+component added there is covered by every assertion without touching the
+spec.
 
 ---
 
@@ -667,7 +790,8 @@ remove them on hide and on destroy.
 │   ├── layout.css        # Layout sizing (e.g. --card-width)
 │   ├── typography.css    # Font variables and --line-width
 │   └── themes/           # Theme files, including typography-only themes
-├── util.ts         # injectVars, copyCSSVariables
+├── util.ts         # elementProps, splitProps, copyCSSVariables
+├── styleProps.ts   # shorthand groups mirroring the SCSS mixins
 ├── cssprops.ts     # The known custom-property list
 └── index.ts        # Public API exports
 ```
