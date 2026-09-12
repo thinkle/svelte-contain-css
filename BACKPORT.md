@@ -4,6 +4,53 @@ Tracks fixes made on `svelte5` that should be reviewed for backporting to `main`
 
 ---
 
+## svelte5 — CircleButton variable rename (2026-09-12)
+
+`CircleButton` was called `MiniButton` until the rename (a circle is not a place
+to put text), but its CSS variables kept the `mini-button` prefix — so consumers
+still had to name the old component to style the new one.
+
+Its CSS now reads `--circle-button-*` **with `--mini-button-*` behind it** in
+every include and every `var()`, and `elementProps` emits the new prefix, so
+`<CircleButton bg="…">` writes `--circle-button-bg`.
+
+### Portable to legacy
+
+| Fix | Files | Legacy |
+|-----|-------|--------|
+| `circle-button` first, `mini-button` as fallback | `src/lib/controls/CircleButton.svelte` | ⬜ todo |
+| Same treatment for the buttons that borrow the look | `src/lib/layout/Sidebar.svelte`, `src/lib/overlays/Dialog.svelte` | ⬜ todo |
+| `circle-button` added to the prefix list | `src/lib/cssprops.ts` | ⬜ todo |
+
+| Theme tokens renamed to `--circle-button-*` | `src/lib/vars/themes/*.css`, `src/lib/vars/soft-corners.css` | ⬜ todo |
+
+### ⚠️ The one behaviour that changes
+
+`var()` reaches its fallback only when the name is **not defined at all** —
+proximity does not enter into it. So a theme defining `--circle-button-bg` at
+`:root` beats an app defining `--mini-button-bg` on a wrapper:
+
+| theme sets | app sets | winner |
+|---|---|---|
+| new name | old name | **theme** ← the break |
+| old name | old name | app |
+| old name | new name | app |
+
+Every bundled theme now sets the new name, so **an app still on
+`--mini-button-*` while loading a theme must rename.** That is the deliberate
+cost of having the library's own themes teach the current name rather than the
+deprecated one. Pinned by `new-beats-old-at-distance` in
+`tests/circle-button-vars.spec.ts` so it stays a decision rather than a
+surprise.
+
+### Note for the legacy port
+
+Legacy has no `elementProps`, so only the SCSS half applies there — the prop
+prefix is set by `injectVars($$props, …)` instead. The fallback ordering is the
+part that matters and it ports directly.
+
+---
+
 ## svelte5 — attribute pass-through & style shorthands (2026-09-12)
 
 Branch: `claude/component-attribute-spreading-5e0ybz`
