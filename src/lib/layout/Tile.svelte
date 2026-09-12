@@ -6,9 +6,30 @@
     HTMLInputAttributes,
   } from "svelte/elements";
   import { splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    MARGIN_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { BaseStyleProps, MarginStyleProps } from "$lib/types";
 
-  type BaseProps = BaseStyleProps & MarginStyleProps & {
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const TILE_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  type BaseProps = BaseStyleProps &
+    MarginStyleProps &
+    StyleProps<typeof TILE_VARS> & {
     /** Distribution along the tile's own axis, which is vertical. */
     justify?: string | null;
     /** Cross-axis alignment, which is horizontal. Centred already. */
@@ -92,15 +113,11 @@
       ...rest
     } = props as RenderProps & BaseProps & { class?: unknown };
     return splitProps({ ...rest, ...styleProps }, "tile", [
-      "bg",
-      "fg",
-      "padding",
+      ...TILE_VARS,
       "width",
       "height",
       "justify",
       "align",
-      "marginBlock",
-      "marginInline",
     ]);
   });
 

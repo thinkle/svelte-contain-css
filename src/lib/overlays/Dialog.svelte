@@ -1,6 +1,13 @@
 <script lang="ts">
   import CircleButton from "$lib/controls/CircleButton.svelte";
   import { copyCSSVariables, splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
   import type { HTMLDialogAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
@@ -14,7 +21,8 @@
       children?: Snippet;
       onclose?: (() => void) | null;
       onClose?: (() => void) | null;
-    }
+    },
+    StyleProps<typeof DIALOG_VARS>
   >;
 
   let {
@@ -33,7 +41,17 @@
   /* The <section> is the variable carrier that copyCSSVariables reads through,
      so it takes the style while the <dialog> takes the attributes -- a
      caller's `aria-*` and `data-*` belong on the dialog itself. */
-  const el = $derived(splitProps(restProps, "dialog"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const DIALOG_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const el = $derived(splitProps(restProps, "dialog", DIALOG_VARS));
 
   // Handle backdrop click to close modal (click outside behavior)
   // Clicks on the dialog element itself (the backdrop) close the dialog

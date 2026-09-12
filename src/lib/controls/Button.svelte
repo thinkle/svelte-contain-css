@@ -3,6 +3,13 @@
   import type { HTMLButtonAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLButtonAttributes,
@@ -16,7 +23,8 @@
       icon?: Snippet;
       children?: Snippet;
     },
-    BaseStyleProps
+    BaseStyleProps &
+      StyleProps<typeof BUTTON_VARS>
   >;
 
   let {
@@ -32,11 +40,19 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const BUTTON_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(restProps, "button", [
-      "bg",
-      "fg",
-      "padding",
+      ...BUTTON_VARS,
       "width",
       "height",
     ]),

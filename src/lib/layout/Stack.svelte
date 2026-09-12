@@ -7,6 +7,12 @@
     MarginStyleProps,
   } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLDivElement>,
@@ -20,7 +26,8 @@
       gap?: string | null;
       children?: Snippet;
     },
-    BaseStyleProps & MarginStyleProps
+    BaseStyleProps & MarginStyleProps &
+      StyleProps<typeof STACK_VARS>
   >;
 
   let {
@@ -38,22 +45,29 @@
 
   const resolvedAlign = $derived(align ?? (center ? "center" : null));
 
+  /* The shorthands stack's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const STACK_VARS = [
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(
       { justify, align: resolvedAlign, gap, ...restProps },
       "stack",
       [
+      ...STACK_VARS,
       "bg",
       "fg",
-      "padding",
       "width",
       "height",
       "gap",
       "justify",
       "align",
-      "marginBlock",
-      "marginInline",
-      ],
+    ],
     ),
   );
 </script>

@@ -3,13 +3,19 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLDivElement>,
     {
       highlanderMode?: boolean;
       children?: import("svelte").Snippet;
-    }
+    },
+    StyleProps<typeof ACCORDION_VARS>
   >;
 
   let {
@@ -19,7 +25,15 @@
     ...restProps
   }: Props = $props();
 
-  const el = $derived(elementProps(restProps, "accordion"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const ACCORDION_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "accordion", ACCORDION_VARS));
   let wrapper: HTMLDivElement | undefined = $state();
 
   function onAccordionClicked(e: MouseEvent) {

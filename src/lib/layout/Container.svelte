@@ -1,5 +1,12 @@
 <script lang="ts">
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
@@ -20,7 +27,8 @@
       height?: string | null;
       paddingTop?: string | null;
       borderTop?: string | null;
-    }
+    } &
+      StyleProps<typeof CONTAINER_VARS>
   >;
 
   const {
@@ -30,14 +38,22 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands container's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CONTAINER_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(restProps, "container", [
-      "bg",
-      "fg",
+      ...CONTAINER_VARS,
       "marginBlock",
       "marginInline",
       "maxWidth",
-      "padding",
       "height",
       "paddingTop",
       "borderTop",

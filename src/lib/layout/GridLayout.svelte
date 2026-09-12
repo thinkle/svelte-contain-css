@@ -3,6 +3,12 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps, MarginStyleProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLDivElement>,
@@ -11,7 +17,8 @@
       tile?: boolean;
       children?: Snippet;
     },
-    MarginStyleProps
+    MarginStyleProps &
+      StyleProps<typeof GRID_LAYOUT_VARS>
   >;
 
   let {
@@ -22,8 +29,17 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands grid-layout's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const GRID_LAYOUT_VARS = [
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+  ] as const;
+
   const el = $derived(
-    elementProps(restProps, "grid-layout", ["marginBlock", "marginInline"]),
+    elementProps(restProps, "grid-layout", GRID_LAYOUT_VARS),
   );
 </script>
 

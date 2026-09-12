@@ -153,3 +153,43 @@
 <div data-probe="Page" data-root-class="page">
   <Page data-testid="probe-Page" id="id-Page" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Page</Page>
 </div>
+
+<!--
+  Shorthand fixture for tests/style-shorthands.spec.ts.
+
+  These props exist because the component's CSS includes the mixin that reads
+  them, so the test asserts the value reaches COMPUTED CSS -- emitting
+  `--button-font-weight` proves nothing if no rule consumes it. One component
+  per mixin combination, rather than all 34.
+-->
+<div data-shorthand="Button">
+  <Button
+    data-testid="shorthand-Button"
+    fontWeight="900"
+    fontSize="29px"
+    letterSpacing="3px"
+    textAlign="right"
+    padding="7px"
+  >Shorthand</Button>
+</div>
+<div data-shorthand="Tag">
+  <Tag
+    data-testid="shorthand-Tag"
+    fontWeight="800"
+    fontSize="27px"
+    letterSpacing="2px"
+    padding="6px"
+  >Shorthand</Tag>
+</div>
+<div data-shorthand="Container">
+  <Container
+    data-testid="shorthand-Container"
+    fontWeight="700"
+    fontSize="25px"
+    letterSpacing="4px"
+    padding="9px"
+  >Shorthand</Container>
+</div>
+<div data-shorthand="Stack">
+  <Stack data-testid="shorthand-Stack" padding="13px" marginBlock="17px">Shorthand</Stack>
+</div>

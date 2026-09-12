@@ -3,6 +3,13 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   let tooltipDiv: HTMLElement | undefined = $state();
   let targetDiv: HTMLElement | undefined = $state();
@@ -16,7 +23,8 @@
       children?: import("svelte").Snippet;
       tooltip?: import("svelte").Snippet;
       block?: boolean;
-    }
+    },
+    StyleProps<typeof TOOLTIP_VARS>
   >;
 
   let {
@@ -32,7 +40,19 @@
 
   /* The wrapper is the element a caller is pointing at -- the tooltip itself
      is a popover the component owns and positions. */
-  const el = $derived(elementProps(restProps, "tooltip"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const TOOLTIP_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  /* The variables land on the wrapper and reach the popover by inheritance:
+     the tooltip is a descendant of it, and custom properties inherit. */
+  const el = $derived(elementProps(restProps, "tooltip", TOOLTIP_VARS));
   // svelte-ignore state_referenced_locally
   let renderedVertical = $state(vertical);
   // svelte-ignore state_referenced_locally

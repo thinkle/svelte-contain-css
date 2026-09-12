@@ -3,6 +3,12 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import FormProvider from "./FormProvider.svelte";
 
   let {
@@ -48,11 +54,21 @@
       maxWidth?: string;
       minWidth?: string;
       width?: string;
-    }
+    } &
+      StyleProps<typeof FIELDSET_VARS>
   > = $props();
 
   /* The style props are destructured above, so they have to be handed back
      explicitly -- rest props no longer carry them. */
+  /* The shorthands fieldset's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const FIELDSET_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(
       {
@@ -69,16 +85,13 @@
       },
       "fieldset",
       [
-      "bg",
-      "fg",
-      "padding",
+      ...FIELDSET_VARS,
       "border",
-      "borderRadius",
       "margin",
       "maxWidth",
       "minWidth",
       "width",
-      ],
+    ],
     ),
   );
 </script>

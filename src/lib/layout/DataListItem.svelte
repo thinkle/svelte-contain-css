@@ -4,6 +4,11 @@
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLLIElement>,
@@ -41,7 +46,8 @@
     selectedBorder?: string | null;
       selectionColor?: string | null;
     },
-    BaseStyleProps
+    BaseStyleProps &
+      StyleProps<typeof DATA_LIST_ITEM_VARS>
   >;
 
   let {
@@ -58,10 +64,17 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands data-list-item's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const DATA_LIST_ITEM_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(restProps, "data-list-item", [
-      "bg",
-      "fg",
+      ...DATA_LIST_ITEM_VARS,
       "padding",
       "width",
       "height",

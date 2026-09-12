@@ -3,6 +3,13 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import Button from "./Button.svelte";
 
   type Props = ContainProps<
@@ -12,7 +19,8 @@
       icon?: Snippet;
       children?: Snippet;
     },
-    BaseStyleProps
+    BaseStyleProps &
+      StyleProps<typeof TAB_ITEM_VARS>
   >;
 
   const {
@@ -28,8 +36,22 @@
      there would be silently inert. The variables work on the Button too:
      `.tab > button`'s rules read --tab-bg and friends, and a custom property
      resolves on the element it is declared on. */
+  /* The shorthands tab's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const TAB_ITEM_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
   const el = $derived(
-    elementProps(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
+    elementProps(restProps, "tab", [
+      ...TAB_ITEM_VARS,
+      "width",
+      "height",
+    ]),
   );
 </script>
 

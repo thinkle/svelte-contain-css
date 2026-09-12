@@ -1,5 +1,10 @@
 <script lang="ts">
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
   import type { ContainProps, SidebarStyleProps } from "$lib/types";
   import type { HTMLAttributes } from "svelte/elements";
@@ -19,7 +24,8 @@
       expandLabel?: string;
       collapseLabel?: string;
     },
-    SidebarStyleProps
+    SidebarStyleProps &
+      StyleProps<typeof SIDEBAR_VARS>
   >;
 
   let {
@@ -32,7 +38,18 @@
     ...restProps
   }: Props = $props();
 
-  const el = $derived(elementProps(restProps, "sidebar", ["bg", "fg", "width"]));
+  /* The shorthands sidebar's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const SIDEBAR_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "sidebar", [
+      ...SIDEBAR_VARS,
+      "width",
+    ]));
 
   let expandedHamburger = $state(false);
   let expandedBar = $state(true);

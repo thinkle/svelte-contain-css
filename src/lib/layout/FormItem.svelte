@@ -3,6 +3,10 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import { getContext } from "svelte";
 
   type FormItemDefaults = {
@@ -41,10 +45,18 @@
       collapseSide?: boolean;
       above?: boolean;
       below?: boolean;
-    }
+    },
+    StyleProps<typeof FORM_ITEM_VARS>
   > = $props();
 
-  const el = $derived(elementProps(restProps, "form-item"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const FORM_ITEM_VARS = [
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "form-item", FORM_ITEM_VARS));
 
   // Use $derived to reactively compute values from context
   const effectiveFullWidth = $derived(

@@ -2,6 +2,11 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { ContainProps, HeroStyleProps } from "$lib/types";
 
   type Props = ContainProps<
@@ -9,15 +14,23 @@
     {
       children?: Snippet;
     },
-    HeroStyleProps
+    HeroStyleProps &
+      StyleProps<typeof HERO_VARS>
   >;
 
   const { children, class: className, ...restProps }: Props = $props();
 
+  /* The shorthands hero's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const HERO_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps(restProps, "hero", [
-      "bg",
-      "fg",
+      ...HERO_VARS,
       "padding",
       "width",
       "height",

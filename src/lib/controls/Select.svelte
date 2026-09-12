@@ -2,6 +2,13 @@
   import type { HTMLSelectAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import type { MatchMode, TypeaheadMode } from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
@@ -16,7 +23,8 @@
       matchMode?: MatchMode;
       /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
       typeaheadMode?: TypeaheadMode;
-    }
+    },
+    StyleProps<typeof SELECT_VARS>
   >;
 
   let {
@@ -29,7 +37,17 @@
     ...restProps
   }: Props = $props();
 
-  const el = $derived(elementProps(restProps, "select"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const SELECT_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "select", SELECT_VARS));
   let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;

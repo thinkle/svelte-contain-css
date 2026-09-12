@@ -3,6 +3,13 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps, TagStyleProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLSpanElement>,
@@ -26,7 +33,8 @@
        */
       closeLabel?: string;
     },
-    TagStyleProps
+    TagStyleProps &
+      StyleProps<typeof TAG_VARS>
   >;
 
   let {
@@ -42,14 +50,18 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands tag's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const TAG_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
   const el = $derived(
-    elementProps(restProps, "tag", [
-      "bg",
-      "fg",
-      "padding",
-      "borderRadius",
-      "fontSize",
-    ]),
+    elementProps(restProps, "tag", TAG_VARS),
   );
 </script>
 

@@ -3,6 +3,10 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps, MarginStyleProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLElement>,
@@ -11,7 +15,8 @@
       customHeight?: string | null;
       children?: Snippet;
     },
-    MarginStyleProps
+    MarginStyleProps &
+      StyleProps<typeof ROW_CONTAINER_VARS>
   >;
 
   let {
@@ -22,8 +27,15 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands row-container's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const ROW_CONTAINER_VARS = [
+    ...MARGIN_VARS,
+  ] as const;
+
   const el = $derived(
-    elementProps(restProps, "row-container", ["marginBlock", "marginInline"]),
+    elementProps(restProps, "row-container", ROW_CONTAINER_VARS),
   );
 </script>
 

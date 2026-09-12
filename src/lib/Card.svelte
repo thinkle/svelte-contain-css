@@ -3,6 +3,11 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { CardStyleProps, ContainProps } from "$lib/types";
   import { elementProps } from "./util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLElement>,
@@ -13,7 +18,8 @@
       center?: boolean;
       fixedHeight?: boolean;
     },
-    CardStyleProps
+    CardStyleProps &
+      StyleProps<typeof CARD_VARS>
   >;
 
   let {
@@ -29,10 +35,17 @@
 
   /* `height` is destructured (the $effect below reads it), so it has to be
      handed back explicitly -- rest props no longer carry it. */
+  /* The shorthands card's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const CARD_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps({ height, ...restProps }, "card", [
-      "bg",
-      "fg",
+      ...CARD_VARS,
       "padding",
       "width",
       "height",

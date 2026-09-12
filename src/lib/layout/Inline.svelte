@@ -7,6 +7,12 @@
     MarginStyleProps,
   } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    MARGIN_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLAttributes<HTMLDivElement>,
@@ -20,7 +26,8 @@
       wrap?: string | null;
       children?: Snippet;
     },
-    BaseStyleProps & MarginStyleProps
+    BaseStyleProps & MarginStyleProps &
+      StyleProps<typeof INLINE_VARS>
   >;
 
   let {
@@ -36,19 +43,26 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands inline's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const INLINE_VARS = [
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...MARGIN_VARS,
+  ] as const;
+
   const el = $derived(
     elementProps({ justify, align, gap, wrap, ...restProps }, "inline", [
+      ...INLINE_VARS,
       "bg",
       "fg",
-      "padding",
       "width",
       "height",
       "gap",
       "justify",
       "align",
       "wrap",
-      "marginBlock",
-      "marginInline",
     ]),
   );
 </script>

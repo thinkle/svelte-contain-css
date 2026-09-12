@@ -1,5 +1,12 @@
 <script lang="ts">
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    PADDING_VARS,
+    RADIUS_VARS,
+    TYPOGRAPHY_CONTAINER_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
@@ -35,10 +42,20 @@
        */
       progressLabel?: string;
     },
-    BaseStyleProps
+    BaseStyleProps & StyleProps<typeof PROGRESS_VARS>
   > = $props();
 
-  const cssKeys = ["bg", "fg", "padding", "width", "height"];
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const PROGRESS_VARS = [
+    ...COLOR_VARS,
+    ...PADDING_VARS,
+    ...RADIUS_VARS,
+    ...TYPOGRAPHY_CONTAINER_VARS,
+  ] as const;
+
+  const cssKeys = [...PROGRESS_VARS, "width", "height"];
 
   /* Every style prop is destructured above, so they are handed back
      explicitly. Passing `restProps` alone -- which is what this did before --

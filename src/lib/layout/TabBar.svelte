@@ -4,6 +4,11 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Item = { label: string; value: string };
   type Props = ContainProps<
@@ -14,7 +19,8 @@
       items?: (string | Item)[];
       onchange?: (value: string | Item | null) => void;
       children?: import("svelte").Snippet;
-    }
+    },
+    StyleProps<typeof TAB_BAR_VARS>
   >;
 
   let {
@@ -27,7 +33,15 @@
     ...restProps
   }: Props = $props();
 
-  const el = $derived(elementProps(restProps, "tab-bar"));
+  /* The shorthands this component's own CSS backs, one group per mixin
+     it includes. The Props type is derived from this same array, so what
+     the component accepts and what it emits cannot drift apart. */
+  const TAB_BAR_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
+  const el = $derived(elementProps(restProps, "tab-bar", TAB_BAR_VARS));
 
   let lastActive = $state(active);
 </script>

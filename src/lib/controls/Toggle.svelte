@@ -3,6 +3,11 @@
   import type { HTMLInputAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
   import { splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLInputAttributes,
@@ -13,7 +18,9 @@
       offLabel?: Snippet;
       children?: Snippet;
     },
-    BaseStyleProps,
+    BaseStyleProps &
+      StyleProps<typeof TOGGLE_VARS>
+  ,
     "type"
   >;
 
@@ -30,8 +37,21 @@
   /* Variables and the caller's `style` go on the wrapper label, which is what
      `.toggle`'s CSS targets; the attributes go on the input, which is what
      `aria-*`, `required` and `data-*` are about. */
+  /* The shorthands toggle's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const TOGGLE_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
   const el = $derived(
-    splitProps(restProps, "toggle", ["bg", "fg", "padding", "width", "height"]),
+    splitProps(restProps, "toggle", [
+      ...TOGGLE_VARS,
+      "padding",
+      "width",
+      "height",
+    ]),
   );
 
   const hasOffLabel = $derived(Boolean(offLabel));

@@ -3,6 +3,11 @@
   import type { HTMLInputAttributes } from "svelte/elements";
   import type { BaseStyleProps, ContainProps } from "$lib/types";
   import { splitProps } from "$lib/util";
+  import {
+    COLOR_VARS,
+    TYPOGRAPHY_VARS,
+    type StyleProps,
+  } from "$lib/styleProps";
 
   type Props = ContainProps<
     HTMLInputAttributes,
@@ -11,7 +16,9 @@
       value?: any;
       children?: Snippet;
     },
-    BaseStyleProps,
+    BaseStyleProps &
+      StyleProps<typeof RADIO_BUTTON_VARS>
+  ,
     "value" | "type"
   >;
 
@@ -23,10 +30,17 @@
     ...restProps
   }: Props = $props();
 
+  /* The shorthands radio-button's own CSS backs, one group per mixin it
+     includes. The Props type is derived from this same array, so what the
+     component accepts and what it emits cannot drift apart. */
+  const RADIO_BUTTON_VARS = [
+    ...COLOR_VARS,
+    ...TYPOGRAPHY_VARS,
+  ] as const;
+
   const el = $derived(
     splitProps(restProps, "radio-button", [
-      "bg",
-      "fg",
+      ...RADIO_BUTTON_VARS,
       "padding",
       "width",
       "height",
