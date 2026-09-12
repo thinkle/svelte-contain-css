@@ -1,26 +1,38 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
   import Button from "./Button.svelte";
 
-  type Props = {
-    active?: boolean;
-    icon?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    HTMLAttributes<HTMLButtonElement>;
+  type Props = ContainProps<
+    HTMLAttributes<HTMLButtonElement>,
+    {
+      active?: boolean;
+      icon?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps
+  >;
 
-  const { active = false, icon, children, ...restProps }: Props = $props();
+  const {
+    active = false,
+    icon,
+    children,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
+  /* The wrapper is `display: contents` and exists only to scope the tab's CSS
+     onto the Button inside it, so the variables belong on it while every
+     attribute is forwarded to the Button. */
+  const el = $derived(
+    splitProps(restProps, "tab", ["bg", "fg", "padding", "width", "height"]),
   );
 </script>
 
-<div class="tab" class:active {style}>
-  <Button primary={active} {icon} {...restProps}>
+<div class="tab" class:active style={el.style}>
+  <Button primary={active} {icon} class={className} {...el.attrs}>
     {@render children?.()}
   </Button>
 </div>

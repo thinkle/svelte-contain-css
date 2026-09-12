@@ -1,25 +1,30 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
 
-  type Props = {
-    group?: any;
-    value?: any;
-    children?: Snippet;
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "value">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      group?: any;
+      value?: any;
+      children?: Snippet;
+    },
+    BaseStyleProps,
+    "value" | "type"
+  >;
 
   let {
     group = $bindable<any>(undefined),
     value = undefined,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  let style = $derived(
-    injectVars(restProps, "radio-button", [
+  const el = $derived(
+    splitProps(restProps, "radio-button", [
       "bg",
       "fg",
       "padding",
@@ -37,14 +42,14 @@
   }
 </script>
 
-<div class="label-sizing-box" {style}>
+<div class={["label-sizing-box", className]} style={el.style}>
   <label class="radio-item">
     <input
       {value}
       type="radio"
       checked={isChecked}
       onchange={handleChange}
-      {...restProps}
+      {...el.attrs}
     />
     <span>{@render children?.()}</span>
   </label>

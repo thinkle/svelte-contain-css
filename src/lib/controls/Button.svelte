@@ -1,20 +1,23 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
 
-  type Props = {
-    primary?: boolean;
-    secondary?: boolean;
-    warning?: boolean;
-    danger?: boolean;
-    success?: boolean;
-    info?: boolean;
-    icon?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    HTMLButtonAttributes;
+  type Props = ContainProps<
+    HTMLButtonAttributes,
+    {
+      primary?: boolean;
+      secondary?: boolean;
+      warning?: boolean;
+      danger?: boolean;
+      success?: boolean;
+      info?: boolean;
+      icon?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps
+  >;
 
   let {
     primary = false,
@@ -25,18 +28,23 @@
     info = false,
     icon,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "button", ["bg", "fg", "padding", "width", "height"]),
+  const el = $derived(
+    elementProps(restProps, "button", [
+      "bg",
+      "fg",
+      "padding",
+      "width",
+      "height",
+    ]),
   );
-
-
 </script>
 
 <button
-  {style}
+  class={className}
   class:primary
   class:secondary
   class:warning
@@ -44,7 +52,7 @@
   class:success
   class:info
   class:has-icon={icon}
-  {...restProps}
+  {...el}
 >
   <span class="content">{@render children?.()}</span>
   {#if icon}

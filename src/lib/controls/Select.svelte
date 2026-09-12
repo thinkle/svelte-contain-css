@@ -1,18 +1,23 @@
 <script lang="ts">
   import type { HTMLSelectAttributes } from "svelte/elements";
+  import type { ContainProps } from "$lib/types";
+  import { elementProps } from "$lib/util";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import type { MatchMode, TypeaheadMode } from "$lib/dropdowns/DropdownMenu.svelte";
   import { onMount, tick } from "svelte";
 
-  type Props = {
-    value?: any;
-    children?: import("svelte").Snippet;
-    "data-audit-action"?: string | null;
-    /** See {@link MatchMode} on DropdownMenu -- how type-ahead text is compared. */
-    matchMode?: MatchMode;
-    /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
-    typeaheadMode?: TypeaheadMode;
-  } & HTMLSelectAttributes;
+  type Props = ContainProps<
+    HTMLSelectAttributes,
+    {
+      value?: any;
+      children?: import("svelte").Snippet;
+      "data-audit-action"?: string | null;
+      /** See {@link MatchMode} on DropdownMenu -- how type-ahead text is compared. */
+      matchMode?: MatchMode;
+      /** See {@link TypeaheadMode} on DropdownMenu -- focus a match or filter the list. */
+      typeaheadMode?: TypeaheadMode;
+    }
+  >;
 
   let {
     value = $bindable(),
@@ -20,8 +25,11 @@
     "data-audit-action": dropdownAuditAction = null,
     matchMode = "prefix",
     typeaheadMode = "focus",
+    class: className,
     ...restProps
   }: Props = $props();
+
+  const el = $derived(elementProps(restProps, "select"));
   let selectElement: HTMLSelectElement | undefined = $state();
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
@@ -121,7 +129,7 @@
   });
 </script>
 
-<select bind:value bind:this={selectElement} {...restProps}>
+<select bind:value bind:this={selectElement} class={className} {...el}>
   {@render children?.()}
 </select>
 <div class="dropdown-wrapper" style:--target-width={targetWidth}>

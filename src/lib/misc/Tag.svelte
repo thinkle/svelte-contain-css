@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import type { ClassValue, HTMLAttributes } from "svelte/elements";
+  import type { HTMLAttributes } from "svelte/elements";
   import type { ContainProps, TagStyleProps } from "$lib/types";
   import { elementProps } from "$lib/util";
 
@@ -25,7 +25,6 @@
        * distinguishable to a screen reader.
        */
       closeLabel?: string;
-      class?: ClassValue;
     },
     TagStyleProps
   >;

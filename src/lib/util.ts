@@ -27,6 +27,39 @@ function buildVars(
 }
 
 /**
+ * Split a component's rest props into a `style` string and the attributes that
+ * belong on an element, keeping the two separate.
+ *
+ * Use this for a component that renders a wrapper around a control (Toggle,
+ * RadioButton, Checkbox, FormItem): the CSS variables and the caller's `style`
+ * belong on the wrapper, because that is what the component's own CSS targets
+ * and what a caller expects to position, while `aria-*`, `name`, `required`
+ * and `data-*` belong on the control itself. {@link elementProps} is the
+ * single-element case and is what most components want.
+ *
+ * @returns `style` for the wrapper, `attrs` (never containing `style`) for the
+ *   control.
+ */
+export function splitProps(
+  props: Record<string, any>,
+  prefix: string,
+  varList: readonly string[] = [],
+  extraVars = "",
+): { style: string; attrs: Record<string, unknown> } {
+  const attrs: Record<string, unknown> = {};
+  for (const key in props) {
+    if (key.startsWith("--")) continue; // becomes a declaration, not an attribute
+    if (key === "style") continue; // returned separately
+    if (varList.includes(key)) continue; // a style prop, not an attribute
+    attrs[key] = props[key];
+  }
+  return {
+    style: buildVars(props, prefix, varList) + extraVars + (props.style ?? ""),
+    attrs,
+  };
+}
+
+/**
  * Split a component's rest props into the attributes that belong on its root
  * element, with the component's CSS variables and the caller's own `style`
  * merged into a single `style` attribute.
@@ -67,22 +100,15 @@ export function elementProps(
   varList: readonly string[] = [],
   extraVars = "",
 ): Record<string, unknown> {
-  const attrs: Record<string, unknown> = {};
-  for (const key in props) {
-    if (key.startsWith("--")) continue; // becomes a declaration, not an attribute
-    if (key === "style") continue; // merged below
-    if (varList.includes(key)) continue; // a style prop, not an attribute
-    attrs[key] = props[key];
-  }
-  const style =
-    buildVars(props, prefix, varList) + extraVars + (props.style ?? "");
+  const { style, attrs } = splitProps(props, prefix, varList, extraVars);
   if (style) attrs.style = style;
   return attrs;
 }
 
 /**
- * Build only the CSS variable string, for the rare component that cannot put
- * the result on an element it also spreads onto.
+ * Build only the CSS variable string, for a component that has no element to
+ * spread attributes onto (Dialog, which portals its content and copies
+ * variables across).
  */
 export function injectVars(
   props: Record<string, any>,

@@ -1,17 +1,21 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
 
-  type Props = {
-    checked?: boolean;
-    name?: string;
-    onLabel?: Snippet;
-    offLabel?: Snippet;
-    children?: Snippet;
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "type">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      checked?: boolean;
+      name?: string;
+      onLabel?: Snippet;
+      offLabel?: Snippet;
+      children?: Snippet;
+    },
+    BaseStyleProps,
+    "type"
+  >;
 
   let {
     checked = $bindable(false),
@@ -19,11 +23,15 @@
     onLabel,
     offLabel,
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "toggle", ["bg", "fg", "padding", "width", "height"]),
+  /* Variables and the caller's `style` go on the wrapper label, which is what
+     `.toggle`'s CSS targets; the attributes go on the input, which is what
+     `aria-*`, `required` and `data-*` are about. */
+  const el = $derived(
+    splitProps(restProps, "toggle", ["bg", "fg", "padding", "width", "height"]),
   );
 
   const hasOffLabel = $derived(Boolean(offLabel));
@@ -31,7 +39,7 @@
   const effectiveOnLabel = $derived(onLabel || children);
 </script>
 
-<label class="toggle" {style}>
+<label class={["toggle", className]} style={el.style}>
   {#if hasOffLabel}
     <span class="toggle-label toggle-label-off">{@render offLabel?.()}</span>
   {/if}
@@ -41,7 +49,7 @@
       name={name || undefined}
       type="checkbox"
       bind:checked
-      {...restProps}
+      {...el.attrs}
     />
     <span class="toggle-track" aria-hidden="true">
       <span class="toggle-thumb"></span>

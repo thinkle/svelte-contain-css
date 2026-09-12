@@ -1,17 +1,21 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
-  import type { BaseStyleProps } from "$lib/types";
-  import { injectVars } from "$lib/util";
+  import type { BaseStyleProps, ContainProps } from "$lib/types";
+  import { splitProps } from "$lib/util";
 
-  type Props = {
-    checked?: boolean | undefined;
-    name?: string;
-    value?: any;
-    group?: any[];
-    children?: Snippet;
-  } & BaseStyleProps &
-    Omit<HTMLInputAttributes, "value">;
+  type Props = ContainProps<
+    HTMLInputAttributes,
+    {
+      checked?: boolean | undefined;
+      name?: string;
+      value?: any;
+      group?: any[];
+      children?: Snippet;
+    },
+    BaseStyleProps,
+    "value" | "type"
+  >;
 
   let {
     checked = $bindable<boolean | undefined>(undefined),
@@ -19,11 +23,12 @@
     value = undefined,
     group = $bindable<any[] | undefined>(undefined),
     children,
+    class: className,
     ...restProps
   }: Props = $props();
 
-  const style = $derived(
-    injectVars(restProps, "checkbox", [
+  const el = $derived(
+    splitProps(restProps, "checkbox", [
       "bg",
       "fg",
       "padding",
@@ -58,7 +63,7 @@
   let ref: HTMLElement | null = $state(null);
 </script>
 
-<div class="label-sizing-box" {style}>
+<div class={["label-sizing-box", className]} style={el.style}>
   <label class="checkbox-item">
     {#if useGroup}
       <input
@@ -67,14 +72,14 @@
         {value}
         checked={isChecked}
         onchange={handleGroupChange}
-        {...restProps}
+        {...el.attrs}
       />
     {:else}
       <input
         name={name || (ref && ref.textContent) || undefined}
         type="checkbox"
         bind:checked
-        {...restProps}
+        {...el.attrs}
       />
     {/if}
     <span bind:this={ref}>{@render children?.()}</span>
