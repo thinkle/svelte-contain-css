@@ -4,6 +4,41 @@ Tracks fixes made on `svelte5` that should be reviewed for backporting to `main`
 
 ---
 
+## svelte5 — CircleButton variable rename (2026-09-12)
+
+`CircleButton` was called `MiniButton` until the rename (a circle is not a place
+to put text), but its CSS variables kept the `mini-button` prefix — so consumers
+still had to name the old component to style the new one.
+
+Its CSS now reads `--circle-button-*` **with `--mini-button-*` behind it** in
+every include and every `var()`, and `elementProps` emits the new prefix, so
+`<CircleButton bg="…">` writes `--circle-button-bg`.
+
+### Portable to legacy
+
+| Fix | Files | Legacy |
+|-----|-------|--------|
+| `circle-button` first, `mini-button` as fallback | `src/lib/controls/CircleButton.svelte` | ⬜ todo |
+| Same treatment for the buttons that borrow the look | `src/lib/layout/Sidebar.svelte`, `src/lib/overlays/Dialog.svelte` | ⬜ todo |
+| `circle-button` added to the prefix list | `src/lib/cssprops.ts` | ⬜ todo |
+
+### ⚠️ Do NOT rename the theme tokens
+
+`material.css`, `retro.css` and `bootstrap.css` still define `--mini-button-*`,
+deliberately, and each carries a comment saying so. The component resolves
+`--circle-button-bg` *first*; if a theme defined that at `:root`, it would win
+over an app's existing `--mini-button-bg` override and silently break it.
+Leaving the tokens on the old name keeps the override order correct: app's new
+name → app's old name → theme.
+
+### Note for the legacy port
+
+Legacy has no `elementProps`, so only the SCSS half applies there — the prop
+prefix is set by `injectVars($$props, …)` instead. The fallback ordering is the
+part that matters and it ports directly.
+
+---
+
 ## svelte5 — attribute pass-through & style shorthands (2026-09-12)
 
 Branch: `claude/component-attribute-spreading-5e0ybz`

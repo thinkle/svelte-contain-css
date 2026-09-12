@@ -134,7 +134,14 @@ Or import in your CSS:
 **Controls:**
 
 - `Button`, `ButtonLink`, `CircleButton` - Buttons and link-styled buttons
-- `MiniButton` - Backwards-compatible alias for `CircleButton`
+  - `CircleButton` is an icon button: one glyph, sized as a circle. Text does
+    not fit in it — use `Button` for anything with a label, however short.
+  - Its variables are `--circle-button-bg`, `--circle-button-size`,
+    `--circle-button-radius` and friends. The older `--mini-button-*` spelling
+    still resolves behind each of them, so existing overrides and themes keep
+    working; prefer the new names in new code.
+- `MiniButton` - Backwards-compatible alias for `CircleButton`. Deprecated: it
+  was renamed precisely because the old name invited putting text in a circle.
 - `Input`, `Select`, `Option` - Form inputs
 - `Checkbox`, `RadioButton`, `Toggle` - Selection controls
 - `Slider` - Range input

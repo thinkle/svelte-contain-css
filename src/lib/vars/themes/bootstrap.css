@@ -47,6 +47,11 @@
   --button-bg: #6c757d;
   --button-fg: #ffffff;
   --button-border: 1px solid #6c757d;
+  /* Defined under the OLD `mini-button` prefix on purpose. CircleButton reads
+     `--circle-button-*` first and falls back to these, so an app that already
+     overrides `--mini-button-bg` keeps winning over the theme. Renaming these
+     to `--circle-button-*` would resolve ahead of that override and silently
+     break it. Set the new names in your own CSS, not here. */
   --mini-button-bg: #6c757d;
   --mini-button-fg: #ffffff;
   --mini-button-border: 1px solid #6c757d;

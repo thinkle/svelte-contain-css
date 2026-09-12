@@ -35,7 +35,7 @@
     ...restProps
   }: Props = $props();
 
-  /* The shorthands mini-button's own CSS backs, one group per mixin it
+  /* The shorthands circle-button's own CSS backs, one group per mixin it
      includes. The Props type is derived from this same array, so what the
      component accepts and what it emits cannot drift apart. */
   const CIRCLE_BUTTON_VARS = [
@@ -44,7 +44,7 @@
   ] as const;
 
   const el = $derived(
-    elementProps(restProps, "mini-button", [
+    elementProps(restProps, "circle-button", [
       ...CIRCLE_BUTTON_VARS,
       "padding",
       "width",
@@ -72,19 +72,30 @@
     @include color-props(primary, button, control);
   }
   button {
-    @include typography-props(mini-button, button, ui, control);
-    @include color-props(mini-button, button, control, secondary);
-    @include clickable(mini-button, button, clickable);
-    @include box-shadow(mini-button, button, control);
+    /* `circle-button` first, `mini-button` behind it. This component was
+       called MiniButton until it was renamed to stop people putting text in a
+       circle; its variables kept the old prefix. Every include and every
+       var() below names both, so `--circle-button-bg` is the name to reach
+       for while an existing `--mini-button-bg` -- in a theme, or in an app
+       that set one years ago -- keeps working untouched. */
+    @include typography-props(circle-button, mini-button, button, ui, control);
+    @include color-props(circle-button, mini-button, button, control, secondary);
+    @include clickable(circle-button, mini-button, button, clickable);
+    @include box-shadow(circle-button, mini-button, button, control);
     @include focusable();
     margin: var-with-fallbacks(--margin, button, control, var(--space));
-    width: var(--mini-button-size, var(--icon-size, 1em));
-    height: var(--mini-button-size, var(--icon-size, 1em));
+    width: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
+    height: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
     /* Make sure we don't shrink in a flex container */
-    min-width: var(--mini-button-size, var(--icon-size, 1em));
-    min-height: var(--mini-button-size, var(--icon-size, 1em));
-    border-radius: var(--mini-button-radius, 50%);
-    border: var(--mini-button-border, button-border, none);
+    min-width: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
+    min-height: var(--circle-button-size, var(--mini-button-size, var(--icon-size, 1em)));
+    border-radius: var(--circle-button-radius, var(--mini-button-radius, 50%));
+    /* The inner fallback list is preserved verbatim rather than tidied: the
+       `button-border` token in it is not a valid border value, so when neither
+       variable is set this declaration is invalid at computed-value time and
+       the border falls back to the initial `medium none`. That is the current
+       rendering, and changing it is a separate decision from renaming. */
+    border: var(--circle-button-border, var(--mini-button-border, button-border, none));
     display: inline-grid;
     place-content: center;
     line-height: 1;
