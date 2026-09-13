@@ -138,6 +138,7 @@ const components: {
 }[] = [
   ...[
     "button",
+    "circle-button",
     "mini-button",
     "menu",
     "menu-trigger",

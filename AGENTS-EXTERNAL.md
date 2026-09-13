@@ -134,7 +134,16 @@ Or import in your CSS:
 **Controls:**
 
 - `Button`, `ButtonLink`, `CircleButton` - Buttons and link-styled buttons
-- `MiniButton` - Backwards-compatible alias for `CircleButton`
+  - `CircleButton` is an icon button: one glyph, sized as a circle. Text does
+    not fit in it — use `Button` for anything with a label, however short.
+  - Its variables are `--circle-button-bg`, `--circle-button-size`,
+    `--circle-button-radius` and friends. The older `--mini-button-*` spelling
+    resolves behind each of them, so an app that sets no theme keeps working —
+    but every bundled theme defines the new name at `:root`, and `var()` only
+    reaches its fallback when a name is undefined anywhere. **If you load a
+    theme and override `--mini-button-*`, rename it to `--circle-button-*`.**
+- `MiniButton` - Backwards-compatible alias for `CircleButton`. Deprecated: it
+  was renamed precisely because the old name invited putting text in a circle.
 - `Input`, `Select`, `Option` - Form inputs
 - `Checkbox`, `RadioButton`, `Toggle` - Selection controls
 - `Slider` - Range input

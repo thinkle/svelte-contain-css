@@ -252,25 +252,25 @@
       top: var(--padding);
       left: 0;
 
-      border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
+      border-radius: var-with-fallbacks(--radius, circle-button, mini-button, button, 50%);
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
-      border: var(--mini-button-border);
+      border: var(--circle-button-border, var(--mini-button-border));
       width: var(--_sidebar-expander-width);
       height: var(--_sidebar-expander-height);
-      @include color-props(mini-button, button, control, secondary);
-      @include clickable(mini-button, button, control);
+      @include color-props(circle-button, mini-button, button, control, secondary);
+      @include clickable(circle-button, mini-button, button, control);
       @include focusable();
     }
     aside > button::after {
-      color: var(--mini-button-fg, currentColor);
+      color: var(--circle-button-fg, var(--mini-button-fg, currentColor));
       filter: var(--sidebar-mobile-icon-filter, none);
     }
     aside > button.close {
       left: calc(
         var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
       );
-      border-radius: var-with-fallbacks(--radius, mini-button, button, 50%);
+      border-radius: var-with-fallbacks(--radius, circle-button, mini-button, button, 50%);
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }

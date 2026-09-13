@@ -124,7 +124,7 @@
     top: var(--padding, 1rem);
     height: var(
       --dialog-padding,
-      var(--mini-button-size, var(--icon-size, 32px))
+      var(--circle-button-size, var(--mini-button-size, var(--icon-size, 32px)))
     );
     display: flex;
     justify-content: flex-end;
