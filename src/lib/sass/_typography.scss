@@ -89,9 +89,9 @@
 }
 
 @mixin heading-props-for($level, $group, $prefixes...) {
-  $level-prefixes: map-prefixes($level, $prefixes);
-  $group-prefixes: map-prefixes($group, $prefixes);
-  $heading-prefixes: map-prefixes(heading, $prefixes);
+  $level-prefixes: fn.map-prefixes($level, $prefixes);
+  $group-prefixes: fn.map-prefixes($group, $prefixes);
+  $heading-prefixes: fn.map-prefixes(heading, $prefixes);
   $resolved-prefixes: ();
 
   @each $prefix in $level-prefixes {
@@ -196,7 +196,7 @@
 
   & :global(p) {
     @include typography-props-bare(
-      append(map-prefixes(paragraph, $prefixes), paragraph)...
+      append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
     );
   }
   & :global(p:first-of-type),
@@ -206,8 +206,8 @@
   :global(h4 + p),
   :global(h5 + p),
   :global(h6 + p) {
-    $first-paragraph-prefixes: map-prefixes(first-paragraph, $prefixes);
-    $paragraph-prefixes: append(map-prefixes(paragraph, $prefixes), paragraph);
+    $first-paragraph-prefixes: fn.map-prefixes(first-paragraph, $prefixes);
+    $paragraph-prefixes: append(fn.map-prefixes(paragraph, $prefixes), paragraph);
     $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
 
     @each $prefix in $paragraph-prefixes {
@@ -221,23 +221,26 @@
     @include typography-props-bare(
       append($first-paragraph-fallback-prefixes, first-paragraph)...
     );
+    // var-with-fallbacks appends the base name to each prefix itself, so these
+    // take the raw $prefixes -- pre-mapping them would double up on
+    // "first-paragraph" (e.g. --body-first-paragraph-first-paragraph-font-size).
     font-size: fn.var-with-fallbacks(
       --first-paragraph-font-size,
       append(
-          map-prefixes(first-paragraph, $prefixes),
+          $prefixes,
           fn.vars(
             font-size,
-            append(map-prefixes(paragraph, $prefixes), paragraph)...
+            append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
           )
         )...
     );
     line-height: fn.var-with-fallbacks(
       --first-paragraph-line-height,
       append(
-          map-prefixes(first-paragraph, $prefixes),
+          $prefixes,
           fn.vars(
             line-height,
-            append(map-prefixes(paragraph, $prefixes), paragraph)...
+            append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
           )
         )...
     );
@@ -254,7 +257,7 @@
   :global(h5 + p::first-line),
   :global(h6 + p::first-line) {
     @include typography-props-bare(
-      append(map-prefixes-include-base(first-line, $prefixes), first-line)...
+      append(fn.map-prefixes-include-base(first-line, $prefixes), first-line)...
     );
   }
 
@@ -266,7 +269,7 @@
   :global(h5 + p::first-letter),
   :global(h6 + p::first-letter) {
     @include typography-props-bare(
-      map-prefixes-include-base(first-letter, $prefixes)...
+      fn.map-prefixes-include-base(first-letter, $prefixes)...
     );
     --link-bg: #{fn.vars(link-bg, $prefixes...)};
     --link-fg: #{fn.vars(link-fg, $prefixes...)};
