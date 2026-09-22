@@ -23,6 +23,7 @@
       children?: import("svelte").Snippet;
       tooltip?: import("svelte").Snippet;
       block?: boolean;
+      tooltipDisabled?: boolean;
     },
     StyleProps<typeof TOOLTIP_VARS>
   >;
@@ -34,6 +35,7 @@
     children,
     tooltip,
     block = false,
+    tooltipDisabled = false,
     class: className,
     ...restProps
   }: Props = $props();
@@ -73,6 +75,10 @@
     unwatchViewport();
     tooltipDiv?.togglePopover(false);
   }
+
+  $effect(() => {
+    if (tooltipDisabled) hidePopover();
+  });
 
   /**
    * Find the rect to anchor the tooltip to.
@@ -250,13 +256,14 @@
   });
 
   async function showPopover() {
+    if (tooltipDisabled) return;
     wantsShow = true;
     if (!hasRendered) {
       hasRendered = true;
       // Wait for the content to exist before measuring it — positioning reads
       // the measurement element's height/width to decide flip direction.
       await tick();
-      if (!wantsShow) return;
+      if (!wantsShow || tooltipDisabled) return;
     }
     if (!positionTooltip()) return;
     watchViewport();

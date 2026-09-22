@@ -8,7 +8,10 @@
   import Tag from "$lib/misc/Tag.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import { tooltipVars } from "./cssVariableDefs";
+  import Checkbox from "$lib/controls/Checkbox.svelte";
+  let tooltipDisabled = false;
 </script>
 
 <CssVariableDemo variables={tooltipVars}>
@@ -192,6 +195,37 @@
       </Tooltip>
     </p>
   </TextLayout>
+  <DemoWithCode
+    defaultTab="split"
+    code={`
+    <Tooltip 
+      tooltipText="Must confirm before proceeding" 
+      tooltipDisabled={${tooltipDisabled}}
+    >
+      <Button${!tooltipDisabled ? " disabled" : ""} danger>Do Action</Button>
+    </Tooltip>
+      `}
+  >
+    {#snippet header()}<p>
+        Finally, you can disable a Tooltip by setting the
+        <code>tooltipDisabled</code> prop to <code>true</code>.
+      </p>
+      <p>
+        For example, if you want a tooltip to explain a disabled state like
+        this...
+      </p>
+    {/snippet}
+    <div>
+      <p>There is a tooltip when the button is disabled here...</p>
+      <Checkbox bind:checked={tooltipDisabled}>Confirm scary action</Checkbox>
+      <Tooltip
+        tooltipText="You must check the box to enable this button"
+        {tooltipDisabled}
+        ><Button danger disabled={!tooltipDisabled}>Do Scary Action</Button
+        ></Tooltip
+      >
+    </div>
+  </DemoWithCode>
 </CssVariableDemo>
 
 <style>
