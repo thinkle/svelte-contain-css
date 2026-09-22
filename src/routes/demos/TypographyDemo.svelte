@@ -3,11 +3,13 @@
   import Inline from "$lib/layout/Inline.svelte";
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
+  import ButtonLink from "$lib/controls/ButtonLink.svelte";
   import CssVariables from "./CssVariables.svelte";
   import CssWrapper from "./CssWrapper.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
   import TypographyThemeControls from "./TypographyThemeControls.svelte";
   import type { CSSVariable } from "./types";
+  import Button from "$lib/controls/Button.svelte";
   let cssVariables: CSSVariable[] = [
     {
       name: "--font-size",
@@ -525,6 +527,10 @@ ${headingExampleMarkup}
         Any time we need a <em>variant</em> text color, we have a number of pre-computed
         convenience CSS Properties available. These are used automatically by &lt;Text&gt;
         but can also be applied directly to other elements styling.
+      </p>
+      <p>
+        Here is an example of a <ButtonLink>Button Link</ButtonLink> inside a paragraph,
+        next to a plain <Button>Button</Button>
       </p>
       <ul>
         <li style="color:var(--muted-text-fg)">
