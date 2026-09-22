@@ -429,13 +429,13 @@
       data-list,
       var-with-fallbacks(--fg, data-list-item, data-list, inherit)
     );
-    --fg: var-with-fallbacks(
+    --fg: #{var-with-fallbacks(
       --selected-fg,
       data-list-item,
       data-list,
       var-with-fallbacks(--fg, data-list-item, data-list, inherit)
-    );
-    --link-fg: var-with-fallbacks(
+    )};
+    --link-fg: #{var-with-fallbacks(
       --selected-link-fg,
       data-list-item,
       data-list,
@@ -445,13 +445,13 @@
         data-list,
         var-with-fallbacks(--link-fg, data-list-item, data-list, inherit)
       )
-    );
-    --data-list-item-selected-accent: var-with-fallbacks(
+    )};
+    --data-list-item-selected-accent: #{var-with-fallbacks(
       --selection-color,
       data-list-item,
       data-list,
       var(--primary-bg)
-    );
+    )};
   }
 
   .data-list-item.selectable.checked::after {
