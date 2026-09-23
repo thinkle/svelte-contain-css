@@ -102,6 +102,26 @@
   </DataListItem>
 </DataList>`;
 
+  const itemAnatomyMarkup = `<DataList maxWidth="800px">
+  <!-- children fill the main content region -->
+  <DataListItem>
+    <h4>Content only</h4>
+    <p>The row collapses to one column when no snippets are supplied.</p>
+  </DataListItem>
+
+  <!-- start and end are optional named snippets -->
+  <DataListItem iconSize="3.5rem" itemPadding="1.25rem">
+    {#snippet start()}
+      <img src="/profile.jpg" alt="Sam Rivera" />
+    {/snippet}
+    <h4>Sam Rivera</h4>
+    <p>Product designer · New York</p>
+    {#snippet end()}
+      <Button>View profile</Button>
+    {/snippet}
+  </DataListItem>
+</DataList>`;
+
   const iconSizeMarkup = $derived.by(() => {
     const items = articleFeed
       .slice(0, 2)
@@ -190,7 +210,43 @@ ${items}
       This pattern differs from <code>Table</code>: rows can have
       variable-height content, chips/tags, and action clusters.
     </p>
+    <p>
+      <code>DataList</code> supplies the semantic list container and shared defaults;
+      <code>DataListItem</code> supplies each row's layout and behavior.
+    </p>
   </TextLayout>
+
+  <DemoWithCode markupSource={itemAnatomyMarkup}>
+    {#snippet header()}
+      <h3>DataListItem Anatomy</h3>
+      <p>
+        Put ordinary row content in <code>DataListItem</code>. Add the optional
+        <code>start</code> and <code>end</code> snippets for leading media and trailing
+        actions; omitted regions collapse automatically.
+      </p>
+      <p>
+        Layout props may be set on <code>DataList</code> for every row or directly on
+        one <code>DataListItem</code> for a per-row override.
+      </p>
+    {/snippet}
+    <DataList maxWidth="800px">
+      <DataListItem>
+        <h4>Content only</h4>
+        <p>The row collapses to one column when no snippets are supplied.</p>
+      </DataListItem>
+
+      <DataListItem iconSize="3.5rem" itemPadding="1.25rem">
+        {#snippet start()}
+          <img src={articleFeed[0].image} alt={articleFeed[0].imageAlt} />
+        {/snippet}
+        <h4>Sam Rivera</h4>
+        <p>Product designer · New York</p>
+        {#snippet end()}
+          <Button>View profile</Button>
+        {/snippet}
+      </DataListItem>
+    </DataList>
+  </DemoWithCode>
 
   <DemoWithCode markupSource={basicListMarkup}>
     {#snippet header()}
