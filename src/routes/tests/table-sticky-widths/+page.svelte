@@ -83,6 +83,31 @@
   </Table>
 </section>
 
+<!-- A header carrying interactive controls: the sticky copy must be the
+     focusable one, and the collapsed copy in the body table must not be. -->
+<section data-testid="interactive" class="frame">
+  <Table sticky>
+    {#snippet thead()}
+      <thead>
+        <tr>
+          {#each columns as c}
+            <th><button type="button">{c}</button></th>
+          {/each}
+        </tr>
+      </thead>
+    {/snippet}
+    {#snippet tbody()}
+      <tbody>
+        {#each rows as row}
+          <tr>
+            {#each row as cell}<td>{cell}</td>{/each}
+          </tr>
+        {/each}
+      </tbody>
+    {/snippet}
+  </Table>
+</section>
+
 <!-- Ground truth: the same content in a plain, non-sticky Table in an
      identical frame. Whatever the browser does here is what the sticky
      variant's measured colgroup is supposed to reproduce. -->

@@ -18,15 +18,22 @@ import { expect, test, type Locator } from "@playwright/test";
 
 const PATH = "/svelte-contain-css/tests/table-sticky-widths";
 
-async function colWidths(section: Locator, table: string): Promise<number[]> {
-  // Scope to .scrolling-table: the hidden measuring clone is a sibling, and
-  // must never be what an assertion accidentally measures.
+// The synced colgroup now lives only on the sticky header table; the body
+// table is a plain auto-layout table that sizes itself.
+async function colWidths(section: Locator): Promise<number[]> {
   return section
-    .locator(`.scrolling-table > table.${table} > colgroup > col`)
+    .locator(".scrolling-table > table.fixed-table-head > colgroup > col")
     .evaluateAll((cols) =>
       cols.map((c) => parseFloat(getComputedStyle(c).width)),
     );
 }
+
+// Real body cells only: the body table also carries the collapsed header copy
+// and the zero-height ruler row, neither of which is what we are checking.
+const BODY_CELLS =
+  ".scrolling-table > table.scrolling-table-body > tbody:not(.column-ruler) > tr:first-child > td";
+const HEAD_CELLS =
+  ".scrolling-table > table.fixed-table-head > thead > tr:last-child > th";
 
 async function cellWidths(section: Locator, selector: string) {
   return section
@@ -43,30 +50,22 @@ test.describe("Sticky table column widths", () => {
   });
 
   for (const name of ["narrow", "wide", "colspan"]) {
-    test(`${name}: header and body colgroups agree`, async ({ page }) => {
+    test(`${name}: the two tables are the same width`, async ({ page }) => {
       const section = page.getByTestId(name);
-      const head = await colWidths(section, "fixed-table-head");
-      const body = await colWidths(section, "scrolling-table-body");
+      const width = (sel: string) =>
+        section
+          .locator(`.scrolling-table > table.${sel}`)
+          .evaluate((el) => el.getBoundingClientRect().width);
 
-      expect(head.length).toBeGreaterThan(0);
-      expect(body.length).toBe(head.length);
-      // Sub-pixel: both colgroups are written from the same array, but each
-      // table resolves them against its own fixed layout.
-      head.forEach((w, i) => {
-        expect(Math.abs(w - body[i])).toBeLessThanOrEqual(1);
-      });
+      const head = await width("fixed-table-head");
+      const body = await width("scrolling-table-body");
+      expect(Math.abs(head - body)).toBeLessThanOrEqual(1);
     });
 
     test(`${name}: header cells line up with body cells`, async ({ page }) => {
       const section = page.getByTestId(name);
-      const headCells = await cellWidths(
-        section,
-        ".scrolling-table > table.fixed-table-head > thead > tr:last-child > th",
-      );
-      const bodyCells = await cellWidths(
-        section,
-        ".scrolling-table > table.scrolling-table-body > tbody > tr:first-child > td",
-      );
+      const headCells = await cellWidths(section, HEAD_CELLS);
+      const bodyCells = await cellWidths(section, BODY_CELLS);
 
       expect(headCells.length).toBe(bodyCells.length);
       headCells.forEach((w, i) => {
@@ -88,10 +87,7 @@ test.describe("Sticky table column widths", () => {
     test(`${name}: matches a plain table in the same container`, async ({
       page,
     }) => {
-      const sticky = await colWidths(
-        page.getByTestId(name),
-        "fixed-table-head",
-      );
+      const sticky = await colWidths(page.getByTestId(name));
       const reference = await page
         .getByTestId(`${name}-reference`)
         .locator("table > tbody > tr:first-child > td")
@@ -110,7 +106,7 @@ test.describe("Sticky table column widths", () => {
     page,
   }) => {
     const section = page.getByTestId("narrow");
-    const widths = await colWidths(section, "fixed-table-head");
+    const widths = await colWidths(section);
     const total = widths.reduce((a, b) => a + b, 0);
     const available = await section.evaluate((el) => el.clientWidth);
 
@@ -148,15 +144,63 @@ test.describe("Sticky table column widths", () => {
     expect(parseFloat(await width())).toBeLessThanOrEqual(1100);
   });
 
+  test("the body is rendered once, the header twice", async ({ page }) => {
+    // The point of the collapsed-header layout: only the header is duplicated.
+    // The old measuring clone re-rendered every row, doubling the whole table.
+    const section = page.getByTestId("narrow");
+    await expect(section.getByText("Ada", { exact: true })).toHaveCount(1);
+    await expect(
+      section.locator(
+        "table.scrolling-table-body > tbody:not(.column-ruler) > tr",
+      ),
+    ).toHaveCount(3);
+    // Header twice: once visible and sticky, once collapsed inside the body table.
+    await expect(section.locator("thead")).toHaveCount(2);
+  });
+
+  test("the collapsed header copy costs no vertical space", async ({
+    page,
+  }) => {
+    const section = page.getByTestId("narrow");
+    const headH = await section
+      .locator("table.scrolling-table-body > thead")
+      .evaluate((el) => el.getBoundingClientRect().height);
+    expect(headH).toBe(0);
+
+    // ...and the ruler row likewise.
+    const rulerH = await section
+      .locator("tbody.column-ruler")
+      .evaluate((el) => el.getBoundingClientRect().height);
+    expect(rulerH).toBe(0);
+  });
+
+  test("controls in the collapsed header copy are not focusable", async ({
+    page,
+  }) => {
+    const section = page.getByTestId("interactive");
+    const buttons = section.locator("table.scrolling-table-body thead button");
+    await expect(buttons).toHaveCount(5); // they exist in the DOM...
+
+    // ...but tabbing lands on the visible sticky header's buttons, never the
+    // collapsed copy. visibility: collapse takes them out of the tab order.
+    await section
+      .locator("table.fixed-table-head thead button")
+      .first()
+      .focus();
+    await page.keyboard.press("Tab");
+    const inCollapsed = await page.evaluate(() => {
+      const el = document.activeElement;
+      return !!el?.closest("table.scrolling-table-body");
+    });
+    expect(inCollapsed).toBe(false);
+  });
+
   test("column widths are proportional to content, not evenly divided", async ({
     page,
   }) => {
     // Guards the colspan case: a full-width toolbar row must not be used as
     // the ruler, which would hand every column an identical width.
-    const widths = await colWidths(
-      page.getByTestId("colspan"),
-      "fixed-table-head",
-    );
+    const widths = await colWidths(page.getByTestId("colspan"));
     const unique = new Set(widths.map((w) => Math.round(w)));
     expect(unique.size).toBeGreaterThan(1);
   });
