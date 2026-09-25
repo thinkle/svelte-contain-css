@@ -255,14 +255,18 @@ test.describe("Sidebar sheet button placement", () => {
       await expect(sidebar.locator("div.content")).toHaveCSS("opacity", "1");
       expect(await within()).toBe(true);
 
-      // Open, it sits against the panel's inner edge rather than wandering off.
+      // Open, it sits flush against the panel's inner edge rather than
+      // wandering off -- and fully inside it. Straddling the edge looks like
+      // a mistake, and it desynchronises the button from the content inset
+      // the panel reserves for it, leaving a dead gap before the first item.
       const b = (await button.boundingBox())!;
       const panel = (await sidebar.locator("div.content").boundingBox())!;
-      const nearPanelEdge =
+      const pokesOut =
         side === "left"
-          ? Math.abs(b.x + b.width - (panel.x + panel.width))
-          : Math.abs(b.x - panel.x);
-      expect(nearPanelEdge).toBeLessThan(24);
+          ? b.x + b.width - (panel.x + panel.width)
+          : panel.x - b.x;
+      expect(pokesOut).toBeLessThanOrEqual(1);
+      expect(pokesOut).toBeGreaterThan(-4);
     });
   }
 });

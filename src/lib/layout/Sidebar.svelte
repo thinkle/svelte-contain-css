@@ -301,9 +301,14 @@
       filter: var(--sidebar-mobile-icon-filter, none);
     }
     & > button.close {
-      left: calc(
-        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
-      );
+      /* Flush inside the panel's inner edge. Adding --padding here pushed the
+         button a padding's worth further in, which left it straddling the
+         edge -- part of it hanging outside the panel -- while the content
+         inset below still reserved the full button width, so the gap between
+         the button and the first nav item came out wider than intended.
+         Either the button pops out of the panel or it sits inside it; this
+         sits inside it, and the inset is then exactly button + one gutter. */
+      left: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
       border-radius: var-with-fallbacks(
         --radius,
         circle-button,
@@ -344,9 +349,7 @@
     }
     &.right > button.close {
       left: auto;
-      right: calc(
-        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
-      );
+      right: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
       border-top-right-radius: var-with-fallbacks(
         --radius,
         circle-button,
