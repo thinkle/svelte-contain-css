@@ -2,6 +2,7 @@
   import Bar from "$lib/layout/Bar.svelte";
   import Container from "$lib/layout/Container.svelte";
   import Card from "$lib/Card.svelte";
+  import SidebarContainer from "$lib/layout/SidebarContainer.svelte";
   import MenuList from "$lib/layout/MenuList.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
@@ -42,13 +43,20 @@
   let navIsOpen = $derived(navOpen ?? true);
 
   // --- Customization demo ---------------------------------------------------
-  const iconSets: Record<string, { expand: string; collapse: string }> = {
-    Arrows: { expand: "'\\203A'", collapse: "'\\2039'" },
-    Chevrons: { expand: "'\\276F'", collapse: "'\\276E'" },
-    Hamburger: { expand: "'\\2630'", collapse: "'\\2715'" },
-    Plus: { expand: "'+'", collapse: "'\\2212'" },
+  /* The rail and the sheet read from different variables, so they can carry
+     different glyphs -- which is the point: a chevron means "slide out from
+     this edge", a menu glyph means "open a panel". */
+  const glyphs: Record<string, { expand: string; collapse: string }> = {
+    "Chevrons ›‹": { expand: "'\\203A'", collapse: "'\\2039'" },
+    "Arrows →←": { expand: "'\\2192'", collapse: "'\\2190'" },
+    "Menu ☰✕": { expand: "'\\2630'", collapse: "'\\2715'" },
+    "Plus/minus": { expand: "'+'", collapse: "'\\2212'" },
   };
-  let iconSet = $state<string>("Arrows");
+  const glyphNames = Object.keys(glyphs);
+
+  let customOverlay = $state(false);
+  let railGlyph = $state<string>("Chevrons ›‹");
+  let sheetGlyph = $state<string>("Menu ☰✕");
   let railWidth = $state(14);
   let railColor = $state("#3b82f6");
 
@@ -56,24 +64,36 @@
     `--grab-bar-width: ${railWidth}px;` +
       `--grab-bar-bg: ${railColor};` +
       `--grab-bar-hover-bg: color-mix(in srgb, ${railColor} 80%, black);` +
+      `--grab-bar-fg: white;` +
       `--sidebar-icon-fg: white;` +
-      `--sidebar-expand: ${iconSets[iconSet].expand};` +
-      `--sidebar-collapse: ${iconSets[iconSet].collapse};`,
+      `--grab-bar-expand: ${glyphs[railGlyph].expand};` +
+      `--grab-bar-collapse: ${glyphs[railGlyph].collapse};` +
+      `--sidebar-sheet-expand: ${glyphs[sheetGlyph].expand};` +
+      `--sidebar-sheet-collapse: ${glyphs[sheetGlyph].collapse};`,
   );
 
-  let customCode = $derived(`<Sidebar
+  let customCode = $derived(`<Sidebar${customOverlay ? " overlay" : ""}
   --grab-bar-width="${railWidth}px"
   --grab-bar-bg="${railColor}"
-  --grab-bar-hover-bg="color-mix(in srgb, ${railColor} 80%, black)"
-  --sidebar-icon-fg="white"
-  --sidebar-expand="${iconSets[iconSet].expand}"
-  --sidebar-collapse="${iconSets[iconSet].collapse}"
+  --grab-bar-fg="white"
+
+  {/* the rail's own glyphs */}
+  --grab-bar-expand="${glyphs[railGlyph].expand}"
+  --grab-bar-collapse="${glyphs[railGlyph].collapse}"
+
+  {/* the sheet button's glyphs -- separate on purpose */}
+  --sidebar-sheet-expand="${glyphs[sheetGlyph].expand}"
+  --sidebar-sheet-collapse="${glyphs[sheetGlyph].collapse}"
 >
   <MenuList>...</MenuList>
 </Sidebar>
 
-<!-- Icons can be images instead of characters: -->
-<Sidebar --sidebar-expand-image="url(chevron.svg)" />`);
+<!-- Set --sidebar-expand / --sidebar-collapse instead to change both at
+     once, or the *-image variants to use SVGs (that is how the Bootstrap
+     and Material themes swap them). -->`);
+
+  // --- Container demos ------------------------------------------------------
+  let shellWidth = $state(900);
 
   const controlCode = `<script lang="ts">
   // undefined = let each layout use its own default
@@ -281,30 +301,59 @@
       {#snippet blurb()}
         <h3>Customising the rail and its icons</h3>
         <p>
-          The grab bar and its arrows are driven entirely by CSS variables, so
-          you can restyle them per instance without touching the component.
-          <code>--sidebar-expand</code> and <code>--sidebar-collapse</code> set
-          the glyph (any CSS <code>content</code> string), and
-          <code>--sidebar-expand-image</code> /
-          <code>--sidebar-collapse-image</code> take a
-          <code>url()</code> if you would rather ship SVGs -- that is how the
-          Bootstrap and Material themes replace them.
+          The rail and the sheet button are <em>separate</em> affordances with
+          separate glyphs, and sensibly different defaults: the rail slides a
+          panel out of the edge it sits on, so it gets a chevron
+          (<code>›</code>/<code>‹</code>); the sheet is conjured by a floating
+          button, so it gets the menu glyph (<code>☰</code>) and closes with an
+          <code>✕</code>. Toggle overlay below to swap between them.
         </p>
         <p>
-          The rail itself responds to <code>--grab-bar-width</code>,
+          Set <code>--grab-bar-expand</code>/<code>--grab-bar-collapse</code>
+          for the rail and
+          <code>--sidebar-sheet-expand</code>/<code
+            >--sidebar-sheet-collapse</code
+          >
+          for the sheet. Both fall through to
+          <code>--sidebar-expand</code>/<code>--sidebar-collapse</code>, so set
+          those to change everything at once. Each has an
+          <code>-image</code> twin taking a <code>url()</code> if you would
+          rather ship SVGs -- that is how the Bootstrap and Material themes
+          replace them.
+        </p>
+        <p>
+          The rail responds to <code>--grab-bar-width</code>,
           <code>--grab-bar-bg</code>, <code>--grab-bar-fg</code> and their
-          <code>-hover-</code> and <code>-active-</code> variants; the icon to
+          <code>-hover-</code>/<code>-active-</code> variants; the icons to
           <code>--sidebar-icon-fg</code>, <code>--sidebar-icon-width</code> and
           <code>--sidebar-icon-height</code>.
         </p>
       {/snippet}
       {#snippet inputArea()}
+        <Bar>
+          <Checkbox bind:checked={customOverlay}>
+            Overlay (use the sheet button)
+          </Checkbox>
+        </Bar>
         <MenuList>
-          {#each Object.keys(iconSets) as name}
-            <li>
-              <RadioButton bind:group={iconSet} value={name}>{name}</RadioButton>
-            </li>
-          {/each}
+          <li>
+            <label>
+              Rail glyphs
+              <select bind:value={railGlyph} disabled={customOverlay}>
+                {#each glyphNames as name}<option value={name}>{name}</option
+                  >{/each}
+              </select>
+            </label>
+          </li>
+          <li>
+            <label>
+              Sheet glyphs
+              <select bind:value={sheetGlyph} disabled={!customOverlay}>
+                {#each glyphNames as name}<option value={name}>{name}</option
+                  >{/each}
+              </select>
+            </label>
+          </li>
           <li>
             <label>
               Rail width: {railWidth}px
@@ -328,7 +377,7 @@
         height="340px"
       >
         {#snippet sidebar()}
-          <Sidebar style={customVars}>
+          <Sidebar overlay={customOverlay} style={customVars}>
             <MenuList>
               <li>Dashboard</li>
               <li>Reports</li>
@@ -345,38 +394,150 @@
     </DemoWithCode>
 
     <DemoWithCode
+      height="330px"
+      code={`<!-- Any element can host a Sidebar. It needs three things,
+     and <Page> is not one of them:
+       1. container-type  -- or NEITHER responsive branch matches
+                             and you get the rail AND the button
+       2. a height        -- a collapsed sidebar has no content of
+                             its own to hold it open
+       3. display: flex   -- or the content sits BELOW it -->
+<div style="container-type: inline-size;
+            display: flex;
+            height: 260px;">
+  <Sidebar>
+    <MenuList>...</MenuList>
+  </Sidebar>
+  <p>Content beside the sidebar</p>
+</div>`}
+    >
+      {#snippet blurb()}
+        <h3>A plain <code>&lt;div&gt;</code> can host one</h3>
+        <p>
+          <code>&lt;Sidebar&gt;</code> is not tied to
+          <code>&lt;Page&gt;</code>. It is just a flex sibling that happens to
+          collapse, and any element can host it -- provided it supplies
+          <code>container-type</code>, a height, and
+          <code>display: flex</code>.
+        </p>
+        <p>
+          The <code>container-type</code> is the one that bites: without it
+          neither of the sidebar's container queries matches, and you get the
+          rail and the sheet button rendered at the same time.
+        </p>
+      {/snippet}
+
+      <div
+        style="container-type: inline-size; display: flex; height: 260px; border: 3px solid #eee;"
+      >
+        <Sidebar>
+          <MenuList>
+            <li>Dashboard</li>
+            <li>Reports</li>
+            <li>Settings</li>
+          </MenuList>
+        </Sidebar>
+        <p style="padding: 0 1rem;">
+          A bare div, three CSS declarations, no Page in sight.
+        </p>
+      </div>
+    </DemoWithCode>
+
+    <DemoWithCode
+      height="400px"
+      code={`<!-- A plain <Container> gives you container-type, but NOT
+     display:flex -- so the content lands underneath -- and it
+     sets overflow-x: hidden, which clips an overlay sheet. -->
+<Container width="${shellWidth}px">
+  <Sidebar>...</Sidebar>
+  <p>This ends up BELOW the sidebar.</p>
+</Container>
+
+<!-- <SidebarContainer> is the same idea with the three
+     requirements already met, and no page chrome. -->
+<SidebarContainer width="${shellWidth}px" height="260px">
+  <Sidebar>...</Sidebar>
+  <p>This sits beside it.</p>
+</SidebarContainer>`}
+    >
+      {#snippet blurb()}
+        <h3>
+          <code>&lt;Container&gt;</code> vs <code>&lt;SidebarContainer&gt;</code>
+        </h3>
+        <p>
+          A reasonable first guess is
+          <code>&lt;Container&gt;&lt;Sidebar /&gt;content&lt;/Container&gt;</code
+          >, and it does not work: <code>Container</code> is a block, so the
+          content does <em>not</em> know to leave room -- it simply stacks
+          underneath. <code>Container</code> also sets
+          <code>overflow-x: hidden</code>, which clips an overlay sheet out of
+          existence.
+        </p>
+        <p>
+          <code>&lt;SidebarContainer&gt;</code> is the minimum fix: a flex row
+          with a container context, a height, and no clipping. No header, no
+          footer, none of <code>Page</code>'s other machinery. Drag the width
+          to watch both respond.
+        </p>
+      {/snippet}
+      {#snippet inputArea()}
+        <label>
+          Width: {shellWidth}px
+          <Slider bind:value={shellWidth} min={320} max={1000} />
+        </label>
+      {/snippet}
+
+      <div style="display: grid; gap: 1rem;">
+        <div>
+          <strong>Plain <code>Container</code> — content falls below</strong>
+          <div style="width: {shellWidth}px; max-width: 100%;">
+            <Container height="185px" --container-border="3px solid #fdd">
+              <Sidebar>
+                <MenuList>
+                  <li>Dashboard</li>
+                </MenuList>
+              </Sidebar>
+              <p>I stacked underneath the sidebar.</p>
+            </Container>
+          </div>
+        </div>
+        <div>
+          <strong><code>SidebarContainer</code> — content sits beside</strong>
+          <div style="width: {shellWidth}px; max-width: 100%;">
+            <SidebarContainer
+              height="150px"
+              style="border: 3px solid #dfd; box-sizing: border-box;"
+            >
+              <Sidebar>
+                <MenuList>
+                  <li>Dashboard</li>
+                  <li>Reports</li>
+                </MenuList>
+              </Sidebar>
+              <p style="padding: 0 1rem;">I sit beside it, as you would hope.</p>
+            </SidebarContainer>
+          </div>
+        </div>
+      </div>
+    </DemoWithCode>
+
+    <DemoWithCode
       height="360px"
-      code={`<!-- No <Page> needed. The sidebar needs three things from
-     whatever it sits in:
-       1. a container-query context  (Container, Card and Page all
-          provide one; a bare <div> does NOT)
-       2. a height to fill
-       3. to be a flex/grid sibling of the content, if you want the
-          in-flow "push" behaviour rather than overlay -->
-<Card>
+      code={`<Card>
   <div style="display: flex; height: 100%">
-    <Sidebar>
-      <MenuList>...</MenuList>
-    </Sidebar>
+    <Sidebar>...</Sidebar>
     <p>Card content</p>
   </div>
 </Card>`}
     >
       {#snippet blurb()}
-        <h3>Outside a Page</h3>
+        <h3>Inside a Card</h3>
         <p>
-          <code>&lt;Sidebar&gt;</code> is not tied to <code>&lt;Page&gt;</code>.
-          It works in any element that gives it a
-          <em>container-query context</em> and a height --
-          <code>Container</code>, <code>Card</code> and <code>Page</code> all
-          do. A bare <code>&lt;div&gt;</code> does not, and without one neither
-          responsive branch matches: you get the rail and the sheet button at
-          once.
-        </p>
-        <p>
-          Because it responds to its container rather than the window, a
-          sidebar in a narrow card is in sheet mode even on a wide screen --
-          the card below is only 420px wide, so it never shows a rail.
+          Because it measures its container rather than the window, a sidebar
+          in a narrow card is in sheet mode even on a wide screen. The card
+          below is the default 420px, so it never shows a rail no matter how
+          big your display is -- which is container queries doing exactly what
+          you would want.
         </p>
       {/snippet}
 

@@ -221,3 +221,134 @@ test.describe("Sidebar external control", () => {
     await expect(rail).toHaveAttribute("aria-expanded", "false");
   });
 });
+
+test.describe("Sidebar sheet button placement", () => {
+  /* The sheet button is absolutely positioned, and all of its geometry is
+     naturally written from the left. On a right-hand sidebar the panel slides
+     out of the RIGHT edge, so the button has to hug that edge and step
+     inwards -- leftwards -- when it opens. Anchored from the left it stepped
+     the other way and landed off the far side of the page, unclickable. */
+  for (const [side, sectionId, sidebarId] of [
+    ["left", "overlay-section", "overlay-sidebar"],
+    ["right", "overlay-right-section", "overlay-right-sidebar"],
+  ]) {
+    test(`the ${side}-hand sheet button stays on the page, open and shut`, async ({
+      page,
+    }) => {
+      await page.goto(ROUTE);
+      await page.waitForLoadState("networkidle");
+
+      const sidebar = page.getByTestId(sidebarId);
+      const button = sidebar.locator(
+        '[data-audit-action="toggle-sidebar-sheet"]',
+      );
+      const shell = page.getByTestId(sectionId).locator(".page").first();
+
+      const shellBox = (await shell.boundingBox())!;
+      const within = async () => {
+        const b = (await button.boundingBox())!;
+        return b.x >= shellBox.x - 1 && b.x + b.width <= shellBox.x + shellBox.width + 1;
+      };
+
+      expect(await within()).toBe(true);
+      await button.click();
+      await expect(sidebar.locator("div.content")).toHaveCSS("opacity", "1");
+      expect(await within()).toBe(true);
+
+      // Open, it sits against the panel's inner edge rather than wandering off.
+      const b = (await button.boundingBox())!;
+      const panel = (await sidebar.locator("div.content").boundingBox())!;
+      const nearPanelEdge =
+        side === "left"
+          ? Math.abs(b.x + b.width - (panel.x + panel.width))
+          : Math.abs(b.x - panel.x);
+      expect(nearPanelEdge).toBeLessThan(24);
+    });
+  }
+});
+
+test.describe("Sidebar icons", () => {
+  test("the rail and the sheet do not share a glyph by default", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const glyph = (loc: ReturnType<typeof page.locator>) =>
+      loc.evaluate((el) => getComputedStyle(el, "::after").content);
+
+    const rail = page
+      .getByTestId("icons-section")
+      .locator("aside.sidebar .edge-bar button");
+    const sheet = page
+      .getByTestId("icons-sheet-section")
+      .locator("aside.sidebar > button");
+
+    await expect(rail).toBeVisible();
+    await expect(sheet).toBeVisible();
+
+    const railGlyph = await glyph(rail);
+    const sheetGlyph = await glyph(sheet);
+
+    // A chevron says "slide out from this edge"; the menu glyph says "open a
+    // panel". They are different affordances, so they must not look alike.
+    expect(railGlyph).not.toBe(sheetGlyph);
+    expect(sheetGlyph).toContain("\u2630");
+  });
+
+  test("rail and sheet glyphs can be set independently", async ({ page }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    await page.getByTestId("icons-section").evaluate((el) => {
+      (el as HTMLElement).style.setProperty("--grab-bar-collapse", "'R'");
+      (el as HTMLElement).style.setProperty("--sidebar-sheet-collapse", "'S'");
+    });
+    const rail = page
+      .getByTestId("icons-section")
+      .locator("aside.sidebar .edge-bar button");
+    await expect
+      .poll(() => rail.evaluate((el) => getComputedStyle(el, "::after").content))
+      .toBe('"R"');
+  });
+});
+
+test.describe("SidebarContainer", () => {
+  test("lays the content beside the sidebar, not below it", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("sc").locator("aside.sidebar");
+    const content = page.getByTestId("sc-content");
+
+    const s = (await sidebar.boundingBox())!;
+    const c = (await content.boundingBox())!;
+
+    // Beside: the content starts at or after the sidebar's right edge, and
+    // shares its vertical band rather than stacking under it.
+    expect(c.x).toBeGreaterThanOrEqual(s.x + s.width - 2);
+    expect(c.y).toBeLessThan(s.y + s.height);
+  });
+
+  test("gives the sidebar a container context and a height", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sc = page.getByTestId("sc");
+    expect(await sc.evaluate((el) => getComputedStyle(el).containerType)).toBe(
+      "inline-size",
+    );
+    expect(await sc.evaluate((el) => getComputedStyle(el).display)).toBe("flex");
+    // Not clipped -- that is what makes an overlay sheet vanish in Container.
+    expect(await sc.evaluate((el) => getComputedStyle(el).overflowX)).not.toBe(
+      "hidden",
+    );
+
+    const box = (await sc.locator("aside.sidebar").boundingBox())!;
+    expect(box.height).toBeGreaterThan(100);
+  });
+});

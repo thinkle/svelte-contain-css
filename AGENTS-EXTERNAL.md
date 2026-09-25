@@ -257,6 +257,45 @@ boolean, that boolean applies in both layouts.
 New CSS variables for overlay mode: `--sidebar-overlay-box-shadow` (falls back
 to `--overlay-box-shadow`) and `--sidebar-overlay-z-index` (default `3`).
 
+The rail and the sheet button carry different glyphs, because they are
+different affordances — the rail slides a panel out of the edge it sits on
+(`›`/`‹`), the sheet is conjured by a floating button (`☰`/`✕`). Set them
+independently with `--grab-bar-expand`/`--grab-bar-collapse` and
+`--sidebar-sheet-expand`/`--sidebar-sheet-collapse`; both fall through to
+`--sidebar-expand`/`--sidebar-collapse` to change everything at once. Each has
+an `-image` twin taking a `url()`.
+
+#### SidebarContainer
+
+`Sidebar` does **not** require `Page`. It needs three things from its host,
+and `Page` is only one way to get them:
+
+1. `container-type` — without it neither responsive branch matches and you get
+   the rail *and* the sheet button at once
+2. a height — a collapsed sidebar has no in-flow content to hold it open
+3. `display: flex` (or grid) — or the content stacks *below* it
+
+So `<Container><Sidebar />content</Container>` does not work: `Container` is a
+block, and its `overflow-x: hidden` also clips an overlay sheet. Use
+`SidebarContainer`, which is exactly those three requirements and no page
+chrome:
+
+```svelte
+<SidebarContainer height="400px">
+  <Sidebar>...</Sidebar>
+  <main>Content, beside the sidebar</main>
+</SidebarContainer>
+```
+
+Any element works if you supply them yourself:
+
+```svelte
+<div style="container-type: inline-size; display: flex; height: 400px">
+  <Sidebar>...</Sidebar>
+  <main>Content</main>
+</div>
+```
+
 ### Container
 
 `Container` is the workhorse section wrapper: full width of its parent, capped at

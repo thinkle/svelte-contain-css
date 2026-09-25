@@ -291,6 +291,56 @@
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
+
+    /* Everything above anchors the button to the left, which is right for a
+       left-hand sidebar and nonsense for a right-hand one: the sheet slides
+       out of the right edge, so the button has to hug that edge and then step
+       *inwards* -- leftwards -- by the panel's width when it opens. Anchored
+       from the left it stepped the other way, off the far side of the page
+       entirely, where it could not even be clicked. The flattened corners
+       mirror too, so the button still reads as attached to its own edge. */
+    &.right > button {
+      left: auto;
+      right: 0;
+      border-top-left-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-bottom-left-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &.right > button.close {
+      left: auto;
+      right: calc(
+        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
+      );
+      border-top-right-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-bottom-right-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
   }
 
   /* Responsive sidebar... */
@@ -398,13 +448,43 @@
     font-size: var(--sidebar-icon-font-size, 1.1rem);
     line-height: 1;
   }
-  button.expander::after {
-    content: var(--sidebar-expand, "›");
-    background-image: var(--sidebar-expand-image, none);
+  /* The rail and the sheet are different affordances and want different
+     glyphs. The rail slides a panel out from the edge it sits on, so a
+     chevron pointing that way says what will happen. The sheet is summoned
+     from nowhere by a free-floating button, where the menu glyph is what
+     people already recognise -- and it closes with an x, not a back-chevron,
+     because there is no edge to slide back into.
+
+     Both still fall through --sidebar-expand / --sidebar-collapse, so setting
+     those restyles every button at once and themes that swap in SVGs keep
+     working unchanged. */
+  .edge-bar button.expander::after {
+    content: var(--grab-bar-expand, var(--sidebar-expand, "›"));
+    background-image: var(
+      --grab-bar-expand-image,
+      var(--sidebar-expand-image, none)
+    );
   }
-  button.close::after {
-    content: var(--sidebar-collapse, "‹");
-    background-image: var(--sidebar-collapse-image, none);
+  .edge-bar button.close::after {
+    content: var(--grab-bar-collapse, var(--sidebar-collapse, "‹"));
+    background-image: var(
+      --grab-bar-collapse-image,
+      var(--sidebar-collapse-image, none)
+    );
+  }
+  aside > button.expander::after {
+    content: var(--sidebar-sheet-expand, var(--sidebar-expand, "☰"));
+    background-image: var(
+      --sidebar-sheet-expand-image,
+      var(--sidebar-expand-image, none)
+    );
+  }
+  aside > button.close::after {
+    content: var(--sidebar-sheet-collapse, var(--sidebar-collapse, "✕"));
+    background-image: var(
+      --sidebar-sheet-collapse-image,
+      var(--sidebar-collapse-image, none)
+    );
   }
   .right button::after {
     display: inline-block;

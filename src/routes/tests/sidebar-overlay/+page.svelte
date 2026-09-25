@@ -18,6 +18,7 @@
   */
   import Page from "$lib/layout/Page.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
+  import SidebarContainer from "$lib/layout/SidebarContainer.svelte";
   import Button from "$lib/controls/Button.svelte";
 
   let pushExpanded = $state<boolean | undefined>(undefined);
@@ -80,3 +81,23 @@
     </Page>
   </section>
 </div>
+
+<!-- Icons: the rail and the sheet must not share a glyph by default. -->
+<section data-testid="icons-section" style="width: 800px; container-type: inline-size; display: flex; height: 160px;">
+  <Sidebar data-testid="icons-rail-sidebar">
+    <p>nav</p>
+  </Sidebar>
+  <p>wide host, so this one shows the rail</p>
+</section>
+<section data-testid="icons-sheet-section" style="width: 400px; container-type: inline-size; display: flex; height: 160px;">
+  <Sidebar data-testid="icons-sheet-sidebar">
+    <p>nav</p>
+  </Sidebar>
+  <p>narrow host, so this one shows the sheet button</p>
+</section>
+
+<!-- SidebarContainer: content beside, not below. -->
+<SidebarContainer data-testid="sc" height="160px" style="width: 800px;">
+  <Sidebar data-testid="sc-sidebar"><p>nav</p></Sidebar>
+  <p data-testid="sc-content">beside</p>
+</SidebarContainer>
