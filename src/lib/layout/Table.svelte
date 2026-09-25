@@ -22,35 +22,48 @@
   // svelte-ignore state_referenced_locally
   let columns = $state(column_widths || []);
 
-  /* Code for syncing column widths for scrolling table solution */
-  let headClone: HTMLTableElement | null = $state(null);
-  let bodyClone: HTMLTableElement | null = $state(null);
+  /* Code for syncing column widths for scrolling table solution.
+
+     We measure ONE hidden clone that holds thead and tbody together, because
+     that is the layout we are trying to reproduce: the visible sticky header
+     and the visible scrolling body are two <table>s that have to *look* like
+     one, so the widths they share must come from one table's layout pass.
+
+     Measuring head and body as separate tables (which this used to do) and
+     folding them together with Math.max() blends two unrelated constraint
+     solutions -- each table solves for its own content at its own available
+     width -- and the blend is routinely wider than either, which pushes the
+     table into horizontal overflow nobody asked for. A single auto-layout
+     table already takes the max of every cell in a column, including any
+     border/padding difference between a <th> in the head and a <td> below
+     it, and it does so with proportions that actually add up. */
+  let measureClone: HTMLTableElement | null = $state(null);
   let resizeObserver: ResizeObserver | null = $state(null);
   let tableWidth = $state<number | null>(null);
   import { onDestroy } from "svelte";
 
   onDestroy(() => {
     if (resizeObserver) {
-      if (headClone) resizeObserver.unobserve(headClone);
-      if (bodyClone) resizeObserver.unobserve(bodyClone);
       resizeObserver.disconnect();
       resizeObserver = null;
     }
   });
 
   function syncColumnWidths() {
-    if (!headClone || !bodyClone) return;
+    if (!measureClone) return;
+
+    const spanOf = (cell: Element, attr: "colspan" | "rowspan") =>
+      parseInt(cell.getAttribute(attr) || "1", 10);
 
     const getFlattenedCellWidths = (
       row: HTMLTableRowElement | null,
     ): number[] => {
       if (!row) return [];
-      const cells = Array.from(row.children) as HTMLElement[];
       const colWidths: number[] = [];
       let colIndex = 0;
 
-      for (const cell of cells) {
-        const colspan = parseInt(cell.getAttribute("colspan") || "1", 10);
+      for (const cell of Array.from(row.children) as HTMLElement[]) {
+        const colspan = spanOf(cell, "colspan");
         const width = cell.offsetWidth / colspan;
         for (let j = 0; j < colspan; j++) {
           colWidths[colIndex++] = width;
@@ -63,29 +76,41 @@
     const getTotalCols = (row: HTMLTableRowElement | null): number => {
       if (!row) return 0;
       return Array.from(row.children).reduce(
-        (acc, cell) => acc + parseInt(cell.getAttribute("colspan") || "1", 10),
+        (acc, cell) => acc + spanOf(cell, "colspan"),
         0,
       );
     };
 
-    const hasNoColspan = (row: HTMLTableRowElement) =>
-      !Array.from(row.children).some((cell) => cell.hasAttribute("colspan"));
+    /* A row is a clean ruler if every cell covers exactly one column and one
+       row: no colspan to divide evenly (a guess), and no rowspan, which would
+       shift the columns that *neighbouring* rows report. */
+    const isCleanRow = (row: HTMLTableRowElement) =>
+      !Array.from(row.children).some(
+        (cell) => spanOf(cell, "colspan") > 1 || spanOf(cell, "rowspan") > 1,
+      );
 
     const findBestRow = (
       table: HTMLTableElement,
     ): HTMLTableRowElement | null => {
-      // Fast path: first row covers the vast majority of real tables
-      const firstRow = table.querySelector<HTMLTableRowElement>("tbody tr, tr");
-      if (firstRow && hasNoColspan(firstRow)) return firstRow;
+      const rows = Array.from(table.querySelectorAll<HTMLTableRowElement>("tr"));
 
-      // Slow path: single pass — return on first no-colspan row found,
-      // while simultaneously tracking the least-colspan row as a fallback.
+      // Fast path: first body row covers the vast majority of real tables
+      const firstRow = table.querySelector<HTMLTableRowElement>("tbody tr, tr");
+      if (firstRow && isCleanRow(firstRow)) return firstRow;
+
+      // Otherwise: first clean row anywhere in the table, head or body -- they
+      // share a column set, so either section measures the same columns.
+      for (const row of rows) {
+        if (isCleanRow(row)) return row;
+      }
+
+      // Last resort: the row that spans the most columns, so colspan division
+      // is spread over as few cells as possible.
       let best: HTMLTableRowElement | null = null;
-      let bestSpanCount = Infinity;
-      for (const row of table.querySelectorAll<HTMLTableRowElement>("tr")) {
-        if (hasNoColspan(row)) return row;
+      let bestSpanCount = -1;
+      for (const row of rows) {
         const spanCount = getTotalCols(row);
-        if (spanCount < bestSpanCount) {
+        if (spanCount > bestSpanCount) {
           bestSpanCount = spanCount;
           best = row;
         }
@@ -93,46 +118,31 @@
       return best;
     };
 
-    // Step 1: pick best candidate rows
-    let headRow = findBestRow(headClone);
-    let bodyRow = findBestRow(bodyClone);
-
-    // Step 2: if their total col counts don't match, try to find a pair that does
-    if (headRow && bodyRow && getTotalCols(headRow) !== getTotalCols(bodyRow)) {
-      const headRows = Array.from(headClone.querySelectorAll("tr"));
-      const bodyRows = Array.from(bodyClone.querySelectorAll("tr"));
-      outer: for (const hr of headRows) {
-        const hCols = getTotalCols(hr);
-        for (const br of bodyRows) {
-          if (hCols === getTotalCols(br)) {
-            headRow = hr;
-            bodyRow = br;
-            break outer;
-          }
-        }
-      }
-    }
-
-    // Step 3: flatten widths and compute max
-    const headWidths = getFlattenedCellWidths(headRow);
-    const bodyWidths = getFlattenedCellWidths(bodyRow);
-    const numCols = Math.max(headWidths.length, bodyWidths.length);
-    const maxColWidths: number[] = [];
-
-    for (let i = 0; i < numCols; i++) {
-      maxColWidths[i] = Math.max(headWidths[i] || 0, bodyWidths[i] || 0);
-    }
-
-    columns = maxColWidths;
-    fitTableToColGroup(columns);
+    columns = fitToCloneWidth(
+      getFlattenedCellWidths(findBestRow(measureClone)),
+      measureClone.offsetWidth,
+    );
+    tableWidth = measureClone.offsetWidth;
   }
 
-  function fitTableToColGroup(columns: number[]) {
-    let totalWidth = 0;
-    for (let c of columns) {
-      totalWidth += c;
-    }
-    tableWidth = totalWidth;
+  /* The clone's own offsetWidth is the truth about how wide this table is;
+     the per-cell widths only tell us the proportions. They don't add up to it,
+     because `border-collapse: collapse` makes adjacent cells *share* a border
+     that each of them reports in full -- so naively summing them overshoots by
+     roughly one border per interior column boundary, and the visible tables,
+     sized from that sum, overflow a container the table actually fits in.
+     (This is the same off-by-a-border that produced the old one-pixel
+     bleed-through, just multiplied by the column count.)
+
+     The overcount is a constant per boundary, not a percentage, so spread the
+     difference evenly rather than scaling. */
+  function fitToCloneWidth(widths: number[], cloneWidth: number): number[] {
+    if (!widths.length || !cloneWidth) return widths;
+    const total = widths.reduce((sum, w) => sum + w, 0);
+    const delta = total - cloneWidth;
+    if (Math.abs(delta) < 0.5) return widths;
+    const perColumn = delta / widths.length;
+    return widths.map((w) => Math.max(0, w - perColumn));
   }
 
   let hasInitialized = $state(false);
@@ -146,7 +156,7 @@
     if (column_widths) return;
     // If no column widths provided, reset columns to empty
     columns = [];
-    if (thead && sticky && headClone && bodyClone) {
+    if (thead && sticky && measureClone) {
       syncColumnWidths();
       // Set up ResizeObserver to keep columns in sync when content or size changes.
       // Debounce via rAF so rapid Svelte updates only trigger one sync per frame.
@@ -165,8 +175,7 @@
             });
           }
         });
-        if (headClone) resizeObserver.observe(headClone);
-        if (bodyClone) resizeObserver.observe(bodyClone);
+        resizeObserver.observe(measureClone);
       }
       hasInitialized = true;
     }
@@ -204,11 +213,10 @@
         <!-- default slot for additional content -->
       </table>
     </div>
-    <div class="visually-hidden">
-      <table class="fixed-table-head" bind:this={headClone}>
+    <div class="visually-hidden" aria-hidden="true">
+      <!-- One table, head and body together: see syncColumnWidths() -->
+      <table class="measure-clone" bind:this={measureClone}>
         {@render thead?.()}
-      </table>
-      <table class="scrolling-table-body" bind:this={bodyClone}>
         {@render tbody?.()}
         <!-- Table body content -->
         {@render children?.()}
@@ -365,11 +373,29 @@
   .scrolling-table-body :global(tbody > tr:first-child > th) {
     border-top: none;
   }
+  /* The measuring clone must lay out in normal flow, because the whole point
+     is to find out how wide the columns want to be *in this container*. Taking
+     it out of flow (position: absolute/fixed) gives it the nearest positioned
+     ancestor -- or, for fixed, the viewport -- as its containing block, so a
+     table inside a Card or a SplitPane gets measured against the wrong width.
+
+     It still must not occupy space or add to the scroll area, which is what
+     `position: fixed` was doing for us: height: 0 + overflow: hidden does the
+     same job while leaving the inline axis alone. The table inside still lays
+     out at its full size and reports honest offsetWidth values; overflow only
+     clips what we were never going to show. Don't "simplify" this back to a
+     positioned box. display: none would be worse still -- no layout at all,
+     so nothing to measure. */
   .visually-hidden {
     visibility: hidden;
     /* opacity: 0.5; */
     pointer-events: none;
-    position: fixed;
+    height: 0;
+    overflow: hidden;
+  }
+  /* Nothing sticky or offset in here -- it only exists to be measured. */
+  .measure-clone {
+    margin: 0;
   }
 
   /* Interactive affordances: target rows/cells with tabindex for keyboard accessibility */
