@@ -416,6 +416,67 @@ export let buttonVars: CSSVariable[] = [
   },
 ];
 
+export let sidebarVars: CSSVariable[] = [
+  ...colorProps("sidebar"),
+  ...colorProps("grab-bar"),
+  {
+    name: "--sidebar-width",
+    defaultValue: "256px",
+    type: "length",
+    unit: "px",
+    group: "Size",
+  },
+  {
+    name: "--grab-bar-width",
+    defaultValue: "var(--padding)",
+    type: "length",
+    unit: "px",
+    group: "Size",
+  },
+  {
+    name: "--sidebar-transition",
+    defaultValue: "var(--transition)",
+    type: "text",
+    placeholder: "e.g., 0.3s ease-in-out",
+    group: "Affordances",
+  },
+  {
+    name: "--sidebar-overlay-box-shadow",
+    defaultValue: "0 0 var(--space, 8px) rgba(127, 127, 127, 0.4)",
+    type: "text",
+    placeholder: "e.g., 0 0 12px rgba(0,0,0,.4)",
+    group: "Overlay",
+  },
+  {
+    name: "--sidebar-overlay-z-index",
+    defaultValue: "3",
+    type: "text",
+    placeholder: "e.g., 3",
+    group: "Overlay",
+  },
+  {
+    name: "--sidebar-icon-width",
+    defaultValue: "0.65rem",
+    type: "length",
+    unit: "rem",
+    group: "Icons",
+  },
+  {
+    name: "--sidebar-icon-height",
+    defaultValue: "1rem",
+    type: "length",
+    unit: "rem",
+    group: "Icons",
+  },
+  {
+    name: "--mirror-sidebar-icons",
+    defaultValue: "scaleX(-1)",
+    type: "text",
+    placeholder: "e.g., scaleX(-1)",
+    group: "Icons",
+  },
+];
+
 export let cardVars = [
   ...shadowProps("card"),
   ...boxProps("card"),
@@ -763,6 +824,7 @@ export let accordionVars = [
 export let components = {
   button: buttonVars,
   card: cardVars,
+  sidebar: sidebarVars,
   dialog: dialogVars,
   dataList: dataListVars,
 };
