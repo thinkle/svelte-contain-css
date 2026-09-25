@@ -173,6 +173,17 @@
        `overflow: hidden` clips the button and the sheet away to nothing.
        Nothing needs clipping here: the shut sheet is hidden by opacity and
        pointer-events, not by the box. */
+    /* Sized here rather than on the button, because the panel needs them too
+       -- see the padding it reserves below. */
+    --_sidebar-expander-width: max(
+      var(--sidebar-icon-width, 0.65rem),
+      var(--icon-size, 32px)
+    );
+    --_sidebar-expander-height: max(
+      var(--sidebar-icon-height, 1rem),
+      var(--icon-size, 32px)
+    );
+
     position: relative;
     overflow: visible;
     background: transparent;
@@ -214,16 +225,36 @@
         transform var(--sidebar-transition) ease-in-out,
         opacity var(--sidebar-transition) ease-in-out;
       padding: var(--padding);
+      /* The close button floats over the panel's inner edge, so the panel has
+         to keep that strip clear or the first nav item sits underneath it.
+
+         Reserved on the inline axis, not the block one: a nav wants the full
+         height, and a blank band across the top of it to clear one button is
+         a poor trade. The cost is that the whole column is a button's width
+         narrower, even well below the button -- override
+         --sidebar-sheet-content-inset to 0 and set your own padding if you
+         would rather have the width back. */
+      padding-inline-end: var(
+        --sidebar-sheet-content-inset,
+        calc(var(--padding) + var(--_sidebar-expander-width))
+      );
     }
     &.left > .content {
       border-right: var(--border-width) var(--border-style) var(--border-color);
     }
-    /* A right-hand sheet slides out of the right edge, not the left. */
+    /* A right-hand sheet slides out of the right edge, not the left -- and
+       its button lands on the panel's left edge, so the reserved strip
+       mirrors with it. */
     &.right > .content {
       left: auto;
       right: 0;
       transform: translateX(100%);
       border-left: var(--border-width) var(--border-style) var(--border-color);
+      padding-inline-end: var(--padding);
+      padding-inline-start: var(
+        --sidebar-sheet-content-inset,
+        calc(var(--padding) + var(--_sidebar-expander-width))
+      );
     }
     &.expandedHamburger > .content {
       transform: translateX(0);
@@ -239,14 +270,6 @@
     }
 
     & > button {
-      --_sidebar-expander-width: max(
-        var(--sidebar-icon-width, 0.65rem),
-        var(--icon-size, 32px)
-      );
-      --_sidebar-expander-height: max(
-        var(--sidebar-icon-height, 1rem),
-        var(--icon-size, 32px)
-      );
       transition: left var(--sidebar-transition);
       transform: translateX(0);
       z-index: 3;
@@ -452,7 +475,7 @@
      glyphs. The rail slides a panel out from the edge it sits on, so a
      chevron pointing that way says what will happen. The sheet is summoned
      from nowhere by a free-floating button, where the menu glyph is what
-     people already recognise -- and it closes with an x, not a back-chevron,
+     people already recognize -- and it closes with an x, not a back-chevron,
      because there is no edge to slide back into.
 
      Both still fall through --sidebar-expand / --sidebar-collapse, so setting

@@ -267,6 +267,50 @@ test.describe("Sidebar sheet button placement", () => {
   }
 });
 
+test.describe("Sheet panel content", () => {
+  for (const [side, sidebarId] of [
+    ["left", "overlay-sidebar"],
+    ["right", "overlay-right-sidebar"],
+  ]) {
+    test(`the ${side}-hand sheet keeps its content clear of the close button`, async ({
+      page,
+    }) => {
+      await page.goto(ROUTE);
+      await page.waitForLoadState("networkidle");
+
+      const sidebar = page.getByTestId(sidebarId);
+      const panel = sidebar.locator("div.content");
+      await sidebar
+        .locator('[data-audit-action="toggle-sidebar-sheet"]')
+        .click();
+      await expect(panel).toHaveCSS("opacity", "1");
+
+      const r = await sidebar.evaluate((el) => {
+        const p = el.querySelector("div.content")!;
+        const button = el.querySelector("button")!;
+        const first = p.firstElementChild!;
+        const b = button.getBoundingClientRect();
+        const f = first.getBoundingClientRect();
+        const pr = p.getBoundingClientRect();
+        return {
+          overlaps: !(
+            b.right <= f.left ||
+            b.left >= f.right ||
+            b.bottom <= f.top ||
+            b.top >= f.bottom
+          ),
+          // Space is reserved on the inline axis, so the content still
+          // starts at the top -- no blank band across a nav.
+          topGap: f.top - pr.top,
+        };
+      });
+
+      expect(r.overlaps).toBe(false);
+      expect(r.topGap).toBeLessThan(20);
+    });
+  }
+});
+
 test.describe("Sidebar icons", () => {
   test("the rail and the sheet do not share a glyph by default", async ({
     page,

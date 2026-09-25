@@ -42,7 +42,7 @@
      and out of the tab order in all three engines, so its duplicated controls
      are inert without needing the `inert` attribute. Note the consequence: the
      body table has no exposed column headers -- the visible sticky header is
-     the accessible one. That matches the previous behaviour, but it is a real
+     the accessible one. That matches the previous behavior, but it is a real
      gap, and only a genuine single-table layout would close it. */
   let bodyTable: HTMLTableElement | null = $state(null);
   let headTable: HTMLTableElement | null = $state(null);
