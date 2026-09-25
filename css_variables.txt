@@ -161,6 +161,7 @@
 --mini-button-radius, 50%
 --mini-button-size, var
 --mirror-sidebar-icons, scaleX
+--overlay-box-shadow
 --padding
 --padding, form-item, 8px
 --page-border
@@ -186,6 +187,8 @@
 --sidebar-collapse, "«"
 --sidebar-expand, "»"
 --sidebar-fg
+--sidebar-overlay-box-shadow
+--sidebar-overlay-z-index, 3
 --sidebar-transition
 --sidebar-width
 --slider-button-color

@@ -225,6 +225,77 @@ Use one per route — don't nest Pages, and don't reach for it as a generic wrap
 </Page>
 ```
 
+`Sidebar` normally widens as it opens, reflowing the page content beside it.
+Pass `overlay` to make the panel float *above* the content at every width
+instead — nothing reflows:
+
+```svelte
+<Sidebar overlay>...</Sidebar>
+```
+
+An overlay sidebar also swaps the grab-bar rail for the compact layout's
+affordance — a button that opens a sheet — and starts shut. A rail floating on
+top of your content is an odd thing to ask someone to grab, and a panel that
+starts open over the content is worse.
+
+Its open/closed state is a bindable `expanded` prop, so you can drive it from
+your own button and still let the built-in toggle work:
+
+```svelte
+<script>
+  let navOpen = $state(undefined); // undefined = the sidebar's own default
+</script>
+
+<Button onclick={() => (navOpen = !(navOpen ?? true))}>Menu</Button>
+<Sidebar overlay bind:expanded={navOpen}>...</Sidebar>
+```
+
+Left `undefined`, `expanded` keeps each layout's default: a rail starts open, a
+sheet (compact, or any `overlay` sidebar) starts closed. Once it holds a
+boolean, that boolean applies in both layouts.
+
+New CSS variables for overlay mode: `--sidebar-overlay-box-shadow` (falls back
+to `--overlay-box-shadow`) and `--sidebar-overlay-z-index` (default `3`).
+
+The rail and the sheet button carry different glyphs, because they are
+different affordances — the rail slides a panel out of the edge it sits on
+(`›`/`‹`), the sheet is conjured by a floating button (`☰`/`✕`). Set them
+independently with `--grab-bar-expand`/`--grab-bar-collapse` and
+`--sidebar-sheet-expand`/`--sidebar-sheet-collapse`; both fall through to
+`--sidebar-expand`/`--sidebar-collapse` to change everything at once. Each has
+an `-image` twin taking a `url()`.
+
+#### SidebarContainer
+
+`Sidebar` does **not** require `Page`. It needs three things from its host,
+and `Page` is only one way to get them:
+
+1. `container-type` — without it neither responsive branch matches and you get
+   the rail *and* the sheet button at once
+2. a height — a collapsed sidebar has no in-flow content to hold it open
+3. `display: flex` (or grid) — or the content stacks *below* it
+
+So `<Container><Sidebar />content</Container>` does not work: `Container` is a
+block, and its `overflow-x: hidden` also clips an overlay sheet. Use
+`SidebarContainer`, which is exactly those three requirements and no page
+chrome:
+
+```svelte
+<SidebarContainer height="400px">
+  <Sidebar>...</Sidebar>
+  <main>Content, beside the sidebar</main>
+</SidebarContainer>
+```
+
+Any element works if you supply them yourself:
+
+```svelte
+<div style="container-type: inline-size; display: flex; height: 400px">
+  <Sidebar>...</Sidebar>
+  <main>Content</main>
+</div>
+```
+
 ### Container
 
 `Container` is the workhorse section wrapper: full width of its parent, capped at

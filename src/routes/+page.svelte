@@ -27,6 +27,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Hero from "$lib/layout/Hero.svelte";
   import PageDemo from "./demos/PageDemo.svelte";
+  import SidebarDemo from "./demos/SidebarDemo.svelte";
   import TabDemo from "./demos/TabDemo.svelte";
 
   import DropdownMenuDemo from "./demos/DropdownMenuDemo.svelte";
@@ -124,6 +125,7 @@
     { name: "Inline", component: InlineDemo, demo: "Inline" },
     { name: "Stack", component: StackDemo, demo: "Stack" },
     { name: "Page", component: PageDemo, demo: "Page" },
+    { name: "Sidebar", component: SidebarDemo, demo: "Sidebar" },
     { name: "Table", component: TableDemo, demo: "Table" },
     { name: "Data List", component: DataListDemo, demo: "DataList" },
     {

@@ -40,6 +40,7 @@ import Tile from "./layout/Tile.svelte";
 import Code from "./misc/Code.svelte";
 import TextLayout from "./typography/TextLayout.svelte";
 import Sidebar from "./layout/Sidebar.svelte";
+import SidebarContainer from "./layout/SidebarContainer.svelte";
 import Dialog from "./overlays/Dialog.svelte";
 import Progress from "./misc/Progress.svelte";
 import Tooltip from "./overlays/Tooltip.svelte";
@@ -96,7 +97,7 @@ export {
 export { TextLayout, Code, Accordion };
 export { Card, Tile, Form, FormItem, FormProvider, Fieldset };
 export { DataList, DataListItem };
-export { Row, Column, Columns, SplitPane, Sidebar };
+export { Row, Column, Columns, SplitPane, Sidebar, SidebarContainer };
 export { Dialog };
 export { Progress, Tooltip };
 export { Table };
