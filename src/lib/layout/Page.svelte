@@ -224,7 +224,11 @@
     overflow: hidden;
   }
 
-  @container (max-width: 600px) {
+  /* Must match Sidebar's own compact breakpoint exactly -- everything in
+     this block exists to accommodate the sheet affordance, so switching at a
+     different width than the Sidebar does leaves a band where Page has
+     floated the aside but the Sidebar still shows a rail. */
+  @container (max-width: #{$sidebar-compact-max}) {
     .side-by-side {
       gap: 0;
     }

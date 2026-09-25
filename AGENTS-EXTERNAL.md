@@ -238,7 +238,7 @@ affordance — a button that opens a sheet — and starts shut. A rail floating 
 top of your content is an odd thing to ask someone to grab, and a panel that
 starts open over the content is worse.
 
-Its open/closed state is a bindable `expanded` prop, so you can drive it from
+Its open/closed state is a bindable `open` prop, so you can drive it from
 your own button and still let the built-in toggle work:
 
 ```svelte
@@ -247,10 +247,10 @@ your own button and still let the built-in toggle work:
 </script>
 
 <Button onclick={() => (navOpen = !(navOpen ?? true))}>Menu</Button>
-<Sidebar overlay bind:expanded={navOpen}>...</Sidebar>
+<Sidebar overlay bind:open={navOpen}>...</Sidebar>
 ```
 
-Left `undefined`, `expanded` keeps each layout's default: a rail starts open, a
+Left `undefined`, `open` keeps each layout's default: a rail starts open, a
 sheet (compact, or any `overlay` sidebar) starts closed. Once it holds a
 boolean, that boolean applies in both layouts.
 

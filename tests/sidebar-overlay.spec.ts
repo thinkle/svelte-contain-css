@@ -11,7 +11,7 @@ import { expect, test } from "@playwright/test";
  *    sidebar also swaps the grab-bar rail for the sheet button and starts
  *    shut: a panel that opens over your content unbidden, or a rail floating
  *    on top of content waiting to be grabbed, are both wrong affordances.
- * 2. `bind:expanded` -- the open/closed state is one bindable prop, so a
+ * 2. `bind:open` -- the open/closed state is one bindable prop, so a
  *    caller's own button and the sidebar's built-in toggle must stay in
  *    sync in both directions.
  *

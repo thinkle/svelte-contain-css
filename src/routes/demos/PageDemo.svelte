@@ -19,7 +19,7 @@
   let sidebarExpanded = $state<boolean | undefined>(undefined);
 
   let sidebarAttrs = $derived(
-    `${side === "right" ? " right" : ""}${overlaySidebar ? " overlay" : ""} bind:expanded={sidebarExpanded}`,
+    `${side === "right" ? " right" : ""}${overlaySidebar ? " overlay" : ""} bind:open={sidebarExpanded}`,
   );
 
   let code = $derived(`
@@ -95,7 +95,7 @@
         <Sidebar
           right={side === "right"}
           overlay={overlaySidebar}
-          bind:expanded={sidebarExpanded}
+          bind:open={sidebarExpanded}
         >
           <div>Sidebar</div>
           <div>Sidebar</div>

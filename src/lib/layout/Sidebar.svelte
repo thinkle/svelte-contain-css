@@ -30,14 +30,14 @@
       /**
        * Whether the sidebar is showing its panel. Bindable, so a caller can
        * drive the sidebar from a button of their own:
-       * `<Sidebar bind:expanded />`.
+       * `<Sidebar bind:open />`.
        *
        * Left `undefined` (the default) the sidebar keeps its per-layout
        * defaults -- the wide rail starts open, the compact sheet starts
        * closed -- and the built-in toggles set it from there. Once it holds a
        * boolean, that boolean wins in both layouts.
        */
-      expanded?: boolean | undefined;
+      open?: boolean | undefined;
       /**
        * Accessible name for the button that opens the sidebar on narrow
        * screens, and for the one that collapses it once open. What the sidebar
@@ -56,7 +56,7 @@
     right,
     children,
     overlay = false,
-    expanded = $bindable<boolean | undefined>(undefined),
+    open = $bindable<boolean | undefined>(undefined),
     expandLabel = "Expand sidebar",
     collapseLabel = "Collapse sidebar",
     class: className,
@@ -80,11 +80,11 @@
      disagree about what "untouched" should look like -- the rail starts open,
      the sheet starts closed -- so `undefined` stands for "this layout's
      default" and each layout resolves it its own way. The moment anything
-     (either built-in toggle, or a caller through `bind:expanded`) writes a
+     (either built-in toggle, or a caller through `bind:open`) writes a
      boolean, both layouts read that same boolean, which is what keeps
      programmatic control and the internal toggles in sync. */
-  const expandedBar = $derived(expanded ?? true);
-  const expandedHamburger = $derived(expanded ?? false);
+  const expandedBar = $derived(open ?? true);
+  const expandedHamburger = $derived(open ?? false);
 </script>
 
 <aside
@@ -102,14 +102,14 @@
     aria-label={expandedHamburger ? collapseLabel : expandLabel}
     aria-expanded={expandedHamburger}
     data-audit-action="toggle-sidebar-sheet"
-    onclick={() => (expanded = !expandedHamburger)}
+    onclick={() => (open = !expandedHamburger)}
   ></button>
   <div class="content">
     {@render children?.()}
   </div>
   <label class="edge-bar">
     <button
-      onclick={() => (expanded = !expandedBar)}
+      onclick={() => (open = !expandedBar)}
       class="expander"
       class:expander={!expandedBar}
       class:close={expandedBar}
@@ -158,7 +158,7 @@
 
      It keys on .expandedHamburger, which resolves `undefined` to false -- so
      a sheet starts shut, where the rail starts open. That falls out of the
-     shared `expanded` state for free. */
+     shared `open` state for free. */
   @mixin sheet-affordance {
     /* The sheet and its button are absolutely positioned, so the sidebar has
        to be their containing block. Without this they resolve against
@@ -370,7 +370,7 @@
   }
 
   /* Responsive sidebar... */
-  @container (min-width: 513px) {
+  @container (min-width: #{$sidebar-wide-min}) {
     /* The rail layout. Everything here is scoped away from `overlay`, which
        uses the sheet affordance at every width instead. */
     aside:not(.overlay) {
@@ -457,7 +457,7 @@
       display: none;
     }
   }
-  @container (max-width: 512px) {
+  @container (max-width: #{$sidebar-compact-max}) {
     aside {
       @include sheet-affordance;
     }

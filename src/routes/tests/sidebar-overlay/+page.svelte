@@ -8,7 +8,7 @@
        which reflows the page content. With `overlay` the panel floats above
        the content instead, at every width, so the content box never moves.
 
-    2. `bind:expanded` -- the open/closed state used to be two private
+    2. `bind:open` -- the open/closed state used to be two private
        variables. It is now one bindable prop, so a caller's button and the
        sidebar's own rail toggle have to drive the same value in both
        directions.
@@ -30,7 +30,7 @@
   <section data-testid="push-section">
     <Page width="900px" height="320px">
       {#snippet sidebar()}
-        <Sidebar data-testid="push-sidebar" bind:expanded={pushExpanded}>
+        <Sidebar data-testid="push-sidebar" bind:open={pushExpanded}>
           <div>Push sidebar</div>
         </Sidebar>
       {/snippet}
@@ -53,7 +53,7 @@
         <Sidebar
           overlay
           data-testid="overlay-sidebar"
-          bind:expanded={overlayExpanded}
+          bind:open={overlayExpanded}
         >
           <div>Overlay sidebar</div>
         </Sidebar>

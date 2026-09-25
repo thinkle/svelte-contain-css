@@ -55,7 +55,7 @@
 
 <Page>
   {#snippet sidebar()}
-    <Sidebar bind:expanded={navOpen}>
+    <Sidebar bind:open={navOpen}>
       <MenuList>...</MenuList>
     </Sidebar>
   {/snippet}
@@ -276,7 +276,7 @@
       {#snippet blurb()}
         <h3>Driving it from outside</h3>
         <p>
-          <code>expanded</code> is bindable, so your own button can open and
+          <code>open</code> is bindable, so your own button can open and
           close the sidebar. It is one piece of state shared with the sidebar's
           built-in toggles -- click the grab bar and the value below changes
           too, so the two never disagree.
@@ -293,7 +293,7 @@
             {navIsOpen ? "Collapse" : "Expand"} sidebar
           </Button>
           <Button onclick={() => (navOpen = undefined)}>Reset to default</Button>
-          <code>expanded = {String(navOpen)}</code>
+          <code>open = {String(navOpen)}</code>
         </Bar>
       {/snippet}
 
@@ -305,7 +305,7 @@
         height="360px"
       >
         {#snippet sidebar()}
-          <Sidebar bind:expanded={navOpen}>
+          <Sidebar bind:open={navOpen}>
             <MenuList>
               <li>Dashboard</li>
               <li>Reports</li>
