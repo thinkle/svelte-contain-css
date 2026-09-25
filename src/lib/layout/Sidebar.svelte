@@ -16,6 +16,23 @@
       right?: boolean;
       children?: Snippet;
       /**
+       * Float the panel *over* the page content at every width instead of
+       * widening the aside and pushing the content aside. Narrow/compact
+       * screens already overlay, so this only changes the wide layout.
+       */
+      overlay?: boolean;
+      /**
+       * Whether the sidebar is showing its panel. Bindable, so a caller can
+       * drive the sidebar from a button of their own:
+       * `<Sidebar bind:expanded />`.
+       *
+       * Left `undefined` (the default) the sidebar keeps its per-layout
+       * defaults -- the wide rail starts open, the compact sheet starts
+       * closed -- and the built-in toggles set it from there. Once it holds a
+       * boolean, that boolean wins in both layouts.
+       */
+      expanded?: boolean | undefined;
+      /**
        * Accessible name for the button that opens the sidebar on narrow
        * screens, and for the one that collapses it once open. What the sidebar
        * holds is the useful thing to say -- `expandLabel="Show filters"` beats
@@ -32,6 +49,8 @@
     left,
     right,
     children,
+    overlay = false,
+    expanded = $bindable<boolean | undefined>(undefined),
     expandLabel = "Expand sidebar",
     collapseLabel = "Collapse sidebar",
     class: className,
@@ -51,14 +70,22 @@
       "width",
     ]));
 
-  let expandedHamburger = $state(false);
-  let expandedBar = $state(true);
+  /* One piece of state, two layouts. The wide rail and the compact sheet
+     disagree about what "untouched" should look like -- the rail starts open,
+     the sheet starts closed -- so `undefined` stands for "this layout's
+     default" and each layout resolves it its own way. The moment anything
+     (either built-in toggle, or a caller through `bind:expanded`) writes a
+     boolean, both layouts read that same boolean, which is what keeps
+     programmatic control and the internal toggles in sync. */
+  const expandedBar = $derived(expanded ?? true);
+  const expandedHamburger = $derived(expanded ?? false);
 </script>
 
 <aside
   class={["sidebar", className]}
   class:right
   class:left
+  class:overlay
   class:expandedHamburger
   class:expandedBar
   {...el}
@@ -67,19 +94,21 @@
     class:expander={!expandedHamburger}
     class:close={expandedHamburger}
     aria-label={expandedHamburger ? collapseLabel : expandLabel}
+    aria-expanded={expandedHamburger}
     data-audit-action="toggle-sidebar-sheet"
-    onclick={() => (expandedHamburger = !expandedHamburger)}
+    onclick={() => (expanded = !expandedHamburger)}
   ></button>
   <div class="content">
     {@render children?.()}
   </div>
   <label class="edge-bar">
     <button
-      onclick={() => (expandedBar = !expandedBar)}
+      onclick={() => (expanded = !expandedBar)}
       class="expander"
       class:expander={!expandedBar}
       class:close={expandedBar}
-      aria-label={expandedBar ? "Collapse sidebar" : "Expand sidebar"}
+      aria-label={expandedBar ? collapseLabel : expandLabel}
+      aria-expanded={expandedBar}
       data-audit-action="toggle-sidebar-rail"
     ></button>
   </label>
@@ -145,6 +174,61 @@
       left: auto;
       right: 0;
     }
+
+    /* Overlay mode.
+
+       The only thing that makes the wide sidebar *push* the page content is
+       the aside growing to hold the panel -- the panel itself is already
+       absolutely positioned. So overlay mode simply declines to grow: the
+       aside keeps the grab bar's footprint in flow, the panel floats above
+       the content, and the rail slides out to sit against the panel's outer
+       edge exactly as it does when the aside widens.
+
+       The collapsed panel is hidden with opacity/pointer-events rather than
+       the aside's `overflow: hidden`, which has to be lifted here so the
+       floating panel is not clipped. That mirrors how the compact layout
+       below already hides its sheet. */
+    aside.overlay {
+      overflow: visible;
+      z-index: var(--sidebar-overlay-z-index, 3);
+    }
+    aside.overlay.expandedBar {
+      width: var(--grab-bar-width);
+    }
+    aside.overlay > .content {
+      /* Out of flow whether open or shut, so the collapsed panel cannot
+         widen anything now that the aside no longer clips it. */
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: var-with-fallbacks(
+        --overlay-box-shadow,
+        sidebar,
+        0 0 var(--space, 8px) rgba(127, 127, 127, 0.4)
+      );
+      transition:
+        transform var(--sidebar-transition),
+        opacity var(--sidebar-transition);
+    }
+    aside.overlay.right > .content {
+      left: auto;
+      right: 0;
+    }
+    aside.overlay.expandedBar > .content {
+      opacity: 1;
+      pointer-events: all;
+    }
+    aside.overlay.expandedBar .edge-bar {
+      left: var(--sidebar-width);
+      right: auto;
+    }
+    aside.overlay.expandedBar.right .edge-bar {
+      left: auto;
+      right: var(--sidebar-width);
+    }
+
     .edge-bar {
       @include color-props(grab-bar, sidebar, surface);
       background: var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg)));

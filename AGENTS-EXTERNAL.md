@@ -225,6 +225,33 @@ Use one per route — don't nest Pages, and don't reach for it as a generic wrap
 </Page>
 ```
 
+`Sidebar` normally widens as it opens, reflowing the page content beside it.
+Pass `overlay` to make the panel float *above* the content at every width
+instead — the grab-bar rail keeps its place, but nothing reflows:
+
+```svelte
+<Sidebar overlay>...</Sidebar>
+```
+
+Its open/closed state is a bindable `expanded` prop, so you can drive it from
+your own button and still let the built-in toggle work:
+
+```svelte
+<script>
+  let navOpen = $state(undefined); // undefined = the sidebar's own default
+</script>
+
+<Button onclick={() => (navOpen = !(navOpen ?? true))}>Menu</Button>
+<Sidebar overlay bind:expanded={navOpen}>...</Sidebar>
+```
+
+Left `undefined`, `expanded` keeps each layout's default (the wide rail starts
+open, the narrow sheet starts closed). Once it holds a boolean, that boolean
+applies in both layouts.
+
+New CSS variables for overlay mode: `--sidebar-overlay-box-shadow` (falls back
+to `--overlay-box-shadow`) and `--sidebar-overlay-z-index` (default `3`).
+
 ### Container
 
 `Container` is the workhorse section wrapper: full width of its parent, capped at

@@ -6,16 +6,25 @@
   import MenuList from "$lib/layout/MenuList.svelte";
   import Page from "$lib/layout/Page.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
+  import Button from "$lib/controls/Button.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
 
   let hasHeader = $state(true);
   let hasFooter = $state(true);
   let side = $state("left");
+  let overlaySidebar = $state(false);
+  // `undefined` leaves the sidebar on its own per-layout default until
+  // something -- a button here, or the sidebar's own toggle -- sets it.
+  let sidebarExpanded = $state<boolean | undefined>(undefined);
+
+  let sidebarAttrs = $derived(
+    `${side === "right" ? " right" : ""}${overlaySidebar ? " overlay" : ""} bind:expanded={sidebarExpanded}`,
+  );
 
   let code = $derived(`
 <Page${side === "right" ? " right" : ""}>
-  ${hasHeader ? `{#snippet header()}\n    <Bar>...</Bar>\n  {/snippet}\n` : ""}${hasFooter ? `{#snippet footer()}\n    <Bar marginBottom="0">...</Bar>\n  {/snippet}\n` : ""}${side !== "none" ? `{#snippet sidebar()}\n    <Sidebar${side === "right" ? " right" : ""}>...</Sidebar>\n  {/snippet}\n` : ""}  <div>Page content here</div>
+  ${hasHeader ? `{#snippet header()}\n    <Bar>...</Bar>\n  {/snippet}\n` : ""}${hasFooter ? `{#snippet footer()}\n    <Bar marginBottom="0">...</Bar>\n  {/snippet}\n` : ""}${side !== "none" ? `{#snippet sidebar()}\n    <Sidebar${sidebarAttrs}>...</Sidebar>\n  {/snippet}\n` : ""}  <div>Page content here</div>
 </Page>`);
 </script>
 
@@ -46,6 +55,14 @@
         <li>
           <RadioButton bind:group={side} value="none">No Sidebar</RadioButton>
         </li>
+        <li>
+          <Checkbox bind:checked={overlaySidebar}>Overlay sidebar</Checkbox>
+        </li>
+        <li>
+          <Button onclick={() => (sidebarExpanded = !(sidebarExpanded ?? true))}>
+            {sidebarExpanded ?? true ? "Collapse" : "Expand"} sidebar
+          </Button>
+        </li>
       </MenuList>
     {/snippet}
 
@@ -75,7 +92,11 @@
       {/snippet}
 
       {#snippet sidebar()}
-        <Sidebar right={side === "right"}>
+        <Sidebar
+          right={side === "right"}
+          overlay={overlaySidebar}
+          bind:expanded={sidebarExpanded}
+        >
           <div>Sidebar</div>
           <div>Sidebar</div>
           <div>Sidebar</div>
