@@ -227,11 +227,16 @@ Use one per route — don't nest Pages, and don't reach for it as a generic wrap
 
 `Sidebar` normally widens as it opens, reflowing the page content beside it.
 Pass `overlay` to make the panel float *above* the content at every width
-instead — the grab-bar rail keeps its place, but nothing reflows:
+instead — nothing reflows:
 
 ```svelte
 <Sidebar overlay>...</Sidebar>
 ```
+
+An overlay sidebar also swaps the grab-bar rail for the compact layout's
+affordance — a button that opens a sheet — and starts shut. A rail floating on
+top of your content is an odd thing to ask someone to grab, and a panel that
+starts open over the content is worse.
 
 Its open/closed state is a bindable `expanded` prop, so you can drive it from
 your own button and still let the built-in toggle work:
@@ -245,9 +250,9 @@ your own button and still let the built-in toggle work:
 <Sidebar overlay bind:expanded={navOpen}>...</Sidebar>
 ```
 
-Left `undefined`, `expanded` keeps each layout's default (the wide rail starts
-open, the narrow sheet starts closed). Once it holds a boolean, that boolean
-applies in both layouts.
+Left `undefined`, `expanded` keeps each layout's default: a rail starts open, a
+sheet (compact, or any `overlay` sidebar) starts closed. Once it holds a
+boolean, that boolean applies in both layouts.
 
 New CSS variables for overlay mode: `--sidebar-overlay-box-shadow` (falls back
 to `--overlay-box-shadow`) and `--sidebar-overlay-z-index` (default `3`).

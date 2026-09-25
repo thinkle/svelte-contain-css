@@ -7,9 +7,12 @@ import { expect, test } from "@playwright/test";
  *
  * 1. `overlay` -- by default the wide sidebar widens its aside as it opens,
  *    which reflows the page content. With `overlay` the panel floats above the
- *    content at every width, so the content box must not move.
+ *    content at every width, so the content box must not move. An overlay
+ *    sidebar also swaps the grab-bar rail for the sheet button and starts
+ *    shut: a panel that opens over your content unbidden, or a rail floating
+ *    on top of content waiting to be grabbed, are both wrong affordances.
  * 2. `bind:expanded` -- the open/closed state is one bindable prop, so a
- *    caller's own button and the sidebar's built-in rail toggle must stay in
+ *    caller's own button and the sidebar's built-in toggle must stay in
  *    sync in both directions.
  *
  * To debug these tests, run the dev server and visit:
@@ -44,6 +47,27 @@ test.describe("Sidebar overlay mode", () => {
     expect(closed!.x).toBeLessThan(open!.x - 100);
   });
 
+  test("an overlay sidebar uses the sheet button, not the rail, and starts shut", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("overlay-sidebar");
+    const sheet = sidebar.locator('[data-audit-action="toggle-sidebar-sheet"]');
+    const rail = sidebar.locator('[data-audit-action="toggle-sidebar-rail"]');
+    const panel = sidebar.locator("div.content");
+
+    // A rail you have to grab while it floats over the content is the wrong
+    // affordance for an overlay, so overlay mode hides it.
+    await expect(rail).toBeHidden();
+    await expect(sheet).toBeVisible();
+
+    // And it must not start open on top of the content.
+    await expect(sheet).toHaveAttribute("aria-expanded", "false");
+    expect(await panel.evaluate((el) => getComputedStyle(el).opacity)).toBe("0");
+  });
+
   test("an overlay sidebar leaves the page content where it is", async ({
     page,
   }) => {
@@ -51,19 +75,19 @@ test.describe("Sidebar overlay mode", () => {
     await page.waitForLoadState("networkidle");
 
     const content = page.getByTestId("overlay-page-content");
-    const rail = page
+    const sheet = page
       .getByTestId("overlay-sidebar")
-      .locator('[data-audit-action="toggle-sidebar-rail"]');
+      .locator('[data-audit-action="toggle-sidebar-sheet"]');
 
-    await expect(rail).toHaveAttribute("aria-expanded", "true");
+    await expect(sheet).toHaveAttribute("aria-expanded", "false");
+    const shut = await content.boundingBox();
+
+    await sheet.click();
+    await expect(sheet).toHaveAttribute("aria-expanded", "true");
     const open = await content.boundingBox();
 
-    await rail.click();
-    await expect(rail).toHaveAttribute("aria-expanded", "false");
-    const closed = await content.boundingBox();
-
-    expect(Math.abs(closed!.width - open!.width)).toBeLessThan(2);
-    expect(Math.abs(closed!.x - open!.x)).toBeLessThan(2);
+    expect(Math.abs(open!.width - shut!.width)).toBeLessThan(2);
+    expect(Math.abs(open!.x - shut!.x)).toBeLessThan(2);
   });
 
   test("an open overlay panel covers the page content", async ({ page }) => {
@@ -73,6 +97,11 @@ test.describe("Sidebar overlay mode", () => {
     const sidebar = page.getByTestId("overlay-sidebar");
     const panel = sidebar.locator("div.content");
     const content = page.getByTestId("overlay-page-content");
+
+    await sidebar
+      .locator('[data-audit-action="toggle-sidebar-sheet"]')
+      .click();
+    await expect(panel).toHaveCSS("opacity", "1");
 
     const panelBox = (await panel.boundingBox())!;
     const contentBox = (await content.boundingBox())!;
@@ -105,6 +134,11 @@ test.describe("Sidebar overlay mode", () => {
     const panel = sidebar.locator("div.content");
     const content = page.getByTestId("overlay-right-page-content");
     const shell = page.getByTestId("overlay-right-section").locator(".page");
+
+    await sidebar
+      .locator('[data-audit-action="toggle-sidebar-sheet"]')
+      .click();
+    await expect(panel).toHaveCSS("opacity", "1");
 
     const panelBox = (await panel.boundingBox())!;
     const contentBox = (await content.boundingBox())!;

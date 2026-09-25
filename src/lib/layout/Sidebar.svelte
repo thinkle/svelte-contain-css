@@ -19,6 +19,12 @@
        * Float the panel *over* the page content at every width instead of
        * widening the aside and pushing the content aside. Narrow/compact
        * screens already overlay, so this only changes the wide layout.
+       *
+       * An overlay sidebar also takes the compact layout's affordance: a
+       * button that opens a sheet, starting shut. The grab-bar rail is for a
+       * panel that lives in the layout -- floating one over the content and
+       * asking someone to grab it is strange, and a panel that starts open on
+       * top of the content is worse.
        */
       overlay?: boolean;
       /**
@@ -141,92 +147,186 @@
 
   /* Expander doo-dad */
 
+  /* The sheet affordance: a floating panel you summon with a button and
+     dismiss when you are done with it.
+
+     Used by the compact layout, and by `overlay` at any width. Overlay wants
+     this rather than the rail: a panel that starts open on top of the content
+     is nonsense, and a grab-bar rail floating over the content is a strange
+     thing to ask anyone to grab. A button that opens a sheet is the
+     affordance people already know.
+
+     It keys on .expandedHamburger, which resolves `undefined` to false -- so
+     a sheet starts shut, where the rail starts open. That falls out of the
+     shared `expanded` state for free. */
+  @mixin sheet-affordance {
+    /* The sheet and its button are absolutely positioned, so the sidebar has
+       to be their containing block. Without this they resolve against
+       whatever positioned ancestor happens to be up the tree -- inside <Page>
+       that is Page's own aside and it looks fine, but drop a Sidebar into a
+       Card or a Container and the button escapes to the top-left of the page,
+       over unrelated content.
+
+       `overflow` has to be released in the same breath. Every child here is
+       out of flow, so the aside computes to zero height -- harmless while it
+       was not a containing block, but the moment it becomes one the inherited
+       `overflow: hidden` clips the button and the sheet away to nothing.
+       Nothing needs clipping here: the shut sheet is hidden by opacity and
+       pointer-events, not by the box. */
+    position: relative;
+    overflow: visible;
+    background: transparent;
+    width: calc(
+      var(--gap) +
+        max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
+    );
+    flex: 0 0 auto;
+
+    /* Every child is out of flow, so the aside has no content to hold it
+       open and the base `height: 100%` resolves against an auto-height
+       parent -- which is to say, nothing. Stretch to the row instead, so the
+       aside is as tall as whatever it sits beside, and the open sheet's own
+       `height: 100%` has something real to measure against. */
+    height: auto;
+    align-self: stretch;
+
+    .edge-bar {
+      display: none;
+    }
+
+    &.right,
+    &.left {
+      border-left: none;
+      border-right: none;
+    }
+
+    & > .content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      z-index: 2;
+      transform: translateX(-100%);
+      opacity: 0;
+      background: transparent;
+      pointer-events: none;
+      transition:
+        transform var(--sidebar-transition) ease-in-out,
+        opacity var(--sidebar-transition) ease-in-out;
+      padding: var(--padding);
+    }
+    &.left > .content {
+      border-right: var(--border-width) var(--border-style) var(--border-color);
+    }
+    /* A right-hand sheet slides out of the right edge, not the left. */
+    &.right > .content {
+      left: auto;
+      right: 0;
+      transform: translateX(100%);
+      border-left: var(--border-width) var(--border-style) var(--border-color);
+    }
+    &.expandedHamburger > .content {
+      transform: translateX(0);
+      height: 100%;
+      opacity: 1;
+      pointer-events: all;
+      box-shadow: var-with-fallbacks(
+        --overlay-box-shadow,
+        sidebar,
+        0 0 var(--space, 8px) rgba(127, 127, 127, 0.4)
+      );
+      @include color-props(sidebar, surface);
+    }
+
+    & > button {
+      --_sidebar-expander-width: max(
+        var(--sidebar-icon-width, 0.65rem),
+        var(--icon-size, 32px)
+      );
+      --_sidebar-expander-height: max(
+        var(--sidebar-icon-height, 1rem),
+        var(--icon-size, 32px)
+      );
+      transition: left var(--sidebar-transition);
+      transform: translateX(0);
+      z-index: 3;
+      position: absolute;
+      opacity: 1;
+      pointer-events: all;
+      display: block;
+      top: var(--padding);
+      left: 0;
+
+      border-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border: var(--circle-button-border, var(--mini-button-border));
+      width: var(--_sidebar-expander-width);
+      height: var(--_sidebar-expander-height);
+      @include color-props(circle-button, mini-button, button, control, secondary);
+      @include clickable(circle-button, mini-button, button, control);
+      @include focusable();
+    }
+    & > button::after {
+      color: var(--circle-button-fg, var(--mini-button-fg, currentColor));
+      filter: var(--sidebar-mobile-icon-filter, none);
+    }
+    & > button.close {
+      left: calc(
+        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
+      );
+      border-radius: var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      );
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
   /* Responsive sidebar... */
   @container (min-width: 513px) {
-    /* Aside is a relative container whose width
-    will smoothly animate so our parent knows
-    how to lay us out */
-    aside {
+    /* The rail layout. Everything here is scoped away from `overlay`, which
+       uses the sheet affordance at every width instead. */
+    aside:not(.overlay) {
       transition: width var(--sidebar-transition);
       position: relative;
       height: 100%;
       width: var(--grab-bar-width);
     }
-    aside.expandedBar {
+    aside:not(.overlay).expandedBar {
       width: calc(var(--sidebar-width) + var(--grab-bar-width));
     }
-    aside .content {
+    aside:not(.overlay) .content {
       transition: transform var(--sidebar-transition);
       transform: translateX(-110%);
     }
-    aside.right .content {
+    aside:not(.overlay).right .content {
       transform: translateX(100%);
     }
-    /* Positioning */
-    aside.expandedBar .content {
+    aside:not(.overlay).expandedBar .content {
       transform: translateX(0);
       position: absolute;
       top: 0;
       left: 0;
       width: var(--sidebar-width);
     }
-    aside.expandedBar.right .content {
+    aside:not(.overlay).expandedBar.right .content {
       left: auto;
       right: 0;
     }
 
-    /* Overlay mode.
-
-       The only thing that makes the wide sidebar *push* the page content is
-       the aside growing to hold the panel -- the panel itself is already
-       absolutely positioned. So overlay mode simply declines to grow: the
-       aside keeps the grab bar's footprint in flow, the panel floats above
-       the content, and the rail slides out to sit against the panel's outer
-       edge exactly as it does when the aside widens.
-
-       The collapsed panel is hidden with opacity/pointer-events rather than
-       the aside's `overflow: hidden`, which has to be lifted here so the
-       floating panel is not clipped. That mirrors how the compact layout
-       below already hides its sheet. */
     aside.overlay {
-      overflow: visible;
-      z-index: var(--sidebar-overlay-z-index, 3);
-    }
-    aside.overlay.expandedBar {
-      width: var(--grab-bar-width);
-    }
-    aside.overlay > .content {
-      /* Out of flow whether open or shut, so the collapsed panel cannot
-         widen anything now that the aside no longer clips it. */
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-      pointer-events: none;
-      box-shadow: var-with-fallbacks(
-        --overlay-box-shadow,
-        sidebar,
-        0 0 var(--space, 8px) rgba(127, 127, 127, 0.4)
-      );
-      transition:
-        transform var(--sidebar-transition),
-        opacity var(--sidebar-transition);
-    }
-    aside.overlay.right > .content {
-      left: auto;
-      right: 0;
-    }
-    aside.overlay.expandedBar > .content {
-      opacity: 1;
-      pointer-events: all;
-    }
-    aside.overlay.expandedBar .edge-bar {
-      left: var(--sidebar-width);
-      right: auto;
-    }
-    aside.overlay.expandedBar.right .edge-bar {
-      left: auto;
-      right: var(--sidebar-width);
+      @include sheet-affordance;
     }
 
     .edge-bar {
@@ -276,110 +376,14 @@
       filter: var(--greyed-out-filter);
     }
 
-    /* Hide hamburger expander when not in
-    hamburger mode */
-    button {
+    /* Hide the sheet button in rail mode */
+    aside:not(.overlay) > button {
       display: none;
     }
   }
   @container (max-width: 512px) {
-    .edge-bar {
-      display: none;
-    }
-    .sidebar {
-      background: transparent;
-    }
-    .right,
-    .left {
-      border-left: none;
-      border-right: none;
-    }
-    aside > .content {
-      transform: translateX(-100%);
-      opacity: 0;
-      background: transparent;
-      pointer-events: none;
-      transition: transform var(--sidebar-transition) ease-in-out;
-      padding: var(--padding);
-    }
-    aside.left > .content {
-      border-right: var(--border-width) var(--border-style) var(--border-color);
-    }
-    aside.right > .content {
-      border-left: var(--border-width) var(--border-style) var(--border-color);
-    }
-    aside.expandedHamburger > .content {
-      transform: translateX(0);
-      height: 100%;
-      opacity: 1;
-      pointer-events: all;
-      @include color-props(sidebar, surface);
-    }
-
-    aside > button {
-      --_sidebar-expander-width: max(
-        var(--sidebar-icon-width, 0.65rem),
-        var(--icon-size, 32px)
-      );
-      --_sidebar-expander-height: max(
-        var(--sidebar-icon-height, 1rem),
-        var(--icon-size, 32px)
-      );
-      transition: left var(--sidebar-transition);
-      transform: translateX(0);
-      z-index: 3;
-      position: absolute;
-      opacity: 1;
-      pointer-events: all;
-      display: block;
-      position: absolute;
-      top: var(--padding);
-      left: 0;
-
-      border-radius: var-with-fallbacks(--radius, circle-button, mini-button, button, 50%);
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-      border: var(--circle-button-border, var(--mini-button-border));
-      width: var(--_sidebar-expander-width);
-      height: var(--_sidebar-expander-height);
-      @include color-props(circle-button, mini-button, button, control, secondary);
-      @include clickable(circle-button, mini-button, button, control);
-      @include focusable();
-    }
-    aside > button::after {
-      color: var(--circle-button-fg, var(--mini-button-fg, currentColor));
-      filter: var(--sidebar-mobile-icon-filter, none);
-    }
-    aside > button.close {
-      left: calc(
-        var(--sidebar-width) - var(--_sidebar-expander-width) + var(--padding)
-      );
-      border-radius: var-with-fallbacks(--radius, circle-button, mini-button, button, 50%);
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    /* aside > button:hover {
-      background: var(--mini-button-hover-bg);
-      color: var(--mini-button-hover-fg);
-    } */
-
     aside {
-      width: calc(
-        var(--gap) +
-          max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
-      );
-      flex: 0 0 auto;
-    }
-    aside .content {
-      position: absolute;
-      --top: calc(
-        var(--padding) +
-          max(var(--sidebar-icon-height, 1rem), var(--icon-size, 32px))
-      );
-      left: 0;
-      width: var(--sidebar-width);
-      z-index: 2;
+      @include sheet-affordance;
     }
   }
   button::after {
