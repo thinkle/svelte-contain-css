@@ -29,6 +29,19 @@
     ["Alan", "Sanderson", "10", "88%", "1"],
   ];
 
+  /* Reorder fixture: swapping these two columns leaves the table exactly as
+     wide as it was, so a ResizeObserver on the table never fires. Nothing here
+     uses {#key ...} -- the component must re-sync on its own. */
+  let reordered = $state(false);
+  const reorderCols = $derived(
+    reordered
+      ? ["N", "A considerably wider column heading"]
+      : ["A considerably wider column heading", "N"],
+  );
+  const reorderRow = $derived(
+    reordered ? ["1", "wwwwwwwwwwwwwwwwwwww"] : ["wwwwwwwwwwwwwwwwwwww", "1"],
+  );
+
   const wideRowExtra = [
     "0",
     "Aug 29",
@@ -76,6 +89,30 @@
         {#each rows as row}
           <tr>
             {#each [...row, ...wideRowExtra] as cell}<td>{cell}</td>{/each}
+          </tr>
+        {/each}
+      </tbody>
+    {/snippet}
+  </Table>
+</section>
+
+<section data-testid="reorder" class="frame">
+  <button data-testid="swap" onclick={() => (reordered = !reordered)}>
+    Swap columns
+  </button>
+  <Table sticky>
+    {#snippet thead()}
+      <thead>
+        <tr>
+          {#each reorderCols as c}<th>{c}</th>{/each}
+        </tr>
+      </thead>
+    {/snippet}
+    {#snippet tbody()}
+      <tbody>
+        {#each [reorderRow, reorderRow] as row}
+          <tr>
+            {#each row as cell}<td>{cell}</td>{/each}
           </tr>
         {/each}
       </tbody>

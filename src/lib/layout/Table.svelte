@@ -143,7 +143,7 @@
     // Read columnCount so this re-runs once the ruler row has rendered.
     columnCount;
     syncColumnWidths();
-    observe(bodyTable);
+    observeColumns();
   });
 
   $effect(() => {
@@ -151,27 +151,61 @@
     trimHeadOverhang();
   });
 
-  /* Keep columns in sync when the container resizes or content changes. The
-     body table is a real, in-flow element, so it sees its container -- the old
-     measuring clone was `position: fixed` and only ever saw the viewport.
+  /* Keep columns in sync as the table changes underneath us.
+
+     Watching the table itself is not enough, and this is the subtle one:
+     reordering columns leaves the table exactly the same width, so a
+     ResizeObserver on the table never fires -- yet every column width has
+     moved and the header's colgroup is now stale. (Consumers have had to
+     paper over this by remounting the component on a column-set key.)
+
+     So observe the ruler cells: one per column, they ARE the quantity being
+     copied into the colgroup. Reorder them and they swap widths, which fires;
+     resize the container and they all change, which fires. Swap two columns of
+     identical width and nothing fires -- correctly, because the colgroup would
+     be unchanged. ResizeObserver reports them despite `visibility: collapse`,
+     verified in Chromium, Firefox and WebKit.
+
      Debounced via rAF so a burst of Svelte updates costs one sync per frame. */
-  function observe(table: HTMLTableElement) {
-    if (resizeObserver) return;
+  let observedCount = -1;
+  let observedRuler: Element | null = null;
+  function observeColumns() {
+    if (!bodyTable) return;
     if (typeof window === "undefined" || !window.ResizeObserver) return;
-    let rafPending = false;
-    resizeObserver = new ResizeObserver(() => {
-      if (rafPending) return;
-      rafPending = true;
-      requestAnimationFrame(() => {
-        rafPending = false;
-        /* A resize is a genuinely new layout, so the overhang is allowed to
-           be re-measured. Correcting only ever changes the header table, and
-           this observer watches the body, so this cannot re-enter. */
-        corrections = 0;
-        syncColumnWidths();
+
+    const cells = Array.from(
+      bodyTable.querySelectorAll<HTMLElement>(".column-ruler > tr > td"),
+    );
+    // The ruler is rendered a tick after the column count is known, so the
+    // first call through here finds nothing. Bail without recording anything,
+    // and the effect that set the count will bring us straight back.
+    if (!cells.length) return;
+
+    // Re-attach only when the ruler actually changed, or the observation
+    // callback that firing `observe()` produces would re-enter and loop.
+    if (observedRuler === cells[0] && observedCount === cells.length) return;
+    observedRuler = cells[0];
+    observedCount = cells.length;
+
+    if (!resizeObserver) {
+      let rafPending = false;
+      resizeObserver = new ResizeObserver(() => {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(() => {
+          rafPending = false;
+          /* A fresh layout, so the overhang may be re-measured. Correcting
+             only ever touches the header table, never the observed ruler, so
+             this cannot re-enter. */
+          corrections = 0;
+          syncColumnWidths();
+        });
       });
-    });
-    resizeObserver.observe(table);
+    }
+
+    resizeObserver.disconnect();
+    resizeObserver.observe(bodyTable);
+    for (const cell of cells) resizeObserver.observe(cell);
   }
 </script>
 

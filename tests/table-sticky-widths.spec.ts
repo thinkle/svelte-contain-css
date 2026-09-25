@@ -144,6 +144,44 @@ test.describe("Sticky table column widths", () => {
     expect(parseFloat(await width())).toBeLessThanOrEqual(1100);
   });
 
+  test("re-syncs when columns are reordered without changing size", async ({
+    page,
+  }) => {
+    /* The case a ResizeObserver on the table cannot see: the reorder leaves the
+       table exactly as wide as before, so only the per-column widths move.
+       Consumers used to work around this by remounting on a column-set key;
+       this fixture deliberately does not. */
+    const section = page.getByTestId("reorder");
+    const headCells = () => cellWidths(section, HEAD_CELLS);
+    const bodyCells = () => cellWidths(section, BODY_CELLS);
+    const tableWidth = () =>
+      section
+        .locator(".scrolling-table > table.scrolling-table-body")
+        .evaluate((el) => el.getBoundingClientRect().width);
+
+    const before = await headCells();
+    const widthBefore = await tableWidth();
+    expect(before[0]).toBeGreaterThan(before[1]);
+
+    await section.getByTestId("swap").click();
+
+    // The widths must actually swap...
+    await expect
+      .poll(async () => (await headCells())[0] < (await headCells())[1])
+      .toBe(true);
+
+    // ...the table must not have changed size (otherwise this proves nothing)...
+    expect(Math.abs((await tableWidth()) - widthBefore)).toBeLessThanOrEqual(1);
+
+    // ...and the header must still line up with the body.
+    const head = await headCells();
+    const body = await bodyCells();
+    expect(head.length).toBe(body.length);
+    head.forEach((w, i) => {
+      expect(Math.abs(w - body[i])).toBeLessThanOrEqual(1);
+    });
+  });
+
   test("the body is rendered once, the header twice", async ({ page }) => {
     // The point of the collapsed-header layout: only the header is duplicated.
     // The old measuring clone re-rendered every row, doubling the whole table.
