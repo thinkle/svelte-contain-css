@@ -476,6 +476,27 @@ export let sidebarVars: CSSVariable[] = [
     group: "Sticky sheet",
   },
   {
+    name: "--sidebar-sheet-edge-radius",
+    defaultValue: "0",
+    type: "length",
+    unit: "px",
+    group: "Sheet button",
+  },
+  {
+    name: "--sidebar-sheet-expand-edge-radius",
+    defaultValue: "var(--sidebar-sheet-edge-radius)",
+    type: "length",
+    unit: "px",
+    group: "Sheet button",
+  },
+  {
+    name: "--sidebar-sheet-collapse-edge-radius",
+    defaultValue: "var(--sidebar-sheet-edge-radius)",
+    type: "length",
+    unit: "px",
+    group: "Sheet button",
+  },
+  {
     name: "--grab-bar-expand",
     defaultValue: "'\\203A'",
     type: "text",

@@ -290,6 +290,20 @@ sidebar, and the compact layout); the wide rail ignores it. Like any
 The sheet sits at `--sidebar-overlay-z-index` (default `3`), above a sticky
 `Table` head (`2`).
 
+The sheet's toggle is a **tab** by default: the corners on the side it attaches
+to are square, so it reads as fastened to that edge -- right when the sidebar
+sits against the page edge. Beside a table, or anywhere inside page padding, a
+half-flat tab floats and looks broken; use `sheetButton="button"` for a toggle
+rounded all round:
+
+```svelte
+<Sidebar right overlay sticky sheetButton="button" bind:open>...</Sidebar>
+```
+
+Per-state control is by variable: `--sidebar-sheet-expand-edge-radius` (the
+shut button) and `--sidebar-sheet-collapse-edge-radius` (the open one), both
+falling back to `--sidebar-sheet-edge-radius` (default `0`).
+
 The rail and the sheet button carry different glyphs, because they are
 different affordances — the rail slides a panel out of the edge it sits on
 (`›`/`‹`), the sheet is conjured by a floating button (`☰`/`✕`). Set them
