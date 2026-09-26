@@ -32,6 +32,12 @@
     for ad hoc inline styles.
   </p>
   <p>
+    It has no surface, border, margin or padding of its own -- only the gap. Give
+    it padding with the <code>padding</code> prop or
+    <code>--inline-padding</code> when you want some; it no longer picks up the
+    theme's <code>--padding</code>.
+  </p>
+  <p>
     <code>fill</code> makes an Inline span the available row width.
     <code>stretch</code> makes it stretch across the parent cross-axis.
   </p>
