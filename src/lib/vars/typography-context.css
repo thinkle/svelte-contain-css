@@ -1,0 +1,271 @@
+/* The single, global consumer of the private context variables emitted by
+   the `typography-container-props` Sass mixin
+   (see src/lib/sass/_typography.scss). Every "typography container"
+   component (Container, Card, Tile, TextLayout, ...) sets these variables
+   on itself; nothing reads them into a real CSS property except this one
+   rule, so a heading nested arbitrarily deep -- through <article>, <Tile>,
+   a plain <div>, whatever -- always picks up its NEAREST ancestor's values,
+   by ordinary custom-property inheritance. No selector ever has to "reach
+   into" a component it doesn't own, and no two components' rules ever
+   compete for the same element.
+
+   Kept at (0,0,0) specificity via :where() on purpose: any real selector,
+   even a single class, can override this outright (e.g. Bar overriding
+   --_heading-margin-inline for its own flush layout). A heading with NO
+   opted-in ancestor at all sees these vars fully unset and falls back to
+   `revert`/`unset` here, i.e. plain, unstyled HTML -- this rule is inert
+   until something opts a subtree in. TextLayout is the one exception: since
+   using it IS the explicit request for prose styling, it also restates
+   these properties with real specificity on its own selector so it reliably
+   wins over incidental external CSS. See AGENTS-INTERNAL.md. */
+
+:where(h1, h2, h3, h4, h5, h6) {
+  box-sizing: border-box;
+  max-width: var(--_heading-max-width, unset);
+  margin-inline: var(--_heading-margin-inline, auto);
+  margin-bottom: var(--_heading-margin-bottom, 0);
+  margin-top: var(--_heading-margin-top, 1.5em);
+}
+
+:where(
+  h1:first-child,
+  h2:first-child,
+  h3:first-child,
+  h4:first-child,
+  h5:first-child,
+  h6:first-child
+) {
+  margin-top: var(--_heading-first-margin-top, 0);
+}
+
+:where(h1) {
+  color: var(--_h1-color, revert);
+  background: var(--_h1-background, transparent);
+  padding: var(--_h1-padding, 0);
+  border: var(--_h1-border, none);
+  border-width: var(--_h1-border-width);
+  border-style: var(--_h1-border-style);
+  border-color: var(--_h1-border-color);
+  border-radius: var(--_h1-border-radius, 0);
+  box-shadow: var(--_h1-box-shadow, none);
+  font-family: var(--_h1-font-family, revert);
+  text-transform: var(--_h1-text-transform, revert);
+  text-decoration: var(--_h1-text-decoration, revert);
+  font-size: var(--_h1-font-size, revert);
+  font-weight: var(--_h1-font-weight, revert);
+  line-height: var(--_h1-line-height, revert);
+  letter-spacing: var(--_h1-letter-spacing, revert);
+  text-indent: var(--_h1-text-indent, revert);
+  font-variant: var(--_h1-font-variant, revert);
+  text-align: var(--_h1-text-align, revert);
+}
+
+:where(h2) {
+  color: var(--_h2-color, revert);
+  background: var(--_h2-background, transparent);
+  padding: var(--_h2-padding, 0);
+  border: var(--_h2-border, none);
+  border-width: var(--_h2-border-width);
+  border-style: var(--_h2-border-style);
+  border-color: var(--_h2-border-color);
+  border-radius: var(--_h2-border-radius, 0);
+  box-shadow: var(--_h2-box-shadow, none);
+  font-family: var(--_h2-font-family, revert);
+  text-transform: var(--_h2-text-transform, revert);
+  text-decoration: var(--_h2-text-decoration, revert);
+  font-size: var(--_h2-font-size, revert);
+  font-weight: var(--_h2-font-weight, revert);
+  line-height: var(--_h2-line-height, revert);
+  letter-spacing: var(--_h2-letter-spacing, revert);
+  text-indent: var(--_h2-text-indent, revert);
+  font-variant: var(--_h2-font-variant, revert);
+  text-align: var(--_h2-text-align, revert);
+}
+
+:where(h3) {
+  color: var(--_h3-color, revert);
+  background: var(--_h3-background, transparent);
+  padding: var(--_h3-padding, 0);
+  border: var(--_h3-border, none);
+  border-width: var(--_h3-border-width);
+  border-style: var(--_h3-border-style);
+  border-color: var(--_h3-border-color);
+  border-radius: var(--_h3-border-radius, 0);
+  box-shadow: var(--_h3-box-shadow, none);
+  font-family: var(--_h3-font-family, revert);
+  text-transform: var(--_h3-text-transform, revert);
+  text-decoration: var(--_h3-text-decoration, revert);
+  font-size: var(--_h3-font-size, revert);
+  font-weight: var(--_h3-font-weight, revert);
+  line-height: var(--_h3-line-height, revert);
+  letter-spacing: var(--_h3-letter-spacing, revert);
+  text-indent: var(--_h3-text-indent, revert);
+  font-variant: var(--_h3-font-variant, revert);
+  text-align: var(--_h3-text-align, revert);
+}
+
+:where(h4) {
+  color: var(--_h4-color, revert);
+  background: var(--_h4-background, transparent);
+  padding: var(--_h4-padding, 0);
+  border: var(--_h4-border, none);
+  border-width: var(--_h4-border-width);
+  border-style: var(--_h4-border-style);
+  border-color: var(--_h4-border-color);
+  border-radius: var(--_h4-border-radius, 0);
+  box-shadow: var(--_h4-box-shadow, none);
+  font-family: var(--_h4-font-family, revert);
+  text-transform: var(--_h4-text-transform, revert);
+  text-decoration: var(--_h4-text-decoration, revert);
+  font-size: var(--_h4-font-size, revert);
+  font-weight: var(--_h4-font-weight, revert);
+  line-height: var(--_h4-line-height, revert);
+  letter-spacing: var(--_h4-letter-spacing, revert);
+  text-indent: var(--_h4-text-indent, revert);
+  font-variant: var(--_h4-font-variant, revert);
+  text-align: var(--_h4-text-align, revert);
+}
+
+:where(h5) {
+  color: var(--_h5-color, revert);
+  background: var(--_h5-background, transparent);
+  padding: var(--_h5-padding, 0);
+  border: var(--_h5-border, none);
+  border-width: var(--_h5-border-width);
+  border-style: var(--_h5-border-style);
+  border-color: var(--_h5-border-color);
+  border-radius: var(--_h5-border-radius, 0);
+  box-shadow: var(--_h5-box-shadow, none);
+  font-family: var(--_h5-font-family, revert);
+  text-transform: var(--_h5-text-transform, revert);
+  text-decoration: var(--_h5-text-decoration, revert);
+  font-size: var(--_h5-font-size, revert);
+  font-weight: var(--_h5-font-weight, revert);
+  line-height: var(--_h5-line-height, revert);
+  letter-spacing: var(--_h5-letter-spacing, revert);
+  text-indent: var(--_h5-text-indent, revert);
+  font-variant: var(--_h5-font-variant, revert);
+  text-align: var(--_h5-text-align, revert);
+}
+
+:where(h6) {
+  color: var(--_h6-color, revert);
+  background: var(--_h6-background, transparent);
+  padding: var(--_h6-padding, 0);
+  border: var(--_h6-border, none);
+  border-width: var(--_h6-border-width);
+  border-style: var(--_h6-border-style);
+  border-color: var(--_h6-border-color);
+  border-radius: var(--_h6-border-radius, 0);
+  box-shadow: var(--_h6-box-shadow, none);
+  font-family: var(--_h6-font-family, revert);
+  text-transform: var(--_h6-text-transform, revert);
+  text-decoration: var(--_h6-text-decoration, revert);
+  font-size: var(--_h6-font-size, revert);
+  font-weight: var(--_h6-font-weight, revert);
+  line-height: var(--_h6-line-height, revert);
+  letter-spacing: var(--_h6-letter-spacing, revert);
+  text-indent: var(--_h6-text-indent, revert);
+  font-variant: var(--_h6-font-variant, revert);
+  text-align: var(--_h6-text-align, revert);
+}
+
+/* Prose-measure group: p, blockquote, dl, ul, ol. li/dt/dd deliberately have
+   no rule of their own -- they're already bounded by their ul/ol/dl parent's
+   own max-width box via ordinary block layout, so a wide list inside a
+   narrow measure never needs its own separate constraint. */
+:where(p, blockquote, dl, ul, ol) {
+  max-width: var(--_prose-max-width, 40em);
+  margin-inline: var(--_prose-margin-inline, auto);
+  font-family: var(--_prose-font-family, revert);
+  line-height: var(--_prose-line-height, revert);
+  font-weight: var(--_prose-font-weight, revert);
+}
+
+/* Declared AFTER the shared prose rule on purpose, same as the original
+   selector-based version: p gets a second, more specific set of typography
+   values (paragraph-context-vars), which wins for whichever properties both
+   rules set, because it's later in source at the same (zero) specificity. */
+:where(p) {
+  font-family: var(--_paragraph-font-family);
+  text-transform: var(--_paragraph-text-transform);
+  text-decoration: var(--_paragraph-text-decoration);
+  font-size: var(--_paragraph-font-size);
+  font-weight: var(--_paragraph-font-weight);
+  line-height: var(--_paragraph-line-height);
+  letter-spacing: var(--_paragraph-letter-spacing);
+  text-indent: var(--_paragraph-text-indent);
+  font-variant: var(--_paragraph-font-variant);
+  text-align: var(--_paragraph-text-align);
+}
+
+:where(
+  p:first-of-type,
+  h1 + p,
+  h2 + p,
+  h3 + p,
+  h4 + p,
+  h5 + p,
+  h6 + p
+) {
+  font-family: var(--_first-paragraph-font-family);
+  text-transform: var(--_first-paragraph-text-transform);
+  text-decoration: var(--_first-paragraph-text-decoration);
+  font-weight: var(--_first-paragraph-font-weight);
+  letter-spacing: var(--_first-paragraph-letter-spacing);
+  text-indent: var(--_first-paragraph-text-indent);
+  font-variant: var(--_first-paragraph-font-variant);
+  text-align: var(--_first-paragraph-text-align);
+  font-size: var(--_first-paragraph-font-size);
+  line-height: var(--_first-paragraph-line-height);
+  margin-block-start: var(--_first-paragraph-margin-top);
+}
+
+:where(
+  p:first-of-type::first-line,
+  h1 + p::first-line,
+  h2 + p::first-line,
+  h3 + p::first-line,
+  h4 + p::first-line,
+  h5 + p::first-line,
+  h6 + p::first-line
+) {
+  font-family: var(--_first-line-font-family);
+  text-transform: var(--_first-line-text-transform);
+  text-decoration: var(--_first-line-text-decoration);
+  font-size: var(--_first-line-font-size);
+  font-weight: var(--_first-line-font-weight);
+  line-height: var(--_first-line-line-height);
+  letter-spacing: var(--_first-line-letter-spacing);
+  text-indent: var(--_first-line-text-indent);
+  font-variant: var(--_first-line-font-variant);
+  text-align: var(--_first-line-text-align);
+}
+
+:where(
+  p:first-of-type::first-letter,
+  h1 + p::first-letter,
+  h2 + p::first-letter,
+  h3 + p::first-letter,
+  h4 + p::first-letter,
+  h5 + p::first-letter,
+  h6 + p::first-letter
+) {
+  font-family: var(--_first-letter-font-family);
+  text-transform: var(--_first-letter-text-transform);
+  text-decoration: var(--_first-letter-text-decoration);
+  font-size: var(--_first-letter-font-size);
+  font-weight: var(--_first-letter-font-weight);
+  line-height: var(--_first-letter-line-height);
+  letter-spacing: var(--_first-letter-letter-spacing);
+  text-indent: var(--_first-letter-text-indent);
+  font-variant: var(--_first-letter-font-variant);
+  text-align: var(--_first-letter-text-align);
+  --link-bg: var(--_first-letter-link-bg);
+  --link-fg: var(--_first-letter-link-fg);
+  background: var(--_first-letter-background);
+  color: var(--_first-letter-color);
+  float: var(--first-letter-float, none);
+  margin-right: var(--first-letter-margin-right, 0);
+  padding-top: var(--first-letter-padding-top, 0);
+}

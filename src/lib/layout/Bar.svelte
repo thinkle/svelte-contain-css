@@ -133,6 +133,17 @@
 
     /* Reset form label width in horizontal context */
     --form-label-width: auto;
+
+    /* A Bar lays its content out in a flex row, so a heading dropped inside
+       it must not inherit an ancestor Container's (or any other typography
+       container's) prose-measure margins -- auto inline margins in a flex
+       row eat the row's free space and drag the heading toward the middle,
+       fighting `justify-content: space-between`. This is a plain custom
+       property override, not a selector reset: it wins for anything inside
+       `.bar` purely by being the nearest ancestor to declare it, regardless
+       of stylesheet order, so it doesn't need `!important` or a doubled
+       class the way an outside consumer's workaround for this used to. */
+    --_heading-margin-inline: var-with-fallbacks(--heading-margin-inline, bar, 0);
   }
 
   .bar :global(h1),
