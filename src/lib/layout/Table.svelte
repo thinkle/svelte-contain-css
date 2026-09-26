@@ -39,8 +39,9 @@
      block, and no second copy of the body.
 
      `visibility: collapse` also drops that copy out of the accessibility tree
-     and out of the tab order in all three engines, so its duplicated controls
-     are inert without needing the `inert` attribute. Note the consequence: the
+     and out of the tab order in all three engines; the copy is marked `inert`
+     as well (see below) so that is stated rather than implied. Note the
+     consequence: the
      body table has no exposed column headers -- the visible sticky header is
      the accessible one. That matches the previous behavior, but it is a real
      gap, and only a genuine single-table layout would close it. */
@@ -149,6 +150,34 @@
   $effect(() => {
     columns;
     trimHeadOverhang();
+  });
+
+  /* The body table's copy of the header is there to be measured, not used,
+     so say so. `visibility: collapse` already keeps it out of the tab order,
+     but that is a side effect rather than a statement -- and tools that
+     only recognize `visibility: hidden` (testing-library's role queries, for
+     one) otherwise find every header control twice. `inert` is the accurate
+     word for a copy-for-measurement: out of the focus order and out of the
+     accessibility tree, with no effect on layout.
+
+     The thead is the caller's markup, rendered from their snippet, so it
+     cannot carry the attributes in the template. Watch the table's direct
+     children instead, in case the caller's snippet swaps its <thead> out. */
+  $effect(() => {
+    if (!bodyTable) return;
+    const table = bodyTable;
+    const mark = () => {
+      for (const head of table.querySelectorAll(":scope > thead")) {
+        if (!head.hasAttribute("inert")) head.setAttribute("inert", "");
+        if (head.getAttribute("aria-hidden") !== "true")
+          head.setAttribute("aria-hidden", "true");
+      }
+    };
+    mark();
+    if (typeof MutationObserver === "undefined") return;
+    const observer = new MutationObserver(mark);
+    observer.observe(table, { childList: true });
+    return () => observer.disconnect();
   });
 
   /* Keep columns in sync as the table changes underneath us.

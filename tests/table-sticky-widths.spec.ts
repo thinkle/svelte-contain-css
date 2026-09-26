@@ -233,6 +233,26 @@ test.describe("Sticky table column widths", () => {
     expect(inCollapsed).toBe(false);
   });
 
+  test("the collapsed header copy is inert and hidden from the a11y tree", async ({
+    page,
+  }) => {
+    const section = page.getByTestId("interactive");
+    const copy = section.locator("table.scrolling-table-body > thead");
+    await expect(copy).toHaveAttribute("inert", "");
+    await expect(copy).toHaveAttribute("aria-hidden", "true");
+    // The visible header is left alone.
+    const visible = section.locator("table.fixed-table-head > thead");
+    await expect(visible).not.toHaveAttribute("inert", /.*/);
+
+    // Role queries find each header control once, not twice. (testing-library
+    // does not treat `visibility: collapse` as hidden; this is the case it
+    // tripped over.)
+    const visibleCount = await section
+      .locator("table.fixed-table-head thead button")
+      .count();
+    await expect(section.getByRole("button")).toHaveCount(visibleCount);
+  });
+
   test("column widths are proportional to content, not evenly divided", async ({
     page,
   }) => {
