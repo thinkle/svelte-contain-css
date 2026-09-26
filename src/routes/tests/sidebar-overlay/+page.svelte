@@ -166,3 +166,26 @@
     </ul>
   </Sidebar>
 </section>
+
+<!-- sheetButton: the toggle's shape. Default "tab" squares the corners on
+     the side it attaches to; "button" rounds all four. -->
+<section
+  data-testid="sheet-button-section"
+  style="--sidebar-transition: 0s; width: 900px; container-type: inline-size; display: flex; height: 200px; --circle-button-radius: 10px;"
+>
+  <div style="flex: 1;">content</div>
+  <Sidebar right overlay data-testid="sheet-button-tab">
+    <p>tab</p>
+  </Sidebar>
+  <Sidebar right overlay sheetButton="button" data-testid="sheet-button-button">
+    <p>button</p>
+  </Sidebar>
+  <Sidebar
+    right
+    overlay
+    data-testid="sheet-button-per-state"
+    style="--sidebar-sheet-expand-edge-radius: 10px;"
+  >
+    <p>round when shut, tab when open</p>
+  </Sidebar>
+</section>

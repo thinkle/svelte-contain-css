@@ -45,6 +45,23 @@
        */
       sticky?: boolean;
       /**
+       * The shape of the sheet's toggle button (the sheet is what any
+       * `overlay` sidebar, and any sidebar in the compact layout, uses).
+       *
+       * - `"tab"` (default): the corners on the side it attaches to are
+       *   square, so it reads as fastened to that edge -- the page edge while
+       *   shut, the panel's edge while open. Right against a page edge.
+       * - `"button"`: rounded all round like any other button, for a sheet
+       *   that does not sit against an edge -- beside a table, inside page
+       *   padding -- where a half-flat tab looks broken.
+       *
+       * Per-state control, if you need it, is by variable:
+       * `--sidebar-sheet-expand-edge-radius` (the shut button) and
+       * `--sidebar-sheet-collapse-edge-radius` (the open one), both falling
+       * back to `--sidebar-sheet-edge-radius`.
+       */
+      sheetButton?: "tab" | "button";
+      /**
        * Whether the sidebar is showing its panel. Bindable, so a caller can
        * drive the sidebar from a button of their own:
        * `<Sidebar bind:open />`.
@@ -74,6 +91,7 @@
     children,
     overlay = false,
     sticky = false,
+    sheetButton = "tab",
     open = $bindable<boolean | undefined>(undefined),
     expandLabel = "Expand sidebar",
     collapseLabel = "Collapse sidebar",
@@ -111,6 +129,7 @@
   class:left
   class:overlay
   class:sticky
+  class:button-sheet-toggle={sheetButton === "button"}
   class:expandedHamburger
   class:expandedBar
   {...el}
@@ -142,6 +161,9 @@
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
   aside {
+    /* Set only by `sheetButton="button"` (below); cleared here so it never
+       leaks in from an enclosing sidebar. */
+    --_sidebar-sheet-edge-override: initial;
     @include color-props(sidebar, surface);
     @include typography-props-bare(sidebar, surface);
     height: 100%;
@@ -201,6 +223,33 @@
     --_sidebar-expander-height: max(
       var(--sidebar-icon-height, 1rem),
       var(--icon-size, 32px)
+    );
+
+    /* The sheet button's corners. Its "edge" corners are the pair on the
+       side it attaches to -- the page edge while shut, the panel's inner edge
+       while open -- and default to 0, which is what makes it read as a tab
+       fastened to that edge. `sheetButton="button"` rounds them like the
+       other two, for a sheet that does not sit against an edge. */
+    --_sidebar-sheet-button-radius: #{var-with-fallbacks(
+        --radius,
+        circle-button,
+        mini-button,
+        button,
+        50%
+      )};
+    --_sidebar-sheet-expand-edge-radius: var(
+      --sidebar-sheet-expand-edge-radius,
+      var(
+        --_sidebar-sheet-edge-override,
+        var(--sidebar-sheet-edge-radius, 0)
+      )
+    );
+    --_sidebar-sheet-collapse-edge-radius: var(
+      --sidebar-sheet-collapse-edge-radius,
+      var(
+        --_sidebar-sheet-edge-override,
+        var(--sidebar-sheet-edge-radius, 0)
+      )
     );
 
     position: relative;
@@ -301,15 +350,9 @@
       top: var(--padding);
       left: 0;
 
-      border-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-radius: var(--_sidebar-sheet-button-radius);
+      border-top-left-radius: var(--_sidebar-sheet-expand-edge-radius);
+      border-bottom-left-radius: var(--_sidebar-sheet-expand-edge-radius);
       border: var(--circle-button-border, var(--mini-button-border));
       width: var(--_sidebar-expander-width);
       height: var(--_sidebar-expander-height);
@@ -330,15 +373,9 @@
          Either the button pops out of the panel or it sits inside it; this
          sits inside it, and the inset is then exactly button + one gutter. */
       left: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
-      border-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-radius: var(--_sidebar-sheet-button-radius);
+      border-top-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-bottom-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
     }
 
     /* Everything above anchors the button to the left, which is right for a
@@ -351,42 +388,16 @@
     &.right > button {
       left: auto;
       right: 0;
-      border-top-left-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-bottom-left-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-radius: var(--_sidebar-sheet-button-radius);
+      border-top-right-radius: var(--_sidebar-sheet-expand-edge-radius);
+      border-bottom-right-radius: var(--_sidebar-sheet-expand-edge-radius);
     }
     &.right > button.close {
       left: auto;
       right: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
-      border-top-right-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-bottom-right-radius: var-with-fallbacks(
-        --radius,
-        circle-button,
-        mini-button,
-        button,
-        50%
-      );
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-radius: var(--_sidebar-sheet-button-radius);
+      border-top-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-bottom-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
     }
 
     /* `sticky`: the sheet follows the reader down the page instead of
@@ -566,6 +577,9 @@
     aside {
       @include sheet-affordance;
     }
+  }
+  aside.button-sheet-toggle {
+    --_sidebar-sheet-edge-override: var(--_sidebar-sheet-button-radius);
   }
   button::after {
     color: var(--sidebar-icon-fg, var(--fg, currentColor));

@@ -537,3 +537,66 @@ test.describe("Sidebar sticky sheet", () => {
     expect(Math.round(p.height)).toBe(1500);
   });
 });
+
+/**
+ * sheetButton: "tab" (default) squares the toggle's corners on the side it
+ * attaches to, so it reads as fastened to an edge. "button" rounds all four,
+ * for a sheet that does not sit against one. Per-state control is by
+ * --sidebar-sheet-expand-edge-radius / --sidebar-sheet-collapse-edge-radius.
+ */
+test.describe("Sidebar sheetButton", () => {
+  // Polled: the button's own `clickable` transition animates the corners.
+  const sheetButton = '[data-audit-action="toggle-sidebar-sheet"]';
+  const corners = (page, testid: string) =>
+    page
+      .getByTestId(testid)
+      .locator(sheetButton)
+      .evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return {
+          tl: cs.borderTopLeftRadius,
+          tr: cs.borderTopRightRadius,
+          bl: cs.borderBottomLeftRadius,
+          br: cs.borderBottomRightRadius,
+        };
+      });
+
+  test("a right-hand tab squares its right corners shut, its left corners open", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+    await expect.poll(() => corners(page, "sheet-button-tab")).toEqual({
+      tl: "10px", bl: "10px", tr: "0px", br: "0px",
+    });
+    await page.getByTestId("sheet-button-tab").locator(sheetButton).click();
+    await expect.poll(() => corners(page, "sheet-button-tab")).toEqual({
+      tl: "0px", bl: "0px", tr: "10px", br: "10px",
+    });
+  });
+
+  test('sheetButton="button" is round all round, shut and open', async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+    const round = { tl: "10px", bl: "10px", tr: "10px", br: "10px" };
+    await expect.poll(() => corners(page, "sheet-button-button")).toEqual(round);
+    await page.getByTestId("sheet-button-button").locator(sheetButton).click();
+    await expect.poll(() => corners(page, "sheet-button-button")).toEqual(round);
+  });
+
+  test("the per-state variable shapes one state and leaves the other", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+    await expect.poll(() => corners(page, "sheet-button-per-state")).toEqual({
+      tl: "10px", bl: "10px", tr: "10px", br: "10px",
+    });
+    await page.getByTestId("sheet-button-per-state").locator(sheetButton).click();
+    await expect.poll(() => corners(page, "sheet-button-per-state")).toEqual({
+      tl: "0px", bl: "0px", tr: "10px", br: "10px",
+    });
+  });
+});
