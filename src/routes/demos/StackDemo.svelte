@@ -54,6 +54,12 @@
     is clearer than custom flex CSS.
   </p>
   <p>
+    It has no surface, border, margin or padding of its own -- only the gap. Give
+    it padding with the <code>padding</code> prop or
+    <code>--stack-padding</code> when you want some; it no longer picks up the
+    theme's <code>--padding</code>.
+  </p>
+  <p>
     Stack removes direct-child block margins so its gap defines the spacing. If
     you want prose-style margins, use <code>&lt;TextLayout&gt;</code>.
   </p>

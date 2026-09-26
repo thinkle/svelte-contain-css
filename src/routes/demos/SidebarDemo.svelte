@@ -64,6 +64,34 @@
   <main>Page content</main>
 </Page>`;
 
+  // --- Sticky sheet demo ----------------------------------------------------
+  /* A sheet beside something taller than the view. Without `sticky` the open
+     sheet is as tall as its row; with it the sheet sticks at the top of the
+     scroller and caps its height. The demo scrolls its own box rather than the
+     page, so the cap comes from that box's height, not 100dvh. */
+  let stickyOn = $state(true);
+  let sheetButton = $state<"tab" | "button">("button");
+  let stickyOpen = $state<boolean | undefined>(true);
+  const stickyRows = Array.from({ length: 40 }, (_, i) => i + 1);
+
+  let stickyCode = $derived(`<div style="display: flex; container-type: inline-size;">
+  <main>...a table far taller than the view...</main>
+  <Sidebar
+    right
+    overlay${stickyOn ? "\n    sticky" : ""}${sheetButton === "button" ? '\n    sheetButton="button"' : ""}
+    bind:open
+  >
+    <MenuList>...</MenuList>
+  </Sidebar>
+</div>
+
+<!-- Sticking to the page? The defaults already fit the viewport:
+     --sidebar-sheet-top (default var(--padding)) is where it rests, and the
+     sheet stops at 100dvh minus --sidebar-sheet-reserve (default twice the
+     top). Set the reserve to the height of any chrome above the row, or set
+     --sidebar-sheet-max-height outright -- as this demo does, because it
+     scrolls a 360px box instead of the page. -->`);
+
   // --- Icon / rail customization -------------------------------------------
   /* The rail and the sheet read from different variables, which is the point:
      a chevron means "slide out from this edge", a menu glyph means "open a
@@ -331,6 +359,66 @@
         </Page>
       </DemoWithCode>
 
+      <DemoWithCode height="440px" code={stickyCode}>
+        {#snippet blurb()}
+          <h3>Beside long content: <code>sticky</code> and <code>sheetButton</code></h3>
+          <p>
+            An overlay sheet is normally as tall as the row it sits in -- right
+            beside a short card, wrong beside a fifty-row table, where its top
+            scrolls away and anything at its foot lands off the screen.
+            <code>sticky</code> keeps the sheet (and its button) at the top of
+            the view as the content scrolls past, and stops it growing at the
+            view's height so its own content scrolls instead.
+          </p>
+          <p>
+            The toggle is a <em>tab</em> by default -- square on the side it
+            attaches to, so it reads as fastened to the page edge. Beside a table
+            or anywhere inside page padding there is no edge to fasten to, and a
+            half-flat tab just floats; <code>sheetButton="button"</code> makes it an
+            ordinary round button. Scroll the box and compare.
+          </p>
+        {/snippet}
+        {#snippet inputArea()}
+          <Inline wrap="wrap">
+            <FormItem>
+              {#snippet label()}Sticky{/snippet}
+              <Checkbox bind:checked={stickyOn} />
+            </FormItem>
+            <FormItem>
+              {#snippet label()}Sheet button{/snippet}
+              <Select bind:value={sheetButton}>
+                <Option value="tab">tab (default)</Option>
+                <Option value="button">button</Option>
+              </Select>
+            </FormItem>
+          </Inline>
+        {/snippet}
+
+        <div class="sticky-scroller">
+          <div class="sticky-row">
+            <main>
+              {#each stickyRows as n}
+                <p>Row {n} of a long table</p>
+              {/each}
+            </main>
+            <Sidebar
+              right
+              overlay
+              sticky={stickyOn}
+              {sheetButton}
+              bind:open={stickyOpen}
+              --sidebar-sheet-max-height="calc(360px - 2 * var(--padding))"
+            >
+              <MenuList>
+                {#each stickyRows.slice(0, 25) as n}
+                  <li>Column {n}</li>
+                {/each}
+              </MenuList>
+            </Sidebar>
+          </div>
+        </div>
+      </DemoWithCode>
+
       <DemoWithCode height="420px" code={customCode}>
         {#snippet blurb()}
           <h3>Customizing the rail and its icons</h3>
@@ -572,3 +660,23 @@
     </CssVariableDemo>
   </Container>
 </FormProvider>
+
+<style>
+  /* The sticky demo scrolls its own box, so the sheet sticks to the box. The
+     row needs a container to query and must be a flex row for the Sidebar to
+     stretch beside the content. */
+  .sticky-scroller {
+    height: 360px;
+    overflow-y: auto;
+    border: 3px solid #eee;
+  }
+  .sticky-row {
+    display: flex;
+    container-type: inline-size;
+  }
+  .sticky-row > main {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-inline: var(--padding);
+  }
+</style>

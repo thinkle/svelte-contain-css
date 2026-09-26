@@ -505,6 +505,15 @@ ${headingExampleMarkup}
         <code>--line-width</code> and
         <code>--line-height</code>.
       </p>
+      <p>
+        The width is a cap, and where the capped column sits depends on its
+        container. In a <code>TextLayout</code> -- a prose column -- it is centred.
+        In a <code>Card</code>, <code>Container</code>, <code>Tile</code> and the
+        other typography containers it starts at the leading edge, like any other
+        block. <code>--prose-margin-inline</code> and
+        <code>--heading-margin-inline</code> override either way. Outside every
+        container, headings and paragraphs are left entirely to the browser.
+      </p>
       <h3>Headings</h3>
       <p>
         We take some pains to clean up the space around headings by default, so

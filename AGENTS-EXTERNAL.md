@@ -454,7 +454,10 @@ It is **not** the way to put two things next to each other. That's `Inline`.
 ### Inline and Stack — the generic flex helpers
 
 `Inline` (row) and `Stack` (column) are unopinionated: display flex, a gap, no
-surface, no border, no margin by default. When you just need things beside or
+surface, no border, no margin and no padding by default. (Before 1.4.0 they took
+the inherited theme `--padding`, so a `padding="0"` on every one was a common
+workaround; it is now the default and can go. Set `padding`, or
+`--inline-padding` / `--stack-padding`, when you do want some.) When you just need things beside or
 below each other, these are the answer.
 
 ```svelte
@@ -650,6 +653,17 @@ So this is already fine, with no `TextLayout` in sight:
   <p>Grade 9 · Homeroom 12</p>
 </Card>
 ```
+
+**Where the measure sits.** Inside those components the capped measure is
+**start-aligned**: a paragraph narrower than its Card sits against the Card's
+leading edge like any other block. Only `TextLayout` centres it (it is the one
+prose column). Override with `--prose-margin-inline` / `--heading-margin-inline`
+-- `auto` to centre, `0` to start-align. (Before 1.4.0 every container centred
+the measure, which dragged headings toward the middle of flex rows like `Bar`.)
+
+**Outside all of them** -- a heading in a bare `Inline`, a `<p>` in a plain
+`div` -- nothing is applied: headings and paragraphs keep the browser's own
+styles.
 
 Reach for `TextLayout` when the content is genuinely **an article** — a long run of
 prose that wants a strict reading measure of its own, narrower than whatever
@@ -911,8 +925,17 @@ or a variable on an ancestor.
 
 A few components have no single element to forward to, and take no attributes:
 `FormProvider` and `Code` render no element of their own; `ResponsiveText`
-renders one element per breakpoint; `Table`'s sticky mode renders a hidden
-measuring copy, so an `id` would appear twice. Wrap them if you need a handle.
+renders one element per breakpoint; `Table`'s sticky mode renders a second,
+hidden copy of the header for measuring, so an `id` would appear twice. Wrap them
+if you need a handle.
+
+**Testing a sticky `Table`.** That header copy is `inert` and `aria-hidden`, so
+role queries (`getByRole('columnheader')`, a header button by its name) find each
+header once, and it is out of the focus order. Text queries and plain
+`querySelectorAll('th')` still see both copies -- scope them to
+`.fixed-table-head`, the one people see. The body also ends with a zero-height
+`tbody.column-ruler` (one empty cell per column), so exclude it when counting
+rows: `tbody:not(.column-ruler) > tr`.
 
 ---
 
