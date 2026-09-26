@@ -49,47 +49,51 @@
   text-align: fn.var-no-fallbacks(--text-align, $prefixes...);
 }
 
-@mixin heading-box-props($prefixes...) {
-  --_heading-color: #{fn.vars-fallback(fg, revert, $prefixes...)};
-  color: var(--_heading-color);
-  --_heading-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
-  background: var(--_heading-background);
-  --_heading-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
-  padding: var(--_heading-padding);
-  --_heading-border: #{fn.vars-fallback(border, none, $prefixes...)};
-  border: var(--_heading-border);
-  border-width: fn.prefixed-vars-optional(border-width, $prefixes...);
-  border-style: fn.prefixed-vars-optional(border-style, $prefixes...);
-  border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
-  --_heading-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
-  border-radius: var(--_heading-border-radius);
-  --_heading-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
-  box-shadow: var(--_heading-box-shadow);
+/* Per-level heading (h1-h6) box/typography properties, resolved to PRIVATE,
+   inheriting custom properties (--_h1-color, --_h2-font-size, etc) rather than
+   assigned directly to a matched h1-h6 selector. Nothing in this file matches
+   an actual heading element anymore -- see typography-context.css (vars/), which
+   is the single, global, :where()-scoped rule that actually reads these vars
+   and applies them to real elements. That split is what lets a component
+   nested arbitrarily deep (through <article>, <Tile>, whatever) still get the
+   nearest ancestor's heading styling: these are ordinary inherited custom
+   properties, so DOM proximity decides which component's values apply, not
+   selector specificity or stylesheet order. See AGENTS-INTERNAL.md. */
+@mixin heading-box-context-vars($var-prefix, $prefixes...) {
+  --_#{$var-prefix}-color: #{fn.vars-fallback(fg, revert, $prefixes...)};
+  --_#{$var-prefix}-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
+  --_#{$var-prefix}-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
+  --_#{$var-prefix}-border: #{fn.vars-fallback(border, none, $prefixes...)};
+  --_#{$var-prefix}-border-width: #{fn.prefixed-vars-optional(border-width, $prefixes...)};
+  --_#{$var-prefix}-border-style: #{fn.prefixed-vars-optional(border-style, $prefixes...)};
+  --_#{$var-prefix}-border-color: #{fn.prefixed-vars-optional(border-color, $prefixes...)};
+  --_#{$var-prefix}-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
+  --_#{$var-prefix}-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
 }
 
-@mixin heading-typography-props($prefixes...) {
-  font-family: fn.var-with-fallbacks(--font-family, list.append($prefixes, revert)...);
-  text-transform: fn.var-with-fallbacks(
-    --text-transform,
-    list.append($prefixes, revert)...
-  );
-  text-decoration: fn.var-with-fallbacks(
-    --text-decoration,
-    list.append($prefixes, revert)...
-  );
-  font-size: fn.vars-fallback(font-size, revert, $prefixes...);
-  font-weight: fn.var-with-fallbacks(--font-weight, list.append($prefixes, revert)...);
-  line-height: fn.var-with-fallbacks(--line-height, list.append($prefixes, revert)...);
-  letter-spacing: fn.var-with-fallbacks(
-    --letter-spacing,
-    list.append($prefixes, revert)...
-  );
-  text-indent: fn.var-with-fallbacks(--indent, list.append($prefixes, revert)...);
-  font-variant: fn.var-with-fallbacks(--font-variant, list.append($prefixes, revert)...);
-  text-align: fn.var-with-fallbacks(--text-align, list.append($prefixes, revert)...);
+@mixin heading-typography-context-vars($var-prefix, $prefixes...) {
+  --_#{$var-prefix}-font-family: #{fn.var-with-fallbacks(--font-family, list.append($prefixes, revert)...)};
+  --_#{$var-prefix}-text-transform: #{fn.var-with-fallbacks(
+      --text-transform,
+      list.append($prefixes, revert)...
+    )};
+  --_#{$var-prefix}-text-decoration: #{fn.var-with-fallbacks(
+      --text-decoration,
+      list.append($prefixes, revert)...
+    )};
+  --_#{$var-prefix}-font-size: #{fn.vars-fallback(font-size, revert, $prefixes...)};
+  --_#{$var-prefix}-font-weight: #{fn.var-with-fallbacks(--font-weight, list.append($prefixes, revert)...)};
+  --_#{$var-prefix}-line-height: #{fn.var-with-fallbacks(--line-height, list.append($prefixes, revert)...)};
+  --_#{$var-prefix}-letter-spacing: #{fn.var-with-fallbacks(
+      --letter-spacing,
+      list.append($prefixes, revert)...
+    )};
+  --_#{$var-prefix}-text-indent: #{fn.var-with-fallbacks(--indent, list.append($prefixes, revert)...)};
+  --_#{$var-prefix}-font-variant: #{fn.var-with-fallbacks(--font-variant, list.append($prefixes, revert)...)};
+  --_#{$var-prefix}-text-align: #{fn.var-with-fallbacks(--text-align, list.append($prefixes, revert)...)};
 }
 
-@mixin heading-props-for($level, $group, $prefixes...) {
+@mixin heading-context-vars-for($var-prefix, $level, $group, $prefixes...) {
   $level-prefixes: fn.map-prefixes($level, $prefixes);
   $group-prefixes: fn.map-prefixes($group, $prefixes);
   $heading-prefixes: fn.map-prefixes(heading, $prefixes);
@@ -109,8 +113,143 @@
   $resolved-prefixes: list.append($resolved-prefixes, $group, $separator: comma);
   $resolved-prefixes: list.append($resolved-prefixes, heading, $separator: comma);
 
-  @include heading-box-props($resolved-prefixes...);
-  @include heading-typography-props($resolved-prefixes...);
+  @include heading-box-context-vars($var-prefix, $resolved-prefixes...);
+  @include heading-typography-context-vars($var-prefix, $resolved-prefixes...);
+}
+
+/* All six heading levels' context vars in one call -- what every
+   "typography container" component (Container, Card, Tile, TextLayout, ...)
+   includes on itself once, alongside the shared --_heading-* vars below. */
+@mixin heading-context-vars($prefixes...) {
+  @include heading-context-vars-for(h1, heading-1, heading-major, $prefixes...);
+  @include heading-context-vars-for(h2, heading-2, heading-major, $prefixes...);
+  @include heading-context-vars-for(h3, heading-3, heading, $prefixes...);
+  @include heading-context-vars-for(h4, heading-4, heading, $prefixes...);
+  @include heading-context-vars-for(h5, heading-5, heading-minor, $prefixes...);
+  @include heading-context-vars-for(h6, heading-6, heading-minor, $prefixes...);
+}
+
+/* Shared prose-measure group: p, blockquote, dl, ul, ol. li/dt/dd don't get
+   their own vars -- they're never wider than their ul/ol/dl parent's own
+   max-width box, so they're already bounded for free by ordinary block
+   layout, not by anything selector-based reaching them individually. */
+@mixin prose-context-vars($prefixes...) {
+  --_prose-max-width: #{fn.var-with-fallbacks(--line-width, list.append($prefixes, 40em)...)};
+  --_prose-font-family: #{fn.var-with-fallbacks(
+      --body-font-family,
+      list.append($prefixes, var(--font-family))...
+    )};
+  --_prose-line-height: #{fn.var-with-fallbacks(--line-height, list.append($prefixes, 1.5)...)};
+  --_prose-margin-inline: #{fn.var-with-fallbacks(
+      --prose-margin-inline,
+      list.append($prefixes, auto)...
+    )};
+  --_prose-font-weight: #{fn.var-no-fallbacks(--body-font-weight, $prefixes...)};
+}
+
+/* p specifically also gets the fuller typography-props-bare treatment
+   (paragraph-prefixed), which -- same as in the original selector-based
+   version -- is declared/consumed AFTER the shared prose vars above, so it
+   wins for whichever properties both groups set. */
+@mixin paragraph-context-vars($prefixes...) {
+  $paragraph-prefixes: list.append(fn.map-prefixes(paragraph, $prefixes), paragraph);
+  --_paragraph-font-family: #{fn.vars(font-family, $paragraph-prefixes...)};
+  --_paragraph-text-transform: #{fn.vars(text-transform, $paragraph-prefixes...)};
+  --_paragraph-text-decoration: #{fn.vars(text-decoration, $paragraph-prefixes...)};
+  --_paragraph-font-size: #{fn.vars(font-size, $paragraph-prefixes...)};
+  --_paragraph-font-weight: #{fn.vars(font-weight, $paragraph-prefixes...)};
+  --_paragraph-line-height: #{fn.vars(line-height, $paragraph-prefixes...)};
+  --_paragraph-letter-spacing: #{fn.vars(letter-spacing, $paragraph-prefixes...)};
+  --_paragraph-text-indent: #{fn.vars(indent, $paragraph-prefixes...)};
+  --_paragraph-font-variant: #{fn.vars(font-variant, $paragraph-prefixes...)};
+  --_paragraph-text-align: #{fn.vars(text-align, $paragraph-prefixes...)};
+}
+
+/* The first paragraph in a typography context (p:first-of-type, or a p right
+   after a heading) gets its own, slightly different treatment -- larger lede
+   text, no top margin. Structural matching (:first-of-type, `h1 + p`) still
+   has to happen where the real element is, in the global consumer rule; only
+   the VALUES move to context vars here. */
+@mixin first-paragraph-context-vars($prefixes...) {
+  $first-paragraph-prefixes: fn.map-prefixes(first-paragraph, $prefixes);
+  $paragraph-prefixes: list.append(fn.map-prefixes(paragraph, $prefixes), paragraph);
+  $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
+
+  @each $prefix in $paragraph-prefixes {
+    $first-paragraph-fallback-prefixes: list.append(
+      $first-paragraph-fallback-prefixes,
+      $prefix,
+      $separator: comma
+    );
+  }
+
+  --_first-paragraph-font-family: #{fn.vars(font-family, $first-paragraph-fallback-prefixes...)};
+  --_first-paragraph-text-transform: #{fn.vars(
+      text-transform,
+      $first-paragraph-fallback-prefixes...
+    )};
+  --_first-paragraph-text-decoration: #{fn.vars(
+      text-decoration,
+      $first-paragraph-fallback-prefixes...
+    )};
+  --_first-paragraph-font-weight: #{fn.vars(font-weight, $first-paragraph-fallback-prefixes...)};
+  --_first-paragraph-letter-spacing: #{fn.vars(
+      letter-spacing,
+      $first-paragraph-fallback-prefixes...
+    )};
+  --_first-paragraph-text-indent: #{fn.vars(indent, $first-paragraph-fallback-prefixes...)};
+  --_first-paragraph-font-variant: #{fn.vars(
+      font-variant,
+      $first-paragraph-fallback-prefixes...
+    )};
+  --_first-paragraph-text-align: #{fn.vars(text-align, $first-paragraph-fallback-prefixes...)};
+  // var-with-fallbacks appends the base name to each prefix itself, so these
+  // take the raw $prefixes -- pre-mapping them would double up on
+  // "first-paragraph" (e.g. --body-first-paragraph-first-paragraph-font-size).
+  --_first-paragraph-font-size: #{fn.var-with-fallbacks(
+      --first-paragraph-font-size,
+      list.append($prefixes, fn.vars(font-size, $paragraph-prefixes...))...
+    )};
+  --_first-paragraph-line-height: #{fn.var-with-fallbacks(
+      --first-paragraph-line-height,
+      list.append($prefixes, fn.vars(line-height, $paragraph-prefixes...))...
+    )};
+  --_first-paragraph-margin-top: #{fn.var-with-fallbacks(
+      --first-paragraph-margin-top,
+      list.append($prefixes, 0)...
+    )};
+}
+
+@mixin first-line-context-vars($prefixes...) {
+  $resolved: list.append(fn.map-prefixes-include-base(first-line, $prefixes), first-line);
+  --_first-line-font-family: #{fn.vars(font-family, $resolved...)};
+  --_first-line-text-transform: #{fn.vars(text-transform, $resolved...)};
+  --_first-line-text-decoration: #{fn.vars(text-decoration, $resolved...)};
+  --_first-line-font-size: #{fn.vars(font-size, $resolved...)};
+  --_first-line-font-weight: #{fn.vars(font-weight, $resolved...)};
+  --_first-line-line-height: #{fn.vars(line-height, $resolved...)};
+  --_first-line-letter-spacing: #{fn.vars(letter-spacing, $resolved...)};
+  --_first-line-text-indent: #{fn.vars(indent, $resolved...)};
+  --_first-line-font-variant: #{fn.vars(font-variant, $resolved...)};
+  --_first-line-text-align: #{fn.vars(text-align, $resolved...)};
+}
+
+@mixin first-letter-context-vars($prefixes...) {
+  $resolved: fn.map-prefixes-include-base(first-letter, $prefixes);
+  --_first-letter-font-family: #{fn.vars(font-family, $resolved...)};
+  --_first-letter-text-transform: #{fn.vars(text-transform, $resolved...)};
+  --_first-letter-text-decoration: #{fn.vars(text-decoration, $resolved...)};
+  --_first-letter-font-size: #{fn.vars(font-size, $resolved...)};
+  --_first-letter-font-weight: #{fn.vars(font-weight, $resolved...)};
+  --_first-letter-line-height: #{fn.vars(line-height, $resolved...)};
+  --_first-letter-letter-spacing: #{fn.vars(letter-spacing, $resolved...)};
+  --_first-letter-text-indent: #{fn.vars(indent, $resolved...)};
+  --_first-letter-font-variant: #{fn.vars(font-variant, $resolved...)};
+  --_first-letter-text-align: #{fn.vars(text-align, $resolved...)};
+  --_first-letter-link-bg: #{fn.vars(link-bg, $prefixes...)};
+  --_first-letter-link-fg: #{fn.vars(link-fg, $prefixes...)};
+  --_first-letter-background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
+  --_first-letter-color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};
 }
 
 @mixin typography-container-props($prefixes...) {
@@ -121,163 +260,30 @@
   );
 
   @include typography-props($prefixes...);
-  & :global(p),
-  :global(blockquote),
-  :global(dl),
-  :global(ul),
-  :global(ol) {
-    max-width: fn.var-with-fallbacks(--line-width, list.append($prefixes, 40em)...);
-    font-family: fn.var-with-fallbacks(
-      --body-font-family,
-      list.append($prefixes, var(--font-family))...
-    );
-    line-height: fn.var-with-fallbacks(
-      --line-height,
-      list.append($prefixes, 1.5)...
-    );
-    margin-left: auto;
-    margin-right: auto;
-    font-weight: fn.var-no-fallbacks(--body-font-weight, $prefixes...);
-  }
-  & :global(h1),
-  :global(h2),
-  :global(h3),
-  :global(h4),
-  :global(h5),
-  :global(h6) {
-    max-width: fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...);
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
-    margin-bottom: fn.var-with-fallbacks(
+  @include prose-context-vars($prefixes...);
+  @include paragraph-context-vars($prefixes...);
+  @include first-paragraph-context-vars($prefixes...);
+  @include first-line-context-vars($prefixes...);
+  @include first-letter-context-vars($prefixes...);
+  /* Private context vars only -- consumed once, globally, by the :where()
+     rule in vars/typography-context.css, not by a selector matching h1-h6 here.
+     See the comment above heading-box-context-vars(). */
+  --_heading-max-width: #{fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...)};
+  --_heading-margin-inline: #{fn.var-with-fallbacks(
+      --heading-margin-inline,
+      list.append($prefixes, auto)...
+    )};
+  --_heading-margin-bottom: #{fn.var-with-fallbacks(
       --heading-margin-bottom,
       list.append($prefixes, 0)...
-    );
-    margin-top: fn.var-with-fallbacks(
+    )};
+  --_heading-margin-top: #{fn.var-with-fallbacks(
       --heading-margin-top,
       list.append($prefixes, 1.5em)...
-    );
-  }
-
-  & :global(h1:first-child),
-  :global(h2:first-child),
-  :global(h3:first-child),
-  :global(h4:first-child),
-  :global(h5:first-child),
-  :global(h6:first-child) {
-    margin-top: fn.var-with-fallbacks(
+    )};
+  --_heading-first-margin-top: #{fn.var-with-fallbacks(
       --first-heading-margin-top,
       list.append($prefixes, 0)...
-    );
-  }
-
-  & :global(h1) {
-    @include heading-props-for(heading-1, heading-major, $prefixes...);
-  }
-
-  & :global(h2) {
-    @include heading-props-for(heading-2, heading-major, $prefixes...);
-  }
-
-  & :global(h3) {
-    @include heading-props-for(heading-3, heading, $prefixes...);
-  }
-
-  & :global(h4) {
-    @include heading-props-for(heading-4, heading, $prefixes...);
-  }
-
-  & :global(h5) {
-    @include heading-props-for(heading-5, heading-minor, $prefixes...);
-  }
-
-  & :global(h6) {
-    @include heading-props-for(heading-6, heading-minor, $prefixes...);
-  }
-
-  & :global(p) {
-    @include typography-props-bare(
-      list.append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
-    );
-  }
-  & :global(p:first-of-type),
-  :global(h1 + p),
-  :global(h2 + p),
-  :global(h3 + p),
-  :global(h4 + p),
-  :global(h5 + p),
-  :global(h6 + p) {
-    $first-paragraph-prefixes: fn.map-prefixes(first-paragraph, $prefixes);
-    $paragraph-prefixes: list.append(fn.map-prefixes(paragraph, $prefixes), paragraph);
-    $first-paragraph-fallback-prefixes: $first-paragraph-prefixes;
-
-    @each $prefix in $paragraph-prefixes {
-      $first-paragraph-fallback-prefixes: list.append(
-        $first-paragraph-fallback-prefixes,
-        $prefix,
-        $separator: comma
-      );
-    }
-
-    @include typography-props-bare(
-      list.append($first-paragraph-fallback-prefixes, first-paragraph)...
-    );
-    // var-with-fallbacks appends the base name to each prefix itself, so these
-    // take the raw $prefixes -- pre-mapping them would double up on
-    // "first-paragraph" (e.g. --body-first-paragraph-first-paragraph-font-size).
-    font-size: fn.var-with-fallbacks(
-      --first-paragraph-font-size,
-      list.append(
-          $prefixes,
-          fn.vars(
-            font-size,
-            list.append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
-          )
-        )...
-    );
-    line-height: fn.var-with-fallbacks(
-      --first-paragraph-line-height,
-      list.append(
-          $prefixes,
-          fn.vars(
-            line-height,
-            list.append(fn.map-prefixes(paragraph, $prefixes), paragraph)...
-          )
-        )...
-    );
-    margin-block-start: fn.var-with-fallbacks(
-      --first-paragraph-margin-top,
-      list.append($prefixes, 0)...
-    );
-  }
-  & :global(p:first-of-type::first-line),
-  :global(h1 + p::first-line),
-  :global(h2 + p::first-line),
-  :global(h3 + p::first-line),
-  :global(h4 + p::first-line),
-  :global(h5 + p::first-line),
-  :global(h6 + p::first-line) {
-    @include typography-props-bare(
-      list.append(fn.map-prefixes-include-base(first-line, $prefixes), first-line)...
-    );
-  }
-
-  & :global(p:first-of-type::first-letter),
-  :global(h1 + p::first-letter),
-  :global(h2 + p::first-letter),
-  :global(h3 + p::first-letter),
-  :global(h4 + p::first-letter),
-  :global(h5 + p::first-letter),
-  :global(h6 + p::first-letter) {
-    @include typography-props-bare(
-      fn.map-prefixes-include-base(first-letter, $prefixes)...
-    );
-    --link-bg: #{fn.vars(link-bg, $prefixes...)};
-    --link-fg: #{fn.vars(link-fg, $prefixes...)};
-    background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
-    color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};
-    float: var(--first-letter-float, none);
-    margin-right: var(--first-letter-margin-right, 0);
-    padding-top: var(--first-letter-padding-top, 0);
-  }
+    )};
+  @include heading-context-vars($prefixes...);
 }
