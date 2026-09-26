@@ -54,12 +54,39 @@
   </span>
 </div>
 
+<div class="row">
+  <span data-testid="anchor-rich">
+    <Tooltip>
+      {#snippet tooltip()}
+        <p>rich tooltip body</p>
+      {/snippet}
+      <Button>rich</Button>
+    </Tooltip>
+  </span>
+</div>
+
+<!-- Pinned against the viewport's bottom and right edges, so the tooltip has
+     to flip: above the target, and to its left. -->
+<span data-testid="anchor-bottom" class="pin" style="bottom: 12px; left: 40%;">
+  <Tooltip tooltipText="flips above a target at the bottom edge">
+    <Button>bottom</Button>
+  </Tooltip>
+</span>
+<span data-testid="anchor-right" class="pin" style="top: 40%; right: 12px;">
+  <Tooltip tooltipText="flips left of a target at the right edge">
+    <Button>right</Button>
+  </Tooltip>
+</span>
+
 <div class="tall-spacer"></div>
 
 <style>
   .tall-spacer {
     /* Give the page room to scroll. */
     height: 150vh;
+  }
+  .pin {
+    position: fixed;
   }
   .row {
     /* Push targets well away from the viewport origin so a mis-anchored

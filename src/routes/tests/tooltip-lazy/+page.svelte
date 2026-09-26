@@ -4,7 +4,7 @@
   // Manual test for lazy tooltip content mounting.
   // Content should NOT be in the DOM until a tooltip is first hovered/focused,
   // and positioning (including flip-up near the viewport bottom) must still be
-  // correct on that FIRST show — the measurement element has to be populated
+  // correct on that FIRST show — the content has to be mounted
   // before it's measured.
 
   const cells = Array.from({ length: 40 }, (_, i) => i + 1);
@@ -25,7 +25,7 @@
   <strong data-testid="count">{mountedCount}</strong>
   <br />
   Expect <strong>0</strong> before hovering anything. Each hovered tooltip adds
-  2 (popover + measurement copy).
+  1 (the popover itself -- there is no measurement copy).
 </p>
 
 <h2>Rich snippet tooltips</h2>

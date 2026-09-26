@@ -13,7 +13,6 @@
 
   let tooltipDiv: HTMLElement | undefined = $state();
   let targetDiv: HTMLElement | undefined = $state();
-  let tooltipMeasurementDiv: HTMLElement | undefined = $state();
   type Props = ContainProps<
     HTMLAttributes<HTMLElement>,
     {
@@ -63,8 +62,8 @@
   /**
    * Tooltip content mounts on first show, not on mount. A page with many
    * tooltips (e.g. a grid of cells each carrying a rich tooltip snippet)
-   * would otherwise build every tooltip twice — popover + measurement copy —
-   * before the user hovers anything. Once shown, content stays mounted.
+   * would otherwise build every tooltip's content before the user hovers
+   * anything. Once shown, content stays mounted.
    */
   let hasRendered = $state(false);
   /** Guards against the pointer/focus leaving while content mounts. */
@@ -148,32 +147,32 @@
    * Place the tooltip against its target. Split out from showPopover so it can
    * re-run while the tooltip is open: the tooltip is `position: fixed` against
    * viewport coordinates, so any scroll or resize invalidates it.
+   *
+   * Measures the popover itself, so it must already be open -- a closed
+   * popover is `display: none` and has no size. That is safe to do without a
+   * flash: the popover opens, is measured and is placed in one synchronous
+   * run, and the browser does not paint until it finishes. (It also measures
+   * more truly than an offscreen copy could: a fixed box's width, and so its
+   * wrapped height, depends on where it sits horizontally -- which is why the
+   * horizontal side is placed before the height is read.)
    */
   function positionTooltip(): boolean {
-    if (!tooltipDiv || !tooltipMeasurementDiv) return false;
+    if (!tooltipDiv || !tooltipDiv.matches(":popover-open")) return false;
     const targetRect = resolveTargetRect();
     if (!targetRect) return false;
-    let targetHeight = tooltipMeasurementDiv.getBoundingClientRect().height;
-    let targetWidth = tooltipMeasurementDiv.getBoundingClientRect().width;
     renderedHorizontal = horizontal;
     renderedVertical = vertical;
 
-    // Adjust vertical position based on position in window.
-    if (
-      renderedVertical === "top" &&
-      //targetRect.top - window.scrollY < window.innerHeight / 3
-      targetRect.top < targetHeight + 32
-    ) {
-      renderedVertical = "bottom";
-    } else if (
-      renderedVertical === "bottom" &&
-      //targetRect.bottom > (window.innerHeight * 2) / 3
-      targetRect.bottom + targetHeight > window.innerHeight - 32
-    ) {
-      renderedVertical = "top";
-    }
+    const tooltipGap =
+      Number(
+        window
+          .getComputedStyle(tooltipDiv)
+          .getPropertyValue("--tooltip-arrow-size")
+          .replace("px", ""),
+      ) || 8;
 
-    // Adjust horizontal position based on position in window
+    // Horizontal first: it depends only on the target, and it decides how
+    // much room the tooltip has to lay out in.
     if (
       renderedHorizontal === "left" &&
       targetRect.left < window.innerWidth / 3
@@ -185,23 +184,6 @@
     ) {
       renderedHorizontal = "left";
     }
-    const tooltipGap =
-      Number(
-        window
-          .getComputedStyle(tooltipDiv)
-          .getPropertyValue("--tooltip-arrow-size")
-          .replace("px", ""),
-      ) || 8;
-    // Adjust tooltip style to match target element
-    if (renderedVertical === "bottom") {
-      tooltipDiv.style.bottom = "unset";
-      tooltipDiv.style.top = `${targetRect.top + targetRect.height}px`;
-      tooltipDiv.style.marginTop = "var(--tooltipGap, 8px)";
-    } else if (renderedVertical == "top") {
-      tooltipDiv.style.bottom = `${window.innerHeight - targetRect.top}px`;
-      tooltipDiv.style.top = "unset";
-      tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
-    }
     if (renderedHorizontal == "right") {
       // Anchor so that the arrow center (at 2*tooltipGap from tooltip left) aligns with target center
       tooltipDiv.style.left = `${targetRect.left + targetRect.width / 2 - 2 * tooltipGap}px`;
@@ -212,9 +194,30 @@
       tooltipDiv.style.left = "unset";
     }
 
-    // Top and Left will put us OVER the element (matching top and left corner)
-    // Let's use the margin to adjust positioning...
+    // Now its height at the width it will actually have.
+    const tooltipHeight = tooltipDiv.getBoundingClientRect().height;
 
+    if (renderedVertical === "top" && targetRect.top < tooltipHeight + 32) {
+      renderedVertical = "bottom";
+    } else if (
+      renderedVertical === "bottom" &&
+      targetRect.bottom + tooltipHeight > window.innerHeight - 32
+    ) {
+      renderedVertical = "top";
+    }
+    // Each side clears the other's margin, or a tooltip that flips keeps a
+    // stale gap on the side it left.
+    if (renderedVertical === "bottom") {
+      tooltipDiv.style.bottom = "unset";
+      tooltipDiv.style.top = `${targetRect.top + targetRect.height}px`;
+      tooltipDiv.style.marginTop = "var(--tooltipGap, 8px)";
+      tooltipDiv.style.marginBottom = "";
+    } else {
+      tooltipDiv.style.bottom = `${window.innerHeight - targetRect.top}px`;
+      tooltipDiv.style.top = "unset";
+      tooltipDiv.style.marginBottom = "var(--tooltipGap, 8px)";
+      tooltipDiv.style.marginTop = "";
+    }
     return true;
   }
 
@@ -260,14 +263,19 @@
     wantsShow = true;
     if (!hasRendered) {
       hasRendered = true;
-      // Wait for the content to exist before measuring it — positioning reads
-      // the measurement element's height/width to decide flip direction.
+      // Wait for the content to exist before measuring it -- positioning
+      // reads the popover's height to decide whether to flip. Still no paint
+      // in between: tick() resolves in a microtask, before the browser
+      // renders.
       await tick();
       if (!wantsShow || tooltipDisabled) return;
     }
-    if (!positionTooltip()) return;
-    watchViewport();
     tooltipDiv?.togglePopover(true);
+    if (!positionTooltip()) {
+      tooltipDiv?.togglePopover(false);
+      return;
+    }
+    watchViewport();
   }
 </script>
 
@@ -293,13 +301,6 @@
       class:left={renderedHorizontal === "left"}
       class:right={renderedHorizontal === "right"}
     >
-      {#if hasRendered}
-        {#if tooltip}{@render tooltip()}{:else}
-          {tooltipText}
-        {/if}
-      {/if}
-    </div>
-    <div class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
       {#if hasRendered}
         {#if tooltip}{@render tooltip()}{:else}
           {tooltipText}
@@ -335,13 +336,6 @@
         {/if}
       {/if}
     </span>
-    <span class="tooltip invisible measure" bind:this={tooltipMeasurementDiv}>
-      {#if hasRendered}
-        {#if tooltip}{@render tooltip()}{:else}
-          {tooltipText}
-        {/if}
-      {/if}
-    </span>
   </span>
 {/if}
 
@@ -364,8 +358,8 @@
   }
 
   /* Boxless on purpose: wrapping the target must not change its layout. The
-     tooltip and its measurement copy live outside this element so that
-     measuring the target's contents never picks them up. */
+     tooltip lives outside this element so that measuring the target's
+     contents never picks it up. */
   .tooltip-target {
     display: contents;
   }
@@ -397,9 +391,5 @@
   }
   .left::after {
     right: var(--tooltip-arrow-size, 8px);
-  }
-  .invisible {
-    visibility: hidden;
-    pointer-events: none;
   }
 </style>
