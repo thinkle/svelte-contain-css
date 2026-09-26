@@ -140,9 +140,13 @@
       list.append($prefixes, var(--font-family))...
     )};
   --_prose-line-height: #{fn.var-with-fallbacks(--line-height, list.append($prefixes, 1.5)...)};
+  /* Start-aligned: a measure-capped paragraph in a Card or a Tile sits
+     against its container's leading edge like any other block. Centring the
+     measure is what a prose column asks for, and TextLayout -- the one
+     component that IS a prose column -- opts back in to `auto`. */
   --_prose-margin-inline: #{fn.var-with-fallbacks(
       --prose-margin-inline,
-      list.append($prefixes, auto)...
+      list.append($prefixes, 0)...
     )};
   --_prose-font-weight: #{fn.var-no-fallbacks(--body-font-weight, $prefixes...)};
 }
@@ -269,9 +273,11 @@
      rule in vars/typography-context.css, not by a selector matching h1-h6 here.
      See the comment above heading-box-context-vars(). */
   --_heading-max-width: #{fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...)};
+  /* Same as --_prose-margin-inline: start-aligned in a container, centred
+     only by TextLayout. */
   --_heading-margin-inline: #{fn.var-with-fallbacks(
       --heading-margin-inline,
-      list.append($prefixes, auto)...
+      list.append($prefixes, 0)...
     )};
   --_heading-margin-bottom: #{fn.var-with-fallbacks(
       --heading-margin-bottom,

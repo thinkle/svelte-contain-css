@@ -28,6 +28,10 @@
   div {
     @include typography-container-props(body, text);
     @include typography-props(body, text);
+    /* A prose column centres its measure; other typography containers keep
+       it start-aligned (see typography-container-props). */
+    --_prose-margin-inline: #{var-with-fallbacks(--prose-margin-inline, body, text, auto)};
+    --_heading-margin-inline: #{var-with-fallbacks(--heading-margin-inline, body, text, auto)};
     width: var(--text-width, var(--body-width, 100%));
     /* Not margin-props() (_box.scss): that defaults both axes to 0, but a
        TextLayout has always centred itself horizontally by default. Same
@@ -102,29 +106,29 @@
   @each $level in h1, h2, h3, h4, h5, h6 {
     div :global(#{$level}) {
       box-sizing: border-box;
-      max-width: var(--_heading-max-width);
-      margin-inline: var(--_heading-margin-inline);
-      margin-bottom: var(--_heading-margin-bottom);
-      margin-top: var(--_heading-margin-top);
-      color: var(--_#{$level}-color);
-      background: var(--_#{$level}-background);
-      padding: var(--_#{$level}-padding);
-      border: var(--_#{$level}-border);
-      border-width: var(--_#{$level}-border-width);
-      border-style: var(--_#{$level}-border-style);
-      border-color: var(--_#{$level}-border-color);
-      border-radius: var(--_#{$level}-border-radius);
-      box-shadow: var(--_#{$level}-box-shadow);
-      font-family: var(--_#{$level}-font-family);
-      text-transform: var(--_#{$level}-text-transform);
-      text-decoration: var(--_#{$level}-text-decoration);
-      font-size: var(--_#{$level}-font-size);
-      font-weight: var(--_#{$level}-font-weight);
-      line-height: var(--_#{$level}-line-height);
-      letter-spacing: var(--_#{$level}-letter-spacing);
-      text-indent: var(--_#{$level}-text-indent);
-      font-variant: var(--_#{$level}-font-variant);
-      text-align: var(--_#{$level}-text-align);
+      max-width: var(--_heading-max-width, revert);
+      margin-inline: var(--_heading-margin-inline, revert);
+      margin-bottom: var(--_heading-margin-bottom, revert);
+      margin-top: var(--_heading-margin-top, revert);
+      color: var(--_#{$level}-color, revert);
+      background: var(--_#{$level}-background, revert);
+      padding: var(--_#{$level}-padding, revert);
+      border: var(--_#{$level}-border, revert);
+      border-width: var(--_#{$level}-border-width, revert);
+      border-style: var(--_#{$level}-border-style, revert);
+      border-color: var(--_#{$level}-border-color, revert);
+      border-radius: var(--_#{$level}-border-radius, revert);
+      box-shadow: var(--_#{$level}-box-shadow, revert);
+      font-family: var(--_#{$level}-font-family, revert);
+      text-transform: var(--_#{$level}-text-transform, revert);
+      text-decoration: var(--_#{$level}-text-decoration, revert);
+      font-size: var(--_#{$level}-font-size, revert);
+      font-weight: var(--_#{$level}-font-weight, revert);
+      line-height: var(--_#{$level}-line-height, revert);
+      letter-spacing: var(--_#{$level}-letter-spacing, revert);
+      text-indent: var(--_#{$level}-text-indent, revert);
+      font-variant: var(--_#{$level}-font-variant, revert);
+      text-align: var(--_#{$level}-text-align, revert);
     }
   }
 
@@ -134,7 +138,7 @@
   div :global(h4:first-child),
   div :global(h5:first-child),
   div :global(h6:first-child) {
-    margin-top: var(--_heading-first-margin-top);
+    margin-top: var(--_heading-first-margin-top, revert);
   }
 
   /* Same real-specificity restatement for the prose/paragraph groups, reading
@@ -144,24 +148,24 @@
   div :global(dl),
   div :global(ul),
   div :global(ol) {
-    max-width: var(--_prose-max-width);
-    margin-inline: var(--_prose-margin-inline);
-    font-family: var(--_prose-font-family);
-    line-height: var(--_prose-line-height);
-    font-weight: var(--_prose-font-weight);
+    max-width: var(--_prose-max-width, revert);
+    margin-inline: var(--_prose-margin-inline, revert);
+    font-family: var(--_prose-font-family, revert);
+    line-height: var(--_prose-line-height, revert);
+    font-weight: var(--_prose-font-weight, revert);
   }
 
   div :global(p) {
-    font-family: var(--_paragraph-font-family);
-    text-transform: var(--_paragraph-text-transform);
-    text-decoration: var(--_paragraph-text-decoration);
-    font-size: var(--_paragraph-font-size);
-    font-weight: var(--_paragraph-font-weight);
-    line-height: var(--_paragraph-line-height);
-    letter-spacing: var(--_paragraph-letter-spacing);
-    text-indent: var(--_paragraph-text-indent);
-    font-variant: var(--_paragraph-font-variant);
-    text-align: var(--_paragraph-text-align);
+    font-family: var(--_paragraph-font-family, revert);
+    text-transform: var(--_paragraph-text-transform, revert);
+    text-decoration: var(--_paragraph-text-decoration, revert);
+    font-size: var(--_paragraph-font-size, revert);
+    font-weight: var(--_paragraph-font-weight, revert);
+    line-height: var(--_paragraph-line-height, revert);
+    letter-spacing: var(--_paragraph-letter-spacing, revert);
+    text-indent: var(--_paragraph-text-indent, revert);
+    font-variant: var(--_paragraph-font-variant, revert);
+    text-align: var(--_paragraph-text-align, revert);
   }
 
   div :global(p:first-of-type),
@@ -171,17 +175,17 @@
   div :global(h4 + p),
   div :global(h5 + p),
   div :global(h6 + p) {
-    font-family: var(--_first-paragraph-font-family);
-    text-transform: var(--_first-paragraph-text-transform);
-    text-decoration: var(--_first-paragraph-text-decoration);
-    font-weight: var(--_first-paragraph-font-weight);
-    letter-spacing: var(--_first-paragraph-letter-spacing);
-    text-indent: var(--_first-paragraph-text-indent);
-    font-variant: var(--_first-paragraph-font-variant);
-    text-align: var(--_first-paragraph-text-align);
-    font-size: var(--_first-paragraph-font-size);
-    line-height: var(--_first-paragraph-line-height);
-    margin-block-start: var(--_first-paragraph-margin-top);
+    font-family: var(--_first-paragraph-font-family, revert);
+    text-transform: var(--_first-paragraph-text-transform, revert);
+    text-decoration: var(--_first-paragraph-text-decoration, revert);
+    font-weight: var(--_first-paragraph-font-weight, revert);
+    letter-spacing: var(--_first-paragraph-letter-spacing, revert);
+    text-indent: var(--_first-paragraph-text-indent, revert);
+    font-variant: var(--_first-paragraph-font-variant, revert);
+    text-align: var(--_first-paragraph-text-align, revert);
+    font-size: var(--_first-paragraph-font-size, revert);
+    line-height: var(--_first-paragraph-line-height, revert);
+    margin-block-start: var(--_first-paragraph-margin-top, revert);
   }
 
   div :global(p:first-of-type::first-line),
@@ -191,16 +195,16 @@
   div :global(h4 + p::first-line),
   div :global(h5 + p::first-line),
   div :global(h6 + p::first-line) {
-    font-family: var(--_first-line-font-family);
-    text-transform: var(--_first-line-text-transform);
-    text-decoration: var(--_first-line-text-decoration);
-    font-size: var(--_first-line-font-size);
-    font-weight: var(--_first-line-font-weight);
-    line-height: var(--_first-line-line-height);
-    letter-spacing: var(--_first-line-letter-spacing);
-    text-indent: var(--_first-line-text-indent);
-    font-variant: var(--_first-line-font-variant);
-    text-align: var(--_first-line-text-align);
+    font-family: var(--_first-line-font-family, revert);
+    text-transform: var(--_first-line-text-transform, revert);
+    text-decoration: var(--_first-line-text-decoration, revert);
+    font-size: var(--_first-line-font-size, revert);
+    font-weight: var(--_first-line-font-weight, revert);
+    line-height: var(--_first-line-line-height, revert);
+    letter-spacing: var(--_first-line-letter-spacing, revert);
+    text-indent: var(--_first-line-text-indent, revert);
+    font-variant: var(--_first-line-font-variant, revert);
+    text-align: var(--_first-line-text-align, revert);
   }
 
   div :global(p:first-of-type::first-letter),
@@ -210,20 +214,20 @@
   div :global(h4 + p::first-letter),
   div :global(h5 + p::first-letter),
   div :global(h6 + p::first-letter) {
-    font-family: var(--_first-letter-font-family);
-    text-transform: var(--_first-letter-text-transform);
-    text-decoration: var(--_first-letter-text-decoration);
-    font-size: var(--_first-letter-font-size);
-    font-weight: var(--_first-letter-font-weight);
-    line-height: var(--_first-letter-line-height);
-    letter-spacing: var(--_first-letter-letter-spacing);
-    text-indent: var(--_first-letter-text-indent);
-    font-variant: var(--_first-letter-font-variant);
-    text-align: var(--_first-letter-text-align);
+    font-family: var(--_first-letter-font-family, revert);
+    text-transform: var(--_first-letter-text-transform, revert);
+    text-decoration: var(--_first-letter-text-decoration, revert);
+    font-size: var(--_first-letter-font-size, revert);
+    font-weight: var(--_first-letter-font-weight, revert);
+    line-height: var(--_first-letter-line-height, revert);
+    letter-spacing: var(--_first-letter-letter-spacing, revert);
+    text-indent: var(--_first-letter-text-indent, revert);
+    font-variant: var(--_first-letter-font-variant, revert);
+    text-align: var(--_first-letter-text-align, revert);
     --link-bg: var(--_first-letter-link-bg);
     --link-fg: var(--_first-letter-link-fg);
-    background: var(--_first-letter-background);
-    color: var(--_first-letter-color);
+    background: var(--_first-letter-background, revert);
+    color: var(--_first-letter-color, revert);
     float: var(--first-letter-float, none);
     margin-right: var(--first-letter-margin-right, 0);
     padding-top: var(--first-letter-padding-top, 0);
