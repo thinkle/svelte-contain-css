@@ -23,6 +23,9 @@
 
   let pushExpanded = $state<boolean | undefined>(undefined);
   let overlayExpanded = $state<boolean | undefined>(undefined);
+  let stickyRightOpen = $state<boolean | undefined>(undefined);
+  let stickyLeftOpen = $state<boolean | undefined>(undefined);
+  let unstuckOpen = $state<boolean | undefined>(undefined);
 </script>
 
 <div style="--sidebar-transition: 0s;">
@@ -101,3 +104,65 @@
   <Sidebar data-testid="sc-sidebar"><p>nav</p></Sidebar>
   <p data-testid="sc-content">beside</p>
 </SidebarContainer>
+
+<!-- `sticky`: a sheet beside content far taller than the viewport. Without
+     it the open sheet is as tall as the row; with it the sheet sticks near
+     the viewport top and scrolls its own list. `--sidebar-transition: 0s` so
+     geometry can be read straight after a click. -->
+<section
+  data-testid="sticky-section"
+  style="--sidebar-transition: 0s; margin-top: 120px; width: 900px; container-type: inline-size; display: flex;"
+>
+  <div data-testid="sticky-tall-content" style="flex: 1; height: 3000px;">
+    Tall content
+  </div>
+  <Sidebar
+    right
+    overlay
+    sticky
+    data-testid="sticky-right-sidebar"
+    bind:open={stickyRightOpen}
+  >
+    <ul data-testid="sticky-right-list">
+      {#each { length: 80 } as _, i}
+        <li>Column {i + 1}</li>
+      {/each}
+    </ul>
+  </Sidebar>
+</section>
+
+<section
+  data-testid="sticky-left-section"
+  style="--sidebar-transition: 0s; width: 900px; container-type: inline-size; display: flex;"
+>
+  <Sidebar overlay sticky data-testid="sticky-left-sidebar" bind:open={stickyLeftOpen}>
+    <p>Short left sheet</p>
+  </Sidebar>
+  <div style="flex: 1; height: 3000px;">Tall content</div>
+</section>
+
+<!-- The control: same shape, no `sticky`. -->
+<section
+  data-testid="unstuck-section"
+  style="--sidebar-transition: 0s; width: 900px; container-type: inline-size; display: flex;"
+>
+  <div style="flex: 1; height: 1500px;">Tall content</div>
+  <Sidebar right overlay data-testid="unstuck-sidebar" bind:open={unstuckOpen}>
+    <p>Stretches to the row</p>
+  </Sidebar>
+</section>
+
+<!-- A shut sticky sheet must not hold a short row open to its own height. -->
+<section
+  data-testid="sticky-short-section"
+  style="width: 900px; container-type: inline-size; display: flex;"
+>
+  <div data-testid="sticky-short-content" style="flex: 1; height: 60px;">Short</div>
+  <Sidebar right overlay sticky data-testid="sticky-short-sidebar">
+    <ul>
+      {#each { length: 40 } as _, i}
+        <li>Item {i + 1}</li>
+      {/each}
+    </ul>
+  </Sidebar>
+</section>

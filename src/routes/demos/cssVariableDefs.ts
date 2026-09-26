@@ -455,6 +455,27 @@ export let sidebarVars: CSSVariable[] = [
     group: "Overlay",
   },
   {
+    name: "--sidebar-sheet-top",
+    defaultValue: "var(--padding)",
+    type: "length",
+    unit: "px",
+    group: "Sticky sheet",
+  },
+  {
+    name: "--sidebar-sheet-reserve",
+    defaultValue: "calc(2 * var(--sidebar-sheet-top))",
+    type: "length",
+    unit: "rem",
+    group: "Sticky sheet",
+  },
+  {
+    name: "--sidebar-sheet-max-height",
+    defaultValue: "calc(100dvh - var(--sidebar-sheet-reserve))",
+    type: "text",
+    placeholder: "e.g., 60vh",
+    group: "Sticky sheet",
+  },
+  {
     name: "--grab-bar-expand",
     defaultValue: "'\\203A'",
     type: "text",

@@ -400,3 +400,140 @@ test.describe("SidebarContainer", () => {
     expect(box.height).toBeGreaterThan(100);
   });
 });
+
+/**
+ * `sticky`: the sheet follows the reader down a long page instead of
+ * stretching to the height of its row, and scrolls its own content once it
+ * reaches its max-height.
+ */
+test.describe("Sidebar sticky sheet", () => {
+  const sheetButton = '[data-audit-action="toggle-sidebar-sheet"]';
+
+  test("stays on screen while a tall row scrolls past it", async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 700 });
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("sticky-right-sidebar");
+    const button = sidebar.locator(sheetButton);
+    const panel = sidebar.locator("div.content");
+
+    await button.click();
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+
+    // Scroll well into the 3000px row.
+    await page.getByTestId("sticky-tall-content").evaluate((el) => {
+      window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + 1200);
+    });
+
+    const p = (await panel.boundingBox())!;
+    const b = (await button.boundingBox())!;
+    const viewport = page.viewportSize()!;
+    // Resting near the viewport top, not 1200px above it.
+    expect(p.y).toBeGreaterThanOrEqual(0);
+    expect(p.y).toBeLessThan(40);
+    // Its whole height is on screen, so whatever sits at its foot is reachable.
+    expect(p.y + p.height).toBeLessThanOrEqual(viewport.height);
+    // And the close button came with it.
+    expect(b.y).toBeGreaterThanOrEqual(p.y);
+    expect(b.y + b.height).toBeLessThan(p.y + p.height);
+  });
+
+  test("caps its height and scrolls its own content", async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 700 });
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("sticky-right-sidebar");
+    await sidebar.locator(sheetButton).click();
+    const panel = sidebar.locator("div.content");
+
+    const { clientHeight, scrollHeight, overflowY } = await panel.evaluate(
+      (el) => ({
+        clientHeight: el.clientHeight,
+        scrollHeight: el.scrollHeight,
+        overflowY: getComputedStyle(el).overflowY,
+      }),
+    );
+    expect(clientHeight).toBeLessThan(700);
+    expect(scrollHeight).toBeGreaterThan(clientHeight);
+    expect(overflowY).toBe("auto");
+  });
+
+  test("honours --sidebar-sheet-top and --sidebar-sheet-max-height", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1200, height: 700 });
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("sticky-right-sidebar");
+    await sidebar.evaluate((el) => {
+      el.style.setProperty("--sidebar-sheet-top", "100px");
+      el.style.setProperty("--sidebar-sheet-max-height", "300px");
+    });
+    await sidebar.locator(sheetButton).click();
+    await page.getByTestId("sticky-tall-content").evaluate((el) => {
+      window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + 1200);
+    });
+
+    const p = (await sidebar.locator("div.content").boundingBox())!;
+    expect(Math.round(p.y)).toBe(100);
+    expect(Math.round(p.height)).toBe(300);
+  });
+
+  test("keeps the unstuck geometry: right sheet on the right, button on its inner edge", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    for (const id of ["sticky-right-sidebar", "sticky-left-sidebar"]) {
+      const sidebar = page.getByTestId(id);
+      const button = sidebar.locator(sheetButton);
+      const panel = sidebar.locator("div.content");
+      const right = id.includes("right");
+
+      const shut = (await button.boundingBox())!;
+      const aside = (await sidebar.boundingBox())!;
+      // Shut, the button hugs the aside's outer edge.
+      if (right) expect(Math.round(shut.x + shut.width)).toBe(Math.round(aside.x + aside.width));
+      else expect(Math.round(shut.x)).toBe(Math.round(aside.x));
+
+      await button.scrollIntoViewIfNeeded();
+      await button.click();
+      const p = (await panel.boundingBox())!;
+      const b = (await button.boundingBox())!;
+
+      // The sheet is anchored to the same outer edge, and spills towards the
+      // content.
+      if (right) {
+        expect(Math.round(p.x + p.width)).toBe(Math.round(aside.x + aside.width));
+        // The open button sits just inside the sheet's left (inner) edge.
+        expect(Math.round(b.x)).toBe(Math.round(p.x));
+      } else {
+        expect(Math.round(p.x)).toBe(Math.round(aside.x));
+        expect(Math.round(b.x + b.width)).toBe(Math.round(p.x + p.width));
+      }
+      await button.click();
+    }
+  });
+
+  test("a shut sticky sheet does not hold a short row open", async ({ page }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const row = (await page.getByTestId("sticky-short-section").boundingBox())!;
+    expect(Math.round(row.height)).toBe(60);
+  });
+
+  test("without sticky, the sheet still stretches to its row", async ({ page }) => {
+    await page.goto(ROUTE);
+    await page.waitForLoadState("networkidle");
+
+    const sidebar = page.getByTestId("unstuck-sidebar");
+    await sidebar.locator(sheetButton).click();
+    const p = (await sidebar.locator("div.content").boundingBox())!;
+    expect(Math.round(p.height)).toBe(1500);
+  });
+});

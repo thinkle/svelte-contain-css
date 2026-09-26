@@ -28,6 +28,23 @@
        */
       overlay?: boolean;
       /**
+       * Pin the sheet to the viewport while the page scrolls past it, instead
+       * of stretching it to the height of whatever it sits beside.
+       *
+       * Without it, an open sheet is as tall as its row -- right beside a
+       * short card, wrong beside a fifty-row table, where the top of the
+       * panel scrolls away and anything at its foot ends up off the bottom of
+       * the page. With it, the sheet (and its button) stick at
+       * `--sidebar-sheet-top` and stop growing at `--sidebar-sheet-max-height`,
+       * scrolling their own content past that.
+       *
+       * Applies wherever the sheet does: any `overlay` sidebar, and any
+       * sidebar in the compact layout. The wide rail is unaffected. Like any
+       * `position: sticky`, it needs every ancestor up to the scrolling one to
+       * leave `overflow` alone.
+       */
+      sticky?: boolean;
+      /**
        * Whether the sidebar is showing its panel. Bindable, so a caller can
        * drive the sidebar from a button of their own:
        * `<Sidebar bind:open />`.
@@ -56,6 +73,7 @@
     right,
     children,
     overlay = false,
+    sticky = false,
     open = $bindable<boolean | undefined>(undefined),
     expandLabel = "Expand sidebar",
     collapseLabel = "Collapse sidebar",
@@ -92,6 +110,7 @@
   class:right
   class:left
   class:overlay
+  class:sticky
   class:expandedHamburger
   class:expandedBar
   {...el}
@@ -216,7 +235,9 @@
       top: 0;
       left: 0;
       width: var(--sidebar-width);
-      z-index: 2;
+      /* Above a sticky Table head (z-index 2), which a sheet beside a long table
+         otherwise slides under. */
+      z-index: var(--sidebar-overlay-z-index, 3);
       transform: translateX(-100%);
       opacity: 0;
       background: transparent;
@@ -272,7 +293,7 @@
     & > button {
       transition: left var(--sidebar-transition);
       transform: translateX(0);
-      z-index: 3;
+      z-index: calc(var(--sidebar-overlay-z-index, 3) + 1);
       position: absolute;
       opacity: 1;
       pointer-events: all;
@@ -366,6 +387,90 @@
       );
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+    }
+
+    /* `sticky`: the sheet follows the reader down the page instead of
+       stretching to the row.
+
+       Sticky needs the sheet back *in flow* -- an absolutely positioned box
+       cannot stick -- but the aside is only a button's width wide and the
+       row's full height, and that height is exactly the range the sheet
+       should be free to travel. So the aside becomes a one-cell grid as tall
+       as its row, and the sheet and its button share that cell, each sticky
+       within it.
+
+       Horizontal placement moves from `left`/`right` onto margins, because on
+       a sticky box `left` and `right` stop being offsets and become sticky
+       insets -- they would pin the button against a sideways-scrolling
+       ancestor rather than place it. The margins reproduce the absolute
+       geometry exactly: the aside is `--gap` plus one button wide, and a
+       sheet or button wider than that spills out of its cell on the side
+       that faces the content. */
+    &.sticky {
+      --_sidebar-sheet-top: var(--sidebar-sheet-top, var(--padding));
+      --_sidebar-aside-width: calc(var(--gap) + var(--_sidebar-expander-width));
+      display: grid;
+      grid-template-columns: 100%;
+      align-content: stretch;
+      /* A shut sheet is still in flow now, and would otherwise hold the row
+         open to its own height. The aside's width is set explicitly, so
+         size containment only ever zeroes out the height it would have
+         contributed; the row still stretches it to full height. */
+      contain: size;
+    }
+    &.sticky > .content,
+    &.sticky > button.expander,
+    &.sticky > button.close {
+      grid-area: 1 / 1;
+      position: sticky;
+      align-self: start;
+      justify-self: start;
+      left: auto;
+      right: auto;
+    }
+    &.sticky > .content {
+      top: var(--_sidebar-sheet-top);
+      margin-left: 0;
+      height: auto;
+      /* The reserve is a budget for everything that is not the sheet, rather
+         than just the sticky offset: before the sheet sticks -- page scrolled
+         to the top -- its top edge is its row's, which may sit well below the
+         viewport top, and a sheet sized only from the offset would overflow
+         the viewport by exactly that much. Twice the top gives it an even
+         margin at both ends once it has stuck. */
+      max-height: var(
+        --sidebar-sheet-max-height,
+        calc(100dvh - var(--sidebar-sheet-reserve, calc(2 * var(--_sidebar-sheet-top))))
+      );
+      overflow-y: auto;
+      /* A column, so a child with `min-height: 0` and its own overflow can
+         keep a header or footer in view and scroll only its middle. Children
+         that do not opt in keep their size, and the sheet scrolls as a
+         whole. */
+      display: flex;
+      flex-direction: column;
+    }
+    &.sticky.expandedHamburger > .content {
+      height: auto;
+    }
+    &.sticky.right > .content {
+      margin-left: calc(var(--_sidebar-aside-width) - var(--sidebar-width));
+    }
+    &.sticky > button.expander,
+    &.sticky > button.close {
+      top: calc(var(--_sidebar-sheet-top) + var(--padding));
+      margin-top: var(--padding);
+      margin-left: 0;
+      transition: margin-left var(--sidebar-transition);
+    }
+    &.sticky > button.close {
+      margin-left: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
+    }
+    &.sticky.right > button.expander {
+      margin-left: var(--gap);
+    }
+    &.sticky.right > button.close {
+      margin-left: calc(var(--_sidebar-aside-width) - var(--sidebar-width));
     }
   }
 
