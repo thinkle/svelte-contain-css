@@ -82,6 +82,12 @@
 
   .inline {
     @include box-props(inline);
+    /* A layout helper, not a surface: padding comes only from
+       --inline-padding (or the `padding` prop), never from the theme's
+       --padding. box-props falls back to --padding, which is inherited, so
+       without this every Inline picked up the page's padding -- or
+       whatever padding an enclosing Card set. */
+    --_padding: var(--inline-padding, 0);
     @include margin-props(inline);
     display: flex;
     flex-direction: row;
