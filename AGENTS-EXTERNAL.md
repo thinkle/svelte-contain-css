@@ -257,6 +257,39 @@ boolean, that boolean applies in both layouts.
 New CSS variables for overlay mode: `--sidebar-overlay-box-shadow` (falls back
 to `--overlay-box-shadow`) and `--sidebar-overlay-z-index` (default `3`).
 
+Beside something much taller than the viewport -- a long table -- add
+`sticky`. Without it an open sheet is as tall as its row, so its top scrolls
+away and anything at its foot lands off the bottom of the page. With it the
+sheet and its button stick near the viewport top and the sheet stops growing,
+scrolling its own content instead:
+
+```svelte
+<div style="display: flex; container-type: inline-size;">
+  <main>...fifty-row table...</main>
+  <Sidebar right overlay sticky bind:open --sidebar-sheet-reserve="9rem">
+    ...
+  </Sidebar>
+</div>
+```
+
+- `--sidebar-sheet-top` (default `var(--padding)`): where the top edge rests.
+- `--sidebar-sheet-reserve` (default twice the top): height budget for
+  everything that is not the sheet. Set it to the chrome above the row when
+  that is taller, or the unstuck sheet runs off the bottom of the viewport by
+  that much before you scroll.
+- `--sidebar-sheet-max-height` replaces the whole `calc(100dvh - reserve)`.
+
+The sheet is a flex column: a child with `min-height: 0` and its own
+`overflow-y: auto` middle keeps its header and footer in view while only the
+middle scrolls. `sticky` applies wherever the sheet does (any `overlay`
+sidebar, and the compact layout); the wide rail ignores it. Like any
+`position: sticky`, every ancestor up to the scrolling one must leave
+`overflow` alone -- so not inside `SidebarContainer`'s content column or a
+`Container`.
+
+The sheet sits at `--sidebar-overlay-z-index` (default `3`), above a sticky
+`Table` head (`2`).
+
 The rail and the sheet button carry different glyphs, because they are
 different affordances — the rail slides a panel out of the edge it sits on
 (`›`/`‹`), the sheet is conjured by a floating button (`☰`/`✕`). Set them
