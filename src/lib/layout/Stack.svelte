@@ -87,6 +87,12 @@
 
   .stack {
     @include box-props(stack);
+    /* A layout helper, not a surface: padding comes only from
+       --stack-padding (or the `padding` prop), never from the theme's
+       --padding. box-props falls back to --padding, which is inherited, so
+       without this every Stack picked up the page's padding -- or
+       whatever padding an enclosing Card set. */
+    --_padding: var(--stack-padding, 0);
     @include margin-props(stack);
     display: flex;
     flex-direction: column;
