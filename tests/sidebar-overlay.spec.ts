@@ -600,3 +600,54 @@ test.describe("Sidebar sheetButton", () => {
     });
   });
 });
+
+/**
+ * The sheet's menu glyph is wider than its icon box, which is sized for the
+ * rail's thin chevron. The box's inline-grid centres the overflow; on a
+ * right-hand sidebar an old `display: inline-block` overrode that, the glyph
+ * spilled right from the box's left edge, and the mirror threw it left.
+ * Measured on the rendered pixels, since the glyph is a pseudo-element.
+ */
+test.describe("Sidebar sheet glyph", () => {
+  async function inkOffset(page, testid: string): Promise<number> {
+    const btn = page
+      .getByTestId(testid)
+      .locator('[data-audit-action="toggle-sidebar-sheet"]');
+    await btn.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    await page.waitForTimeout(400); // let the hover/press transition settle
+    const png = (await btn.screenshot()).toString("base64");
+    return page.evaluate(async (data) => {
+      const img = new Image();
+      img.src = `data:image/png;base64,${data}`;
+      await img.decode();
+      const c = document.createElement("canvas");
+      c.width = img.width;
+      c.height = img.height;
+      const ctx = c.getContext("2d")!;
+      ctx.drawImage(img, 0, 0);
+      const { data: px } = ctx.getImageData(0, 0, c.width, c.height);
+      const lum = (i: number) => (px[i] + px[i + 1] + px[i + 2]) / 3;
+      const bg = lum(((c.height >> 1) * c.width + 2) * 4); // near the left edge, mid-height
+      let min = c.width,
+        max = -1;
+      for (let y = 0; y < c.height; y++)
+        for (let x = 0; x < c.width; x++)
+          if (lum((y * c.width + x) * 4) < bg - 80) {
+            min = Math.min(min, x);
+            max = Math.max(max, x);
+          }
+      return (min + max) / 2 - (c.width - 1) / 2;
+    }, png);
+  }
+
+  for (const testid of ["sheet-button-button", "overlay-sidebar"]) {
+    test(`the menu glyph is centred in its button: ${testid}`, async ({
+      page,
+    }) => {
+      await page.goto(ROUTE);
+      await page.waitForLoadState("networkidle");
+      expect(Math.abs(await inkOffset(page, testid))).toBeLessThanOrEqual(1);
+    });
+  }
+});

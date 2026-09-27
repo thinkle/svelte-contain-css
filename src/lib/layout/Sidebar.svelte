@@ -631,8 +631,13 @@
       var(--sidebar-collapse-image, none)
     );
   }
+  /* Mirrored, and still inline-grid from the rule above: the grid is what
+     centres a glyph wider than its box (the sheet's menu glyph is, at the
+     rail chevron's 0.65rem). An old `display: inline-block` here overrode
+     it, so the glyph started at the box's left edge, spilled right, and the
+     mirror threw the spill left -- every right-hand sheet button sat about
+     2.5px off centre. */
   .right button::after {
-    display: inline-block;
     transform: var(--mirror-sidebar-icons, scaleX(-1));
   }
 </style>
