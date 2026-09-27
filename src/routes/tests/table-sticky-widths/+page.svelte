@@ -145,6 +145,21 @@
   </Table>
 </section>
 
+<!-- Compatibility fixture: named snippets still need semantic row groups,
+     but a missing wrapper must not turn the sticky header into visible data. -->
+<section data-testid="bare-groups" class="frame">
+  <Table sticky>
+    {#snippet thead()}
+      <tr><th>Name</th><th>Year</th></tr>
+      <tr><th colspan="2">Current roster</th></tr>
+    {/snippet}
+    {#snippet tbody()}
+      <tr><td>Ada</td><td>10</td></tr>
+      <tr><td>Grace</td><td>11</td></tr>
+    {/snippet}
+  </Table>
+</section>
+
 <!-- Ground truth: the same content in a plain, non-sticky Table in an
      identical frame. Whatever the browser does here is what the sticky
      variant's measured colgroup is supposed to reproduce. -->

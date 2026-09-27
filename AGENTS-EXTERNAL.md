@@ -937,6 +937,14 @@ header once, and it is out of the focus order. Text queries and plain
 `tbody.column-ruler` (one empty cell per column), so exclude it when counting
 rows: `tbody:not(.column-ruler) > tr`.
 
+**Sticky table markup.** The named snippets include their row groups; they are
+not row-only slots. `thead()` must render a `<thead>` containing its rows, and
+`tbody()` must render a `<tbody>` containing its rows. Bare `<tr>` children are
+tolerated in sticky mode so an accidental omission does not produce a visible
+second header, but development builds warn because direct rows are not semantic
+table markup. This contract only applies to `<Table sticky>`; a plain `Table`
+remains a transparent styling wrapper.
+
 ---
 
 ## Semantic Variants

@@ -53,9 +53,12 @@
   </DemoWithCode>
   <TextLayout>
     <p>
-      If you want sticky headers, it's best to use our separate slot for
-      <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> so we can create
-      two separate tables for rendering/stacking purposes.
+      Sticky headers use the named <code>thead</code> and <code>tbody</code>
+      snippets so Contain can create two separate tables for rendering and
+      stacking. Each snippet must include its semantic row-group element:
+      <code>thead()</code> renders <code>&lt;thead&gt;</code>, and
+      <code>tbody()</code> renders <code>&lt;tbody&gt;</code>. Do not pass bare
+      <code>&lt;tr&gt;</code> elements to either snippet.
     </p>
     <Code
       code={`

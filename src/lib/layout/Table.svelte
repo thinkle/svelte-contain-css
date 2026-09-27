@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { BROWSER, DEV } from "esm-env";
+  import { onDestroy } from "svelte";
+
   interface Props {
     sticky?: boolean;
     column_widths?: number[] | null;
@@ -53,8 +56,6 @@
   let overhang = $state(0);
   let resizeObserver: ResizeObserver | null = $state(null);
   let tableWidth = $state<number | null>(null);
-  import { onDestroy } from "svelte";
-
   onDestroy(() => {
     resizeObserver?.disconnect();
     resizeObserver = null;
@@ -161,22 +162,68 @@
      accessibility tree, with no effect on layout.
 
      The thead is the caller's markup, rendered from their snippet, so it
-     cannot carry the attributes in the template. Watch the table's direct
-     children instead, in case the caller's snippet swaps its <thead> out. */
+     cannot carry the attributes in the template. Watch both tables' direct
+     children in case a snippet swaps its group out.
+
+     Older consumers sometimes supplied bare <tr>s in these named snippets.
+     Reparenting Svelte-owned nodes into a new <thead>/<tbody> is unsafe, but
+     sticky mode can still degrade safely: the visible table tells us how many
+     direct rows belong to the header, so mark the same leading rows in the
+     body table as its collapsed measuring copy. Bare tbody rows remain where
+     Svelte put them and visible. Warn in development so callers can restore
+     the semantic row groups without shipping a doubled header meanwhile. */
+  let warnedBareThead = false;
+  let warnedBareTbody = false;
   $effect(() => {
-    if (!bodyTable) return;
-    const table = bodyTable;
+    if (!sticky || !headTable || !bodyTable) return;
+    const directRows = (table: HTMLTableElement) =>
+      Array.from(table.children).filter(
+        (child): child is HTMLTableRowElement => child.tagName === "TR",
+      );
     const mark = () => {
-      for (const head of table.querySelectorAll(":scope > thead")) {
+      for (const head of bodyTable!.querySelectorAll(":scope > thead")) {
         if (!head.hasAttribute("inert")) head.setAttribute("inert", "");
         if (head.getAttribute("aria-hidden") !== "true")
           head.setAttribute("aria-hidden", "true");
+      }
+
+      const visibleBareHeadRows = directRows(headTable!);
+      const bodyBareRows = directRows(bodyTable!);
+      for (const row of bodyBareRows) {
+        row.removeAttribute("data-contain-implicit-table-head");
+        row.removeAttribute("inert");
+        row.removeAttribute("aria-hidden");
+      }
+      for (const row of bodyBareRows.slice(0, visibleBareHeadRows.length)) {
+        row.setAttribute("data-contain-implicit-table-head", "");
+        row.setAttribute("inert", "");
+        row.setAttribute("aria-hidden", "true");
+      }
+
+      if (BROWSER && DEV && visibleBareHeadRows.length && !warnedBareThead) {
+        warnedBareThead = true;
+        console.warn(
+          "<Table sticky>: the thead snippet must render a <thead> containing its rows. Bare <tr> children are tolerated for compatibility, but are not semantic table markup.",
+        );
+      }
+      if (
+        BROWSER &&
+        DEV &&
+        tbody &&
+        bodyBareRows.length > visibleBareHeadRows.length &&
+        !warnedBareTbody
+      ) {
+        warnedBareTbody = true;
+        console.warn(
+          "<Table sticky>: the tbody snippet must render a <tbody> containing its rows. Bare <tr> children are tolerated for compatibility, but are not semantic table markup.",
+        );
       }
     };
     mark();
     if (typeof MutationObserver === "undefined") return;
     const observer = new MutationObserver(mark);
-    observer.observe(table, { childList: true });
+    observer.observe(headTable, { childList: true });
+    observer.observe(bodyTable, { childList: true });
     return () => observer.disconnect();
   });
 
@@ -444,6 +491,10 @@
      you get a blank gap. `display: none` is worse -- no layout, nothing to
      measure, and the columns size from the body alone. */
   .scrolling-table-body > :global(thead) {
+    visibility: collapse;
+  }
+  .scrolling-table-body
+    > :global(tr[data-contain-implicit-table-head]) {
     visibility: collapse;
   }
 

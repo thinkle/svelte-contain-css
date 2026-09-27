@@ -253,6 +253,40 @@ test.describe("Sticky table column widths", () => {
     await expect(section.getByRole("button")).toHaveCount(visibleCount);
   });
 
+  test("bare rows in named snippets do not duplicate the sticky header", async ({
+    page,
+  }) => {
+    const warnings: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "warning") warnings.push(message.text());
+    });
+    await page.reload();
+
+    const section = page.getByTestId("bare-groups");
+    const visibleRows = section.locator("table.fixed-table-head > tr");
+    const copiedRows = section.locator(
+      "table.scrolling-table-body > tr[data-contain-implicit-table-head]",
+    );
+    const bodyRows = section.locator(
+      "table.scrolling-table-body > tr:not([data-contain-implicit-table-head])",
+    );
+
+    await expect(visibleRows).toHaveCount(2);
+    await expect(copiedRows).toHaveCount(2);
+    await expect(copiedRows.first()).toHaveCSS("visibility", "collapse");
+    await expect(copiedRows.first()).toHaveAttribute("inert", "");
+    await expect(copiedRows.first()).toHaveAttribute("aria-hidden", "true");
+    await expect(bodyRows).toHaveCount(2);
+    await expect(bodyRows.first()).toBeVisible();
+    await expect(section.getByText("Ada", { exact: true })).toHaveCount(1);
+    expect(warnings).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining("thead snippet must render a <thead>"),
+        expect.stringContaining("tbody snippet must render a <tbody>"),
+      ]),
+    );
+  });
+
   test("column widths are proportional to content, not evenly divided", async ({
     page,
   }) => {
