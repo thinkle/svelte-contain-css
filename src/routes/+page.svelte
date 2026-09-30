@@ -183,7 +183,12 @@
     showHero = !isSticking;
   }}
 >
-  <Bar slot="header" --bar-border-top="none" --side-width="{sideWidth}px">
+  <Bar
+    slot="header"
+    primary
+    --bar-border-top="none"
+    --side-width="{sideWidth}px"
+  >
     <div class="icon equal-width"></div>
     <h1><em>ContainCSS</em></h1>
     <div
@@ -292,11 +297,7 @@
     {#if theItem < menu.length - 1}
       {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
       {#if nextItem}
-        <Bar
-          --bar-justify="end"
-          --bar-bg="transparent"
-          --bar-fg="var(--fg)"
-        >
+        <Bar --bar-justify="end">
           {#if theDemo}
             <Button
               secondary
