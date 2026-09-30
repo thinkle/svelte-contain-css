@@ -48,13 +48,15 @@
   .code :global(code[class*="language-"]),
   .code :global(pre[class*="language-"]) {
     tab-size: var(--code-tab-size, 2em);
-    @include color-props(code, surface);
     @include typography-props(code, surface);
   }
 
+  /* Colors live on the block only. Giving the <code> inside the <pre> its
+     own background paints line-by-line patches wherever the two resolve
+     differently (e.g. no --code-bg: the <pre> fell back to transparent while
+     the <code> took --surface-bg). */
   .code :global(pre[class*="language-"]) {
-    background: var(--code-bg);
-    color: var(--code-fg);
+    @include color-props(code, surface);
     padding: 1em;
     border-radius: 0.3em;
     @include box-shadow(code, surface);

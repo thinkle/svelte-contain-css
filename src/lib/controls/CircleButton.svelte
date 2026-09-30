@@ -68,9 +68,6 @@
 
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
-  button.primary {
-    @include color-props(primary, button, control);
-  }
   button {
     /* `circle-button` first, `mini-button` behind it. This component was
        called MiniButton until it was renamed to stop people putting text in a
@@ -102,19 +99,22 @@
     line-height: 1;
     flex-shrink: 0; /* Don't shrink any more */
   }
-  button.primary {
+  /* Variants go through :where() so they only choose which colors apply.
+     As plain `button.primary` they tied with the clickable mixin's
+     `button:hover` and, coming later, cancelled the hover background. */
+  button:where(.primary) {
     @include color-props(primary, button, control);
   }
-  button.warning {
+  button:where(.warning) {
     @include color-props(warning, button, control);
   }
-  button.danger {
+  button:where(.danger) {
     @include color-props(danger, button, control);
   }
-  button.success {
+  button:where(.success) {
     @include color-props(success, button, control);
   }
-  button.info {
+  button:where(.info) {
     @include color-props(info, button, control);
   }
 </style>
