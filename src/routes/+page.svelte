@@ -190,6 +190,7 @@
       class="info equal-width"
       bind:clientWidth={sideWidth}
       style:--button-bg="var(--bar-bg, var(--container-bg))"
+      style:--button-fg="var(--bar-fg, var(--container-fg))"
       style:--button-drop-shadow="none"
       style:--button-border="none"
       style:--button-shadow-color="transparent"
@@ -291,7 +292,11 @@
     {#if theItem < menu.length - 1}
       {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
       {#if nextItem}
-        <Bar --bar-justify="end">
+        <Bar
+          --bar-justify="end"
+          --bar-bg="transparent"
+          --bar-fg="var(--fg)"
+        >
           {#if theDemo}
             <Button
               secondary
