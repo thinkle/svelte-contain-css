@@ -37,7 +37,10 @@
   --checkbox-transition: 400ms;
   --checked-weight: var(--bold);
   --grab-bar-hover-base-color-percentage: 88%;
-  --grab-bar-hover-color-mix: var(--hover-color-mix, white);
+  --grab-bar-hover-color-mix: var(
+    --hover-color-mix,
+    var(--grab-bar-fg, var(--sidebar-fg, var(--fg)))
+  );
   --grab-bar-active-base-color-percentage: 80%;
   --grab-bar-active-color-mix: var(--active-color-mix, black);
   --grab-bar-shadow-color: color-mix(
@@ -46,14 +49,14 @@
     transparent
   );
   --grab-bar-hover-bg: color-mix(
-    in oklch,
+    in oklab,
     var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
       var(--grab-bar-hover-base-color-percentage, 88%),
     var(--grab-bar-hover-color-mix, white)
       calc(100% - var(--grab-bar-hover-base-color-percentage, 88%))
   );
   --grab-bar-active-bg: color-mix(
-    in oklch,
+    in oklab,
     var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
       var(--grab-bar-active-base-color-percentage, 80%),
     var(--grab-bar-active-color-mix, black)
@@ -75,7 +78,8 @@
   --scrollbar-track-bg: transparent;
 
   --hover-base-color-percentage: 90%;
-  --hover-color-mix: white;
+  /* --hover-color-mix is unset by default: hovers mix toward each
+     element's own text color. Set it to force a direction (e.g. black). */
   --active-base-color-percentage: 90%;
   --active-color-mix: black;
   --disabled-base-color-percentage: 50%;

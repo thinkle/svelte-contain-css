@@ -72,11 +72,10 @@
   }
   a[role="button"]:hover {
     text-decoration: none;
-    /* Override other link styles that may be outside us */
-    @include color-props(button, control, secondary);
-  }
-  a.primary[role="button"]:hover {
-    @include color-props(primary, button, control, secondary);
+    /* Override other link styles that may be outside us. Only the text
+       color: re-applying the full colors here would cancel the hover
+       background from the clickable mixin. */
+    color: var(--_color);
   }
   a.primary {
     @include color-props(primary, button, control, secondary);

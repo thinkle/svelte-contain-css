@@ -47,6 +47,10 @@
   }
 }
 
+// Hover mixes toward --hover-color-mix, defaulting to the element's own
+// text color: that darkens light controls and lightens dark ones regardless
+// of the theme's mode. Mixing is done in oklab because oklch drifts in hue
+// when one side is white/black (which have no hue).
 @mixin clickable-hover-affordance($prefixes...) {
   filter: fn.var-with-fallbacks(
     --hover-filter,
@@ -57,9 +61,9 @@
     append($prefixes, none)...
   );
   background-color: color-mix(
-    in oklch,
+    in oklab,
     var(--_background-color) var(--hover-base-color-percentage, 90%),
-    var(--hover-color-mix, white)
+    var(--hover-color-mix, var(--_color, white))
       calc(100% - var(--hover-base-color-percentage, 90%))
   );
   box-shadow: fn.var-with-fallbacks(
@@ -78,7 +82,7 @@
     append($prefixes, none)...
   );
   background-color: color-mix(
-    in oklch,
+    in oklab,
     var(--_background-color) var(--active-base-color-percentage, 90%),
     var(--active-color-mix, black)
       calc(100% - var(--active-base-color-percentage, 90%))
@@ -112,7 +116,7 @@
       append($prefixes, grayscale(0.5))...
     );
     background-color: color-mix(
-      in oklch,
+      in oklab,
       var(--_background-color) var(--disabled-base-color-percentage, 50%),
       var(--disabled-color-mix, gray)
         calc(100% - var(--disabled-base-color-percentage, 50%))
