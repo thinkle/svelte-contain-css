@@ -15,7 +15,7 @@
   ]);
 </script>
 
-<div class="hero" style:--text-align="var(--hero-text-align,center)">
+<div class="hero" style={cssVars} style:--text-align="var(--hero-text-align,center)">
   <slot />
 </div>
 

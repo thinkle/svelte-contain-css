@@ -162,7 +162,12 @@
 </script>
 
 {#if showHero}
-  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+  <Hero
+    center={true}
+    bg="var(--primary-bg)"
+    fg="var(--primary-fg)"
+    --heading-fg="var(--primary-fg)"
+  >
     <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
     <p>
       The Simple Svelte Component Library that uses css variables & container
@@ -195,7 +200,7 @@
         </Button>
       {/if}
 
-      <DropdownMenu --bg="#222">
+      <DropdownMenu>
         <span slot="label">
           {menu[theItem].name}
         </span>
