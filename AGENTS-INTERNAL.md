@@ -759,6 +759,20 @@ anything scrolls. Keep positioning in its own function so it can re-run, attach
 and `resize` listeners while open, throttle with `requestAnimationFrame`, and
 remove them on hide and on destroy.
 
+**Overlays must not inherit their host's text styles.** A popover or
+`<dialog>` is a DOM child of wherever it was placed; the top layer changes
+painting and positioning, not inheritance. A tooltip in a `white-space: nowrap`
+table cell was nowrap too and ran off the screen. `typography-props()` does not
+help: its chains end in `unset`, which for an inherited property means "take
+the parent's value". So an overlay's root element includes
+`@include overlay-text-reset(<prefixes>)` **after** its typography mixin, in
+the same rule. It re-declares white-space, weight, style, case, spacing,
+alignment, indent, line-height, word breaking, cursor, pointer-events and
+user-select with real defaults at the end of the same var chains, so the
+`--component-*` vars still win and custom properties still inherit (that is
+how theming reaches the overlay). Tooltip, DropdownMenu and Dialog use it; a
+new overlay should too. See `tests/overlay-inheritance.spec.ts`.
+
 ---
 
 ## File Organization

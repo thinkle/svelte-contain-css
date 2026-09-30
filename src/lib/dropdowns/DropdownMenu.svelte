@@ -361,6 +361,11 @@
     @include typography-props(menu, surface);
   }
   .dropdown-container {
+    /* The popover is a DOM child of the <nav>, which sits wherever the menu
+       was placed; stop that spot's white-space, alignment, weight etc. from
+       reaching the list. First, so pointer-events below still wins. The
+       menu's own typography vars still apply to .menu inside. */
+    @include overlay-text-reset(dropdown-menu, menu, surface);
     box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
