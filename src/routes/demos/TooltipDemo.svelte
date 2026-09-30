@@ -194,6 +194,29 @@
         <Tag --tag-bg="black" --tag-fg="white">Test</Tag>
       </Tooltip>
     </p>
+    <h2>Tooltips Don't Inherit Their Host's Text Styles</h2>
+    <p>
+      A tooltip is a popover that lives in the DOM wherever you put it, and
+      the top layer doesn't change inheritance. So the tooltip resets
+      <code>white-space</code>, alignment, weight, style, case, spacing,
+      indent and cursor to its own defaults. Here it sits in a
+      <code>nowrap</code>, centred, bold, uppercase cell, and its long text
+      still wraps normally:
+    </p>
+    <div class="hostile-cell">
+      Name
+      <Tooltip
+        tooltipText={'Formerly limited English proficient, not enrolled in an ELL program (Aspen: "Not enrolled in an ELLP")'}
+      >
+        <Tag>ELL</Tag>
+      </Tooltip>
+    </div>
+    <p>
+      Custom properties still inherit, so theming still works, and the
+      <code>--tooltip-*</code> variables still win, e.g.
+      <code>--tooltip-white-space: nowrap</code> or
+      <code>--tooltip-text-align: center</code>.
+    </p>
   </TextLayout>
   <DemoWithCode
     defaultTab="split"
@@ -229,6 +252,14 @@
 </CssVariableDemo>
 
 <style>
+  .hostile-cell {
+    white-space: nowrap;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 1rem;
+    border: 1px dashed currentColor;
+  }
   .blip-container {
     display: flex;
     gap: 16px;

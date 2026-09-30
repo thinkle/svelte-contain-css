@@ -52,7 +52,10 @@
   ] as const;
 
   /* The variables land on the wrapper and reach the popover by inheritance:
-     the tooltip is a descendant of it, and custom properties inherit. */
+     the tooltip is a descendant of it, and custom properties inherit.
+     Ordinary inherited properties (white-space, font-weight, text-align...)
+     would reach it the same way from the host, which is why the popover's
+     CSS resets them -- see overlay-text-reset in _typography.scss. */
   const el = $derived(elementProps(restProps, "tooltip", TOOLTIP_VARS));
   // svelte-ignore state_referenced_locally
   let renderedVertical = $state(vertical);
@@ -350,6 +353,10 @@
     @include box-props-square-border(tooltip);
     @include box-shadow(tooltip, surface);
     @include typography-container-props(tooltip, ui);
+    /* The popover is a DOM child of wherever the Tooltip was placed, so
+       without this it inherits that spot's white-space, weight, alignment
+       and so on. Must follow typography-container-props. */
+    @include overlay-text-reset(tooltip, ui);
   }
 
   .tooltip-wrapper {

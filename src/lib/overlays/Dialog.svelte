@@ -138,6 +138,10 @@
     @include box-props(dialog, top, surface, block);
     @include color-props(dialog, top, surface, block);
     @include typography-container-props(dialog, top, surface, block);
+    /* A <dialog> is a DOM child of wherever it was declared -- a table cell,
+       a bold header, a clickable card -- and would inherit its text styles
+       and cursor. Must follow typography-container-props. */
+    @include overlay-text-reset(dialog, top, surface, block);
     @include box-shadow(dialog, top, surface, block);
     min-width: min(
       calc(100vw - var(--padding) * 2),

@@ -293,3 +293,56 @@
     )};
   @include heading-context-vars($prefixes...);
 }
+
+/* Text reset for an overlay's root element: a tooltip, popover menu or dialog
+   that sits in the DOM wherever its trigger was placed.
+
+   The top layer changes how an element paints and where it is positioned, not
+   what it inherits. A popover declared inside a `white-space: nowrap` table
+   cell is nowrap too, and one inside a bold, uppercase, centred header is
+   bold, uppercase and centred -- styles that belong to the trigger's context,
+   not to the overlay. typography-props() doesn't stop that: its chains end in
+   `unset`, which for an inherited property means "take the parent's value".
+
+   So this re-declares every inherited text property with a real default at
+   the end of the same variable chain. The vars still win (--tooltip-*, then
+   the category, then the global), and custom properties still inherit --
+   that is how theming reaches an overlay -- but when nothing is set, the
+   overlay gets its own defaults instead of its host's.
+
+   INCLUDE IT AFTER typography-props() / typography-container-props() in the
+   same rule: it has to beat their `unset` fallbacks by source order.
+
+   Deliberately left inheriting:
+   - direction, writing-mode: the document's script direction is the
+     overlay's too.
+   - visibility: a hidden subtree should not be able to show an overlay.
+   - font-family: every theme defines --font-family at :root, and there is no
+     neutral value to fall back to that would beat "the page's font". */
+@mixin overlay-text-reset($prefixes...) {
+  --_font-size: #{fn.var-with-fallbacks(--font-size, list.append($prefixes, 1rem)...)};
+  font-size: var(--_font-size);
+  font-weight: fn.var-with-fallbacks(--font-weight, list.append($prefixes, normal)...);
+  font-style: fn.var-with-fallbacks(--font-style, list.append($prefixes, normal)...);
+  font-variant: fn.var-with-fallbacks(--font-variant, list.append($prefixes, normal)...);
+  font-feature-settings: normal;
+  text-transform: fn.var-with-fallbacks(--text-transform, list.append($prefixes, none)...);
+  letter-spacing: fn.var-with-fallbacks(--letter-spacing, list.append($prefixes, normal)...);
+  word-spacing: normal;
+  line-height: fn.var-with-fallbacks(--line-height, list.append($prefixes, normal)...);
+  text-indent: fn.var-with-fallbacks(--indent, list.append($prefixes, 0)...);
+  text-align: fn.var-with-fallbacks(--text-align, list.append($prefixes, start)...);
+  text-shadow: none;
+  /* An overlay is capped by a max-width; its text has to wrap inside it. */
+  white-space: fn.var-with-fallbacks(--white-space, list.append($prefixes, normal)...);
+  word-break: normal;
+  overflow-wrap: fn.var-with-fallbacks(--overflow-wrap, list.append($prefixes, break-word)...);
+  hyphens: manual;
+  /* Not the trigger's pointer/text cursor, and never click-through. */
+  cursor: auto;
+  pointer-events: auto;
+  /* user-select isn't inherited, but `auto` copies a parent's `none`;
+     `text` is what `auto` resolves to in an ordinary context. */
+  -webkit-user-select: text;
+  user-select: text;
+}
