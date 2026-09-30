@@ -32,9 +32,6 @@
 
 <style lang="scss">
   @import "$lib/sass/_mixins.scss";
-  button.primary {
-    @include color-props(primary, button, control);
-  }
   button {
     @include typography-props(button, control);
     @include color-props(mini-button, button, control, secondary);
@@ -54,10 +51,12 @@
     place-content: center;
     flex-shrink: 0; /* Don't shrink any more */
   }
-  button.primary {
+  /* Variants use :where() so they only change which colors apply and don't
+     outrank the :hover/:active rules from the clickable mixin. */
+  button:where(.primary) {
     @include color-props(primary, button, control);
   }
-  button.warning {
+  button:where(.warning) {
     @include color-props(warning, button, control);
   }
 </style>

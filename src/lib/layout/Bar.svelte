@@ -16,6 +16,8 @@
     | "end"
     | null = null;
   export let align: "center" | "start" | "end" | "stretch" | null = null;
+  /** Color the bar with the theme's primary pair (e.g. a header/nav bar). */
+  export let primary = false;
   let style = injectVars($$props, "bar", [
     "bg",
     "fg",
@@ -28,7 +30,7 @@
   ]);
 </script>
 
-<div class="bar" {style}>
+<div class="bar" class:primary {style}>
   <slot />
 </div>
 
@@ -58,6 +60,14 @@
     max-height: var(--bar-max-height);
     @include color-props(bar, container);
     gap: var-with-fallbacks(--gap, bar, 8px);
+  }
+
+  /* Setting --bar-bg/--bar-fg (rather than colors directly) lets children
+     that key off the bar's colors follow along. A bg/fg prop or theme
+     --bar-primary-* still wins. */
+  .bar.primary {
+    --bar-bg: var(--bar-primary-bg, var(--primary-bg));
+    --bar-fg: var(--bar-primary-fg, var(--primary-fg));
   }
 
   .bar :global(h1),

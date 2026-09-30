@@ -58,23 +58,25 @@
     @include focusable();
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
-  button.primary {
+  /* Variants use :where() so they only change which colors apply and don't
+     outrank the :hover/:active rules from the clickable mixin. */
+  button:where(.primary) {
     @include color-props(primary, button, control);
     @include typography-props-bare(primary, button);
   }
-  button.warning {
+  button:where(.warning) {
     @include color-props(warning, button, control);
     @include typography-props-bare(warning, button);
   }
-  button.danger {
+  button:where(.danger) {
     @include color-props(danger, button, control);
     @include typography-props-bare(danger, button);
   }
-  button.success {
+  button:where(.success) {
     @include color-props(success, button, control);
     @include typography-props-bare(success, button);
   }
-  button.info {
+  button:where(.info) {
     @include color-props(info, button, control);
     @include typography-props-bare(info, button);
   }

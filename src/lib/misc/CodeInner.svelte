@@ -29,13 +29,13 @@
   .code :global(code[class*="language-"]),
   .code :global(pre[class*="language-"]) {
     tab-size: var(--code-tab-size, 2em);
-    @include color-props(code, container);
     @include typography-props(code, container);
   }
 
+  /* Colors live on the block; the inline <code> inside must stay transparent
+     or its background paints line-by-line patches. */
   .code :global(pre[class*="language-"]) {
-    background: var(--code-bg);
-    color: var(--code-fg);
+    @include color-props(code, container);
     padding: 1em;
     border-radius: 0.3em;
     @include box-shadow(code, container);

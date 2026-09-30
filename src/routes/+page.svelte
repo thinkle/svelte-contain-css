@@ -162,7 +162,12 @@
 </script>
 
 {#if showHero}
-  <Hero center={true} bg="var(--primary-bg)" fg="var(--primary-fg)">
+  <Hero
+    center={true}
+    bg="var(--primary-bg)"
+    fg="var(--primary-fg)"
+    --heading-fg="var(--primary-fg)"
+  >
     <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
     <p>
       The Simple Svelte Component Library that uses css variables & container
@@ -178,13 +183,19 @@
     showHero = !isSticking;
   }}
 >
-  <Bar slot="header" --bar-border-top="none" --side-width="{sideWidth}px">
+  <Bar
+    slot="header"
+    primary
+    --bar-border-top="none"
+    --side-width="{sideWidth}px"
+  >
     <div class="icon equal-width"></div>
     <h1><em>ContainCSS</em></h1>
     <div
       class="info equal-width"
       bind:clientWidth={sideWidth}
       style:--button-bg="var(--bar-bg, var(--container-bg))"
+      style:--button-fg="var(--bar-fg, var(--container-fg))"
       style:--button-drop-shadow="none"
       style:--button-border="none"
       style:--button-shadow-color="transparent"
@@ -195,7 +206,7 @@
         </Button>
       {/if}
 
-      <DropdownMenu --bg="#222">
+      <DropdownMenu>
         <span slot="label">
           {menu[theItem].name}
         </span>

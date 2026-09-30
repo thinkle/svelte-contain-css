@@ -4,4 +4,15 @@
   --code-tab-size: 4;
   --code-width: min(75em, 100%);
   --code-height: auto;
+  /* Token backgrounds must be explicit: the fallback chain ends in unset,
+     which for a custom property means inherit, so an ancestor's background
+     would otherwise leak into every token. */
+  --code-comment-bg: transparent;
+  --code-string-bg: transparent;
+  --code-keyword-bg: transparent;
+  --code-attr-name-bg: transparent;
+  --code-tag-bg: transparent;
+  --code-function-bg: transparent;
+  --code-variable-bg: transparent;
+  --code-operator-bg: transparent;
 }

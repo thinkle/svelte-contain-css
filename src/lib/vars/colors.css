@@ -1,16 +1,16 @@
 :root {
   --white: #fff;
   --black: #222;
-  --primary-bg: var(--material-color-blue-600);
+  --primary-bg: var(--material-color-indigo-600);
   --primary-fg: var(--white);
-  --secondary-bg: var(--material-color-blue-grey-100);
-  --secondary-fg: var(--material-color-grey-900);
+  --secondary-bg: var(--material-color-indigo-50);
+  --secondary-fg: var(--material-color-indigo-900);
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
 
   /* Fallback colors - themes can override these */
-  --bg: var(--material-color-grey-50);
-  --fg: var(--material-color-grey-900);
+  --bg: #eef0f9;
+  --fg: #1b1d2e;
 
   --stripe-fg: var(--menu-fg, var(--fg));
   --stripe-bg: color-mix(
@@ -18,26 +18,36 @@
     var(--menu-bg, var(--bg)) 94%,
     var(--menu-fg, var(--fg)) 6%
   );
-  --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
-  --border-color: var(--fg);
-  --warning-bg: var(--material-color-orange-600);
-  --warning-fg: var(--white);
+  --shadow-color: rgba(26, 35, 126, 0.16);
+  --border-color: var(--material-color-indigo-300);
+  --warning-bg: var(--material-color-amber-400);
+  --warning-fg: var(--material-color-grey-900);
   --warning-text-transform: uppercase;
 
   /* Semantic color variants */
-  --danger-bg: var(--material-color-red-600);
+  --danger-bg: var(--material-color-red-700);
   --danger-fg: var(--white);
-  --success-bg: var(--material-color-green-600);
+  --success-bg: var(--material-color-green-800);
   --success-fg: var(--white);
-  --info-bg: var(--material-color-light-blue-600);
+  --info-bg: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
-  --surface-bg: var(--bg);
+  /* Page is tinted; surfaces (containers, cards, bars, sidebar) sit on top */
+  --page-bg: var(--bg);
+  --page-content-bg: transparent;
+  --surface-bg: #ffffff;
   --surface-fg: var(--fg);
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
+  --input-bg: #ffffff;
+  --input-fg: var(--fg);
   --surface-link-fg: var(--link-fg, var(--primary-bg));
   --container-link-fg: var(--surface-link-fg);
   --menu-item-bg: var(--menu-bg);
-  --focus-color: var(--material-color-blue-a400);
+  --focus-color: var(--material-color-indigo-a200);
+  --tooltip-bg: var(--material-color-indigo-900);
+  --tooltip-fg: var(--white);
+  --tooltip-arrow-color: var(--tooltip-bg);
   --tooltip-border: none;
 }
 
@@ -48,7 +58,7 @@ body {
 
 a {
   background-color: var(--link-bg, transparent);
-  color: var(--link-fg, var(--material-color-blue-a400));
+  color: var(--link-fg, var(--material-color-indigo-700));
 }
 
 /* Color definitions */

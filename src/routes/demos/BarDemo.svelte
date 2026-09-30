@@ -139,6 +139,24 @@
   />
 </Container>
 <Container>
+  <h3>Primary Bar</h3>
+  <p>
+    Add <code>primary</code> to color a bar with your theme's primary colors,
+    e.g. for a header or nav bar. Override with
+    <code>--bar-primary-bg</code> and <code>--bar-primary-fg</code>.
+  </p>
+  <Bar primary>
+    <strong>My App</strong>
+    <div>Home · Docs · About</div>
+  </Bar>
+  <Code
+    code={`<Bar primary>
+  <strong>My App</strong>
+  <div>Home · Docs · About</div>
+</Bar>`}
+  />
+</Container>
+<Container>
   <CssWrapper variables={cssValues}>
     <Bar>
       <h3>CSS Variables for Bar</h3>
