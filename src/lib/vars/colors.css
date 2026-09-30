@@ -9,7 +9,7 @@
   --inactive-fg: var(--material-color-grey-900);
 
   /* Fallback colors - themes can override these */
-  --bg: #fcfcff;
+  --bg: #eef0f9;
   --fg: #1b1d2e;
 
   --stripe-fg: var(--menu-fg, var(--fg));
@@ -32,8 +32,15 @@
   --info-bg: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
-  --surface-bg: var(--bg);
+  /* Page is tinted; surfaces (containers, cards, bars, sidebar) sit on top */
+  --page-bg: var(--bg);
+  --page-content-bg: transparent;
+  --surface-bg: #ffffff;
   --surface-fg: var(--fg);
+  --container-bg: var(--surface-bg);
+  --container-fg: var(--surface-fg);
+  --input-bg: #ffffff;
+  --input-fg: var(--fg);
   --surface-link-fg: var(--link-fg, var(--primary-bg));
   --container-link-fg: var(--surface-link-fg);
   --menu-item-bg: var(--menu-bg);
