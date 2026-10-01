@@ -109,13 +109,10 @@
   }
   a[role="button"]:hover {
     text-decoration: none;
-    /* Override other link styles that may be outside
-    us */
-    /* @include color-props(button, control, secondary); */
-  }
-
-  a.primary[role="button"]:hover {
-    @include color-props(primary, button, control, secondary);
+    /* Override other link styles that may be outside us. Text color only:
+       re-applying the full color-props here (as a primary-only rule used
+       to) resets background-color and cancels the clickable hover. */
+    color: var(--_color);
   }
   a.primary {
     @include color-props(primary, button, control, secondary);

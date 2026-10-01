@@ -228,13 +228,20 @@
   }}
 >
   {#snippet header()}
-    <Bar --bar-border-top="none" --side-width="{sideWidth}px">
+    <Bar primary --bar-border-top="none" --side-width="{sideWidth}px">
       <div class="icon equal-width"></div>
       <h1><em>ContainCSS</em></h1>
+      <!-- The nav buttons and the menu trigger take the bar's colors. These
+           are --button-* / --menu-trigger-* (not a bare --bg/--fg) and stop
+           at the trigger: the open menu is themed by --menu-*, so the bar's
+           primary text color can't leak onto the menu's light surface. -->
       <div
         class="info equal-width"
         bind:clientWidth={sideWidth}
         style:--button-bg="var(--bar-bg, var(--container-bg))"
+        style:--button-fg="var(--bar-fg, var(--container-fg))"
+        style:--menu-trigger-bg="var(--bar-bg, var(--container-bg))"
+        style:--menu-trigger-fg="var(--bar-fg, var(--container-fg))"
         style:--button-drop-shadow="none"
         style:--button-border="none"
         style:--button-shadow-color="transparent"
@@ -246,7 +253,7 @@
           </Button>
         {/if}
 
-        <DropdownMenu --bg="#222">
+        <DropdownMenu>
           {#snippet label()}
             <span>
               {menu[theItem].name}

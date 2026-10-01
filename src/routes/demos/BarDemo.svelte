@@ -184,6 +184,37 @@
   </DemoWithCode>
 
   <DemoWithCode
+    code={`<Bar primary>
+  <strong>My App</strong>
+  <div>Home · Docs · About</div>
+</Bar>
+<Bar secondary>
+  <strong>Section</strong>
+  <div>Filters</div>
+</Bar>`}
+  >
+    {#snippet header()}
+      <h3>Primary &amp; Secondary Bars</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Add <code>primary</code> (or <code>secondary</code>) to color a bar
+        with your theme's pair, e.g. for a header or nav bar. It sets
+        <code>--bar-bg</code>/<code>--bar-fg</code>, so children that key off
+        the bar's colors follow along.
+      </p>
+    {/snippet}
+    <Bar primary>
+      <strong>My App</strong>
+      <div>Home · Docs · About</div>
+    </Bar>
+    <Bar secondary>
+      <strong>Section</strong>
+      <div>Filters</div>
+    </Bar>
+  </DemoWithCode>
+
+  <DemoWithCode
     code={`<Bar marginBlock="0">
   <h3>Flush Header</h3>
   <Button secondary>Action</Button>

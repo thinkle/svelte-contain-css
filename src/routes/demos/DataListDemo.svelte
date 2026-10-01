@@ -25,27 +25,27 @@
 
   const articleFeed = [
     {
-      image: "https://loremflickr.com/320/320/cat?lock=11",
-      imageAlt: "Orange cat looking at a ball of yarn",
+      image: "https://picsum.photos/id/40/320/320",
+      imageAlt: "Close-up of a cat's nose and whiskers",
       title: "Cats And Yarn",
       subtitle:
         "Why cats love string toys and safer alternatives for play time.",
       meta: "4 min read",
     },
     {
-      image: "https://loremflickr.com/320/320/bird?lock=12",
-      imageAlt: "Small songbird perched on a branch",
+      image: "https://picsum.photos/id/1024/320/320",
+      imageAlt: "Bird of prey in flight with its wings spread",
       title: "Birdwatching In Ten Minutes",
       subtitle:
         "A quick routine to spot common backyard birds before breakfast.",
       meta: "6 min read",
     },
     {
-      image: "https://loremflickr.com/320/320/owl?lock=13",
-      imageAlt: "Owl with bright eyes",
-      title: "Owls At Dusk",
+      image: "https://picsum.photos/id/1003/320/320",
+      imageAlt: "Young spotted fawn at the edge of a forest",
+      title: "Deer At Dusk",
       subtitle:
-        "Where and when to catch evening owl activity without disturbance.",
+        "Where and when to catch evening deer activity without disturbance.",
       meta: "5 min read",
     },
   ];
@@ -62,26 +62,26 @@
 
   const featureFeed = [
     {
-      image: "https://loremflickr.com/320/320/parrot?lock=14",
-      imageAlt: "Parrot in bright green and yellow feathers",
-      title: "Parrot Care Starter Guide",
-      subtitle: "Daily enrichment, social needs, and habitat basics.",
+      image: "https://picsum.photos/id/237/320/320",
+      imageAlt: "Black puppy lying on a wooden floor",
+      title: "Puppy Care Starter Guide",
+      subtitle: "Daily exercise, social needs, and training basics.",
       tags: ["Care", "Beginner"],
       meta: "8 min read",
     },
     {
-      image: "https://loremflickr.com/320/320/cat,window?lock=15",
-      imageAlt: "Cat sitting by a sunlit window",
-      title: "Indoor Cat Enrichment",
+      image: "https://picsum.photos/id/1062/320/320",
+      imageAlt: "Pug wrapped in a blanket on a bed",
+      title: "Indoor Dog Enrichment",
       subtitle:
-        "Simple games and setups to keep indoor cats curious and active.",
+        "Simple games and setups to keep indoor dogs curious and active.",
       tags: ["Play", "Home"],
       meta: "7 min read",
     },
     {
-      image: "https://loremflickr.com/320/320/kingfisher?lock=16",
-      imageAlt: "Kingfisher near water",
-      title: "Photographing Birds Ethically",
+      image: "https://picsum.photos/id/219/320/320",
+      imageAlt: "Leopard walking along a dirt road",
+      title: "Photographing Wildlife Ethically",
       subtitle: "Composition tips that avoid stressing wildlife.",
       tags: ["Photography", "Outdoors"],
       meta: "9 min read",
@@ -91,7 +91,7 @@
   const basicListMarkup = `<DataList maxWidth="800px" iconSize="3rem" iconBorderRadius="50%">
   <DataListItem>
     {#snippet start()}
-      <img src="https://loremflickr.com/120/120/cat?lock=1" alt="Cat with yarn" />
+      <img src="https://picsum.photos/id/40/120/120" alt="Close-up of a cat's nose" />
     {/snippet}
     <h4>Cats</h4>
     <p>Cats love to play with yarn.</p>

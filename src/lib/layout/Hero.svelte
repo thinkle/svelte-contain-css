@@ -63,12 +63,23 @@
     height: var(--hero-height, 100vh);
     /* font-size: var(--hero-font-size, 2rem); */
     box-sizing: border-box;
+  }
+
+  /* Fade the content, not the hero itself: fading the whole block makes its
+     background flash in over the page on every load. */
+  .hero > :global(*) {
     animation-name: fade-in;
     animation-duration: var(--hero-animation-duration, 1s);
     animation-timing-function: var(
       --hero-animation-timing-function,
       ease-in-out
     );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero > :global(*) {
+      animation: none;
+    }
   }
 
   @keyframes fade-in {

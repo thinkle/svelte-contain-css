@@ -3,18 +3,18 @@
   --muted-text-amount: 20%;
   --white: #fff;
   --black: #222;
-  --primary-bg: var(--material-color-blue-600);
-  --primary-color: var(--material-color-blue-600);
+  --primary-bg: var(--material-color-indigo-600);
+  --primary-color: var(--material-color-indigo-600);
   --primary-fg: var(--white);
-  --secondary-bg: var(--material-color-blue-grey-100);
-  --secondary-color: var(--material-color-blue-grey-100);
-  --secondary-fg: var(--material-color-grey-900);
+  --secondary-bg: var(--material-color-indigo-50);
+  --secondary-color: var(--material-color-indigo-50);
+  --secondary-fg: var(--material-color-indigo-900);
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
 
   /* Fallback colors - themes can override these */
-  --bg: var(--material-color-grey-50);
-  --fg: var(--material-color-grey-900);
+  --bg: #fcfcff;
+  --fg: #1b1d2e;
 
   --stripe-fg: var(--menu-fg, var(--fg));
   --stripe-bg: color-mix(
@@ -23,21 +23,26 @@
     var(--menu-fg, var(--fg)) 6%
   );
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
-  --border-color: var(--fg);
-  --warning-bg: var(--material-color-orange-600);
-  --warning-color: var(--material-color-orange-600);
-  --warning-fg: var(--white);
+  /* Derived from the page pair rather than hard-coded, so a theme that only
+     sets --bg/--fg (light or dark) still gets a visible but quiet border. */
+  --border-color: color-mix(in oklab, var(--fg) 35%, var(--bg));
+  /* Semantic pairs meet WCAG AA (4.5:1) for button-sized text. Warning is
+     amber with dark text: no orange dark enough for white text still reads
+     as "warning" rather than "danger". */
+  --warning-bg: var(--material-color-amber-400);
+  --warning-color: var(--material-color-amber-400);
+  --warning-fg: var(--material-color-grey-900);
   --warning-text-transform: uppercase;
 
   /* Semantic color variants */
-  --danger-bg: var(--material-color-red-600);
-  --danger-color: var(--material-color-red-600);
+  --danger-bg: var(--material-color-red-700);
+  --danger-color: var(--material-color-red-700);
   --danger-fg: var(--white);
-  --success-bg: var(--material-color-green-600);
-  --success-color: var(--material-color-green-600);
+  --success-bg: var(--material-color-green-800);
+  --success-color: var(--material-color-green-800);
   --success-fg: var(--white);
-  --info-bg: var(--material-color-light-blue-600);
-  --info-color: var(--material-color-light-blue-600);
+  --info-bg: var(--material-color-light-blue-800);
+  --info-color: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
   --surface-bg: var(--bg);
@@ -48,7 +53,7 @@
      affordances.css. The color-props(menu-item, menu, button, control) chain
      resolves it to --menu-bg / --bg at the element, keeping per-instance
      --menu-bg overrides working. */
-  --focus-color: var(--material-color-blue-a400);
+  --focus-color: var(--material-color-indigo-a200);
   --tooltip-border: none;
 }
 
@@ -59,7 +64,7 @@ body {
 
 a {
   background-color: var(--link-bg, transparent);
-  color: var(--link-fg, var(--material-color-blue-a400));
+  color: var(--link-fg, var(--material-color-indigo-700));
 }
 
 /* Color definitions */

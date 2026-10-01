@@ -1,50 +1,53 @@
 /* light mode */
 
 :root {
-  --fg: var(--material-color-grey-800);
-  --bg: #fafafa;
-  --surface-bg: var(--material-color-grey-100);
-  --surface-fg: var(--material-color-grey-800);
+  --fg: #1b1d2e;
+  --bg: #fcfcff;
+  --surface-bg: #f4f5fb;
+  --surface-fg: #1b1d2e;
   --container-bg: var(--surface-bg);
   --container-fg: var(--surface-fg);
-  --sidebar-bg: var(--material-color-grey-100);
-  --sidebar-fg: var(--material-color-grey-900);
+  --sidebar-bg: #eef0fa;
+  --sidebar-fg: #1b1d2e;
 
-  --menu-fg: var(--material-color-grey-900);
-  --menu-bg: var(--material-color-grey-100);
-  --primary-bg: var(--material-color-blue-500);
-  --primary-color: var(--material-color-blue-500);
-  --primary-fg: var(--material-color-grey-100);
-  --secondary-bg: var(--material-color-grey-400);
-  --secondary-color: var(--material-color-grey-400);
-  --secondary-fg: var(--material-color-grey-900);
+  --menu-fg: #1b1d2e;
+  --menu-bg: #ffffff;
+  --primary-bg: var(--material-color-indigo-600);
+  --primary-color: var(--material-color-indigo-600);
+  --primary-fg: var(--white);
+  --secondary-bg: var(--material-color-indigo-50);
+  --secondary-color: var(--material-color-indigo-50);
+  --secondary-fg: var(--material-color-indigo-900);
   --stripe-bg: color-mix(in srgb, var(--menu-bg) 94%, var(--menu-fg) 6%);
-  --hover-color-mix: #444;
   --active-color-mix: black;
   --stripe-fg: var(--menu-fg);
-  --control-bg: var(--material-color-grey-300);
-  --control-fg: var(--material-color-grey-900);
-  --tab-bg: var(--material-color-grey-200);
-  --tab-fg: var(--material-color-grey-800);
+  --control-bg: var(--material-color-indigo-50);
+  --control-fg: var(--material-color-indigo-900);
+  --tab-bg: var(--material-color-indigo-50);
+  --tab-fg: var(--material-color-indigo-900);
   --tab-active-bg: #ffffff;
-  --tab-active-fg: var(--material-color-blue-700);
-  --tab-bar-fg: var(--material-color-grey-900);
+  --tab-active-fg: var(--material-color-indigo-700);
+  --tab-bar-fg: #1b1d2e;
 
   /* Semantic colors for light mode */
-  --warning-bg: var(--material-color-orange-600);
-  --warning-color: var(--material-color-orange-600);
-  --warning-fg: var(--white);
-  --danger-bg: var(--material-color-red-600);
-  --danger-color: var(--material-color-red-600);
+  --warning-bg: var(--material-color-amber-400);
+  --warning-color: var(--material-color-amber-400);
+  --warning-fg: var(--material-color-grey-900);
+  --danger-bg: var(--material-color-red-700);
+  --danger-color: var(--material-color-red-700);
   --danger-fg: var(--white);
-  --success-bg: var(--material-color-green-600);
-  --success-color: var(--material-color-green-600);
+  --success-bg: var(--material-color-green-800);
+  --success-color: var(--material-color-green-800);
   --success-fg: var(--white);
-  --info-bg: var(--material-color-light-blue-600);
-  --info-color: var(--material-color-light-blue-600);
+  --info-bg: var(--material-color-light-blue-800);
+  --info-color: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
-  --border-color: var(--material-color-grey-400);
+  --border-color: var(--material-color-indigo-300);
+  --focus-color: var(--material-color-indigo-a200);
+  --tooltip-bg: var(--material-color-indigo-900);
+  --tooltip-fg: var(--white);
+  --tooltip-arrow-color: var(--tooltip-bg);
   --input-bg: #fefefe;
   --input-fg: var(--material-color-grey-900);
   --slider-track-bg: color-mix(

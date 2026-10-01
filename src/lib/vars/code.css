@@ -4,4 +4,16 @@
   --code-tab-size: 4;
   --code-width: min(75em, 100%);
   --code-height: auto;
+  /* Token backgrounds must be explicit: each token's color-props chain ends
+     with no fallback, and an unset custom property inherits, so without these
+     an ancestor's --bg would paint behind every token. Themes that style
+     tokens already set these; this covers themes that don't. */
+  --code-comment-bg: transparent;
+  --code-string-bg: transparent;
+  --code-keyword-bg: transparent;
+  --code-attr-name-bg: transparent;
+  --code-tag-bg: transparent;
+  --code-function-bg: transparent;
+  --code-variable-bg: transparent;
+  --code-operator-bg: transparent;
 }
