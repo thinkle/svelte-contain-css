@@ -89,7 +89,7 @@
 <DemoWithCode
   code={`<Inline>
   <img
-    src="https://loremflickr.com/320/400/cat?lock=stack-demo"
+    src="https://picsum.photos/id/593/320/400"
     alt="Placeholder preview"
     width="320"
     height="400"
@@ -135,7 +135,7 @@
   {/snippet}
   <Inline>
     <img
-      src="https://loremflickr.com/320/400/cat?lock=stack-demo"
+      src="https://picsum.photos/id/593/320/400"
       alt="Placeholder preview"
       width="320"
       height="400"

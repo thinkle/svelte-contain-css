@@ -143,6 +143,11 @@
        and cursor. Must follow typography-container-props. */
     @include overlay-text-reset(dialog, top, surface, block);
     @include box-shadow(dialog, top, surface, block);
+    /* typography-props writes margin-top/bottom ending in `unset`, which
+       zeroes the UA's `margin: auto` and pins a modal to the top edge.
+       Restore auto so it centers vertically; only dialog-level vars move it. */
+    margin-top: var(--dialog-margin-top, auto);
+    margin-bottom: var(--dialog-margin-bottom, auto);
     min-width: min(
       calc(100vw - var(--padding) * 2),
       var(--dialog-min-width, 400px)

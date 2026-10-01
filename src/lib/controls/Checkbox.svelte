@@ -203,11 +203,16 @@
     border-radius: var(--checkbox-radius, 0);
   }
 
-  label:hover::before {
+  /* The :has(:checked) variants are needed because the checked rule below
+     outranks a bare label:hover::before and would swallow the hover; the mix
+     still reads the checked colors through --_background-color. */
+  label:hover::before,
+  label:has(input:checked):hover::before {
     @include clickable-hover-affordance(checkbox, clickable);
   }
 
-  label:active::before {
+  label:active::before,
+  label:has(input:checked):active::before {
     @include clickable-active-affordance(checkbox, clickable);
   }
 

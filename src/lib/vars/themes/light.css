@@ -19,7 +19,6 @@
   --secondary-color: var(--material-color-indigo-50);
   --secondary-fg: var(--material-color-indigo-900);
   --stripe-bg: color-mix(in srgb, var(--menu-bg) 94%, var(--menu-fg) 6%);
-  --hover-color-mix: #444;
   --active-color-mix: black;
   --stripe-fg: var(--menu-fg);
   --control-bg: var(--material-color-indigo-50);
