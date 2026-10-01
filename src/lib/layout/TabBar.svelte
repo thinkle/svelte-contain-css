@@ -56,6 +56,7 @@
     --bar-bg="var(--tab-bar-bg, var(--bar-bg))"
     --bar-align="var(--tab-bar-align, flex-end)"
     --bar-overflow="hidden"
+    --bar-wrap="var(--tab-bar-wrap, nowrap)"
     --bar-border-left="var(--tab-bar-border-left, none)"
     --bar-border-right="var(--tab-bar-border-right, none)"
     --bar-border-top="var(--tab-bar-border-top, none)"
@@ -96,7 +97,14 @@
     border-right: var(--tab-bar-border-left, none);
     border-top: var(--tab-bar-border-left, none);
     gap: var(--tab-bar-gap, var(--space-md));
-    overflow: hidden;
+    /* Tabs stay one strip. When they don't all fit -- four tabs on a phone --
+       the strip scrolls sideways rather than dropping the last tab onto a
+       second row, which reads as a broken tab set (the second row floats
+       under the active tab's baseline). Set --tab-bar-wrap: wrap for the
+       old behaviour. */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
   }
   .sticky {
     position: sticky;

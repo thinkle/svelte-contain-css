@@ -206,7 +206,7 @@
           <SplitPane
             leftWidth="1fr"
             rightWidth="1fr"
-            height="var(--demo-with-code-height, var(--demo-with-code-split-height, min(70vh, 640px)))"
+            height="var(--_split-height)"
             --split-pane-border="none"
             --split-pane-content-padding="var(--space-md)"
           >
@@ -304,6 +304,19 @@
 
   .split-panel {
     padding: 0;
+    --_split-height: var(
+      --demo-with-code-height,
+      var(--demo-with-code-split-height, min(70vh, 640px))
+    );
+  }
+
+  /* SplitPane stacks its panes below 600px (it asks the same container this
+     does). A fixed height only makes sense for panes side by side; stacked,
+     it just leaves a slab of empty panel under the code. */
+  @container (max-width: 600px) {
+    .split-panel {
+      --_split-height: auto;
+    }
   }
 
   .split-panel :global(.split-pane) {

@@ -172,7 +172,12 @@
     justify-content: var-with-fallbacks(--justify, tile, flex-start);
     align-items: var-with-fallbacks(--align, tile, center);
     container-type: inline-size;
-    // Add other specific styles for the tile
+    /* A Tile is a fixed-size object. Inline-size containment makes its
+       min-content width zero, so as a flex item in any row that runs out of
+       room (a RowContainer lane, a nowrap Inline) it would be squeezed to a
+       sliver with its text spilling out. Hold the size; let the row wrap or
+       scroll instead. */
+    flex-shrink: 0;
   }
 
   button.tile,

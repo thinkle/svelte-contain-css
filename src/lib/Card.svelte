@@ -89,6 +89,15 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
+    /* --card-width is the size a Card *wants*; it never gets to push past
+       its container. `stretch` is "whatever the parent leaves after my
+       margins", so a 250px card in a 200px pane just becomes a narrower
+       card -- whose own container queries then take it from there. The
+       prefixed lines cover browsers that only know the old keyword. */
+    max-width: 100%;
+    max-width: -moz-available;
+    max-width: -webkit-fill-available;
+    max-width: stretch;
     /* Was a single `margin` shorthand (--card-margin, 16px on every side).
        Split into block/inline -- same default on each axis, so nothing
        visually changes for existing callers -- but now a caller who wants
