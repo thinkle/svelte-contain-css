@@ -255,6 +255,12 @@
     position: relative;
     overflow: visible;
     background: transparent;
+    /* The aside is only a transparent strip holding the button and the
+       sheet, and a host may let content run underneath it (Page does, once
+       it has moved the button into its header). The strip itself must not
+       swallow clicks meant for that content; the button and an open sheet
+       turn pointer events back on for themselves. */
+    pointer-events: none;
     width: calc(
       var(--gap) +
         max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
@@ -347,7 +353,9 @@
       opacity: 1;
       pointer-events: all;
       display: block;
-      top: var(--padding);
+      /* A host can line the button up with something of its own -- Page
+         centres it in its header row. */
+      top: var(--sidebar-sheet-button-top, var(--padding));
       left: 0;
 
       border-radius: var(--_sidebar-sheet-button-radius);

@@ -15,6 +15,14 @@
     HTMLAttributes<HTMLDivElement>,
     {
       sticky?: boolean;
+      /**
+       * Let tabs that don't fit wrap onto another row. By default the tab
+       * strip stays one row and scrolls sideways when it runs out of room,
+       * which keeps the active tab attached to its panel; wrapping suits a
+       * long set of short, filter-like tabs where seeing them all at once
+       * matters more. Same as setting --tab-bar-wrap: wrap.
+       */
+      wrap?: boolean;
       active?: string | Item | null;
       items?: (string | Item)[];
       onchange?: (value: string | Item | null) => void;
@@ -25,6 +33,7 @@
 
   let {
     sticky = false,
+    wrap = false,
     active = $bindable(null),
     items = [],
     onchange,
@@ -46,7 +55,7 @@
   let lastActive = $state(active);
 </script>
 
-<div class={["tabs", className]} class:sticky {...el}>
+<div class={["tabs", className]} class:sticky class:wrap-tabs={wrap} {...el}>
   <Bar
     padding="0"
     --button-height="var(--tab-bar-height, 3em)"
@@ -100,11 +109,14 @@
     /* Tabs stay one strip. When they don't all fit -- four tabs on a phone --
        the strip scrolls sideways rather than dropping the last tab onto a
        second row, which reads as a broken tab set (the second row floats
-       under the active tab's baseline). Set --tab-bar-wrap: wrap for the
-       old behaviour. */
+       under the active tab's baseline). `wrap` (or --tab-bar-wrap: wrap)
+       brings wrapping back. */
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
+  }
+  .wrap-tabs {
+    --tab-bar-wrap: wrap;
   }
   .sticky {
     position: sticky;

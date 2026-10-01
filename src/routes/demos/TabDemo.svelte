@@ -151,6 +151,11 @@
           <code>&lt;TabBar&gt;</code> is the container for tab controls. It provides
           the aligned row, tab spacing, and optional sticky behavior.
         </p>
+        <p>
+          Tabs stay on one row: when there are more than fit, the strip scrolls
+          sideways so the active tab stays attached to its panel. Add
+          <code>wrap</code> to let them flow onto a second row instead.
+        </p>
       {/snippet}
       <TabBar>
         <TabItem>Foo</TabItem>
