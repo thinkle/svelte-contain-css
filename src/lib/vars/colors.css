@@ -12,9 +12,17 @@
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
 
-  /* Fallback colors - themes can override these */
-  --bg: #fcfcff;
-  --fg: #1b1d2e;
+  /* Fallback colors - themes can override these.
+
+     Neutral on purpose: this file is the base every theme (and every app
+     with no theme at all) inherits before anything else runs, so a tint
+     here reaches apps that never asked for it. A theme that wants a
+     particular cast -- indigo, warm, whatever -- sets --bg/--fg itself
+     (see themes/light.css); --border-color below already derives from
+     whatever --bg/--fg a theme (or an app) actually provides, so a themed
+     app gets a themed border for free without this file picking a hue. */
+  --bg: var(--material-color-grey-50);
+  --fg: var(--material-color-grey-900);
 
   --stripe-fg: var(--menu-fg, var(--fg));
   --stripe-bg: color-mix(
@@ -53,7 +61,12 @@
      affordances.css. The color-props(menu-item, menu, button, control) chain
      resolves it to --menu-bg / --bg at the element, keeping per-instance
      --menu-bg overrides working. */
-  --focus-color: var(--material-color-indigo-a200);
+  /* --focus-color intentionally not defaulted here either: both consumers
+     (_affordances.scss's outline rule, Tag's close-button outline) already
+     fall back to the browser's own focus ring / currentColor when it's
+     unset, which is exactly the neutral behavior an un-themed app should
+     get. A theme that wants a specific ring sets --focus-color itself
+     (see themes/light.css, themes/material.css, themes/purple.css). */
   --tooltip-border: none;
 }
 
@@ -64,7 +77,10 @@ body {
 
 a {
   background-color: var(--link-bg, transparent);
-  color: var(--link-fg, var(--material-color-indigo-700));
+  /* Same reasoning as --surface-link-fg above: derive from the theme's own
+     --primary-bg (always defined, even for an app with no theme at all)
+     rather than hard-coding a hue here too. */
+  color: var(--link-fg, var(--primary-bg));
 }
 
 /* Color definitions */
