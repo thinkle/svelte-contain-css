@@ -33,6 +33,10 @@
     --_prose-margin-inline: #{var-with-fallbacks(--prose-margin-inline, body, text, auto)};
     --_heading-margin-inline: #{var-with-fallbacks(--heading-margin-inline, body, text, auto)};
     width: var(--text-width, var(--body-width, 100%));
+    /* width is 100% by default and padding-inline is added on top -- without
+       border-box a TextLayout is always 2 * padding wider than its parent,
+       which on a phone means a sideways scroll before anything else loads. */
+    box-sizing: border-box;
     /* Not margin-props() (_box.scss): that defaults both axes to 0, but a
        TextLayout has always centred itself horizontally by default. Same
        var-with-fallbacks() shape as everywhere else, just inline defaults to
@@ -91,6 +95,18 @@
   div :global(code) {
     @include typography-props(code);
     text-wrap: nowrap;
+  }
+
+  /* Inline code (a CSS variable name, a prop signature) reads best unbroken,
+     so it stays on one line -- until the column it sits in is too narrow for
+     that to be a choice. There a long token like --grid-layout-justify-content
+     is wider than the whole line, and refusing to break it pushes the layout
+     sideways; let it wrap, and mid-token if it has to. */
+  @container (max-width: 30rem) {
+    div :global(:not(pre) > code) {
+      text-wrap: wrap;
+      overflow-wrap: anywhere;
+    }
   }
 
   /* Everywhere else, heading styling is consumed once, globally, by the

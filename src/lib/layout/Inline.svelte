@@ -91,7 +91,11 @@
     @include margin-props(inline);
     display: flex;
     flex-direction: row;
-    flex-wrap: var(--inline-wrap, nowrap);
+    /* Wraps by default, like Bar: a row of tags or choices that can't wrap
+       just pushes past its container the moment the container is narrow.
+       Pass wrap="nowrap" (or --inline-wrap) for a row that must stay on one
+       line -- and then give its children room to shrink. */
+    flex-wrap: var(--inline-wrap, wrap);
     gap: var(--inline-gap, var(--gap));
     justify-content: var(--inline-justify, flex-start);
     align-items: var(--inline-align, center);

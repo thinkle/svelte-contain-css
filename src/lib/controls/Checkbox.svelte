@@ -110,6 +110,10 @@
   .label-sizing-box {
     position: relative;
     display: inline-block;
+    /* An inline-block wraps as a whole first, so short labels in a row just
+       flow onto the next line; only a label longer than the whole row wraps
+       its own text (the invisible sizer and the real label wrap alike). */
+    max-width: 100%;
   }
 
   .label-sizing-box .checkbox-item {

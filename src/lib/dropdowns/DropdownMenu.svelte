@@ -308,7 +308,9 @@
     aria-expanded={isOpen ? "true" : "false"}
     aria-controls={id}
   >
-    {#if label}{@render label()}{:else}Menu{/if}
+    <span class="trigger-label"
+      >{#if label}{@render label()}{:else}Menu{/if}</span
+    >
   </button>
   <div
     {id}
@@ -349,6 +351,19 @@
     @include clickable(menu-trigger, menu, button, control);
     @include focusable();
     position: relative;
+    /* In a crowded row (a toolbar, a phone-width header) the trigger gives
+       way before its neighbours do: never wider than the space it was given,
+       its label on one line and truncated with an ellipsis (below). */
+    max-width: 100%;
+  }
+  /* The clipping lives on this inner span, not the button: overflow other
+     than visible moves an inline-level box's baseline to its bottom edge,
+     which would drop the trigger out of line with text beside it. */
+  .trigger-label {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dropdown-content :global(.menu) {
@@ -453,6 +468,10 @@
   }
   nav {
     position: relative;
+    /* Lets a flex/grid parent shrink the menu below its label's width, so the
+       trigger's ellipsis can kick in instead of the row overflowing. */
+    min-width: 0;
+    max-width: 100%;
   }
 
   [popover] {

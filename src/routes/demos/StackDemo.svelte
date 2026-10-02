@@ -87,12 +87,13 @@
   </p>
 </TextLayout>
 <DemoWithCode
-  code={`<Inline>
+  code={`<Inline wrap="nowrap">
   <img
     src="https://picsum.photos/id/593/320/400"
     alt="Placeholder preview"
     width="320"
     height="400"
+    style="width: min(320px, 40%); height: auto"
   />
   <Stack${stretchAttr}${modeAttr}
     bg="var(--material-color-pink-50)"
@@ -133,12 +134,16 @@
       <RadioButton bind:group={stackMode} value="end">end</RadioButton>
     </Inline>
   {/snippet}
-  <Inline>
+  <!-- nowrap keeps the Stack beside the image (wrapping would put it below
+       and there'd be nothing to stretch against); the image gives up width
+       instead, so the pair fits a phone. -->
+  <Inline wrap="nowrap">
     <img
       src="https://picsum.photos/id/593/320/400"
       alt="Placeholder preview"
       width="320"
       height="400"
+      style="width: min(320px, 40%); height: auto"
     />
     <Stack
       stretch={stretchEnabled}

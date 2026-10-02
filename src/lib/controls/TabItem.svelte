@@ -79,6 +79,10 @@
       var(--border-radius) var(--border-radius) 0 0
     );
     margin: 0;
+    /* In a TabBar that scrolls, a tab keeps its label on one line and its
+       full width; squeezing the labels is what made them wrap. */
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {

@@ -109,15 +109,27 @@
       block,
       var(--gap)
     );
-    /* Why is this suddenly causing a scroll? */
     container-type: inline-size;
-    overflow-x: hidden;
+    /* Scroll, never clip: content wider than the container (a table, a
+       wide grid, a long unbroken string) must stay reachable on a narrow
+       screen. `hidden` here made it unreachable on phones. */
+    overflow-x: auto;
     height: var(--container-height, 100%);
     overflow-y: auto;
     @include custom-scrollbar(container, surface);
     /* Make container take up its width if possible: this fixes a bug where container would
     shrink enormously if it ended up nested inside e.g. a <SplitPane> */
     width: var(--container-width, 100%);
+  }
+  /* Small tier (see $small-max): --container-padding-small, falling back to
+     the regular padding. */
+  @include when-small {
+    section {
+      padding: var(
+        --container-padding-small,
+        var-with-fallbacks(--padding, container, surface, block, 8px)
+      );
+    }
   }
   .border {
     border: var-with-fallbacks(

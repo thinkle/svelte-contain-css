@@ -194,6 +194,9 @@
       --select-width,
       var(--target-width, var(--dropdown-menu-width, min(12em, 100vw)))
     );
+    /* The measured width fits the longest option; the container may be
+       narrower than that. Truncate (below) rather than overflow. */
+    max-width: 100%;
     text-overflow: ellipsis;
     @include typography-props(select, input, ui);
     @include focusable();

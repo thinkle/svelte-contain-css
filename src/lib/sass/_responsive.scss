@@ -13,6 +13,49 @@
 $sidebar-compact-max: 512px;
 $sidebar-wide-min: 513px;
 
+/* The "small" size tier: a component whose container is this wide or less
+   is on a phone, or in a pane about that narrow, and sizes itself for it.
+
+   The convention, shared by every component that has a size worth changing
+   there (Card started it; Tile, GridLayout, Bar and Container follow):
+
+     --{component}-{property}-small
+
+   applies inside a small container. What wins there, in order:
+     1. the `-small` variable, if you set it;
+     2. otherwise the regular variable, if you set it -- a size you chose on
+        purpose is not overridden behind your back;
+     3. otherwise the component's own small default, which for most
+        properties is simply its regular default.
+
+   Container queries can't read a custom property, so the breakpoint itself
+   is fixed here rather than themeable. 600px matches Card and SplitPane,
+   which already switched there. (The Sidebar's rail-to-sheet switch,
+   above, is a separate, layout-chrome decision and keeps its own value.) */
+$small-max: 600px;
+
+/* Styles for the small tier: the nearest container is narrow, OR the
+   viewport is.
+
+   The container query is the real answer -- a Tile in a 400px pane on a
+   desktop is small. But a container query only matches inside an ancestor
+   that *is* a container, and a component dropped straight into a page (no
+   Page, no Container around it) has none, so on a phone it would never
+   find out. The viewport query covers that: a narrow viewport means every
+   container in it is narrow too, so the two never disagree in the
+   direction that matters.
+
+   An element never queries itself, so on a component that is its own
+   container (Tile, Bar) this asks about the space it was given. */
+@mixin when-small {
+  @media (max-width: #{$small-max}) {
+    @content;
+  }
+  @container (max-width: #{$small-max}) {
+    @content;
+  }
+}
+
 
 /* Warning: because we define a fallback
   media query, the media query can override the container
