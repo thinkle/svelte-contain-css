@@ -64,7 +64,7 @@
     --bar-fg="var(--tab-bar-fg, var(--bar-fg))"
     --bar-bg="var(--tab-bar-bg, var(--bar-bg))"
     --bar-align="var(--tab-bar-align, flex-end)"
-    --bar-overflow="hidden"
+    --bar-overflow="var(--tab-bar-overflow, auto hidden)"
     --bar-wrap="var(--tab-bar-wrap, nowrap)"
     --bar-border-left="var(--tab-bar-border-left, none)"
     --bar-border-right="var(--tab-bar-border-right, none)"
@@ -115,6 +115,10 @@
     overflow-y: hidden;
     scrollbar-width: thin;
   }
+  /* Svelte 5 wraps a component given CSS variables in <svelte-css-wrapper>,
+     not a <div>, so the selectors above don't reach the Bar here. The
+     sideways scroll that matters on a phone therefore also goes in through
+     --bar-overflow on the Bar itself (x scrolls, y clipped). */
   .wrap-tabs {
     --tab-bar-wrap: wrap;
   }
