@@ -109,9 +109,11 @@
       block,
       var(--gap)
     );
-    /* Why is this suddenly causing a scroll? */
     container-type: inline-size;
-    overflow-x: hidden;
+    /* Scroll, never clip: content wider than the container (a table, a
+       wide grid, a long unbroken string) must stay reachable on a narrow
+       screen. `hidden` here made it unreachable on phones. */
+    overflow-x: auto;
     height: var(--container-height, 100%);
     overflow-y: auto;
     @include custom-scrollbar(container, surface);
