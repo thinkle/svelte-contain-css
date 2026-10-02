@@ -197,7 +197,9 @@
   /* Card itself: narrow (≤ --card-width-small: 250px) — tighten typography and spacing */
   @container (max-width: 300px) {
     .card section {
-      font-size: var(--card-font-size-small, calc(0.875 * var(--_font-size)));
+      /* Opt-in only: a narrow card is usually a phone, and text should not
+         shrink there. */
+      font-size: var(--card-font-size-small, var(--_font-size));
     }
     .card header,
     .card section {
@@ -218,7 +220,9 @@
   /* Card itself: wide (≥ --card-width-large: 600px) — expand typography and spacing */
   @container (min-width: 500px) {
     .card section {
-      font-size: var(--card-font-size-large, calc(1.125 * var(--_font-size)));
+      /* Opt-in only: a card's width is a layout fact, not a reason for its
+         text to be a different size from the text beside it. */
+      font-size: var(--card-font-size-large, var(--_font-size));
     }
     .card header,
     .card section {
