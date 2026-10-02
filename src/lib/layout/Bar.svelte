@@ -146,6 +146,24 @@
     --_heading-margin-inline: var-with-fallbacks(--heading-margin-inline, bar, 0);
   }
 
+  /* Small tier (see $small-max): --bar-padding-small, --bar-gap-small and
+     --bar-min-height-small, each falling back to the regular value. A bar
+     that should be slimmer on a phone says so once, here, instead of every
+     consumer writing its own query. */
+  @include when-small {
+    .bar {
+      padding: var(
+        --bar-padding-small,
+        var-with-fallbacks(--padding, bar, 8px)
+      );
+      gap: var(--bar-gap-small, var-with-fallbacks(--gap, bar, 8px));
+      min-height: var(
+        --bar-min-height-small,
+        var(--bar-min-height, var(--bar-height, 3em))
+      );
+    }
+  }
+
   .bar :global(h1),
   .bar :global(h2),
   .bar :global(h3),

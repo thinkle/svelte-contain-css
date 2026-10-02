@@ -121,6 +121,16 @@
     shrink enormously if it ended up nested inside e.g. a <SplitPane> */
     width: var(--container-width, 100%);
   }
+  /* Small tier (see $small-max): --container-padding-small, falling back to
+     the regular padding. */
+  @include when-small {
+    section {
+      padding: var(
+        --container-padding-small,
+        var-with-fallbacks(--padding, container, surface, block, 8px)
+      );
+    }
+  }
   .border {
     border: var-with-fallbacks(
       --border,

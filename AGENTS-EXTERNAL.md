@@ -323,7 +323,7 @@ and `Page` is only one way to get them:
 3. `display: flex` (or grid) — or the content stacks *below* it
 
 So `<Container><Sidebar />content</Container>` does not work: `Container` is a
-block, and its `overflow-x: hidden` also clips an overlay sheet. Use
+block, and its `overflow-x: auto` (a scroll box) also clips an overlay sheet. Use
 `SidebarContainer`, which is exactly those three requirements and no page
 chrome:
 
@@ -1213,6 +1213,46 @@ Components respond to their container, not viewport:
   </FormItem>
 </Container>
 ```
+
+### Small screens: the `-small` variables
+
+Sized components have a **small tier**: when the space they're given is
+600px wide or less (a phone, or a narrow pane on a desktop), they read a
+`-small` twin of their size variables. You don't have to write a media query
+to make a Tile, Bar or Container behave on a phone -- the defaults already
+do, and you tune them with variables like everything else.
+
+In the small tier, for each property:
+
+1. `--{component}-{property}-small` wins if you set it;
+2. otherwise your regular `--{component}-{property}` is kept -- a size you
+   chose on purpose is never overridden behind your back;
+3. otherwise the component's own small default applies.
+
+| Component | Small-tier variables | Small default |
+| --- | --- | --- |
+| `Tile` | `--tile-width-small`, `--tile-height-small` | 160px wide (two per row on a 360px phone), height from the aspect ratio |
+| `GridLayout` | `--grid-layout-gap-small`; tile tracks follow `--tile-width-small` | same as regular |
+| `Bar` | `--bar-padding-small`, `--bar-gap-small`, `--bar-min-height-small` | same as regular |
+| `Container` | `--container-padding-small` | same as regular |
+| `Card` | `--card-width-small`, `--card-height-small`, `--card-padding-small`, `--card-font-size-small` | see Card |
+
+```svelte
+<!-- Slimmer app bar on phones, roomier tiles everywhere else -->
+<div style="--bar-padding-small: 4px; --tile-width: 220px; --tile-width-small: 150px;">
+  ...
+</div>
+```
+
+"The space they're given" is the nearest container ancestor (`Page`
+content, `Container`, `Card`...) **or** the viewport, whichever is
+narrower -- so a component dropped straight into a page with no container
+around it still knows it's on a phone.
+
+A `Tile`'s 3:4 shape (`--tile-aspect-ratio`) is a minimum height, so a tile
+with more content than its shape holds grows instead of spilling out. Set
+`--tile-height` (or `height`) to pin it; `height="auto"` drops the shape and
+sizes the tile to its content.
 
 ### Accordions
 

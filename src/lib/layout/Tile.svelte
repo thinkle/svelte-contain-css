@@ -162,9 +162,10 @@
     @include color-props(tile, surface);
     @include typography-container-props(tile, surface);
     @include box-shadow(tile, surface);
-    width: var(--tile-width, calc(var(--space-lg) * 24));
-    /* Override typography max-width */
-    max-width: var(--tile-width, calc(var(--space-lg) * 24));
+    /* --_tile-width is resolved in the sizing block below. max-width also
+       overrides the typography mixin's prose measure. */
+    width: var(--_tile-width);
+    max-width: var(--_tile-width);
 
     display: inline-flex;
     vertical-align: top;
@@ -194,12 +195,44 @@
   label.tile:has(:global(input:focus-visible)) {
     @include focus-ring();
   }
-  $aspect: 1.333;
-  /* Sizing code */
+  /* Sizing.
 
+     One width, declared once. There used to be two -- `--space-lg * 24`
+     (192px) above and `200px` here -- and the narrower max-width quietly won,
+     so tiles rendered 192px wide but 267px tall (200 * 4/3).
+
+     The 3:4 shape is a *minimum* height rather than a fixed one, so a tile
+     with more content than its shape holds grows to fit instead of spilling
+     out. Set --tile-height to pin it (it sets the minimum too, or the shape
+     would win over a shorter pinned height); --tile-aspect-ratio to change
+     the shape.
+
+     Not the `aspect-ratio` property: a percentage --tile-width (a tile
+     filling a ColumnContainer rail) would then be 4/3 of the rail tall. As a
+     calc, a percentage height against an auto-height parent resolves to
+     nothing and the tile is as tall as its content, which is what those
+     layouts have always relied on. */
   .tile {
-    width: var(--tile-width, 200px);
-    height: var(--tile-height, calc(var(--tile-width, 200px) * $aspect));
+    --_tile-width: var(--tile-width, calc(var(--space-lg, 8px) * 24));
+    --_tile-min-height: var(
+      --tile-height,
+      calc(var(--_tile-width) / (var(--tile-aspect-ratio, 3 / 4)))
+    );
+    height: var(--tile-height, auto);
+    min-height: var(--_tile-min-height);
+  }
+  /* Small tier (see $small-max): two tiles side by side on a phone instead of
+     one 192px tile alone in a 360px row. 160px * 2 + a gap fits a 328px
+     content box, i.e. a 360px phone with 16px gutters. */
+  @include when-small {
+    .tile {
+      --_tile-width: var(
+        --tile-width-small,
+        var(--tile-width, calc(var(--space-lg, 8px) * 20))
+      );
+      height: var(--tile-height-small, var(--tile-height, auto));
+      min-height: var(--tile-height-small, var(--_tile-min-height));
+    }
   }
 
   /* Checkbox code */
