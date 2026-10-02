@@ -1330,6 +1330,22 @@ properties to.
 </TabBar>
 ```
 
+Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
+Buttons that belong on the tab row but aren't tabs go in the `actions`
+snippet, not among the tabs: they sit at the end of the row on a wide
+screen and get their own row above the tabs on a phone.
+
+```svelte
+<TabBar>
+  <TabItem active>Assignments</TabItem>
+  <TabItem>Plans</TabItem>
+  {#snippet actions()}
+    <Button onclick={refresh}>Refresh</Button>
+    <Button primary onclick={newPlan}>New plan</Button>
+  {/snippet}
+</TabBar>
+```
+
 ### Split Panes
 
 ```svelte
