@@ -91,9 +91,10 @@
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
   div > :global(.bar),
-  /* Account for display: contents div inserted by
-  svelte to inject css variables */
-  div > :global(div > .bar) {
+  /* The Bar is handed CSS variables, so Svelte 5 wraps it in a
+     display: contents <svelte-css-wrapper> (Svelte 4 used a <div>, which is
+     all this used to match -- so none of it applied after the migration). */
+  div > :global(svelte-css-wrapper > .bar) {
     @include color-props(tab-bar, bar, surface);
     @include typography-props-bare(tab-bar, bar, surface);
 
@@ -103,8 +104,8 @@
       var(--border-width) var(--border-style) var(--border-color)
     );
     border-left: var(--tab-bar-border-left, none);
-    border-right: var(--tab-bar-border-left, none);
-    border-top: var(--tab-bar-border-left, none);
+    border-right: var(--tab-bar-border-right, none);
+    border-top: var(--tab-bar-border-top, none);
     gap: var(--tab-bar-gap, var(--space-md));
     /* Tabs stay one strip. When they don't all fit -- four tabs on a phone --
        the strip scrolls sideways rather than dropping the last tab onto a
@@ -115,10 +116,9 @@
     overflow-y: hidden;
     scrollbar-width: thin;
   }
-  /* Svelte 5 wraps a component given CSS variables in <svelte-css-wrapper>,
-     not a <div>, so the selectors above don't reach the Bar here. The
-     sideways scroll that matters on a phone therefore also goes in through
-     --bar-overflow on the Bar itself (x scrolls, y clipped). */
+  /* The scroll also goes in through --bar-overflow on the Bar itself (x
+     scrolls, y clipped), so it holds even where a consumer's own CSS beats
+     the rule above. */
   .wrap-tabs {
     --tab-bar-wrap: wrap;
   }

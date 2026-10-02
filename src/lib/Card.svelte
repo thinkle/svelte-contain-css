@@ -183,8 +183,10 @@
   /* ── Container queries ──────────────────────────────────── */
   /* NOTE: .card targets the *parent* container; children target the card itself */
 
-  /* Parent context: small — adjust card sizing vars */
-  @container (max-width: 600px) {
+  /* Parent context: small (the shared small tier, $small-max -- a small
+     container, or a small viewport when there is no container) — adjust
+     card sizing vars */
+  @include when-small {
     .card {
       --w: var(--card-width-small);
       --h: var(--card-height-small);
