@@ -10,6 +10,7 @@
   import Tile from "$lib/layout/Tile.svelte";
   import Bar from "$lib/layout/Bar.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import Card from "$lib/Card.svelte";
   import "$lib/vars/defaults.css";
 </script>
 
@@ -66,6 +67,13 @@
   style="--container-padding-small: 3px;"
 >
   <Container>text</Container>
+</div>
+
+<div class="box small" data-testid="card-small">
+  <Card><p>card</p></Card>
+</div>
+<div class="box wide" data-testid="card-wide">
+  <Card><p>card</p></Card>
 </div>
 
 <style>

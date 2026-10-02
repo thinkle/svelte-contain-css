@@ -15,6 +15,13 @@
     HTMLAttributes<HTMLUListElement>,
     {
       children?: Snippet;
+      /**
+       * In the small tier (a container or viewport 600px or narrower), move
+       * each row's `end` region -- tags, buttons -- onto its own line under
+       * the main content instead of squeezing the main column to a sliver.
+       * On by default; pass `stackable={false}` for rows whose end region is
+       * small enough to stay beside the content on a phone.
+       */
       stackable?: boolean;
     },
     BaseStyleProps & {
@@ -47,7 +54,7 @@
 
   let {
     children,
-    stackable = false,
+    stackable = true,
     class: className,
     ...restProps
   }: Props = $props();
