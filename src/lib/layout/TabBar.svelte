@@ -168,6 +168,12 @@
     flex: 1 1 auto;
     min-width: 0;
   }
+  /* The row carries the underline; the strip's own (from the rule above)
+     would double it and stop short of the actions. */
+  .tab-strip > :global(svelte-css-wrapper > .bar),
+  .tab-strip > :global(.bar) {
+    border-bottom: none;
+  }
   .tab-actions {
     flex: 0 1 auto;
     display: flex;
