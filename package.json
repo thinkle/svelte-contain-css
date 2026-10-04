@@ -1,6 +1,6 @@
 {
   "name": "contain-css-svelte",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "license": "MIT",
   "scripts": {
     "capture:review": "node scripts/capture-review.mjs",
