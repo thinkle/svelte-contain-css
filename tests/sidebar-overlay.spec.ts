@@ -255,18 +255,15 @@ test.describe("Sidebar sheet button placement", () => {
       await expect(sidebar.locator("div.content")).toHaveCSS("opacity", "1");
       expect(await within()).toBe(true);
 
-      // Open, it sits flush against the panel's inner edge rather than
-      // wandering off -- and fully inside it. Straddling the edge looks like
-      // a mistake, and it desynchronises the button from the content inset
-      // the panel reserves for it, leaving a dead gap before the first item.
+      // Open, it is a tab fastened to the panel's outer edge: flush against
+      // it, entirely outside. Inside the panel it needed a button-wide strip
+      // reserved down the whole sheet, which read as a stripe beside every
+      // nav item.
       const b = (await button.boundingBox())!;
       const panel = (await sidebar.locator("div.content").boundingBox())!;
-      const pokesOut =
-        side === "left"
-          ? b.x + b.width - (panel.x + panel.width)
-          : panel.x - b.x;
-      expect(pokesOut).toBeLessThanOrEqual(1);
-      expect(pokesOut).toBeGreaterThan(-4);
+      const gap =
+        side === "left" ? b.x - (panel.x + panel.width) : panel.x - (b.x + b.width);
+      expect(Math.abs(gap)).toBeLessThanOrEqual(1);
     });
   }
 });
@@ -303,8 +300,8 @@ test.describe("Sheet panel content", () => {
             b.bottom <= f.top ||
             b.top >= f.bottom
           ),
-          // Space is reserved on the inline axis, so the content still
-          // starts at the top -- no blank band across a nav.
+          // The button sits outside the panel, so the content starts at the
+          // top -- no blank band across a nav -- and needs no strip either.
           topGap: f.top - pr.top,
         };
       });
@@ -482,7 +479,7 @@ test.describe("Sidebar sticky sheet", () => {
     expect(Math.round(p.height)).toBe(300);
   });
 
-  test("keeps the unstuck geometry: right sheet on the right, button on its inner edge", async ({
+  test("keeps the unstuck geometry: right sheet on the right, button on its outer edge", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -509,11 +506,11 @@ test.describe("Sidebar sticky sheet", () => {
       // content.
       if (right) {
         expect(Math.round(p.x + p.width)).toBe(Math.round(aside.x + aside.width));
-        // The open button sits just inside the sheet's left (inner) edge.
-        expect(Math.round(b.x)).toBe(Math.round(p.x));
+        // The open button is a tab just outside the sheet's left edge.
+        expect(Math.round(b.x + b.width)).toBe(Math.round(p.x));
       } else {
         expect(Math.round(p.x)).toBe(Math.round(aside.x));
-        expect(Math.round(b.x + b.width)).toBe(Math.round(p.x + p.width));
+        expect(Math.round(b.x)).toBe(Math.round(p.x + p.width));
       }
       await button.click();
     }
@@ -561,7 +558,7 @@ test.describe("Sidebar sheetButton", () => {
         };
       });
 
-  test("a right-hand tab squares its right corners shut, its left corners open", async ({
+  test("a right-hand tab keeps its right corners square, shut and open", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -569,9 +566,10 @@ test.describe("Sidebar sheetButton", () => {
     await expect.poll(() => corners(page, "sheet-button-tab")).toEqual({
       tl: "10px", bl: "10px", tr: "0px", br: "0px",
     });
+    // Open, it hangs off the panel's left edge -- fastened by its right side.
     await page.getByTestId("sheet-button-tab").locator(sheetButton).click();
     await expect.poll(() => corners(page, "sheet-button-tab")).toEqual({
-      tl: "0px", bl: "0px", tr: "10px", br: "10px",
+      tl: "10px", bl: "10px", tr: "0px", br: "0px",
     });
   });
 
@@ -596,7 +594,7 @@ test.describe("Sidebar sheetButton", () => {
     });
     await page.getByTestId("sheet-button-per-state").locator(sheetButton).click();
     await expect.poll(() => corners(page, "sheet-button-per-state")).toEqual({
-      tl: "0px", bl: "0px", tr: "10px", br: "10px",
+      tl: "10px", bl: "10px", tr: "0px", br: "0px",
     });
   });
 });
