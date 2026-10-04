@@ -27,6 +27,14 @@
       items?: (string | Item)[];
       onchange?: (value: string | Item | null) => void;
       children?: import("svelte").Snippet;
+      /**
+       * Controls that belong to the tab row but aren't tabs -- a Refresh
+       * button, a "New..." action. They sit at the end of the row when there
+       * is room, and on their own row above the tabs in the small tier (see
+       * the -small variables), so they never squeeze the tabs or stack into
+       * a tall column beside them on a phone.
+       */
+      actions?: import("svelte").Snippet;
     },
     StyleProps<typeof TAB_BAR_VARS>
   >;
@@ -38,6 +46,7 @@
     items = [],
     onchange,
     children,
+    actions,
     class: className,
     ...restProps
   }: Props = $props();
@@ -55,7 +64,7 @@
   let lastActive = $state(active);
 </script>
 
-<div class={["tabs", className]} class:sticky class:wrap-tabs={wrap} {...el}>
+{#snippet strip()}
   <Bar
     padding="0"
     --button-height="var(--tab-bar-height, 3em)"
@@ -69,7 +78,10 @@
     --bar-border-left="var(--tab-bar-border-left, none)"
     --bar-border-right="var(--tab-bar-border-right, none)"
     --bar-border-top="var(--tab-bar-border-top, none)"
-    --bar-border-bottom="var(--tab-bar-border-bottom, var(--border-width) var(--border-style) var(--border-color))"
+    --bar-border-bottom={actions
+      ? "none"
+      : "var(--tab-bar-border-bottom, var(--border-width) var(--border-style) var(--border-color))"}
+    --bar-margin-block={actions ? "0" : undefined}
   >
     {#each items as item}
       {@const value = typeof item === "string" ? item : item.value}
@@ -86,6 +98,23 @@
     {/each}
     {@render children?.()}
   </Bar>
+{/snippet}
+
+<div
+  class={["tabs", className]}
+  class:sticky
+  class:wrap-tabs={wrap}
+  class:has-actions={!!actions}
+  {...el}
+>
+  {#if actions}
+    <!-- The strip and the actions share the row; the underline moves to
+         the whole row so it runs under both. -->
+    <div class="tab-strip">{@render strip()}</div>
+    <div class="tab-actions">{@render actions()}</div>
+  {:else}
+    {@render strip()}
+  {/if}
 </div>
 
 <style lang="scss">
@@ -121,6 +150,53 @@
      the rule above. */
   .wrap-tabs {
     --tab-bar-wrap: wrap;
+  }
+
+  .has-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: var-with-fallbacks(--gap, tab-bar, var(--space-md, 8px));
+    border-bottom: var(
+      --tab-bar-border-bottom,
+      var(--border-width) var(--border-style) var(--border-color)
+    );
+    margin-block: var(--tab-bar-margin-block, 0 1em);
+  }
+  /* The strip takes the room and gives way first: min-width 0 lets it
+     shrink below its tabs' width, at which point it scrolls (above). */
+  .tab-strip {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  /* The row carries the underline; the strip's own (from the rule above)
+     would double it and stop short of the actions. */
+  .tab-strip > :global(svelte-css-wrapper > .bar),
+  .tab-strip > :global(.bar) {
+    border-bottom: none;
+  }
+  .tab-actions {
+    flex: 0 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var-with-fallbacks(--gap, tab-bar-actions, var(--space-md, 8px));
+    padding-block-end: var-with-fallbacks(
+      --padding,
+      tab-bar-actions,
+      var(--space-sm, 4px)
+    );
+  }
+  /* Small tier: actions get their own row, above the tabs, so the tabs stay
+     attached to the panel they switch. */
+  @include when-small {
+    .has-actions {
+      flex-direction: column-reverse;
+      align-items: stretch;
+    }
+    .tab-actions {
+      justify-content: flex-start;
+    }
   }
   .sticky {
     position: sticky;
