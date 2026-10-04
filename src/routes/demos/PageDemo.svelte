@@ -14,6 +14,9 @@
   let hasFooter = $state(true);
   let side = $state("left");
   let overlaySidebar = $state(false);
+  let compactSidebar = $state<"header" | "gutter" | "symmetric" | "overlap">(
+    "header",
+  );
   // `undefined` leaves the sidebar on its own per-layout default until
   // something -- a button here, or the sidebar's own toggle -- sets it.
   let sidebarExpanded = $state<boolean | undefined>(undefined);
@@ -23,7 +26,7 @@
   );
 
   let code = $derived(`
-<Page${side === "right" ? " right" : ""}>
+<Page${side === "right" ? " right" : ""}${compactSidebar !== "header" ? ` compactSidebar="${compactSidebar}"` : ""}>
   ${hasHeader ? `{#snippet header()}\n    <Bar>...</Bar>\n  {/snippet}\n` : ""}${hasFooter ? `{#snippet footer()}\n    <Bar marginBottom="0">...</Bar>\n  {/snippet}\n` : ""}${side !== "none" ? `{#snippet sidebar()}\n    <Sidebar${sidebarAttrs}>...</Sidebar>\n  {/snippet}\n` : ""}  <div>Page content here</div>
 </Page>`);
 </script>
@@ -34,6 +37,16 @@
     <p>
       <code>&lt;Page&gt;</code> gives you a full-screen shell with optional
       header, footer, and sidebar slots.
+    </p>
+    <p>
+      When the page is narrow (under 512px wide -- a phone, or the
+      <em>Side by Side</em> tab here) the sidebar turns into a sheet opened by a
+      menu button. <code>compactSidebar</code> decides where that button goes
+      and what room is made for it: <code>"header"</code> (the default, when
+      there is a header) puts it in the header row and leaves the content's
+      padding alone; <code>"gutter"</code> reserves a strip on the sidebar's
+      side; <code>"symmetric"</code> reserves it on both sides so the column
+      stays centred; <code>"overlap"</code> reserves nothing.
     </p>
   </TextLayout>
 
@@ -59,6 +72,14 @@
           <Checkbox bind:checked={overlaySidebar}>Overlay sidebar</Checkbox>
         </li>
         <li>
+          <strong>Narrow-screen button:</strong>
+          {#each ["header", "gutter", "symmetric", "overlap"] as const as mode}
+            <RadioButton bind:group={compactSidebar} value={mode}
+              >{mode}</RadioButton
+            >
+          {/each}
+        </li>
+        <li>
           <Button onclick={() => (sidebarExpanded = !(sidebarExpanded ?? true))}>
             {sidebarExpanded ?? true ? "Collapse" : "Expand"} sidebar
           </Button>
@@ -72,6 +93,7 @@
       hideHeader={!hasHeader}
       hideFooter={!hasFooter}
       hideSidebar={side === "none"}
+      {compactSidebar}
       width="100%"
       height="800px"
     >

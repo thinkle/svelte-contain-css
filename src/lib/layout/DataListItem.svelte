@@ -486,9 +486,12 @@
     border-top-width: 0;
   }
 
-  @container (max-width: 640px) {
+  /* The shared small tier ($small-max). Text keeps its size here -- a phone
+     is the last place to make it smaller; --data-list-item-font-size-small
+     is there for anyone who wants it anyway. */
+  @include when-small {
     .data-list-item {
-      font-size: var(--data-list-item-font-size-small, calc(0.9 * var(--_font-size)));
+      font-size: var(--data-list-item-font-size-small, var(--_font-size));
     }
     :global(.data-list.stackable) .data-list-item.hasStart.hasEnd {
       grid-template-columns: $icon-track-width minmax(0, 1fr);

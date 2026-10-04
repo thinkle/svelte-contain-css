@@ -323,7 +323,7 @@ and `Page` is only one way to get them:
 3. `display: flex` (or grid) — or the content stacks *below* it
 
 So `<Container><Sidebar />content</Container>` does not work: `Container` is a
-block, and its `overflow-x: hidden` also clips an overlay sheet. Use
+block, and its `overflow-x: auto` (a scroll box) also clips an overlay sheet. Use
 `SidebarContainer`, which is exactly those three requirements and no page
 chrome:
 
@@ -395,8 +395,11 @@ Other sizing details:
 ### Card — **gotcha: Card is already sized**
 
 `Card` is meant to feel like a notecard. It ships with `--card-width: 420px`
-(250px in a narrow parent, 600px in a very wide one) and adapts its own typography
-via container queries. **It is not a generic panel and it will not fill its parent.**
+and tightens its own padding when it is narrow. **On a wide screen it is not a
+generic panel and it will not fill its parent.** In the small tier (a phone,
+or a pane 600px or narrower) it does fill the width it's given
+(`--card-width-small: 100%`), because a 420px notecard doesn't fit and a
+smaller one adrift in a phone screen helps nobody.
 
 If a Card looks mysteriously narrow, that's the design — not a bug to patch with
 `width: 100%` on the wrapper.
@@ -1214,6 +1217,64 @@ Components respond to their container, not viewport:
 </Container>
 ```
 
+### Small screens: the `-small` variables
+
+Contain's responsive behaviour follows three rules:
+
+1. **Outer size follows the small tier.** Things that stand alone -- a Card,
+   a Container, a DataList -- fill the width they're given on a phone.
+   Things that come in a collection -- Tiles in a grid -- shrink so several
+   still fit per row.
+2. **Inner density can follow a component's own width.** A narrow Card
+   tightens its padding; a DataList row moves its trailing actions onto
+   their own line.
+3. **Text never shrinks for a small screen.** Type size belongs to the
+   theme, not to a component's width, and body and input text stay at 16px
+   or more on a phone (iOS zooms the page when an input under 16px takes
+   focus). The `-font-size-small` variables exist for a deliberate choice;
+   nothing uses them by default.
+
+The mechanics:
+
+Sized components have a **small tier**: when the space they're given is
+600px wide or less (a phone, or a narrow pane on a desktop), they read a
+`-small` twin of their size variables. You don't have to write a media query
+to make a Tile, Bar or Container behave on a phone -- the defaults already
+do, and you tune them with variables like everything else.
+
+In the small tier, for each property:
+
+1. `--{component}-{property}-small` wins if you set it;
+2. otherwise your regular `--{component}-{property}` is kept -- a size you
+   chose on purpose is never overridden behind your back;
+3. otherwise the component's own small default applies.
+
+| Component | Small-tier variables | Small default |
+| --- | --- | --- |
+| `Tile` | `--tile-width-small`, `--tile-height-small` | 160px wide (two per row on a 360px phone), height from the aspect ratio |
+| `GridLayout` | `--grid-layout-gap-small`; tile tracks follow `--tile-width-small` | same as regular |
+| `Bar` | `--bar-padding-small`, `--bar-gap-small`, `--bar-min-height-small` | same as regular |
+| `Container` | `--container-padding-small` | same as regular |
+| `Card` | `--card-width-small`, `--card-height-small`, `--card-padding-small`, `--card-font-size-small` | fills the width (100%) |
+| `DataList` | `stackable` (on by default), `--data-list-item-font-size-small` | the `end` region (tags, buttons) moves under the content |
+
+```svelte
+<!-- Slimmer app bar on phones, roomier tiles everywhere else -->
+<div style="--bar-padding-small: 4px; --tile-width: 220px; --tile-width-small: 150px;">
+  ...
+</div>
+```
+
+"The space they're given" is the nearest container ancestor (`Page`
+content, `Container`, `Card`...) **or** the viewport, whichever is
+narrower -- so a component dropped straight into a page with no container
+around it still knows it's on a phone.
+
+A `Tile`'s 3:4 shape (`--tile-aspect-ratio`) is a minimum height, so a tile
+with more content than its shape holds grows instead of spilling out. Set
+`--tile-height` (or `height`) to pin it; `height="auto"` drops the shape and
+sizes the tile to its content.
+
 ### Accordions
 
 Uses native `<details>` for accessibility:
@@ -1287,6 +1348,22 @@ properties to.
   <TabItem active={activeTab === "about"} onclick={() => activeTab = "about"}>
     About
   </TabItem>
+</TabBar>
+```
+
+Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
+Buttons that belong on the tab row but aren't tabs go in the `actions`
+snippet, not among the tabs: they sit at the end of the row on a wide
+screen and get their own row above the tabs on a phone.
+
+```svelte
+<TabBar>
+  <TabItem active>Assignments</TabItem>
+  <TabItem>Plans</TabItem>
+  {#snippet actions()}
+    <Button onclick={refresh}>Refresh</Button>
+    <Button primary onclick={newPlan}>New plan</Button>
+  {/snippet}
 </TabBar>
 ```
 
@@ -1464,7 +1541,7 @@ Components cascade through category variables. For example, `Button`:
 
 **Card:**
 
-- `--card-width` (default: 420px), `--card-width-small` (250px),
+- `--card-width` (default: 420px), `--card-width-small` (100%: fills a small container),
   `--card-height` (fixed-height cards only)
 
 **Bar:**

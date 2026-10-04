@@ -212,7 +212,7 @@
     fg="var(--primary-fg)"
     headingFg="var(--primary-fg)"
   >
-    <h1 style="text-align: center">Meet <em>ContainCSS</em></h1>
+    <h1 class="hero-title">Meet <em>ContainCSS</em></h1>
     <p>
       The Simple Svelte Component Library that uses css variables & container
       queries to make your life easier.
@@ -228,9 +228,14 @@
   }}
 >
   {#snippet header()}
-    <Bar primary --bar-border-top="none" --side-width="{sideWidth}px">
+    <Bar
+      primary
+      --bar-wrap="nowrap"
+      --bar-border-top="none"
+      --side-width="{sideWidth}px"
+    >
       <div class="icon equal-width"></div>
-      <h1><em>ContainCSS</em></h1>
+      <h1 class="site-title"><em>ContainCSS</em></h1>
       <!-- The nav buttons and the menu trigger take the bar's colors. These
            are --button-* / --menu-trigger-* (not a bare --bg/--fg) and stop
            at the trigger: the open menu is themed by --menu-*, so the bar's
@@ -247,7 +252,10 @@
         style:--button-shadow-color="transparent"
       >
         {#if theItem > 0}
-          <Button onclick={() => changeItem(theItem - 1)}>
+          <Button
+            aria-label="Previous section"
+            onclick={() => changeItem(theItem - 1)}
+          >
             <span style="transform:rotate(180deg);display:inline-block;">⮕</span
             >
           </Button>
@@ -269,7 +277,9 @@
           {/each}
         </DropdownMenu>
 
-        <Button onclick={() => changeItem(theItem + 1)}>⮕</Button>
+        <Button aria-label="Next section" onclick={() => changeItem(theItem + 1)}
+          >⮕</Button
+        >
       </div></Bar
     >
   {/snippet}
@@ -376,8 +386,12 @@
 </Page>
 
 <style>
+  /* Only here so the prerender crawler finds every /component page. It used
+     to be visibility:hidden, which still lays out -- and the links run
+     together into one unbreakable "A|B|C..." word ~600px wide, which gave
+     every phone a sideways scroll. The crawler reads the HTML, not layout. */
   .hidden {
-    visibility: hidden;
+    display: none;
   }
   .info {
     display: flex;
@@ -386,6 +400,48 @@
   }
   .equal-width {
     min-width: var(--side-width);
+  }
+  .site-title {
+    white-space: nowrap;
+  }
+  .hero-title {
+    text-align: center;
+  }
+  /* Hero is an inline-size container, so once it's too narrow for the
+     theme's headline the headline scales with the hero (not the viewport)
+     instead of running off the edge of a phone. */
+  @container (max-width: 500px) {
+    .hero-title {
+      font-size: 13cqi;
+    }
+  }
+
+  /* The header Bar is itself an inline-size container, so its children can
+     answer to the bar's width rather than the viewport's. When there isn't
+     room for the centred title with matching spacers on both sides, drop the
+     spacer and let the title and the section nav share one row: the nav
+     takes whatever is left, and the dropdown trigger truncates its label
+     instead of pushing the row onto a second line. */
+  @container (max-width: 640px) {
+    .icon {
+      display: none;
+    }
+    .site-title {
+      flex: 0 0 auto;
+      font-size: 1.25rem;
+    }
+    .info {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .equal-width {
+      min-width: 0;
+    }
+  }
+  @container (max-width: 300px) {
+    .site-title {
+      display: none;
+    }
   }
   .subheader {
     padding: var(--padding);

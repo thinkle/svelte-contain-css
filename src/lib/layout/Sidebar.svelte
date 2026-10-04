@@ -224,9 +224,15 @@
       var(--sidebar-icon-height, 1rem),
       var(--icon-size, 32px)
     );
+    /* Where the open sheet's close button sits: just past the panel's outer
+       edge, but never off the screen. */
+    --_sidebar-close-offset: min(
+      var(--sidebar-width),
+      calc(100vw - var(--_sidebar-expander-width))
+    );
 
     /* The sheet button's corners. Its "edge" corners are the pair on the
-       side it attaches to -- the page edge while shut, the panel's inner edge
+       side it attaches to -- the page edge while shut, the panel's outer edge
        while open -- and default to 0, which is what makes it read as a tab
        fastened to that edge. `sheetButton="button"` rounds them like the
        other two, for a sheet that does not sit against an edge. */
@@ -255,6 +261,12 @@
     position: relative;
     overflow: visible;
     background: transparent;
+    /* The aside is only a transparent strip holding the button and the
+       sheet, and a host may let content run underneath it (Page does, once
+       it has moved the button into its header). The strip itself must not
+       swallow clicks meant for that content; the button and an open sheet
+       turn pointer events back on for themselves. */
+    pointer-events: none;
     width: calc(
       var(--gap) +
         max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
@@ -295,19 +307,13 @@
         transform var(--sidebar-transition) ease-in-out,
         opacity var(--sidebar-transition) ease-in-out;
       padding: var(--padding);
-      /* The close button floats over the panel's inner edge, so the panel has
-         to keep that strip clear or the first nav item sits underneath it.
-
-         Reserved on the inline axis, not the block one: a nav wants the full
-         height, and a blank band across the top of it to clear one button is
-         a poor trade. The cost is that the whole column is a button's width
-         narrower, even well below the button -- override
-         --sidebar-sheet-content-inset to 0 and set your own padding if you
-         would rather have the width back. */
-      padding-inline-end: var(
-        --sidebar-sheet-content-inset,
-        calc(var(--padding) + var(--_sidebar-expander-width))
-      );
+      /* The close button hangs off the panel's outer edge (below), so the
+         panel keeps its whole width. It used to sit inside that edge, which
+         meant reserving a button-wide strip down the full height of the
+         sheet -- a stripe beside every nav item, there only to clear one
+         button at the top. --sidebar-sheet-content-inset brings a reserve
+         back if you want one. */
+      padding-inline-end: var(--sidebar-sheet-content-inset, var(--padding));
     }
     &.left > .content {
       border-right: var(--border-width) var(--border-style) var(--border-color);
@@ -321,10 +327,7 @@
       transform: translateX(100%);
       border-left: var(--border-width) var(--border-style) var(--border-color);
       padding-inline-end: var(--padding);
-      padding-inline-start: var(
-        --sidebar-sheet-content-inset,
-        calc(var(--padding) + var(--_sidebar-expander-width))
-      );
+      padding-inline-start: var(--sidebar-sheet-content-inset, var(--padding));
     }
     &.expandedHamburger > .content {
       transform: translateX(0);
@@ -347,7 +350,9 @@
       opacity: 1;
       pointer-events: all;
       display: block;
-      top: var(--padding);
+      /* A host can line the button up with something of its own -- Page
+         centres it in its header row. */
+      top: var(--sidebar-sheet-button-top, var(--padding));
       left: 0;
 
       border-radius: var(--_sidebar-sheet-button-radius);
@@ -365,17 +370,14 @@
       filter: var(--sidebar-mobile-icon-filter, none);
     }
     & > button.close {
-      /* Flush inside the panel's inner edge. Adding --padding here pushed the
-         button a padding's worth further in, which left it straddling the
-         edge -- part of it hanging outside the panel -- while the content
-         inset below still reserved the full button width, so the gap between
-         the button and the first nav item came out wider than intended.
-         Either the button pops out of the panel or it sits inside it; this
-         sits inside it, and the inset is then exactly button + one gutter. */
-      left: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
+      /* Just outside the open panel, fastened to its outer edge like a tab --
+         the same tab the open button was, now on the panel instead of the
+         page edge. Clamped so a sheet nearly as wide as the screen still
+         leaves its close button on screen. */
+      left: var(--_sidebar-close-offset);
       border-radius: var(--_sidebar-sheet-button-radius);
-      border-top-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
-      border-bottom-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-top-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-bottom-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
     }
 
     /* Everything above anchors the button to the left, which is right for a
@@ -394,10 +396,10 @@
     }
     &.right > button.close {
       left: auto;
-      right: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
+      right: var(--_sidebar-close-offset);
       border-radius: var(--_sidebar-sheet-button-radius);
-      border-top-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
-      border-bottom-left-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-top-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
+      border-bottom-right-radius: var(--_sidebar-sheet-collapse-edge-radius);
     }
 
     /* `sticky`: the sheet follows the reader down the page instead of
@@ -475,13 +477,16 @@
       transition: margin-left var(--sidebar-transition);
     }
     &.sticky > button.close {
-      margin-left: calc(var(--sidebar-width) - var(--_sidebar-expander-width));
+      margin-left: var(--_sidebar-close-offset);
     }
     &.sticky.right > button.expander {
       margin-left: var(--gap);
     }
     &.sticky.right > button.close {
-      margin-left: calc(var(--_sidebar-aside-width) - var(--sidebar-width));
+      margin-left: calc(
+        var(--_sidebar-aside-width) - var(--_sidebar-close-offset) -
+          var(--_sidebar-expander-width)
+      );
     }
   }
 

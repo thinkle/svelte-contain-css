@@ -339,15 +339,22 @@
     </div>
   {/if}
 {:else}
-  <table>
-    {#if thead}
-      {@render thead?.()}
-    {/if}
-    {#if tbody}
-      {@render tbody?.()}
-    {/if}
-    {@render children?.()}
-  </table>
+  <!-- A table can't shrink below its content, so on a narrow screen it is
+       wider than its container. It scrolls sideways in its own strip rather
+       than widening (or, under an overflow-clipping ancestor, being cut off
+       by) everything around it. Not done for the sticky variants: a scroll
+       box would become the sticky header's scroll container. -->
+  <div class="table-scroll">
+    <table>
+      {#if thead}
+        {@render thead?.()}
+      {/if}
+      {#if tbody}
+        {@render tbody?.()}
+      {/if}
+      {@render children?.()}
+    </table>
+  </div>
 {/if}
 
 <style lang="scss">
@@ -401,6 +408,18 @@
       var(--table-thick-border, 3px) solid
         var(--table-first-row-border-color, var(--secondary-bg))
     ) !important ;
+  }
+
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    /* Room for the table's own box-shadow, which the scroll box would
+       otherwise clip. */
+    padding: var(--table-scroll-padding, 0 0 4px);
+    /* A visible scrollbar, not the hover-revealed one the other scroll areas
+       use: a phone has no hover, and the bar is the only sign that the table
+       goes on past the edge. */
+    scrollbar-width: thin;
   }
 
   .table-container {

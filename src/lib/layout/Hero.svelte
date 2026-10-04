@@ -61,6 +61,16 @@
     width: var(--hero-width, 100%);
     max-width: var(--hero-width, 100%);
     height: var(--hero-height, 100vh);
+    /* Small-viewport units where supported: on a phone, 100vh is the height
+       with the browser's toolbars *hidden*, so a full-height hero's content
+       sits partly under them on first load. */
+    height: var(--hero-height, 100svh);
+    /* Without inline padding, centred hero text runs right to the screen's
+       edges the moment the viewport is narrower than its longest line. */
+    padding-inline: var(--hero-padding-inline, var(--padding, 1rem));
+    /* Lets hero content size itself to the hero (cqi units, @container)
+       rather than to the viewport. */
+    container-type: inline-size;
     /* font-size: var(--hero-font-size, 2rem); */
     box-sizing: border-box;
   }

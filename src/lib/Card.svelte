@@ -89,6 +89,15 @@
     overflow-x: hidden;
     container-type: inline-size;
     width: var(--w);
+    /* --card-width is the size a Card *wants*; it never gets to push past
+       its container. `stretch` is "whatever the parent leaves after my
+       margins", so a 250px card in a 200px pane just becomes a narrower
+       card -- whose own container queries then take it from there. The
+       prefixed lines cover browsers that only know the old keyword. */
+    max-width: 100%;
+    max-width: -moz-available;
+    max-width: -webkit-fill-available;
+    max-width: stretch;
     /* Was a single `margin` shorthand (--card-margin, 16px on every side).
        Split into block/inline -- same default on each axis, so nothing
        visually changes for existing callers -- but now a caller who wants
@@ -174,8 +183,10 @@
   /* ── Container queries ──────────────────────────────────── */
   /* NOTE: .card targets the *parent* container; children target the card itself */
 
-  /* Parent context: small — adjust card sizing vars */
-  @container (max-width: 600px) {
+  /* Parent context: small (the shared small tier, $small-max -- a small
+     container, or a small viewport when there is no container) — adjust
+     card sizing vars */
+  @include when-small {
     .card {
       --w: var(--card-width-small);
       --h: var(--card-height-small);
@@ -186,7 +197,9 @@
   /* Card itself: narrow (≤ --card-width-small: 250px) — tighten typography and spacing */
   @container (max-width: 300px) {
     .card section {
-      font-size: var(--card-font-size-small, calc(0.875 * var(--_font-size)));
+      /* Opt-in only: a narrow card is usually a phone, and text should not
+         shrink there. */
+      font-size: var(--card-font-size-small, var(--_font-size));
     }
     .card header,
     .card section {
@@ -207,7 +220,9 @@
   /* Card itself: wide (≥ --card-width-large: 600px) — expand typography and spacing */
   @container (min-width: 500px) {
     .card section {
-      font-size: var(--card-font-size-large, calc(1.125 * var(--_font-size)));
+      /* Opt-in only: a card's width is a layout fact, not a reason for its
+         text to be a different size from the text beside it. */
+      font-size: var(--card-font-size-large, var(--_font-size));
     }
     .card header,
     .card section {

@@ -178,4 +178,23 @@
        the grid's item width, say. */
     --justify-items: center;
   }
+
+  /* Small tier (see $small-max). Tile tracks follow the tile's own small
+     width -- same precedence, same default -- or a phone gets 160px tiles in
+     192px tracks, one to a row. (Card tracks are already capped at 100% of
+     the grid by the `min()` above.) */
+  @include when-small {
+    .tile-grid {
+      --item-width: var(
+        --tile-width-small,
+        var(--tile-width, calc(var(--space-lg, 8px) * 20))
+      );
+    }
+    .grid-layout {
+      gap: var(
+        --grid-layout-gap-small,
+        var-with-fallbacks(--gap, grid-layout, 8px)
+      );
+    }
+  }
 </style>

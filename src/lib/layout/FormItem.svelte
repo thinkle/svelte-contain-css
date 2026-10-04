@@ -177,14 +177,28 @@
   label {
     display: contents;
   }
+  /* Label and input widths are what they'd like, not what they insist on:
+     a 12em label above its input in a 15em-wide collapsed item, or a fixed
+     input width beside a label in a narrow column, gives way to the item. */
   .label {
     box-sizing: border-box;
     width: var(--form-label-width, 12em);
+    max-width: 100%;
     text-align: var(--form-label-text-align, right);
   }
   .input {
     box-sizing: border-box;
     width: var(--form-input-fixed-width, var(--form-input-width));
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* A native input's intrinsic width (~20 characters) is a default, not a
+     requirement -- in a narrow item it fits the space it has. */
+  .input :global(input),
+  .input :global(select),
+  .input :global(textarea) {
+    max-width: 100%;
   }
 
   /* In grid layouts, make the input area stretch fully */
