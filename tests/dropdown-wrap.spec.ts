@@ -226,6 +226,12 @@ test.describe("Dropdown Menu Wrapping", () => {
     const popover = page.locator(`#${popoverId}`);
     await expect(popover).toBeVisible();
 
+    // Clicking leaves the pointer where the trigger was. Depending on the
+    // popover's measured position, a menu item can open under that point and
+    // acquire a transient hover state. Park the pointer before comparing the
+    // stable, unhovered menu to the baseline.
+    await page.mouse.move(0, 0);
+
     // Take a screenshot for visual comparison
     await expect(section).toHaveScreenshot("dropdown-wrap-default.png");
 
@@ -241,6 +247,7 @@ test.describe("Dropdown Menu Wrapping", () => {
     const popover3 = page.locator(`#${popoverId3}`);
     await expect(popover3).toBeVisible();
 
+    await page.mouse.move(0, 0);
     await expect(section3).toHaveScreenshot("dropdown-nowrap.png");
   });
 });
