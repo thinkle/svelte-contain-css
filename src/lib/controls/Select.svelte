@@ -52,7 +52,10 @@
   let observer: MutationObserver;
   let resizeObserver: ResizeObserver;
   let targetWidth = $state("");
-  let optionButtons: HTMLLIElement[] = $state([]);
+  let optionButtons: (HTMLLIElement | null)[] = $state([]);
+  // The subset of optionButtons the resize observer is currently watching, so
+  // the $effect below can tell "nothing changed" from "rewire".
+  let observedButtons: HTMLLIElement[] = [];
 
   onMount(() => {
     tick().then(() => updateOptions());
@@ -78,14 +81,39 @@
       });
     }
 
-    // Observe size changes in option buttons
     resizeObserver = new ResizeObserver(() => updateTargetWidth());
-    optionButtons.forEach((button) => resizeObserver.observe(button));
 
     return () => {
       observer.disconnect();
       resizeObserver.disconnect();
     };
+  });
+
+  /*
+    optionButtons is populated by `bind:this` inside the {#each options}
+    block below, so it only ever reflects the CURRENT option list once Svelte
+    has reconciled the DOM -- which happens asynchronously relative to the
+    updateOptions() call that rebuilt `options`. Re-deriving the observed set
+    here, every time that binding changes, is what keeps the ResizeObserver
+    in sync in both directions: a button added once the list grows longer
+    gets observed, and one removed when the list shrinks is dropped instead
+    of lingering as a stale (and eventually null) target.
+
+    Guarded by reference comparison so an unrelated re-render that leaves the
+    same buttons in place doesn't thrash disconnect()/observe() every time.
+  */
+  $effect(() => {
+    if (!resizeObserver) return;
+    const current = optionButtons.filter((button): button is HTMLLIElement =>
+      Boolean(button),
+    );
+    const unchanged =
+      current.length === observedButtons.length &&
+      current.every((button, i) => button === observedButtons[i]);
+    if (unchanged) return;
+    resizeObserver.disconnect();
+    current.forEach((button) => resizeObserver!.observe(button));
+    observedButtons = current;
   });
 
   let options: { value: string; html: string }[] = $state([]);
@@ -114,6 +142,19 @@
         html: richHtml.trim(),
       });
     }
+    /*
+      optionButtons is bound by index from the {#each options} block below,
+      so when the option list shrinks, the array's tail is left holding
+      targets for <li>s that no longer render. (Svelte nulls each removed
+      binding's own slot as it tears the element down, but that happens once
+      the DOM catches up with this reassignment, not synchronously here --
+      so truncate now rather than leave the old length around in the
+      meantime.) Trimming it here, before the {#each} re-renders, keeps it
+      from ever describing more options than currently exist.
+    */
+    if (optionButtons.length > options.length) {
+      optionButtons.length = options.length;
+    }
     activeOption = options[selectElement.selectedIndex];
     updateTargetWidth();
   }
@@ -121,6 +162,9 @@
   function updateTargetWidth() {
     let maxWidth = 0;
     for (let button of optionButtons) {
+      // A stale or not-yet-bound slot (see updateOptions() above) -- skip it
+      // rather than crash on a null bind:this target.
+      if (!button) continue;
       if (button.offsetWidth > maxWidth) {
         maxWidth = button.offsetWidth;
       }
