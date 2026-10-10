@@ -62,7 +62,12 @@
         checkedBg?: string | null;
         checkedFg?: string | null;
       },
-    "type"
+    // `role`/`aria-checked`/`onkeydown` drive the roving-tabindex radiogroup
+    // contract below -- the spread goes last (so a caller's `style`/`class`
+    // etc. can win), which means an attribute the type doesn't own here
+    // would otherwise let a caller silently clobber the keyboard wiring,
+    // not just the styling.
+    "type" | "role" | "aria-checked" | "onkeydown" | "tabindex"
   >;
 
   let {
@@ -80,14 +85,23 @@
   const useGroup = $derived(group !== undefined && value !== undefined);
   const isChecked = $derived(useGroup ? group === value : checked);
 
+  const showTooltip = $derived(disabled && disabledReason.length > 0);
+
+  /** See GroupedToggleItem's identical flag: a native `disabled` button can
+   *  never be focused, which would make a `disabledReason` tooltip --
+   *  documented above as shown "on hover/focus" -- unreachable by keyboard.
+   *  `aria-disabled` keeps it a real Tab stop instead; `handleClick` and
+   *  `handleKeydown` do the disabled-guarding the native attribute would
+   *  otherwise have done. */
+  const useAriaDisabled = $derived(showTooltip);
+
   function handleClick(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
   ) {
+    if (disabled) return;
     if (useGroup) group = value;
     onclick?.(event);
   }
-
-  const showTooltip = $derived(disabled && disabledReason.length > 0);
 
   const el = $derived(
     elementProps(restProps, "grouped-toggle-item", [
@@ -119,23 +133,77 @@
   function handleKeydown(event: KeyboardEvent) {
     const forward = event.key === "ArrowRight" || event.key === "ArrowDown";
     const backward = event.key === "ArrowLeft" || event.key === "ArrowUp";
-    if (!forward && !backward) return;
+    const home = event.key === "Home";
+    const end = event.key === "End";
+    if (!forward && !backward && !home && !end) return;
     if (!ref) return;
     event.preventDefault();
 
-    const group = ref.closest('[role="radiogroup"]');
-    if (!group) return;
+    const groupEl = ref.closest('[role="radiogroup"]');
+    if (!groupEl) return;
+    // Only truly-native-disabled segments (no `disabledReason`, so nothing
+    // to explain) are excluded from arrow-key travel -- an `aria-disabled`
+    // segment stays reachable so its tooltip is actually discoverable by
+    // keyboard, same as GroupedToggleItem. `handleClick`'s `if (disabled)
+    // return` already stops arrow-navigating onto one from selecting it.
     const radios = Array.from(
-      group.querySelectorAll<HTMLButtonElement>('[role="radio"]:not(:disabled)'),
+      groupEl.querySelectorAll<HTMLButtonElement>('[role="radio"]:not(:disabled)'),
     );
-    const index = radios.indexOf(ref);
-    if (index === -1 || radios.length === 0) return;
-    const nextIndex = forward
-      ? (index + 1) % radios.length
-      : (index - 1 + radios.length) % radios.length;
+    if (radios.length === 0) return;
+    let nextIndex: number;
+    if (home) {
+      nextIndex = 0;
+    } else if (end) {
+      nextIndex = radios.length - 1;
+    } else {
+      const index = radios.indexOf(ref);
+      if (index === -1) return;
+      nextIndex = forward
+        ? (index + 1) % radios.length
+        : (index - 1 + radios.length) % radios.length;
+    }
     radios[nextIndex].focus();
     radios[nextIndex].click();
   }
+
+  /**
+   * Which segment owns the group's single Tab stop. Normally that's whichever
+   * enabled segment is checked -- but if the checked value is disabled (or
+   * nothing is checked yet), roving tabindex has to fall back to SOME enabled
+   * segment, or the whole group becomes unreachable by Tab. Per the WAI-ARIA
+   * radiogroup pattern, that fallback is the first enabled segment.
+   *
+   * This can't be a pure `$derived` of this item's own props: "is any enabled
+   * sibling checked" isn't something this component has a reactive reference
+   * to (`GroupedToggle` carries no shared selection state, same reasoning as
+   * `handleKeydown` above), so it's recomputed from the live DOM whenever
+   * this item's own checked/disabled state -- or, via the shared `group`
+   * bindable, a sibling's -- changes.
+   */
+  let isTabStop = $state(false);
+  $effect(() => {
+    isChecked;
+    disabled;
+    group;
+    if (!ref) return;
+    const groupEl = ref.closest('[role="radiogroup"]');
+    if (!groupEl) {
+      isTabStop = isChecked && !disabled;
+      return;
+    }
+    const radios = Array.from(
+      groupEl.querySelectorAll<HTMLButtonElement>('[role="radio"]'),
+    );
+    const enabled = radios.filter(
+      (radio) => !radio.disabled && radio.getAttribute("aria-disabled") !== "true",
+    );
+    const anEnabledSiblingIsChecked = enabled.some(
+      (radio) => radio.getAttribute("aria-checked") === "true",
+    );
+    isTabStop = anEnabledSiblingIsChecked
+      ? isChecked && !disabled
+      : enabled[0] === ref;
+  });
 </script>
 
 {#snippet radioButton()}
@@ -144,10 +212,11 @@
     type="button"
     class={["grouped-toggle-item", className]}
     class:checked={isChecked}
-    {disabled}
+    disabled={disabled && !useAriaDisabled}
+    aria-disabled={useAriaDisabled ? "true" : undefined}
     role="radio"
     aria-checked={isChecked}
-    tabindex={isChecked ? 0 : -1}
+    tabindex={isTabStop ? 0 : -1}
     onclick={handleClick}
     onkeydown={handleKeydown}
     {...el}
@@ -259,11 +328,11 @@
     );
   }
 
-  .grouped-toggle-item:hover:not(:disabled) {
+  .grouped-toggle-item:hover:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-hover-affordance(grouped-toggle-item, clickable);
   }
 
-  .grouped-toggle-item:active:not(:disabled) {
+  .grouped-toggle-item:active:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-active-affordance(grouped-toggle-item, clickable);
   }
 
@@ -295,7 +364,8 @@
     );
   }
 
-  .grouped-toggle-item:disabled {
+  .grouped-toggle-item:disabled,
+  .grouped-toggle-item[aria-disabled="true"] {
     cursor: not-allowed;
     opacity: var(--grouped-toggle-item-disabled-opacity, 0.5);
   }
