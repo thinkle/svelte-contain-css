@@ -86,13 +86,16 @@
   const isChecked = $derived(useGroup ? group === value : checked);
 
   const showTooltip = $derived(disabled && disabledReason.length > 0);
+  const tooltipId = $props.id();
 
   /** See GroupedToggleItem's identical flag: a native `disabled` button can
    *  never be focused, which would make a `disabledReason` tooltip --
    *  documented above as shown "on hover/focus" -- unreachable by keyboard.
    *  `aria-disabled` keeps it a real Tab stop instead; `handleClick` and
    *  `handleKeydown` do the disabled-guarding the native attribute would
-   *  otherwise have done. */
+   *  otherwise have done. `aria-describedby` points at the tooltip's own
+   *  content so a screen-reader user who focuses (rather than hovers) still
+   *  hears *why*. */
   const useAriaDisabled = $derived(showTooltip);
 
   function handleClick(
@@ -214,6 +217,7 @@
     class:checked={isChecked}
     disabled={disabled && !useAriaDisabled}
     aria-disabled={useAriaDisabled ? "true" : undefined}
+    aria-describedby={useAriaDisabled ? tooltipId : undefined}
     role="radio"
     aria-checked={isChecked}
     tabindex={isTabStop ? 0 : -1}
@@ -226,7 +230,7 @@
 {/snippet}
 
 {#if showTooltip}
-  <Tooltip tooltipText={disabledReason}>
+  <Tooltip tooltipText={disabledReason} {tooltipId}>
     {@render radioButton()}
   </Tooltip>
 {:else}

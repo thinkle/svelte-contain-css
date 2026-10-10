@@ -82,6 +82,7 @@
   );
 
   const showTooltip = $derived(disabled && disabledReason.length > 0);
+  const tooltipId = $props.id();
 
   /**
    * A native `disabled` button can never receive focus, which would make a
@@ -92,6 +93,9 @@
    * the disabled-guarding the native attribute would otherwise have done.
    * Plain `disabled` (no reason) keeps the native attribute -- nothing to
    * read on focus, so there's no reason to pull it out of the Tab order.
+   * `aria-describedby` points at the tooltip's own content so a screen-reader
+   * user who focuses (rather than hovers) still hears *why*, not just that
+   * the segment is unavailable.
    */
   const useAriaDisabled = $derived(showTooltip);
 
@@ -111,6 +115,7 @@
     class:checked
     disabled={disabled && !useAriaDisabled}
     aria-disabled={useAriaDisabled ? "true" : undefined}
+    aria-describedby={useAriaDisabled ? tooltipId : undefined}
     aria-pressed={checked}
     onclick={handleClick}
     {...el}
@@ -120,7 +125,7 @@
 {/snippet}
 
 {#if showTooltip}
-  <Tooltip tooltipText={disabledReason}>
+  <Tooltip tooltipText={disabledReason} {tooltipId}>
     {@render toggleButton()}
   </Tooltip>
 {:else}
@@ -248,6 +253,9 @@
     );
   }
 
+  /* Covers both the natively-disabled (no reason) and aria-disabled (has a
+     reason, stays focusable -- see the script's handleClick comment) cases
+     with the same look, so a segment reads as unavailable either way. */
   .grouped-toggle-item:disabled,
   .grouped-toggle-item[aria-disabled="true"] {
     cursor: not-allowed;

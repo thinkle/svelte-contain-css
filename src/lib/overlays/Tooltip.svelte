@@ -23,6 +23,12 @@
       tooltip?: import("svelte").Snippet;
       block?: boolean;
       tooltipDisabled?: boolean;
+      /** Applied to the popover element itself (not the boxless wrapper,
+       *  which already gets the ordinary `id` via rest props) so a caller can
+       *  point `aria-describedby` at the tooltip's actual content -- a
+       *  keyboard or screen-reader user who can't hover never otherwise
+       *  learns what the tooltip says. */
+      tooltipId?: string;
     },
     StyleProps<typeof TOOLTIP_VARS>
   >;
@@ -35,6 +41,7 @@
     tooltip,
     block = false,
     tooltipDisabled = false,
+    tooltipId,
     class: className,
     ...restProps
   }: Props = $props();
@@ -297,6 +304,7 @@
     </div>
     <div
       popover="auto"
+      id={tooltipId}
       class="tooltip"
       bind:this={tooltipDiv}
       class:bottom={renderedVertical === "bottom"}
@@ -326,6 +334,7 @@
     </span>
     <span
       popover="auto"
+      id={tooltipId}
       class="tooltip"
       bind:this={tooltipDiv}
       class:bottom={renderedVertical === "bottom"}
