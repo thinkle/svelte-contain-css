@@ -130,7 +130,11 @@
     @include color-props(grouped-toggle-item, control, secondary);
     @include typography-props-bare(grouped-toggle-item, control);
     @include clickable-cursor(grouped-toggle-item, clickable);
-    @include focusable();
+    /* `.grouped-toggle` clips overflow (same reason TabBar does for
+       TabItem), so the standard outer `focusable()` ring gets cut off,
+       worst on the rounded first/last segments -- an inset ring stays
+       inside the clip instead. */
+    @include focusable-inset();
 
     border: none;
     border-inline-start: var-with-fallbacks(
