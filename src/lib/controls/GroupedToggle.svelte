@@ -61,8 +61,18 @@
   .grouped-toggle {
     display: inline-flex;
     align-items: stretch;
+    /* A grid or flex parent stretches a block-level item to fill its track
+       by default (DemoWithCode's own layout does exactly this) -- `inline-
+       flex` alone doesn't protect against that, since being a grid/flex
+       *item* is a separate question from this element's own `display`.
+       Without this, the row ends up wider than its children, which leaves
+       dead space after the last segment and strands the rounded corner out
+       past it, with the last segment itself still square. A segmented
+       control is sized to its content, like TabBar/a button group, not
+       full-bleed by default. */
+    width: fit-content;
     border-radius: var-with-fallbacks(
-      --radius,
+      --border-radius,
       grouped-toggle,
       var(--border-radius, 4px)
     );

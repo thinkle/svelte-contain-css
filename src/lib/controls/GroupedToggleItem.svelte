@@ -130,6 +130,15 @@
     margin: 0;
     padding: var-with-fallbacks(--padding, grouped-toggle-item, 0.35em 0.75em);
     min-width: 2em;
+    /* `auto` basis, not `0%`: a basis of 0 would force every segment to the
+       same final width regardless of label length, even in the ordinary
+       case where the row is exactly as wide as its content and there's
+       nothing extra to distribute. `auto` only starts sharing out space
+       once the row is wider than its segments' own content -- a consumer
+       overriding the width on GroupedToggle -- so "Light" and "Earthtones"
+       keep their natural proportions unless something is actually stretching
+       the row. */
+    flex: 1 1 auto;
     @include clickable-affordance-transition(
       grouped-toggle-item,
       clickable,
@@ -138,8 +147,68 @@
     );
   }
 
-  .grouped-toggle-item:first-child {
+  /* A disabled segment with a `disabledReason` wraps in <Tooltip>, which
+     inserts not one but TWO boxless (display: contents) layers between this
+     button and GroupedToggle in the DOM -- `.tooltip-wrapper` and, inside
+     it, `.tooltip-target` -- both invisible to layout, neither invisible to
+     :first-child/:last-child, which match the real DOM tree regardless of
+     display. Every branch below requires `.grouped-toggle` itself as the
+     ancestor whose first/last-ness is actually being tested (via
+     `:global(.grouped-toggle) >`), not just bare `:first-child`/
+     `:last-child` on the button -- a wrapped item is always the only child
+     of its own tooltip-target, so an unscoped selector would match it
+     regardless of its true row position (e.g. a disabled *last* item would
+     wrongly lose its divider, thinking it was first). */
+  :global(.grouped-toggle) > .grouped-toggle-item:first-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):first-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
     border-inline-start: none;
+  }
+
+  /* Rounded on the item itself, not just relied on via the parent's
+     `overflow: hidden` clip -- that clip only rounds whatever happens to sit
+     flush against the parent's true edge, and a parent that ends up wider
+     than its content (a grid/flex ancestor stretching it, before the
+     `width: fit-content` fix on GroupedToggle) left the last segment
+     stranded short of that edge, still square. Explicit corner radii here
+     hold regardless of how wide the parent ends up.
+     Same --grouped-toggle-border-radius GroupedToggle itself reads: custom
+     properties inherit, so a value set on the wrapper (default or
+     overridden via its `borderRadius` prop) resolves identically here. */
+  :global(.grouped-toggle) > .grouped-toggle-item:first-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):first-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
+    border-start-start-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+    border-end-start-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+  }
+
+  :global(.grouped-toggle) > .grouped-toggle-item:last-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):last-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
+    border-start-end-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+    border-end-end-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
   }
 
   .grouped-toggle-item:hover:not(:disabled) {

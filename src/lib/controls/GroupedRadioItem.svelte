@@ -188,6 +188,11 @@
     margin: 0;
     padding: var-with-fallbacks(--padding, grouped-toggle-item, 0.35em 0.75em);
     min-width: 2em;
+    /* `auto` basis, not `0%` -- see GroupedToggleItem's identical rule: only
+       shares out extra space once the row is wider than its segments' own
+       content, so labels of different lengths keep their natural
+       proportions in the ordinary (unstretched) case. */
+    flex: 1 1 auto;
     @include clickable-affordance-transition(
       grouped-toggle-item,
       clickable,
@@ -196,8 +201,58 @@
     );
   }
 
-  .grouped-toggle-item:first-child {
+  /* A disabled segment with a `disabledReason` wraps in <Tooltip>, which
+     inserts not one but TWO boxless (display: contents) layers between this
+     button and GroupedToggle in the DOM -- `.tooltip-wrapper` and, inside
+     it, `.tooltip-target`. See GroupedToggleItem's identical rule for why
+     every branch requires `.grouped-toggle` itself as the ancestor whose
+     first/last-ness is actually being tested, drilling through both
+     wrapper layers, rather than bare `:first-child`/`:last-child` on the
+     button -- a wrapped item is always the only child of its own
+     tooltip-target, so an unscoped selector would match it regardless of
+     its true row position. */
+  :global(.grouped-toggle) > .grouped-toggle-item:first-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):first-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
     border-inline-start: none;
+  }
+
+  /* Rounded on the item itself -- see GroupedToggleItem's identical rule for
+     why relying solely on the parent's overflow:hidden clip isn't enough. */
+  :global(.grouped-toggle) > .grouped-toggle-item:first-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):first-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
+    border-start-start-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+    border-end-start-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+  }
+
+  :global(.grouped-toggle) > .grouped-toggle-item:last-child,
+  :global(.grouped-toggle)
+    > :global(.tooltip-wrapper):last-child
+    > :global(.tooltip-target)
+    > .grouped-toggle-item {
+    border-start-end-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
+    border-end-end-radius: var-with-fallbacks(
+      --border-radius,
+      grouped-toggle,
+      var(--border-radius, 4px)
+    );
   }
 
   .grouped-toggle-item:hover:not(:disabled) {

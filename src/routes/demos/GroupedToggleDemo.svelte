@@ -92,6 +92,8 @@
   <DemoWithCode
     defaultTab="split"
     code={`<GroupedToggle>
+  <GroupedToggleItem bind:checked={layers.topo}>Topo</GroupedToggleItem>
+  <GroupedToggleItem bind:checked={layers.trails}>Trails</GroupedToggleItem>
   <GroupedToggleItem
     disabled
     disabledReason="Flood data isn't available for this region."
@@ -105,6 +107,7 @@
     {/snippet}
     <GroupedToggle>
       <GroupedToggleItem bind:checked={layers.topo}>Topo</GroupedToggleItem>
+      <GroupedToggleItem bind:checked={layers.trails}>Trails</GroupedToggleItem>
       <GroupedToggleItem
         disabled
         disabledReason="Flood data isn't available for this region."
