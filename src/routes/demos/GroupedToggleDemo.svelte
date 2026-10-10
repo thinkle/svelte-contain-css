@@ -47,6 +47,13 @@
   // choice here. Two options wouldn't justify reaching for a radio group
   // over a plain Toggle; four does.
   let theme = $state("light");
+
+  // Pizza toppings: another genuine multi-select case, used to show off
+  // per-segment checked colour -- unlike a theme, a pizza can actually BE
+  // cheese *and* pepperoni *and* olives at once, so GroupedToggleItem (not
+  // GroupedRadioItem) is the right fit here too, and the colour-coding
+  // reads as each topping's own identity rather than a contradiction.
+  let toppings = $state({ cheese: true, pepperoni: true, olives: false });
 </script>
 
 <CssVariableDemo variables={groupedToggleVars}>
@@ -145,31 +152,40 @@
   <DemoWithCode
     defaultTab="split"
     code={`<GroupedToggle>
-  <GroupedToggleItem checked={true} checkedBg="#fef9c3" checkedFg="#713f12">Light</GroupedToggleItem>
-  <GroupedToggleItem checked={true} checkedBg="#1e293b" checkedFg="#f8fafc">Dark</GroupedToggleItem>
-  <GroupedToggleItem checked={true} checkedBg="#ec4899" checkedFg="#fff">Candy</GroupedToggleItem>
-  <GroupedToggleItem checked={true} checkedBg="#92400e" checkedFg="#fff">Earthtones</GroupedToggleItem>
+  <GroupedToggleItem bind:checked={toppings.cheese} checkedBg="#fde047" checkedFg="#713f12">
+    Cheese
+  </GroupedToggleItem>
+  <GroupedToggleItem bind:checked={toppings.pepperoni} checkedBg="#b91c1c" checkedFg="#fff">
+    Pepperoni
+  </GroupedToggleItem>
+  <GroupedToggleItem bind:checked={toppings.olives} checkedBg="#1c1917" checkedFg="#fff">
+    Olives
+  </GroupedToggleItem>
 </GroupedToggle>`}
   >
     {#snippet header()}
       <h3>Per-segment checked colour</h3>
     {/snippet}
     <GroupedToggle>
-      <GroupedToggleItem checked={true} checkedBg="#fef9c3" checkedFg="#713f12">
-        Light
+      <GroupedToggleItem bind:checked={toppings.cheese} checkedBg="#fde047" checkedFg="#713f12">
+        Cheese
       </GroupedToggleItem>
-      <GroupedToggleItem checked={true} checkedBg="#1e293b" checkedFg="#f8fafc">Dark</GroupedToggleItem>
-      <GroupedToggleItem checked={true} checkedBg="#ec4899" checkedFg="#fff">Candy</GroupedToggleItem>
-      <GroupedToggleItem checked={true} checkedBg="#92400e" checkedFg="#fff">
-        Earthtones
+      <GroupedToggleItem bind:checked={toppings.pepperoni} checkedBg="#b91c1c" checkedFg="#fff">
+        Pepperoni
+      </GroupedToggleItem>
+      <GroupedToggleItem bind:checked={toppings.olives} checkedBg="#1c1917" checkedFg="#fff">
+        Olives
       </GroupedToggleItem>
     </GroupedToggle>
     <p>
+      On the pizza: {Object.entries(toppings)
+        .filter(([, on]) => on)
+        .map(([topping]) => topping)
+        .join(", ") || "just cheese... wait, no cheese either? Plain crust it is"}.
       Each segment's checked fill is independently overridable, so a consuming app can colour-code
       a row of modes consistently with wherever else it names them (a legend, a summary sentence,
-      etc) without every checked segment sharing one colour -- reusing the same Light/Dark/Candy/
-      Earthtones labels as the radio example above, just as a palette swatch rather than an actual
-      switcher.
+      etc) -- and unlike a theme, toppings can genuinely stack, which is why this is
+      <code>GroupedToggleItem</code>, not <code>GroupedRadioItem</code>.
     </p>
   </DemoWithCode>
 </CssVariableDemo>
