@@ -80,10 +80,20 @@
   );
 
   const showTooltip = $derived(disabled && disabledReason.length > 0);
+  const tooltipId = $props.id();
 
+  /**
+   * A disabled segment WITH a reason stays a real, focusable button --
+   * `aria-disabled` rather than the native `disabled` attribute, which would
+   * remove it from the tab order entirely and make the reason unreachable
+   * for anyone who can't hover (keyboard and screen-reader users). A segment
+   * with no reason to give has nothing to discover by focusing it, so it
+   * stays plainly, natively `disabled`, same as any other inert control.
+   */
   function handleClick(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
   ) {
+    if (disabled) return;
     checked = !checked;
     onclick?.(event);
   }
@@ -94,7 +104,9 @@
     type="button"
     class={["grouped-toggle-item", className]}
     class:checked
-    {disabled}
+    disabled={disabled && !showTooltip}
+    aria-disabled={showTooltip ? "true" : undefined}
+    aria-describedby={showTooltip ? tooltipId : undefined}
     aria-pressed={checked}
     onclick={handleClick}
     {...el}
@@ -104,7 +116,7 @@
 {/snippet}
 
 {#if showTooltip}
-  <Tooltip tooltipText={disabledReason}>
+  <Tooltip tooltipText={disabledReason} {tooltipId}>
     {@render toggleButton()}
   </Tooltip>
 {:else}
@@ -211,11 +223,11 @@
     );
   }
 
-  .grouped-toggle-item:hover:not(:disabled) {
+  .grouped-toggle-item:hover:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-hover-affordance(grouped-toggle-item, clickable);
   }
 
-  .grouped-toggle-item:active:not(:disabled) {
+  .grouped-toggle-item:active:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-active-affordance(grouped-toggle-item, clickable);
   }
 
@@ -228,7 +240,11 @@
     );
   }
 
-  .grouped-toggle-item:disabled {
+  /* Covers both the natively-disabled (no reason) and aria-disabled (has a
+     reason, stays focusable -- see the script's handleClick comment) cases
+     with the same look, so a segment reads as unavailable either way. */
+  .grouped-toggle-item:disabled,
+  .grouped-toggle-item[aria-disabled="true"] {
     cursor: not-allowed;
     opacity: var(--grouped-toggle-item-disabled-opacity, 0.5);
   }

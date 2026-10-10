@@ -80,14 +80,23 @@
   const useGroup = $derived(group !== undefined && value !== undefined);
   const isChecked = $derived(useGroup ? group === value : checked);
 
+  /**
+   * A disabled segment WITH a reason stays a real, focusable button --
+   * `aria-disabled` rather than the native `disabled` attribute, which would
+   * remove it from the tab order (and from arrow-key roving below) and make
+   * the reason unreachable for anyone who can't hover. See the identical
+   * comment on `GroupedToggleItem` for the full reasoning.
+   */
   function handleClick(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement },
   ) {
+    if (disabled) return;
     if (useGroup) group = value;
     onclick?.(event);
   }
 
   const showTooltip = $derived(disabled && disabledReason.length > 0);
+  const tooltipId = $props.id();
 
   const el = $derived(
     elementProps(restProps, "grouped-toggle-item", [
@@ -144,7 +153,9 @@
     type="button"
     class={["grouped-toggle-item", className]}
     class:checked={isChecked}
-    {disabled}
+    disabled={disabled && !showTooltip}
+    aria-disabled={showTooltip ? "true" : undefined}
+    aria-describedby={showTooltip ? tooltipId : undefined}
     role="radio"
     aria-checked={isChecked}
     tabindex={isChecked ? 0 : -1}
@@ -157,7 +168,7 @@
 {/snippet}
 
 {#if showTooltip}
-  <Tooltip tooltipText={disabledReason}>
+  <Tooltip tooltipText={disabledReason} {tooltipId}>
     {@render radioButton()}
   </Tooltip>
 {:else}
@@ -255,11 +266,11 @@
     );
   }
 
-  .grouped-toggle-item:hover:not(:disabled) {
+  .grouped-toggle-item:hover:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-hover-affordance(grouped-toggle-item, clickable);
   }
 
-  .grouped-toggle-item:active:not(:disabled) {
+  .grouped-toggle-item:active:not(:disabled):not([aria-disabled="true"]) {
     @include clickable-active-affordance(grouped-toggle-item, clickable);
   }
 
@@ -272,7 +283,8 @@
     );
   }
 
-  .grouped-toggle-item:disabled {
+  .grouped-toggle-item:disabled,
+  .grouped-toggle-item[aria-disabled="true"] {
     cursor: not-allowed;
     opacity: var(--grouped-toggle-item-disabled-opacity, 0.5);
   }
