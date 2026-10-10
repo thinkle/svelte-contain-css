@@ -5,6 +5,9 @@ import Button from "./controls/Button.svelte";
 import ButtonLink from "./controls/ButtonLink.svelte";
 import Checkbox from "./controls/Checkbox.svelte";
 import CircleButton from "./controls/CircleButton.svelte";
+import GroupedToggle from "./controls/GroupedToggle.svelte";
+import GroupedToggleItem from "./controls/GroupedToggleItem.svelte";
+import GroupedRadioItem from "./controls/GroupedRadioItem.svelte";
 import Input from "./controls/Input.svelte";
 import MiniButton from "./controls/MiniButton.svelte";
 import RadioButton from "./controls/RadioButton.svelte";
@@ -67,6 +70,7 @@ export { Tag };
 
 export { Hero };
 export { TabItem };
+export { GroupedToggle, GroupedToggleItem, GroupedRadioItem };
 export {
   Button,
   ButtonLink,

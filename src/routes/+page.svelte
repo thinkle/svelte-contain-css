@@ -21,6 +21,7 @@
   import RadioButtonDemo from "./demos/RadioButtonDemo.svelte";
   import SliderDemo from "./demos/SliderDemo.svelte";
   import ToggleDemo from "./demos/ToggleDemo.svelte";
+  import GroupedToggleDemo from "./demos/GroupedToggleDemo.svelte";
   import FormDemo from "./demos/FormDemo.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
@@ -162,6 +163,11 @@
     { name: "Radio Button", component: RadioButtonDemo, demo: "RadioButton" },
     { name: "Slider", component: SliderDemo, demo: "Slider" },
     { name: "Toggle", component: ToggleDemo, demo: "Toggle" },
+    {
+      name: "Grouped Toggle",
+      component: GroupedToggleDemo,
+      demo: "GroupedToggle",
+    },
     { name: "Form", component: FormDemo, demo: "Form" },
     { name: "Form Item", component: FormItemDemo, demo: "FormItem" },
     { name: "Overlays" },
