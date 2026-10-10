@@ -145,23 +145,31 @@
   <DemoWithCode
     defaultTab="split"
     code={`<GroupedToggle>
-  <GroupedToggleItem checked={true} checkedBg="#dc2626" checkedFg="#fff">A</GroupedToggleItem>
-  <GroupedToggleItem checked={true} checkedBg="#7c3aed" checkedFg="#fff">B</GroupedToggleItem>
-  <GroupedToggleItem checked={true} checkedBg="#0d9488" checkedFg="#fff">C</GroupedToggleItem>
+  <GroupedToggleItem checked={true} checkedBg="#fef9c3" checkedFg="#713f12">Light</GroupedToggleItem>
+  <GroupedToggleItem checked={true} checkedBg="#1e293b" checkedFg="#f8fafc">Dark</GroupedToggleItem>
+  <GroupedToggleItem checked={true} checkedBg="#ec4899" checkedFg="#fff">Candy</GroupedToggleItem>
+  <GroupedToggleItem checked={true} checkedBg="#92400e" checkedFg="#fff">Earthtones</GroupedToggleItem>
 </GroupedToggle>`}
   >
     {#snippet header()}
       <h3>Per-segment checked colour</h3>
     {/snippet}
     <GroupedToggle>
-      <GroupedToggleItem checked={true} checkedBg="#dc2626" checkedFg="#fff">A</GroupedToggleItem>
-      <GroupedToggleItem checked={true} checkedBg="#7c3aed" checkedFg="#fff">B</GroupedToggleItem>
-      <GroupedToggleItem checked={true} checkedBg="#0d9488" checkedFg="#fff">C</GroupedToggleItem>
+      <GroupedToggleItem checked={true} checkedBg="#fef9c3" checkedFg="#713f12">
+        Light
+      </GroupedToggleItem>
+      <GroupedToggleItem checked={true} checkedBg="#1e293b" checkedFg="#f8fafc">Dark</GroupedToggleItem>
+      <GroupedToggleItem checked={true} checkedBg="#ec4899" checkedFg="#fff">Candy</GroupedToggleItem>
+      <GroupedToggleItem checked={true} checkedBg="#92400e" checkedFg="#fff">
+        Earthtones
+      </GroupedToggleItem>
     </GroupedToggle>
     <p>
       Each segment's checked fill is independently overridable, so a consuming app can colour-code
       a row of modes consistently with wherever else it names them (a legend, a summary sentence,
-      etc) without every checked segment sharing one colour.
+      etc) without every checked segment sharing one colour -- reusing the same Light/Dark/Candy/
+      Earthtones labels as the radio example above, just as a palette swatch rather than an actual
+      switcher.
     </p>
   </DemoWithCode>
 </CssVariableDemo>

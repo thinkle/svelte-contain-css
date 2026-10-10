@@ -176,7 +176,11 @@
     @include color-props(grouped-toggle-item, control, secondary);
     @include typography-props-bare(grouped-toggle-item, control);
     @include clickable-cursor(grouped-toggle-item, clickable);
-    @include focusable();
+    /* `.grouped-toggle` clips overflow (same reason TabBar does for
+       TabItem), so the standard outer `focusable()` ring gets cut off,
+       worst on the rounded first/last segments -- an inset ring stays
+       inside the clip instead. */
+    @include focusable-inset();
 
     border: none;
     border-inline-start: var-with-fallbacks(
@@ -261,6 +265,25 @@
 
   .grouped-toggle-item:active:not(:disabled) {
     @include clickable-active-affordance(grouped-toggle-item, clickable);
+  }
+
+  /* Tinted toward the selection accent rather than the plain neutral ring
+     GroupedToggleItem uses -- arrow-key roving only ever lands on ONE
+     segment at a time here, so the ring doubles as "this is the choice
+     you're navigating," not just "this element has focus" the way an
+     independent toggle's ring does. `--primary-bg` has to come BEFORE the
+     generic `--focus-color` in the fallback chain, not after -- every theme
+     in this library sets `--focus-color` globally, so putting it first (as
+     `var-with-fallbacks` would, threading one base var through prefixes)
+     makes it win outright and this ring would end up identical to
+     GroupedToggleItem's. `--grouped-radio-item-focus-color` stays
+     overridable like every other color here; it just defaults to the accent
+     instead of the generic focus color. */
+  .grouped-toggle-item:focus-visible {
+    outline-color: var(
+      --grouped-radio-item-focus-color,
+      var(--primary-bg, var(--focus-color, -webkit-focus-ring-color))
+    );
   }
 
   .grouped-toggle-item.checked {
