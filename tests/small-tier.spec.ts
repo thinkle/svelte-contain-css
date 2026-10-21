@@ -97,16 +97,50 @@ test("a tile with no container around it still goes small on a phone", async ({
   expect(w).toBe(160);
 });
 
-test("a Card fills a small container, and its text doesn't shrink", async ({ page }) => {
+test("in a small pane on a wide screen, a Card snaps to 250px and its text doesn't shrink", async ({ page }) => {
   const card = page.getByTestId("card-small").locator(".card");
   const { w, font } = await card.evaluate((e) => ({
     w: e.getBoundingClientRect().width,
     font: getComputedStyle(e.querySelector("section")!).fontSize,
   }));
-  // 360px box less the card's 16px margins either side
-  expect(Math.round(w)).toBeGreaterThanOrEqual(326);
+  // 250px plus the card's 1px border either side
+  expect(Math.round(w)).toBeGreaterThanOrEqual(250);
+  expect(Math.round(w)).toBeLessThanOrEqual(252);
   expect(font).toBe("16px");
 });
+
+test("on a phone, a Card fills the width it's given", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const w = await page
+    .getByTestId("card-small")
+    .locator(".card")
+    .evaluate((e) => e.getBoundingClientRect().width);
+  // 360px box less the card's 16px margins either side
+  expect(Math.round(w)).toBeGreaterThanOrEqual(326);
+});
+
+for (const viewport of [1200, 390]) {
+  test(`a Card never gets wider as its container gets narrower (${viewport}px viewport)`, async ({ page }) => {
+    await page.setViewportSize({ width: viewport, height: 900 });
+    const sweep = await page
+      .getByTestId("card-sweep")
+      .locator(".sweep")
+      .evaluateAll((els) =>
+        els.map((e) => ({
+          container: Number((e as HTMLElement).dataset.w),
+          card: Math.round(e.querySelector(".card")!.getBoundingClientRect().width),
+        })),
+      );
+    for (let i = 1; i < sweep.length; i++) {
+      expect(sweep[i].card, `${sweep[i].container}px container vs ${sweep[i - 1].container}px`).toBeLessThanOrEqual(sweep[i - 1].card);
+    }
+    if (viewport === 1200) {
+      // ...and the snap is a real step down, not a slide.
+      const at = (c: number) => sweep.find((s) => s.container === c)!.card;
+      expect(at(601) - at(600)).toBeGreaterThan(100);
+    }
+  });
+}
 
 test("a Card keeps --card-width in a wide container", async ({ page }) => {
   const w = await page

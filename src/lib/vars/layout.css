@@ -47,10 +47,10 @@ body {
   --icon-size: 32px;
   /* Cards */
   --card-width: 420px;
-  /* In the small tier a Card fills the space it's given (Card's max-width
-     still keeps it inside its margins). Was 250px: a narrow card adrift in a
-     390px phone, small enough to trip Card's own narrow-card styles. */
-  --card-width-small: 100%;
+  /* --card-width-small is deliberately not set here: Card's own default
+     differs by context (250px in a narrow pane, 100% on a phone), and a
+     global value would pin both. Set it yourself to choose one size for
+     the whole small tier. */
   --card-width-large: 600px;
   --card-height: 300px;
   --card-height-small: 150px;

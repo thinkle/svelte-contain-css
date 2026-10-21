@@ -7,6 +7,12 @@
   let fixedHeight = $state(true);
   let cardWidth = $state(420);
   let cardHeight = $state(300);
+  let responsiveType = $state(true);
+  const typeVars = $derived(
+    responsiveType
+      ? `\n  --card-font-size-small="0.875rem"\n  --card-font-size-large="1.25rem"`
+      : "",
+  );
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
   import { cardVars } from "./cssVariableDefs";
@@ -100,8 +106,9 @@
     >
       {#snippet blurb()}
         <p>
-          Toggle fixed-height mode and resize the pane to see how the card shell
-          and content area respond together.
+          Toggle fixed-height mode and drag the divider: once the right pane is
+          600px or narrower, the cards snap from 420px down to 250px (on a phone
+          they fill the width instead).
         </p>
       {/snippet}
       {#snippet inputArea()}
@@ -134,7 +141,7 @@
       </SplitPane>
     </DemoWithCode>
     <DemoWithCode
-      code={`<Card center width="${cardWidth}px" height="${cardHeight}px">
+      code={`<Card center width="${cardWidth}px" height="${cardHeight}px"${typeVars}>
   {#snippet header()}
     <div>Card Header</div>
   {/snippet}
@@ -148,7 +155,14 @@
       {#snippet blurb()}
         <p>
           Cards have three responsive breakpoints based on their own width. Drag
-          the slider to see typography and padding adapt at 300px and 500px.
+          the slider to see padding tighten below 300px and loosen above 500px.
+        </p>
+        <p>
+          Text size doesn't change by default: a narrow card is usually a phone,
+          and text shouldn't shrink there. If you want type that follows the
+          card, opt in with <code>--card-font-size-small</code> and
+          <code>--card-font-size-large</code> (on the Card, or once on any
+          ancestor or in your theme).
         </p>
       {/snippet}
       {#snippet inputArea()}
@@ -160,20 +174,23 @@
           Height: {cardHeight}px
           <Slider bind:value={cardHeight} min={200} max={800} />
         </label>
+        <Checkbox bind:checked={responsiveType}>Responsive type</Checkbox>
       {/snippet}
-      <Card center width="{cardWidth}px" height="{cardHeight}px">
-        {#snippet header()}
-          <div>Card Header</div>
-        {/snippet}
-        <div>
-          Resize the slider to see responsive typography and spacing kick in.
-        </div>
-        <div>{cardWidth}&times;{cardHeight}</div>
+      <div class:responsive-type={responsiveType}>
+        <Card center width="{cardWidth}px" height="{cardHeight}px">
+          {#snippet header()}
+            <div>Card Header</div>
+          {/snippet}
+          <div>
+            Resize the slider to see responsive typography and spacing kick in.
+          </div>
+          <div>{cardWidth}&times;{cardHeight}</div>
 
-        {#snippet footer()}
-          <div>Card Footer</div>
-        {/snippet}
-      </Card>
+          {#snippet footer()}
+            <div>Card Footer</div>
+          {/snippet}
+        </Card>
+      </div>
     </DemoWithCode>
 
     <DemoWithCode
@@ -199,3 +216,10 @@
     </DemoWithCode>
   </CssVariableDemo>
 </Container>
+
+<style>
+  .responsive-type {
+    --card-font-size-small: 0.875rem;
+    --card-font-size-large: 1.25rem;
+  }
+</style>

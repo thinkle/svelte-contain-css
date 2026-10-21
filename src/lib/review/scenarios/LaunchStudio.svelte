@@ -275,7 +275,7 @@
               prepared before rumors filled the room.
             </p>
           </TextLayout>
-          <GridLayout card --card-width="var(--card-width-small)">
+          <GridLayout card --card-width="var(--card-width-small, 250px)">
             <Card>
               {#snippet header()}
                 <h3>Map Room</h3>
@@ -335,7 +335,7 @@
             night staff civil.
           </p>
         </TextLayout>
-        <GridLayout card --card-width="var(--card-width-small)">
+        <GridLayout card --card-width="var(--card-width-small, 250px)">
           <Card>
             {#snippet header()}
               <h3>Sphere</h3>

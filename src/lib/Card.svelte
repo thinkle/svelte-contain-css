@@ -183,14 +183,28 @@
   /* ── Container queries ──────────────────────────────────── */
   /* NOTE: .card targets the *parent* container; children target the card itself */
 
-  /* Parent context: small (the shared small tier, $small-max -- a small
-     container, or a small viewport when there is no container) — adjust
-     card sizing vars */
-  @include when-small {
+  /* Parent context: small (the shared small tier, $small-max).
+
+     A narrow pane on a wide screen snaps the card down to its small size --
+     the visible "this card responds to its container" step. Never `100%`
+     here: the tier starts at 600px, where a 420px card still fits, so
+     "fill" made a card *grow* as its container shrank past 600.
+
+     A narrow viewport (a phone) fills instead: a 250px card adrift in a
+     390px screen helps nobody. This comes after the container query so it
+     wins on a phone, and it also covers a Card with no container ancestor.
+     An explicit --card-width-small still wins in both. */
+  @container (max-width: #{$small-max}) {
     .card {
-      --w: var(--card-width-small);
+      --w: var(--card-width-small, 250px);
       --h: var(--card-height-small);
-      --sidebar-width: calc(var(--card-width-small) - var(--_padding) * 2);
+      --sidebar-width: calc(var(--card-width-small, 250px) - var(--_padding) * 2);
+    }
+  }
+  @media (max-width: #{$small-max}) {
+    .card {
+      --w: var(--card-width-small, 100%);
+      --h: var(--card-height-small);
     }
   }
 
