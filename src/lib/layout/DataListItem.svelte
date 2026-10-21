@@ -302,16 +302,24 @@
 
   .main :global(h4),
   .main :global(h5) {
-    font-size: var-with-fallbacks(
-      --heading-font-size,
-      data-list-item,
+    /* Tightens in a narrow list, down to --font-size-min-text; a list
+       doesn't grow past its set size in a wide one (max-scale 1). See
+       fluid-font-size(); the list is the container. */
+    @include fluid-font-size(
       data-list,
       var-with-fallbacks(
-        --title-font-size,
+        --heading-font-size,
         data-list-item,
         data-list,
-        var(--data-list-heading-font-size, var(--font-size, 1rem))
-      )
+        var-with-fallbacks(
+          --title-font-size,
+          data-list-item,
+          data-list,
+          var(--data-list-heading-font-size, var(--font-size, 1rem))
+        )
+      ),
+      text,
+      1
     );
     font-weight: var-with-fallbacks(
       --heading-font-weight,
@@ -335,16 +343,23 @@
   .main :global(h4 + p),
   .main :global(h5 + p),
   .main :global(h6 + p) {
-    font-size: var-with-fallbacks(
-      --paragraph-font-size,
-      data-list-item,
+    /* The line under a row's title is a caption: it may go smaller than
+       the title, down to --font-size-min-caption. */
+    @include fluid-font-size(
       data-list,
       var-with-fallbacks(
-        --body-font-size,
+        --paragraph-font-size,
         data-list-item,
         data-list,
-        var(--font-size-small, 0.9rem)
-      )
+        var-with-fallbacks(
+          --body-font-size,
+          data-list-item,
+          data-list,
+          var(--font-size-small, 0.9rem)
+        )
+      ),
+      caption,
+      1
     );
     line-height: var-with-fallbacks(
       --paragraph-line-height,

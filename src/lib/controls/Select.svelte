@@ -326,4 +326,12 @@
       display: none;
     }
   }
+  /* The native <select> zooms like a text field on iOS when its text is
+     under 16px; see Input. The dropdown-menu variant is a button and
+     doesn't. */
+  @media (pointer: coarse) {
+    select {
+      font-size: max(var(--font-size-min-input, 16px), var(--_font-size, 1em));
+    }
+  }
 </style>

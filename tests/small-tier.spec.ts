@@ -97,15 +97,12 @@ test("a tile with no container around it still goes small on a phone", async ({
   expect(w).toBe(160);
 });
 
-test("a Card fills a small container, and its text doesn't shrink", async ({ page }) => {
+test("a Card fills a small container", async ({ page }) => {
   const card = page.getByTestId("card-small").locator(".card");
-  const { w, font } = await card.evaluate((e) => ({
-    w: e.getBoundingClientRect().width,
-    font: getComputedStyle(e.querySelector("section")!).fontSize,
-  }));
-  // 360px box less the card's 16px margins either side
+  const w = await card.evaluate((e) => e.getBoundingClientRect().width);
+  // 360px box less the card's 16px margins either side. Its text follows
+  // that width, down to a floor: see fluid-type.spec.ts.
   expect(Math.round(w)).toBeGreaterThanOrEqual(326);
-  expect(font).toBe("16px");
 });
 
 test("a Card keeps --card-width in a wide container", async ({ page }) => {
