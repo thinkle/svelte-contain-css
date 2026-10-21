@@ -30,8 +30,15 @@
     @include typography-props(body, text);
     /* A prose column centres its measure; other typography containers keep
        it start-aligned (see typography-container-props). */
-    --_prose-margin-inline: #{var-with-fallbacks(--prose-margin-inline, body, text, auto)};
-    --_heading-margin-inline: #{var-with-fallbacks(--heading-margin-inline, body, text, auto)};
+    /* marginInline (--text-layout-margin-inline) places the *text* in the
+       column, not the column in its container: TextLayout is the text, so
+       marginInline="0 auto" means "start-align my prose". Headings follow
+       via --_heading-margin-inline below. */
+    --_prose-margin-inline: var(
+      --text-layout-margin-inline,
+      #{var-with-fallbacks(--prose-margin-inline, body, text, auto)}
+    );
+    --_heading-margin-inline: #{var-with-fallbacks(--heading-margin-inline, body, text, var(--_prose-margin-inline))};
     /* Two widths. The prose elements carry the reading measure themselves
        (--_prose-max-width / --_heading-max-width, from --line-width), so the
        box doesn't need to: capping it at --line-width as well (which
@@ -60,12 +67,11 @@
        border-box a TextLayout is always 2 * padding wider than its parent,
        which on a phone means a sideways scroll before anything else loads. */
     box-sizing: border-box;
-    /* Not margin-props() (_box.scss): that defaults both axes to 0, but a
-       TextLayout has always centred itself horizontally by default. Same
-       var-with-fallbacks() shape as everywhere else, just inline defaults to
-       auto instead of 0 -- marginBlock is new and does default to 0, same as
-       every other component. */
-    margin-inline: var-with-fallbacks(--margin-inline, text-layout, auto);
+    /* The column itself always centres in its container (marginInline
+       moves the text inside it, above). To move the whole column, wrap it:
+       <Container marginInline="0 auto"><TextLayout>. marginBlock is still
+       the box's own margin, as on every other component. */
+    margin-inline: auto;
     margin-block: var-with-fallbacks(--margin-block, text-layout, 0);
     padding-inline: var(--text-padding, var(--padding));
   }

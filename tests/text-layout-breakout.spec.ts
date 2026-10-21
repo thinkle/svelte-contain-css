@@ -143,6 +143,27 @@ test.describe("at 1400px", () => {
     expect(fig.width).toBeGreaterThan(lineWidth + 100);
   });
 
+  test('marginInline="0 auto" start-aligns the text; the column stays centred', async ({ page }) => {
+    const { contentLeft, lineWidth } = await layout(page, "margin-prop");
+    const col = await box(page, '[data-testid="margin-prop"] .figure');
+    const p = await box(page, '[data-testid="margin-prop"] p');
+    const h2 = await box(page, '[data-testid="margin-prop"] h2');
+    const host = await box(page, '[data-testid="margin-prop"]');
+    expect(p.left).toBeCloseTo(contentLeft, 0);
+    expect(h2.left).toBeCloseTo(contentLeft, 0);
+    expect(p.width).toBeCloseTo(lineWidth, 0);
+    // the wide column is still centred in its container
+    expect(Math.abs((col.left - host.left) - (host.right - col.right))).toBeLessThan(2);
+  });
+
+  test("--heading-margin-inline still sets headings apart from the prose", async ({ page }) => {
+    const { contentLeft } = await layout(page, "heading-apart");
+    const p = await box(page, '[data-testid="heading-apart"] p');
+    const h2 = await box(page, '[data-testid="heading-apart"] h2');
+    expect(p.left).toBeCloseTo(contentLeft, 0);
+    expect(h2.left).toBeGreaterThan(contentLeft + 100);
+  });
+
   test("--text-layout-wide-width: 100% fills the container", async ({ page }) => {
     const fig = await box(page, '[data-testid="full"] .figure');
     const { contentLeft, contentRight } = await layout(page, "full");

@@ -61,8 +61,23 @@
   </TextLayout>
 </div>
 
+<div data-testid="margin-prop">
+  <TextLayout marginInline="0 auto">
+    <h2>Start-aligned by prop</h2>
+    <p>marginInline places the text, not the column.</p>
+    <div class="figure">A plain block</div>
+  </TextLayout>
+</div>
+
+<div data-testid="heading-apart">
+  <TextLayout --prose-margin-inline="0" --heading-margin-inline="auto">
+    <h2>Centred heading</h2>
+    <p>Start-aligned prose under it.</p>
+  </TextLayout>
+</div>
+
 <div data-testid="left">
-  <TextLayout --prose-margin-inline="0" --heading-margin-inline="0">
+  <TextLayout --prose-margin-inline="0">
     <h2>Left-aligned</h2>
     <p>Prose against the leading edge, figures sticking out to the right.</p>
     <div class="figure">A plain block</div>

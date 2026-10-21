@@ -53,12 +53,6 @@
     the main control, and optional trailing content.
   </p>
 
-  <h3>Form with fieldsets</h3>
-  <p>
-    A real <code>Form</code> sets the layout for everything inside it; each
-    <code>Fieldset</code> groups its rows under a legend.
-  </p>
-
   <DemoWithCode
     language="svelte"
     code={`<Form layout="above" fullWidth globalInputStyles>
@@ -80,6 +74,15 @@
   </Fieldset>
 </Form>`}
   >
+    {#snippet header()}
+      <h3>Form with fieldsets</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        A real <code>Form</code> sets the layout for everything inside it; each
+        <code>Fieldset</code> groups its rows under a legend.
+      </p>
+    {/snippet}
     <Container border padding="1rem" marginBlock="1rem">
       <Form layout="above" fullWidth globalInputStyles>
         <Fieldset>
@@ -142,16 +145,6 @@
     </Container>
   </DemoWithCode>
 
-  <h3>Context Without Extra Chrome</h3>
-  <p>
-    Use <code>FormProvider</code> when you want to set defaults for a subsection
-    but you do not want another form or fieldset wrapper.
-  </p>
-  <p>
-    The outer container here is just visual framing. The shared form defaults
-    come from <code>FormProvider</code>.
-  </p>
-
   <DemoWithCode
     language="svelte"
     code={`<FormProvider layout="below" fullWidth>
@@ -166,6 +159,19 @@
   </FormItem>
 </FormProvider>`}
   >
+    {#snippet header()}
+      <h3>Context without extra chrome</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Use <code>FormProvider</code> when you want to set defaults for a
+        subsection but you do not want another form or fieldset wrapper.
+      </p>
+      <p>
+        The outer container here is just visual framing. The shared form
+        defaults come from <code>FormProvider</code>.
+      </p>
+    {/snippet}
     <Container border padding="1rem" marginBlock="1rem">
       <Stack>
         <FormProvider layout="below" fullWidth globalInputStyles>

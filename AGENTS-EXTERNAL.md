@@ -488,6 +488,11 @@ instead of a raw `style="margin-top: ..."`: one value sets both sides equal, two
 space-separated values set start and end independently — no top/bottom prop pair
 to remember, no 4-value `margin` shorthand order to get wrong.
 
+The one exception is `TextLayout`'s `marginInline`: it places the *text* inside
+the column (`"auto"`, the default, centres it; `"0 auto"` start-aligns it), and
+the column itself always centres in its container. To move the whole column,
+wrap it: `<Container marginInline="0 auto"><TextLayout>...</TextLayout></Container>`.
+
 ```svelte
 <!-- Same space above and below -->
 <Card marginBlock="1rem">...</Card>
@@ -601,8 +606,9 @@ wide column, so it is no longer squeezed down to 42rem. No prop needed:
 
 - **Symmetric by default.** The prose is centred in the wide column, so a
   figure sticks out evenly on both sides. For left-aligned prose with figures
-  extending to the right, set `--prose-margin-inline="0"` and
-  `--heading-margin-inline="0"` on the `TextLayout`.
+  extending to the right, use `<TextLayout marginInline="0 auto">` (headings
+  follow). `--prose-margin-inline="0"` on an ancestor does the same for every
+  TextLayout and Card below it.
 - **Full width is `100%`, not `100vw`.** `--text-layout-wide-width="100%"`
   fills the container. `100vw` ignores the parent's padding and counts the
   scrollbar, so it scrolls the page sideways.
@@ -662,8 +668,9 @@ So this is already fine, with no `TextLayout` in sight:
 **Where the measure sits.** Inside those components the capped measure is
 **start-aligned**: a paragraph narrower than its Card sits against the Card's
 leading edge like any other block. Only `TextLayout` centres it (it is the one
-prose column). Override with `--prose-margin-inline` / `--heading-margin-inline`
--- `auto` to centre, `0` to start-align. (Before 1.4.0 every container centred
+prose column). Override with `--prose-margin-inline` -- `auto` to centre, `0`
+to start-align; headings follow it (`--heading-margin-inline` sets them apart,
+if you ever need that). (Before 1.4.0 every container centred
 the measure, which dragged headings toward the middle of flex rows like `Bar`.)
 
 **Outside all of them** -- a heading in a bare `Inline`, a `<p>` in a plain
