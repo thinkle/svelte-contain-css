@@ -31,14 +31,15 @@ const card = (page: Page, id: string) =>
     });
 
 const expected = (
-  root: number,
+  base: number,
   width: number,
   floor: number,
   maxScale: number,
+  anchor = 420,
 ) =>
   Math.min(
-    Math.max(root + (width - 420) * 0.0125, Math.min(floor, root)),
-    root * maxScale,
+    Math.max(base + (width - anchor) * 0.0125, Math.min(floor, base)),
+    base * maxScale,
   );
 
 test.describe("on a wide screen", () => {
@@ -52,17 +53,59 @@ test.describe("on a wide screen", () => {
       const c = await card(page, `card-${w}`);
       expect(c.body).toBeCloseTo(expected(c.root, c.width, 14, 1.25), 1);
       expect(c.header).toBeCloseTo(expected(c.root, c.width, 14, 1.25), 1);
-      expect(c.footer).toBeCloseTo(expected(c.root, c.width, 12, 1.25), 1);
+      // the footer starts a step under the body: --card-footer-font-size, 0.875em
+      expect(c.footer).toBeCloseTo(
+        expected(c.root * 0.875, c.width, 12, 1.25),
+        1,
+      );
     });
   }
 
-  test("a narrow Card stops at the floor, and its footer may go under its body", async ({
+  test("a narrow Card stops at the floors: 14px body, 12px footer", async ({
     page,
   }) => {
     const c = await card(page, "card-250");
     expect(c.body).toBe(14);
-    expect(c.footer).toBeLessThan(c.body);
-    expect(c.footer).toBeGreaterThanOrEqual(12);
+    expect(c.footer).toBe(12);
+  });
+
+  test("a Card's footer is a step under its body at every width", async ({
+    page,
+  }) => {
+    for (const w of [250, 420, 1000]) {
+      const c = await card(page, `card-${w}`);
+      expect(c.footer, `${w}px card`).toBeLessThan(c.body);
+    }
+  });
+
+  test("a Tile at its 192px default keeps its text; wider reads larger, narrower smaller", async ({
+    page,
+  }) => {
+    const tile = (id: string) =>
+      page
+        .getByTestId(`tile-${id}`)
+        .locator(".tile")
+        .evaluate((t) => ({
+          width: t.clientWidth,
+          root: parseFloat(getComputedStyle(t).fontSize),
+          text: parseFloat(getComputedStyle(t.querySelector("p")!).fontSize),
+          title: parseFloat(getComputedStyle(t.querySelector("h3")!).fontSize),
+        }));
+    const d = await tile("default");
+    expect(d.text).toBe(d.root);
+    const wide = await tile("wide");
+    expect(wide.text).toBeCloseTo(
+      expected(wide.root, wide.width, 14, 1.25, d.width),
+      1,
+    );
+    expect(wide.text).toBeGreaterThan(d.text);
+    expect(wide.title).toBeGreaterThan(d.title);
+    const narrow = await tile("narrow");
+    expect(narrow.text).toBeCloseTo(
+      expected(narrow.root, narrow.width, 14, 1.25, d.width),
+      1,
+    );
+    expect(narrow.text).toBeLessThan(d.text);
   });
 
   test("a wide Card grows to 1.25x at most", async ({ page }) => {

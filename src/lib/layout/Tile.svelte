@@ -133,7 +133,7 @@
         {...el.attrs as HTMLInputAttributes}
       />
     </div>
-    {@render props.children?.()}
+    <span class="tile-body">{@render props.children?.()}</span>
   </label>
 {:else if props.interactive}
   <button
@@ -141,11 +141,11 @@
     style={el.style}
     {...el.attrs as HTMLButtonAttributes}
   >
-    {@render props.children?.()}
+    <span class="tile-body">{@render props.children?.()}</span>
   </button>
 {:else}
   <div class={["tile", className]} style={el.style} {...el.attrs}>
-    {@render props.children?.()}
+    <span class="tile-body">{@render props.children?.()}</span>
   </div>
 {/if}
 
@@ -233,6 +233,31 @@
       height: var(--tile-height-small, var(--tile-height, auto));
       min-height: var(--tile-height-small, var(--_tile-min-height));
     }
+  }
+
+  /* Type that follows the tile's width (see fluid-font-size()): a tile
+     made wider than its 192px default reads larger, one squeezed into a
+     narrow rail reads smaller, down to --font-size-min-text. The tile is
+     its own container, so the scale goes on this wrapper inside it, which
+     takes no part in layout. Headings follow, since their sizes are in em.
+     --tile-font-size-slope: 0 turns it off.
+
+     The scale measures the tile's content box (100cqi), so the anchor is
+     the content width of a default tile: 192px less its padding and border
+     either side. */
+  .tile-body {
+    display: contents;
+    @include fluid-font-size(
+      tile,
+      1em,
+      text,
+      1.25,
+      calc(
+        var(--space-lg, 8px) * 24 - 2 *
+          var(--tile-padding, var(--surface-padding, var(--padding, 8px))) - 2 *
+          var(--border-width, 1px)
+      )
+    );
   }
 
   /* Checkbox code */

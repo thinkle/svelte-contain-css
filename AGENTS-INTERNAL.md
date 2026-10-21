@@ -777,12 +777,14 @@ new overlay should too. See `tests/overlay-inheritance.spec.ts`.
 Don't write a container query that swaps in a smaller font-size: a small
 container is as often a phone as a narrow desktop pane, and a step down there
 shrinks phone text. `@include fluid-font-size(<prefix>, <base>, text|caption,
-<max-scale>)` slides from `<base>` with the container's width, stops at
+<max-scale>, <anchor>)` slides from `<base>` with the container's width
+either side of `<anchor>` (the component's default size), stops at
 `--font-size-min-text` or `--font-size-min-caption`, holds `text` at its base
 on a phone, and reads `--<prefix>-font-size-slope` / `-anchor` / `-max-scale`
 before the global knobs. The container is the nearest container-type ancestor,
 so put it on an element inside the component that owns the container (Card's
-header, body and footer; a DataList row's title and caption). It leaves its
+header, body and footer; a DataList row's title and caption; Tile's
+`display: contents` body wrapper). It leaves its
 result in `--_fluid-font-size` for a rule that offers a fixed override in front
 of it. Text you type into never scales down this way; Input and Select hold
 `--font-size-min-input` on touch screens. See `tests/fluid-type.spec.ts`.

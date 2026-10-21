@@ -202,8 +202,9 @@
   /* The same card reads larger as the one thing across a hero than at the
      bottom of a 300px sidebar; see fluid-font-size() for the scale and its
      floors. Headings follow, since their default sizes are in em. The
-     footer is a caption, so it may go smaller than the body. Turn it off
-     with --card-font-size-slope: 0. */
+     footer is a caption: it starts a step under the body
+     (--card-footer-font-size, 0.875em) and slides from there, down to the
+     caption floor. Turn it off with --card-font-size-slope: 0. */
   header {
     /* The card's own size: only the body has a --card-font-size of its
        own; a header or footer reading --_font-size would get whatever an
@@ -214,7 +215,7 @@
     @include fluid-font-size(card, var(--_font-size, 1em));
   }
   footer {
-    @include fluid-font-size(card, 1em, caption);
+    @include fluid-font-size(card, var(--card-footer-font-size, 0.875em), caption);
   }
 
   /* ── Container queries ──────────────────────────────────── */

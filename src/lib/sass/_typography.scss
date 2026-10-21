@@ -352,7 +352,9 @@
 /* Type that follows the room it has.
 
    Sets font-size from $base, plus or minus 1.25px for every 100px the
-   element's container is wider or narrower than 420px. Card's body reads
+   element's container is wider or narrower than $anchor -- the component's
+   own default size, so a component at the size it was designed for has the
+   text it was designed with (Card 420px, Tile 192px). Card's body reads
    larger as the one thing across a hero than at the bottom of a 300px
    sidebar. Never above $max-scale times $base, and never below the floor
    for its kind of text, $floor: `text` (--font-size-min-text) or `caption`
@@ -363,11 +365,11 @@
    it is most of the screen.
 
    The container is the nearest ancestor with a container-type, usually the
-   component itself. Each knob reads the component's own variable first,
-   then a global one, so a theme can turn every sliding scale off at once
-   with --font-size-slope: 0:
+   component itself. The slope reads the component's own variable, then a
+   global one, so a theme can turn every sliding scale off at once with
+   --font-size-slope: 0:
      --<prefix>-font-size-slope      (--font-size-slope, 0.0125)
-     --<prefix>-font-size-anchor     (--font-size-anchor, 420px)
+     --<prefix>-font-size-anchor     ($anchor)
      --<prefix>-font-size-max-scale  ($max-scale)
 
    The result is also left in --_fluid-font-size, for a rule that wants to
@@ -377,7 +379,13 @@ $fluid-floor-defaults: (
   caption: 12px,
 );
 
-@mixin fluid-font-size($prefix, $base, $floor: text, $max-scale: 1.25) {
+@mixin fluid-font-size(
+  $prefix,
+  $base,
+  $floor: text,
+  $max-scale: 1.25,
+  $anchor: 420px
+) {
   --_fluid-base: #{$base};
   --_fluid-min: min(
     var(--font-size-min-#{$floor}, #{map.get($fluid-floor-defaults, $floor)}),
@@ -387,7 +395,7 @@ $fluid-floor-defaults: (
     var(--_fluid-min),
     calc(
       var(--_fluid-base) +
-        (100cqi - var(--#{$prefix}-font-size-anchor, var(--font-size-anchor, 420px))) *
+        (100cqi - var(--#{$prefix}-font-size-anchor, #{$anchor})) *
         var(--#{$prefix}-font-size-slope, var(--font-size-slope, 0.0125))
     ),
     calc(var(--_fluid-base) * var(--#{$prefix}-font-size-max-scale, #{$max-scale}))

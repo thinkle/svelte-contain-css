@@ -1229,11 +1229,14 @@ Contain's responsive behaviour follows three rules:
    tightens its padding; a DataList row moves its trailing actions onto
    their own line.
 3. **Text may follow the room it has, down to a floor -- but not on a
-   phone.** Card and DataList size their type by their own width: 1.25px
-   more or less for every 100px either side of 420px. A Card reads larger
-   as the one thing across a hero, smaller at the bottom of a 300px
-   sidebar; a DataList tightens in a narrow pane but doesn't grow past its
-   set size in a wide one. Text never slides under the floor for its kind,
+   phone.** Card, Tile and DataList size their type by their own width:
+   1.25px more or less for every 100px either side of the size they were
+   designed at (Card 420px, Tile 192px, DataList 420px). A Card reads
+   larger as the one thing across a hero, smaller at the bottom of a 300px
+   sidebar; a Tile made wider reads larger; a DataList tightens in a narrow
+   pane but doesn't grow past its set size in a wide one. A Card's footer
+   is a caption: it starts a step under the body (`--card-footer-font-size`,
+   `0.875em`) and slides from there. Text never slides under the floor for its kind,
    and on a phone, where the component is most of the screen, body text and
    titles don't shrink at all. The floors are theme tokens:
 
@@ -1248,9 +1251,9 @@ Contain's responsive behaviour follows three rules:
 
    | Variable | Default | |
    | --- | --- | --- |
-   | `--card-font-size-slope`, `--data-list-font-size-slope`, `--font-size-slope` | `0.0125` | px per px of width; `0` turns the scale off |
-   | `--card-font-size-anchor`, `--data-list-font-size-anchor`, `--font-size-anchor` | `420px` | the width at which text is its set size |
-   | `--card-font-size-max-scale`, `--data-list-font-size-max-scale` | `1.25`, `1` | how far it may grow |
+   | `--card-font-size-slope`, `--tile-font-size-slope`, `--data-list-font-size-slope`, `--font-size-slope` | `0.0125` | px per px of width; `0` turns the scale off |
+   | `--card-font-size-anchor`, `--tile-font-size-anchor`, `--data-list-font-size-anchor` | `420px`; a default 192px Tile's content width; `420px` | the width at which text is its set size |
+   | `--card-font-size-max-scale`, `--tile-font-size-max-scale`, `--data-list-font-size-max-scale` | `1.25`, `1.25`, `1` | how far it may grow |
 
    `--card-font-size-small` / `-large` still pin a Card to one size per
    tier instead.

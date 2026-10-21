@@ -6,6 +6,7 @@
   import DataList from "$lib/layout/DataList.svelte";
   import DataListItem from "$lib/layout/DataListItem.svelte";
   import Input from "$lib/controls/Input.svelte";
+  import Tile from "$lib/layout/Tile.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Option from "$lib/controls/Option.svelte";
   import "$lib/vars/defaults.css";
@@ -57,6 +58,15 @@
     </DataList>
   </div>
 {/each}
+
+<!-- A wide box, so the tiles stay out of the small tier. -->
+<div class="box" style="width: 900px">
+  {#each [{ id: "default", w: null }, { id: "wide", w: "400px" }, { id: "narrow", w: "120px" }] as t}
+    <span data-testid="tile-{t.id}">
+      <Tile width={t.w}><h3>Title</h3><p>Tile text</p></Tile>
+    </span>
+  {/each}
+</div>
 
 <div style="font-size: 12px" data-testid="small-controls">
   <Input />
