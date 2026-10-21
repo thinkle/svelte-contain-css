@@ -25,6 +25,7 @@
     shadow?: string | null;
     padding?: string | null;
     gap?: string | null;
+    marginBlock?: string | null;
     header?: Snippet;
     heading?: Snippet;
     blurb?: Snippet;
@@ -50,6 +51,7 @@
     shadow = null,
     padding = null,
     gap = null,
+    marginBlock = null,
     header,
     heading,
     blurb,
@@ -144,8 +146,11 @@
   );
 </script>
 
+<!-- No margin of its own by default; placed straight in a TextLayout's flow
+     it is a figure there, and takes that layout's figure spacing. -->
 <Container
-  marginBlock="0"
+  marginBlock={marginBlock ??
+    "var(--demo-with-code-margin-block, var(--_figure-margin-block, 0))"}
   maxWidth="none"
   height="auto"
   padding="0"

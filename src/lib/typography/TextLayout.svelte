@@ -32,6 +32,29 @@
        it start-aligned (see typography-container-props). */
     --_prose-margin-inline: #{var-with-fallbacks(--prose-margin-inline, body, text, auto)};
     --_heading-margin-inline: #{var-with-fallbacks(--heading-margin-inline, body, text, auto)};
+    /* Two widths. The prose elements carry the reading measure themselves
+       (--_prose-max-width / --_heading-max-width, from --line-width), so the
+       box doesn't need to: capping it at --line-width as well (which
+       typography-container-props does for every other container) only
+       squeezed the non-prose children -- a table, a demo, a figure -- down
+       to 42rem. The box caps at a wider column instead; those children break
+       out to it while the prose stays centred inside it, where it always was.
+
+       100% (not 100vw) is "as wide as the container": 100vw ignores the
+       parent's padding and counts the scrollbar, so it scrolls the page
+       sideways. max() keeps a --line-width set wider than the wide column
+       from being squeezed back down by it. */
+    max-width: max(var(--_prose-max-width), var(--text-layout-wide-width, 72rem));
+    /* Block spacing for the figures in the flow (DemoWithCode, Table,
+       Card...), which read --_figure-margin-block as the fallback under their
+       own margin vars. Handed only to direct children below; kept under its
+       own name here so a TextLayout nested in a figure still has its value
+       after the outer one resets everything below its children. */
+    --_text-layout-figure-margin-block: #{var-with-fallbacks(
+        --figure-margin-block,
+        text-layout,
+        var(--gap-xl, 2rem)
+      )};
     width: var(--text-width, var(--body-width, 100%));
     /* width is 100% by default and padding-inline is added on top -- without
        border-box a TextLayout is always 2 * padding wider than its parent,
@@ -45,6 +68,40 @@
     margin-inline: var-with-fallbacks(--margin-inline, text-layout, auto);
     margin-block: var-with-fallbacks(--margin-block, text-layout, 0);
     padding-inline: var(--text-padding, var(--padding));
+  }
+
+  /* Only the direct children are figures in the flow. A component handed
+     --var props sits inside a display: contents <svelte-css-wrapper>, so it
+     is a grandchild in the DOM but a child in layout -- hence the second
+     selector (the same trap TabBar fell into). Everything deeper is reset,
+     so a table inside a card inside the prose isn't spaced like a figure. */
+  div > :global(*),
+  div > :global(svelte-css-wrapper > *) {
+    --_figure-margin-block: var(--_text-layout-figure-margin-block);
+  }
+  div > :global(:not(svelte-css-wrapper) *),
+  div > :global(svelte-css-wrapper > * *) {
+    --_figure-margin-block: initial;
+  }
+
+  /* Where the other block elements go. A <figure>, or an image placed
+     straight in the flow, is a figure: it gets the wide column. An image
+     inside a <p> stays at the measure, because the <p> does. A code block is
+     read like prose, so it keeps the measure and scrolls sideways when a
+     line is too long rather than breaking out. */
+  div > :global(figure) {
+    margin-inline: 0;
+    margin-block: var(--_figure-margin-block);
+  }
+  div > :global(img),
+  div > :global(:is(p, figure) img) {
+    max-width: 100%;
+  }
+  div > :global(pre) {
+    box-sizing: border-box;
+    max-width: var(--_prose-max-width, revert);
+    margin-inline: var(--_prose-margin-inline, revert);
+    overflow-x: auto;
   }
 
   div :global(a) {

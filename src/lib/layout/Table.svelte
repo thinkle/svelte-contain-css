@@ -410,6 +410,15 @@
     ) !important ;
   }
 
+  /* A table has no block margin of its own (the <table> UA default is 0).
+     Placed straight in a TextLayout's flow it is a figure, and takes that
+     layout's figure spacing; --table-margin-block still wins. */
+  .table-scroll,
+  .scrolling-table,
+  .table-container {
+    margin-block: var(--table-margin-block, var(--_figure-margin-block, 0));
+  }
+
   .table-scroll {
     max-width: 100%;
     overflow-x: auto;

@@ -167,7 +167,7 @@ Or import in your CSS:
 
 **Layout — content structures:**
 
-- `TextLayout` - Typography container for prose; **caps width at a reading measure**
+- `TextLayout` - Typography container for prose; **prose at a reading measure, figures in a wider column**
 - `Form`, `FormItem`, `FormProvider`, `Fieldset` - Form layout
 - `Table` - Styled tables
 - `DataList`, `DataListItem` - Rich feed/list rows with start/content/end regions
@@ -204,7 +204,7 @@ interchangeable: each has an opinion about width, borders and spacing.
 | `Card`             | A notecard — **width-capped at ~420px by default**            | One discrete item: a record, a summary, a note    |
 | `Bar`              | Full-width bar, border above/below, `space-between`           | A section header with a title and actions         |
 | `Inline` / `Stack` | Bare flex row / column with a gap. No surface, no border.     | Everything else                                   |
-| `TextLayout`       | Prose container capped at a reading measure                   | Article-length prose (other surfaces typeset too) |
+| `TextLayout`       | Prose at a reading measure; figures get a wider column        | Article-length prose (other surfaces typeset too) |
 
 ### Page
 
@@ -581,51 +581,53 @@ them with a single uniform gap. That destroys the vertical rhythm — the space 
 an `<h2>` should not equal the space between two `<p>`s. `Stack` is for **UI
 elements**; `TextLayout` is for **text**.
 
-### The TextLayout gotcha: it caps your width
+### TextLayout has two widths: prose and figures
 
-`TextLayout` constrains its content to a comfortable reading measure
-(`--line-width`, 42rem by default). That's the feature — and the trap.
-
-**Anything wide must live outside the TextLayout.** Close it, emit the wide element,
-and open a new one:
-
-```svelte
-<!-- ✅ Prose, then a full-width table, then more prose -->
-<Container>
-  <TextLayout>
-    <h2>Term results</h2>
-    <p>Scores are aggregated across all sections.</p>
-  </TextLayout>
-
-  <Table>
-    <!-- full width of the Container, not squeezed to 42rem -->
-  </Table>
-
-  <TextLayout>
-    <p>Students below the threshold are flagged for follow-up.</p>
-  </TextLayout>
-</Container>
-```
+`TextLayout` keeps its **prose** — `<p>`, headings, lists, blockquotes — at a
+comfortable reading measure (`--line-width`, 42rem by default). Its **box** is
+wider: `--text-layout-wide-width`, 72rem by default. Anything else you place
+in the flow — a `Table`, a demo, a `<figure>`, an image, a `Card` — gets that
+wide column, so it is no longer squeezed down to 42rem. No prop needed:
 
 ```svelte
-<!-- ❌ The table, bar and grid are now 42rem wide and you'll wonder why -->
+<!-- ✅ One TextLayout; the table breaks out, the prose stays at the measure -->
 <TextLayout>
   <h2>Term results</h2>
   <p>Scores are aggregated across all sections.</p>
   <Table>...</Table>
-  <Bar>...</Bar>
+  <p>Students below the threshold are flagged for follow-up.</p>
 </TextLayout>
 ```
 
-Rule of thumb: **`TextLayout` wraps runs of prose, not whole pages.** If a UI
-element (a `Bar`, `Table`, `GridLayout`, `DataList`, a row of cards) is inside a
-`TextLayout`, it is almost certainly a mistake.
+- **Symmetric by default.** The prose is centred in the wide column, so a
+  figure sticks out evenly on both sides. For left-aligned prose with figures
+  extending to the right, set `--prose-margin-inline="0"` and
+  `--heading-margin-inline="0"` on the `TextLayout`.
+- **Full width is `100%`, not `100vw`.** `--text-layout-wide-width="100%"`
+  fills the container. `100vw` ignores the parent's padding and counts the
+  scrollbar, so it scrolls the page sideways.
+- **Wide tables scroll inside themselves.** A `Table` grows to the wide column
+  and then scrolls horizontally in its own strip; the page doesn't widen. (The
+  `sticky` variant doesn't — it needs a scrolling ancestor, so give it one.)
+- **Where the rest goes.** A `<figure>`, or an `<img>` placed straight in the
+  flow, is wide. An `<img>` inside a `<p>` stays at the measure. A `<pre>`
+  code block keeps the measure and scrolls sideways when a line is long.
+- **Figure spacing.** A figure placed straight in a `TextLayout` (`Table`,
+  `Card`, `<figure>`, the docs' `DemoWithCode`) gets
+  `--text-layout-figure-margin-block` above and below — `--gap-xl` by
+  default — so the next heading doesn't sit flush against it. The
+  component's own margin (`--table-margin-block`, `--card-margin-block`, a
+  `marginBlock` prop) still wins.
 
-To deliberately widen or narrow the measure, set `--line-width` (or `--text-width`
-for the box itself) rather than restructuring:
+Rule of thumb: **`TextLayout` wraps prose and the figures that belong to it**,
+not page chrome. A `Bar`, a sidebar or a page-level `GridLayout` inside a
+`TextLayout` is still almost certainly a mistake.
+
+To change either width, set the variable rather than restructuring:
 
 ```svelte
 <TextLayout --line-width="60rem">...</TextLayout>
+<TextLayout --text-layout-wide-width="100%">...</TextLayout>
 ```
 
 ### You often don't need TextLayout at all
@@ -1555,7 +1557,9 @@ Components cascade through category variables. For example, `Button`:
 
 **TextLayout:**
 
-- `--line-width` (the measure), `--text-width` (the box), `--text-padding`
+- `--line-width` (the measure), `--text-layout-wide-width` (the box's cap, for
+  figures; default 72rem), `--text-width` (the box), `--text-padding`
+- `--text-layout-figure-margin-block` (space around figures in the flow)
 
 **Form/FormItem:**
 
@@ -1674,7 +1678,8 @@ Example transformation:
 - Things stacked vertically → `Stack`
 - Prose → plain `<h2>` / `<p>` / `<ul>`; `Container`, `Card`, `Dialog` etc. already
   typeset them. Add `TextLayout` only for article-length runs
-- Something wide (table, grid, bar) → **outside** any `TextLayout`
+- A figure (table, demo, image) in an article → **inside** the `TextLayout`; it
+  gets the wide column. Page chrome (bar, page grid) → outside
 - Need a color → a semantic prop, or a variable on an ancestor. Not inline styles.
 
 ### Import Everything

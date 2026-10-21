@@ -52,11 +52,16 @@
     <code>FormItem</code> is the labeled row or block that arranges the label,
     the main control, and optional trailing content.
   </p>
-</TextLayout>
 
-<DemoWithCode
-  language="svelte"
-  code={`<Form layout="above" fullWidth globalInputStyles>
+  <h3>Form with fieldsets</h3>
+  <p>
+    A real <code>Form</code> sets the layout for everything inside it; each
+    <code>Fieldset</code> groups its rows under a legend.
+  </p>
+
+  <DemoWithCode
+    language="svelte"
+    code={`<Form layout="above" fullWidth globalInputStyles>
   <Fieldset>
     {#snippet legend()}Profile{/snippet}
 
@@ -74,83 +79,82 @@
     </FormItem>
   </Fieldset>
 </Form>`}
->
-  {#snippet header()}
-    <h3>Form with fieldsets</h3>
-  {/snippet}
-  <Container border padding="1rem" marginBlock="1rem">
-    <Form layout="above" fullWidth globalInputStyles>
-      <Fieldset>
-        {#snippet legend()}
-          Profile
-        {/snippet}
-
-        <FormItem>
-          {#snippet label()}
-            Full Name
+  >
+    <Container border padding="1rem" marginBlock="1rem">
+      <Form layout="above" fullWidth globalInputStyles>
+        <Fieldset>
+          {#snippet legend()}
+            Profile
           {/snippet}
-          <Input bind:value={fullName} />
-        </FormItem>
 
-        <FormItem>
-          {#snippet label()}
-            Email
+          <FormItem>
+            {#snippet label()}
+              Full Name
+            {/snippet}
+            <Input bind:value={fullName} />
+          </FormItem>
+
+          <FormItem>
+            {#snippet label()}
+              Email
+            {/snippet}
+            <Input bind:value={email} type="email" />
+          </FormItem>
+
+          <FormItem>
+            {#snippet label()}
+              Role
+            {/snippet}
+            <Select bind:value={role}>
+              <Option value="viewer">Viewer</Option>
+              <Option value="editor">Editor</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
+          </FormItem>
+        </Fieldset>
+
+        <Fieldset>
+          {#snippet legend()}
+            Delivery
           {/snippet}
-          <Input bind:value={email} type="email" />
-        </FormItem>
 
-        <FormItem>
-          {#snippet label()}
-            Role
-          {/snippet}
-          <Select bind:value={role}>
-            <Option value="viewer">Viewer</Option>
-            <Option value="editor">Editor</Option>
-            <Option value="admin">Admin</Option>
-          </Select>
-        </FormItem>
-      </Fieldset>
+          <FormItem>
+            {#snippet label()}
+              Weekly Digest
+            {/snippet}
+            <Checkbox bind:checked={digest}>Email me a weekly summary</Checkbox>
+          </FormItem>
 
-      <Fieldset>
-        {#snippet legend()}
-          Delivery
-        {/snippet}
+          <FormItem>
+            {#snippet label()}
+              Confidence Threshold ({confidence}%)
+            {/snippet}
+            <Slider bind:value={confidence} min={0} max={100} step={1} />
+          </FormItem>
 
-        <FormItem>
-          {#snippet label()}
-            Weekly Digest
-          {/snippet}
-          <Checkbox bind:checked={digest}>Email me a weekly summary</Checkbox>
-        </FormItem>
+          <FormItem>
+            {#snippet after()}
+              <Button primary>Save Preferences</Button>
+            {/snippet}
+          </FormItem>
+        </Fieldset>
+      </Form>
+    </Container>
+  </DemoWithCode>
 
-        <FormItem>
-          {#snippet label()}
-            Confidence Threshold ({confidence}%)
-          {/snippet}
-          <Slider bind:value={confidence} min={0} max={100} step={1} />
-        </FormItem>
-
-        <FormItem>
-          {#snippet after()}
-            <Button primary>Save Preferences</Button>
-          {/snippet}
-        </FormItem>
-      </Fieldset>
-    </Form>
-  </Container>
-</DemoWithCode>
-
-<TextLayout>
   <h3>Context Without Extra Chrome</h3>
   <p>
     Use <code>FormProvider</code> when you want to set defaults for a subsection
     but you do not want another form or fieldset wrapper.
   </p>
-</TextLayout>
+  <p>
+    The outer container here is just visual framing. The shared form defaults
+    come from <code>FormProvider</code>.
+  </p>
 
-<DemoWithCode
-  language="svelte"
-  code={`<FormProvider layout="below" fullWidth>
+  <DemoWithCode
+    language="svelte"
+    code={`<FormProvider layout="below" fullWidth>
   <FormItem>
     {#snippet label()}Name{/snippet}
     <input type="text" />
@@ -161,45 +165,35 @@
     <input type="email" />
   </FormItem>
 </FormProvider>`}
->
-  {#snippet header()}
-    <h3>Context without extra chrome</h3>
-  {/snippet}
-  {#snippet blurb()}
-    <p>
-      The outer container here is just visual framing. The shared form defaults
-      come from <code>FormProvider</code>.
-    </p>
-  {/snippet}
-  <Container border padding="1rem" marginBlock="1rem">
-    <Stack>
-      <FormProvider layout="below" fullWidth globalInputStyles>
-        <FormItem>
-          {#snippet label()}
-            Name
-          {/snippet}
-          <Input value="Ada Lovelace" />
-        </FormItem>
+  >
+    <Container border padding="1rem" marginBlock="1rem">
+      <Stack>
+        <FormProvider layout="below" fullWidth globalInputStyles>
+          <FormItem>
+            {#snippet label()}
+              Name
+            {/snippet}
+            <Input value="Ada Lovelace" />
+          </FormItem>
 
-        <FormItem>
-          {#snippet label()}
-            Email
-          {/snippet}
-          <Input value="ada@example.com" type="email" />
-        </FormItem>
+          <FormItem>
+            {#snippet label()}
+              Email
+            {/snippet}
+            <Input value="ada@example.com" type="email" />
+          </FormItem>
 
-        <FormItem layout="side">
-          {#snippet label()}
-            Override
-          {/snippet}
-          <Input value="This one opts back into side layout" />
-        </FormItem>
-      </FormProvider>
-    </Stack>
-  </Container>
-</DemoWithCode>
+          <FormItem layout="side">
+            {#snippet label()}
+              Override
+            {/snippet}
+            <Input value="This one opts back into side layout" />
+          </FormItem>
+        </FormProvider>
+      </Stack>
+    </Container>
+  </DemoWithCode>
 
-<TextLayout>
   <h3>When To Reach For What</h3>
   <p>
     Use <code>Form</code> for an actual submit boundary. Use
