@@ -87,7 +87,20 @@
     gap: var(--button-icon-gap, var(--space));
   }
   button {
-    width: var(--button-width);
+    /* A button is as wide as its label, wherever it lands -- including a
+       flex column or grid (Stack, a form grid) that would otherwise stretch
+       it edge to edge. Ask for a wide one with width="100%". Contexts that
+       want full-width buttons (MenuList rows) set their own width through
+       their own variable, which outranks this. */
+    width: var(--button-width, fit-content);
+    /* ...and never wider than the space its margins leave, so
+       width="100%" fits instead of overflowing by the margin. Same cap as
+       Card; the prefixed lines cover browsers that only know the old
+       keyword. */
+    max-width: 100%;
+    max-width: -moz-available;
+    max-width: -webkit-fill-available;
+    max-width: stretch;
     height: var(--button-height);
     @include box-props(button, control, secondary);
     @include border-props-none(button);

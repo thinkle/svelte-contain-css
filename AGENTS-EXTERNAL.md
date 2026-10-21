@@ -160,7 +160,7 @@ Or import in your CSS:
 
 **Layout — generic flex helpers:**
 
-- `Inline`, `Stack` - The default choice for generic horizontal/vertical grouping
+- `Inline`, `Stack` - Flex row / column for grouping pieces of UI (not for text: headings and paragraphs already flow)
 - `Row`, `Column`, `Columns` - Older flexbox helpers
 - `GridLayout` - CSS Grid wrapper
 - `RowContainer`, `ColumnContainer` - Specialized sized lanes/rails for predictable tile regions
@@ -203,7 +203,7 @@ interchangeable: each has an opinion about width, borders and spacing.
 | `Container`        | Centered content region, max-width ~900px, its own surface    | A section of a page                               |
 | `Card`             | A notecard — **width-capped at ~420px by default**            | One discrete item: a record, a summary, a note    |
 | `Bar`              | Full-width bar, border above/below, `space-between`           | A section header with a title and actions         |
-| `Inline` / `Stack` | Bare flex row / column with a gap. No surface, no border.     | Everything else                                   |
+| `Inline` / `Stack` | Bare flex row / column with a gap. No surface, no border.     | Arranging UI pieces: a toolbar, a sidebar's top and bottom |
 | `TextLayout`       | Prose container capped at a reading measure                   | Article-length prose (other surfaces typeset too) |
 
 ### Page
@@ -477,6 +477,13 @@ below each other, these are the answer.
 - `Stack` supports `split`, `justify`, `center`, `fill`, and `stretch`.
 - `Stack` zeroes the block margins of its direct children — spacing comes from `gap`.
   That's exactly why it's wrong for prose (see below).
+- `Stack` stretches its children across its width (`align-items: stretch`) --
+  except buttons, which keep the width of their label. Use `width="100%"` on a
+  `Button` that should span the column.
+- A Stack earns its place when the column has a height to fill: `<Stack fill split>`
+  pins one group to the top of a sidebar or fixed-height Card and another to the
+  bottom. If you are only putting things one under another, normal flow already
+  does that.
 
 ### Margin: `marginBlock` and `marginInline`
 
@@ -1524,7 +1531,7 @@ Components cascade through category variables. For example, `Button`:
 **Button:**
 
 - `--button-bg`, `--button-fg`, `--button-padding`
-- `--button-width`, `--button-height`
+- `--button-width` (default: `fit-content` -- a button is as wide as its label, even in a `Stack` or a grid; `width="100%"` for a full-width one, capped to fit its margins), `--button-height`
 - `--button-hover-filter`, `--button-hover-transform`
 
 **Dialog:**

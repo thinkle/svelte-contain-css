@@ -6,6 +6,10 @@
   import Inline from "$lib/layout/Inline.svelte";
   import Stack from "$lib/layout/Stack.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import MenuList from "$lib/layout/MenuList.svelte";
+  import Sidebar from "$lib/layout/Sidebar.svelte";
+  import SidebarContainer from "$lib/layout/SidebarContainer.svelte";
+  import Tag from "$lib/misc/Tag.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
 
@@ -64,19 +68,68 @@
     you want prose-style margins, use <code>&lt;TextLayout&gt;</code>.
   </p>
 </TextLayout>
+<TextLayout>
+  <p>
+    It is not a replacement for normal document flow. Headings and paragraphs
+    already stack, with spacing that suits text; put them in a
+    <code>&lt;TextLayout&gt;</code> (or just let them flow). Reach for Stack when
+    you are arranging <em>pieces of UI</em> in a column -- especially when the
+    column has a height to fill.
+  </p>
+</TextLayout>
 <DemoWithCode
-  code={`<Stack>
-  <h3>Release Notes</h3>
-  <p>Stack keeps related content in vertical rhythm.</p>  
-  <Button secondary>Preview</Button>
-  <Button primary>Publish</Button>  
-</Stack>`}
-  ><Stack>
-    <h3>Release Notes</h3>
-    <p>Stack keeps related content in vertical rhythm.</p>
-    <Button secondary>Preview</Button>
-    <Button primary>Publish</Button>
-  </Stack>
+  code={`<SidebarContainer height="440px">
+  <Sidebar>
+    <Stack fill split padding="var(--space-md)">
+      <MenuList>
+        <li><button>Dashboard</button></li>
+        <li><button>Reports</button></li>
+        <li><button>Settings</button></li>
+      </MenuList>
+      <Stack gap="var(--space-sm)">
+        <Tag info>Free plan</Tag>
+        <Button primary width="100%">Upgrade</Button>
+        <Button>Sign out</Button>
+      </Stack>
+    </Stack>
+  </Sidebar>
+  <main>...</main>
+</SidebarContainer>`}
+>
+  {#snippet header()}
+    <h3>Top and bottom of a sidebar</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      The classic job for a Stack: navigation pinned to the top of a panel,
+      account actions pinned to the bottom. <code>fill</code> makes the outer
+      Stack as tall as the sidebar and <code>split</code> pushes its two children
+      apart; the inner Stack spaces the bottom group with one <code>gap</code>.
+    </p>
+    <p>
+      Buttons keep the width of their label inside a Stack, as they would
+      anywhere else. Ask for a full-width one with <code>width="100%"</code>.
+    </p>
+  {/snippet}
+  <SidebarContainer height="440px">
+    <Sidebar>
+      <Stack fill split padding="var(--space-md)">
+        <MenuList>
+          <li><button>Dashboard</button></li>
+          <li><button>Reports</button></li>
+          <li><button>Settings</button></li>
+        </MenuList>
+        <Stack gap="var(--space-sm)">
+          <Tag info>Free plan</Tag>
+          <Button primary width="100%">Upgrade</Button>
+          <Button>Sign out</Button>
+        </Stack>
+      </Stack>
+    </Sidebar>
+    <main style="padding: 0 1rem;">
+      <p>The page content sits here, beside the sidebar.</p>
+    </main>
+  </SidebarContainer>
 </DemoWithCode>
 <TextLayout>
   <h2>Fill, Stretch, and Split</h2>
