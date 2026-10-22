@@ -208,7 +208,7 @@
     </DemoWithCode>
 
     <DemoWithCode
-      code={`<div class="hero">{@render infoCard()}</div>
+      code={`<div class="wide-column">{@render infoCard()}</div>
 <div class="with-sidebar">
   <aside>{@render infoCard()}</aside>
   <p>...the rest of the page...</p>
@@ -228,12 +228,12 @@
     >
       {#snippet blurb()}
         <p>
-          The same card in two places. As the one thing across a wide hero it
-          reads large; in a 260px sidebar it tightens up, and its footer, being
-          a caption, may go smaller than its body.
+          The same card in two places. As the one thing across a wide column
+          it reads large; in a 260px sidebar it tightens up. Its footer is a
+          caption, so it stays a step smaller than the body in both.
         </p>
       {/snippet}
-      <div class="hero">
+      <div class="wide-column">
         {@render infoCard()}
       </div>
       <div class="with-sidebar">
@@ -275,7 +275,7 @@
   .fixed-type {
     --card-font-size-slope: 0;
   }
-  .hero,
+  .wide-column,
   .with-sidebar > aside {
     container-type: inline-size;
   }

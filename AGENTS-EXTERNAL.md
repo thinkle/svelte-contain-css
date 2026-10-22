@@ -1232,7 +1232,7 @@ Contain's responsive behaviour follows three rules:
    phone.** Card, Tile and DataList size their type by their own width:
    1.25px more or less for every 100px either side of the size they were
    designed at (Card 420px, Tile 192px, DataList 420px). A Card reads
-   larger as the one thing across a hero, smaller at the bottom of a 300px
+   larger as the one thing across a wide page, smaller at the bottom of a 300px
    sidebar; a Tile made wider reads larger; a DataList tightens in a narrow
    pane but doesn't grow past its set size in a wide one. A Card's footer
    is a caption: it starts a step under the body (`--card-footer-font-size`,

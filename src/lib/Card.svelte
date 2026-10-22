@@ -199,7 +199,7 @@
   }
 
   /* ── Type that follows the card's width ─────────────────── */
-  /* The same card reads larger as the one thing across a hero than at the
+  /* The same card reads larger as the one thing across a wide page than at the
      bottom of a 300px sidebar; see fluid-font-size() for the scale and its
      floors. Headings follow, since their default sizes are in em. The
      footer is a caption: it starts a step under the body
