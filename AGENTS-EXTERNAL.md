@@ -1256,11 +1256,35 @@ Contain's responsive behaviour follows three rules:
 2. **Inner density can follow a component's own width.** A narrow Card
    tightens its padding; a DataList row moves its trailing actions onto
    their own line.
-3. **Text never shrinks for a small screen.** Type size belongs to the
-   theme, not to a component's width, and body and input text stay at 16px
-   or more on a phone (iOS zooms the page when an input under 16px takes
-   focus). The `-font-size-small` variables exist for a deliberate choice;
-   nothing uses them by default.
+3. **Text may follow the room it has, down to a floor -- but not on a
+   phone.** Card, Tile and DataList size their type by their own width:
+   1.25px more or less for every 100px either side of the size they were
+   designed at (Card 420px, Tile 192px, DataList 420px). A Card reads
+   larger as the one thing across a wide page, smaller at the bottom of a 300px
+   sidebar; a Tile made wider reads larger; a DataList tightens in a narrow
+   pane but doesn't grow past its set size in a wide one. A Card's footer
+   is a caption: it starts a step under the body (`--card-footer-font-size`,
+   `0.875em`) and slides from there. Text never slides under the floor for its kind,
+   and on a phone, where the component is most of the screen, body text and
+   titles don't shrink at all. The floors are theme tokens:
+
+   | Token | For | Default |
+   | --- | --- | --- |
+   | `--font-size-min-input` | text you type into (Input, a native Select), on touch screens | `16px` -- iOS zooms the page on focus below this |
+   | `--font-size-min-text` | body copy, card headers, list titles | `14px` |
+   | `--font-size-min-caption` | card footers, the line under a list title | `12px` |
+
+   A floor only stops sliding: text you set smaller than its floor stays
+   the size you set. The knobs, per component or for everything at once:
+
+   | Variable | Default | |
+   | --- | --- | --- |
+   | `--card-font-size-slope`, `--tile-font-size-slope`, `--data-list-font-size-slope`, `--font-size-slope` | `0.0125` | px per px of width; `0` turns the scale off |
+   | `--card-font-size-anchor`, `--tile-font-size-anchor`, `--data-list-font-size-anchor` | `420px`; a default 192px Tile's content width; `420px` | the width at which text is its set size |
+   | `--card-font-size-max-scale`, `--tile-font-size-max-scale`, `--data-list-font-size-max-scale` | `1.25`, `1.25`, `1` | how far it may grow |
+
+   `--card-font-size-small` / `-large` still pin a Card to one size per
+   tier instead.
 
 The mechanics:
 

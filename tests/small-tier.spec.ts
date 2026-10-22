@@ -97,7 +97,7 @@ test("a tile with no container around it still goes small on a phone", async ({
   expect(w).toBe(160);
 });
 
-test("in a small pane on a wide screen, a Card snaps to 250px and its text doesn't shrink", async ({ page }) => {
+test("in a small pane on a wide screen, a Card snaps to 250px and its text stops at the floor", async ({ page }) => {
   const card = page.getByTestId("card-small").locator(".card");
   const { w, font } = await card.evaluate((e) => ({
     w: e.getBoundingClientRect().width,
@@ -106,7 +106,9 @@ test("in a small pane on a wide screen, a Card snaps to 250px and its text doesn
   // 250px plus the card's 1px border either side
   expect(Math.round(w)).toBeGreaterThanOrEqual(250);
   expect(Math.round(w)).toBeLessThanOrEqual(252);
-  expect(font).toBe("16px");
+  // ~13.9px on the sliding scale, held at --font-size-min-text; see
+  // fluid-type.spec.ts
+  expect(font).toBe("14px");
 });
 
 test("on a phone, a Card fills the width it's given", async ({ page }) => {

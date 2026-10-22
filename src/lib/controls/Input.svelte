@@ -50,4 +50,12 @@
     width: var(--input-width);
     @include focusable();
   }
+  /* Text you type into never drops under --font-size-min-input on a touch
+     screen: iOS Safari zooms the page when a smaller field takes focus. A
+     mouse has no such problem, so a dense desktop pane keeps its size. */
+  @media (pointer: coarse) {
+    input {
+      font-size: max(var(--font-size-min-input, 16px), var(--_font-size, 1em));
+    }
+  }
 </style>

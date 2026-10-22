@@ -141,36 +141,17 @@ ${items}
 </DataList>`;
   });
 
-  const responsiveTypographyMarkup = `<SplitPane leftWidth="12em" rightWidth="2fr">
+  let roomyList = $state(true);
+  const responsiveTypographyMarkup = $derived(`<SplitPane leftWidth="12em" rightWidth="2fr">
   {#snippet right()}
-    <div class="responsive-typography-scope">
-      <DataList class="responsive-typography-list">…</DataList>
-    </div>
+    <DataList${roomyList ? ' class="roomy-list"' : ""}>…</DataList>
   {/snippet}
-  </SplitPane>`;
+</SplitPane>`);
 
   const responsiveTypographyStyle = `
-  .responsive-typography-scope {
-    container-type: inline-size;
-  }
-
-  .responsive-typography-list {
-    --data-list-heading-font-size: 1.05rem;
-    --data-list-paragraph-font-size: 0.95rem;
-  }
-
-  @container (max-width: 320px) {
-    .responsive-typography-list {
-      --data-list-heading-font-size: 0.85rem;
-      --data-list-paragraph-font-size: 0.75rem;
-    }
-  }
-
-  @container (min-width: 700px) {
-    .responsive-typography-list {
-      --data-list-heading-font-size: 1.3rem;
-      --data-list-paragraph-font-size: 1.05rem;
-    }
+  /* Let the list grow past its set size in a wide pane, too. */
+  .roomy-list {
+    --data-list-font-size-max-scale: 1.2;
   }
 `;
 
@@ -306,36 +287,41 @@ ${items}
     styleSource={responsiveTypographyStyle}
   >
     {#snippet header()}
-      <h3>Responsive Typography (App CSS)</h3>
+      <h3>Responsive Typography</h3>
       <p>
-        Set typography variables with container queries in your app/theme so the
-        same <code>DataList</code> adapts to where it is used.
+        A <code>DataList</code> tightens its type on its own in a narrow pane:
+        row titles down to <code>--font-size-min-text</code>, the line under
+        them to <code>--font-size-min-caption</code>. On a phone the titles
+        keep their size.
       </p>
       <p>
-        This example uses container breakpoints at <code>320px</code> and
-        <code>700px</code>.
+        By default a list doesn't grow past its set size in a wide pane. This
+        one does, up to 1.2&times;, with
+        <code>--data-list-font-size-max-scale</code>. Turn the sliding scale
+        off with <code>--data-list-font-size-slope: 0</code>.
       </p>
+    {/snippet}
+    {#snippet inputArea()}
+      <Checkbox bind:checked={roomyList}>Grow in a wide pane</Checkbox>
     {/snippet}
     <SplitPane leftWidth="12em" rightWidth="2fr">
       {#snippet left()}
         <p class="hint">
-          Resize this pane to cross the 320px and 700px typography breakpoints.
+          Drag the divider to give the list more or less room.
         </p>
       {/snippet}
       {#snippet right()}
-        <div class="responsive-typography-scope">
-          <DataList class="responsive-typography-list">
-            {#each articleFeed as item}
-              <DataListItem>
-                {#snippet start()}
-                  <img src={item.image} alt={item.imageAlt} />
-                {/snippet}
-                <h4>{item.title}</h4>
-                <p>{item.subtitle}</p>
-              </DataListItem>
-            {/each}
-          </DataList>
-        </div>
+        <DataList class={roomyList ? "roomy-list" : undefined}>
+          {#each articleFeed as item}
+            <DataListItem>
+              {#snippet start()}
+                <img src={item.image} alt={item.imageAlt} />
+              {/snippet}
+              <h4>{item.title}</h4>
+              <p>{item.subtitle}</p>
+            </DataListItem>
+          {/each}
+        </DataList>
       {/snippet}
     </SplitPane>
   </DemoWithCode>
@@ -488,27 +474,7 @@ ${items}
     opacity: 0.9;
   }
 
-  .responsive-typography-scope {
-    container-type: inline-size;
-    min-width: 0;
-  }
-
-  :global(.responsive-typography-list) {
-    --data-list-heading-font-size: 1.05rem;
-    --data-list-paragraph-font-size: 0.95rem;
-  }
-
-  @container (max-width: 320px) {
-    :global(.responsive-typography-list) {
-      --data-list-heading-font-size: 0.85rem;
-      --data-list-paragraph-font-size: 0.75rem;
-    }
-  }
-
-  @container (min-width: 700px) {
-    :global(.responsive-typography-list) {
-      --data-list-heading-font-size: 1.3rem;
-      --data-list-paragraph-font-size: 1.05rem;
-    }
+  :global(.roomy-list) {
+    --data-list-font-size-max-scale: 1.2;
   }
 </style>

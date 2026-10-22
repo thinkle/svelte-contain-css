@@ -9,9 +9,7 @@
   let cardHeight = $state(300);
   let responsiveType = $state(true);
   const typeVars = $derived(
-    responsiveType
-      ? `\n  --card-font-size-small="0.875rem"\n  --card-font-size-large="1.25rem"`
-      : "",
+    responsiveType ? "" : `\n  --card-font-size-slope="0"`,
   );
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -21,6 +19,21 @@
   import Inline from "$lib/layout/Inline.svelte";
   import Stack from "$lib/layout/Stack.svelte";
 </script>
+
+{#snippet infoCard()}
+  <Card width="100%" --card-width-small="100%">
+    {#snippet header()}
+      <h3>Fall registration is open</h3>
+    {/snippet}
+    <p>
+      Sign up by November 15 to keep your spot. Returning families can renew
+      from the account page.
+    </p>
+    {#snippet footer()}
+      <span>Updated October 21</span>
+    {/snippet}
+  </Card>
+{/snippet}
 
 <Container>
   <CssVariableDemo variables={cardVars}>
@@ -158,11 +171,13 @@
           the slider to see padding tighten below 300px and loosen above 500px.
         </p>
         <p>
-          Text size doesn't change by default: a narrow card is usually a phone,
-          and text shouldn't shrink there. If you want type that follows the
-          card, opt in with <code>--card-font-size-small</code> and
-          <code>--card-font-size-large</code> (on the Card, or once on any
-          ancestor or in your theme).
+          Text follows the card's width too: a little smaller in a narrow card,
+          larger in a wide one, never below <code>--font-size-min-text</code>
+          (<code>--font-size-min-caption</code> for the footer), and not at all
+          on a phone, where the card is the page. Turn it off with
+          <code>--card-font-size-slope: 0</code>, or pin a size per tier with
+          <code>--card-font-size-small</code> and
+          <code>--card-font-size-large</code>.
         </p>
       {/snippet}
       {#snippet inputArea()}
@@ -174,9 +189,9 @@
           Height: {cardHeight}px
           <Slider bind:value={cardHeight} min={200} max={800} />
         </label>
-        <Checkbox bind:checked={responsiveType}>Responsive type</Checkbox>
+        <Checkbox bind:checked={responsiveType}>Scale type with width</Checkbox>
       {/snippet}
-      <div class:responsive-type={responsiveType}>
+      <div class:fixed-type={!responsiveType}>
         <Card center width="{cardWidth}px" height="{cardHeight}px">
           {#snippet header()}
             <div>Card Header</div>
@@ -190,6 +205,46 @@
             <div>Card Footer</div>
           {/snippet}
         </Card>
+      </div>
+    </DemoWithCode>
+
+    <DemoWithCode
+      code={`<div class="wide-column">{@render infoCard()}</div>
+<div class="with-sidebar">
+  <aside>{@render infoCard()}</aside>
+  <p>...the rest of the page...</p>
+</div>
+
+{#snippet infoCard()}
+  <Card width="100%" --card-width-small="100%">
+    {#snippet header()}
+      <h3>Fall registration is open</h3>
+    {/snippet}
+    <p>Sign up by November 15 to keep your spot. ...</p>
+    {#snippet footer()}
+      <span>Updated October 21</span>
+    {/snippet}
+  </Card>
+{/snippet}`}
+    >
+      {#snippet blurb()}
+        <p>
+          The same card in two places. As the one thing across a wide column
+          it reads large; in a 260px sidebar it tightens up. Its footer is a
+          caption, so it stays a step smaller than the body in both.
+        </p>
+      {/snippet}
+      <div class="wide-column">
+        {@render infoCard()}
+      </div>
+      <div class="with-sidebar">
+        <aside>
+          {@render infoCard()}
+        </aside>
+        <p>
+          The rest of the page goes here. The sidebar is 260px wide whatever the
+          screen, so its card gets small-card type.
+        </p>
       </div>
     </DemoWithCode>
 
@@ -218,8 +273,17 @@
 </Container>
 
 <style>
-  .responsive-type {
-    --card-font-size-small: 0.875rem;
-    --card-font-size-large: 1.25rem;
+  .fixed-type {
+    --card-font-size-slope: 0;
+  }
+  .wide-column,
+  .with-sidebar > aside {
+    container-type: inline-size;
+  }
+  .with-sidebar {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
   }
 </style>

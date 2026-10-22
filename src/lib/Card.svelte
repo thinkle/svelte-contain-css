@@ -145,13 +145,21 @@
 
   .card.center section {
     display: grid;
-    place-content: center;
+    /* safe: a fixedHeight body that overflows scrolls from its top, rather
+       than centring and pushing its first lines out of reach. */
+    place-content: safe center;
     text-align: center;
   }
 
+  /* A fixed-height card keeps its header and footer in view and scrolls
+     only its body. */
   .card.fixedHeight {
     height: var(--h);
     container-type: size;
+    overflow: hidden;
+  }
+  .card.fixedHeight section {
+    min-height: 0;
     @include custom-scrollbar(card, surface);
   }
 
@@ -177,6 +185,10 @@
     @include box-props-top(card-header, bar);
     display: flex;
     align-items: center;
+    /* Header and footer never shrink: in a fixedHeight card that is too
+       short, the body gives up the room and scrolls, rather than flexbox
+       squeezing the bars down to their min-height and clipping their text. */
+    flex-shrink: 0;
     min-height: var-with-fallbacks(--height, card-header, bar, 2em);
   }
 
@@ -197,6 +209,12 @@
   footer {
     @include color-props(card-footer, secondary);
     @include box-props-bottom(card-footer, bar);
+    /* Centred in its min-height like the header, but a column, so footer
+       content that was several blocks stays stacked. */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
     min-height: var-with-fallbacks(--height, card-footer, bar, 2em);
   }
 
@@ -209,6 +227,26 @@
     @include color-props(card-content, surface);
     @include box-props(card-content);
     @include typography-container-props(card, surface);
+  }
+
+  /* ── Type that follows the card's width ─────────────────── */
+  /* The same card reads larger as the one thing across a wide page than at the
+     bottom of a 300px sidebar; see fluid-font-size() for the scale and its
+     floors. Headings follow, since their default sizes are in em. The
+     footer is a caption: it starts a step under the body
+     (--card-footer-font-size, 0.875em) and slides from there, down to the
+     caption floor. Turn it off with --card-font-size-slope: 0. */
+  header {
+    /* The card's own size: only the body has a --card-font-size of its
+       own; a header or footer reading --_font-size would get whatever an
+       ancestor left there. */
+    @include fluid-font-size(card, 1em);
+  }
+  section {
+    @include fluid-font-size(card, var(--_font-size, 1em));
+  }
+  footer {
+    @include fluid-font-size(card, var(--card-footer-font-size, 0.875em), caption);
   }
 
   /* ── Container queries ──────────────────────────────────── */
@@ -242,19 +280,19 @@
   /* Card itself: narrow (≤ --card-width-small: 250px) — tighten typography and spacing */
   @container (max-width: 300px) {
     .card section {
-      /* Opt-in only: a narrow card is usually a phone, and text should not
-         shrink there. */
-      font-size: var(--card-font-size-small, var(--_font-size));
+      /* A fixed size for the narrow tier, if you want one instead of the
+         sliding scale above. */
+      font-size: var(--card-font-size-small, var(--_fluid-font-size));
     }
     .card header,
     .card section {
       padding: var(--card-padding-small, calc(0.75 * var(--_padding, 8px)));
     }
     .card header {
-      height: var(--card-header-height-small, 2.5em);
+      min-height: var(--card-header-height-small, 2.5em);
     }
     .card footer {
-      height: var(--card-footer-height-small, 2.5em);
+      min-height: var(--card-footer-height-small, 2.5em);
       padding: var(
         --card-footer-padding-small,
         calc(0.75 * var(--_padding, 8px))
@@ -265,19 +303,19 @@
   /* Card itself: wide (≥ --card-width-large: 600px) — expand typography and spacing */
   @container (min-width: 500px) {
     .card section {
-      /* Opt-in only: a card's width is a layout fact, not a reason for its
-         text to be a different size from the text beside it. */
-      font-size: var(--card-font-size-large, var(--_font-size));
+      /* A fixed size for the wide tier, if you want one instead of the
+         sliding scale above. */
+      font-size: var(--card-font-size-large, var(--_fluid-font-size));
     }
     .card header,
     .card section {
       padding: var(--card-padding-large, calc(1.25 * var(--_padding, 8px)));
     }
     .card header {
-      height: var(--card-header-height-large, 3em);
+      min-height: var(--card-header-height-large, 3em);
     }
     .card footer {
-      height: var(--card-footer-height-large, 3em);
+      min-height: var(--card-footer-height-large, 3em);
       padding: var(
         --card-footer-padding-large,
         calc(1.25 * var(--_padding, 8px))
