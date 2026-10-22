@@ -75,8 +75,30 @@
 <div class="box wide" data-testid="card-wide">
   <Card><p>card</p></Card>
 </div>
+<!-- Sizes passed as props are what the card is, in every tier. -->
+<div class="box small" data-testid="card-pinned">
+  <Card width="300px" height="340px"><p>card</p></Card>
+</div>
+<div class="box small" data-testid="card-nested">
+  <Card width="320px">
+    <Card><p>inner</p></Card>
+  </Card>
+</div>
+
+<!-- A sweep of container widths across the small-tier boundary: a Card's
+     width must never go up as its container's goes down. -->
+<div data-testid="card-sweep">
+  {#each [800, 640, 601, 600, 560, 500, 452, 400, 300, 250, 200] as w}
+    <div class="sweep" style="width: {w}px" data-w={w}>
+      <Card><p>card {w}</p></Card>
+    </div>
+  {/each}
+</div>
 
 <style>
+  .sweep {
+    container-type: inline-size;
+  }
   .box {
     container-type: inline-size;
     margin-bottom: 24px;

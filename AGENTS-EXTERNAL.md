@@ -396,10 +396,20 @@ Other sizing details:
 
 `Card` is meant to feel like a notecard. It ships with `--card-width: 420px`
 and tightens its own padding when it is narrow. **On a wide screen it is not a
-generic panel and it will not fill its parent.** In the small tier (a phone,
-or a pane 600px or narrower) it does fill the width it's given
-(`--card-width-small: 100%`), because a 420px notecard doesn't fit and a
-smaller one adrift in a phone screen helps nobody.
+generic panel and it will not fill its parent.** In a pane 600px or narrower
+it snaps down to `--card-width-small` (250px) -- the step you see when you drag
+a SplitPane narrower. On a phone (a viewport 600px or narrower) it fills the
+width it's given instead, because a 250px card adrift in a phone screen helps
+nobody. It never gets wider as its container gets narrower, and it never
+overflows its container: `--card-width` is a preferred width, capped to the
+space available.
+
+A `width` or `height` passed as a prop is different: it is the size that card
+*is*, so it holds in every tier. `<Card width="100%">` fills a narrow column
+rather than snapping to 250px, and `<Card height="340px">` stays 340px tall.
+(`width` is still capped to the space available.) Set `--card-width` /
+`--card-height` -- on the Card or in a theme -- for a default the tiers may
+change.
 
 If a Card looks mysteriously narrow, that's the design — not a bug to patch with
 `width: 100%` on the wrapper.
@@ -1224,7 +1234,9 @@ Contain's responsive behaviour follows three rules:
 1. **Outer size follows the small tier.** Things that stand alone -- a Card,
    a Container, a DataList -- fill the width they're given on a phone.
    Things that come in a collection -- Tiles in a grid -- shrink so several
-   still fit per row.
+   still fit per row. In a narrow pane on a wide screen, a Card snaps to its
+   small size (250px) rather than filling. Nothing gets wider as its
+   container gets narrower.
 2. **Inner density can follow a component's own width.** A narrow Card
    tightens its padding; a DataList row moves its trailing actions onto
    their own line.
@@ -1255,7 +1267,7 @@ In the small tier, for each property:
 | `GridLayout` | `--grid-layout-gap-small`; tile tracks follow `--tile-width-small` | same as regular |
 | `Bar` | `--bar-padding-small`, `--bar-gap-small`, `--bar-min-height-small` | same as regular |
 | `Container` | `--container-padding-small` | same as regular |
-| `Card` | `--card-width-small`, `--card-height-small`, `--card-padding-small`, `--card-font-size-small` | fills the width (100%) |
+| `Card` | `--card-width-small`, `--card-height-small`, `--card-padding-small`, `--card-font-size-small` | 250px in a narrow pane; fills the width (100%) on a phone |
 | `DataList` | `stackable` (on by default), `--data-list-item-font-size-small` | the `end` region (tags, buttons) moves under the content |
 
 ```svelte
@@ -1541,7 +1553,7 @@ Components cascade through category variables. For example, `Button`:
 
 **Card:**
 
-- `--card-width` (default: 420px), `--card-width-small` (100%: fills a small container),
+- `--card-width` (default: 420px), `--card-width-small` (250px in a narrow pane, 100% on a phone; setting it picks one size for both),
   `--card-height` (fixed-height cards only)
 
 **Bar:**

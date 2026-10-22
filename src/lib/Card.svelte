@@ -26,6 +26,7 @@
     header,
     footer,
     children,
+    width,
     height,
     fixedHeight,
     center,
@@ -33,8 +34,9 @@
     ...restProps
   }: Props = $props();
 
-  /* `height` is destructured (the $effect below reads it), so it has to be
-     handed back explicitly -- rest props no longer carry it. */
+  /* `width` and `height` are destructured (the $effect below reads
+     height), so they have to be handed back explicitly -- rest props no
+     longer carry them. */
   /* The shorthands card's own CSS backs, one group per mixin it
      includes. The Props type is derived from this same array, so what the
      component accepts and what it emits cannot drift apart. */
@@ -43,15 +45,30 @@
     ...TYPOGRAPHY_CONTAINER_VARS,
   ] as const;
 
+  /* A width or height passed as a prop is the size this card *is*, in
+     every tier: `<Card height="340px">` stays 340px in a narrow pane. The
+     --card-width / --card-height variables are defaults the small and
+     large tiers may swap out; the props also set these private pins,
+     which every tier reads first. */
+  const pins = $derived(
+    (width ? `--_card-width: ${width};` : "") +
+      (height ? `--_card-height: ${height};` : ""),
+  );
+
   const el = $derived(
-    elementProps({ height, ...restProps }, "card", [
-      ...CARD_VARS,
-      "padding",
-      "width",
-      "height",
-      "marginBlock",
-      "marginInline",
-    ]),
+    elementProps(
+      { width, height, ...restProps },
+      "card",
+      [
+        ...CARD_VARS,
+        "padding",
+        "width",
+        "height",
+        "marginBlock",
+        "marginInline",
+      ],
+      pins,
+    ),
   );
 
   const forceFixedHeight = (h: string | null | undefined) => {
@@ -82,8 +99,8 @@
 
   /* ── Card shell ─────────────────────────────────────────── */
   .card {
-    --w: var(--card-width);
-    --h: var(--card-height);
+    --w: var(--_card-width, var(--card-width));
+    --h: var(--_card-height, var(--card-height));
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
@@ -134,6 +151,15 @@
   }
 
   /* ── Card regions ───────────────────────────────────────── */
+  /* The size pins belong to this card alone: without this, a Card nested
+     in one with a `width` would inherit that width as its own. */
+  header,
+  section,
+  footer {
+    --_card-width: initial;
+    --_card-height: initial;
+  }
+
   section {
     padding: var(--padding);
     border-top-right-radius: var(--border-radius);
@@ -183,14 +209,28 @@
   /* ── Container queries ──────────────────────────────────── */
   /* NOTE: .card targets the *parent* container; children target the card itself */
 
-  /* Parent context: small (the shared small tier, $small-max -- a small
-     container, or a small viewport when there is no container) — adjust
-     card sizing vars */
-  @include when-small {
+  /* Parent context: small (the shared small tier, $small-max).
+
+     A narrow pane on a wide screen snaps the card down to its small size --
+     the visible "this card responds to its container" step. Never `100%`
+     here: the tier starts at 600px, where a 420px card still fits, so
+     "fill" made a card *grow* as its container shrank past 600.
+
+     A narrow viewport (a phone) fills instead: a 250px card adrift in a
+     390px screen helps nobody. This comes after the container query so it
+     wins on a phone, and it also covers a Card with no container ancestor.
+     An explicit --card-width-small still wins in both. */
+  @container (max-width: #{$small-max}) {
     .card {
-      --w: var(--card-width-small);
-      --h: var(--card-height-small);
-      --sidebar-width: calc(var(--card-width-small) - var(--_padding) * 2);
+      --w: var(--_card-width, var(--card-width-small, 250px));
+      --h: var(--_card-height, var(--card-height-small));
+      --sidebar-width: calc(var(--card-width-small, 250px) - var(--_padding) * 2);
+    }
+  }
+  @media (max-width: #{$small-max}) {
+    .card {
+      --w: var(--_card-width, var(--card-width-small, 100%));
+      --h: var(--_card-height, var(--card-height-small));
     }
   }
 
@@ -243,8 +283,8 @@
   /* Parent context: large — expand card sizing vars */
   @container (min-width: 1921px) {
     .card {
-      --w: var(--card-width-large);
-      --h: var(--card-height-large);
+      --w: var(--_card-width, var(--card-width-large));
+      --h: var(--_card-height, var(--card-height-large));
     }
   }
 
