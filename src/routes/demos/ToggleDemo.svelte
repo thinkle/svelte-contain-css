@@ -78,7 +78,6 @@
   </TextLayout>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<Toggle bind:checked={notifications}>
   {#snippet onLabel()}Notifications{/snippet}
 </Toggle>`}
@@ -92,7 +91,6 @@
   </DemoWithCode>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<Toggle bind:checked={wifi}>
   {#snippet offLabel()}Off{/snippet}
   {#snippet onLabel()}Wi-Fi{/snippet}

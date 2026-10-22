@@ -909,6 +909,16 @@ For a tint slider, show `<Text danger amount="35%">Needs attention</Text>` when
 when containment/theming is the concept being taught. Do not import the complete
 showcase source with `?raw` as the teaching example.
 
+Which tab a demo opens on: `defaultTab="auto"` (the default) opens Side by Side
+when the box is at least `splitMinWidth` (960px) wide on first render, and the
+Demo otherwise -- decided once, never on resize. Small examples should just use
+the default. Set `defaultTab="demo"` when the example needs the full width:
+it's about width itself (GridLayout, a Container `maxWidth` slider), it has its
+own resizable panes, or a half-width pane would put it in the small tier and
+change what it shows (a Select falls back to the native control there). A split
+is as tall as its taller half, each half capped at
+`--demo-with-code-split-max-height` and scrolling past it.
+
 Verify Demo, Source, and Side by Side, including direct Container children in
 SplitPane. Check that source changes while Source/Side by Side is already open.
 DemoWithCode currently keys its Code instances by resolvedCode to refresh the

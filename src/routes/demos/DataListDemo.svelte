@@ -283,6 +283,7 @@ ${items}
   </DemoWithCode>
 
   <DemoWithCode
+    defaultTab="demo"
     markupSource={responsiveTypographyMarkup}
     styleSource={responsiveTypographyStyle}
   >
@@ -392,7 +393,8 @@ ${items}
     </p>
   </DemoWithCode>
 
-  <DemoWithCode markupSource={responsiveActionMarkup}>
+  <DemoWithCode
+    defaultTab="demo" markupSource={responsiveActionMarkup}>
     {#snippet header()}
       <h3>Responsive Action Layout</h3>
       <p>

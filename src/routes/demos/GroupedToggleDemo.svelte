@@ -68,7 +68,6 @@
   </TextLayout>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<GroupedToggle>
   <GroupedToggleItem bind:checked={layers.topo}>Topo</GroupedToggleItem>
   <GroupedToggleItem bind:checked={layers.trails}>Trails</GroupedToggleItem>
@@ -96,7 +95,6 @@
   </DemoWithCode>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<GroupedToggle>
   <GroupedToggleItem bind:checked={layers.topo}>Topo</GroupedToggleItem>
   <GroupedToggleItem bind:checked={layers.trails}>Trails</GroupedToggleItem>
@@ -125,7 +123,6 @@
   </DemoWithCode>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<GroupedToggle role="radiogroup">
   <GroupedRadioItem bind:group={theme} value="light">Light</GroupedRadioItem>
   <GroupedRadioItem bind:group={theme} value="dark">Dark</GroupedRadioItem>
@@ -149,7 +146,6 @@
   </DemoWithCode>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<GroupedToggle>
   <GroupedToggleItem bind:checked={toppings.cheese} checkedBg="#fde047" checkedFg="#713f12">
     Cheese

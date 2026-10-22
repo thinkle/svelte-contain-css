@@ -22,7 +22,6 @@
     </p>
   </TextLayout>
   <DemoWithCode
-    defaultTab="split"
     code={`    
         <Table>        
             <tr>
@@ -138,7 +137,6 @@
   </TextLayout>
 
   <DemoWithCode
-    defaultTab="split"
     code={`        
 <Table>
   <thead>

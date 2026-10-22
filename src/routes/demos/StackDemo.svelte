@@ -119,6 +119,7 @@
   </p>
 </TextLayout>
 <DemoWithCode
+  defaultTab="demo"
   code={`<SidebarContainer height="440px">
   <Sidebar>
     <Stack fill split padding="var(--space-md)">

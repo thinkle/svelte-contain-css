@@ -44,7 +44,6 @@
 </TextLayout>
 
 <DemoWithCode
-  defaultTab="split"
   code={`<Inline>
   <Tag success>Ready</Tag>
   <Tag info>Pilot</Tag>
@@ -62,7 +61,6 @@
 </DemoWithCode>
 
 <DemoWithCode
-  defaultTab="split"
   code={`<Bar>
   <strong>Workspace</strong>
   <Inline>

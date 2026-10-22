@@ -54,6 +54,7 @@
   </p>
 
   <DemoWithCode
+    defaultTab="demo"
     language="svelte"
     code={`<Form layout="above" fullWidth globalInputStyles>
   <Fieldset>

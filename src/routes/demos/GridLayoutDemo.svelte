@@ -69,6 +69,7 @@
     </p>
   </TextLayout>
   <DemoWithCode
+    defaultTab="demo"
     code={`<GridLayout tile${runAttr}>
   <Tile>
     <h3>Tile 1</h3>
@@ -170,6 +171,7 @@
     </p>
   </TextLayout>
   <DemoWithCode
+    defaultTab="demo"
     code={`<GridLayout card>
   <Card fixedHeight>
     {#snippet header()}
@@ -223,6 +225,7 @@
     </p>
   </TextLayout>
   <DemoWithCode
+    defaultTab="demo"
     code={`<GridLayout --item-width="175px">
   <img src="https://picsum.photos/seed/1/175/175" alt="" />
   <img src="https://picsum.photos/seed/2/175/175" alt="" />
@@ -267,6 +270,7 @@
     </p>
   </TextLayout>
   <DemoWithCode
+    defaultTab="demo"
     code={`<GridLayout tile${gridAttr}>
   <GridRow><h3>Jazz Greats</h3></GridRow>
   <Tile>Ella Fitzgerald</Tile>

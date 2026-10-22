@@ -14,7 +14,10 @@
     styleSource?: string;
     language?: string;
     summary?: string;
-    defaultTab?: "demo" | "source" | "split";
+    /* "auto" (the default) opens side by side when the box is at least
+       splitMinWidth wide on first render, and on the demo otherwise. */
+    defaultTab?: "auto" | "demo" | "source" | "split";
+    splitMinWidth?: number;
     width?: string | null;
     height?: string | null;
     codeWidth?: string | null;
@@ -40,7 +43,8 @@
     styleSource = "",
     language = "html",
     summary = "See Code",
-    defaultTab = "demo",
+    defaultTab = "auto",
+    splitMinWidth = 960,
     width = null,
     height = null,
     codeWidth = null,
@@ -89,18 +93,28 @@
         ]
       : [{ label: "Demo", value: "demo" }],
   );
-  const resolvedDefaultTab = $derived(
-    hasSource && ["demo", "source", "split"].includes(defaultTab)
-      ? defaultTab
-      : "demo",
-  );
+  let box: HTMLDivElement | undefined = $state();
+
+  /* "auto" is decided from the box's width once, on first render (see the
+     effect below) -- never again on resize, so the view doesn't change
+     under someone who has picked a tab or is just scrolling. Below the
+     threshold each half of a split would be too cramped to read. */
+  const resolveTab = (): "demo" | "source" | "split" => {
+    if (!hasSource) return "demo";
+    if (defaultTab === "auto") {
+      return box && box.clientWidth >= splitMinWidth ? "split" : "demo";
+    }
+    return ["demo", "source", "split"].includes(defaultTab)
+      ? (defaultTab as "demo" | "source" | "split")
+      : "demo";
+  };
 
   let activeTab = $state<"demo" | "source" | "split">("demo");
   let didInitializeTab = $state(false);
 
   $effect(() => {
     if (!didInitializeTab) {
-      activeTab = resolvedDefaultTab;
+      activeTab = resolveTab();
       didInitializeTab = true;
       return;
     }
@@ -111,7 +125,7 @@
     }
 
     if (!["demo", "source", "split"].includes(activeTab)) {
-      activeTab = resolvedDefaultTab;
+      activeTab = resolveTab();
     }
   });
 
@@ -157,7 +171,7 @@
   --reset-padding="var(--container-padding, var(--block-padding, var(--padding, 8px)))"
   --reset-margin-block="var(--container-margin-block, var(--block-margin-block, var(--margin-block, var(--gap, 16px)))))"
 >
-  <div class="demo-with-code" {style}>
+  <div class="demo-with-code" {style} bind:this={box}>
     {#if header || heading}
       <div class="demo-heading">
         <TextLayout>
@@ -237,7 +251,13 @@
     box-sizing: border-box;
     display: grid;
     gap: var(--demo-with-code-gap, var(--space-lg));
-    width: min(100%, var(--demo-with-code-width, 72rem));
+    /* As wide as a TextLayout's wide column (the same variable), so raising
+       that one value widens the prose column's figures and its demos
+       together and they keep a shared edge. */
+    width: min(
+      100%,
+      var(--demo-with-code-width, var(--text-layout-wide-width, 72rem))
+    );
     margin-inline: auto;
     padding: var(--demo-with-code-padding, var(--padding, 8px));
     background: var(
@@ -318,10 +338,18 @@
 
   .split-panel {
     padding: 0;
+    /* As tall as the taller half -- a row of tags shouldn't sit in a 640px
+       slab -- with each half capped, and scrolling past the cap, so a long
+       code sample can't make the box enormous. An explicit height still
+       pins it. */
     --_split-height: var(
       --demo-with-code-height,
-      var(--demo-with-code-split-height, min(70vh, 640px))
+      var(--demo-with-code-split-height, auto)
     );
+  }
+  .split-panel :global(.split-pane > :not(.resizer)) {
+    max-height: var(--demo-with-code-split-max-height, min(70vh, 640px));
+    overflow: auto;
   }
 
   /* SplitPane stacks its panes below 600px (it asks the same container this
