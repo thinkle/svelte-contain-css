@@ -57,6 +57,47 @@
     sections, form groupings, and card internals where a simple vertical rhythm container
     is clearer than custom flex CSS.
   </p>
+</TextLayout>
+<DemoWithCode
+  code={`<Card width="240px" height="340px">
+  <Stack fill split>
+    <Stack gap="var(--space-sm)">
+      <h3>Top</h3>
+      <p>Pinned to the top of the card.</p>
+    </Stack>
+    <p>In the middle.</p>
+    <Stack gap="var(--space-sm)">
+      <Inline><Tag>One</Tag><Tag>Two</Tag></Inline>
+      <Button primary>At the bottom</Button>
+    </Stack>
+  </Stack>
+</Card>`}
+>
+  {#snippet header()}
+    <h3>A Stack in a card</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      <code>fill</code> makes the Stack as tall as the card and
+      <code>split</code> spreads its children from top to bottom. The Stacks
+      inside space their own children with one <code>gap</code>.
+    </p>
+  {/snippet}
+  <Card width="240px" height="340px">
+    <Stack fill split>
+      <Stack gap="var(--space-sm)">
+        <h3>Top</h3>
+        <p>Pinned to the top of the card.</p>
+      </Stack>
+      <p>In the middle.</p>
+      <Stack gap="var(--space-sm)">
+        <Inline><Tag>One</Tag><Tag>Two</Tag></Inline>
+        <Button primary>At the bottom</Button>
+      </Stack>
+    </Stack>
+  </Card>
+</DemoWithCode>
+<TextLayout>
   <p>
     It has no surface, border, margin or padding of its own -- only the gap. Give
     it padding with the <code>padding</code> prop or
