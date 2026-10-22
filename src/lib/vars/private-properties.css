@@ -1,0 +1,108 @@
+/* Non-inheriting registrations for Contain's private custom properties.
+
+   Every custom property inherits by default, so a private --_* var that a
+   mixin sets on a Card is also carried by every element inside that Card.
+   Nothing reads it there, but Chrome DevTools still lists it under
+   "Inherited from div.card" on each descendant -- once per ancestor that
+   set it -- which buries the vars you actually came to look at.
+
+   Registering a var with `inherits: false` stops that: descendants get the
+   initial value instead (none here, so it is simply absent from their style
+   pane). It is only safe for vars that are READ ON THE SAME ELEMENT THAT
+   DECLARES THEM. `syntax: "*"` keeps the value an unparsed token stream, the
+   same as an unregistered var, so `var(--_x, fallback)` behaves exactly as
+   before; with no initial-value, an unset var is still guaranteed-invalid.
+
+   Deliberately NOT registered, because something reads them on a descendant:
+   - the typography context vars (--_h1-*..--_h6-*, --_heading-*, --_prose-*,
+     --_paragraph-*, --_first-paragraph-*, --_first-line-*, --_first-letter-*):
+     set by typography-container-props(), read by the global :where() rules in
+     typography-context.css on the headings and paragraphs inside.
+   - --_color, --_background-color, --_box-shadow: the clickable affordance
+     mixins read them on hover/active on elements (menu items, table rows,
+     toggles) that inherit them from the surface around them; Table's
+     .table-container and .veil read --_background-color the same way.
+   - --_padding, --_font-size: Card's header/section/footer, and Page's
+     .content, read the values the card or page set.
+   - Component-internal parent-to-child vars: --_sidebar-*, --_toggle-*,
+     --_thumb-*, --_page-sheet-button-size, --_page-header-inset.
+
+   Each entry below names what reads it. Adding a var here? Check every
+   `var(--_name` in src/lib reads it on the element that sets it -- including
+   ::before/::after, which inherit from their element and would lose it. */
+
+/* sass/_box.scss gap-props(): read by `gap` in the same rule. */
+@property --_gap {
+  syntax: "*";
+  inherits: false;
+}
+/* sass/_box.scss margin-props(): read by `margin-block` / `margin-inline`
+   in the same rule. */
+@property --_margin-block {
+  syntax: "*";
+  inherits: false;
+}
+@property --_margin-inline {
+  syntax: "*";
+  inherits: false;
+}
+/* sass/_typography.scss typography-props(): read by `margin-top` /
+   `margin-bottom` in the same rule. */
+@property --_margin-top {
+  syntax: "*";
+  inherits: false;
+}
+@property --_margin-bottom {
+  syntax: "*";
+  inherits: false;
+}
+/* sass/_color.scss color-props(): read only while computing --_background-color
+   and --_color in the same rule (those two inherit, already resolved). */
+@property --_bg-base {
+  syntax: "*";
+  inherits: false;
+}
+@property --_fg-base {
+  syntax: "*";
+  inherits: false;
+}
+@property --_bg-mix-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --_bg-mix-amount {
+  syntax: "*";
+  inherits: false;
+}
+@property --_fg-mix-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --_fg-mix-amount {
+  syntax: "*";
+  inherits: false;
+}
+/* Tile.svelte: read by .tile's own width / max-width / min-height. */
+@property --_tile-width {
+  syntax: "*";
+  inherits: false;
+}
+@property --_tile-min-height {
+  syntax: "*";
+  inherits: false;
+}
+/* Page.svelte: --_page-gutter is set and read on .content; --_page-header-height
+   is an inline style on .aside, read by .aside's --sidebar-sheet-button-top. */
+@property --_page-gutter {
+  syntax: "*";
+  inherits: false;
+}
+@property --_page-header-height {
+  syntax: "*";
+  inherits: false;
+}
+/* Progress.svelte: read by .progress-text's own text-stroke / text-shadow. */
+@property --_progress-outline-color {
+  syntax: "*";
+  inherits: false;
+}
