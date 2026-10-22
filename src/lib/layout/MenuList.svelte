@@ -75,7 +75,9 @@
   .menu :global(li > button),
   .menu :global(li > input[type="submit"]),
   .menu :global(li > .button) {
-    width: 100%;
+    /* The same variable as the item rule below: this selector outranks it,
+       so a bare 100% here made --menu-item-width a no-op. */
+    width: var(--menu-item-width, 100%);
     flex: 1 1 auto;
     box-sizing: border-box;
   }
