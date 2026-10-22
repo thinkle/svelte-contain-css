@@ -150,3 +150,26 @@ test("a Card keeps --card-width in a wide container", async ({ page }) => {
   expect(w).toBeGreaterThanOrEqual(420);
   expect(w).toBeLessThanOrEqual(424);
 });
+
+test("width and height passed as props hold in the small tier", async ({ page }) => {
+  // fixedHeight is set from `height` once the page hydrates
+  const card = page.getByTestId("card-pinned").locator(".card.fixedHeight");
+  await expect(card).toBeVisible();
+  const { w, h } = await card.evaluate((e) => {
+    const r = e.getBoundingClientRect();
+    return { w: Math.round(r.width), h: Math.round(r.height) };
+  });
+  expect(w).toBeGreaterThanOrEqual(300);
+  expect(w).toBeLessThanOrEqual(302);
+  expect(h).toBeGreaterThanOrEqual(340);
+  expect(h).toBeLessThanOrEqual(342);
+});
+
+test("a Card inside one with a width prop doesn't inherit that width", async ({ page }) => {
+  const inner = page.getByTestId("card-nested").locator(".card .card");
+  const w = await inner.evaluate((e) => Math.round(e.getBoundingClientRect().width));
+  // Its own small-tier 250px (the outer card is a small container). Had it
+  // inherited the outer 320px, max-width would hold it at ~270px instead.
+  expect(w).toBeGreaterThanOrEqual(250);
+  expect(w).toBeLessThanOrEqual(252);
+});

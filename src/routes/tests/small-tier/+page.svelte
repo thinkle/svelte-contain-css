@@ -75,6 +75,15 @@
 <div class="box wide" data-testid="card-wide">
   <Card><p>card</p></Card>
 </div>
+<!-- Sizes passed as props are what the card is, in every tier. -->
+<div class="box small" data-testid="card-pinned">
+  <Card width="300px" height="340px"><p>card</p></Card>
+</div>
+<div class="box small" data-testid="card-nested">
+  <Card width="320px">
+    <Card><p>inner</p></Card>
+  </Card>
+</div>
 
 <!-- A sweep of container widths across the small-tier boundary: a Card's
      width must never go up as its container's goes down. -->

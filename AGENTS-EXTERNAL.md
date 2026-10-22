@@ -404,6 +404,13 @@ nobody. It never gets wider as its container gets narrower, and it never
 overflows its container: `--card-width` is a preferred width, capped to the
 space available.
 
+A `width` or `height` passed as a prop is different: it is the size that card
+*is*, so it holds in every tier. `<Card width="100%">` fills a narrow column
+rather than snapping to 250px, and `<Card height="340px">` stays 340px tall.
+(`width` is still capped to the space available.) Set `--card-width` /
+`--card-height` -- on the Card or in a theme -- for a default the tiers may
+change.
+
 If a Card looks mysteriously narrow, that's the design — not a bug to patch with
 `width: 100%` on the wrapper.
 
