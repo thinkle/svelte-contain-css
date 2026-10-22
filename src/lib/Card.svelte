@@ -124,8 +124,13 @@
        hatch (a single --card-margin applied to both axes) rather than a bare
        16px, so anyone already setting --card-margin directly keeps working
        unchanged -- margin-block/margin-inline just give a newer, more
-       specific override on top of it. */
-    margin-block: var-with-fallbacks(--margin-block, card, var(--card-margin, 16px));
+       specific override on top of it. Under that, a Card placed straight in
+       a TextLayout's flow is a figure and takes its figure spacing. */
+    margin-block: var-with-fallbacks(
+      --margin-block,
+      card,
+      var(--card-margin, var(--_figure-margin-block, 16px))
+    );
     margin-inline: var-with-fallbacks(--margin-inline, card, var(--card-margin, 16px));
     border-radius: var-with-fallbacks(--border-radius, card, surface, 0);
     border: var-with-fallbacks(

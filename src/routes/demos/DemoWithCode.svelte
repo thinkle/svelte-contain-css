@@ -25,6 +25,7 @@
     shadow?: string | null;
     padding?: string | null;
     gap?: string | null;
+    marginBlock?: string | null;
     header?: Snippet;
     heading?: Snippet;
     blurb?: Snippet;
@@ -50,6 +51,7 @@
     shadow = null,
     padding = null,
     gap = null,
+    marginBlock = null,
     header,
     heading,
     blurb,
@@ -144,8 +146,11 @@
   );
 </script>
 
+<!-- No margin of its own by default; placed straight in a TextLayout's flow
+     it is a figure there, and takes that layout's figure spacing. -->
 <Container
-  marginBlock="0"
+  marginBlock={marginBlock ??
+    "var(--demo-with-code-margin-block, var(--_figure-margin-block, 0))"}
   maxWidth="none"
   height="auto"
   padding="0"
@@ -254,12 +259,15 @@
     );
   }
 
-  .demo-heading {
-    min-width: 0;
-  }
-
+  /* The caption belongs to this box, so it lines up with the box's own
+     content edge (where the tabs start), not with the page's centred reading
+     column: one left edge per unit. Still capped at the measure. */
+  .demo-heading,
   .demo-blurb {
     min-width: 0;
+    --prose-margin-inline: 0;
+    --text-padding: 0;
+    --text-layout-margin-inline: 0;
   }
 
   .demo-body {
@@ -276,6 +284,12 @@
   }
 
   .tab-panel {
+    /* The docs page left-aligns its prose; a live demo shows the library's
+       own default instead (a TextLayout there should centre, as it would in
+       the consumer's app). */
+    --prose-margin-inline: initial;
+    --heading-margin-inline: initial;
+    --text-layout-margin-inline: initial;
     box-sizing: border-box;
     min-width: 0;
     min-height: var(--panel-height);

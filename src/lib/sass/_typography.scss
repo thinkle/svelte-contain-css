@@ -273,11 +273,12 @@
      rule in vars/typography-context.css, not by a selector matching h1-h6 here.
      See the comment above heading-box-context-vars(). */
   --_heading-max-width: #{fn.var-with-fallbacks(--line-width, list.append($prefixes, unset)...)};
-  /* Same as --_prose-margin-inline: start-aligned in a container, centred
-     only by TextLayout. */
+  /* Headings sit wherever the prose sits: --prose-margin-inline moves both,
+     and --heading-margin-inline is only for the rare page that wants them
+     apart. (They were two independent variables, always set together.) */
   --_heading-margin-inline: #{fn.var-with-fallbacks(
       --heading-margin-inline,
-      list.append($prefixes, 0)...
+      list.append($prefixes, var(--_prose-margin-inline, 0))...
     )};
   --_heading-margin-bottom: #{fn.var-with-fallbacks(
       --heading-margin-bottom,
