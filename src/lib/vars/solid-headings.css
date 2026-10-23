@@ -2,15 +2,20 @@
   --heading-bg: var(--secondary-bg);
   --heading-fg: var(--secondary-fg);
   --heading-padding: 0.2em 0.45em;
+  /* Every level is filled: tones nudge the pair rather than repaint it. */
+  --heading-text-amount: 25%;
 
   --heading-major-bg: var(--primary-bg);
   --heading-major-fg: var(--primary-fg);
   --heading-major-padding: 0.25em 0.55em;
 
+  /* A shade of the secondary pair itself, not of the page: mixing in --bg
+     made minor blocks vanish on a light Card and lowered contrast on dark
+     pages. */
   --heading-minor-bg: color-mix(
     in srgb,
-    var(--secondary-bg) 88%,
-    var(--bg) 12%
+    var(--secondary-bg) 94%,
+    var(--secondary-fg) 6%
   );
   --heading-minor-fg: var(--secondary-fg);
   --heading-minor-padding: 0.18em 0.4em;

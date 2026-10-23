@@ -16,7 +16,9 @@
   --primary-fg: var(--material-color-indigo-900);
   --secondary-bg: var(--material-color-blue-grey-300);
   --secondary-color: var(--material-color-blue-grey-300);
-  --secondary-fg: var(--material-color-blue-grey-800);
+  /* 900, not 800: blue-grey-800 on 300 is about 4:1, short of AA for small
+     text (h5/h6, Tags). */
+  --secondary-fg: var(--material-color-blue-grey-900);
   --stripe-bg: color-mix(
     in srgb,
     var(--menu-bg) 88%,
@@ -48,7 +50,9 @@
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);
   --warning-color: var(--material-color-orange-400);
-  --warning-fg: var(--white);
+  /* Dark text on orange, as colors.css requires: white on orange-400 is
+     about 1.9:1. */
+  --warning-fg: var(--material-color-grey-900);
   --danger-bg: var(--material-color-red-400);
   --danger-color: var(--material-color-red-400);
   --danger-fg: var(--material-color-blue-grey-900);

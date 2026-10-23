@@ -46,7 +46,8 @@
 
   --link-fg: #0000ee;
   --link-hover-fg: #551a8b;
-  --heading-fg: #000000;
+  /* Untinted: headings take the surface foreground, whatever it is. */
+  --heading-tint: currentColor;
   --border-color: #808080;
   --border: 2px outset #c0c0c0;
   --border-radius: 0;

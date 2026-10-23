@@ -62,7 +62,6 @@
    properties, so DOM proximity decides which component's values apply, not
    selector specificity or stylesheet order. See AGENTS-INTERNAL.md. */
 @mixin heading-box-context-vars($var-prefix, $prefixes...) {
-  --_#{$var-prefix}-color: #{fn.vars-fallback(fg, revert, $prefixes...)};
   --_#{$var-prefix}-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
   --_#{$var-prefix}-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
   --_#{$var-prefix}-border: #{fn.vars-fallback(border, none, $prefixes...)};
@@ -71,6 +70,76 @@
   --_#{$var-prefix}-border-color: #{fn.prefixed-vars-optional(border-color, $prefixes...)};
   --_#{$var-prefix}-border-radius: #{fn.vars-fallback(border-radius, 0, $prefixes...)};
   --_#{$var-prefix}-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
+}
+
+/* Heading foreground: an exact color (--heading-*-fg) or a tint
+   (--heading-*-tint + --heading-*-tint-amount) of whatever foreground the
+   heading inherits. See docs/headings.md for the full contract.
+
+   The tint is mixed against `currentColor`, which stays an unresolved token
+   in these custom properties and only resolves in the heading's own `color`
+   declaration -- as the color the heading INHERITS. So a tinted heading
+   follows the surface it sits on (a dark Tile, a remapped Card, a plain
+   wrapper that sets `color`) without anything being recomputed per surface.
+   Only the ingredients (target, amount, scale) are resolved here.
+
+   Precedence walks the same prefix chain as every other heading var, most
+   specific first (--card-heading-1-*, ..., --heading-1-*, --heading-major-*,
+   --heading-*). At each step an exact fg beats a tint; the first step that
+   sets either wins. So --heading-2-tint beats a shared --heading-fg, and
+   --heading-2-fg beats a shared --heading-tint. Each step is its own private
+   property (--_h2-c1, --_h2-c2...) because a var() to an unset tint makes
+   that whole property invalid -- which is what lets the next step win.
+   Nothing set anywhere: currentColor, i.e. plain inheritance.
+
+   Amount follows Text: 0% keeps the inherited foreground, 100% reaches the
+   target; unset, a tint reaches its target (100%). It resolves along the
+   same chain and is then multiplied by --heading-tint-scale (default 1), so
+   `--heading-tint-scale: 0` on a theme or a surface declines every heading
+   tint below it at once, without touching exact colors or surface mixing. */
+@mixin heading-color-context-vars($var-prefix, $resolved-prefixes, $prefixes...) {
+  --_#{$var-prefix}-tint-amount: calc(
+    #{fn.vars-fallback(tint-amount, 100%, $resolved-prefixes...)} *
+      #{fn.var-with-fallbacks(--heading-tint-scale, list.append($prefixes, 1)...)}
+  );
+  $chain: currentColor;
+  @for $i from list.length($resolved-prefixes) through 1 {
+    $prefix: list.nth($resolved-prefixes, $i);
+    --_#{$var-prefix}-c#{$i}: var(
+      #{fn.generate-var-name($prefix, fg)},
+      color-mix(
+        in srgb,
+        currentColor,
+        var(#{fn.generate-var-name($prefix, tint)})
+          var(--_#{$var-prefix}-tint-amount)
+      )
+    );
+    $chain: var(--_#{$var-prefix}-c#{$i}, #{$chain});
+  }
+  --_#{$var-prefix}-color: #{$chain};
+
+  /* A heading that paints its own background is its own color context: Text
+     tones inside it mix from the heading's foreground, and muted targets
+     the heading's background. --_*-bg-set is only valid when some --*-bg
+     in the chain is set; the 100%/0% color-mix below is exactly
+     currentColor, but is invalid -- so falls back to the surface's
+     foreground -- whenever no background is set. A transparent heading
+     keeps the surrounding surface's ground, as Text did before. */
+  --_#{$var-prefix}-bg-set: #{fn.prefixed-vars-optional(bg, $resolved-prefixes...)};
+  /* --heading-*-text-amount: how far Text tones move inside this level
+     (between --<tone>-text-amount and --text-amount). A filled heading's
+     fg/bg is a pair chosen for contrast; a theme usually wants tones to
+     nudge it less than they nudge body text. Invalid when unset. */
+  --_#{$var-prefix}-text-amount: #{fn.prefixed-vars-optional(text-amount, $resolved-prefixes...)};
+  --_#{$var-prefix}-ground: var(
+    --_#{$var-prefix}-filled-ground,
+    var(--_color, currentColor)
+  );
+  --_#{$var-prefix}-filled-ground: color-mix(
+    in srgb,
+    currentColor 100%,
+    var(--_#{$var-prefix}-bg-set) 0%
+  );
 }
 
 @mixin heading-typography-context-vars($var-prefix, $prefixes...) {
@@ -115,6 +184,7 @@
   $resolved-prefixes: list.append($resolved-prefixes, $group, $separator: comma);
   $resolved-prefixes: list.append($resolved-prefixes, heading, $separator: comma);
 
+  @include heading-color-context-vars($var-prefix, $resolved-prefixes, $prefixes...);
   @include heading-box-context-vars($var-prefix, $resolved-prefixes...);
   @include heading-typography-context-vars($var-prefix, $resolved-prefixes...);
 }
