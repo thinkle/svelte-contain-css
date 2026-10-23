@@ -167,3 +167,90 @@ Done means the editorial specimen is expressible in a theme, per-level differenc
 remain available, surface changes and semantic Text interact predictably, tinting
 can be declined, and the behavior is demonstrated, tested, documented, and ready
 for PR review. No further planning-only handoff is needed.
+
+## Outcome (implemented on this branch)
+
+Full contract: [headings.md](headings.md). Specimen:
+`/review/headings?theme=<review theme>&preset=default|restrained|editorial|expressive|solid`.
+Captures: `node scripts/capture-headings.mjs <outDir>` (needs a dev server on
+4173; set `CHROMIUM_PATH` if Playwright's bundled browser is unavailable).
+Before/after comparisons: [heading-colors/](heading-colors/).
+
+### Chosen contract
+
+- Two kinds of heading. **Transparent** headings tint the foreground they
+  inherit: `--heading-*-tint` (target) and `--heading-*-tint-amount` (0% keeps
+  the inherited fg, 100% reaches the target, unset = 100%). **Filled** headings
+  name an exact `--heading-*-fg` / `--heading-*-bg` pair, unchanged from 1.6.
+- The mix is `color-mix(in srgb, currentColor, <tint> <amount>)`, with
+  `currentColor` left as a token until the heading's own `color` declaration.
+  The heading follows whatever surface it lands on, including plain wrappers
+  and mix-remapped surfaces, with no per-surface recomputation.
+- Precedence walks the existing prefix chain. The first step that sets `fg`
+  or `tint` wins, and `fg` beats `tint` within a step. Amount resolves along
+  the chain independently.
+- `--heading-tint-scale` (default 1, component-prefixable) multiplies every
+  amount. `0` declines heading tints; exact colors and surface mix controls
+  are untouched.
+- Library default: `--heading-tint: var(--primary-color); --heading-tint-amount: 60%`
+  (was an exact `--heading-fg: var(--primary-bg)`).
+- `transparent` as a tint target subdues against the real composited
+  backdrop. This is the recipe for quiet h3-h6.
+- Text in a transparent heading keeps the surface's tones. Text in a filled
+  heading is grounded on the heading's fg/bg, and muted targets the heading bg.
+- No new component. Filled headings were already the robust case in Phase 1
+  (an exact pair survives every surface); the fragile case was transparent
+  headings with exact colors.
+
+### Phase 1 findings (baseline, current API)
+
+- Default theme: headings were fixed `--primary-bg`, so they vanished on a
+  primary Tile (1.0:1) and sat at 1.6-1.9:1 on dark and remapped Tiles.
+- Editorial/expressive written naively (exact colors) failed on every dark or
+  saturated surface. Subdued h3-h6 via `color-mix(var(--fg), var(--bg))`
+  resolved at `:root` and stayed dark-on-dark (1.2-2.2:1).
+- Text inside a filled heading was mixed from the surface foreground, not the
+  heading's. In forest, both Text spans inside the Card's filled h1 were
+  near-invisible.
+- The old API could already express surface-relative tints via
+  `--heading-fg: color-mix(in srgb, currentColor, X N%)`, but nothing
+  documented it, the mix target resolved at `:root`, and there was no way to
+  decline it.
+
+### Limits (not papered over)
+
+- **A tint cannot rescue a surface whose background is the tint color.** Light
+  theme, primary Tile: 60% primary tint measures 2.6:1, and 40% still only
+  3.9:1. Surfaces like that need `--heading-tint-scale: 0` or a different
+  target. The specimen shows both states.
+- **A light foreground on a mid-luminance surface mixes badly.** Forest's
+  warning Tile has a light fg on orange. The editorial h2's 70% danger tint
+  turns light pink there and is less legible than the old fixed dark red.
+  This regression is a theme pair choice meeting a tint; no amount fixes it.
+- Mixing hues into a filled heading's fg can be muddy (amber into indigo gives
+  brown) and is not always legible. Light theme: `Text warning` in the filled h1
+  is 6.2:1. Dark theme (dark-indigo fg on a pale-indigo h1): only 2.2:1. Before,
+  it mixed from the surface fg instead and was worse on most surfaces. Use
+  `--warning-text-fg-override` where it matters.
+- On a light page, the new default is a deeper navy than the old vivid
+  indigo (60% vs. effectively 100%). That is the cost of legibility on dark
+  surfaces; `--heading-tint-amount` is the knob.
+- Ingredients resolve at typography containers, like every heading variable.
+  A plain `<div>` inside a Card that sets `--heading-tint` does not affect
+  headings in that Card.
+- Surfaces have no semantic variants (`<Tile warning>` doesn't exist), so a
+  theme can't say "in warning surfaces, headings use X". Adding variants with
+  `warning` in the prefix chain would make `--warning-heading-tint` work for
+  free; that is a separate API decision.
+- Pre-existing, outside this work: the dark theme's warning pair (light fg on
+  amber) fails for body text too.
+
+### Validation
+
+- `tests/heading-colors.spec.ts` (10 tests) covers default, untinted, amount
+  endpoints, surface following, precedence, scale, nested ingredients, Text in
+  filled and transparent headings, and decoration. Against the previous
+  implementation, 9 of 10 fail.
+- Visual review: before/after captures of all presets x {light, dark, retro,
+  forest-editorial-rounded} x {1280px, 390px}, inspected, plus a computed
+  contrast audit per heading per surface.

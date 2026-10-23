@@ -442,6 +442,25 @@ not only at :root. Do not create self-referencing custom-property cycles. Keep
 surface pairs and text ingredients independent when authoring themes. Mixing does
 not guarantee contrast; inspect light, dark, nested and remapped surfaces.
 
+### Heading color implementation
+
+`heading-color-context-vars()` in `sass/_typography.scss` resolves, per level,
+one private candidate per prefix step (`--_h2-c1` ... `--_h2-cN`):
+`var(<step>-fg, color-mix(in srgb, currentColor, var(<step>-tint) <amount>))`.
+A step with neither is invalid at computed-value time, which is what lets
+`--_h2-color` fall through to the next step; keep each step its own property.
+`currentColor` stays an unresolved token until the heading's `color`
+declaration, so the mix is against the inherited foreground with no per-surface
+recomputation. Only ingredients (tint, amount, `--heading-tint-scale`) resolve
+at the container.
+
+`--_hN-bg-set` is valid only when some `bg` step is set. `--_hN-ground` uses it
+(through a 100%/0% color-mix that equals currentColor) to ground Text tones on a
+filled heading, else on the surface's `--_color`. `typography-context.css`
+re-declares the seven `--<tone>-text-fg` and `--muted-color` on headings from
+that ground. Do not reintroduce a default `--heading-bg: transparent`: it would
+mark every heading as filled. Contract and limits: [docs/headings.md](docs/headings.md).
+
 ### Text implementation contract
 
 `typography/Text.svelte` renders a span and must not call `color-props` or paint

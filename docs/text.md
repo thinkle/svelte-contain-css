@@ -42,4 +42,8 @@ computed shortcuts do not recalculate in a plain descendant span.
 background remapping). Mixes are not a contrast guarantee. Transparent surfaces
 require care because their token does not describe the composited backdrop.
 
+Inside headings, tones are grounded on the surrounding surface for a
+transparent heading and on the heading's own fg/bg for a filled one. See
+[headings.md](headings.md#text-inside-headings).
+
 Preview: `/svelte-contain-css/text`, also available as Text in the demo menu.

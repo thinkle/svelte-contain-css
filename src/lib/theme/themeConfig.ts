@@ -17,6 +17,9 @@ import softCorners from "$lib/vars/soft-corners.css?raw";
 import flat from "$lib/vars/flat.css?raw";
 import layered from "$lib/vars/layered.css?raw";
 import solidHeadings from "$lib/vars/solid-headings.css?raw";
+import restrainedHeadings from "$lib/vars/restrained-headings.css?raw";
+import editorialHeadings from "$lib/vars/editorial-headings.css?raw";
+import expressiveHeadings from "$lib/vars/expressive-headings.css?raw";
 import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
 import { combinedThemeEntries } from "./combinedThemes";
 
@@ -58,6 +61,9 @@ export const typographyThemes: ThemeEntry[] = [
 export const extraThemes: ThemeEntry[] = [
   { name: "Responsive Typography", css: responsiveTypography, file: "responsive-typography.css" },
   { name: "Solid Headings", css: solidHeadings, file: "solid-headings.css" },
+  { name: "Restrained Headings", css: restrainedHeadings, file: "restrained-headings.css" },
+  { name: "Editorial Headings", css: editorialHeadings, file: "editorial-headings.css" },
+  { name: "Expressive Headings", css: expressiveHeadings, file: "expressive-headings.css" },
   { name: "Soft Corners", css: softCorners, file: "soft-corners.css" },
   { name: "Sharp Edges", css: boxy, file: "boxy.css" },
   { name: "Flat Surfaces", css: flat, file: "flat.css" },

@@ -37,7 +37,8 @@
 
   --link-fg: #a24a2b;
   --link-hover-fg: #7f3a22;
-  --heading-fg: #33261f;
+  /* Untinted: headings take the surface foreground, whatever it is. */
+  --heading-tint: currentColor;
 
   --stripe-bg: color-mix(in srgb, var(--menu-bg) 91%, var(--menu-fg) 9%);
   --stripe-fg: var(--menu-fg);

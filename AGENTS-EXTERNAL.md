@@ -1526,6 +1526,33 @@ Color mixing is a useful default, not a contrast guarantee. Check light, dark,
 and nested surfaces. Muted reduces contrast intentionally; transparent backgrounds
 need care because their token does not describe the composited backdrop.
 
+### Heading colors
+
+Headings use the same idea as Text: a **tint** of the foreground they inherit,
+so they follow the surface they land on. A heading that paints its own
+background names an **exact** pair instead. Full contract:
+[docs/headings.md](docs/headings.md).
+
+```css
+:root {
+  --heading-tint: var(--primary-color); /* library default */
+  --heading-tint-amount: 60%;
+  --heading-1-bg: var(--primary-bg);    /* filled h1: exact pair */
+  --heading-1-fg: var(--primary-fg);
+  --heading-2-tint: var(--danger-color);/* accent h2 */
+}
+```
+
+- Each level resolves `--heading-N-*`, then `--heading-major-*`/`--heading-minor-*`,
+  then `--heading-*`; the first step setting `fg` or `tint` wins, and `fg` beats
+  `tint` within a step.
+- `--heading-tint: currentColor` means untinted. `--heading-tint: transparent`
+  at ~30% subdues on any surface.
+- `--heading-tint-scale: 0` on a surface declines tints there. Use it on a
+  surface whose background is the tint color: mixing cannot rescue that case.
+- `Text` in a transparent heading uses the surface's tones; in a filled heading
+  it is grounded on the heading's own fg/bg.
+
 ### Mixing a filled surface
 
 Background/foreground mixing is independent of Text mixing. Use

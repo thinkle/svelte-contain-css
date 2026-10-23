@@ -6,6 +6,9 @@
   const relevantExtraNames = new Set([
     "Responsive Typography",
     "Solid Headings",
+    "Restrained Headings",
+    "Editorial Headings",
+    "Expressive Headings",
     "Fancy Paragraphs",
   ]);
 

@@ -1,0 +1,37 @@
+/* Expressive headings: a distinct treatment for each of the six levels.
+   Filled levels (h1, h4) name exact fg/bg pairs; the rest are tints of the
+   surrounding foreground, so they follow the surface they land on. */
+:root {
+  --heading-1-bg: var(--primary-bg);
+  --heading-1-fg: var(--primary-fg);
+  --heading-1-padding: 0.2em 0.5em;
+  --heading-1-text-transform: uppercase;
+  --heading-1-letter-spacing: 0.04em;
+  --heading-1-box-shadow: 5px 5px 0 var(--warning-color);
+
+  --heading-2-tint: var(--primary-color);
+  --heading-2-tint-amount: 80%;
+  --heading-2-padding: 0 0 0 0.5em;
+  --heading-2-border-width: 0 0 0 6px;
+  --heading-2-border-style: solid;
+  --heading-2-border-color: var(--warning-color);
+
+  --heading-3-tint: var(--info-color);
+  --heading-3-tint-amount: 75%;
+  --heading-3-font-variant: small-caps;
+  --heading-3-text-decoration: underline dotted 2px;
+
+  --heading-4-bg: var(--secondary-bg);
+  --heading-4-fg: var(--secondary-fg);
+  --heading-4-padding: 0.1em 0.7em;
+  --heading-4-border-radius: 999px;
+
+  --heading-5-tint: var(--success-color);
+  --heading-5-tint-amount: 75%;
+  --heading-5-text-transform: uppercase;
+  --heading-5-letter-spacing: 0.12em;
+
+  --heading-6-tint: transparent;
+  --heading-6-tint-amount: 40%;
+  --heading-6-font-variant: small-caps;
+}

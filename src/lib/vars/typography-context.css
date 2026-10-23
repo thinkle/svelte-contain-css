@@ -19,6 +19,76 @@
    these properties with real specificity on its own selector so it reliably
    wins over incidental external CSS. See AGENTS-INTERNAL.md. */
 
+/* Text tones inside a heading. Mirrors color-props() in sass/_color.scss,
+   but grounded on the heading: --_heading-ground is the surrounding surface's
+   foreground for a transparent heading (so nothing changes there), and the
+   heading's own foreground when the heading paints a background. Muted
+   targets that background too. A heading outside any typography container
+   has no ground, these are invalid, and Text falls back to mixing from the
+   heading's color. */
+:where(h1, h2, h3, h4, h5, h6) {
+  --muted-color: var(
+    --muted-color-override,
+    var(--_heading-bg-set, var(--_background-color, var(--bg)))
+  );
+  --primary-text-fg: var(
+    --primary-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--primary-color) var(--primary-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --secondary-text-fg: var(
+    --secondary-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--secondary-color) var(--secondary-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --info-text-fg: var(
+    --info-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--info-color) var(--info-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --success-text-fg: var(
+    --success-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--success-color) var(--success-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --warning-text-fg: var(
+    --warning-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--warning-color) var(--warning-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --danger-text-fg: var(
+    --danger-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--danger-color) var(--danger-text-amount, var(--text-amount, 50%))
+    )
+  );
+  --muted-text-fg: var(
+    --muted-text-fg-override,
+    color-mix(
+      in srgb,
+      var(--_heading-ground),
+      var(--muted-color) var(--muted-text-amount, var(--text-amount, 50%))
+    )
+  );
+}
+
 :where(h1, h2, h3, h4, h5, h6) {
   box-sizing: border-box;
   max-width: var(--_heading-max-width, revert);
@@ -39,6 +109,8 @@
 }
 
 :where(h1) {
+  --_heading-ground: var(--_h1-ground);
+  --_heading-bg-set: var(--_h1-bg-set);
   color: var(--_h1-color, revert);
   background: var(--_h1-background, revert);
   padding: var(--_h1-padding, revert);
@@ -61,6 +133,8 @@
 }
 
 :where(h2) {
+  --_heading-ground: var(--_h2-ground);
+  --_heading-bg-set: var(--_h2-bg-set);
   color: var(--_h2-color, revert);
   background: var(--_h2-background, revert);
   padding: var(--_h2-padding, revert);
@@ -83,6 +157,8 @@
 }
 
 :where(h3) {
+  --_heading-ground: var(--_h3-ground);
+  --_heading-bg-set: var(--_h3-bg-set);
   color: var(--_h3-color, revert);
   background: var(--_h3-background, revert);
   padding: var(--_h3-padding, revert);
@@ -105,6 +181,8 @@
 }
 
 :where(h4) {
+  --_heading-ground: var(--_h4-ground);
+  --_heading-bg-set: var(--_h4-bg-set);
   color: var(--_h4-color, revert);
   background: var(--_h4-background, revert);
   padding: var(--_h4-padding, revert);
@@ -127,6 +205,8 @@
 }
 
 :where(h5) {
+  --_heading-ground: var(--_h5-ground);
+  --_heading-bg-set: var(--_h5-bg-set);
   color: var(--_h5-color, revert);
   background: var(--_h5-background, revert);
   padding: var(--_h5-padding, revert);
@@ -149,6 +229,8 @@
 }
 
 :where(h6) {
+  --_heading-ground: var(--_h6-ground);
+  --_heading-bg-set: var(--_h6-bg-set);
   color: var(--_h6-color, revert);
   background: var(--_h6-background, revert);
   padding: var(--_h6-padding, revert);

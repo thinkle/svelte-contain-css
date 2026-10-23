@@ -1,0 +1,4 @@
+/* Restrained headings: no tint -- headings take the surrounding foreground. */
+:root {
+  --heading-tint: currentColor;
+}

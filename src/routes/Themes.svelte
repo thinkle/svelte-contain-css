@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import { themeState } from "$lib/theme/themeState.svelte";
   import {
     fullThemes,
@@ -75,6 +76,12 @@
       ContainCSS uses CSS properties for theming. There are numerous presets
       included, and you can also write your own themes or customize presets with
       extra variables easily enough.
+    </p>
+    <p>
+      To see how a theme's headings hold up on light, dark and saturated
+      surfaces, open the <a href={`${base}/review/headings?preset=editorial`}
+        >heading specimen</a
+      >.
     </p>
     <p>
       You can adjust this tutorial to use a theme of your choosing to get a feel

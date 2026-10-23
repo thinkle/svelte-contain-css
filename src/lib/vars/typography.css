@@ -30,8 +30,13 @@
   --heading-margin-top: 1em;
   --heading-margin-bottom: 0.25em;
   --first-heading-margin-top: 0;
-  --heading-bg: transparent;
-  --heading-fg: var(--primary-bg);
+  /* Headings lean toward the primary color, measured from whatever
+     foreground surrounds them, so they stay legible on dark or remapped
+     surfaces. 60% keeps h-text clearly primary on a light page; it cannot
+     rescue a surface whose background IS the primary color -- set
+     --heading-tint-scale: 0 there. See docs/headings.md. */
+  --heading-tint: var(--primary-color);
+  --heading-tint-amount: 60%;
   --heading-padding: 0;
   --heading-box-shadow: none;
   --heading-border-radius: 0;

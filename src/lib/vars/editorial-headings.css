@@ -1,0 +1,23 @@
+/* Editorial headings: a filled h1, an accent h2 with its own rule, and
+   quiet h3-h6.
+
+   The h1 paints its own background, so it names an exact fg/bg pair. Every
+   other level is a tint of the foreground around it, so it follows the
+   surface it lands on: transparent at 30% reads as "subdued" on any surface
+   because it lets the real backdrop through. */
+:root {
+  --heading-1-bg: var(--primary-bg);
+  --heading-1-fg: var(--primary-fg);
+  --heading-1-padding: 0.25em 0.45em;
+  --heading-1-border-radius: 3px;
+
+  --heading-2-tint: var(--danger-color);
+  --heading-2-tint-amount: 70%;
+  --heading-2-padding: 0 0 0.15em;
+  --heading-2-border-width: 0 0 3px;
+  --heading-2-border-style: solid;
+  --heading-2-border-color: var(--warning-color);
+
+  --heading-tint: transparent;
+  --heading-tint-amount: 30%;
+}

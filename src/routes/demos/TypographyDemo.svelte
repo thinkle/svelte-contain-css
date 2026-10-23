@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from "$app/paths";
   import Container from "$lib/layout/Container.svelte";
   import Inline from "$lib/layout/Inline.svelte";
   import RadioButton from "$lib/controls/RadioButton.svelte";
@@ -141,10 +142,26 @@
     },
     {
       group: "Headings",
+      name: "--heading-tint",
+      type: "color",
+      placeholder: "e.g., var(--primary-color)",
+      defaultValue: "var(--primary-color)",
+      unit: "",
+    },
+    {
+      group: "Headings",
+      name: "--heading-tint-amount",
+      type: "text",
+      placeholder: "e.g., 60%",
+      defaultValue: "60%",
+      unit: "",
+    },
+    {
+      group: "Headings",
       name: "--heading-fg",
       type: "color",
-      placeholder: "e.g., #000000",
-      defaultValue: "var(--primary-bg)",
+      placeholder: "exact color; beats --heading-tint",
+      defaultValue: "",
       unit: "",
     },
     {
@@ -183,8 +200,8 @@
       group: "Headings",
       name: "--heading-major-fg",
       type: "color",
-      placeholder: "e.g., #000000",
-      defaultValue: "var(--heading-fg)",
+      placeholder: "exact color, e.g. var(--primary-fg)",
+      defaultValue: "",
       unit: "",
     },
     {
@@ -215,8 +232,8 @@
       group: "Headings",
       name: "--heading-minor-fg",
       type: "color",
-      placeholder: "e.g., #000000",
-      defaultValue: "var(--heading-fg)",
+      placeholder: "exact color, e.g. #333",
+      defaultValue: "",
       unit: "",
     },
     {
@@ -393,7 +410,8 @@
   const headingModeVars = $derived.by((): Record<string, string> => {
     if (headingMode === "one") {
       return {
-        "--heading-fg": "var(--primary-bg)",
+        "--heading-tint": "var(--primary-color)",
+        "--heading-tint-amount": "80%",
         "--heading-text-decoration": "underline",
       };
     }
@@ -401,18 +419,19 @@
     if (headingMode === "fixed") {
       return {
         "--heading-font-size": "24px",
-        "--heading-fg": "var(--primary-bg)",
+        "--heading-tint": "var(--primary-color)",
       };
     }
 
     if (headingMode === "six") {
       return {
-        "--heading-1-fg": "var(--material-color-red-600)",
-        "--heading-2-fg": "var(--material-color-deep-orange-600)",
-        "--heading-3-fg": "var(--material-color-amber-700)",
-        "--heading-4-fg": "var(--material-color-green-700)",
-        "--heading-5-fg": "var(--material-color-light-blue-700)",
-        "--heading-6-fg": "var(--material-color-purple-700)",
+        "--heading-tint-amount": "75%",
+        "--heading-1-tint": "var(--material-color-red-600)",
+        "--heading-2-tint": "var(--material-color-deep-orange-600)",
+        "--heading-3-tint": "var(--material-color-amber-700)",
+        "--heading-4-tint": "var(--material-color-green-700)",
+        "--heading-5-tint": "var(--material-color-light-blue-700)",
+        "--heading-6-tint": "var(--material-color-purple-700)",
         "--heading-1-font-size": "2.4rem",
         "--heading-2-font-size": "2rem",
         "--heading-3-font-size": "1.7rem",
@@ -426,7 +445,8 @@
       "--heading-major-bg": "var(--primary-bg)",
       "--heading-major-fg": "var(--primary-fg)",
       "--heading-major-padding": "var(--padding)",
-      "--heading-minor-fg": "var(--secondary-fg)",
+      "--heading-minor-tint": "transparent",
+      "--heading-minor-tint-amount": "30%",
       "--heading-minor-padding": "0 0 0 0.75rem",
       "--heading-minor-border-width": "0 0 0 4px",
       "--heading-minor-border-style": "solid",
@@ -525,6 +545,15 @@ ${headingExampleMarkup}
         <code>--heading-1</code> through <code>--heading-6</code>, then
         <code>--heading-major</code> or <code>--heading-minor</code>, and
         finally the shared <code>--heading</code> tokens.
+      </p>
+      <p>
+        Heading color has two modes. A transparent heading <em>tints</em> the
+        foreground it inherits (<code>--heading-tint</code>,
+        <code>--heading-tint-amount</code>), so it follows the surface it lands
+        on. A heading that paints a background names an exact pair
+        (<code>--heading-1-bg</code>, <code>--heading-1-fg</code>). Compare them
+        on light, dark and saturated surfaces in the
+        <a href={`${base}/review/headings?preset=editorial`}>heading specimen</a>.
       </p>
       <p>
         In practice, you usually set those variables on a wrapper around a
