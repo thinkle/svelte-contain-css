@@ -126,6 +126,11 @@
      foreground -- whenever no background is set. A transparent heading
      keeps the surrounding surface's ground, as Text did before. */
   --_#{$var-prefix}-bg-set: #{fn.prefixed-vars-optional(bg, $resolved-prefixes...)};
+  /* --heading-*-text-amount: how far Text tones move inside this level
+     (between --<tone>-text-amount and --text-amount). A filled heading's
+     fg/bg is a pair chosen for contrast; a theme usually wants tones to
+     nudge it less than they nudge body text. Invalid when unset. */
+  --_#{$var-prefix}-text-amount: #{fn.prefixed-vars-optional(text-amount, $resolved-prefixes...)};
   --_#{$var-prefix}-ground: var(
     --_#{$var-prefix}-filled-ground,
     var(--_color, currentColor)

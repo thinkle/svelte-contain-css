@@ -26,6 +26,7 @@ Component-scoped forms (`--card-heading-2-*`, `--tile-heading-*`,
 | `--heading-*-tint-amount`         | Share of the target: 0% keeps the inherited foreground, 100% reaches the target. Unset anywhere: 100%.         |
 | `--heading-*-fg`                  | Exact foreground. Ignores the surface. Pair it with a `bg`.                                                    |
 | `--heading-*-bg`                  | Background. Makes the heading a color context for `Text` inside it.                                            |
+| `--heading-*-text-amount`        | How far `Text` tones move inside this level. Sits between `--<tone>-text-amount` and `--text-amount`. |
 | `--heading-tint-scale`            | Multiplier on every tint amount below it (default `1`). `0` declines all heading tints.                         |
 | `--heading-*-border-*`, `-box-shadow`, `-text-decoration`, `-padding`, ... | Decoration. Colored independently of the heading's text. |
 
@@ -128,6 +129,48 @@ Higher amounts look more like the brand color on the page and less legible on
 dark or saturated surfaces. 60% is the library's compromise: about 10:1 on the
 light page and about 4.6:1 on a dark tile.
 
+## Colored surfaces
+
+A theme says what headings look like on the page. A surface painted in a
+saturated color (a primary or warning Tile) is a different context, and the
+page's choices often clash there: a primary-filled h1 disappears into a
+primary Tile, and a primary tint drifts toward the Tile's own background.
+Nothing detects that for you. Override on the surface, with the same
+variables, set on the container:
+
+```svelte
+<!-- Default theme, primary surface: headings take the surface fg. -->
+<Tile --tile-bg="var(--primary-bg)" --tile-fg="var(--primary-fg)"
+  --heading-tint-scale="0"
+  --text-amount="30%">
+
+<!-- Editorial preset, primary surface: also invert the filled h1, and let
+     the h2 rule follow the text. -->
+<Tile --tile-bg="var(--primary-bg)" --tile-fg="var(--primary-fg)"
+  --heading-tint-scale="0"
+  --text-amount="30%"
+  --heading-1-bg="var(--primary-fg)"
+  --heading-1-fg="var(--primary-bg)"
+  --heading-2-border-color="currentColor">
+
+<!-- Warning surface: warning text is just the surface's text. -->
+<Tile --tile-bg="var(--warning-bg)" --tile-fg="var(--warning-fg)"
+  --heading-tint-scale="0"
+  --text-amount="30%"
+  --warning-text-fg-override="currentColor">
+```
+
+The rule of thumb: on a colored surface, decline tints, soften Text tones,
+invert any filled level whose background matches the surface, and point rules
+and shadows at `currentColor` or the surface's `fg`. On a dark surface, a
+strong preset may just want less: `--heading-tint-scale: 0.6`.
+
+Because the fixes depend on which levels a preset fills, the override is
+per preset. The specimen shows each preset's overrides under every
+surface; `&recipes=off` shows the same surfaces without them. These go
+wherever your surface is defined: on the component, on a wrapper class in
+your app CSS, or as the defaults of your own `PrimaryPanel` component.
+
 ## Text inside headings
 
 `<Text>` tones inside a heading are grounded on the right context:
@@ -141,8 +184,9 @@ light page and about 4.6:1 on a dark tile.
 `--<tone>-text-fg-override` still wins everywhere. A direct `--danger-text-fg`
 set on a wrapper is recomputed inside headings, the same way a nested color
 surface recomputes it. Mixing a tone into a filled heading's foreground can be
-muddy (amber into indigo gives brown). If it matters, set
-`--warning-text-fg-override` or `--warning-text-amount` for that context.
+muddy (amber into indigo gives brown) or illegible. The bundled presets set
+`--heading-1-text-amount: 30%` (or lower) on their filled levels so tones nudge
+the pair instead of repainting it.
 
 ## Migrating from 1.6
 

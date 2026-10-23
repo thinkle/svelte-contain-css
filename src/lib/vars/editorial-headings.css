@@ -10,6 +10,8 @@
   --heading-1-fg: var(--primary-fg);
   --heading-1-padding: 0.25em 0.45em;
   --heading-1-border-radius: 3px;
+  /* Text tones nudge the filled pair rather than repaint it. */
+  --heading-1-text-amount: 30%;
 
   --heading-2-tint: var(--danger-color);
   --heading-2-tint-amount: 70%;

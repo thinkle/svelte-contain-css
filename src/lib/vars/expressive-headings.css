@@ -8,6 +8,7 @@
   --heading-1-text-transform: uppercase;
   --heading-1-letter-spacing: 0.04em;
   --heading-1-box-shadow: 5px 5px 0 var(--warning-color);
+  --heading-1-text-amount: 30%;
 
   --heading-2-tint: var(--primary-color);
   --heading-2-tint-amount: 80%;
@@ -25,6 +26,7 @@
   --heading-4-fg: var(--secondary-fg);
   --heading-4-padding: 0.1em 0.7em;
   --heading-4-border-radius: 999px;
+  --heading-4-text-amount: 30%;
 
   --heading-5-tint: var(--success-color);
   --heading-5-tint-amount: 75%;
@@ -32,6 +34,6 @@
   --heading-5-letter-spacing: 0.12em;
 
   --heading-6-tint: transparent;
-  --heading-6-tint-amount: 40%;
+  --heading-6-tint-amount: 30%;
   --heading-6-font-variant: small-caps;
 }

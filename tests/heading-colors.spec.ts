@@ -142,6 +142,13 @@ test.describe("heading colors", () => {
     );
   });
 
+  test("--heading-*-text-amount softens tones in that level only", async ({
+    page,
+  }) => {
+    expectNear(await rgb(page, "text-amount", "h1 span"), mix(WHITE, RED, 0.2));
+    expectNear(await rgb(page, "text-amount", "h2 span"), mix(TILE_FG, RED, 0.5));
+  });
+
   test("decoration color is independent of the heading color", async ({
     page,
   }) => {

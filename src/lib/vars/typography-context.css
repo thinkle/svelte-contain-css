@@ -25,7 +25,8 @@
    heading's own foreground when the heading paints a background. Muted
    targets that background too. A heading outside any typography container
    has no ground, these are invalid, and Text falls back to mixing from the
-   heading's color. */
+   heading's color. --_heading-text-amount (from --heading-*-text-amount)
+   sits between a tone's own amount and --text-amount. */
 :where(h1, h2, h3, h4, h5, h6) {
   --muted-color: var(
     --muted-color-override,
@@ -36,7 +37,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--primary-color) var(--primary-text-amount, var(--text-amount, 50%))
+      var(--primary-color)
+        var(
+          --primary-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --secondary-text-fg: var(
@@ -44,7 +49,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--secondary-color) var(--secondary-text-amount, var(--text-amount, 50%))
+      var(--secondary-color)
+        var(
+          --secondary-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --info-text-fg: var(
@@ -52,7 +61,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--info-color) var(--info-text-amount, var(--text-amount, 50%))
+      var(--info-color)
+        var(
+          --info-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --success-text-fg: var(
@@ -60,7 +73,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--success-color) var(--success-text-amount, var(--text-amount, 50%))
+      var(--success-color)
+        var(
+          --success-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --warning-text-fg: var(
@@ -68,7 +85,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--warning-color) var(--warning-text-amount, var(--text-amount, 50%))
+      var(--warning-color)
+        var(
+          --warning-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --danger-text-fg: var(
@@ -76,7 +97,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--danger-color) var(--danger-text-amount, var(--text-amount, 50%))
+      var(--danger-color)
+        var(
+          --danger-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
   --muted-text-fg: var(
@@ -84,7 +109,11 @@
     color-mix(
       in srgb,
       var(--_heading-ground),
-      var(--muted-color) var(--muted-text-amount, var(--text-amount, 50%))
+      var(--muted-color)
+        var(
+          --muted-text-amount,
+          var(--_heading-text-amount, var(--text-amount, 50%))
+        )
     )
   );
 }
@@ -111,6 +140,7 @@
 :where(h1) {
   --_heading-ground: var(--_h1-ground);
   --_heading-bg-set: var(--_h1-bg-set);
+  --_heading-text-amount: var(--_h1-text-amount);
   color: var(--_h1-color, revert);
   background: var(--_h1-background, revert);
   padding: var(--_h1-padding, revert);
@@ -135,6 +165,7 @@
 :where(h2) {
   --_heading-ground: var(--_h2-ground);
   --_heading-bg-set: var(--_h2-bg-set);
+  --_heading-text-amount: var(--_h2-text-amount);
   color: var(--_h2-color, revert);
   background: var(--_h2-background, revert);
   padding: var(--_h2-padding, revert);
@@ -159,6 +190,7 @@
 :where(h3) {
   --_heading-ground: var(--_h3-ground);
   --_heading-bg-set: var(--_h3-bg-set);
+  --_heading-text-amount: var(--_h3-text-amount);
   color: var(--_h3-color, revert);
   background: var(--_h3-background, revert);
   padding: var(--_h3-padding, revert);
@@ -183,6 +215,7 @@
 :where(h4) {
   --_heading-ground: var(--_h4-ground);
   --_heading-bg-set: var(--_h4-bg-set);
+  --_heading-text-amount: var(--_h4-text-amount);
   color: var(--_h4-color, revert);
   background: var(--_h4-background, revert);
   padding: var(--_h4-padding, revert);
@@ -207,6 +240,7 @@
 :where(h5) {
   --_heading-ground: var(--_h5-ground);
   --_heading-bg-set: var(--_h5-bg-set);
+  --_heading-text-amount: var(--_h5-text-amount);
   color: var(--_h5-color, revert);
   background: var(--_h5-background, revert);
   padding: var(--_h5-padding, revert);
@@ -231,6 +265,7 @@
 :where(h6) {
   --_heading-ground: var(--_h6-ground);
   --_heading-bg-set: var(--_h6-bg-set);
+  --_heading-text-amount: var(--_h6-text-amount);
   color: var(--_h6-color, revert);
   background: var(--_h6-background, revert);
   padding: var(--_h6-padding, revert);

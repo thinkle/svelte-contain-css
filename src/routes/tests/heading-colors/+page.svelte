@@ -114,3 +114,14 @@
     <p><Text danger>danger</Text> <Text muted>muted</Text></p>
   </Tile>
 </div>
+
+<!-- --heading-*-text-amount softens Text tones inside that level only. -->
+<div
+  data-testid="text-amount"
+  style="--heading-tint: currentColor; --heading-1-bg: rgb(0, 0, 120); --heading-1-fg: rgb(255, 255, 255); --heading-1-text-amount: 20%; --danger-color: rgb(200, 0, 0);"
+>
+  <Tile style={light}>
+    <h1><Text danger>danger</Text></h1>
+    <h2><Text danger>danger</Text></h2>
+  </Tile>
+</div>

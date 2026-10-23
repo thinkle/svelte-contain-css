@@ -245,6 +245,34 @@ Before/after comparisons: [heading-colors/](heading-colors/).
 - Pre-existing, outside this work: the dark theme's warning pair (light fg on
   amber) fails for body text too.
 
+### Colored-surface follow-up
+
+Every surface in the specimen now carries the overrides its preset needs
+(shown as code under it; `&recipes=off` removes them). With them on, an
+alpha-composited audit of light, dark and forest-editorial-rounded × all five
+presets found 1 problem, down from 352 with recipes off and the old theme
+pairs. That 1 is `Text warning` in a transparent h3 on the light page (2.9:1).
+The light theme's warning ingredient is amber-400, which is weak on any light
+surface, heading or not. Retro was left out: its Text tones are yellow on a
+teal page, a pre-existing theme issue.
+
+Changes this needed beyond the specimen:
+
+- `--heading-*-text-amount`: Text tone share inside a level. The filled levels
+  of the editorial, expressive and solid presets use 25-30%. Without it,
+  `Text warning` in the dark theme's filled h1 was 2.2:1 everywhere.
+- Dark theme: `--warning-fg` is dark (white on orange was 1.9:1) and
+  `--secondary-fg` is blue-grey-900 (800 on 300 was about 4:1). Forest:
+  `--warning-fg` is dark (2.8:1 before). Separate commit. These also change
+  warning/secondary Buttons and Tags in those themes.
+- Solid preset: minor blocks are a shade of the secondary pair, not mixed with
+  `--bg` (they vanished on a light Card).
+- Expressive h6 subdue is 30%, down from 40%.
+
+The ergonomics are as expected: a page-level heading design needs explicit
+overrides on surfaces that reuse its colors, and those overrides are
+per preset.
+
 ### Validation
 
 - `tests/heading-colors.spec.ts` (10 tests) covers default, untinted, amount
