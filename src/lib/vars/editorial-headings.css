@@ -18,7 +18,8 @@
   --heading-2-padding: 0 0 0.15em;
   --heading-2-border-width: 0 0 3px;
   --heading-2-border-style: solid;
-  --heading-2-border-color: var(--warning-color);
+  /* The rule ties back to the h1 block rather than adding a third hue. */
+  --heading-2-border-color: var(--primary-color);
 
   --heading-tint: transparent;
   --heading-tint-amount: 30%;

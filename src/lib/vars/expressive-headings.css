@@ -1,13 +1,18 @@
 /* Expressive headings: a distinct treatment for each of the six levels.
    Filled levels (h1, h4) name exact fg/bg pairs; the rest are tints of the
-   surrounding foreground, so they follow the surface they land on. */
+   surrounding foreground, so they follow the surface they land on.
+
+   Accents come from the primary pair itself: a preset can't know whether a
+   theme's warning orange goes with its primary (in the dark theme,
+   lavender and bright orange don't). */
 :root {
   --heading-1-bg: var(--primary-bg);
   --heading-1-fg: var(--primary-fg);
   --heading-1-padding: 0.2em 0.5em;
   --heading-1-text-transform: uppercase;
   --heading-1-letter-spacing: 0.04em;
-  --heading-1-box-shadow: 5px 5px 0 var(--warning-color);
+  --heading-1-box-shadow: 5px 5px 0
+    color-mix(in srgb, var(--primary-bg) 50%, var(--primary-fg));
   --heading-1-text-amount: 30%;
 
   --heading-2-tint: var(--primary-color);
@@ -15,7 +20,7 @@
   --heading-2-padding: 0 0 0 0.5em;
   --heading-2-border-width: 0 0 0 6px;
   --heading-2-border-style: solid;
-  --heading-2-border-color: var(--warning-color);
+  --heading-2-border-color: var(--primary-color);
 
   --heading-3-tint: var(--info-color);
   --heading-3-tint-amount: 75%;

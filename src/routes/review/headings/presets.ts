@@ -7,9 +7,12 @@ export type SurfaceId =
   | "card"
   | "dark"
   | "primary"
-  | "warning"
   | "remapped"
-  | "nested";
+  | "nested"
+  | "tile-primary"
+  | "tile-warning"
+  | "tile-success"
+  | "tile-dark";
 
 type Vars = Record<`--${string}`, string>;
 
@@ -25,10 +28,27 @@ const onColor: Vars = {
   "--text-amount": "30%",
 };
 const onPrimary: Vars = onColor;
+// A tone's own Text on that tone's surface is just the surface's text.
 const onWarning: Vars = {
   ...onColor,
-  // Warning text on a warning surface is just the surface's text.
   "--warning-text-fg-override": "currentColor",
+};
+const onSuccess: Vars = {
+  ...onColor,
+  "--success-text-fg-override": "currentColor",
+};
+// Small tiles only hold an h3 and a line; the same rule applies.
+const tiles = {
+  "tile-primary": onPrimary,
+  "tile-warning": onWarning,
+  "tile-success": onSuccess,
+};
+
+const unchipped: Vars = {
+  "--tile-heading-bg": "transparent",
+  "--tile-heading-fg": "currentColor",
+  "--tile-heading-padding": "0",
+  "--tile-heading-box-shadow": "none",
 };
 
 export const headingPresets: Record<
@@ -40,7 +60,7 @@ export const headingPresets: Record<
     css: "",
     recipes: {
       primary: onPrimary,
-      warning: onWarning,
+      ...tiles,
       // Small h5/h6 need 4.5:1; the darkest surface needs a lighter touch.
       remapped: { "--heading-tint-scale": "0.75" },
     },
@@ -48,7 +68,7 @@ export const headingPresets: Record<
   restrained: {
     label: "Restrained",
     css: restrained,
-    recipes: { primary: onPrimary, warning: onWarning },
+    recipes: { primary: onPrimary, ...tiles },
   },
   editorial: {
     label: "Editorial",
@@ -62,10 +82,7 @@ export const headingPresets: Record<
         "--heading-1-fg": "var(--primary-bg)",
         "--heading-2-border-color": "currentColor",
       },
-      warning: {
-        ...onWarning,
-        "--heading-2-border-color": "currentColor",
-      },
+      ...tiles,
     },
   },
   expressive: {
@@ -78,15 +95,12 @@ export const headingPresets: Record<
         "--heading-1-fg": "var(--primary-bg)",
         "--heading-2-border-color": "currentColor",
       },
-      warning: {
-        ...onWarning,
-        "--heading-2-border-color": "currentColor",
-        "--heading-1-box-shadow": "5px 5px 0 var(--warning-fg)",
-      },
+      ...tiles,
       // Strong tints read on light pages; dark surfaces want less.
       dark: { "--heading-tint-scale": "0.6" },
       remapped: { "--heading-tint-scale": "0.6" },
       nested: { "--heading-tint-scale": "0.6" },
+      "tile-dark": { "--heading-tint-scale": "0.6" },
     },
   },
   solid: {
@@ -98,7 +112,13 @@ export const headingPresets: Record<
         "--heading-major-bg": "var(--primary-fg)",
         "--heading-major-fg": "var(--primary-bg)",
       },
-      warning: onWarning,
+      // A gray chip on a colored tile clashes; colored tiles drop it.
+      ...Object.fromEntries(
+        Object.entries(tiles).map(([id, vars]) => [
+          id,
+          { ...vars, ...unchipped },
+        ]),
+      ),
     },
   },
 };

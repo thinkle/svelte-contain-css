@@ -2,7 +2,10 @@
   import { browser } from "$app/environment";
   import { page } from "$app/state";
   import Card from "$lib/Card.svelte";
+  import Container from "$lib/layout/Container.svelte";
+  import GridLayout from "$lib/layout/GridLayout.svelte";
   import Tile from "$lib/layout/Tile.svelte";
+  import Text from "$lib/typography/Text.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import ReviewThemeStyle from "$lib/review/ReviewThemeStyle.svelte";
   import { reviewThemes, isReviewThemeName } from "$lib/review/themes";
@@ -13,11 +16,12 @@
   } from "./presets";
   import HeadingSpecimen from "./HeadingSpecimen.svelte";
 
-  /* Heading color specimen: one preset x one theme, rendered on every kind
-     of surface, with the overrides each colored surface needs for that
-     preset shown under it. ?theme=<review theme>&preset=<preset>, and
-     &recipes=off to see the surfaces without their overrides. Each block is
-     a data-audit-target for screenshots. The query is read only in the
+  /* Heading color specimen: one preset x one theme, on the surfaces headings
+     really land on -- the page, a Card, colored Container sections, and a
+     row of ordinary Tiles -- with the overrides each colored surface needs
+     for that preset shown under it. ?theme=<review theme>&preset=<preset>,
+     and &recipes=off to see the surfaces without their overrides. Each block
+     is a data-audit-target for screenshots. The query is read only in the
      browser: the route is prerendered, where searchParams is off-limits. */
   const params = $derived(browser ? page.url.searchParams : null);
   const themeName = $derived.by(() => {
@@ -32,44 +36,73 @@
   const preset = $derived(headingPresets[presetName]);
   const css = $derived(reviewThemes[themeName].css + "\n" + preset.css);
 
-  const surfaces: { id: SurfaceId; label: string; vars?: Record<string, string> }[] = [
-    { id: "card", label: "Card (theme surface)" },
-    {
-      id: "dark",
-      label: "Dark Tile",
-      vars: { "--tile-bg": "#1f2933", "--tile-fg": "#f5f1e8" },
-    },
+  type Props = Record<string, string>;
+  const darkPair = { bg: "#1f2933", fg: "#f5f1e8" };
+
+  const sections: { id: SurfaceId; label: string; props: Props }[] = [
+    { id: "dark", label: "Dark Container", props: darkPair },
     {
       id: "primary",
-      label: "Primary Tile",
-      vars: { "--tile-bg": "var(--primary-bg)", "--tile-fg": "var(--primary-fg)" },
-    },
-    {
-      id: "warning",
-      label: "Warning Tile",
-      vars: { "--tile-bg": "var(--warning-bg)", "--tile-fg": "var(--warning-fg)" },
+      label: "Primary Container",
+      props: { bg: "var(--primary-bg)", fg: "var(--primary-fg)" },
     },
     {
       id: "remapped",
-      label: "Remapped Tile (mix controls)",
-      vars: {
-        "--tile-bg-mix-color": "black",
-        "--tile-bg-mix-amount": "78%",
-        "--tile-fg-mix-color": "white",
-        "--tile-fg-mix-amount": "100%",
+      label: "Container remapped with mix controls",
+      props: {
+        "--container-bg-mix-color": "black",
+        "--container-bg-mix-amount": "78%",
+        "--container-fg-mix-color": "white",
+        "--container-fg-mix-amount": "100%",
       },
     },
   ];
-  const layout = "--tile-width: 100%; --tile-align: stretch; text-align: start;";
-  const dark = { "--tile-bg": "#1f2933", "--tile-fg": "#f5f1e8" };
 
-  const recipeFor = (id: SurfaceId) =>
-    recipesOn ? (preset.recipes[id] ?? {}) : {};
+  const tiles: {
+    id: SurfaceId | "tile";
+    props: Props;
+    title: string;
+    tone: "success" | "info" | "warning" | "muted";
+    note: string;
+    body: string;
+  }[] = [
+    { id: "tile", props: {}, title: "Berths", tone: "success", note: "12 open", body: "Inner harbor, east quay." },
+    {
+      id: "tile-primary",
+      props: { bg: "var(--primary-bg)", fg: "var(--primary-fg)" },
+      title: "Pilot on call",
+      tone: "info",
+      note: "Ch. 14",
+      body: "Request boarding an hour out.",
+    },
+    {
+      id: "tile-warning",
+      props: { bg: "var(--warning-bg)", fg: "var(--warning-fg)" },
+      title: "Closures",
+      tone: "warning",
+      note: "2 active",
+      body: "North berth closed to tenders.",
+    },
+    {
+      id: "tile-success",
+      props: { bg: "var(--success-bg)", fg: "var(--success-fg)" },
+      title: "Inspections",
+      tone: "success",
+      note: "passed",
+      body: "All moorings checked Monday.",
+    },
+    { id: "tile-dark", props: darkPair, title: "Night desk", tone: "muted", note: "after 6 pm", body: "Radio only; office closed." },
+  ];
+
+  const recipeFor = (id: SurfaceId | "tile"): Props =>
+    recipesOn && id !== "tile" ? (preset.recipes[id] ?? {}) : {};
   const nestedRecipe = $derived(recipeFor("nested"));
-  const toProps = (vars: Record<string, string>) =>
-    Object.entries(vars)
+  const code = (tag: string, props: Props) =>
+    `<${tag}\n  ` +
+    Object.entries(props)
       .map(([k, v]) => `${k}="${v}"`)
-      .join("\n  ");
+      .join("\n  ") +
+    ">";
 </script>
 
 <svelte:head>
@@ -95,38 +128,56 @@
     </TextLayout>
   </section>
 
+  <section data-audit-target="tiles">
+    <p class="label">Tiles (GridLayout tile)</p>
+    <GridLayout tile>
+      {#each tiles as t}
+        {@const recipe = recipeFor(t.id)}
+        <Tile {...t.props} {...recipe} data-testid={`surface-${t.id}`}>
+          <h3>{t.title} <Text {...{ [t.tone]: true }}>{t.note}</Text></h3>
+          <p>{t.body}</p>
+        </Tile>
+      {/each}
+    </GridLayout>
+    {#each tiles as t}
+      {@const recipe = recipeFor(t.id)}
+      {#if Object.keys(recipe).length}
+        <pre class="recipe">{code("Tile", { ...t.props, ...recipe })}</pre>
+      {/if}
+    {/each}
+  </section>
+
   <div class="grid">
-    {#each surfaces as s}
+    <section data-audit-target="card" data-testid="surface-card">
+      <p class="label">Card (theme surface)</p>
+      <Card><HeadingSpecimen /></Card>
+    </section>
+
+    {#each sections as s}
       {@const recipe = recipeFor(s.id)}
       <section data-audit-target={s.id} data-testid={`surface-${s.id}`}>
         <p class="label">{s.label}</p>
-        {#if s.id === "card"}
-          <Card><HeadingSpecimen /></Card>
-        {:else}
-          <Tile style={layout} {...s.vars} {...recipe}>
-            <HeadingSpecimen />
-          </Tile>
-        {/if}
+        <Container {...s.props} {...recipe}>
+          <HeadingSpecimen />
+        </Container>
         {#if Object.keys(recipe).length}
-          <pre class="recipe">&lt;Tile
-  {toProps(recipe)}&gt;</pre>
+          <pre class="recipe">{code("Container", { ...s.props, ...recipe })}</pre>
         {/if}
       </section>
     {/each}
 
     <section data-audit-target="nested" data-testid="surface-nested">
-      <p class="label">Nested: Card › dark Tile › plain div</p>
+      <p class="label">Nested: Card › dark Container › plain div</p>
       <Card>
         <h2>Outer card</h2>
-        <Tile style={layout} {...dark} {...nestedRecipe}>
+        <Container {...darkPair} {...nestedRecipe}>
           <div class="plain">
             <HeadingSpecimen levels={3} />
           </div>
-        </Tile>
+        </Container>
       </Card>
       {#if Object.keys(nestedRecipe).length}
-        <pre class="recipe">&lt;Tile
-  {toProps(nestedRecipe)}&gt;</pre>
+        <pre class="recipe">{code("Container", { ...darkPair, ...nestedRecipe })}</pre>
       {/if}
     </section>
   </div>
@@ -153,7 +204,7 @@
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 20px;
     align-items: start;
   }

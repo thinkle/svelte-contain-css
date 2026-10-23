@@ -96,26 +96,26 @@ Ready-made add-ons: `restrained-headings.css`, `editorial-headings.css`,
 
 The tint is mixed against `currentColor` in the heading's own `color`
 declaration, which is the color the heading inherits. So the same theme gives
-an indigo-leaning heading on a light Card, a pale-indigo one on a dark Tile, and
+an indigo-leaning heading on a light Card, a pale-indigo one on a dark Container, and
 follows a surface remapped with `--tile-fg-mix-*` or a plain wrapper that sets
 `color`. Nothing needs to be recomputed per surface.
 
 Ingredients (`tint`, `amount`, `scale`) resolve at each typography container,
 like every other heading variable. Set them on or above the container
-(`<Tile style="--heading-tint: ...">`, a theme, a wrapper around the
+(`<Container --heading-tint="...">`, a theme, a wrapper around the
 container). A plain `<div>` inside a Card that sets `--heading-tint` does not
 reach headings in that Card.
 
 ### What tinting cannot do
 
 **Mixing is not a contrast guarantee.** The big gap: when a surface's
-background *is* the tint target (a Tile filled with `--primary-bg` under a
+background *is* the tint target (a section filled with `--primary-bg` under a
 primary tint), every amount moves the heading toward the background. In the
-light theme a 60% primary tint on a primary Tile measures 2.6:1, and even
+light theme a 60% primary tint on a primary surface measures 2.6:1, and even
 40% only reaches 3.9:1. Decline the tint on such surfaces:
 
 ```svelte
-<Tile style="--tile-bg: var(--primary-bg); --tile-fg: var(--primary-fg); --heading-tint-scale: 0;">
+<Container bg="var(--primary-bg)" fg="var(--primary-fg)" --heading-tint-scale="0">
 ```
 
 or retarget it there (`--tile-heading-tint: var(--warning-color)`).
@@ -132,37 +132,48 @@ light page and about 4.6:1 on a dark tile.
 ## Colored surfaces
 
 A theme says what headings look like on the page. A surface painted in a
-saturated color (a primary or warning Tile) is a different context, and the
+saturated color (a primary section, a warning Tile) is a different context, and the
 page's choices often clash there: a primary-filled h1 disappears into a
-primary Tile, and a primary tint drifts toward the Tile's own background.
+primary section, and a primary tint drifts toward that section's own
+background.
 Nothing detects that for you. Override on the surface, with the same
 variables, set on the container:
 
 ```svelte
-<!-- Default theme, primary surface: headings take the surface fg. -->
-<Tile --tile-bg="var(--primary-bg)" --tile-fg="var(--primary-fg)"
+<!-- Default theme, primary section: headings take the surface fg. -->
+<Container bg="var(--primary-bg)" fg="var(--primary-fg)"
   --heading-tint-scale="0"
   --text-amount="30%">
 
-<!-- Editorial preset, primary surface: also invert the filled h1, and let
+<!-- Editorial preset, primary section: also invert the filled h1, and let
      the h2 rule follow the text. -->
-<Tile --tile-bg="var(--primary-bg)" --tile-fg="var(--primary-fg)"
+<Container bg="var(--primary-bg)" fg="var(--primary-fg)"
   --heading-tint-scale="0"
   --text-amount="30%"
   --heading-1-bg="var(--primary-fg)"
   --heading-1-fg="var(--primary-bg)"
   --heading-2-border-color="currentColor">
 
-<!-- Warning surface: warning text is just the surface's text. -->
-<Tile --tile-bg="var(--warning-bg)" --tile-fg="var(--warning-fg)"
+<!-- A warning Tile: warning text is just the tile's text. -->
+<Tile bg="var(--warning-bg)" fg="var(--warning-fg)"
   --heading-tint-scale="0"
   --text-amount="30%"
   --warning-text-fg-override="currentColor">
+  <h3>Closures <Text warning>2 active</Text></h3>
+</Tile>
+
+<!-- Solid preset, colored Tile: drop the chip, keep the tile's text. -->
+<Tile bg="var(--success-bg)" fg="var(--success-fg)"
+  --heading-tint-scale="0"
+  --tile-heading-bg="transparent"
+  --tile-heading-fg="currentColor"
+  --tile-heading-padding="0">
 ```
 
 The rule of thumb: on a colored surface, decline tints, soften Text tones,
 invert any filled level whose background matches the surface, and point rules
-and shadows at `currentColor` or the surface's `fg`. On a dark surface, a
+and shadows at `currentColor` or the surface's `fg`. A `--tile-heading-*`
+(or `--card-heading-*`, ...) variable scopes a change to that component. On a dark surface, a
 strong preset may just want less: `--heading-tint-scale: 0.6`.
 
 Because the fixes depend on which levels a preset fills, the override is

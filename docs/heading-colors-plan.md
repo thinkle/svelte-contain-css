@@ -205,7 +205,7 @@ Before/after comparisons: [heading-colors/](heading-colors/).
 ### Phase 1 findings (baseline, current API)
 
 - Default theme: headings were fixed `--primary-bg`, so they vanished on a
-  primary Tile (1.0:1) and sat at 1.6-1.9:1 on dark and remapped Tiles.
+  primary surface (1.0:1) and sat at 1.6-1.9:1 on dark and remapped ones.
 - Editorial/expressive written naively (exact colors) failed on every dark or
   saturated surface. Subdued h3-h6 via `color-mix(var(--fg), var(--bg))`
   resolved at `:root` and stayed dark-on-dark (1.2-2.2:1).
@@ -220,11 +220,11 @@ Before/after comparisons: [heading-colors/](heading-colors/).
 ### Limits (not papered over)
 
 - **A tint cannot rescue a surface whose background is the tint color.** Light
-  theme, primary Tile: 60% primary tint measures 2.6:1, and 40% still only
+  theme, primary surface: 60% primary tint measures 2.6:1, and 40% still only
   3.9:1. Surfaces like that need `--heading-tint-scale: 0` or a different
   target. The specimen shows both states.
 - **A light foreground on a mid-luminance surface mixes badly.** Forest's
-  warning Tile has a light fg on orange. The editorial h2's 70% danger tint
+  warning surface had a light fg on orange (since fixed in the theme). The editorial h2's 70% danger tint
   turns light pink there and is less legible than the old fixed dark red.
   This regression is a theme pair choice meeting a tint; no amount fixes it.
 - Mixing hues into a filled heading's fg can be muddy (amber into indigo gives
@@ -272,6 +272,29 @@ Changes this needed beyond the specimen:
 The ergonomics are as expected: a page-level heading design needs explicit
 overrides on surfaces that reuse its colors, and those overrides are
 per preset.
+
+### Specimen surfaces and preset accents (second follow-up)
+
+The first specimen stretched `Tile` into full-width panels holding a whole
+page of h1-h6, which is not how a Tile is used. Large colored regions are now
+`Container`s (dark, primary, remapped, and nested in a Card). Tiles appear as
+a real `GridLayout tile` row at their default size, each holding an h3 and a
+line of text, on default, primary, warning, success and dark backgrounds. The
+large warning surface is gone; a warning-sized region is a Tile.
+
+The expressive preset's h1 shadow and h2 rule used `--warning-color`, and the
+editorial h2 rule did too. In the dark theme that put bright orange against a
+lavender primary. A preset can't know whether a theme's semantic colors go
+with its primary, so both now take their accents from the primary pair
+(expressive's shadow is a primary-bg/primary-fg mix). The specimen h1 no
+longer carries a `Text warning`; that was contrived content. On colored Tiles,
+the solid preset drops its secondary chip (`--tile-heading-bg: transparent`
+plus `--tile-heading-fg: currentColor`): gray chips on lavender, orange and
+green were legible but ugly.
+
+The audit after this pass: 1 problem across light, dark and
+forest-editorial-rounded × all presets (the light theme's amber Text warning
+on the page, as above).
 
 ### Validation
 
