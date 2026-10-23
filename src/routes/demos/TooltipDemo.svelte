@@ -219,7 +219,6 @@
     </p>
   </TextLayout>
   <DemoWithCode
-    defaultTab="split"
     code={`
     <Tooltip 
       tooltipText="Must confirm before proceeding" 

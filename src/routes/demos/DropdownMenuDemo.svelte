@@ -311,6 +311,7 @@
   </Container>
 </DemoWithCode>
 <DemoWithCode
+  defaultTab="demo"
   code={`
 <Select bind:value={val}>
   <option value={1}>Option A</option>
@@ -368,6 +369,7 @@
   </FormItem>
 </DemoWithCode>
 <DemoWithCode
+  defaultTab="demo"
   code={`
 <Select --select-width="${constrainedWidth}" bind:value={val}>
   ...

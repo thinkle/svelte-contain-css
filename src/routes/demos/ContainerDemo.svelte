@@ -108,6 +108,7 @@
   </DemoWithCode>
 
   <DemoWithCode
+    defaultTab="demo"
     code={`<Container maxWidth="${maxWidth}px">
   <Inline wrap="wrap">
     <Tag success>Ready</Tag>
@@ -150,6 +151,7 @@
   </DemoWithCode>
 
   <DemoWithCode
+    defaultTab="demo"
     code={`<Container --container-width="${fixedWidth}px" maxWidth="100%">
   <h2>This is a fixed-width Container</h2>
   <Card>

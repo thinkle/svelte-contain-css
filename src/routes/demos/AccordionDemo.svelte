@@ -21,7 +21,6 @@
     </p>
   </TextLayout>
   <DemoWithCode
-    defaultTab="split"
     code={`<Accordion highlanderMode={${highlanderMode}}>
     <details open>
       <summary>Hello</summary>

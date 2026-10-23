@@ -145,7 +145,6 @@
   </TextLayout>
 
   <DemoWithCode
-    defaultTab="split"
     code={`<Checkbox bind:checked={val}>Lettuce</Checkbox>
 <Checkbox --checkbox-checked-bg="red" bind:checked={val2}>Tomato</Checkbox>
 <Checkbox bind:checked={val3}>Onion</Checkbox>`}
@@ -210,7 +209,6 @@
   </DemoWithCode>
 
   <DemoWithCode
-    defaultTab="split"
     language="svelte"
     code={`<${scriptTag}>
   let agreeToTerms = $state(false);
