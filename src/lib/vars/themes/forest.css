@@ -45,7 +45,8 @@
 
   --warning-bg: #d4841f;
   --warning-color: #d4841f;
-  --warning-fg: #fffaf2;
+  /* Dark text on amber: #fffaf2 on #d4841f is about 2.8:1. */
+  --warning-fg: #2a1a08;
   --danger-bg: #b44d3d;
   --danger-color: #b44d3d;
   --danger-fg: #fff8f6;
