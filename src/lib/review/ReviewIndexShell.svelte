@@ -92,13 +92,11 @@
     gap: 0.75rem;
   }
 
-  .review-index-content :global(a) {
-    color: var(--link-fg, var(--primary-bg, #2563eb));
+  /* Colors belong to the shared link rules or the component that owns the
+     link. A descendant a:hover color here overrides the switcher's active
+     foreground and paints primary ink on its primary background. */
+  .review-index-content :global(:where(a)) {
     text-decoration-thickness: 0.08em;
     text-underline-offset: 0.16em;
-  }
-
-  .review-index-content :global(a:hover) {
-    color: var(--link-hover-fg, var(--link-fg, var(--primary-bg, #1d4ed8)));
   }
 </style>
