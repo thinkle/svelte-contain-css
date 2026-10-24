@@ -40,6 +40,9 @@
     </details>
 </Accordion>`}
   >
+    {#snippet header()}
+      <h3>Single-open sections</h3>
+    {/snippet}
     {#snippet inputArea()}
       <Checkbox bind:checked={highlanderMode}>highlanderMode</Checkbox>
     {/snippet}

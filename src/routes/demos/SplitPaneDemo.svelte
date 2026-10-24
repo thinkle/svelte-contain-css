@@ -32,6 +32,9 @@
   {/snippet}
 </SplitPane>`}
   >
+    {#snippet header()}
+      <h3>Resizing two panes</h3>
+    {/snippet}
     {#snippet inputArea()}
       <FormItem>
         {#snippet label()}

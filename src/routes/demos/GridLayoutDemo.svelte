@@ -52,6 +52,7 @@
 
 <CssVariableDemo variables={cssVariables}>
   <TextLayout>
+    <h2>GridLayout</h2>
     <p>
       GridLayout creates a centered, responsive grid that automatically wraps
       items. If your layout is for a Contain <code>&lt;Card&gt;</code> or
@@ -61,12 +62,6 @@
       <code>--grid-layout-item-width</code> to specify a different custom size.
     </p>
 
-    <h2>Basic Grid with Tiles</h2>
-
-    <p>
-      Tiles already have a default width, so the simplest version is just
-      <code>&lt;GridLayout tile&gt;</code>:
-    </p>
   </TextLayout>
   <DemoWithCode
     code={`<GridLayout tile${runAttr}>
@@ -96,7 +91,12 @@
   </Tile>
 </GridLayout>`}
   >
+    {#snippet header()}
+      <h3>Basic Grid with Tiles</h3>
+    {/snippet}
     {#snippet blurb()}
+      <p>Tiles already have a default width, so the simplest version is just
+        <code>&lt;GridLayout tile&gt;</code>.</p>
       <p>
         The run of items is centered in the grid by default.
         <code>--grid-layout-justify-content</code> moves it, the same way
@@ -156,19 +156,7 @@
       </Tile>
     </GridLayout>
   </DemoWithCode>
-  <TextLayout>
-    <h2>Grid with Cards</h2>
 
-    <p>
-      Cards work the same way. Use <code>card</code> to inherit the framework's default
-      card width:
-    </p>
-
-    <p>
-      If you need a nonstandard layout, you can still override the item width
-      directly with <code>--item-width</code>.
-    </p>
-  </TextLayout>
   <DemoWithCode
     code={`<GridLayout card>
   <Card fixedHeight>
@@ -192,6 +180,19 @@
   </Card>
 </GridLayout>`}
   >
+    {#snippet header()}
+      <h3>Grid with Cards</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        Cards work the same way. Use <code>card</code> to inherit the framework's default
+        card width:
+      </p>
+      <p>
+        If you need a nonstandard layout, you can still override the item width
+        directly with <code>--item-width</code>.
+      </p>
+    {/snippet}
     <GridLayout card>
       <Card fixedHeight>
         {#snippet header()}
@@ -215,13 +216,7 @@
     </GridLayout>
   </DemoWithCode>
 
-  <TextLayout>
-    <h2>Custom Item Width: Image Gallery</h2>
-    <p>
-      For arbitrary content like images, set <code>--item-width</code> directly.
-      Here each item is 175px wide and the grid fills the available space:
-    </p>
-  </TextLayout>
+
   <DemoWithCode
     code={`<GridLayout --item-width="175px">
   <img src="https://picsum.photos/seed/1/175/175" alt="" />
@@ -234,6 +229,15 @@
   <img src="https://picsum.photos/seed/8/175/175" alt="" />
 </GridLayout>`}
   >
+    {#snippet header()}
+      <h3>Custom Item Width: Image Gallery</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        For arbitrary content like images, set <code>--item-width</code> directly.
+        Here each item is 175px wide and the grid fills the available space:
+      </p>
+    {/snippet}
     <GridLayout --item-width="175px">
       <img src="https://picsum.photos/seed/1/175/175" alt="" />
       <img src="https://picsum.photos/seed/2/175/175" alt="" />
@@ -246,26 +250,7 @@
     </GridLayout>
   </DemoWithCode>
 
-  <TextLayout>
-    <h2>Full-width rows</h2>
-    <p>
-      If you want an item to span across all the columns in a grid, we have a
-      wrapper component (<code>GridRow</code>) for that <em>or</em> a
-      convenience class (<code>class="grid-full-row"</code>) you can hang on any
-      element.
-    </p>
-    <p>
-      These set <code>grid-column</code> to span every track, and
-      <code>justify-self</code> to decide how the row sits in that span. Rows fill
-      their span by default.
-    </p>
-    <p>
-      To move them, set <code>--grid-row-justify</code> to <code>start</code>,
-      <code>center</code> or <code>end</code>. Set it on the grid and every row
-      inside follows — a row only has to speak up when it differs, with
-      <code>justify="start"</code> or the bare <code>center</code> shorthand.
-    </p>
-  </TextLayout>
+
   <DemoWithCode
     code={`<GridLayout tile${gridAttr}>
   <GridRow><h3>Jazz Greats</h3></GridRow>
@@ -281,7 +266,27 @@
   </GridRow>
 </GridLayout>`}
   >
+    {#snippet header()}
+      <h3>Full-width rows</h3>
+    {/snippet}
     {#snippet blurb()}
+      <p>
+        If you want an item to span across all the columns in a grid, we have a
+        wrapper component (<code>GridRow</code>) for that <em>or</em> a
+        convenience class (<code>class="grid-full-row"</code>) you can hang on any
+        element.
+      </p>
+      <p>
+        These set <code>grid-column</code> to span every track, and
+        <code>justify-self</code> to decide how the row sits in that span. Rows fill
+        their span by default.
+      </p>
+      <p>
+        To move them, set <code>--grid-row-justify</code> to <code>start</code>,
+        <code>center</code> or <code>end</code>. Set it on the grid and every row
+        inside follows — a row only has to speak up when it differs, with
+        <code>justify="start"</code> or the bare <code>center</code> shorthand.
+      </p>
       <p>
         Set on the grid, so every row follows without repeating itself. The last
         row says <code>justify="start"</code> and keeps saying it — the point of

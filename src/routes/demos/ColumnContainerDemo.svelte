@@ -23,6 +23,9 @@
   <Tile>Alerts</Tile>
 </ColumnContainer>`}
   >
+    {#snippet header()}
+      <h3>A vertical rail</h3>
+    {/snippet}
     <ColumnContainer size="medium" --tile-width="100%">
       {#each items as item}
         <Tile>
