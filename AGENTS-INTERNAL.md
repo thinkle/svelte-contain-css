@@ -400,11 +400,6 @@ alias where it is declared, which can lose overrides on a descendant.
 
 ### Remove repetition without removing override levels
 
-Use `color-variant-props(...)` for a variant only when the same element already
-matches a base `color-props(...)` rule. It changes the resolved channels while
-reusing the base rule's local text-tone expressions. New descendant surfaces
-still need `color-props` so their Text tones use their own colors.
-
 Fallback helpers share one prefix builder and preserve the first occurrence
 of a prefix. Keep their terminal semantics distinct (`inherit`, `unset`, an
 explicit default, or an invalid optional value). Do not remove a distinct

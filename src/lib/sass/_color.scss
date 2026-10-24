@@ -1,7 +1,7 @@
 @use "functions" as fn;
 @use "sass:list";
 
-@mixin -color-channels($prefixes...) {
+@mixin color-props($prefixes...) {
   --link-bg: #{fn.vars(link-bg, $prefixes...)};
   --link-fg: #{fn.vars(link-fg, $prefixes...)};
 
@@ -64,16 +64,6 @@
     var(--_fg-base),
     var(--_fg-mix-color) var(--_fg-mix-amount)
   );
-
-  background-color: var(--_background-color);
-  color: var(--_color);
-}
-
-// A surface establishes its text tones once. Their var() references resolve
-// against the final --_color/--_background-color on the SAME element, so a
-// color variant does not need to redeclare these identical expressions.
-@mixin color-props($prefixes...) {
-  @include -color-channels($prefixes...);
   // Text tones belong to this resolved surface. Amount is the target share:
   // 0% preserves the foreground; 100% reaches the target color.
   // Muted targets the local surface; an explicit override can travel across
@@ -90,10 +80,7 @@
       )
     );
   }
-}
 
-// Only use when this element already matches a base color-props rule.
-// Descendants/new surfaces still need color-props to establish local tones.
-@mixin color-variant-props($prefixes...) {
-  @include -color-channels($prefixes...);
+  background-color: var(--_background-color);
+  color: var(--_color);
 }
