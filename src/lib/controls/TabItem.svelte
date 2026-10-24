@@ -87,7 +87,7 @@
   }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
-    @include color-props(tab-active, primary, tab, button, control, secondary);
+    @include color-variant-props(tab-active, primary, tab, button, control, secondary);
     @include typography-props(tab-active, tab, button, ui);
   }
 </style>

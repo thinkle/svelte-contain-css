@@ -1,55 +1,35 @@
 @use "sass:list";
 @use "sass:string";
 
+// All helpers below preserve their historical terminal fallback. Only this
+// builder walks prefixes; repeated names cannot add another override level.
+@function unique-prefixes($prefixes) {
+  $result: ();
+  @each $prefix in $prefixes {
+    @if not list.index($result, $prefix) {
+      $result: list.append($result, $prefix, $separator: comma);
+    }
+  }
+  @return $result;
+}
+
 @function var-with-fallbacks($base-var, $args...) {
-  // Remove the initial -- from the base variable for concatenation purposes
-  $base-var-name: string.slice($base-var, 3);
-  $fallback: list.nth($args, list.length($args));
-
-  // Initialize the result with the final fallback value
-  $result: var($base-var, $fallback);
-
-  // Check if only one argument (apart from $base-var) is provided
-  @if list.length($args) == 1 {
-    // Only one argument means it's the fallback value
-    @return var(#{$base-var}, #{$fallback});
+  $prefixes: ();
+  $last: list.length($args);
+  @if $last > 1 {
+    @for $i from 1 to $last {
+      $prefixes: list.append($prefixes, list.nth($args, $i));
+    }
   }
-
-  // Iterate through the prefixes in reverse order
-  @for $i from list.length($args) - 1 through 1 {
-    $prefix: list.nth($args, $i);
-    // Construct the variable name by concatenating the prefix and base variable name
-    // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
-    $prefixed-var: string.unquote("--#{$prefix}-#{$base-var-name}");
-    // Nest the current prefixed variable as a fallback to the current result
-    $result: var(#{$prefixed-var}, #{$result});
-  }
-
-  // Return the final CSS var() function with all fallbacks
-  // e.g., var(--card-bg, var(--container-bg, var(--bg, white)))
-  @return #{$result};
+  @return vars-fallback(
+    string.slice($base-var, 3),
+    var(#{$base-var}, #{list.nth($args, $last)}),
+    $prefixes...
+  );
 }
 
 @function var-no-fallbacks($base-var, $args...) {
-  // Remove the initial -- from the base variable for concatenation purposes
-  $base-var-name: string.slice($base-var, 3);
-
-  // Initialize the result with the final fallback value
-  $result: var($base-var, unset);
-
-  // Iterate through the prefixes in reverse order
-  @for $i from list.length($args) through 1 {
-    $prefix: list.nth($args, $i);
-    // Construct the variable name by concatenating the prefix and base variable name
-    // e.g., --card-bg if $prefix is 'card' and $base-var-name is 'bg'
-    $prefixed-var: string.unquote("--#{$prefix}-#{$base-var-name}");
-    // Nest the current prefixed variable as a fallback to the current result
-    $result: var(#{$prefixed-var}, #{$result});
-  }
-
-  // Return the final CSS var() function with all fallbacks
-  // e.g., var(--card-bg, var(--container-bg, var(--bg))
-  @return #{$result};
+  @return vars-fallback(string.slice($base-var, 3), var(#{$base-var}, unset), $args...);
 }
 
 @function generate-var-name($prefix, $suffix) {
@@ -84,82 +64,38 @@
   @return $result;
 }
 
+// `vars` deliberately omits the naked global token; it ends in inherit.
 @function vars($suffix, $args...) {
-  // Initialize the result with the first prefixed variable
-  $prefix: list.nth($args, list.length($args));
-  $result: var(generate-var-name($prefix, $suffix), inherit);
-
-  // Iterate through the rest of the prefixes
-  @if list.length($args) > 1 {
-    @for $i from list.length($args) - 1 through 1 {
-      $prefix: list.nth($args, $i);
-      $prefixed-var: generate-var-name($prefix, $suffix);
-      // Nest the current prefixed variable as a fallback to the current result
-      $result: var(#{$prefixed-var}, #{$result});
-    }
-  }
-
-  // Return the final CSS var() function with all fallbacks
-  @return #{$result};
+  @return vars-fallback($suffix, inherit, $args...);
 }
 
 @function vars-fallback($suffix, $fallback, $args...) {
+  $prefixes: unique-prefixes($args);
   $result: $fallback;
-
-  @if list.length($args) > 0 {
-    @for $i from list.length($args) through 1 {
-      $prefix: list.nth($args, $i);
-      $prefixed-var: generate-var-name($prefix, $suffix);
-      $result: var(#{$prefixed-var}, #{$result});
+  @if list.length($prefixes) > 0 {
+    @for $i from list.length($prefixes) through 1 {
+      $name: generate-var-name(list.nth($prefixes, $i), $suffix);
+      $result: var(#{$name}, #{$result});
     }
   }
-
   @return #{$result};
 }
 
 @function vars-optional($suffix, $args...) {
-  $result: var(--#{$suffix});
-
-  @if list.length($args) > 0 {
-    @for $i from list.length($args) through 1 {
-      $prefix: list.nth($args, $i);
-      $prefixed-var: generate-var-name($prefix, $suffix);
-      $result: var(#{$prefixed-var}, #{$result});
-    }
-  }
-
-  @return #{$result};
+  @return vars-fallback($suffix, var(--#{$suffix}), $args...);
 }
 
 @function prefixed-vars-optional($suffix, $args...) {
-  $result: var(--__missing-#{$suffix});
-
-  @if list.length($args) > 0 {
-    @for $i from list.length($args) through 1 {
-      $prefix: list.nth($args, $i);
-      $prefixed-var: generate-var-name($prefix, $suffix);
-      $result: var(#{$prefixed-var}, #{$result});
-    }
-  }
-
-  @return #{$result};
+  @return vars-fallback($suffix, var(--__missing-#{$suffix}), $args...);
 }
 
+// Legacy contract: the final argument is excluded from the prefix list.
 @function vars-suffix-fallback($suffix, $args...) {
-  // Initialize the result with the first prefixed variable
-  $prefix: list.nth($args, list.length($args));
-  $result: var(--#{$suffix}, inherit);
-
-  // Iterate through the rest of the prefixes
+  $prefixes: ();
   @if list.length($args) > 1 {
-    @for $i from list.length($args) - 1 through 1 {
-      $prefix: list.nth($args, $i);
-      $prefixed-var: generate-var-name($prefix, $suffix);
-      // Nest the current prefixed variable as a fallback to the current result
-      $result: var(#{$prefixed-var}, #{$result});
+    @for $i from 1 to list.length($args) {
+      $prefixes: list.append($prefixes, list.nth($args, $i));
     }
   }
-
-  // Return the final CSS var() function with all fallbacks
-  @return #{$result};
+  @return vars-fallback($suffix, var(--#{$suffix}, inherit), $prefixes...);
 }

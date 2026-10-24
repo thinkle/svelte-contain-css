@@ -32,6 +32,22 @@
   border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
 }
 
+// The full shorthand chain can be large. Resolve it once on this element;
+// side overrides use the same value without repeating that chain four times.
+@mixin -border-sides($base-border, $global, $prefixes...) {
+  --_border-base: #{$base-border};
+  border: var(--_border-base);
+  @each $side in top, right, bottom, left {
+    @if $global {
+      border-#{$side}: fn.var-with-fallbacks(
+        --border-#{$side}, list.append($prefixes, var(--_border-base))...
+      );
+    } @else {
+      border-#{$side}: fn.vars-fallback(border-#{$side}, var(--_border-base), $prefixes...);
+    }
+  }
+}
+
 // Bordered surfaces opt into the theme's global border and visible fallback.
 @mixin border-props($prefixes...) {
   $base-border: fn.var-with-fallbacks(
@@ -43,23 +59,7 @@
           fn.var-with-fallbacks(--border-color, list.append($prefixes, var(--fg))...)
       )...
   );
-  border: $base-border;
-  $directions: (top, right, bottom, left);
-  $rectProps: (border);
-
-  // Loop through each direction
-  @each $dir in $directions {
-    // Apply prop for each direction
-    @each $p in $rectProps {
-      #{$p}-#{$dir}: fn.var-with-fallbacks(
-        --#{$p}-#{$dir},
-        list.append(
-            $prefixes,
-            $base-border
-          )...
-      );
-    }
-  }
+  @include -border-sides($base-border, true, $prefixes...);
 }
 // Borderless components accept component/category overrides, never naked
 // theme --border or --border-<side>. Keep radius independent of this policy.
@@ -72,10 +72,7 @@
     fn.vars-fallback(border-style, none, $prefixes...)
     fn.vars-fallback(border-color, currentColor, $prefixes...);
   $base-border: fn.vars-fallback(border, $default-border, $prefixes...);
-  border: $base-border;
-  @each $dir in (top, right, bottom, left) {
-    border-#{$dir}: fn.vars-fallback(border-#{$dir}, $base-border, $prefixes...);
-  }
+  @include -border-sides($base-border, false, $prefixes...);
 }
 
 // Compatibility alias for the previous bordered helper name.

@@ -128,18 +128,18 @@
     color: var(--_color);
   }
   a.primary {
-    @include color-props(primary, button, control, secondary);
+    @include color-variant-props(primary, button, control, secondary);
   }
   a.warning {
-    @include color-props(warning, a, control);
+    @include color-variant-props(warning, a, control);
   }
   a.danger {
-    @include color-props(danger, a, control);
+    @include color-variant-props(danger, a, control);
   }
   a.success {
-    @include color-props(success, a, control);
+    @include color-variant-props(success, a, control);
   }
   a.info {
-    @include color-props(info, a, control);
+    @include color-variant-props(info, a, control);
   }
 </style>

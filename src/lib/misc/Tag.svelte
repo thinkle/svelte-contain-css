@@ -213,18 +213,18 @@
      variant tokens are always set and win first, so colors are unchanged at
      0% mix (asserted in tests/color-mix.spec.ts). */
   .tag.primary {
-    @include color-props(tag-primary, primary, tag);
+    @include color-variant-props(tag-primary, primary, tag);
   }
   .tag.warning {
-    @include color-props(tag-warning, warning, tag);
+    @include color-variant-props(tag-warning, warning, tag);
   }
   .tag.danger {
-    @include color-props(tag-danger, danger, tag);
+    @include color-variant-props(tag-danger, danger, tag);
   }
   .tag.success {
-    @include color-props(tag-success, success, tag);
+    @include color-variant-props(tag-success, success, tag);
   }
   .tag.info {
-    @include color-props(tag-info, info, tag);
+    @include color-variant-props(tag-info, info, tag);
   }
 </style>

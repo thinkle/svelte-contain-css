@@ -21,16 +21,13 @@
 }
 
 @mixin clickable-affordance-transition($prefixes...) {
+  --_transition: #{fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...)};
   transition:
-    filter fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
-    background-color
-      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
-    border-color
-      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
-    box-shadow
-      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...),
-    transform
-      fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...);
+    filter var(--_transition),
+    background-color var(--_transition),
+    border-color var(--_transition),
+    box-shadow var(--_transition),
+    transform var(--_transition);
 }
 
 // Hover mixes toward --hover-color-mix, defaulting to the element's own
