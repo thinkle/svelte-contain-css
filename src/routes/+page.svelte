@@ -69,6 +69,8 @@
     // Use Intersection Observer to watch when sections come into view
     intersectionObserver = new IntersectionObserver(
       (entries) => {
+        // Scrolling past Intro/Installation must not replace a selected demo.
+        if (theDemo) return;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const link = entry.target.id ? `#${entry.target.id}` : null;
