@@ -212,6 +212,9 @@ test.describe("Dropdown Menu Wrapping", () => {
   });
 
   test("visual regression: dropdown positioning", async ({ page }) => {
+    // Keep the snapshot scenario independent of shared project viewport
+    // defaults. Baselines cover the current fixture at this desktop size.
+    await page.setViewportSize({ width: 1280, height: 720 });
     await page.goto("/svelte-contain-css/tests/dropdown-wrap");
     await page.waitForLoadState("networkidle");
 
