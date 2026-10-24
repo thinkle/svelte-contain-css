@@ -30,6 +30,10 @@ const plainProps = [
   "icon-size",
 ];
 const colorProps = [
+  "--link-color",
+  "--link-hover-color",
+  "--link-text-amount",
+  "--first-letter-text-amount",
   "--primary-bg",
   "--primary-fg",
   "--secondary-bg",

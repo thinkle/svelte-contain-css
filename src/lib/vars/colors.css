@@ -54,8 +54,6 @@
 
   --surface-bg: var(--bg);
   --surface-fg: var(--fg);
-  --surface-link-fg: var(--link-fg, var(--primary-bg));
-  --container-link-fg: var(--surface-link-fg);
   /* --menu-item-bg intentionally not defaulted at :root -- see the note in
      affordances.css. The color-props(menu-item, menu, button, control) chain
      resolves it to --menu-bg / --bg at the element, keeping per-instance
@@ -76,10 +74,24 @@ body {
 
 a {
   background-color: var(--link-bg, transparent);
-  /* Same reasoning as --surface-link-fg above: derive from the theme's own
-     --primary-bg (always defined, even for an app with no theme at all)
-     rather than hard-coding a hue here too. */
-  color: var(--link-fg, var(--primary-bg));
+  /* Exact --link-fg (including component-prefixed overrides from
+     color-props) wins. Otherwise tint the inherited foreground, just as Text
+     does: primary ink must not disappear on a primary background.
+     currentColor stays unresolved in inherited variables and, here in color,
+     means the link's inherited foreground. Keep the default tint gentle. */
+  --_link-target-color: var(--link-color, var(--primary-color));
+  --_link-default-fg: color-mix(
+    in srgb,
+    currentColor,
+    var(--_link-target-color) var(--link-text-amount, var(--text-amount, 10%))
+  );
+  color: var(--link-fg, var(--_link-default-fg));
+}
+
+a:hover,
+a:focus-visible {
+  --_link-target-color: var(--link-hover-color, var(--link-color, var(--primary-color)));
+  color: var(--link-hover-fg, var(--link-fg, var(--_link-default-fg)));
 }
 
 /* Color definitions */

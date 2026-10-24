@@ -14,7 +14,9 @@
   --menu-bg: #fcf3ea;
   --menu-fg: #33261f;
 
-  --primary-bg: #b85c38;
+  /* The filled surface needs to support cream text plus a gentle accent;
+     keep the original brighter clay as the tint target below. */
+  --primary-bg: #a54e30;
   --primary-color: #b85c38;
   --primary-fg: #fff8f3;
   --secondary-bg: #ead4c3;
@@ -33,8 +35,8 @@
   --border-color: #ccb2a1;
   --shadow-color: color-mix(in srgb, #33261f 14%, transparent);
 
-  --link-fg: #a24a2b;
-  --link-hover-fg: #7f3a22;
+  --link-color: #a24a2b;
+  --link-hover-color: #7f3a22;
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
 

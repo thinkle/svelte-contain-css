@@ -9,7 +9,7 @@ import { test, expect } from "@playwright/test";
  * that only sets --bg/--fg) got Contain's own brand colour whether it asked
  * for one or not. This pins the fix: with no theme loaded, the structural
  * vars stay neutral or derive from whatever the app already provided
- * (--primary-bg), rather than hard-coding a hue here too.
+ * (--primary-color), rather than hard-coding a hue here too.
  */
 
 const URL = "/svelte-contain-css/tests/neutral-defaults";
@@ -55,20 +55,18 @@ test("--focus-color is unset, so the browser's own focus ring applies", async ({
   expect(focusColor).toBe("");
 });
 
-test("a bare link derives its color from --primary-bg, not a hard-coded hue", async ({
-  page,
-}) => {
+test("a bare link tints its foreground toward the app's primary color", async ({ page }) => {
   await page.goto(URL);
-  const [linkColor, primaryBg] = await page.evaluate(() => {
-    const probe = document.createElement("span");
-    probe.style.color = "var(--primary-bg)";
-    document.body.appendChild(probe);
-    const primary = getComputedStyle(probe).color;
-    probe.remove();
-    return [
-      getComputedStyle(document.querySelector('[data-testid="link"]')!).color,
-      primary,
-    ];
+  const link = page.getByTestId("link");
+  // Deliberately different primary-bg: links use the ink target, not the fill.
+  await page.locator("body").evaluate(el => {
+    el.style.cssText = "color: rgb(20, 40, 60); --primary-color: rgb(200, 100, 0); --primary-bg: rgb(0, 255, 0);";
   });
-  expect(linkColor).toBe(primaryBg);
+  const actual = await link.evaluate(el => {
+    const ctx = document.createElement("canvas").getContext("2d")!;
+    ctx.fillStyle = getComputedStyle(el).color;
+    ctx.fillRect(0, 0, 1, 1);
+    return Array.from(ctx.getImageData(0, 0, 1, 1).data).slice(0, 3);
+  });
+  expect(actual).toEqual([38, 46, 54]);
 });
