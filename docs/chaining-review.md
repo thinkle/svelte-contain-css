@@ -20,11 +20,6 @@ names, lookup order, and defaults. Its baseline is `efc0d12`.
   Their different terminal contracts remain distinct: global+default,
   global+`unset`, prefixed-only+`inherit`, and optional/guaranteed-invalid paths.
   The legacy `vars-suffix-fallback` still excludes its final argument.
-- **Color variants:** Button, ButtonLink, CircleButton, Tag and TabItem variants
-  change color channels without re-emitting the eight identical text-tone
-  declarations already supplied by their base surface rule. Those declarations
-  resolve against the final local color channels, including when a class changes.
-  New descendant surfaces still establish their own tones with `color-props`.
 
 The new border/transition intermediates are private and non-inheriting. They are
 set and read on the same element. Public theme variables continue to inherit.
@@ -41,11 +36,17 @@ bundling; it is not a claim about any particular app's downloaded bundle size.
 
 | Metric | Before | After | Reduction |
 | --- | ---: | ---: | ---: |
-| CSS bytes | 1,250,138 | 1,126,964 | 123,174 (9.85%) |
-| Declarations | 8,211 | 8,031 | 180 (2.19%) |
-| `var()` calls | 34,623 | 30,700 | 3,923 (11.33%) |
+| CSS bytes | 1,250,138 | 1,152,185 | 97,953 (7.84%) |
+| Declarations | 8,211 | 8,199 | 12 (0.15%) |
+| `var()` calls | 34,623 | 31,477 | 3,146 (9.09%) |
 
 ## Changes deliberately deferred
+
+- Hoisting identical text-tone declarations out of color variants. The values
+  are identical, but the variant selectors have higher specificity than the
+  base surface. Removing those declarations could change how consumer CSS
+  competes with them, even if the bundled themes render identically. Keeping
+  the existing rules avoids that subtle public cascade change.
 
 - Removing unused-looking public prefixes or compatibility aliases. A token
   absent from bundled themes may still be used by an app. This PR removes

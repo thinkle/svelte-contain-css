@@ -103,18 +103,18 @@
      As plain `button.primary` they tied with the clickable mixin's
      `button:hover` and, coming later, cancelled the hover background. */
   button:where(.primary) {
-    @include color-variant-props(primary, button, control);
+    @include color-props(primary, button, control);
   }
   button:where(.warning) {
-    @include color-variant-props(warning, button, control);
+    @include color-props(warning, button, control);
   }
   button:where(.danger) {
-    @include color-variant-props(danger, button, control);
+    @include color-props(danger, button, control);
   }
   button:where(.success) {
-    @include color-variant-props(success, button, control);
+    @include color-props(success, button, control);
   }
   button:where(.info) {
-    @include color-variant-props(info, button, control);
+    @include color-props(info, button, control);
   }
 </style>
