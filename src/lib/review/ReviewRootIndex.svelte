@@ -1,5 +1,6 @@
 <script lang="ts">
   import { base } from "$app/paths";
+  import MenuList from "$lib/layout/MenuList.svelte";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import { reviewThemeLabels } from "$lib/review/themes";
 </script>
@@ -12,11 +13,13 @@
   title="Review Routes"
   description="Available themes for the review harness."
 >
-  <ul>
-    {#each Object.entries(reviewThemeLabels) as [theme, label]}
-      <li>
-        <a href={`${base}/review/${theme}/`}>{label}</a>
-      </li>
-    {/each}
-  </ul>
+  <nav aria-label="Review themes">
+    <MenuList>
+      {#each Object.entries(reviewThemeLabels) as [theme, label]}
+        <li>
+          <a href={`${base}/review/${theme}/`}>{label}</a>
+        </li>
+      {/each}
+    </MenuList>
+  </nav>
 </ReviewIndexShell>

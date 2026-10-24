@@ -987,6 +987,14 @@ let derived = $derived(value * 2); // New
 
 ## Testing & Development
 
+### Review navigation uses the library
+
+Review indexes, theme navigation, and scenario-page headers are consumer examples.
+Compose library components and semantic HTML for their layout, surfaces,
+typography, navigation, and interaction states. Do not write a second design
+system in review-page CSS. If a component cannot support the needed behavior,
+fix that component rather than adding a page-specific styling workaround.
+
 ### Component demos are small usage examples
 
 Use one `DemoWithCode` per concept/blurb, not one around an entire showcase.

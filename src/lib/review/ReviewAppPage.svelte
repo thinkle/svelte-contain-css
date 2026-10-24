@@ -1,5 +1,9 @@
 <script lang="ts">
   import { base } from "$app/paths";
+  import Container from "$lib/layout/Container.svelte";
+  import Stack from "$lib/layout/Stack.svelte";
+  import Inline from "$lib/layout/Inline.svelte";
+  import ButtonLink from "$lib/controls/ButtonLink.svelte";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
   import { reviewAppScenarios } from "$lib/review/scenarios";
   import type { ReviewThemeName } from "$lib/review/themes";
@@ -21,14 +25,19 @@
   <title>{scenario.title} · {data.themeLabel} Review</title>
 </svelte:head>
 
-<div class="review-page-header">
-  <div class="review-page-links">
-    <a href={`${base}/review/${data.theme}/`}>{data.themeLabel} routes</a>
-    <a href={`${base}/review/${data.theme}/app/`}>App scenarios</a>
-  </div>
-
-  <ReviewThemeSwitcher theme={data.theme} />
-</div>
+<header>
+  <Container height="auto">
+    <Stack>
+      <nav aria-label="Review navigation">
+        <Inline>
+          <ButtonLink href={`${base}/review/${data.theme}/`}>{data.themeLabel} routes</ButtonLink>
+          <ButtonLink href={`${base}/review/${data.theme}/app/`}>App scenarios</ButtonLink>
+        </Inline>
+      </nav>
+      <ReviewThemeSwitcher theme={data.theme} />
+    </Stack>
+  </Container>
+</header>
 
 <div
   class="review-page"
@@ -38,25 +47,3 @@
 >
   <scenario.component />
 </div>
-
-<style>
-  .review-page-header {
-    display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
-    background: color-mix(in srgb, var(--surface-bg, white) 92%, transparent);
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--border-color, currentColor) 45%, transparent);
-  }
-
-  .review-page-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .review-page-links a {
-    color: var(--link-fg, var(--primary-bg, #2563eb));
-    text-underline-offset: 0.18em;
-  }
-</style>

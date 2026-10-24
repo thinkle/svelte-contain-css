@@ -1,5 +1,6 @@
 <script lang="ts">
   import { base } from "$app/paths";
+  import MenuList from "$lib/layout/MenuList.svelte";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
   import { reviewAppScenarios } from "$lib/review/scenarios";
@@ -25,23 +26,27 @@
 
   <section>
     <h2>Groups</h2>
-    <ul>
-      <li>
-        <a href={`${base}/review/${theme}/app/`}>App scenarios</a>
-      </li>
-    </ul>
+    <nav aria-label="Review groups">
+      <MenuList>
+        <li>
+          <a href={`${base}/review/${theme}/app/`}>App scenarios</a>
+        </li>
+      </MenuList>
+    </nav>
   </section>
 
   <section>
     <h2>Direct Endpoints</h2>
-    <ul>
-      {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
-        <li>
-          <a href={`${base}/review/${theme}/app/${scenario}`}>
-            {entry.title}
-          </a>
-        </li>
-      {/each}
-    </ul>
+    <nav aria-label="Scenario endpoints">
+      <MenuList>
+        {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
+          <li>
+            <a href={`${base}/review/${theme}/app/${scenario}`}>
+              {entry.title}
+            </a>
+          </li>
+        {/each}
+      </MenuList>
+    </nav>
   </section>
 </ReviewIndexShell>
