@@ -45,8 +45,10 @@
   I am a card.
 </Card>`}
     >
-      {#snippet blurb()}
+      {#snippet header()}
         <h2>Cards</h2>
+      {/snippet}
+      {#snippet blurb()}
         <p>
           Cards usually come with some box-shadow, coloring, and so forth, and
           have responsive sizing out of the box.
@@ -70,6 +72,9 @@
   {/snippet}
 </Card>`}
     >
+      {#snippet header()}
+        <h3>Headers and footers</h3>
+      {/snippet}
       {#snippet blurb()}
         <p>
           Cards have optional header and footer sections that are visually
@@ -117,6 +122,9 @@
   {/snippet}
 </SplitPane>`}
     >
+      {#snippet header()}
+        <h3>Cards in resizable panes</h3>
+      {/snippet}
       {#snippet blurb()}
         <p>
           Toggle fixed-height mode and drag the divider: once the right pane is
@@ -165,6 +173,9 @@
   {/snippet}
 </Card>`}
     >
+      {#snippet header()}
+        <h3>Responsive sizing and typography</h3>
+      {/snippet}
       {#snippet blurb()}
         <p>
           Cards have three responsive breakpoints based on their own width. Drag
@@ -227,6 +238,9 @@
   </Card>
 {/snippet}`}
     >
+      {#snippet header()}
+        <h3>One card in two contexts</h3>
+      {/snippet}
       {#snippet blurb()}
         <p>
           The same card in two places. As the one thing across a wide column
@@ -254,6 +268,9 @@
   <Card marginBlock="0" marginInline="0">Second, no gap between them.</Card>
 </Stack>`}
     >
+      {#snippet header()}
+        <h3>Controlling card margins</h3>
+      {/snippet}
       {#snippet blurb()}
         <p>
           Card has a default <code>margin</code> on every side (space between it

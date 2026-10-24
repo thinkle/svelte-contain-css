@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/controls/Button.svelte";
   import Container from "$lib/layout/Container.svelte";
-  import Code from "$lib/misc/Code.svelte";
+  import DemoWithCode from "./DemoWithCode.svelte";
   import Dialog from "$lib/overlays/Dialog.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
   import CssVariableDemo from "./CssVariableDemo.svelte";
@@ -21,11 +21,34 @@
         We use the new HTML dialog element in our dialog components for
         simplicity sake.
       </p>
-      <h3>Modal Dialogs</h3>
-      <p>
-        A modal dialog is <em>not</em> "light dismissable" but must be explicitly
-        closed.
-      </p>
+    </TextLayout>
+
+    <DemoWithCode
+      language="svelte"
+      code={`
+<Button
+  onclick={() => (modalIsOpen = !modalIsOpen)}
+  >
+  Open Modal Dialog
+</Button>
+<Dialog
+  modal={true}
+  onClose={() => (modalIsOpen = false)}
+  open={modalIsOpen}
+>
+  ...content
+</Dialog>
+`}
+    >
+      {#snippet header()}
+        <h3>Modal Dialogs</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          A modal dialog is <em>not</em> "light dismissable" but must be explicitly
+          closed.
+        </p>
+      {/snippet}
       <Button
         data-testid="open-modal-dialog"
         onclick={() => (modalIsOpen = !modalIsOpen)}>Open Modal Dialog</Button
@@ -76,29 +99,25 @@
           </p>
         {/if}
       </Dialog>
-      <Code
-        language="svelte"
-        code={`
-<Button
-  onclick={() => (modalIsOpen = !modalIsOpen)}
-  >
-  Open Modal Dialog
-</Button>
-<Dialog
-  modal={true}
-  onClose={() => (modalIsOpen = false)}
-  open={modalIsOpen}
->
-  ...content
-</Dialog>
-`}
-      />
+    </DemoWithCode>
 
-      <h3>Non-Modal Dialog</h3>
-      <p>
-        A non-modal dialog looks like a dialog, but displays like any other
-        block element.
-      </p>
+    <DemoWithCode
+      language="svelte"
+      code={`<Button onclick={() => (nonModalIsOpen = true)}>Open Non-Modal Dialog</Button>
+<Dialog modal={false} open={nonModalIsOpen} onClose={() => (nonModalIsOpen = false)}>
+  <h3>Non-Modal Dialog</h3>
+  <p>The rest of the page remains interactive.</p>
+</Dialog>`}
+    >
+      {#snippet header()}
+        <h3>Non-Modal Dialog</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          A non-modal dialog looks like a dialog, but displays like any other
+          block element.
+        </p>
+      {/snippet}
       <Button
         data-testid="open-non-modal-dialog"
         onclick={() => (nonModalIsOpen = !nonModalIsOpen)}
@@ -117,13 +136,26 @@
           rest of the page.
         </p>
       </Dialog>
+    </DemoWithCode>
 
-      <h3>Light-Dismissible Modal</h3>
-      <p>
-        By default, modal dialogs require explicit closure. You can enable
-        "light dismissal" with the <code>dismissible</code> prop to allow users to
-        close by clicking outside the dialog content.
-      </p>
+    <DemoWithCode
+      language="svelte"
+      code={`<Button onclick={() => (dismissibleModalIsOpen = true)}>Open Dismissible Modal Dialog</Button>
+<Dialog modal dismissible open={dismissibleModalIsOpen} onClose={() => (dismissibleModalIsOpen = false)}>
+  <h3>Light-Dismissible Modal Dialog</h3>
+  <p>Click the backdrop or use the close button.</p>
+</Dialog>`}
+    >
+      {#snippet header()}
+        <h3>Light-Dismissible Modal</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          By default, modal dialogs require explicit closure. You can enable
+          "light dismissal" with the <code>dismissible</code> prop to allow users
+          to close by clicking outside the dialog content.
+        </p>
+      {/snippet}
       <Button
         data-testid="open-dismissible-dialog"
         onclick={() => (dismissibleModalIsOpen = !dismissibleModalIsOpen)}
@@ -147,29 +179,6 @@
           want to provide an easy escape route for the user.
         </p>
       </Dialog>
-      <Code
-        language="svelte"
-        code={`
-<!-- Standard modal - must explicitly close -->
-<Dialog
-  modal={true}
-  onClose={() => (modalIsOpen = false)}
-  open={modalIsOpen}
->
-  ...content
-</Dialog>
-
-<!-- Light-dismissible modal - click backdrop to close -->
-<Dialog
-  modal={true}
-  dismissible={true}
-  onClose={() => (dismissibleModalIsOpen = false)}
-  open={dismissibleModalIsOpen}
->
-  ...content
-</Dialog>
-`}
-      />
-    </TextLayout>
+    </DemoWithCode>
   </CssVariableDemo>
 </Container>

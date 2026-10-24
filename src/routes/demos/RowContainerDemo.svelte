@@ -23,6 +23,9 @@
   <Tile>Tile 3</Tile>
 </RowContainer>`}
   >
+    {#snippet header()}
+      <h3>A horizontal lane</h3>
+    {/snippet}
     <RowContainer size="medium" --tile-width="140px">
       {#each items as item}
         <Tile>

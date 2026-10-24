@@ -44,6 +44,9 @@
         </Table>
         `}
   >
+    {#snippet header()}
+      <h3>A basic table</h3>
+    {/snippet}
     <Table>
       <tr><th>Fruits</th> <th>Colors</th></tr>
       <tr><td>Apple</td> <td>Red</td></tr>

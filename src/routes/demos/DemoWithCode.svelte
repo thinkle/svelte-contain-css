@@ -146,11 +146,11 @@
   );
 </script>
 
-<!-- No margin of its own by default; placed straight in a TextLayout's flow
-     it is a figure there, and takes that layout's figure spacing. -->
+<!-- Use TextLayout's figure spacing when present, and the same rhythm token
+     between standalone examples. Explicit marginBlock still wins. -->
 <Container
   marginBlock={marginBlock ??
-    "var(--demo-with-code-margin-block, var(--_figure-margin-block, 0))"}
+    "var(--demo-with-code-margin-block, var(--_figure-margin-block, var(--gap-xl, 2rem)))"}
   maxWidth="none"
   height="auto"
   padding="0"

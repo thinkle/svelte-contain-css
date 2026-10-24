@@ -200,6 +200,8 @@ ${items}
   <DemoWithCode markupSource={itemAnatomyMarkup}>
     {#snippet header()}
       <h3>DataListItem Anatomy</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         Put ordinary row content in <code>DataListItem</code>. Add the optional
         <code>start</code> and <code>end</code> snippets for leading media and trailing
@@ -232,6 +234,8 @@ ${items}
   <DemoWithCode markupSource={basicListMarkup}>
     {#snippet header()}
       <h3>Basic Feed</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         A standard data list row with image, heading, paragraph, and a trailing
         action cluster.
@@ -257,6 +261,8 @@ ${items}
   <DemoWithCode markupSource={iconSizeMarkup}>
     {#snippet header()}
       <h3>Icon Size Variants</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         <code>iconSize</code> controls both image size and icon track width by default.
         Move the slider to preview row density from compact to oversized.
@@ -288,6 +294,8 @@ ${items}
   >
     {#snippet header()}
       <h3>Responsive Typography</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         A <code>DataList</code> tightens its type on its own in a narrow pane:
         row titles down to <code>--font-size-min-text</code>, the line under
@@ -329,6 +337,8 @@ ${items}
   <DemoWithCode markupSource={interactiveRowsMarkup}>
     {#snippet header()}
       <h3>Interactive Rows</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         Use <code>interactive</code> when the entire row should behave like one click
         target.
@@ -364,6 +374,8 @@ ${items}
   <DemoWithCode markupSource={selectableRowsMarkup}>
     {#snippet header()}
       <h3>Selectable Rows</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         Use <code>selectable</code> with <code>bind:checked</code> when rows represent
         a selected/unselected state.
@@ -395,6 +407,8 @@ ${items}
   <DemoWithCode markupSource={responsiveActionMarkup}>
     {#snippet header()}
       <h3>Responsive Action Layout</h3>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         This section focuses on how the trailing action area adapts to narrow
         containers.

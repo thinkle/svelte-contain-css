@@ -347,38 +347,42 @@
       </MenuList>
     </Sidebar>
   {/snippet}
-  {#if !theDemo}
-    <IntroOverview id="Intro" />
-    <Installation />
-  {/if}
-  <div id="demo-area" class:empty={!theDemo}>
-    {#if theDemo}
-      {#if menu[theItem].demo}
-        <a href="{base}/component/{menu[theItem].demo}" target="_blank"
-          >Open separate page to experiment with theming</a
-        >
-      {/if}
-      {@const SvelteComponent = theDemo}
-      <SvelteComponent />
+  <!-- Match standalone docs pages. Live DemoWithCode panels reset these
+       prose-placement variables so examples still show library defaults. -->
+  <div class="tutorial-content">
+    {#if !theDemo}
+      <IntroOverview id="Intro" />
+      <Installation />
     {/if}
-    {#if theItem < menu.length - 1}
-      {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
-      {#if nextItem}
-        <Bar --bar-justify="end">
-          {#if theDemo}
-            <Button
-              secondary
-              onclick={() => {
-                theDemo = null;
-              }}>Back to Overview</Button
-            >
-          {/if}
-          <Button primary onclick={() => changeItem(menu.indexOf(nextItem))}>
-            Next: {nextItem.name}
-          </Button>
-        </Bar>
+    <div id="demo-area" class:empty={!theDemo}>
+      {#if theDemo}
+        {#if menu[theItem].demo}
+          <a href="{base}/component/{menu[theItem].demo}" target="_blank"
+            >Open separate page to experiment with theming</a
+          >
+        {/if}
+        {@const SvelteComponent = theDemo}
+        <SvelteComponent />
       {/if}
-    {/if}
+      {#if theItem < menu.length - 1}
+        {@const nextItem = menu.find((m, i) => i > theItem && m.component)}
+        {#if nextItem}
+          <Bar --bar-justify="end">
+            {#if theDemo}
+              <Button
+                secondary
+                onclick={() => {
+                  theDemo = null;
+                }}>Back to Overview</Button
+              >
+            {/if}
+            <Button primary onclick={() => changeItem(menu.indexOf(nextItem))}>
+              Next: {nextItem.name}
+            </Button>
+          </Bar>
+        {/if}
+      {/if}
+    </div>
   </div>
 
   <!-- Help Svelte Pre-Render routes... -->
@@ -392,6 +396,11 @@
 </Page>
 
 <style>
+  .tutorial-content {
+    display: contents;
+    --prose-margin-inline: 0;
+  }
+
   /* Only here so the prerender crawler finds every /component page. It used
      to be visibility:hidden, which still lays out -- and the links run
      together into one unbreakable "A|B|C..." word ~600px wide, which gave
