@@ -106,3 +106,14 @@
   syntax: "*";
   inherits: false;
 }
+
+/* sass/_box.scss and _affordances.scss: each is declared and read only on
+   the element receiving its border/transition mixin. */
+@property --_border-base {
+  syntax: "*";
+  inherits: false;
+}
+@property --_transition {
+  syntax: "*";
+  inherits: false;
+}

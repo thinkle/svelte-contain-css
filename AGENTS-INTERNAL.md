@@ -398,6 +398,19 @@ value as component defaults in themes when inheritance already supplies it.
 Do not replace element-time fallback chains with root aliases: CSS resolves an
 alias where it is declared, which can lose overrides on a descendant.
 
+### Remove repetition without removing override levels
+
+Fallback helpers share one prefix builder and preserve the first occurrence
+of a prefix. Keep their terminal semantics distinct (`inherit`, `unset`, an
+explicit default, or an invalid optional value). Do not remove a distinct
+public prefix merely because the bundled themes do not currently set it.
+
+Large repeated chains may resolve once into a private variable on the element
+that uses them (borders and transitions do this). Register same-element-only
+intermediates as non-inheriting in `vars/private-properties.css`; never move
+public lookups into root aliases. See `docs/chaining-review.md` for rationale,
+measurements, and deferred changes.
+
 ### Variable Naming Convention & Fallback Cascade
 
 Variables follow a hierarchical fallback pattern:
