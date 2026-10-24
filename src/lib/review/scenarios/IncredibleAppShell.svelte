@@ -92,7 +92,7 @@
 
   <TextLayout>
     <Stack class="hero-copy">
-      <p class="kicker">Containership Operations</p>
+      <div class="kicker">Containership Operations</div>
       <h1>A bridge display for very opinionated cargo rectangles</h1>
       <p>
         The harbor team uses this console to track reefers, dry boxes, twist
@@ -101,7 +101,7 @@
         have a berth assignment, a watch officer, and a paper trail tidy enough
         to survive a salty breeze.
       </p>
-      <p>{statusMessage}</p>
+      <div role="status">{statusMessage}</div>
     </Stack>
 
     <Form layout="above" fullWidth globalInputStyles>

@@ -63,7 +63,7 @@
   headingFg="var(--primary-fg)"
 >
   <TextLayout>
-    <p>Encyclopedia Of Strategic Containers</p>
+    <div class="eyebrow">Encyclopedia Of Strategic Containers</div>
 
     <Stack gap="0">
       <div>
@@ -71,14 +71,14 @@
         <Tag info>Briefing</Tag>
         <Tag warning>Needs Footnote</Tag>
       </div>
-      <h1>Contain the cascade without spilling the tea</h1>
+      <h1>Contain the Cascade</h1>
     </Stack>
     <p>
       Containment was a Cold War policy of limiting expansion by surrounding a
       rival power with alliances, aid, military readiness, and patient
       diplomacy. In this miniature entry, the doctrine is treated as a civic art
       of boundaries: buffers hold, channels stay open, and every communique is
-      filed in a box marked "do not escalate before breakfast."
+      filed in a box marked &ldquo;do not escalate before breakfast.&rdquo;
     </p>
 
     <Inline>
@@ -93,7 +93,7 @@
     </Inline>
   </TextLayout>
 </Hero>
-<Page data-audit-target="page">
+<Page data-audit-target="page" --bar-height="3em">
   {#snippet header()}<Bar --bar-border-top="none" --bar-border-bottom="none">
       <div><strong>Containment Studio</strong></div>
       <div>
@@ -139,7 +139,9 @@
           <h3>Margin Note</h3>
         {/snippet}
         <Inline>
-          <Tooltip tooltipText="Diplomatic cables also need explanatory hover text.">
+          <Tooltip
+            tooltipText="Diplomatic cables also need explanatory hover text."
+          >
             <Button data-audit-action="show-tooltip" data-audit-focus="true">
               Review Margin Note
             </Button>
@@ -150,7 +152,11 @@
   </Container>
 
   <div id="launch-plan">
-    <Container border height="36rem">
+    <Container
+      border
+      height="calc(100vh - var(--bar-height))"
+      maxWidth="1600px"
+    >
       <TabBar sticky>
         <TabItem
           active={activeTab === "overview"}
@@ -181,8 +187,9 @@
               <p>
                 A containment policy normally joins military preparedness,
                 economic assistance, diplomatic signaling, and public patience.
-                The entries below summarize the map-room logic without pretending
-                that history ever fits neatly inside one filing cabinet.
+                The entries below summarize the map-room logic without
+                pretending that history ever fits neatly inside one filing
+                cabinet.
               </p>
             </TextLayout>
 
@@ -288,7 +295,9 @@
                 <h3>Historian</h3>
               {/snippet}
               <Inline><Tag warning>Reviewing</Tag></Inline>
-              <p>One paragraph still confuses containment with a casserole lid.</p>
+              <p>
+                One paragraph still confuses containment with a casserole lid.
+              </p>
             </Card>
             <Card>
               {#snippet header()}
