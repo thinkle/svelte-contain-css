@@ -34,10 +34,9 @@
   }
 
   $effect(() => {
+    // Update in place. Recreating this node on each CSS change would move it
+    // after later layers, letting a preset override the editor's custom vars.
     applyStyle(id, css);
-    return () => {
-      removeStyle();
-    };
   });
 
   onDestroy(() => {

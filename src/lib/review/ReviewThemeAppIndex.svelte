@@ -1,9 +1,8 @@
 <script lang="ts">
   import { base } from "$app/paths";
-  import MenuList from "$lib/layout/MenuList.svelte";
+  import ReviewScenarioList from "./ReviewScenarioList.svelte";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
-  import { reviewAppScenarios } from "$lib/review/scenarios";
   import type { ReviewThemeName } from "$lib/review/themes";
 
   interface Props {
@@ -20,19 +19,9 @@
 
 <ReviewIndexShell
   title={`${themeLabel} App Review Routes`}
-  description="Available app scenarios for this theme."
+  description="Choose a scenario by the components and interactions you want to explore."
 >
   <ReviewThemeSwitcher {theme} />
 
-  <nav aria-label="App scenarios">
-    <MenuList>
-      {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
-        <li>
-          <a href={`${base}/review/${theme}/app/${scenario}`}>
-            {entry.title}
-          </a>
-        </li>
-      {/each}
-    </MenuList>
-  </nav>
+  <ReviewScenarioList {theme} />
 </ReviewIndexShell>

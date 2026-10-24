@@ -7,7 +7,7 @@
   import Tile from "$lib/layout/Tile.svelte";
   import Text from "$lib/typography/Text.svelte";
   import TextLayout from "$lib/typography/TextLayout.svelte";
-  import ReviewThemeStyle from "$lib/review/ReviewThemeStyle.svelte";
+  import ThemeStyle from "$lib/theme/ThemeStyle.svelte";
   import { reviewThemes, isReviewThemeName } from "$lib/review/themes";
   import {
     headingPresets,
@@ -109,7 +109,7 @@
   <title>Heading colors · {presetName} · {themeName}</title>
 </svelte:head>
 
-<ReviewThemeStyle id="review-heading-theme" {css} />
+<ThemeStyle id="review-heading-theme" {css} />
 
 <div
   class="specimen"

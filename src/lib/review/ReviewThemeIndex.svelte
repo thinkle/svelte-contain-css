@@ -3,7 +3,7 @@
   import MenuList from "$lib/layout/MenuList.svelte";
   import ReviewIndexShell from "$lib/review/ReviewIndexShell.svelte";
   import ReviewThemeSwitcher from "$lib/review/ReviewThemeSwitcher.svelte";
-  import { reviewAppScenarios } from "$lib/review/scenarios";
+  import ReviewScenarioList from "./ReviewScenarioList.svelte";
   import type { ReviewThemeName } from "$lib/review/themes";
 
   interface Props {
@@ -36,17 +36,7 @@
   </section>
 
   <section>
-    <h2>Direct Endpoints</h2>
-    <nav aria-label="Scenario endpoints">
-      <MenuList>
-        {#each Object.entries(reviewAppScenarios) as [scenario, entry]}
-          <li>
-            <a href={`${base}/review/${theme}/app/${scenario}`}>
-              {entry.title}
-            </a>
-          </li>
-        {/each}
-      </MenuList>
-    </nav>
+    <h2>Scenarios</h2>
+    <ReviewScenarioList {theme} />
   </section>
 </ReviewIndexShell>

@@ -1,10 +1,12 @@
 <script lang="ts">
-  import "$lib/vars/defaults.css";
-  import "$lib/vars/themes/light.css";
-  import "$lib/vars/themes/typography-airy.css";
-  import "$lib/vars/fancy-paragraphs.css";
-
+  import light from "$lib/vars/themes/light.css?raw";
+  import airy from "$lib/vars/themes/typography-airy.css?raw";
+  import fancy from "$lib/vars/fancy-paragraphs.css?raw";
+  import ThemeStyle from "$lib/theme/ThemeStyle.svelte";
   let { children } = $props();
 </script>
 
+<ThemeStyle id="review-typography-colors" css={light} />
+<ThemeStyle id="review-typography-fonts" css={airy} />
+<ThemeStyle id="review-typography-paragraphs" css={fancy} />
 {@render children?.()}

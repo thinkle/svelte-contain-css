@@ -4,7 +4,7 @@ test("review navigation follows component theme overrides", async ({ page }) => 
   await page.goto("/svelte-contain-css/review/light/app");
   await page.waitForLoadState("networkidle");
   await page.locator("html").evaluate(el => {
-    el.style.cssText = "--button-border-radius: 0px; --control-padding: 5px 9px; --button-font-weight: 700; --container-padding: 23px; --menu-item-padding: 7px;";
+    el.style.cssText = "--button-border-radius: 0px; --control-padding: 5px 9px; --button-font-weight: 700; --container-padding: 23px; --data-list-item-item-padding: 7px;";
   });
   const switcher = page.getByRole("navigation", { name: "Review theme switcher" });
   const active = switcher.locator("a[aria-current=page]");
@@ -13,7 +13,7 @@ test("review navigation follows component theme overrides", async ({ page }) => 
   await expect(active).toHaveCSS("padding-right", "9px");
   await expect(active).toHaveCSS("font-weight", "700");
   const scenarios = page.getByRole("navigation", { name: "App scenarios", exact: true });
-  await expect(scenarios.getByRole("link", { name: "The Tidy Shelf (Blog)" })).toHaveCSS("padding-top", "7px");
+  await expect(scenarios.locator('[data-review-scenario-summary="blog-mockup"]')).toHaveCSS("padding-top", "7px");
   await expect(page.locator("main > section")).toHaveCSS("padding-top", "23px");
 });
 

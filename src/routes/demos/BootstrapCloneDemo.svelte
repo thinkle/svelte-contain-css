@@ -1,7 +1,8 @@
 <script lang="ts">
   import Card from "$lib/Card.svelte";
   import Button from "$lib/controls/Button.svelte";
-  import "$lib/vars/themes/bootstrap.css";
+  import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
+  import ThemeStyle from "$lib/theme/ThemeStyle.svelte";
   import Sidebar from "$lib/layout/Sidebar.svelte";
 
   import Bar from "$lib/layout/Bar.svelte";
@@ -15,6 +16,8 @@
 
   const scriptTag = "script";
 </script>
+
+<ThemeStyle id="bootstrap-demo-theme" css={bootstrap} />
 
 <Page>
   <Container>

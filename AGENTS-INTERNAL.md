@@ -995,6 +995,12 @@ typography, navigation, and interaction states. Do not write a second design
 system in review-page CSS. If a component cannot support the needed behavior,
 fix that component rather than adding a page-specific styling workaround.
 
+Temporary review/demo themes must use `theme/ThemeStyle.svelte` with raw CSS,
+so their styles are removed on unmount. A global CSS import survives client-side
+navigation and leaves stale variables from a previous theme behind. Group review
+choices as palettes, complete themes, and combinations; keep combination labels
+and descriptions aligned with their actual typography, heading, and surface add-ons.
+
 ### Component demos are small usage examples
 
 Use one `DemoWithCode` per concept/blurb, not one around an entire showcase.

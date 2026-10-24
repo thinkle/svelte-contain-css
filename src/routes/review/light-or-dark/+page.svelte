@@ -2,4 +2,4 @@
   import ReviewThemeIndex from "$lib/review/ReviewThemeIndex.svelte";
 </script>
 
-<ReviewThemeIndex theme="light-or-dark" themeLabel="Light Or Dark" />
+<ReviewThemeIndex theme="light-or-dark" themeLabel="System (light/dark)" />
