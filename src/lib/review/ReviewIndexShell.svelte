@@ -13,7 +13,7 @@
 <div class="review-index-shell">
   <main class="review-index-panel">
     <header class="review-index-header">
-      <p class="review-index-kicker">Review Harness</p>
+      <div class="review-index-kicker">Review Harness</div>
       <h1>{title}</h1>
       <p class="review-index-description">{description}</p>
     </header>

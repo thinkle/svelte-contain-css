@@ -113,7 +113,7 @@
   div :global(a) {
     color: var(
       --body-link-fg,
-      var(--text-link-fg, var(--link-fg, currentColor))
+      var(--text-link-fg, var(--link-fg, var(--_link-default-fg, currentColor)))
     );
     background-color: var(
       --body-link-bg,
@@ -143,7 +143,7 @@
       --body-link-hover-fg,
       var(
         --text-link-hover-fg,
-        var(--link-hover-fg, var(--link-fg, currentColor))
+        var(--link-hover-fg, var(--link-fg, var(--_link-default-fg, currentColor)))
       )
     );
     background-color: var(

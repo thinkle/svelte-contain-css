@@ -1,3 +1,4 @@
+import BlogMockup from "./scenarios/BlogMockup.svelte";
 import IncredibleAppShell from "./scenarios/IncredibleAppShell.svelte";
 import LayoutWorkbench from "./scenarios/LayoutWorkbench.svelte";
 import LaunchStudio from "./scenarios/LaunchStudio.svelte";
@@ -5,6 +6,10 @@ import TableWorkbench from "./scenarios/TableWorkbench.svelte";
 import VisualSystemBoard from "./scenarios/VisualSystemBoard.svelte";
 
 export const reviewAppScenarios = {
+  "blog-mockup": {
+    title: "The Tidy Shelf (Blog)",
+    component: BlogMockup,
+  },
   "incredible-app-shell": {
     title: "Containership Console",
     component: IncredibleAppShell,

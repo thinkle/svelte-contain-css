@@ -97,8 +97,11 @@
   --heading-font-weight: 500;
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
-  --link-fg: #0d6efd;
-  --link-hover-fg: #0a58ca;
+  --link-color: #0d6efd;
+  /* White on primary blue is already at the small-text contrast threshold.
+     Keep the inherited foreground; the underline identifies the link. */
+  --link-text-amount: 0%;
+  --link-hover-color: #0a58ca;
 
   /* Code */
   --code-font-family: "Courier New", Courier, monospace;

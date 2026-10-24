@@ -11,12 +11,11 @@
   import Themes from "../../Themes.svelte";
   import { fade, fly } from "svelte/transition";
   interface Props {
-    [key: string]: any
+    [key: string]: any;
   }
 
   let { ...props }: Props = $props();
   let showThemes = $state(false);
-  
 </script>
 
 <ThemeInjector />
@@ -27,13 +26,16 @@
     <Checkbox bind:checked={showThemes}>Show themes</Checkbox>
   </Bar>
   {#if showThemes}
-    <div in:fly={{y:-300}} out:fade>
-    <Container height='auto'>
-      <Themes />
-    </Container>
+    <div in:fly={{ y: -300 }} out:fade>
+      <Container height="auto">
+        <Themes includeBlurb={false} showPreview={false} />
+      </Container>
     </div>
   {/if}
   <!-- Docs pages are mostly examples: prose shares the demo boxes' left
        edge instead of centring between them. -->
-  <DynamicComponent component={props.data.component} --prose-margin-inline="0" />
+  <DynamicComponent
+    component={props.data.component}
+    --prose-margin-inline="0"
+  />
 </Page>

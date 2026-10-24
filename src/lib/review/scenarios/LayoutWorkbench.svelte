@@ -105,7 +105,7 @@
 
         <h2>{card.metric}</h2>
         <p>{card.detail}</p>
-        <p><Button>Inspect</Button></p>
+        <Inline><Button>Inspect</Button></Inline>
       </Card>
     {/each}
   </GridLayout>

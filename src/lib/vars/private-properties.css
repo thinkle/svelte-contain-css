@@ -117,3 +117,15 @@
   syntax: "*";
   inherits: false;
 }
+
+/* colors.css: the default tint is consumed on the same anchor, including
+   TextLayout's rest/hover/focus rules. */
+@property --_link-default-fg {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --_link-target-color {
+  syntax: "*";
+  inherits: false;
+}

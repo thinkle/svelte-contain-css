@@ -33,8 +33,8 @@
   --border-color: #a7bcae;
   --shadow-color: color-mix(in srgb, #1f2d26 14%, transparent);
 
-  --link-fg: #1f6b52;
-  --link-hover-fg: #174f3d;
+  --link-color: #1f6b52;
+  --link-hover-color: #174f3d;
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
 

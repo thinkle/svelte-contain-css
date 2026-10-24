@@ -22,8 +22,8 @@
   --heading-2-border-style: solid;
   --heading-2-border-color: var(--primary-color);
 
-  --heading-3-tint: var(--info-color);
-  --heading-3-tint-amount: 75%;
+  --heading-3-tint: var(--primary-color);
+  --heading-3-tint-amount: 60%;
   --heading-3-font-variant: small-caps;
   --heading-3-text-decoration: underline dotted 2px;
 
@@ -33,12 +33,9 @@
   --heading-4-border-radius: 999px;
   --heading-4-text-amount: 30%;
 
-  --heading-5-tint: var(--success-color);
-  --heading-5-tint-amount: 75%;
+  --heading-minor-fg: var(--muted-text-fg);
   --heading-5-text-transform: uppercase;
   --heading-5-letter-spacing: 0.12em;
 
-  --heading-6-tint: transparent;
-  --heading-6-tint-amount: 30%;
   --heading-6-font-variant: small-caps;
 }

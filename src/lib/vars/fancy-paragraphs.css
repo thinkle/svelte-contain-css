@@ -1,5 +1,13 @@
 :root {
   --first-line-font-variant: small-caps;
   --first-letter-font-weight: bold;
-  --first-letter-fg: var(--primary-bg);
+  /* Keep currentColor unresolved until the first letter consumes it. An
+     alias to --primary-text-fg at :root freezes the tone before nested
+     surfaces exist; a paragraph-local alias is too late for context vars
+     already resolved on its typography container. */
+  --first-letter-fg: color-mix(
+    in srgb,
+    currentColor,
+    var(--primary-color) var(--first-letter-text-amount, var(--text-amount, 10%))
+  );
 }
