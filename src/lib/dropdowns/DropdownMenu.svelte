@@ -348,6 +348,7 @@
   button {
     @include color-props(menu-trigger, menu, button, surface);
     @include box-props-square(menu-trigger, menu, button, surface);
+    @include border-props-borderless(menu-trigger, menu, button, surface);
     @include clickable(menu-trigger, menu, button, control);
     @include focusable();
     position: relative;
@@ -406,7 +407,8 @@
     min-width: var(--dropdown-menu-min-width, 12em);
     @include color-props(dropdown-menu, menu, surface);
     @include box-shadow(dropdown-menu, dropdown);
-    @include box-props-square-border(dropdown-menu, menu, surface);
+    @include box-props-square(dropdown-menu, menu, surface);
+    @include border-props(dropdown-menu, menu, surface);
     padding: 0;
     overflow: hidden;
   }
@@ -433,6 +435,7 @@
     @include color-props(search-hint, tag, secondary);
     @include typography-props-bare(search-hint, tag);
     @include box-props(search-hint, tag);
+    @include border-props-borderless(search-hint, tag);
     font-size: var(--search-hint-font-size, var(--font-size-tiny, 0.75rem));
     padding: var(--search-hint-padding, 0.2em 0.55em);
     font-variant-numeric: tabular-nums;

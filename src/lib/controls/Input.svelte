@@ -46,6 +46,7 @@
   input {
     @include typography-props(input, ui);
     @include box-props(input, ui);
+    @include border-props-borderless(input, ui);
     @include color-props(input, ui);
     width: var(--input-width);
     @include focusable();

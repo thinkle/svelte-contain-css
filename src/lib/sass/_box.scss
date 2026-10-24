@@ -32,17 +32,18 @@
   border-color: fn.prefixed-vars-optional(border-color, $prefixes...);
 }
 
-@mixin border-props-border($prefixes...) {
+// Bordered surfaces opt into the theme's global border and visible fallback.
+@mixin border-props($prefixes...) {
   $base-border: fn.var-with-fallbacks(
     --border,
     list.append(
         $prefixes,
-        var(--border-width, 1px) var(--border-style, solid)
-          var(--border-color, var(--fg))
+        fn.var-with-fallbacks(--border-width, list.append($prefixes, 1px)...)
+          fn.var-with-fallbacks(--border-style, list.append($prefixes, solid)...)
+          fn.var-with-fallbacks(--border-color, list.append($prefixes, var(--fg))...)
       )...
   );
   border: $base-border;
-  @include border-longhand-props($prefixes...);
   $directions: (top, right, bottom, left);
   $rectProps: (border);
 
@@ -60,32 +61,38 @@
     }
   }
 }
-@mixin border-props-none($prefixes...) {
-  $base-border: fn.var-with-fallbacks(--border, list.append($prefixes, inherit)...);
+// Borderless components accept component/category overrides, never naked
+// theme --border or --border-<side>. Keep radius independent of this policy.
+@mixin border-props-borderless($prefixes...) {
+  // Compose longhands BEFORE shorthand/side overrides. Emitting longhand
+  // declarations between border and border-top/right/bottom/left used to
+  // have no effect: the later side shorthands overwrote them all.
+  $default-border:
+    fn.vars-fallback(border-width, medium, $prefixes...)
+    fn.vars-fallback(border-style, none, $prefixes...)
+    fn.vars-fallback(border-color, currentColor, $prefixes...);
+  $base-border: fn.vars-fallback(border, $default-border, $prefixes...);
   border: $base-border;
-  @include border-longhand-props($prefixes...);
-  $directions: (top, right, bottom, left);
-  $rectProps: (border);
-
-  // Loop through each direction
-  @each $dir in $directions {
-    // Apply prop for each direction
-    @each $p in $rectProps {
-      #{$p}-#{$dir}: fn.var-with-fallbacks(
-        --#{$p}-#{$dir},
-        list.append(
-            $prefixes,
-            fn.var-with-fallbacks(--border, list.append($prefixes, none)...)
-          )...
-      );
-    }
+  @each $dir in (top, right, bottom, left) {
+    border-#{$dir}: fn.vars-fallback(border-#{$dir}, $base-border, $prefixes...);
   }
 }
 
+// Compatibility alias for the previous bordered helper name.
+@mixin border-props-border($prefixes...) {
+  @include border-props($prefixes...);
+}
+
+// Compatibility alias for consumers importing the old Sass helper.
+@mixin border-props-none($prefixes...) {
+  @include border-props-borderless($prefixes...);
+}
+
+// Legacy combined helpers; new component code uses separate geometry/policy.
 @mixin box-props-square-border($prefixes...) {
   box-sizing: border-box;
 
-  @include border-props-border($prefixes...);
+  @include border-props($prefixes...);
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --square-radius,
@@ -95,7 +102,6 @@
 
 @mixin box-props-square($prefixes...) {
   box-sizing: border-box;
-  @include border-props-none($prefixes...);
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --square-radius,
@@ -107,7 +113,6 @@
   // Using the fn.var-with-fallbacks function for each property
   box-sizing: border-box;
   @include padding-props($prefixes...);
-  @include border-props-none($prefixes...);
   border-radius: fn.var-with-fallbacks(
     --border-radius,
     list.append($prefixes, none)...
@@ -116,7 +121,7 @@
 
 @mixin box-props-border($prefixes...) {
   box-sizing: border-box;
-  @include border-props-border($prefixes...);
+  @include border-props($prefixes...);
   @include padding-props($prefixes...);
   border-radius: fn.var-with-fallbacks(--radius, list.append($prefixes, 0)...);
 }
@@ -125,7 +130,6 @@
   // Using the fn.var-with-fallbacks function for each property
   box-sizing: border-box;
   @include padding-props($prefixes...);
-  @include border-props-none($prefixes...);
   border-bottom-right-radius: fn.var-with-fallbacks(
     --border-radius,
     $prefixes...
@@ -139,7 +143,6 @@
   // Using the fn.var-with-fallbacks function for each property
   box-sizing: border-box;
   @include padding-props($prefixes...);
-  @include border-props-none($prefixes...);
   border-top-right-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
   border-top-left-radius: fn.var-with-fallbacks(--border-radius, $prefixes...);
 }

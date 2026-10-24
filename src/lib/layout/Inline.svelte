@@ -82,6 +82,7 @@
 
   .inline {
     @include box-props(inline);
+    @include border-props-borderless(inline);
     /* A layout helper, not a surface: padding comes only from
        --inline-padding (or the `padding` prop), never from the theme's
        --padding. box-props falls back to --padding, which is inherited, so

@@ -123,8 +123,8 @@
     @include color-props(form, surface);
     @include typography-container-props(form, surface);
     @include box-props(form, surface);
+    @include border-props-borderless(form, surface);
 
-    border: var-with-fallbacks(--border, form, surface, none);
     border-radius: var-with-fallbacks(--border-radius, form, surface, 0);
     padding: var-with-fallbacks(--padding, form, surface, 0);
     margin: var-with-fallbacks(--margin, form, 0);

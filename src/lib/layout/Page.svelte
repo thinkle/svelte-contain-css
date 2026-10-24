@@ -246,6 +246,7 @@
     );
     @include custom-scrollbar(page-content, page);
     @include box-props(page-content);
+    @include border-props-borderless(page-content);
     @include color-props(page-content, page, surface);
   }
   .aside {

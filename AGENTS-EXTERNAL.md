@@ -495,6 +495,21 @@ below each other, these are the answer.
   bottom. If you are only putting things one under another, normal flow already
   does that.
 
+### Border presence versus border appearance
+
+A naked `--border` (or `--border-top`, etc.) themes components that opt into
+default borders, such as Tile, Select and Container with `border`. It does
+not add borders to borderless components such as Inline and Stack. Explicit
+component/category variables still work: use `--inline-border`,
+`--stack-border-bottom`, `--button-border`, or `--surface-border` to request
+borders on the corresponding components. Radius variables are independent:
+`--border-radius` and `--square-radius` retain their existing roles.
+
+Migration: if a theme previously relied on naked `--border` to add borders to
+borderless components, replace that with the relevant component/category
+variables. Handwritten border rules in other components retain their existing
+fallback chains.
+
 ### Margin: `marginBlock` and `marginInline`
 
 `Bar`, `Card`, `Container`, `GridLayout`, `Stack`, `Inline`, `TextLayout`,

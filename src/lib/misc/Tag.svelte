@@ -92,6 +92,7 @@
     @include color-props(tag, secondary);
     @include typography-props-bare(tag);
     @include box-props(tag);
+    @include border-props-borderless(tag);
     font-size: var(--tag-font-size, var(--font-size-tiny, 0.75rem));
     padding: var(--tag-padding, 0.2em 0.55em);
     margin-inline-start: var(--space);

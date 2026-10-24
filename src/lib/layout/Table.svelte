@@ -367,7 +367,8 @@
   table {
     @include color-props(table, surface);
     @include typography-container-props(table, surface, paragraph);
-    @include box-props-square-border(table, surface, paragraph);
+    @include box-props-square(table, surface, paragraph);
+    @include border-props(table, surface, paragraph);
     @include box-size-props(table);
     border-collapse: collapse;
     @include box-shadow(table, surface);
@@ -392,7 +393,8 @@
   table > :global(thead > tr > th),
   table > :global(tr > td),
   table > :global(tr > th) {
-    @include box-props-square-border(table-cell, cell);
+    @include box-props-square(table-cell, cell);
+    @include border-props(table-cell, cell);
     border-left: var(
       --table-border,
       1px solid var(--table-border-color, var(--secondary-bg))

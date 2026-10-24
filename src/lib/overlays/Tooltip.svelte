@@ -359,7 +359,8 @@
     margin: 0;
     overflow: visible;
     @include color-props(tooltip, secondary);
-    @include box-props-square-border(tooltip);
+    @include box-props-square(tooltip);
+    @include border-props(tooltip);
     @include box-shadow(tooltip, surface);
     @include typography-container-props(tooltip, ui);
     /* The popover is a DOM child of wherever the Tooltip was placed, so

@@ -108,6 +108,7 @@
       @include typography-props(menu-item, button, ui, control);
       @include color-props(menu-item, menu, button, control);
       @include box-props-square(menu-item, button, control);
+      @include border-props-borderless(menu-item, button, control);
       margin: 0;
       @include focusable-as-hover(menu-item);
       @include clickable(menu-item);

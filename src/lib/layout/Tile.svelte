@@ -153,11 +153,8 @@
   @use "$lib/sass/_mixins.scss" as *;
 
   .tile {
-    border: var(
-      --tile-border,
-      var(--border-width) var(--border-style) var(--border-color)
-    );
-    @include box-props-square-border(tile, surface);
+    @include box-props-square(tile, surface);
+    @include border-props(tile, surface);
     @include margin-props(tile, surface);
     @include color-props(tile, surface);
     @include typography-container-props(tile, surface);

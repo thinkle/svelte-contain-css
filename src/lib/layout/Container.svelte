@@ -71,6 +71,7 @@
     box-sizing: border-box;
     @include color-props(container, surface, block);
     @include box-props(container, surface, block);
+    @include border-props-borderless(container, surface, block);
     /* box-props (above) already sets a padding, but its shared fallback (4px)
        is generic to every component that uses the mixin, not Container's own
        long-standing 8px default. This declaration coming AFTER box-props is
@@ -132,11 +133,6 @@
     }
   }
   .border {
-    border: var-with-fallbacks(
-      --border,
-      container,
-      surface,
-      var(--border-width) var(--border-style) var(--border-color)
-    );
+    @include border-props(container, surface);
   }
 </style>

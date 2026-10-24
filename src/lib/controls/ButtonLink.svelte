@@ -111,7 +111,7 @@
     max-width: stretch;
     height: var(--button-height);
     @include box-props(button, control, secondary);
-    @include border-props-none(button);
+    @include border-props-borderless(button);
     @include color-props(button, control, secondary);
     @include box-shadow(button, control);
     @include typography-props-bare(button, ui, control);
