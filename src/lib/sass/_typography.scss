@@ -184,6 +184,10 @@
   $resolved-prefixes: list.append($resolved-prefixes, $group, $separator: comma);
   $resolved-prefixes: list.append($resolved-prefixes, heading, $separator: comma);
 
+  // h3/h4 use `heading` for both group and generic role. Resolving the
+  // same token twice adds no behavior, including in the per-step color vars.
+  $resolved-prefixes: fn.unique-prefixes($resolved-prefixes);
+
   @include heading-color-context-vars($var-prefix, $resolved-prefixes, $prefixes...);
   @include heading-box-context-vars($var-prefix, $resolved-prefixes...);
   @include heading-typography-context-vars($var-prefix, $resolved-prefixes...);

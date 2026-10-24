@@ -112,23 +112,23 @@
     margin: var-with-fallbacks(--margin, button, control, var(--space));
   }
   button.primary {
-    @include color-props(primary, button, control);
+    @include color-variant-props(primary, button, control);
     @include clickable(primary, button, clickable);
   }
   button.warning {
-    @include color-props(warning, button, control);
+    @include color-variant-props(warning, button, control);
     @include clickable(warning, button, clickable);
   }
   button.danger {
-    @include color-props(danger, button, control);
+    @include color-variant-props(danger, button, control);
     @include clickable(danger, button, clickable);
   }
   button.success {
-    @include color-props(success, button, control);
+    @include color-variant-props(success, button, control);
     @include clickable(success, button, clickable);
   }
   button.info {
-    @include color-props(info, button, control);
+    @include color-variant-props(info, button, control);
     @include clickable(info, button, clickable);
   }
   .icon {
