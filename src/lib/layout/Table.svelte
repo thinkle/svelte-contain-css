@@ -421,6 +421,16 @@
     margin-block: var(--table-margin-block, var(--_figure-margin-block, 0));
   }
 
+  .scrolling-table {
+    /* The sticky header's veil masks scrolled table content above its inset.
+       At rest it must not paint over a toolbar BEFORE the table. Clip at the
+       table wrapper's vertical edges, keeping horizontal overflow available.
+       `clip` does not create a scroll container, so the header still sticks
+       to the surrounding page/panel rather than this wrapper. */
+    overflow-y: clip;
+    overflow-x: visible;
+  }
+
   .table-scroll {
     max-width: 100%;
     overflow-x: auto;
