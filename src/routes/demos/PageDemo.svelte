@@ -51,6 +51,9 @@
   </TextLayout>
 
   <DemoWithCode code={code}>
+    {#snippet header()}
+      <h3>A page shell</h3>
+    {/snippet}
     {#snippet inputArea()}
       <MenuList>
         <li>

@@ -116,6 +116,9 @@
   </FormItem>
 </Stack>`}
   >
+    {#snippet header()}
+      <h3>Binding range values</h3>
+    {/snippet}
     <Stack>
       <FormItem>
         {#snippet label()}Volume ({volume}%){/snippet}

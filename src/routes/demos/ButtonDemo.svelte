@@ -27,6 +27,8 @@
   >
     {#snippet header()}
       <h2>Buttons</h2>
+    {/snippet}
+    {#snippet blurb()}
       <p>
         Buttons can be tuned with CSS properties (--button-bg, --button-fg, etc)
         and we also support a number of conveniences, such as an icon snippet,
@@ -56,7 +58,6 @@
     >
   </DemoWithCode>
 
-  <h3>Try Customizing Some Buttons...</h3>
   <CssVariableDemo variables={buttonVars}>
     <DemoWithCode
       code={`<Button>Standard Button</Button>
@@ -67,6 +68,9 @@
 <ButtonLink primary href="https://example.com" target="_blank">Primary Link Button</ButtonLink>
 <CircleButton bg="var(--material-color-deep-orange)" fg="white">+</CircleButton>`}
     >
+      {#snippet header()}
+        <h3>Customizing button styles</h3>
+      {/snippet}
       <Button>Standard Button</Button>
       <Button>
         Icon Button

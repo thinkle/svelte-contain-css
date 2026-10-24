@@ -109,6 +109,8 @@
 >
   {#snippet header()}
     <h2>Dropdown Menus</h2>
+  {/snippet}
+  {#snippet blurb()}
     <p>
       Our basic dropdowns work well, even if the contents are longer than the
       contents of the page (see "long menu" example).
@@ -169,6 +171,9 @@
 </Bar>`}
 >
   {#snippet header()}
+    <h3>Trigger and popup colors</h3>
+  {/snippet}
+  {#snippet blurb()}
     <p>
       If you want a dropdown trigger to blend into a surrounding bar without also
       recoloring the popup, use <code>--menu-trigger-bg</code> and
@@ -208,6 +213,8 @@
 >
   {#snippet header()}
     <h2>Type-ahead matching &amp; filtering</h2>
+  {/snippet}
+  {#snippet blurb()}
     <p>
       Open a menu and start typing to jump to an item. Two props tune this, and
       both work on <code>&lt;Select&gt;</code> and
@@ -322,6 +329,8 @@
 >
   {#snippet header()}
     <h2>Select</h2>
+  {/snippet}
+  {#snippet blurb()}
     <p>
       Our <code>&lt;Select&gt;</code> element creates the select element we always
       wish we had, with styling allowed inside of the &lt;option&gt; tag. On small
@@ -376,6 +385,8 @@
 >
   {#snippet header()}
     <h2>Controlling width</h2>
+  {/snippet}
+  {#snippet blurb()}
     <p>
       Here it is using the <code>--select-width</code> variable to constrain the
       select size.

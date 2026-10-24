@@ -55,6 +55,9 @@
   ${slotContent}
 </Progress>`}
   >
+    {#snippet header()}
+      <h3>Progress states</h3>
+    {/snippet}
     {#snippet inputArea()}
       <FormItem>
         {#snippet label()}State{/snippet}

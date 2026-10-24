@@ -112,9 +112,7 @@
 </TextLayout>
 
 <!-- 1. Interactive: dull a whole component's palette --------------------- -->
-<TextLayout>
-  <h3>Muting a component's palette</h3>
-</TextLayout>
+
 <DemoWithCode
   summary="See the CSS"
   code={`<!-- Set on any ancestor; every Tag inside inherits it -->
@@ -127,6 +125,9 @@
   <Tag info>info</Tag>
 </div>`}
 >
+  {#snippet header()}
+    <h3>Muting a component's palette</h3>
+  {/snippet}
   {#snippet inputArea()}
     <Stack gap="var(--space-md)">
       <Inline gap="var(--space-lg)" wrap="wrap">
@@ -173,17 +174,7 @@
 </DemoWithCode>
 
 <!-- 2. Remap a whole component family ------------------------------------ -->
-<TextLayout>
-  <h3>Remapping a whole family</h3>
-  <p>
-    Because <code>Button</code> already threads <code>button</code> through its
-    color chain, one ancestor can recolor every button variant at once — here,
-    mixing heavily toward black on the background and fully to white on the
-    text yields a uniform white-on-dark scheme while each variant keeps a hint
-    of its own hue underneath. No change to <code>Button</code> was needed for
-    this.
-  </p>
-</TextLayout>
+
 <DemoWithCode
   summary="See the CSS"
   code={`<div style="--button-bg-mix-color: black; --button-bg-mix-amount: ${btnBgAmount}%;
@@ -194,6 +185,19 @@
   <Button info>Info</Button>
 </div>`}
 >
+  {#snippet header()}
+    <h3>Remapping a whole family</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      Because <code>Button</code> already threads <code>button</code> through its
+      color chain, one ancestor can recolor every button variant at once — here,
+      mixing heavily toward black on the background and fully to white on the
+      text yields a uniform white-on-dark scheme while each variant keeps a hint
+      of its own hue underneath. No change to <code>Button</code> was needed for
+      this.
+    </p>
+  {/snippet}
   {#snippet inputArea()}
     <FormItem>
       {#snippet label()}<span>Black mixed into background: {btnBgAmount}%</span>{/snippet}
@@ -231,17 +235,20 @@
 </DemoWithCode>
 
 <!-- 3. No-op + edge cases ------------------------------------------------- -->
-<TextLayout>
-  <h3>Defaults and edge cases</h3>
-  <p>
-    With nothing set, output is identical to before this feature existed —
-    <code>color-mix(in srgb, X, transparent 0%)</code> is exactly <code>X</code>.
-    A component with no color context at all (no variant, no tokens) also stays
-    well-defined: the mix of an unresolved color is simply dropped by the
-    browser, same as it would be without mixing.
-  </p>
-</TextLayout>
+
 <DemoWithCode>
+  {#snippet header()}
+    <h3>Defaults and edge cases</h3>
+  {/snippet}
+  {#snippet blurb()}
+    <p>
+      With nothing set, output is identical to before this feature existed —
+      <code>color-mix(in srgb, X, transparent 0%)</code> is exactly <code>X</code>.
+      A component with no color context at all (no variant, no tokens) also stays
+      well-defined: the mix of an unresolved color is simply dropped by the
+      browser, same as it would be without mixing.
+    </p>
+  {/snippet}
   <Inline gap="var(--space-lg)" wrap="wrap">
     <Tag primary>primary</Tag>
     <Tag warning>warning</Tag>

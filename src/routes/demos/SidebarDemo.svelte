@@ -183,8 +183,10 @@
 
     <CssVariableDemo variables={sidebarVars}>
       <DemoWithCode height="420px" code={modeCode}>
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Placement and overlay</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             By default the sidebar sits <em>in flow</em>: expanding it makes the
             page content narrower. Add <code>overlay</code> and the panel floats
@@ -256,8 +258,10 @@
   </Page>
 </div>`}
       >
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Responsive behavior</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             The sidebar uses container queries, so it reacts to the width of the
             element it lives in rather than the browser window -- drop one
@@ -306,8 +310,10 @@
       </DemoWithCode>
 
       <DemoWithCode height="440px" code={controlCode}>
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Driving it from outside</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             <code>open</code> is bindable, so your own button can open and close
             the sidebar. It is one piece of state shared with the sidebar's built-in
@@ -360,8 +366,10 @@
       </DemoWithCode>
 
       <DemoWithCode height="440px" code={stickyCode}>
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Beside long content: <code>sticky</code> and <code>sheetButton</code></h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             An overlay sheet is normally as tall as the row it sits in -- right
             beside a short card, wrong beside a fifty-row table, where its top
@@ -420,8 +428,10 @@
       </DemoWithCode>
 
       <DemoWithCode height="420px" code={customCode}>
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Customizing the rail and its icons</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             The rail and the sheet button are <em>separate</em> affordances with
             separate glyphs, and sensibly different defaults: the rail slides a
@@ -507,8 +517,10 @@
       </DemoWithCode>
 
       <DemoWithCode height="440px" code={scCode}>
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>A sidebar anywhere: <code>&lt;SidebarContainer&gt;</code></h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             <code>&lt;Sidebar&gt;</code> is not tied to
             <code>&lt;Page&gt;</code>. It needs exactly three things from its
@@ -591,8 +603,10 @@
   <p>Content beside the sidebar</p>
 </div>`}
       >
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Rolling your own host</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             Nothing is special about <code>SidebarContainer</code> -- it is
             those three declarations and no more. Any element works if you
@@ -627,8 +641,10 @@
   </div>
 </Card>`}
       >
-        {#snippet blurb()}
+        {#snippet header()}
           <h3>Inside a Card</h3>
+        {/snippet}
+        {#snippet blurb()}
           <p>
             Because it measures its container rather than the window, a sidebar
             in a narrow card is in sheet mode even on a wide screen. The card
