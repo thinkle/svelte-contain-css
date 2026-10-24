@@ -46,9 +46,56 @@ test("full-size preview preserves the selected palette, type, add-ons, and custo
 
 test("full presets and extras also survive the full-size link", async ({ page }) => {
   await page.getByRole("radio", { name: "Bootstrap", exact: true }).locator("..").click();
-  await page.getByRole("checkbox", { name: "Expressive Headings", exact: true }).locator("..").click();
+  await page.getByRole("radio", { name: "Expressive", exact: true }).locator("..").click();
   const href = await page.getByRole("link", { name: /Open .*full size/ }).getAttribute("href");
   await page.goto(href!);
   await expect.poll(() => page.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--primary-bg").trim())).toBe("#0d6efd");
   await expect.poll(() => page.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--heading-1-text-transform").trim())).toBe("uppercase");
+});
+
+test("custom variables retain priority when presets and add-ons change", async ({ page }) => {
+  await page.getByPlaceholder("--bg: red;").fill("--primary-bg: rgb(1, 2, 3); --heading-1-bg: rgb(4, 5, 6);");
+  const values = () => page.locator("html").evaluate(el => {
+    const css = getComputedStyle(el);
+    return [css.getPropertyValue("--primary-bg").trim(), css.getPropertyValue("--heading-1-bg").trim()];
+  });
+  for (const preset of ["Bootstrap", "Material"]) {
+    await page.getByRole("radio", { name: preset, exact: true }).locator("..").click();
+    await expect.poll(values).toEqual(["rgb(1, 2, 3)", "rgb(4, 5, 6)"]);
+  }
+  await page.getByRole("radio", { name: "Block", exact: true }).locator("..").click();
+  await expect.poll(values).toEqual(["rgb(1, 2, 3)", "rgb(4, 5, 6)"]);
+});
+
+
+test("heading choices replace a combination's treatment and Default restores it", async ({ page }) => {
+  await page.getByRole("radio", { name: "Dark + IBM Plex + Expressive Headings + Layered Depth", exact: true }).locator("..").click();
+  const transform = () => page.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--heading-1-text-transform").trim());
+  await expect.poll(transform).toBe("uppercase");
+  await page.getByRole("radio", { name: "Block", exact: true }).locator("..").click();
+  await expect.poll(transform).not.toBe("uppercase");
+  await expect(page.getByRole("checkbox", { name: /Headings/ })).toHaveCount(0);
+  await page.getByRole("checkbox", { name: "Show code", exact: true }).locator("..").click();
+  await expect(page.locator("pre")).toContainText("solid-headings.css");
+  await expect(page.locator("pre")).not.toContainText("dark-ibm-layered.css");
+  const href = await page.getByRole("link", { name: /Open .*full size/ }).getAttribute("href");
+  const popup = await page.context().newPage();
+  await popup.goto(href!);
+  await expect.poll(() => popup.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--heading-1-text-transform").trim())).not.toBe("uppercase");
+  await popup.close();
+  await page.getByRole("radio", { name: "Default", exact: true }).locator("..").click();
+  await expect.poll(transform).toBe("uppercase");
+});
+
+test("Layered Depth changes actual card shadows and provides a relevant preview", async ({ page }) => {
+  await page.getByRole("button", { name: "Container Store Report", exact: true }).click();
+  const card = page.getByTestId("theme-preview").locator(".card").first();
+  const baseline = await card.evaluate(el => getComputedStyle(el).boxShadow);
+  await page.getByRole("checkbox", { name: "Layered Depth", exact: true }).locator("..").click();
+  await expect.poll(() => card.evaluate(el => getComputedStyle(el).boxShadow)).toBe("rgba(15, 23, 42, 0.14) 4px 4px 16px 0px");
+  await page.getByRole("button", { name: "The Tidy Shelf (Blog)", exact: true }).click();
+  await page.getByRole("button", { name: "Preview depth on cards", exact: true }).click();
+  await expect(card).toBeVisible();
+  await page.getByRole("checkbox", { name: "Layered Depth", exact: true }).locator("..").click();
+  await expect.poll(() => card.evaluate(el => getComputedStyle(el).boxShadow)).toBe(baseline);
 });

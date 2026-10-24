@@ -6,12 +6,15 @@
     colorThemes,
     typographyThemes,
     extraThemes,
+    headingThemes,
   } from "$lib/theme/themeConfig";
   import {
     TextLayout,
+    Button,
     Code,
     Checkbox,
     FormItem,
+    Fieldset,
     RadioButton,
     FormProvider,
   } from "$lib";
@@ -27,13 +30,15 @@
     fullThemeIndex: number,
     colorThemeIndex: number,
     typographyThemeIndex: number,
+    headingThemeIndex: number,
     enabledExtras: boolean[],
     rawCss: string,
   ) {
     const files: string[] = ["defaults.css"];
     if (fullThemeIndex !== 0) {
       if (fullThemes[fullThemeIndex].file) {
-        files.push(fullThemes[fullThemeIndex].file);
+        const full = fullThemes[fullThemeIndex];
+        files.push(...(headingThemeIndex && full.filesWithoutHeadings ? full.filesWithoutHeadings : [full.file]));
       }
     } else {
       if (colorThemes[colorThemeIndex].file) {
@@ -43,6 +48,7 @@
         files.push(typographyThemes[typographyThemeIndex].file);
       }
     }
+    if (headingThemeIndex) files.push(headingThemes[headingThemeIndex].file);
     for (let i = 0; i < extraThemes.length; i++) {
       if (enabledExtras[i]) files.push(extraThemes[i].file);
     }
@@ -64,6 +70,7 @@
       themeState.fullTheme,
       themeState.colorTheme,
       themeState.typographyTheme,
+      themeState.headingTheme,
       [...themeState.enabledExtras],
       themeState.rawCss,
     ),
@@ -139,43 +146,59 @@
 
 {#snippet themeForm()}
   <FormProvider layout="above">
-    <FormItem fullWidth>
-      {#snippet label()}<span>Full Theme Preset</span>{/snippet}
+    <Fieldset>
+      {#snippet legend()}Full Theme Preset{/snippet}
       {#each fullThemes as theme, i}
         <RadioButton bind:group={themeState.fullTheme} value={i}
           >{theme.name}</RadioButton
         >
       {/each}
-    </FormItem>
+    </Fieldset>
 
     {#if !usingFullTheme}
-      <FormItem fullWidth>
-        {#snippet label()}<span>Color</span>{/snippet}
+      <Fieldset>
+        {#snippet legend()}Color{/snippet}
         {#each colorThemes as theme, i}
           <RadioButton bind:group={themeState.colorTheme} value={i}
             >{theme.name}</RadioButton
           >
         {/each}
-      </FormItem>
+      </Fieldset>
 
-      <FormItem fullWidth>
-        {#snippet label()}<span>Typography</span>{/snippet}
+      <Fieldset>
+        {#snippet legend()}Typography{/snippet}
         {#each typographyThemes as theme, i}
           <RadioButton bind:group={themeState.typographyTheme} value={i}
             >{theme.name}</RadioButton
           >
         {/each}
-      </FormItem>
+      </Fieldset>
     {/if}
 
-    <FormItem fullWidth>
-      {#snippet label()}<span>Add-ons</span>{/snippet}
+    <Fieldset>
+      {#snippet legend()}Headings{/snippet}
+      {#each headingThemes as theme, i}
+        <RadioButton bind:group={themeState.headingTheme} value={i}>{theme.name}</RadioButton>
+      {/each}
+    </Fieldset>
+
+    <Fieldset>
+      {#snippet legend()}Add-ons{/snippet}
       {#each extraThemes as theme, i}
-        <Checkbox bind:checked={themeState.enabledExtras[i]}
+        <Checkbox aria-label={theme.name} bind:checked={themeState.enabledExtras[i]}
           >{theme.name}</Checkbox
         >
       {/each}
-    </FormItem>
+      {#if themeState.enabledExtras[extraThemes.findIndex(theme => theme.file === "layered.css")]}
+        <p>
+          Layered Depth adds soft shadows to cards, buttons, lists, and overlays.
+          The blog preview has few of these; the effect is easiest to see on cards.
+          {#if showPreview}
+            <Button type="button" onclick={() => { activePreview = "layout-workbench"; }}>Preview depth on cards</Button>
+          {/if}
+        </p>
+      {/if}
+    </Fieldset>
 
     <FormItem>
       {#snippet label()}<span>Extra Variables</span>{/snippet}

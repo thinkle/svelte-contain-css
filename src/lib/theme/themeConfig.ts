@@ -27,7 +27,7 @@ import { combinedThemeEntries } from "./combinedThemes";
 // runtime — build it inline from the raw light/dark sources instead.
 const lightordark = `@media (prefers-color-scheme: light) {\n${light}\n}\n@media (prefers-color-scheme: dark) {\n${dark}\n}`;
 
-export type ThemeEntry = { name: string; css: string; file: string };
+export type ThemeEntry = { name: string; css: string; file: string; cssWithoutHeadings?: string; filesWithoutHeadings?: string[] };
 
 // Complete themes — define color, borders, typography themselves.
 // When one of these is active, color + typography pickers are hidden.
@@ -36,7 +36,7 @@ export const fullThemes: ThemeEntry[] = [
   { name: "Bootstrap", css: bootstrap, file: "themes/bootstrap.css" },
   { name: "Material", css: material, file: "themes/material.css" },
   { name: "Retro", css: retro, file: "themes/retro.css" },
-  ...combinedThemeEntries.map(({ name, css, file }) => ({ name, css, file })),
+  ...combinedThemeEntries,
 ];
 
 export const colorThemes: ThemeEntry[] = [
@@ -60,13 +60,18 @@ export const typographyThemes: ThemeEntry[] = [
 
 export const extraThemes: ThemeEntry[] = [
   { name: "Responsive Typography", css: responsiveTypography, file: "responsive-typography.css" },
-  { name: "Solid Headings", css: solidHeadings, file: "solid-headings.css" },
-  { name: "Restrained Headings", css: restrainedHeadings, file: "restrained-headings.css" },
-  { name: "Editorial Headings", css: editorialHeadings, file: "editorial-headings.css" },
-  { name: "Expressive Headings", css: expressiveHeadings, file: "expressive-headings.css" },
   { name: "Soft Corners", css: softCorners, file: "soft-corners.css" },
   { name: "Sharp Edges", css: boxy, file: "boxy.css" },
   { name: "Flat Surfaces", css: flat, file: "flat.css" },
   { name: "Layered Depth", css: layered, file: "layered.css" },
   { name: "Fancy Paragraphs", css: fancyParagraphs, file: "fancy-paragraphs.css" },
+];
+
+// Heading treatments are alternatives, rather than cumulative add-ons.
+export const headingThemes: ThemeEntry[] = [
+  { name: "Default", css: "", file: "" },
+  { name: "Expressive", css: expressiveHeadings, file: "expressive-headings.css" },
+  { name: "Block", css: solidHeadings, file: "solid-headings.css" },
+  { name: "Editorial", css: editorialHeadings, file: "editorial-headings.css" },
+  { name: "Restrained", css: restrainedHeadings, file: "restrained-headings.css" },
 ];

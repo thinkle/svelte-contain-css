@@ -1,45 +1,18 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import { themeState } from "./themeState.svelte";
-  import { fullThemes, colorThemes, typographyThemes, extraThemes } from "./themeConfig";
+  import { fullThemes, colorThemes, typographyThemes, extraThemes, headingThemes } from "./themeConfig";
+  import ThemeStyle from "./ThemeStyle.svelte";
 
-  let ready = false;
-
-  function injectStyle(uid: string, css: string) {
-    if (!ready) return;
-    const id = `${uid}-injected-style`;
-    let el = document.getElementById(id) as HTMLStyleElement | null;
-    if (!el) {
-      el = document.createElement("style");
-      el.id = id;
-      document.head.appendChild(el);
-    }
-    el.innerHTML = css;
-  }
-
-  function applyAll() {
-    const usingFull = themeState.fullTheme !== 0;
-    injectStyle("full", fullThemes[themeState.fullTheme].css);
-    injectStyle("color", usingFull ? "" : colorThemes[themeState.colorTheme].css);
-    injectStyle("typography", usingFull ? "" : typographyThemes[themeState.typographyTheme].css);
-    for (let i = 0; i < extraThemes.length; i++) {
-      injectStyle(`extra-${i}`, themeState.enabledExtras[i] ? extraThemes[i].css : "");
-    }
-    injectStyle("extra-raw", themeState.rawCss ? `:root { ${themeState.rawCss} }` : "");
-  }
-
-  onMount(() => {
-    ready = true;
-    applyAll();
-  });
-
-  $effect(() => {
-    // Track all reactive dependencies
-    themeState.fullTheme;
-    themeState.colorTheme;
-    themeState.typographyTheme;
-    themeState.enabledExtras.join(""); // read array contents
-    themeState.rawCss;
-    applyAll();
-  });
+  const fullTheme = $derived(fullThemes[themeState.fullTheme]);
+  const fullCss = $derived(themeState.headingTheme ? (fullTheme.cssWithoutHeadings ?? fullTheme.css) : fullTheme.css);
+  const usingFull = $derived(themeState.fullTheme !== 0);
 </script>
+
+<ThemeStyle id="full-injected-style" css={fullCss} />
+<ThemeStyle id="color-injected-style" css={usingFull ? "" : colorThemes[themeState.colorTheme].css} />
+<ThemeStyle id="typography-injected-style" css={usingFull ? "" : typographyThemes[themeState.typographyTheme].css} />
+<ThemeStyle id="heading-injected-style" css={headingThemes[themeState.headingTheme].css} />
+{#each extraThemes as theme, index}
+  <ThemeStyle id={`extra-${index}-injected-style`} css={themeState.enabledExtras[index] ? theme.css : ""} />
+{/each}
+<ThemeStyle id="extra-raw-injected-style" css={themeState.rawCss ? `:root { ${themeState.rawCss} }` : ""} />
