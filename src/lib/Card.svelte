@@ -183,6 +183,7 @@
   header {
     @include color-props(card-header, secondary);
     @include box-props-top(card-header, bar);
+    @include border-props-borderless(card-header, bar);
     display: flex;
     align-items: center;
     /* Header and footer never shrink: in a fixedHeight card that is too
@@ -209,6 +210,7 @@
   footer {
     @include color-props(card-footer, secondary);
     @include box-props-bottom(card-footer, bar);
+    @include border-props-borderless(card-footer, bar);
     /* Centred in its min-height like the header, but a column, so footer
        content that was several blocks stays stacked. */
     display: flex;
@@ -226,6 +228,7 @@
     box-sizing: border-box;
     @include color-props(card-content, surface);
     @include box-props(card-content);
+    @include border-props-borderless(card-content);
     @include typography-container-props(card, surface);
   }
 

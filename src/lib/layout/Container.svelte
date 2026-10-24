@@ -69,23 +69,23 @@
   @use "$lib/sass/_mixins.scss" as *;
   section {
     box-sizing: border-box;
-    @include color-props(container, surface, block);
-    @include box-props(container, surface, block);
+    @include color-props(container, surface);
+    @include box-props(container, surface);
+    @include border-props-borderless(container, surface);
     /* box-props (above) already sets a padding, but its shared fallback (4px)
        is generic to every component that uses the mixin, not Container's own
        long-standing 8px default. This declaration coming AFTER box-props is
        what makes it win -- before this fix, Container had no override here
        at all and was silently rendering at box-props' 4px. Same
-       var-with-fallbacks() chain as box-props' own (container/surface/block),
+       var-with-fallbacks() chain as box-props' own (container/surface),
        just a bigger final fallback. */
-    padding: var-with-fallbacks(--padding, container, surface, block, 8px);
-    @include typography-container-props(container, surface, block);
+    padding: var-with-fallbacks(--padding, container, surface, 8px);
+    @include typography-container-props(container, surface);
     /* Override typography max-width */
     max-width: var-with-fallbacks(
       --max-width,
       container,
       surface,
-      block,
       900px
     );
     /* Not the generic margin-props() mixin (_box.scss): that defaults to 0,
@@ -99,14 +99,12 @@
       --margin-inline,
       container,
       surface,
-      block,
       auto
     );
     margin-block: var-with-fallbacks(
       --margin-block,
       container,
       surface,
-      block,
       var(--gap)
     );
     container-type: inline-size;
@@ -127,16 +125,11 @@
     section {
       padding: var(
         --container-padding-small,
-        var-with-fallbacks(--padding, container, surface, block, 8px)
+        var-with-fallbacks(--padding, container, surface, 8px)
       );
     }
   }
   .border {
-    border: var-with-fallbacks(
-      --border,
-      container,
-      surface,
-      var(--border-width) var(--border-style) var(--border-color)
-    );
+    @include border-props(container, surface);
   }
 </style>

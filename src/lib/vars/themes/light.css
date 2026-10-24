@@ -21,8 +21,6 @@
   --stripe-bg: color-mix(in srgb, var(--menu-bg) 94%, var(--menu-fg) 6%);
   --active-color-mix: black;
   --stripe-fg: var(--menu-fg);
-  --control-bg: var(--material-color-indigo-50);
-  --control-fg: var(--material-color-indigo-900);
   --tab-bg: var(--material-color-indigo-50);
   --tab-fg: var(--material-color-indigo-900);
   --tab-active-bg: #ffffff;

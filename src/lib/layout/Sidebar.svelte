@@ -165,7 +165,7 @@
        leaks in from an enclosing sidebar. */
     --_sidebar-sheet-edge-override: initial;
     @include color-props(sidebar, surface);
-    @include typography-props-bare(sidebar, surface);
+    @include typography-props-bare(sidebar, ui);
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
     box-sizing: border-box;

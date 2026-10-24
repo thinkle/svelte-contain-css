@@ -48,7 +48,7 @@
   .code :global(code[class*="language-"]),
   .code :global(pre[class*="language-"]) {
     tab-size: var(--code-tab-size, 2em);
-    @include typography-props(code, surface);
+    @include typography-props(code);
   }
 
   /* Colors live on the block only. Giving the <code> inside the <pre> its

@@ -344,6 +344,60 @@ all — Svelte intercepts `--*` attributes on components and renders
 The `--*` handling in these helpers covers only the object-spread path, which
 Svelte cannot detect statically.
 
+### Box geometry and border policy are separate
+
+`box-props`, `box-props-square`, `box-props-top` and `box-props-bottom`
+set box-sizing, padding and corner geometry only. Pair them with an explicit
+border policy, passing the intended component/category prefixes:
+
+- `border-props-borderless(...)`: prefixed border and directional overrides,
+  falling back to `none`. Never reads naked `--border` or `--border-top`, etc.
+- `border-props(...)`: prefixed overrides, then global border variables, then
+  a visible border derived from global width/style/color defaults.
+
+Both policies compose prefixed `border-width`, `border-style`, and
+`border-color` as their fallback border. A complete border shorthand wins over
+those longhands; a directional shorthand wins on its side. For borderless
+components, the default style is `none` and naked global longhands are ignored.
+
+Inline/Stack and other borderless components must use the former. Bordered
+surfaces and Container's `border` variant use the latter. Keep margin opt-in
+through `margin-props`; do not fold it into box geometry.
+
+Radius is independent: regular boxes read `--<prefix>-border-radius` then
+`--border-radius`; square boxes read `--<prefix>-square-radius` then
+`--square-radius` (default `0`). Preserve those theme variable names.
+The old combined `box-props-square-border` / `box-props-border` helpers and
+`border-props-none` / `border-props-border` names remain available; use the
+explicit split in new component code. `border-props-none` now aliases the
+borderless policy. Sass callers of the geometry-only box helpers must add a
+border mixin explicitly when migrating.
+
+### Prefix chains follow the property family
+
+Choose a short chain per mixin, not a universal ancestry list for a component:
+
+| Family | Typical chain | Shared role |
+| --- | --- | --- |
+| Interface typography | `button, ui` / `select, input, ui` | `ui` covers labels, menus and controls; it is typography only |
+| Control geometry | `button, control` / `select, input, control` | `control` covers shared padding and corners, never typography |
+| Control colors | `button, control, secondary` / `select, input, control` | Semantic palette prefixes belong in colors |
+| Surface geometry/colors | `container, surface` / `dialog, surface` | Shared surfaces, without legacy `block` or `top` categories |
+| Neutral layout | `inline` / `stack` | Component overrides; no implicit surface/control decoration |
+
+Retain useful component families (`tab, button`; `select, input`) and documented
+compatibility aliases such as `mini-button`. Do not pass semantic color roles
+(`primary`, `secondary`, etc.) to geometry or typography mixins. Color variants
+inherit base typography unless they expose a named component state such as
+`tab-active`. Prose-container mixins may still use `surface` because they own
+surface typesetting and heading contexts, not just interface typography.
+
+A fallback category is not an override: `--control-padding` is consulted only
+when `--button-padding` / `--input-padding` is absent. Avoid repeating a category
+value as component defaults in themes when inheritance already supplies it.
+Do not replace element-time fallback chains with root aliases: CSS resolves an
+alias where it is declared, which can lose overrides on a descendant.
+
 ### Variable Naming Convention & Fallback Cascade
 
 Variables follow a hierarchical fallback pattern:
@@ -503,9 +557,11 @@ Use the provided mixins from `$lib/sass/_mixins.scss` for consistent styling:
     // primitives like Stack or Inline — it will impose a max-width on them.
     @include typography-container-props(my-component, container);
 
-    // Box properties (padding, border, border-radius). Despite the name,
+    // Box geometry (box-sizing, padding, border-radius). Despite the name,
     // does NOT include margin -- that's the separate mixin below.
     @include box-props(my-component);
+    // Explicit border policy: prefixed overrides only, default none.
+    @include border-props-borderless(my-component);
 
     // margin-block/margin-inline, both defaulting to 0. Opt-in only: add
     // this to a component deliberately, not as a matter of course -- most
@@ -604,6 +660,7 @@ Standard component file structure:
        above. Remove an include and you must remove its group too. */
     @include color-props(component-name, category);
     @include box-props(component-name, category);
+    @include border-props-borderless(component-name, category);
     @include focusable();
     // ... other styles
   }
@@ -892,6 +949,7 @@ let derived = $derived(value * 2); // New
   .button {
     @include color-props(button, control);
     @include box-props(button);
+    @include border-props-borderless(button);
   }
 </style>
 ```

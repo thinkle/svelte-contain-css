@@ -75,6 +75,7 @@
   .sidebar-container {
     @include color-props(sidebar-container, surface);
     @include box-props(sidebar-container);
+    @include border-props-borderless(sidebar-container);
 
     /* (1) so the Sidebar's container queries have something to measure */
     container-type: inline-size;

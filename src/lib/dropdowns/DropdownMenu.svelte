@@ -347,7 +347,8 @@
 
   button {
     @include color-props(menu-trigger, menu, button, surface);
-    @include box-props-square(menu-trigger, menu, button, surface);
+    @include box-props-square(menu-trigger, button, control);
+    @include border-props-borderless(menu-trigger, button, control);
     @include clickable(menu-trigger, menu, button, control);
     @include focusable();
     position: relative;
@@ -368,19 +369,19 @@
 
   .dropdown-content :global(.menu) {
     @include color-props(menu, surface);
-    @include typography-props(menu, surface);
+    @include typography-props(menu, ui);
     @include clickable(menu, button, control);
     @include focusable();
   }
   .dropdown-menu {
-    @include typography-props(menu, surface);
+    @include typography-props(menu, ui);
   }
   .dropdown-container {
     /* The popover is a DOM child of the <nav>, which sits wherever the menu
        was placed; stop that spot's white-space, alignment, weight etc. from
        reaching the list. First, so pointer-events below still wins. The
        menu's own typography vars still apply to .menu inside. */
-    @include overlay-text-reset(dropdown-menu, menu, surface);
+    @include overlay-text-reset(dropdown-menu, menu, ui);
     box-sizing: border-box;
     opacity: 0;
     pointer-events: none;
@@ -406,7 +407,8 @@
     min-width: var(--dropdown-menu-min-width, 12em);
     @include color-props(dropdown-menu, menu, surface);
     @include box-shadow(dropdown-menu, dropdown);
-    @include box-props-square-border(dropdown-menu, menu, surface);
+    @include box-props-square(dropdown-menu, menu, surface);
+    @include border-props(dropdown-menu, menu, surface);
     padding: 0;
     overflow: hidden;
   }
@@ -431,8 +433,9 @@
     width: fit-content;
     max-width: calc(100% - 2 * var(--search-hint-offset, 4px));
     @include color-props(search-hint, tag, secondary);
-    @include typography-props-bare(search-hint, tag);
+    @include typography-props-bare(search-hint, tag, ui);
     @include box-props(search-hint, tag);
+    @include border-props-borderless(search-hint, tag);
     font-size: var(--search-hint-font-size, var(--font-size-tiny, 0.75rem));
     padding: var(--search-hint-padding, 0.2em 0.55em);
     font-variant-numeric: tabular-nums;

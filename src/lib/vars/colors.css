@@ -40,7 +40,6 @@
   --warning-bg: var(--material-color-amber-400);
   --warning-color: var(--material-color-amber-400);
   --warning-fg: var(--material-color-grey-900);
-  --warning-text-transform: uppercase;
 
   /* Semantic color variants */
   --danger-bg: var(--material-color-red-700);

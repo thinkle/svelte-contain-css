@@ -127,7 +127,7 @@
     height: var(--bar-height, auto);
     max-height: var(--bar-max-height);
     @include color-props(bar, surface);
-    @include typography-props-bare(bar, surface);
+    @include typography-props-bare(bar, ui);
     gap: var-with-fallbacks(--gap, bar, 8px);
     overflow: var(--bar-overflow, visible);
 

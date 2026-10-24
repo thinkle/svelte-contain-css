@@ -137,7 +137,7 @@
 
   .grouped-toggle-item {
     @include color-props(grouped-toggle-item, control, secondary);
-    @include typography-props-bare(grouped-toggle-item, control);
+    @include typography-props-bare(grouped-toggle-item, ui);
     @include clickable-cursor(grouped-toggle-item, clickable);
     /* `.grouped-toggle` clips overflow (same reason TabBar does for
        TabItem), so the standard outer `focusable()` ring gets cut off,

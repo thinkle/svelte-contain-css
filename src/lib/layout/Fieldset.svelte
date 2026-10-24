@@ -119,13 +119,8 @@
   fieldset {
     @include color-props(fieldset, surface);
     @include box-props(fieldset, surface);
+    @include border-props(fieldset, surface);
 
-    border: var-with-fallbacks(
-      --border,
-      fieldset,
-      surface,
-      1px solid var(--border-color)
-    );
     border-radius: var-with-fallbacks(--border-radius, fieldset, surface, 0);
     padding: var-with-fallbacks(--padding, fieldset, surface, var(--space));
     margin: var-with-fallbacks(--margin, fieldset, 0);

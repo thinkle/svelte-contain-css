@@ -87,6 +87,7 @@
 
   .stack {
     @include box-props(stack);
+    @include border-props-borderless(stack);
     /* A layout helper, not a surface: padding comes only from
        --stack-padding (or the `padding` prop), never from the theme's
        --padding. box-props falls back to --padding, which is inherited, so

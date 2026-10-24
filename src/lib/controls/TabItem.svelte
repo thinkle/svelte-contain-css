@@ -69,8 +69,9 @@
   .tab > :global(button),
   .tab > :global(div > button) {
     @include color-props(tab, button, control, secondary);
-    @include box-props(tab, button, control, secondary);
-    @include typography-props(tab, button, ui, control, secondary);
+    @include box-props(tab, button, control);
+    @include border-props-borderless(tab, button, control);
+    @include typography-props(tab, button, ui);
     // Tab bar clips overflow, so the standard outer focus ring would be cut
     // off -- use the inset ring instead. See _affordances.scss.
     @include focusable-inset(tab);
@@ -87,13 +88,6 @@
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
     @include color-props(tab-active, primary, tab, button, control, secondary);
-    @include typography-props(
-      tab-active,
-      tab,
-      button,
-      ui,
-      control,
-      secondary
-    );
+    @include typography-props(tab-active, tab, button, ui);
   }
 </style>

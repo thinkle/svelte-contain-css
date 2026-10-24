@@ -110,11 +110,11 @@
     max-width: -webkit-fill-available;
     max-width: stretch;
     height: var(--button-height);
-    @include box-props(button, control, secondary);
-    @include border-props-none(button);
+    @include box-props(button, control);
+    @include border-props-borderless(button);
     @include color-props(button, control, secondary);
     @include box-shadow(button, control);
-    @include typography-props-bare(button, ui, control);
+    @include typography-props-bare(button, ui);
     @include clickable(button, clickable);
     @include focusable();
     text-decoration: none;
@@ -129,22 +129,17 @@
   }
   a.primary {
     @include color-props(primary, button, control, secondary);
-    @include typography-props-bare(primary, button, ui, control);
   }
   a.warning {
     @include color-props(warning, a, control);
-    @include typography-props-bare(warning, button, ui, control);
   }
   a.danger {
     @include color-props(danger, a, control);
-    @include typography-props-bare(danger, button, ui, control);
   }
   a.success {
     @include color-props(success, a, control);
-    @include typography-props-bare(success, button, ui, control);
   }
   a.info {
     @include color-props(info, a, control);
-    @include typography-props-bare(info, button, ui, control);
   }
 </style>

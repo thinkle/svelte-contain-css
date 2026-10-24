@@ -495,6 +495,46 @@ below each other, these are the answer.
   bottom. If you are only putting things one under another, normal flow already
   does that.
 
+### Theme categories and fallback chains
+
+`--ui-*` is the shared interface **typography** category (labels, buttons,
+menus, tabs). `--control-*` supplies control **colors and geometry** (padding,
+corners, and borders where enabled). For example, Button padding reads
+`--button-padding` → `--control-padding` → `--padding`; its typography reads
+`--button-font-family` → `--ui-font-family` → `--font-family`. Select geometry
+reads `--select-*` → `--input-*` → `--control-*` → the global fallback.
+
+Semantic roles such as `--primary-*` and `--secondary-*` select palettes; they
+no longer supply component padding, radius or typography. `--surface-*` remains
+the shared surface category. A component value takes precedence over its
+category: omit `--input-padding` if inputs should follow `--control-padding`.
+
+Migration: move interface typography overrides from `--control-font-*` to
+`--ui-font-*`, and input geometry/colors from `--ui-*` to `--control-*` or
+`--input-*`. Use `--surface-*` in place of legacy `--block-*` / `--top-*` surface
+fallbacks. Select no longer takes geometry/colors from menu/surface defaults;
+use input/control variables or explicit select variables. Theme variables like
+`--secondary-padding` and `--primary-font-weight` no longer affect controls;
+use the component or its appropriate category. Warning buttons now share base
+button typography rather than becoming uppercase through `--warning-text-transform`.
+Menu item geometry no longer
+falls back to Button geometry; use `--menu-item-*` or `--control-*`.
+
+### Border presence versus border appearance
+
+A naked `--border` (or `--border-top`, etc.) themes components that opt into
+default borders, such as Tile, Select and Container with `border`. It does
+not add borders to borderless components such as Inline and Stack. Explicit
+component/category variables still work: use `--inline-border`,
+`--stack-border-bottom`, `--button-border`, or `--surface-border` to request
+borders on the corresponding components. Radius variables are independent:
+`--border-radius` and `--square-radius` retain their existing roles.
+
+Migration: if a theme previously relied on naked `--border` to add borders to
+borderless components, replace that with the relevant component/category
+variables. Handwritten border rules in other components retain their existing
+fallback chains.
+
 ### Margin: `marginBlock` and `marginInline`
 
 `Bar`, `Card`, `Container`, `GridLayout`, `Stack`, `Inline`, `TextLayout`,
@@ -730,7 +770,7 @@ can do that there, so for example, you could have...
 Custom properties inherit down the DOM, but a component decides which names it
 reads. Setting `--bg` is a fallback, not a command that overrides every descendant's
 more specific surface or semantic color. For example, the current Container reads
-`--container-bg` → `--surface-bg` → `--block-bg` → `--bg`; the matching foreground
+`--container-bg` → `--surface-bg` → `--bg`; the matching foreground
 follows the same prefixes. A danger Button reads `--danger-bg` before `--button-bg`
 and `--control-bg`. The exact chain is component/variant-specific: inspect its
 props and stylesheet rather than guessing a variable name.

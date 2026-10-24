@@ -135,14 +135,15 @@
     z-index: 2;
   }
   dialog {
-    @include box-props(dialog, top, surface, block);
-    @include color-props(dialog, top, surface, block);
-    @include typography-container-props(dialog, top, surface, block);
+    @include box-props(dialog, surface);
+    @include border-props-borderless(dialog, surface);
+    @include color-props(dialog, surface);
+    @include typography-container-props(dialog, surface);
     /* A <dialog> is a DOM child of wherever it was declared -- a table cell,
        a bold header, a clickable card -- and would inherit its text styles
        and cursor. Must follow typography-container-props. */
-    @include overlay-text-reset(dialog, top, surface, block);
-    @include box-shadow(dialog, top, surface, block);
+    @include overlay-text-reset(dialog, surface);
+    @include box-shadow(dialog, surface);
     /* typography-props writes margin-top/bottom ending in `unset`, which
        zeroes the UA's `margin: auto` and pins a modal to the top edge.
        Restore auto so it centers vertically; only dialog-level vars move it. */

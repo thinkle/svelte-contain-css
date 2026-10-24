@@ -204,7 +204,7 @@
 
   .page {
     @include color-props(page, content, surface);
-    @include typography-props-bare(page, surface);
+    @include typography-props-bare(page);
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
@@ -246,6 +246,7 @@
     );
     @include custom-scrollbar(page-content, page);
     @include box-props(page-content);
+    @include border-props-borderless(page-content);
     @include color-props(page-content, page, surface);
   }
   .aside {

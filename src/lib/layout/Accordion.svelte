@@ -90,7 +90,8 @@
   div {
     @include color-props(accordion, surface);
     @include typography-props(accordion, header);
-    @include box-props-square-border(accordion-wrapper, surface);
+    @include box-props-square(accordion-wrapper, surface);
+    @include border-props(accordion-wrapper, surface);
     display: flex;
     flex-direction: column;
     gap: var(--accordion-gap, var(--gap));
@@ -98,20 +99,16 @@
 
   div :global(details > summary) {
     @include color-props(accordion-summary, control, secondary);
-    @include box-props-square-border(accordion-summary, control, surface);
+    @include box-props-square(accordion-summary, control, surface);
+    @include border-props(accordion-summary, control, surface);
     @include clickable(accordion);
     @include focusable();
     cursor: pointer;
-    @include typography-props-bare(accordion-summary, ui, control);
+    @include typography-props-bare(accordion-summary, ui);
   }
   div :global(details[open] > summary) {
     @include color-props(accordion-summary-open, primary);
-    @include typography-props-bare(
-      accordion-summary-open,
-      accordion-summary,
-      ui,
-      control
-    );
+    @include typography-props-bare(accordion-summary-open, accordion-summary, ui);
   }
   div :global(details) {
     interpolate-size: allow-keywords;

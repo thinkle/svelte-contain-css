@@ -120,6 +120,7 @@
        use its whole track still gets it. */
     justify-items: var-with-fallbacks(--justify-items, grid-layout, stretch);
     @include box-props(grid-layout);
+    @include border-props-borderless(grid-layout);
     @include margin-props(grid-layout);
   }
 

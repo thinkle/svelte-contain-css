@@ -154,8 +154,8 @@
   maxWidth="none"
   height="auto"
   padding="0"
-  --reset-padding="var(--container-padding, var(--block-padding, var(--padding, 8px)))"
-  --reset-margin-block="var(--container-margin-block, var(--block-margin-block, var(--margin-block, var(--gap, 16px)))))"
+  --reset-padding="var(--container-padding, var(--surface-padding, var(--padding, 8px)))"
+  --reset-margin-block="var(--container-margin-block, var(--surface-margin-block, var(--margin-block, var(--gap, 16px))))"
 >
   <div class="demo-with-code" {style}>
     {#if header || heading}
