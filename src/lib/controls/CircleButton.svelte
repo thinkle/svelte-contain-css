@@ -75,7 +75,7 @@
        var() below names both, so `--circle-button-bg` is the name to reach
        for while an existing `--mini-button-bg` -- in a theme, or in an app
        that set one years ago -- keeps working untouched. */
-    @include typography-props(circle-button, mini-button, button, ui, control);
+    @include typography-props(circle-button, mini-button, button, ui);
     @include color-props(circle-button, mini-button, button, control, secondary);
     @include clickable(circle-button, mini-button, button, clickable);
     @include box-shadow(circle-button, mini-button, button, control);

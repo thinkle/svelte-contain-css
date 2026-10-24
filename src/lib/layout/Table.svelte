@@ -367,8 +367,8 @@
   table {
     @include color-props(table, surface);
     @include typography-container-props(table, surface, paragraph);
-    @include box-props-square(table, surface, paragraph);
-    @include border-props(table, surface, paragraph);
+    @include box-props-square(table, surface);
+    @include border-props(table, surface);
     @include box-size-props(table);
     border-collapse: collapse;
     @include box-shadow(table, surface);

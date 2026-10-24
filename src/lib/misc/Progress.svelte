@@ -158,8 +158,8 @@
 
   .progress-container {
     @include color-props(progress, surface, control, secondary);
-    @include box-props(progress, surface, control, secondary);
-    @include border-props-borderless(progress, surface, control, secondary);
+    @include box-props(progress, surface);
+    @include border-props-borderless(progress, surface);
     @include typography-container-props(progress, ui);
     width: var(--progress-width, var(--width, 100%));
     display: inline-block;
@@ -182,8 +182,8 @@
 
     .progress-track {
       position: relative;
-      @include box-props(progress-track, progress, control);
-      @include border-props-borderless(progress-track, progress, control);
+      @include box-props(progress-track, progress);
+      @include border-props-borderless(progress-track, progress);
       height: var(--progress-track-height, var(--progress-height, 2em));
       background: var(--progress-track-bg, var(--secondary-bg, var(--white)));
       overflow: hidden;

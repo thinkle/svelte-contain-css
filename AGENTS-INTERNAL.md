@@ -373,6 +373,31 @@ explicit split in new component code. `border-props-none` now aliases the
 borderless policy. Sass callers of the geometry-only box helpers must add a
 border mixin explicitly when migrating.
 
+### Prefix chains follow the property family
+
+Choose a short chain per mixin, not a universal ancestry list for a component:
+
+| Family | Typical chain | Shared role |
+| --- | --- | --- |
+| Interface typography | `button, ui` / `select, input, ui` | `ui` covers labels, menus and controls; it is typography only |
+| Control geometry | `button, control` / `select, input, control` | `control` covers shared padding and corners, never typography |
+| Control colors | `button, control, secondary` / `select, input, control` | Semantic palette prefixes belong in colors |
+| Surface geometry/colors | `container, surface` / `dialog, surface` | Shared surfaces, without legacy `block` or `top` categories |
+| Neutral layout | `inline` / `stack` | Component overrides; no implicit surface/control decoration |
+
+Retain useful component families (`tab, button`; `select, input`) and documented
+compatibility aliases such as `mini-button`. Do not pass semantic color roles
+(`primary`, `secondary`, etc.) to geometry or typography mixins. Color variants
+inherit base typography unless they expose a named component state such as
+`tab-active`. Prose-container mixins may still use `surface` because they own
+surface typesetting and heading contexts, not just interface typography.
+
+A fallback category is not an override: `--control-padding` is consulted only
+when `--button-padding` / `--input-padding` is absent. Avoid repeating a category
+value as component defaults in themes when inheritance already supplies it.
+Do not replace element-time fallback chains with root aliases: CSS resolves an
+alias where it is declared, which can lose overrides on a descendant.
+
 ### Variable Naming Convention & Fallback Cascade
 
 Variables follow a hierarchical fallback pattern:

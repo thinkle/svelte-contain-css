@@ -45,9 +45,9 @@
   @use "$lib/sass/_mixins.scss" as *;
   input {
     @include typography-props(input, ui);
-    @include box-props(input, ui);
-    @include border-props-borderless(input, ui);
-    @include color-props(input, ui);
+    @include box-props(input, control);
+    @include border-props-borderless(input, control);
+    @include color-props(input, control);
     width: var(--input-width);
     @include focusable();
   }

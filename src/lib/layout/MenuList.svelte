@@ -59,7 +59,7 @@
     margin: 0;
     margin-inline: 0;
     padding-inline: 0;
-    @include color-props(menu, ui, control);
+    @include color-props(menu, control);
     overflow: hidden;
     width: 100%;
   }
@@ -105,10 +105,10 @@
       width: var(--menu-item-width, 100%);
       height: var(--menu-item-height);
       text-decoration: none;
-      @include typography-props(menu-item, button, ui, control);
+      @include typography-props(menu-item, button, ui);
       @include color-props(menu-item, menu, button, control);
-      @include box-props-square(menu-item, button, control);
-      @include border-props-borderless(menu-item, button, control);
+      @include box-props-square(menu-item, control);
+      @include border-props-borderless(menu-item, control);
       margin: 0;
       @include focusable-as-hover(menu-item);
       @include clickable(menu-item);

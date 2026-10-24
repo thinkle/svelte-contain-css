@@ -90,7 +90,7 @@
     align-self: flex-start;
     vertical-align: middle;
     @include color-props(tag, secondary);
-    @include typography-props-bare(tag);
+    @include typography-props-bare(tag, ui);
     @include box-props(tag);
     @include border-props-borderless(tag);
     font-size: var(--tag-font-size, var(--font-size-tiny, 0.75rem));

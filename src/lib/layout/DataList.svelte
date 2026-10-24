@@ -110,7 +110,7 @@
 
   .data-list {
     @include color-props(data-list, surface);
-    @include typography-props-bare(data-list, surface);
+    @include typography-props-bare(data-list, ui);
     @include box-props-square(data-list, surface);
     @include border-props(data-list, surface);
     @include box-shadow(data-list, surface);

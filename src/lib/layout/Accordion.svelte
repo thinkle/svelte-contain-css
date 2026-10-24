@@ -104,16 +104,11 @@
     @include clickable(accordion);
     @include focusable();
     cursor: pointer;
-    @include typography-props-bare(accordion-summary, ui, control);
+    @include typography-props-bare(accordion-summary, ui);
   }
   div :global(details[open] > summary) {
     @include color-props(accordion-summary-open, primary);
-    @include typography-props-bare(
-      accordion-summary-open,
-      accordion-summary,
-      ui,
-      control
-    );
+    @include typography-props-bare(accordion-summary-open, accordion-summary, ui);
   }
   div :global(details) {
     interpolate-size: allow-keywords;

@@ -125,7 +125,7 @@
      all this used to match -- so none of it applied after the migration). */
   div > :global(svelte-css-wrapper > .bar) {
     @include color-props(tab-bar, bar, surface);
-    @include typography-props-bare(tab-bar, bar, surface);
+    @include typography-props-bare(tab-bar, bar, ui);
 
     align-items: var-with-fallbacks(--align, tab-bar, flex-end);
     border-bottom: var(
