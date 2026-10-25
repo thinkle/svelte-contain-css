@@ -86,7 +86,7 @@
   @use "$lib/sass/_mixins.scss" as *;
   .hero {
     --hero-font-size: calc(var(--font-size) * 2);
-    --hero-first-letter-fg: var(--hero-fg, var(--surface-fg, var(--fg)));
+    --hero-first-letter-fg: var(--hero-fg, var(--_hero-role-fg, var(--surface-fg, var(--fg))));
     @include color-props(hero, surface);
     @include typography-container-props(hero, surface);
 
