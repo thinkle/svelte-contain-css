@@ -23,7 +23,7 @@ test("link and drop-letter tints follow each surrounding foreground", async ({ p
   near(await pixels(page.getByTestId("inner-surface").locator("p"), "::first-letter"), [36, 38, 48]);
 });
 
-test("exact link/first-letter overrides and a custom tint target still work", async ({ page }) => {
+test("exact link/first-letter overrides, family pins and a custom tint target work", async ({ page }) => {
   await page.goto("/svelte-contain-css/tests/contextual-accents");
   near(await pixels(page.getByTestId("global-exact").locator("a")), [0, 128, 0]);
   near(await pixels(page.getByTestId("component-exact").locator("a")), [255, 204, 0]);

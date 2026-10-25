@@ -44,9 +44,15 @@ const tiles = {
   "tile-success": onSuccess,
 };
 
+// Exact heading colors aren't component-scoped any more: clear the global
+// fills on this surface instead (`initial` is "unset" for a custom property).
 const unchipped: Vars = {
-  "--tile-heading-bg": "transparent",
-  "--tile-heading-fg": "currentColor",
+  "--heading-bg": "initial",
+  "--heading-fg": "initial",
+  "--heading-major-bg": "initial",
+  "--heading-major-fg": "initial",
+  "--heading-minor-bg": "initial",
+  "--heading-minor-fg": "initial",
   "--tile-heading-padding": "0",
   "--tile-heading-box-shadow": "none",
 };

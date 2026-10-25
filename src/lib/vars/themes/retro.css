@@ -16,18 +16,19 @@
   --body-fg: #000000;
   --surface-bg: #c0c0c0;
   --surface-fg: #000000;
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
   --page-bg: #008080;
   --page-fg: #000000;
   --page-content-bg: #c0c0c0;
   --page-content-fg: #000000;
-  --sidebar-bg: #c0c0c0;
-  --sidebar-fg: #000000;
+  --surface-sunken-bg: #c0c0c0;
+  --surface-sunken-fg: #000000;
 
   --primary-bg: #000080;
   --primary-color: #000080;
   --primary-fg: #ffffff;
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: #c0c0c0;
+  --control-fg: #000000;
   --secondary-bg: #c0c0c0;
   --secondary-color: #c0c0c0;
   --secondary-fg: #000000;

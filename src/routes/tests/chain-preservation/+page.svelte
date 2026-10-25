@@ -12,7 +12,7 @@
 </script>
 
 <button data-testid="toggle" disabled={!ready} onclick={() => active = !active}>Toggle variants</button>
-<div id="tones" style="--bg: rgb(240, 240, 240); --fg: rgb(10, 10, 10); --secondary-bg: rgb(240, 240, 240); --secondary-fg: rgb(10, 10, 10); --primary-bg: rgb(20, 30, 40); --primary-fg: rgb(200, 200, 200); --danger-color: rgb(200, 0, 0); --text-amount: 50%; --muted-text-amount: 50%; --button-transition: 120ms ease-in;">
+<div id="tones" style="--bg: rgb(240, 240, 240); --fg: rgb(10, 10, 10); --control-bg: rgb(240, 240, 240); --control-fg: rgb(10, 10, 10); --primary-bg: rgb(20, 30, 40); --primary-fg: rgb(200, 200, 200); --danger-color: rgb(200, 0, 0); --text-amount: 50%; --muted-text-amount: 50%; --button-transition: 120ms ease-in;">
   <Button data-testid="button" primary={active}><Text danger>Danger</Text><Text muted>Muted</Text></Button>
   <ButtonLink data-testid="link" href={base || "/"} primary={active}><Text danger>Danger</Text><Text muted>Muted</Text></ButtonLink>
   <CircleButton data-testid="circle" primary={active}><Text danger>Danger</Text><Text muted>Muted</Text></CircleButton>

@@ -136,7 +136,7 @@
   @use "$lib/sass/_mixins.scss" as *;
 
   .grouped-toggle-item {
-    @include color-props(grouped-toggle-item, control, secondary);
+    @include color-props(grouped-toggle-item, control);
     @include typography-props-bare(grouped-toggle-item, ui);
     @include clickable-cursor(grouped-toggle-item, clickable);
     /* `.grouped-toggle` clips overflow (same reason TabBar does for

@@ -5,15 +5,21 @@
   --body-fg: var(--material-color-blue-grey-50);
   --surface-bg: var(--material-color-blue-grey-900);
   --surface-fg: var(--material-color-blue-grey-50);
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
-  --sidebar-bg: var(--material-color-blue-grey-900);
-  --sidebar-fg: var(--material-color-blue-grey-50);
-  --menu-bg: var(--material-color-blue-grey-900);
-  --menu-fg: var(--material-color-blue-grey-50);
+  /* In the dark, what is raised is lighter. */
+  --surface-raised-bg: var(--material-color-blue-grey-800);
+  --surface-raised-fg: var(--material-color-blue-grey-50);
+  --surface-sunken-bg: #1e282d;
+  --surface-sunken-fg: var(--material-color-blue-grey-50);
+  --surface-overlay-bg: var(--material-color-blue-grey-700);
+  --surface-overlay-fg: var(--material-color-blue-grey-50);
+  --inverse-bg: var(--material-color-blue-grey-50);
+  --inverse-fg: var(--material-color-blue-grey-900);
   --primary-bg: var(--material-color-indigo-200);
   --primary-color: var(--material-color-indigo-200);
   --primary-fg: var(--material-color-indigo-900);
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: var(--material-color-blue-grey-600);
+  --control-fg: var(--material-color-blue-grey-50);
   --secondary-bg: var(--material-color-blue-grey-300);
   --secondary-color: var(--material-color-blue-grey-300);
   /* 900, not 800: blue-grey-800 on 300 is about 4:1, short of AA for small
@@ -21,10 +27,10 @@
   --secondary-fg: var(--material-color-blue-grey-900);
   --stripe-bg: color-mix(
     in srgb,
-    var(--menu-bg) 88%,
-    var(--menu-fg) 12%
+    var(--surface-overlay-bg) 88%,
+    var(--surface-overlay-fg) 12%
   );
-  --stripe-fg: var(--menu-fg);
+  --stripe-fg: var(--surface-overlay-fg);
   --border-color: var(--material-color-blue-grey-600);
   --input-bg: var(--material-color-blue-grey-700);
   --input-fg: var(--material-color-blue-grey-50);
@@ -38,8 +44,6 @@
   --slider-thumb-border: 1px solid var(--material-color-light-blue-50);
   --slider-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
   --slider-thumb-size: 1rem;
-  --button-bg: var(--material-color-blue-grey-800);
-  --button-fg: var(--material-color-blue-grey-50);
   --tab-bg: var(--material-color-blue-grey-700);
   --tab-fg: var(--material-color-blue-grey-100);
   --tab-active-bg: var(--material-color-blue-grey-200);

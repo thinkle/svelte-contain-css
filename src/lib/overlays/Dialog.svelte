@@ -137,7 +137,7 @@
   dialog {
     @include box-props(dialog, surface);
     @include border-props-borderless(dialog, surface);
-    @include color-props(dialog, surface);
+    @include color-props(dialog, surface-overlay);
     @include typography-container-props(dialog, surface);
     /* A <dialog> is a DOM child of wherever it was declared -- a table cell,
        a bold header, a clickable card -- and would inherit its text styles

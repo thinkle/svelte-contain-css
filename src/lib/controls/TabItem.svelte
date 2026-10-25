@@ -68,7 +68,7 @@
   }
   .tab > :global(button),
   .tab > :global(div > button) {
-    @include color-props(tab, button, control, secondary);
+    @include color-props(tab, button, control);
     @include box-props(tab, button, control);
     @include border-props-borderless(tab, button, control);
     @include typography-props(tab, button, ui);
@@ -87,7 +87,7 @@
   }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
-    @include color-props(tab-active, primary, tab, button, control, secondary);
+    @include color-props(tab-active, primary, tab, button, control);
     @include typography-props(tab-active, tab, button, ui);
   }
 </style>

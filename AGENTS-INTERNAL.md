@@ -509,11 +509,47 @@ not only at :root. Do not create self-referencing custom-property cycles. Keep
 surface pairs and text ingredients independent when authoring themes. Mixing does
 not guarantee contrast; inspect light, dark, nested and remapped surfaces.
 
+### Color families (exact colors keyed by family)
+
+Contract: [docs/color-families.md](docs/color-families.md). Rules for new
+components:
+
+- **Color chains name a family.** `color-props(<component prefixes...>,
+  <family>, ...)`. Prefixes before the first family name are component-level:
+  setting their `bg` takes the surface out of its family. A layout surface
+  compiles a neutral tier (`surface`, `surface-raised`, `surface-sunken`,
+  `surface-overlay`, `background`, `inverse`); quiet chrome compiles
+  `control`; a variant compiles its role (`primary`, `danger`...). Never end a
+  chrome chain in `secondary`: that is an accent.
+- **Neutral tiers get the family machinery** (`family-vars()`): flags,
+  pins, and pin-aware Text tones. Pass `$family: false` on elements that
+  only borrow a pair (a heading inside a Bar, menu items) to skip it.
+- **Never add a component-keyed color hook for text, links or headings**
+  (`--bar-link-fg`, `--card-heading-1-fg`). Exact colors are `--on-<family>-*`
+  pins. Typography, spacing, borders and mix rules keep component chains.
+- **Role sugar uses `surfaceVars(role, prefix)`** (see Bar). It writes
+  private `--_<prefix>-role-bg/-fg` and `--_<prefix>-on-*` transport; the bg
+  chain reads them between the component vars and the family.
+- **"Unset" can't stop a `var()` chain**, so the comp/role flags become
+  registered `<number>`s (`--_comp-n`, `--_role-n`, initial 1, non-inheriting)
+  on each consumer, and `select-pinned()` picks with `color-mix` at 0%/100%.
+  A consumer of the flags (anything calling `select-pinned()`) must include
+  `family-selectors` on the same element.
+- Pin-aware values that mix against `currentColor` (links, headings) carry
+  only the pins down by inheritance and select at the consumer; tones,
+  which mix against the surface's `--_color`, select on the surface.
+
+Tests: `tests/color-families.spec.ts` (fixtures in
+`src/routes/tests/color-families`).
+
 ### Heading color implementation
 
 `heading-color-context-vars()` in `sass/_typography.scss` resolves, per level,
 one private candidate per prefix step (`--_h2-c1` ... `--_h2-cN`):
-`var(<step>-fg, color-mix(in srgb, currentColor, var(<step>-tint) <amount>))`.
+`var(<step>-fg, color-mix(in srgb, currentColor, var(<step>-tint) <amount>))`
+for the global steps; component-scoped steps carry only the tint (an exact
+color there would be a component-keyed color). The result is
+`--_hN-mix`; `--_hN-color` is `select-pinned()` of the family pins over it.
 A step with neither is invalid at computed-value time, which is what lets
 `--_h2-color` fall through to the next step; keep each step its own property.
 `currentColor` stays an unresolved token until the heading's `color`

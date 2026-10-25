@@ -234,7 +234,7 @@
   .dropdown-wrapper > :global(.dropdown-menu > button) {
     @include box-props-square(select, input, control);
     @include border-props(select, input, control);
-    @include color-props(select, input, control);
+    @include color-props(select, input, background, $family: false);
     width: var(
       --select-width,
       var(--target-width, var(--dropdown-menu-width, min(12em, 100vw)))
@@ -260,7 +260,7 @@
     box-sizing: border-box;
   }
   .dropdown-wrapper {
-    @include color-props(select, input, control);
+    @include color-props(select, input, background, $family: false);
     --menu-item-justify: var(--select-menu-item-justify, flex-start);
   }
   .dropdown-menu :global(.dropdown-menu) > :global(button) {

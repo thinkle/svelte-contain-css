@@ -111,10 +111,9 @@
   }
 
   div :global(a) {
-    color: var(
-      --body-link-fg,
-      var(--text-link-fg, var(--link-fg, var(--_link-default-fg, currentColor)))
-    );
+    /* colors.css resolves the link color (hand-set --link-fg, then the
+       surface's family pin, then the tint) on the link itself. */
+    color: var(--_link-fg, currentColor);
     background-color: var(
       --body-link-bg,
       var(--text-link-bg, var(--link-bg, transparent))
@@ -139,13 +138,7 @@
 
   div :global(a:hover),
   div :global(a:focus-visible) {
-    color: var(
-      --body-link-hover-fg,
-      var(
-        --text-link-hover-fg,
-        var(--link-hover-fg, var(--link-fg, var(--_link-default-fg, currentColor)))
-      )
-    );
+    color: var(--_link-fg, currentColor);
     background-color: var(
       --body-link-hover-bg,
       var(
@@ -303,8 +296,6 @@
     text-indent: var(--_first-letter-text-indent, revert);
     font-variant: var(--_first-letter-font-variant, revert);
     text-align: var(--_first-letter-text-align, revert);
-    --link-bg: var(--_first-letter-link-bg);
-    --link-fg: var(--_first-letter-link-fg);
     background: var(--_first-letter-background, revert);
     color: var(--_first-letter-color, revert);
     float: var(--first-letter-float, none);

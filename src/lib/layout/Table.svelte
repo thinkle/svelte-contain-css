@@ -384,7 +384,7 @@
     border-bottom: var(
       --table-first-row-bottom-border,
       var(--table-thick-border, 3px) solid
-        var(--table-first-row-border-color, var(--secondary-bg))
+        var(--table-first-row-border-color, var(--secondary-color, var(--secondary-bg)))
     );
   }
 
@@ -397,18 +397,18 @@
     @include border-props(table-cell, cell);
     border-left: var(
       --table-border,
-      1px solid var(--table-border-color, var(--secondary-bg))
+      1px solid var(--table-border-color, var(--border-color))
     );
     border-right: var(
       --table-border,
-      1px solid var(--table-border-color, var(--secondary-bg))
+      1px solid var(--table-border-color, var(--border-color))
     );
   }
   table  :global(tr > th:first-child:has(~ td)) /* Left header on row with cells */ {
     border-right: var(
       --table-first-row-bottom-border,
       var(--table-thick-border, 3px) solid
-        var(--table-first-row-border-color, var(--secondary-bg))
+        var(--table-first-row-border-color, var(--secondary-color, var(--secondary-bg)))
     ) !important ;
   }
 
@@ -592,7 +592,7 @@
       border-right: var(
         --table-first-row-bottom-border,
         var(--table-thick-border, 3px) solid
-          var(--table-first-row-border-color, var(--secondary-bg))
+          var(--table-first-row-border-color, var(--secondary-color, var(--secondary-bg)))
       ) !important;
     }
   }
@@ -603,7 +603,7 @@
       border-right: var(
         --table-first-row-bottom-border,
         var(--table-thick-border, 3px) solid
-          var(--table-first-row-border-color, var(--secondary-bg))
+          var(--table-first-row-border-color, var(--secondary-color, var(--secondary-bg)))
       );
     }
   }

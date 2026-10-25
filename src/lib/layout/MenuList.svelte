@@ -59,7 +59,7 @@
     margin: 0;
     margin-inline: 0;
     padding-inline: 0;
-    @include color-props(menu, control);
+    @include color-props(menu, surface-overlay);
     overflow: hidden;
     width: 100%;
   }
@@ -106,7 +106,7 @@
       height: var(--menu-item-height);
       text-decoration: none;
       @include typography-props(menu-item, button, ui);
-      @include color-props(menu-item, menu, button, control);
+      @include color-props(menu-item, menu, surface-overlay, $family: false);
       @include box-props-square(menu-item, control);
       @include border-props-borderless(menu-item, control);
       margin: 0;
@@ -121,8 +121,9 @@
           menu-item-even,
           stripe,
           menu-item,
-          button,
-          control
+          menu,
+          surface-overlay,
+          $family: false
         );
       }
     }

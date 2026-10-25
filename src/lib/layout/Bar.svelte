@@ -8,6 +8,7 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { BarStyleProps, ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
+  import { surfaceVars } from "$lib/surfaceVars";
   import {
     COLOR_VARS,
     TYPOGRAPHY_VARS,
@@ -67,11 +68,13 @@
     "marginBottom",
   ];
 
+  /* A role, not a raw background: the bar joins that color family, so a
+     theme's --on-primary-* pins apply on it (see surfaceVars). */
   const variantStyle = $derived(
     primary
-      ? "--bar-bg: var(--primary-bg); --bar-fg: var(--primary-fg);"
+      ? surfaceVars("primary", "bar")
       : secondary
-        ? "--bar-bg: var(--secondary-bg); --bar-fg: var(--secondary-fg);"
+        ? surfaceVars("secondary", "bar")
         : "",
   );
 
@@ -172,6 +175,6 @@
   .bar :global(h6) {
     margin-block-start: 0 !important;
     margin-block-end: 0 !important;
-    @include color-props(bar, surface);
+    @include color-props(bar, surface, $family: false);
   }
 </style>

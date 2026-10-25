@@ -358,7 +358,7 @@
     position: fixed;
     margin: 0;
     overflow: visible;
-    @include color-props(tooltip, secondary);
+    @include color-props(tooltip, inverse);
     @include box-props-square(tooltip);
     @include border-props(tooltip);
     @include box-shadow(tooltip, surface);
@@ -390,7 +390,7 @@
     border-left: var(--tooltip-arrow-size, 8px) solid transparent;
     border-right: var(--tooltip-arrow-size, 8px) solid transparent;
     border-bottom: var(--tooltip-arrow-size, 8px) solid
-      var(--tooltip-arrow-color, var(--secondary-bg, white));
+      var(--tooltip-arrow-color, var(--tooltip-bg, var(--inverse-bg, white)));
   }
   .top::after {
     content: " ";
@@ -401,7 +401,7 @@
     border-left: var(--tooltip-arrow-size, 8px) solid transparent;
     border-right: var(--tooltip-arrow-size, 8px) solid transparent;
     border-top: var(--tooltip-arrow-size, 8px) solid
-      var(--tooltip-arrow-color, var(--secondary-bg, white));
+      var(--tooltip-arrow-color, var(--tooltip-bg, var(--inverse-bg, white)));
   }
   .right::after {
     left: var(--tooltip-arrow-size, 8px);

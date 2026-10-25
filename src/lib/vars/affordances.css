@@ -56,14 +56,14 @@
   );
   --grab-bar-hover-bg: color-mix(
     in oklab,
-    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
+    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg, var(--bg)))))
       var(--grab-bar-hover-base-color-percentage, 88%),
     var(--grab-bar-hover-color-mix, white)
       calc(100% - var(--grab-bar-hover-base-color-percentage, 88%))
   );
   --grab-bar-active-bg: color-mix(
     in oklab,
-    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg, var(--bg))))
+    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg, var(--bg)))))
       var(--grab-bar-active-base-color-percentage, 80%),
     var(--grab-bar-active-color-mix, black)
       calc(100% - var(--grab-bar-active-base-color-percentage, 80%))

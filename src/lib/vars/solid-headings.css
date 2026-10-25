@@ -1,6 +1,6 @@
 :root {
-  --heading-bg: var(--secondary-bg);
-  --heading-fg: var(--secondary-fg);
+  --heading-bg: var(--control-bg);
+  --heading-fg: var(--control-fg);
   --heading-padding: 0.2em 0.45em;
   /* Every level is filled: tones nudge the pair rather than repaint it. */
   --heading-text-amount: 25%;
@@ -9,15 +9,15 @@
   --heading-major-fg: var(--primary-fg);
   --heading-major-padding: 0.25em 0.55em;
 
-  /* A shade of the secondary pair itself, not of the page: mixing in --bg
+  /* A shade of the control pair itself, not of the page: mixing in --bg
      made minor blocks vanish on a light Card and lowered contrast on dark
      pages. */
   --heading-minor-bg: color-mix(
     in srgb,
-    var(--secondary-bg) 94%,
-    var(--secondary-fg) 6%
+    var(--control-bg) 94%,
+    var(--control-fg) 6%
   );
-  --heading-minor-fg: var(--secondary-fg);
+  --heading-minor-fg: var(--control-fg);
   --heading-minor-padding: 0.18em 0.4em;
   --heading-box-shadow: 4px 4px 3px
     color-mix(in srgb, var(--_color) 30%, transparent);

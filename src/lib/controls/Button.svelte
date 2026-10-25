@@ -104,7 +104,7 @@
     height: var(--button-height);
     @include box-props(button, control);
     @include border-props-borderless(button);
-    @include color-props(button, control, secondary);
+    @include color-props(button, control);
     @include box-shadow(button, control);
     @include typography-props-bare(button, ui);
     @include clickable(button, clickable);

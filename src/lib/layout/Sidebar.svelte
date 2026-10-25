@@ -164,7 +164,7 @@
     /* Set only by `sheetButton="button"` (below); cleared here so it never
        leaks in from an enclosing sidebar. */
     --_sidebar-sheet-edge-override: initial;
-    @include color-props(sidebar, surface);
+    @include color-props(sidebar, surface-sunken);
     @include typography-props-bare(sidebar, ui);
     height: 100%;
     width: calc(var(--sidebar-width) + var(--grab-bar-width));
@@ -172,7 +172,7 @@
     overflow: hidden;
   }
   aside .content {
-    @include color-props(sidebar, surface);
+    @include color-props(sidebar, surface-sunken);
     width: var(--sidebar-width);
     height: 100%;
     overflow-x: hidden;
@@ -339,7 +339,7 @@
         sidebar,
         0 0 var(--space, 8px) rgba(127, 127, 127, 0.4)
       );
-      @include color-props(sidebar, surface);
+      @include color-props(sidebar, surface-sunken);
     }
 
     & > button {
@@ -361,7 +361,7 @@
       border: var(--circle-button-border, var(--mini-button-border));
       width: var(--_sidebar-expander-width);
       height: var(--_sidebar-expander-height);
-      @include color-props(circle-button, mini-button, button, control, secondary);
+      @include color-props(circle-button, mini-button, button, control);
       @include clickable(circle-button, mini-button, button, control);
       @include focusable();
     }
@@ -527,8 +527,8 @@
     }
 
     .edge-bar {
-      @include color-props(grab-bar, sidebar, surface);
-      background: var(--grab-bar-bg, var(--sidebar-bg, var(--surface-bg)));
+      @include color-props(grab-bar, sidebar, surface-sunken);
+      background: var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg))));
       box-shadow: var(--grab-bar-box-shadow, none);
       position: absolute;
       right: 0;

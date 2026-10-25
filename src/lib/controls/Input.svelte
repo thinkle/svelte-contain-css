@@ -47,7 +47,7 @@
     @include typography-props(input, ui);
     @include box-props(input, control);
     @include border-props-borderless(input, control);
-    @include color-props(input, control);
+    @include color-props(input, background, $family: false);
     width: var(--input-width);
     @include focusable();
   }

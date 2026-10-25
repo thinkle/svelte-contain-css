@@ -23,7 +23,7 @@ async function expectBackground(page: Page, id: string, expected: string) {
 
 test("ui typography and control geometry stay in separate families", async ({ page }) => {
   await page.goto(url);
-  await page.locator("#theme").evaluate(el => el.setAttribute("style", "--ui-font-size: 23px; --ui-font-weight: 650; --control-font-size: 47px; --primary-font-size: 49px; --secondary-font-size: 51px; --ui-padding: 77px; --secondary-padding: 79px; --control-padding: 6px 12px; --control-border-radius: 9px; --secondary-border-radius: 35px; --ui-bg: red; --control-bg: rgb(10, 20, 30); --control-fg: white;"));
+  await page.locator("#theme").evaluate(el => el.setAttribute("style", "--ui-font-size: 23px; --ui-font-weight: 650; --control-font-size: 47px; --primary-font-size: 49px; --secondary-font-size: 51px; --ui-padding: 77px; --secondary-padding: 79px; --control-padding: 6px 12px; --control-border-radius: 9px; --secondary-border-radius: 35px; --ui-bg: red; --control-bg: rgb(10, 20, 30); --control-fg: white; --background-bg: rgb(40, 50, 60);"));
   for (const id of ["button", "primary", "link", "input", "select", "native"]) {
     await expect(page.getByTestId(id)).toHaveCSS("font-size", "23px");
     await expect(page.getByTestId(id)).toHaveCSS("padding-top", "6px");
@@ -31,7 +31,9 @@ test("ui typography and control geometry stay in separate families", async ({ pa
   }
   await expect(page.getByTestId("tag")).toHaveCSS("font-weight", "650");
   await expect(page.getByTestId("button")).toHaveCSS("border-top-left-radius", "9px");
-  await expectBackground(page, "input", "rgb(10, 20, 30)");
+  // Text fields paint the page tier (the `background` family), not control
+  // chrome: a field must not read as a button.
+  await expectBackground(page, "input", "rgb(40, 50, 60)");
 });
 
 test("component and family overrides take precedence", async ({ page }) => {

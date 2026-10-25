@@ -160,10 +160,10 @@ defaults.fgColor = {
 /* Based on sass mix-in...
 @mixin color-props ($prefixes...) {
   background: vars(bg, $prefixes...);
-  color: vars(fg, $prefixes...);  
-  --link-bg: #{vars(link-bg, $prefixes...)};
-  --link-fg: #{vars(link-fg, $prefixes...)};
+  color: vars(fg, $prefixes...);
 }
+Link and heading colors are keyed by color family (--on-<family>-*), not by
+component, so they are not listed per component. See docs/color-families.md.
   */
 
 function colorProps(prefix: string): CSSVariable[] {
@@ -176,16 +176,6 @@ function colorProps(prefix: string): CSSVariable[] {
     },
     {
       name: `--${prefix}-fg`,
-      ...defaults.fgColor,
-      group,
-    },
-    {
-      name: `--${prefix}-link-bg`,
-      ...defaults.bgColor,
-      group,
-    },
-    {
-      name: `--${prefix}-link-fg`,
       ...defaults.fgColor,
       group,
     },

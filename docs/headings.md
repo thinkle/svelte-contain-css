@@ -17,8 +17,30 @@ heading component or per-instance prop is needed.
 Every variable exists at four levels, most specific first:
 `--heading-1-*` … `--heading-6-*`, then the group (`--heading-major-*` for
 h1-h2, `--heading-minor-*` for h5-h6), then the shared `--heading-*`.
-Component-scoped forms (`--card-heading-2-*`, `--tile-heading-*`,
-`--surface-heading-*`, ...) beat all of those inside that component.
+Component-scoped forms (`--card-heading-2-*`, `--tile-heading-*`, ...) beat
+all of those inside that component, for tints, amounts, typography and
+decoration. Exact colors are not component-scoped: they are keyed by color
+family (below).
+
+## Exact colors on a color family
+
+In front of everything on this page sit the family pins
+(`--on-<family>-heading-<n>-fg` / `-bg`, walking level → group → shared; see
+[color-families.md](color-families.md)):
+
+```css
+:root {
+  --on-surface-heading-fg: var(--primary-bg);  /* the app's surfaces, cards, sidebars */
+  --on-primary-heading-fg: var(--primary-fg);  /* every primary bar or tile */
+  --on-primary-heading-1-bg: var(--primary-fg);/* an inverted filled h1 on primary */
+  --on-primary-heading-1-fg: var(--primary-bg);
+}
+```
+
+They apply only on surfaces in that family. A surface with a hand-set
+background belongs to no family, and its headings use the mix rules below. On
+a role surface with no heading pin, headings take the surface foreground
+rather than tinting toward the role's own color.
 
 | Variable                          | Meaning                                                                                                        |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -162,18 +184,22 @@ variables, set on the container:
   <h3>Closures <Text warning>2 active</Text></h3>
 </Tile>
 
-<!-- Solid preset, colored Tile: drop the chip, keep the tile's text. -->
+<!-- Solid preset, colored Tile: drop the chip, keep the tile's text.
+     `initial` unsets the theme's fills on this surface. -->
 <Tile bg="var(--success-bg)" fg="var(--success-fg)"
   --heading-tint-scale="0"
-  --tile-heading-bg="transparent"
-  --tile-heading-fg="currentColor"
+  --heading-bg="initial" --heading-fg="initial"
+  --heading-major-bg="initial" --heading-major-fg="initial"
   --tile-heading-padding="0">
 ```
 
 The rule of thumb: on a colored surface, decline tints, soften Text tones,
 invert any filled level whose background matches the surface, and point rules
 and shadows at `currentColor` or the surface's `fg`. A `--tile-heading-*`
-(or `--card-heading-*`, ...) variable scopes a change to that component. On a dark surface, a
+(or `--card-heading-*`, ...) variable scopes a tint, padding or decoration
+change to that component. For colored surfaces you use often, prefer a role:
+`surfaceVars("success", "tile")` plus `--on-success-heading-*` pins, written
+once in the theme instead of per instance. On a dark surface, a
 strong preset may just want less: `--heading-tint-scale: 0.6`.
 
 Because the fixes depend on which levels a preset fills, the override is

@@ -165,7 +165,7 @@
     flex-shrink: 0;
     width: var-with-fallbacks(--size, radio-button, font, 1em);
     height: var-with-fallbacks(--size, radio-button, font, 1em);
-    @include color-props(radio-button, toggle, inactive, secondary);
+    @include color-props(radio-button, toggle, inactive);
     border: var-with-fallbacks(
       --border,
       radio-button,

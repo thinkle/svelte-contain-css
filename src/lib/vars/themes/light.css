@@ -5,22 +5,29 @@
   --bg: #fcfcff;
   --surface-bg: #f4f5fb;
   --surface-fg: #1b1d2e;
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
-  --sidebar-bg: #eef0fa;
-  --sidebar-fg: #1b1d2e;
-
-  --menu-fg: #1b1d2e;
-  --menu-bg: #ffffff;
+  /* The ladder: cards sit up off the reading surface, sidebars and card
+     headers sit back from it, menus and dialogs float. */
+  --surface-raised-bg: #ffffff;
+  --surface-raised-fg: #1b1d2e;
+  --surface-sunken-bg: #eef0fa;
+  --surface-sunken-fg: #1b1d2e;
+  --surface-overlay-bg: #ffffff;
+  --surface-overlay-fg: #1b1d2e;
+  --inverse-bg: var(--material-color-indigo-900);
+  --inverse-fg: var(--white);
   --primary-bg: var(--material-color-indigo-600);
   --primary-color: var(--material-color-indigo-600);
   --primary-fg: var(--white);
-  --secondary-bg: var(--material-color-indigo-50);
-  --secondary-color: var(--material-color-indigo-50);
-  --secondary-fg: var(--material-color-indigo-900);
-  --stripe-bg: color-mix(in srgb, var(--menu-bg) 94%, var(--menu-fg) 6%);
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: var(--material-color-indigo-50);
+  --control-fg: var(--material-color-indigo-900);
+  /* An accent, not chrome: indigo-50 as text measured 1.1:1. */
+  --secondary-bg: var(--material-color-pink-700);
+  --secondary-color: var(--material-color-pink-700);
+  --secondary-fg: var(--white);
+  --stripe-bg: color-mix(in srgb, var(--surface-overlay-bg) 94%, var(--surface-overlay-fg) 6%);
   --active-color-mix: black;
-  --stripe-fg: var(--menu-fg);
+  --stripe-fg: var(--surface-overlay-fg);
   --tab-bg: var(--material-color-indigo-50);
   --tab-fg: var(--material-color-indigo-900);
   --tab-active-bg: #ffffff;
@@ -43,9 +50,6 @@
 
   --border-color: var(--material-color-indigo-300);
   --focus-color: var(--material-color-indigo-a200);
-  --tooltip-bg: var(--material-color-indigo-900);
-  --tooltip-fg: var(--white);
-  --tooltip-arrow-color: var(--tooltip-bg);
   --input-bg: #fefefe;
   --input-fg: var(--material-color-grey-900);
   --slider-track-bg: color-mix(

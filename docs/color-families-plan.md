@@ -1,6 +1,10 @@
 # Color families: design decisions and handoff
 
-Status: design agreed in discussion (Oct 2026), not implemented. This brief is
+Status: implemented (Oct 2026). The contract as built is
+[color-families.md](color-families.md); this page keeps the reasoning. The
+open questions below are answered at the end, in "Decisions taken".
+
+Original status: design agreed in discussion (Oct 2026), not implemented. This brief is
 for an agent working on `contain` and a large consuming app (updraft) together.
 Settle the open questions at the end against the app's real usage before
 freezing names.
@@ -292,3 +296,35 @@ Keep the existing tests green (`tests/heading-colors.spec.ts`,
 `tests/contextual-accents.spec.ts`, `tests/color-mix.spec.ts`) or update them
 deliberately. Use `/review/headings` (with `&recipes=off`) and its capture
 script for before/after review.
+
+## Decisions taken (implementation, Oct 2026)
+
+Settled against updraft's real surfaces while porting it:
+
+1. **Ladder**: `background`, `surface`, `surface-raised`, `surface-sunken`,
+   `surface-overlay`, plus `inverse`. Named, not numbered. Sunken was added
+   for sidebars and card headers, which every bundled theme already colored
+   a step back from the surface. Card and Tile are raised; menus and Dialog
+   overlay; Tooltip inverse. Input and Select paint `background` (the 1.6
+   behavior; 1.7 had moved them onto control by accident). No theme-wide
+   mapping hook: tier aliasing covered updraft.
+1b. **`secondary` is an accent.** Chrome moved to a `control` family
+   (`--control-bg/-fg`, default a step off the surface). Toggles fall back to
+   `inactive`.
+2. **App slugs**: families need no library change (`surfaceVars("report-filter",
+   "tile")` + `--on-report-filter-*`). Tones stay compiled to the seven;
+   updraft's `excel` etc. keep their `.status-text` class. Revisit if a second
+   app needs custom tones.
+3. **`--heading-*-fg/-bg`** stay exact everywhere for this release
+   (documented as deprecated in favor of `--on-surface-heading-*`).
+4. **Mix rules per family**: not added; global mix rules plus pins were
+   enough. Role surfaces decline heading tints by default instead.
+5. **Weight**: about 3.5 KB of uncompressed CSS per family-aware surface
+   rule; tones dedupe their mix through `--_<tone>-mix`.
+6. **Structural guard**: none. A component-level color is a safe failure
+   (unknown family, mixes).
+
+Mechanism change from the plan: step pairing could not express "stop when a
+component background is set" (a `var()` chain can only test "set"). The
+flags are turned into registered `<number>`s and selected with `color-mix`;
+see "How it works" in color-families.md.

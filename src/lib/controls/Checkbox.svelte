@@ -197,7 +197,7 @@
     flex-shrink: 0;
     width: var-with-fallbacks(--size, checkbox, font, 1em);
     height: var-with-fallbacks(--size, checkbox, font, 1em);
-    @include color-props(checkbox, toggle, inactive, secondary);
+    @include color-props(checkbox, toggle, inactive);
     border: var-with-fallbacks(
       --border,
       checkbox,

@@ -107,3 +107,4 @@ export { Progress, Tooltip };
 export { Table };
 export { DropdownMenu };
 export { Text };
+export { surfaceVars } from "./surfaceVars";

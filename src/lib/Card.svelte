@@ -139,7 +139,7 @@
       surface,
       var(--border-width) var(--border-style) var(--border-color)
     );
-    @include color-props(card, surface);
+    @include color-props(card, surface-raised);
     @include box-shadow(card, surface);
   }
 
@@ -181,7 +181,7 @@
   }
 
   header {
-    @include color-props(card-header, secondary);
+    @include color-props(card-header, surface-sunken);
     @include box-props-top(card-header, bar);
     @include border-props-borderless(card-header, bar);
     display: flex;
@@ -203,12 +203,12 @@
     :global(h6) {
       margin-block-start: 0 !important;
       margin-block-end: 0 !important;
-      @include color-props(card-header, secondary);
+      @include color-props(card-header, surface-sunken, $family: false);
     }
   }
 
   footer {
-    @include color-props(card-footer, secondary);
+    @include color-props(card-footer, surface-sunken);
     @include box-props-bottom(card-footer, bar);
     @include border-props-borderless(card-footer, bar);
     /* Centred in its min-height like the header, but a column, so footer
@@ -226,10 +226,10 @@
     max-width: var(--line-width);
     width: 100%;
     box-sizing: border-box;
-    @include color-props(card-content, surface);
+    @include color-props(card-content, card, surface-raised);
     @include box-props(card-content);
     @include border-props-borderless(card-content);
-    @include typography-container-props(card, surface);
+    @include typography-container-props(card, surface-raised);
   }
 
   /* ── Type that follows the card's width ─────────────────── */
