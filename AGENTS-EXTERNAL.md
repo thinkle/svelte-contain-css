@@ -1620,8 +1620,8 @@ of the surface, never by component. Full contract:
 
 ```css
 :root {
-  --on-surface-heading-fg: var(--primary-bg);   /* exact on the app's surfaces */
-  --on-surface-link-text-fg: rgb(0, 51, 160);
+  --on-background-heading-fg: var(--primary-bg); /* exact on the page and every tier above it */
+  --on-background-link-text-fg: rgb(0, 51, 160);
   --on-primary-heading-fg: var(--primary-fg);   /* exact on primary */
   --on-primary-link-text-fg: var(--primary-fg);
 }

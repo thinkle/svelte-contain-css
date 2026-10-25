@@ -54,14 +54,16 @@ mix from its own colors, under every theme.
 
 Pins are sparse: write only the pairs a designer tuned. On a neutral tier,
 pins walk down the ladder (`--on-surface-raised-X` → `--on-surface-X` →
-`--on-background-X`). A role never borrows another family's pins, and
+`--on-background-X`), never up. So an app-wide neutral pin belongs on
+`background`: it then covers the page, surfaces, cards and sidebars, and a
+tier that needs something different overrides it. A role never borrows another family's pins, and
 `inverse` stands alone.
 
 ```css
 :root {
-  /* On the app's surfaces: exact. Cards and sidebars inherit these. */
-  --on-surface-heading-fg: var(--primary-bg);
-  --on-surface-link-text-fg: rgb(0, 51, 160);
+  /* On the page and every neutral tier above it: exact. */
+  --on-background-heading-fg: var(--primary-bg);
+  --on-background-link-text-fg: rgb(0, 51, 160);
 
   /* On primary bars and tiles: exact, written once. */
   --on-primary-heading-fg: var(--primary-fg);
