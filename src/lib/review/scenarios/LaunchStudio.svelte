@@ -57,11 +57,7 @@
   let rolloutTrackLabel = $derived(rolloutLabels[rolloutTrack]);
 </script>
 
-<Hero
-  bg="var(--primary-bg)"
-  fg="var(--primary-fg)"
-  headingFg="var(--primary-fg)"
->
+<Hero primary>
   <TextLayout>
     <div class="eyebrow">Encyclopedia Of Strategic Containers</div>
 

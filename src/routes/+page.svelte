@@ -215,11 +215,7 @@
 
 <ThemeInjector />
 {#if showHero}
-  <Hero
-    bg="var(--primary-bg)"
-    fg="var(--primary-fg)"
-    headingFg="var(--primary-fg)"
-  >
+  <Hero primary>
     <h1 class="hero-title">Meet <em>ContainCSS</em></h1>
     <p>
       The Simple Svelte Component Library that uses css variables & container

@@ -2,6 +2,7 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import { elementProps } from "$lib/util";
+  import { surfaceVars } from "$lib/surfaceVars";
   import {
     COLOR_VARS,
     TYPOGRAPHY_CONTAINER_VARS,
@@ -13,12 +14,22 @@
     HTMLAttributes<HTMLElement>,
     {
       children?: Snippet;
+      primary?: boolean;
+      secondary?: boolean;
     },
     HeroStyleProps &
       StyleProps<typeof HERO_VARS>
   >;
 
-  const { children, class: className, ...restProps }: Props = $props();
+  const {
+    children,
+    primary,
+    secondary,
+    headingFg,
+    headingBg,
+    class: className,
+    ...restProps
+  }: Props = $props();
 
   /* The shorthands hero's own CSS backs, one group per mixin it
      includes. The Props type is derived from this same array, so what the
@@ -28,15 +39,38 @@
     ...TYPOGRAPHY_CONTAINER_VARS,
   ] as const;
 
+  /* A role, like Bar's: the hero joins that color family, so a theme's
+     --on-primary-* pins apply and unpinned headings stay the hero's own
+     foreground instead of tinting toward its background. */
+  const roleStyle = $derived(
+    primary
+      ? surfaceVars("primary", "hero")
+      : secondary
+        ? surfaceVars("secondary", "hero")
+        : "",
+  );
+
+  /* headingFg / headingBg are this one hero's choice, made against the
+     background it was given, so they are a full-strength tint (relative,
+     reaches the color) and a heading fill -- not a component-keyed exact
+     color a theme could leak onto other heroes. */
+  const headingStyle = $derived(
+    [
+      headingFg != null &&
+        `--hero-heading-tint: ${headingFg}; --hero-heading-tint-amount: 100%; --body-heading-tint: ${headingFg}; --body-heading-tint-amount: 100%;`,
+      headingBg != null && `--heading-bg: ${headingBg};`,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
+
   const el = $derived(
-    elementProps(restProps, "hero", [
-      ...HERO_VARS,
-      "padding",
-      "width",
-      "height",
-      "headingFg",
-      "headingBg",
-    ]),
+    elementProps(
+      restProps,
+      "hero",
+      [...HERO_VARS, "padding", "width", "height"],
+      `${roleStyle} ${headingStyle}`,
+    ),
   );
 </script>
 
