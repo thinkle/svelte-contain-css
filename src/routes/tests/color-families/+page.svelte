@@ -2,7 +2,7 @@
   // Deterministic fixtures for tests/color-families.spec.ts: exact colors
   // keyed by color family, mixing everywhere else. Plain rgb() values so the
   // spec can check pins exactly and mixes by hand.
-  import { Bar, Card, Container, Tile, Text, surfaceVars } from "$lib";
+  import { Bar, Card, Container, TextLayout, Tile, Text, surfaceVars } from "$lib";
 
   const pins = [
     "--surface-bg: rgb(245, 245, 245)",
@@ -77,4 +77,17 @@
   <div style={surfaceVars("primary", "tile")}>
     <Tile data-testid="role-raw" bg="rgb(40, 40, 40)" fg="rgb(240, 240, 240)"><p><a href="#x">link</a></p></Tile>
   </div>
+
+  <!-- A band that owns its headings keeps them, even inside a TextLayout
+       whose own headings are pinned. -->
+  <Container data-testid="band-in-prose">
+    <TextLayout>
+      <h2 class="prose">Prose heading</h2>
+      <Card --card-header-bg="rgb(200, 0, 0)" --card-header-fg="rgb(255, 255, 255)">
+        {#snippet header()}<h3>Card header</h3>{/snippet}
+        <p>Body</p>
+      </Card>
+      <Bar bg="rgb(40, 40, 40)" fg="rgb(240, 240, 240)"><h3 class="bar">Bar heading</h3></Bar>
+    </TextLayout>
+  </Container>
 </div>

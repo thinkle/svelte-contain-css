@@ -172,6 +172,19 @@
   );
 }
 
+/* For a band that paints its own pair and owns the headings in it (a Bar, a
+   Card header or footer) without being a typography container: headings take
+   the band's foreground and no fill. Declared as the same context vars a
+   typography container publishes, so it wins by proximity -- including over
+   an enclosing TextLayout, which re-applies --_hN-color to every heading
+   inside it, resolved against TextLayout's own surface. */
+@mixin heading-color-reset {
+  @for $n from 1 through 6 {
+    --_h#{$n}-color: currentColor;
+    --_h#{$n}-background: transparent;
+  }
+}
+
 @mixin heading-typography-context-vars($var-prefix, $prefixes...) {
   --_#{$var-prefix}-font-family: #{fn.var-with-fallbacks(--font-family, list.append($prefixes, revert)...)};
   --_#{$var-prefix}-text-transform: #{fn.var-with-fallbacks(

@@ -147,6 +147,8 @@
        of stylesheet order, so it doesn't need `!important` or a doubled
        class the way an outside consumer's workaround for this used to. */
     --_heading-margin-inline: var-with-fallbacks(--heading-margin-inline, bar, 0);
+    /* Headings in a bar are the bar's text, even inside a TextLayout. */
+    @include heading-color-reset;
   }
 
   /* Small tier (see $small-max): --bar-padding-small, --bar-gap-small and

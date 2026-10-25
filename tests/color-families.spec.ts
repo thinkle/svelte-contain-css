@@ -88,4 +88,10 @@ test.describe("color families", () => {
   test("a raw background on top of a role context mixes", async ({ page }) => {
     near(await rgb(page, "role-raw", "a"), mix(DARK_FG, LINK, 0.1));
   });
+
+  test("a band's headings take the band's foreground inside a TextLayout", async ({ page }) => {
+    near(await rgb(page, "band-in-prose", "h2.prose"), BRAND);
+    near(await rgb(page, "band-in-prose", "header h3"), WHITE);
+    near(await rgb(page, "band-in-prose", "h3.bar"), DARK_FG);
+  });
 });

@@ -180,6 +180,11 @@
     border-bottom: var(--card-header-border);
   }
 
+  header,
+  footer {
+    @include heading-color-reset;
+  }
+
   header {
     @include color-props(card-header, surface-sunken);
     @include box-props-top(card-header, bar);
