@@ -250,8 +250,9 @@
   .globalInputStyles :global(select),
   .globalInputStyles :global(textarea) {
     @include typography-props(form-input, input, ui);
-    @include box-props-square(form-input, input, control);
-    @include border-props-borderless(form-input, input, control);
+    @include box-props-square(form-input, input, field, control);
+    @include field-border-props(form-input, input, field, control);
+    @include color-props(form-input, input, field, $family: false);
     @include focusable();
   }
 </style>

@@ -20,7 +20,7 @@ it too.
 
 | Tier              | Pair                                      | Components that compile it          |
 | ----------------- | ----------------------------------------- | ----------------------------------- |
-| `background`      | `--background-bg/-fg`, else `--bg`/`--fg` | the page; Input and Select fields   |
+| `background`      | `--background-bg/-fg`, else `--bg`/`--fg` | the page                            |
 | `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, Page, Hero, DataList, Accordion, TabBar |
 | `surface-raised`  | `--surface-raised-bg/-fg`                 | Card, Tile                          |
 | `surface-sunken`  | `--surface-sunken-bg/-fg`                 | Sidebar, a Card's header and footer |
@@ -35,6 +35,34 @@ inactive TabItem, a Tag, an Accordion summary, a Progress track. This used
 to fall through to `secondary`, which made `secondary` do two jobs. It is
 now its own pair (`--control-bg/-fg`), defaulting to a step off the surface
 toward its foreground, and `secondary` is an accent like `primary`.
+
+**`field`.** Text fields: Input, Select, and native inputs under a Form's
+`globalInputStyles`. A field is relative to the surface it sits on, because
+any fixed color matches some surface and the field disappears. Every
+family-aware surface publishes its resolved pair, and by default a field is:
+
+- filled a step off that surface toward its foreground
+  (`--field-fill-amount`, 5% in oklab): a darker well on a light surface, a
+  lighter one on a dark surface;
+- edged with a 1px line mixed from the same pair (`--field-edge-amount`, 50%
+  in oklab, about 3.5:1). Fields are the one borderless-by-default exception:
+  a fill that close to its surface can't meet the 3:1 boundary contrast WCAG
+  1.4.11 asks of a control on its own.
+
+Knobs, all optional:
+
+| Variable                                   | Effect                                              |
+| ------------------------------------------ | --------------------------------------------------- |
+| `--field-bg` / `--field-fg`                | An exact fill and text color for every field        |
+| `--field-border-color`                     | An exact edge color                                 |
+| `--field-border` (shorthand), `-width`, `-style` | The whole edge                               |
+| `--field-border-top: none` + `--field-border-inline: none` | Underline-only fields               |
+| `--field-square-radius`                    | Corner radius of Input and Select together          |
+| `--field-fill-amount`, `--field-edge-amount` | How far the defaults step off the surface         |
+
+`vars/underline-fields.css` is the underline preset ("Underline Fields" in
+the theme picker); it combines with any theme. Component variables
+(`--input-bg`, `--input-border`, `--select-*`) still win over all of these.
 
 **Unknown.** A surface whose background comes from a component-level
 variable (`<Bar bg="#323232">`, a wrapper that sets `--tile-bg`, a theme
@@ -181,7 +209,10 @@ element that only borrows a pair (a heading inside a Bar, a menu item).
   body now follows `--card-bg` too.
 - **Tooltip** compiles `inverse`; set `--inverse-bg/-fg` rather than
   `--tooltip-bg`.
-- **Input and Select** paint the `background` tier (the page color), as in 1.6.
+- **Input and Select** are the `field` family: a fill and a 1px edge mixed
+  from the surface they sit on, so they're visible with no theme. Themes set
+  `--field-bg/-fg` (was `--input-bg/-fg`, which still works per component).
+  Material's fields are underlines; Bootstrap's edge is a shade darker.
 - **Themes**: drop `--container-bg: var(--surface-bg)` aliases (they read as
   a component-level background); move `--sidebar-bg` → `--surface-sunken-bg`,
   `--menu-bg` → `--surface-overlay-bg`, `--card-bg` → `--surface-raised-bg`.

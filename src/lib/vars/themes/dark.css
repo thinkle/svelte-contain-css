@@ -32,11 +32,11 @@
   );
   --stripe-fg: var(--surface-overlay-fg);
   --border-color: var(--material-color-blue-grey-600);
-  --input-bg: var(--material-color-blue-grey-700);
-  --input-fg: var(--material-color-blue-grey-50);
+  --field-bg: var(--material-color-blue-grey-700);
+  --field-fg: var(--material-color-blue-grey-50);
   --slider-track-bg: color-mix(
     in srgb,
-    var(--input-bg) 76%,
+    var(--field-bg) 76%,
     var(--border-color) 24%
   );
   --slider-fill-bg: var(--primary-bg);

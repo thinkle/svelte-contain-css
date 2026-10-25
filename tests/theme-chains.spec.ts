@@ -23,7 +23,7 @@ async function expectBackground(page: Page, id: string, expected: string) {
 
 test("ui typography and control geometry stay in separate families", async ({ page }) => {
   await page.goto(url);
-  await page.locator("#theme").evaluate(el => el.setAttribute("style", "--ui-font-size: 23px; --ui-font-weight: 650; --control-font-size: 47px; --primary-font-size: 49px; --secondary-font-size: 51px; --ui-padding: 77px; --secondary-padding: 79px; --control-padding: 6px 12px; --control-border-radius: 9px; --secondary-border-radius: 35px; --ui-bg: red; --control-bg: rgb(10, 20, 30); --control-fg: white; --background-bg: rgb(40, 50, 60);"));
+  await page.locator("#theme").evaluate(el => el.setAttribute("style", "--ui-font-size: 23px; --ui-font-weight: 650; --control-font-size: 47px; --primary-font-size: 49px; --secondary-font-size: 51px; --ui-padding: 77px; --secondary-padding: 79px; --control-padding: 6px 12px; --control-border-radius: 9px; --secondary-border-radius: 35px; --ui-bg: red; --control-bg: rgb(10, 20, 30); --control-fg: white; --field-bg: rgb(40, 50, 60);"));
   for (const id of ["button", "primary", "link", "input", "select", "native"]) {
     await expect(page.getByTestId(id)).toHaveCSS("font-size", "23px");
     await expect(page.getByTestId(id)).toHaveCSS("padding-top", "6px");
@@ -31,8 +31,8 @@ test("ui typography and control geometry stay in separate families", async ({ pa
   }
   await expect(page.getByTestId("tag")).toHaveCSS("font-weight", "650");
   await expect(page.getByTestId("button")).toHaveCSS("border-top-left-radius", "9px");
-  // Text fields paint the page tier (the `background` family), not control
-  // chrome: a field must not read as a button.
+  // Text fields are the `field` family, not control chrome: a field must not
+  // read as a button.
   await expectBackground(page, "input", "rgb(40, 50, 60)");
 });
 
@@ -55,12 +55,12 @@ test("surface and field geometry ignore unrelated legacy prefixes", async ({ pag
 });
 
 for (const theme of ["bootstrap", "material", "retro", "light", "forest", "canyon"]) {
-  test(`${theme} preserves themed input colors and control padding`, async ({ page }) => {
+  test(`${theme} preserves themed field colors and control padding`, async ({ page }) => {
     await page.goto(url);
     await page.addStyleTag({ content: readFileSync(`src/lib/vars/themes/${theme}.css`, "utf8").replaceAll(":root", "#theme") });
     const expected = await page.locator("#theme").evaluate(el => {
       const probe = document.createElement("div");
-      probe.style.backgroundColor = "var(--input-bg)";
+      probe.style.backgroundColor = "var(--field-bg)";
       el.append(probe);
       const bg = getComputedStyle(probe).backgroundColor;
       probe.remove();

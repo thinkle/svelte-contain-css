@@ -48,6 +48,41 @@
   }
 }
 
+// A text field's edge. Fields are the one borderless-by-default exception:
+// a field has to be findable, and a fill a few percent off its surface can't
+// meet the 3:1 boundary contrast (WCAG 1.4.11) on its own. So the default is
+// a 1px edge mixed from the local surface's own pair (--field-edge-amount,
+// 50% in oklab: about 3.5:1 on white or on a dark slate), which stays
+// visible on any surface the field lands on.
+//
+// Component and category shorthands still win (--input-border,
+// --field-border, --control-border, and their -top/-right/... sides), then
+// the longhands (--field-border-width / -style / -color). Two knobs make an
+// underline-only field: --field-border-top: none and --field-border-inline:
+// none (left and right). See vars/underline-fields.css.
+@mixin field-border-props($prefixes...) {
+  $edge: color-mix(
+    in oklab,
+    var(--_ground-fg, var(--background-fg, var(--fg))) var(--field-edge-amount, 50%),
+    var(--_ground-bg, var(--background-bg, var(--bg)))
+  );
+  $default-border:
+    fn.vars-fallback(border-width, 1px, $prefixes...)
+    fn.vars-fallback(border-style, solid, $prefixes...)
+    fn.vars-fallback(border-color, $edge, $prefixes...);
+  --_border-base: #{fn.vars-fallback(border, $default-border, $prefixes...)};
+  border: var(--_border-base);
+  border-top: fn.vars-fallback(border-top, var(--_border-base), $prefixes...);
+  border-bottom: fn.vars-fallback(border-bottom, var(--_border-base), $prefixes...);
+  @each $side in left, right {
+    border-#{$side}: fn.vars-fallback(
+      border-#{$side},
+      var(--field-border-inline, var(--_border-base)),
+      $prefixes...
+    );
+  }
+}
+
 // Bordered surfaces opt into the theme's global border and visible fallback.
 @mixin border-props($prefixes...) {
   $base-border: fn.var-with-fallbacks(

@@ -535,6 +535,10 @@ components:
   on each consumer, and `select-pinned()` picks with `color-mix` at 0%/100%.
   A consumer of the flags (anything calling `select-pinned()`) must include
   `family-selectors` on the same element.
+- **Text fields compile `field`** with `field-border-props()`:
+  `color-props(<comp>, field, ..., $family: false)`. Their defaults read the
+  surface pair every family-aware surface publishes (`--_ground-bg/-fg`), so a
+  field must never publish one itself (it would read its own).
 - Pin-aware values that mix against `currentColor` (links, headings) carry
   only the pins down by inheritance and select at the consumer; tones,
   which mix against the surface's `--_color`, select on the surface.

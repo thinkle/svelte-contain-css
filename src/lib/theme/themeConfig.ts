@@ -21,6 +21,7 @@ import restrainedHeadings from "$lib/vars/restrained-headings.css?raw";
 import editorialHeadings from "$lib/vars/editorial-headings.css?raw";
 import expressiveHeadings from "$lib/vars/expressive-headings.css?raw";
 import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
+import underlineFields from "$lib/vars/underline-fields.css?raw";
 import { combinedThemeEntries } from "./combinedThemes";
 
 // lightordark.css uses @import url() which won't resolve when injected at
@@ -65,6 +66,7 @@ export const extraThemes: ThemeEntry[] = [
   { name: "Flat Surfaces", css: flat, file: "flat.css" },
   { name: "Layered Depth", css: layered, file: "layered.css" },
   { name: "Fancy Paragraphs", css: fancyParagraphs, file: "fancy-paragraphs.css" },
+  { name: "Underline Fields", css: underlineFields, file: "underline-fields.css" },
 ];
 
 // Heading treatments are alternatives, rather than cumulative add-ons.

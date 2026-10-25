@@ -305,8 +305,10 @@ Settled against updraft's real surfaces while porting it:
    `surface-overlay`, plus `inverse`. Named, not numbered. Sunken was added
    for sidebars and card headers, which every bundled theme already colored
    a step back from the surface. Card and Tile are raised; menus and Dialog
-   overlay; Tooltip inverse. Input and Select paint `background` (the 1.6
-   behavior; 1.7 had moved them onto control by accident). No theme-wide
+   overlay; Tooltip inverse. Input and Select are a relative `field` family (a fill
+   and an edge mixed from the surface they sit on), since any fixed tier
+   matches some surface and the field disappears; 1.7 had moved them onto
+   control by accident. No theme-wide
    mapping hook: tier aliasing covered updraft.
 1b. **`secondary` is an accent.** Chrome moved to a `control` family
    (`--control-bg/-fg`, default a step off the surface). Toggles fall back to

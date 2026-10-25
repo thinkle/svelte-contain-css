@@ -512,9 +512,12 @@ category: omit `--input-padding` if inputs should follow `--control-padding`.
 
 Migration: move interface typography overrides from `--control-font-*` to
 `--ui-font-*`, and input geometry from `--ui-*` to `--control-*` or
-`--input-*`. Input and Select colors are the `background` family (the page
-pair, `--background-bg` → `--bg`), so a field never reads as a button; style
-them with `--input-bg/-fg`. Use `--surface-*` in place of legacy `--block-*` / `--top-*` surface
+`--input-*`. Input and Select colors and edges are the `field` family: by
+default a fill and a 1px edge mixed from the surface they sit on, so a field
+is visible on any surface and never reads as a button. Theme them with
+`--field-bg/-fg`, `--field-border-color` and `--field-square-radius`; make
+underline fields with `--field-border-top: none; --field-border-inline: none`
+or `vars/underline-fields.css`. See docs/color-families.md. Use `--surface-*` in place of legacy `--block-*` / `--top-*` surface
 fallbacks. Select no longer takes geometry/colors from menu/surface defaults;
 use input/control variables or explicit select variables. Theme variables like
 `--secondary-padding` and `--primary-font-weight` no longer affect controls;
@@ -1604,7 +1607,7 @@ Exact colors for text, links and headings are keyed by the **color family**
 of the surface, never by component. Full contract:
 [docs/color-families.md](docs/color-families.md).
 
-- **Neutral ladder**: `background` (page, input fields), `surface` (Container,
+- **Neutral ladder**: `background` (the page), `surface` (Container,
   Bar, Table, Form…), `surface-raised` (Card, Tile), `surface-sunken` (Sidebar,
   Card header/footer), `surface-overlay` (menus, Dialog), `inverse` (Tooltip).
   Each tier falls back to the one below it. Themes recolor tiers
@@ -1613,6 +1616,8 @@ of the surface, never by component. Full contract:
   `<Bar primary>` or `surfaceVars(role, prefix)` on the element or a context.
 - **`control`**: quiet chrome (plain Button, Tag, inactive TabItem). Set
   `--control-bg/-fg`; `secondary` is an accent.
+- **`field`**: text fields. Fill and edge default to a step off the local
+  surface; `--field-*` knobs, `vars/underline-fields.css` preset.
 - **Pins**: `--on-<family>-<tone>-text-fg`, `--on-<family>-link-text-fg`,
   `--on-<family>-heading-<n|major|minor>-fg/-bg`, `--on-<family>-heading-fg`.
 - **Unknown**: a surface with a component-level background (`bg` prop,

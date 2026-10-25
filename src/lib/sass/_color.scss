@@ -24,6 +24,11 @@ $ladder: (
 //  The roles. A role surface never borrows another family's pins.
 $roles: primary, secondary, info, success, warning, danger, control, inactive;
 
+// Text fields (Input, Select, textarea). Not a fixed pair: by default a field
+// is a step off whatever surface it sits on (see field-default()), so it can
+// never match its surface and disappear. --field-bg / --field-fg pin one.
+$relational-families: field;
+
 $tones: primary, secondary, info, success, warning, danger, muted;
 
 //  Heading levels and the group each one walks through before the shared
@@ -38,7 +43,20 @@ $heading-levels: (
 );
 
 @function is-family($name) {
-  @return map.has-key($ladder, $name) or list.index($roles, $name) != null;
+  @return map.has-key($ladder, $name) or list.index($roles, $name) != null or
+    list.index($relational-families, $name) != null;
+}
+
+// The pair of the nearest family-aware surface, published by family-vars(),
+// else the page.
+$ground-bg: var(--_ground-bg, var(--background-bg, var(--bg)));
+$ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
+
+// A field's default fill: the local surface, a few percent toward its own
+// foreground -- a darker well on a light surface, a lighter one on a dark
+// surface. --field-fill-amount sets the step.
+@function field-default-bg() {
+  @return color-mix(in oklab, #{$ground-bg}, #{$ground-fg} var(--field-fill-amount, 5%));
 }
 
 //  The names a family's color variables are looked up under, most specific
@@ -192,6 +210,10 @@ $heading-levels: (
 }
 
 @mixin family-vars($comp, $family) {
+  // This surface's resolved pair, for fields inside it (field-default-bg(),
+  // field-border-props()). Fields never publish one, so they can't loop.
+  --_ground-bg: var(--_background-color);
+  --_ground-fg: var(--_color);
   @if list.length($comp) > 0 {
     --_comp-flag: #{fn.vars-fallback(bg, var(--__unset), $comp...)};
     --_role-flag: #{role-chain($comp, role-bg)};
@@ -349,7 +371,15 @@ $heading-levels: (
       $tail: var(--#{$channel}, unset);
     }
     $tail: fn.vars-fallback($channel, $tail, $rest...);
-    @if $family != null {
+    @if $family == field {
+      // Relative to the surface it sits on; legacy prefixes after it (a
+      // geometry category such as control) never color a field.
+      @if $channel == bg {
+        $tail: var(--field-bg, #{field-default-bg()});
+      } @else {
+        $tail: var(--field-fg, #{$ground-fg});
+      }
+    } @else if $family != null {
       $tail: family-color-chain($family, $channel, $tail);
     }
     @if list.length($comp) > 0 and $neutral {

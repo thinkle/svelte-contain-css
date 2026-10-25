@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
 const url = "/svelte-contain-css/tests/border-policy";
-const borderless = ["inline", "stack", "nested-inline", "button", "button-link", "input", "container"];
+const borderless = ["inline", "stack", "nested-inline", "button", "button-link", "container"];
 
 test("global shorthand and directional borders only reach bordered components", async ({ page }) => {
   await page.goto(url);
@@ -15,6 +15,10 @@ test("global shorthand and directional borders only reach bordered components", 
   for (const id of ["bordered-container", "tile", "fieldset"]) {
     await expect(page.getByTestId(id)).toHaveCSS("border-top-width", "5px");
     await expect(page.getByTestId(id)).toHaveCSS("border-right-width", "3px");
+  }
+  // A field keeps its own edge: the theme's global border doesn't reach it.
+  for (const side of ["top", "right", "bottom", "left"]) {
+    await expect(page.getByTestId("input")).toHaveCSS(`border-${side}-width`, "1px");
   }
   await expect(page.getByTestId("inline")).toHaveCSS("border-top-left-radius", "11px");
   await expect(page.getByTestId("tile")).toHaveCSS("border-top-left-radius", "2px");
@@ -44,7 +48,9 @@ for (const theme of ["bootstrap", "material", "retro"]) {
       await expect(page.getByTestId(id)).toHaveCSS("border-top-width", "0px");
       await expect(page.getByTestId(id)).toHaveCSS("border-bottom-width", "0px");
     }
-    await expect(page.getByTestId("input")).toHaveCSS("border-top-width", theme === "retro" ? "2px" : "1px");
+    // Material fields are underlines; the others keep a full edge.
+    await expect(page.getByTestId("input")).toHaveCSS("border-top-width", theme === "retro" ? "2px" : theme === "material" ? "0px" : "1px");
+    await expect(page.getByTestId("input")).toHaveCSS("border-bottom-width", theme === "retro" ? "2px" : "1px");
   });
 }
 

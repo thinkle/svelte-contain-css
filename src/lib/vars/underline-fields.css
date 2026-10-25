@@ -1,0 +1,11 @@
+/* Underline fields: text inputs and selects keep their fill and drop the
+   top and side edges, leaving a rule along the bottom. Combine with any
+   theme. The rule is the field edge (--field-border-color, mixed from the
+   surface the field sits on by default), so it stays findable everywhere. */
+:root {
+  --field-border-top: none;
+  --field-border-inline: none;
+  --field-square-radius: 0.25rem 0.25rem 0 0;
+  /* A little more fill, so the field still reads as an area to type in. */
+  --field-fill-amount: 7%;
+}

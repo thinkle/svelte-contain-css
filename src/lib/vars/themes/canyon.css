@@ -24,8 +24,8 @@
   --secondary-color: #ead4c3;
   --secondary-fg: #4a352b;
 
-  --input-bg: #fffdfa;
-  --input-fg: #33261f;
+  --field-bg: #fffdfa;
+  --field-fg: #33261f;
 
   --tab-bg: color-mix(in srgb, var(--surface-bg) 72%, var(--secondary-bg) 28%);
   --tab-fg: #5a4033;

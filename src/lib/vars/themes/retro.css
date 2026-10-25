@@ -106,16 +106,12 @@
   --legend-font-weight: 700;
   --legend-padding: 0 0.25rem;
 
-  --input-bg: #ffffff;
-  --input-fg: #000000;
-  --input-border: 2px inset #c0c0c0;
-  --input-square-radius: 0;
+  --field-bg: #ffffff;
+  --field-fg: #000000;
+  --field-border: 2px inset #c0c0c0;
+  --field-square-radius: 0;
   --input-padding: 0.35rem 0.45rem;
 
-  --select-bg: #ffffff;
-  --select-fg: #000000;
-  --select-border: 2px inset #c0c0c0;
-  --select-square-radius: 0;
   --select-width: 100%;
   --select-arrow: "▼";
   --select-arrow-fg: #000000;
