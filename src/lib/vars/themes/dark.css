@@ -9,17 +9,16 @@
      --surface-bg to about blue-grey 800 (raised) and 700 (overlay). */
   --inverse-bg: var(--material-color-blue-grey-50);
   --inverse-fg: var(--material-color-blue-grey-900);
-  --primary-bg: var(--material-color-indigo-200);
+  /* -bg and -fg follow the color (see colors.css): set --primary-color and
+     --secondary-color to recolor. The neutrals are blue-grey, which sits
+     with any accent. */
   --primary-color: var(--material-color-indigo-200);
-  --primary-fg: var(--material-color-indigo-900);
+  --primary-bg: var(--primary-color);
   /* Quiet chrome (plain buttons, tags, inactive tabs). */
   --control-bg: var(--material-color-blue-grey-600);
   --control-fg: var(--material-color-blue-grey-50);
-  --secondary-bg: var(--material-color-blue-grey-300);
   --secondary-color: var(--material-color-blue-grey-300);
-  /* 900, not 800: blue-grey-800 on 300 is about 4:1, short of AA for small
-     text (h5/h6, Tags). */
-  --secondary-fg: var(--material-color-blue-grey-900);
+  --secondary-bg: var(--secondary-color);
   --stripe-bg: color-mix(
     in srgb,
     var(--surface-bg) 88%,

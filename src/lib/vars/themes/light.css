@@ -1,32 +1,98 @@
 /* light mode */
 
 :root {
-  --fg: #1b1d2e;
-  --bg: #fcfcff;
-  --surface-bg: #f4f5fb;
-  --surface-fg: #1b1d2e;
+  /* Everything tinted here derives from --primary-color: set it (and
+     --secondary-color) and the page, surfaces, quiet chrome, tabs, borders,
+     focus ring and tooltips follow, at the same lightness -- so contrast
+     holds for any hue. --neutral-tint retints the neutrals separately (a
+     grey for an untinted page).
+
+     Each tone takes the tint to a fixed luminance by scaling its linear RGB
+     toward black or toward white -- which keeps its hue and stays on
+     screen, where setting oklch lightness directly pushes a saturated
+     orange out of gamut and the browser clips it to red -- then sets its
+     share of chroma: near-neutral body text, livelier tints. The targets
+     (luminance = L^3) are tuned so indigo gives the original palette. */
+  --primary-color: var(--material-color-indigo-600);
+  --secondary-color: var(--material-color-pink-700);
+  --neutral-tint: var(--primary-color);
+
+  --fg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r * min(1, 0.0133 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(g * min(1, 0.0133 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(b * min(1, 0.0133 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+    )
+    l calc(c * 0.3) h
+  );
+  --bg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r + (1 - r) * max(0, (0.9762 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(g + (1 - g) * max(0, (0.9762 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(b + (1 - b) * max(0, (0.9762 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+    )
+    l calc(c * 1.6) h
+  );
+  --surface-bg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r + (1 - r) * max(0, (0.9155 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(g + (1 - g) * max(0, (0.9155 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(b + (1 - b) * max(0, (0.9155 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+    )
+    l calc(c * 1.6) h
+  );
+  --surface-fg: var(--fg);
   /* The ladder (raised, sunken, overlay) steps off --surface-bg in
      lightness by default; set a --surface-*-bg to pin a tier. */
-  --inverse-bg: var(--material-color-indigo-900);
+  --inverse-bg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(g * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(b * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+    )
+    l calc(c * 1) h
+  );
   --inverse-fg: var(--white);
-  --primary-bg: var(--material-color-indigo-600);
-  --primary-color: var(--material-color-indigo-600);
-  --primary-fg: var(--white);
-  /* Quiet chrome (plain buttons, tags, inactive tabs). */
-  --control-bg: var(--material-color-indigo-50);
-  --control-fg: var(--material-color-indigo-900);
-  /* An accent, not chrome: indigo-50 as text measured 1.1:1. */
-  --secondary-bg: var(--material-color-pink-700);
-  --secondary-color: var(--material-color-pink-700);
-  --secondary-fg: var(--white);
+  /* --primary-bg/-fg and --secondary-bg/-fg follow their colors (see
+     colors.css). Quiet chrome (plain buttons, tags, inactive tabs): */
+  --control-bg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r + (1 - r) * max(0, (0.8279 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(g + (1 - g) * max(0, (0.8279 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(b + (1 - b) * max(0, (0.8279 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+    )
+    l calc(c * 1.5) h
+  );
+  --control-fg: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(g * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(b * min(1, 0.0331 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+    )
+    l calc(c * 1) h
+  );
   --stripe-bg: color-mix(in srgb, var(--surface-bg) 94%, var(--surface-fg) 6%);
   --active-color-mix: black;
   --stripe-fg: var(--surface-fg);
-  --tab-bg: var(--material-color-indigo-50);
-  --tab-fg: var(--material-color-indigo-900);
+  --tab-bg: var(--control-bg);
+  --tab-fg: var(--control-fg);
   --tab-active-bg: #ffffff;
-  --tab-active-fg: var(--material-color-indigo-700);
-  --tab-bar-fg: #1b1d2e;
+  --tab-active-fg: oklch(
+    from color(
+      from var(--primary-color) srgb-linear
+      calc(r * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(g * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+      calc(b * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
+    )
+    l calc(c * 1) h
+  );
+  --tab-bar-fg: var(--fg);
 
   /* Semantic colors for light mode */
   --warning-bg: var(--material-color-amber-400);
@@ -42,8 +108,24 @@
   --info-color: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
-  --border-color: var(--material-color-indigo-300);
-  --focus-color: var(--material-color-indigo-a200);
+  --border-color: oklch(
+    from color(
+      from var(--neutral-tint) srgb-linear
+      calc(r * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - r * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2597 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(g * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - g * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2597 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(b * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - b * min(1, 0.2597 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2597 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+    )
+    l calc(c * 1) h
+  );
+  --focus-color: oklch(
+    from color(
+      from var(--primary-color) srgb-linear
+      calc(r * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - r * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2138 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(g * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - g * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2138 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+      calc(b * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b)) + (1 - b * min(1, 0.2138 / (0.2126 * r + 0.7152 * g + 0.0722 * b))) * max(0, (0.2138 - (0.2126 * r + 0.7152 * g + 0.0722 * b)) / (1 - (0.2126 * r + 0.7152 * g + 0.0722 * b))))
+    )
+    l calc(c * 1.3) h
+  );
   --slider-track-bg: color-mix(
     in srgb,
     #fefefe 62%,

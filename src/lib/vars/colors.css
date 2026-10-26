@@ -8,15 +8,30 @@
   --muted-text-amount: 20%;
   --white: #fff;
   --black: #222;
-  --primary-bg: var(--material-color-indigo-600);
+  /* A role is one color: its background follows it, and its text is
+     automatic -- near-white on a background darker than oklch L 0.58,
+     near-black above it (both about 4.5:1 or better), the dark text tinted
+     with the role's hue. So `--primary-color: orange` alone recolors buttons, bars and
+     tags readably. Set -bg or -fg to pin either. */
   --primary-color: var(--material-color-indigo-600);
-  --primary-fg: var(--white);
+  --primary-bg: var(--primary-color);
+  --primary-fg: oklch(
+    from var(--primary-bg)
+      calc(0.2 + 0.78 * clamp(0, (0.58 - l) * 1000, 1))
+      calc(c * (0.35 - 0.3 * clamp(0, (0.58 - l) * 1000, 1)))
+      h
+  );
   /* Secondary is an accent, like primary: <Button secondary>, <Text
      secondary>, a table's header rule. Quiet UI chrome -- a plain Button, a
      Tag, an inactive tab -- is the `control` family below, not this. */
-  --secondary-bg: var(--material-color-pink-700);
   --secondary-color: var(--material-color-pink-700);
-  --secondary-fg: var(--white);
+  --secondary-bg: var(--secondary-color);
+  --secondary-fg: oklch(
+    from var(--secondary-bg)
+      calc(0.2 + 0.78 * clamp(0, (0.58 - l) * 1000, 1))
+      calc(c * (0.35 - 0.3 * clamp(0, (0.58 - l) * 1000, 1)))
+      h
+  );
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
 
