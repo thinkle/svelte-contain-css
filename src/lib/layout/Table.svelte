@@ -81,9 +81,21 @@
   function measureRuler(table: HTMLTableElement): number[] {
     const row = table.querySelector<HTMLTableRowElement>(".column-ruler > tr");
     if (!row) return [];
+    const scale = layoutScale(table);
     return Array.from(row.children).map(
-      (cell) => cell.getBoundingClientRect().width,
+      (cell) => cell.getBoundingClientRect().width / scale,
     );
+  }
+
+  /* getBoundingClientRect() measures what is on screen, after any transform
+     or zoom on an ancestor; the widths are written back as layout pixels.
+     Inside a scaled container (a theme preview at 50%, a zoomed canvas) the
+     two differ, and the header came out at the wrong proportions. Divide by
+     the ratio of the table's on-screen width to its layout width. */
+  function layoutScale(el: HTMLElement): number {
+    const layout = el.offsetWidth;
+    const visual = el.getBoundingClientRect().width;
+    return layout && visual ? visual / layout : 1;
   }
 
   /* The table's own width is the truth; the per-cell widths only give the
@@ -116,7 +128,7 @@
     const widths = measureRuler(bodyTable);
     if (!widths.length) return;
 
-    const width = bodyTable.getBoundingClientRect().width;
+    const width = bodyTable.getBoundingClientRect().width / layoutScale(bodyTable);
     columns = fitToTableWidth(widths, width - overhang);
     tableWidth = width - overhang;
   }
@@ -132,8 +144,9 @@
   function trimHeadOverhang() {
     if (!headTable || !bodyTable || !columns.length) return;
     const delta =
-      headTable.getBoundingClientRect().width -
-      bodyTable.getBoundingClientRect().width;
+      (headTable.getBoundingClientRect().width -
+        bodyTable.getBoundingClientRect().width) /
+      layoutScale(bodyTable);
     if (Math.abs(delta) < 0.5 || corrections > 3) return;
     corrections += 1;
     overhang += delta;
