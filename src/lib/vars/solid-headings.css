@@ -2,7 +2,14 @@
   /* Fills are keyed by color family: the page and every neutral surface get
      them; a role surface (a primary card) keeps unfilled headings in its own
      colors, except major levels on primary, which invert. */
-  --on-background-heading-bg: var(--control-bg);
+  /* A shade of the control pair, not the pair itself: some themes (Retro)
+     make quiet chrome the surface color, and a block the color of the page
+     it sits on reads as stray padding. */
+  --on-background-heading-bg: color-mix(
+    in srgb,
+    var(--control-bg) 88%,
+    var(--control-fg) 12%
+  );
   --on-background-heading-fg: var(--control-fg);
   --heading-padding: 0.2em 0.45em;
   /* Every level is filled: tones nudge the pair rather than repaint it. */

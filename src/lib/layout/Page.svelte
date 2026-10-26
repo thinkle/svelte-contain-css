@@ -203,7 +203,11 @@
   }
 
   .page {
-    @include color-props(page, content, surface);
+    /* The frame (gutters, header and footer bands) is the page's own
+       background; the content inside it is a surface. Both are families, so
+       a theme sets them through --bg and --surface-bg rather than pinning
+       --page-bg, which would take everything inside out of its family. */
+    @include color-props(page, background);
     @include typography-props-bare(page);
     border: var(--page-border);
     height: var(--page-height, 100vh);
@@ -247,7 +251,7 @@
     @include custom-scrollbar(page-content, page);
     @include box-props(page-content);
     @include border-props-borderless(page-content);
-    @include color-props(page-content, page, surface);
+    @include color-props(page-content, surface);
   }
   .aside {
     flex: 0 0 auto;

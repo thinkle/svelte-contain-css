@@ -14,15 +14,13 @@
 
   /* The filled surface needs to support cream text plus a gentle accent;
      keep the original brighter clay as the tint target below. */
-  --primary-bg: #a54e30;
+  --primary-bg: color-mix(in oklab, var(--primary-color), black 10%);
   --primary-color: #b85c38;
-  --primary-fg: #fff8f3;
   /* Quiet chrome (plain buttons, tags, inactive tabs). */
   --control-bg: #ead4c3;
   --control-fg: #4a352b;
-  --secondary-bg: #ead4c3;
+  --secondary-bg: var(--secondary-color);
   --secondary-color: #ead4c3;
-  --secondary-fg: #4a352b;
 
   --field-bg: #fffdfa;
   --field-fg: #33261f;

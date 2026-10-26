@@ -9,16 +9,18 @@
   --white: #fff;
   --black: #222;
   /* A role is one color: its background follows it, and its text is
-     automatic -- near-white on a background darker than oklch L 0.58,
-     near-black above it (both about 4.5:1 or better), the dark text tinted
-     with the role's hue. So `--primary-color: orange` alone recolors buttons, bars and
-     tags readably. Set -bg or -fg to pin either. */
+     automatic. On a background darker than oklch L 0.58 the text is
+     near-white; above it, dark text as light as contrast allows (L 0.15 to
+     0.32) and tinted with the background's hue -- about 4.5:1 at the
+     threshold, much more on pale fills. So `--primary-color: orange` alone
+     recolors buttons, bars and tags readably, on any bundled theme. Set -bg
+     or -fg to pin either. */
   --primary-color: var(--material-color-indigo-600);
   --primary-bg: var(--primary-color);
   --primary-fg: oklch(
     from var(--primary-bg)
-      calc(0.2 + 0.78 * clamp(0, (0.58 - l) * 1000, 1))
-      calc(c * (0.35 - 0.3 * clamp(0, (0.58 - l) * 1000, 1)))
+      calc(0.98 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * clamp(0.15, l - 0.5, 0.32))
+      calc(c * 0.05 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * min(c * 1.2, 0.08))
       h
   );
   /* Secondary is an accent, like primary: <Button secondary>, <Text
@@ -28,8 +30,8 @@
   --secondary-bg: var(--secondary-color);
   --secondary-fg: oklch(
     from var(--secondary-bg)
-      calc(0.2 + 0.78 * clamp(0, (0.58 - l) * 1000, 1))
-      calc(c * (0.35 - 0.3 * clamp(0, (0.58 - l) * 1000, 1)))
+      calc(0.98 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * clamp(0.15, l - 0.5, 0.32))
+      calc(c * 0.05 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * min(c * 1.2, 0.08))
       h
   );
   --inactive-bg: var(--material-color-grey-400);

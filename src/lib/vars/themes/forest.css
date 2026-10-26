@@ -12,15 +12,13 @@
   --surface-sunken-bg: #e3ece0;
   --surface-sunken-fg: #1f2d26;
 
-  --primary-bg: #2f6f52;
+  --primary-bg: var(--primary-color);
   --primary-color: #2f6f52;
-  --primary-fg: #f8fcf9;
   /* Quiet chrome (plain buttons, tags, inactive tabs). */
   --control-bg: #d7e4d4;
   --control-fg: #24352c;
-  --secondary-bg: #d7e4d4;
+  --secondary-bg: var(--secondary-color);
   --secondary-color: #d7e4d4;
-  --secondary-fg: #24352c;
 
   --field-bg: #fbfdfb;
   --field-fg: #1f2d26;

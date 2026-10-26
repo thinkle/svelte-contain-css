@@ -38,8 +38,8 @@ Theming page has a live editor for all of this.
 
 | Tier              | Pair                                      | Components that compile it          |
 | ----------------- | ----------------------------------------- | ----------------------------------- |
-| `background`      | `--background-bg/-fg`, else `--bg`/`--fg` | the page                            |
-| `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, Page, Hero, DataList, Accordion, TabBar |
+| `background`      | `--background-bg/-fg`, else `--bg`/`--fg` | the page; a Page's frame            |
+| `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, a Page's content, Hero, DataList, Accordion, TabBar |
 | `surface-raised`  | `--surface-raised-bg/-fg`                 | Card, Tile                          |
 | `surface-sunken`  | `--surface-sunken-bg/-fg`                 | Sidebar, a Card's header and footer |
 | `surface-overlay` | `--surface-overlay-bg/-fg` (steps off raised) | DropdownMenu, Dialog            |
@@ -228,7 +228,10 @@ their own.
 Recolor tiers, not components. Flattening is aliasing a tier's color
 (`--surface-raised-bg: var(--surface-bg)`), which keeps the family known.
 Setting `--card-bg` in a theme instead makes every card an unknown family:
-readable, but unpinned.
+readable, but unpinned. The same goes for `--page-bg` and
+`--page-content-bg`: a Page's frame is `background` and its content is
+`surface`, so a desktop color around a content area is `--bg` plus
+`--surface-bg` (Retro's teal and grey).
 
 The bundled `light` and `dark` themes give the ladder real steps: cards up,
 sidebars and card headers back, menus floating. In the dark theme, raised
@@ -291,6 +294,10 @@ element that only borrows a pair (a heading inside a Bar, a menu item).
   from the surface they sit on, so they're visible with no theme. Themes set
   `--field-bg/-fg` (was `--input-bg/-fg`, which still works per component).
   Material's fields are underlines; Bootstrap's edge is a shade darker.
+- **Page** compiles `background` for its frame and `surface` for its
+  content (both were `surface`, and the content fell back to `--page-bg`).
+  Drop `--page-bg` / `--page-content-bg` from themes: set `--bg` and
+  `--surface-bg`.
 - **Themes**: drop `--container-bg: var(--surface-bg)` aliases (they read as
   a component-level background); move `--sidebar-bg` → `--surface-sunken-bg`,
   `--menu-bg` → `--surface-overlay-bg`, `--card-bg` → `--surface-raised-bg`.
