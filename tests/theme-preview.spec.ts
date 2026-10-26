@@ -68,34 +68,52 @@ test("custom variables retain priority when presets and add-ons change", async (
 });
 
 
-test("heading choices replace a combination's treatment and Default restores it", async ({ page }) => {
-  await page.getByRole("radio", { name: "Dark + IBM Plex + Expressive Headings + Layered Depth", exact: true }).locator("..").click();
+test("a preset sets the pickers, which stay editable", async ({ page }) => {
+  await page.getByRole("button", { name: "Dark, IBM Plex, Expressive Headings, Layered Depth", exact: true }).click();
+  const checked = (group: string, name: string) =>
+    expect(page.getByRole("group", { name: group }).getByRole("radio", { name, exact: true })).toBeChecked();
+  await checked("Color", "Dark");
+  await checked("Typography", "IBM Plex");
+  await checked("Headings", "Expressive");
+  await expect(page.getByRole("radiogroup", { name: "Depth" }).getByRole("radio", { name: "Layered Depth", exact: true })).toBeChecked();
   const transform = () => page.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--heading-1-text-transform").trim());
   await expect.poll(transform).toBe("uppercase");
-  await page.getByRole("radio", { name: "Block", exact: true }).locator("..").click();
+  // Change one piece; the rest of the preset stays.
+  await page.getByRole("group", { name: "Headings" }).getByRole("radio", { name: "Block", exact: true }).locator("..").click();
   await expect.poll(transform).not.toBe("uppercase");
-  await expect(page.getByRole("checkbox", { name: /Headings/ })).toHaveCount(0);
+  await checked("Color", "Dark");
   await page.getByRole("checkbox", { name: "Show code", exact: true }).locator("..").click();
   await expect(page.locator("pre")).toContainText("solid-headings.css");
+  await expect(page.locator("pre")).toContainText("themes/dark.css");
   await expect(page.locator("pre")).not.toContainText("dark-ibm-layered.css");
   const href = await page.getByRole("link", { name: /Open .*full size/ }).getAttribute("href");
   const popup = await page.context().newPage();
   await popup.goto(href!);
   await expect.poll(() => popup.locator("html").evaluate(el => getComputedStyle(el).getPropertyValue("--heading-1-text-transform").trim())).not.toBe("uppercase");
   await popup.close();
-  await page.getByRole("radio", { name: "Default", exact: true }).locator("..").click();
-  await expect.poll(transform).toBe("uppercase");
 });
 
-test("Layered Depth changes actual card shadows and provides a relevant preview", async ({ page }) => {
+test("Layered Depth deepens card shadows, shown in its own sample", async ({ page }) => {
   await page.getByRole("button", { name: "Container Store Report", exact: true }).click();
   const card = page.getByTestId("theme-preview").locator(".card").first();
-  const baseline = await card.evaluate(el => getComputedStyle(el).boxShadow);
-  await page.getByRole("checkbox", { name: "Layered Depth", exact: true }).locator("..").click();
-  await expect.poll(() => card.evaluate(el => getComputedStyle(el).boxShadow)).toBe("rgba(15, 23, 42, 0.14) 4px 4px 16px 0px");
-  await page.getByRole("button", { name: "The Tidy Shelf (Blog)", exact: true }).click();
-  await page.getByRole("button", { name: "Preview depth on cards", exact: true }).click();
-  await expect(card).toBeVisible();
-  await page.getByRole("checkbox", { name: "Layered Depth", exact: true }).locator("..").click();
-  await expect.poll(() => card.evaluate(el => getComputedStyle(el).boxShadow)).toBe(baseline);
+  const sample = page.locator(".addon", { hasText: "Depth" }).locator(".card");
+  const option = (name: string) => page.getByRole("radiogroup", { name: "Depth" }).getByRole("radio", { name, exact: true }).locator("..");
+  const shadow = (el: Element) => getComputedStyle(el).boxShadow;
+  const baseline = await card.evaluate(shadow);
+  await option("Layered Depth").click();
+  const layered = "rgba(15, 23, 42, 0.24) 8px 8px 24px 0px";
+  await expect.poll(() => card.evaluate(shadow)).toBe(layered);
+  await expect.poll(() => sample.evaluate(shadow)).toBe(layered);
+  // The options are exclusive: Flat replaces Layered rather than stacking.
+  await option("Flat Surfaces").click();
+  await expect.poll(() => card.evaluate(shadow)).toBe("rgba(0, 0, 0, 0) 0px 0px 0px 0px");
+  await option("Default").click();
+  await expect.poll(() => card.evaluate(shadow)).toBe(baseline);
+});
+
+test("Flat Surfaces drops shadows for a hairline edge", async ({ page }) => {
+  const sample = page.locator(".addon", { hasText: "Depth" }).locator(".card");
+  await page.getByRole("radiogroup", { name: "Depth" }).getByRole("radio", { name: "Flat Surfaces", exact: true }).locator("..").click();
+  await expect.poll(() => sample.evaluate(el => getComputedStyle(el).boxShadow)).toBe("rgba(0, 0, 0, 0) 0px 0px 0px 0px");
+  await expect(sample).toHaveCSS("border-top-width", "1px");
 });
