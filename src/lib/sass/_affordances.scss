@@ -24,6 +24,7 @@
   --_transition: #{fn.var-with-fallbacks(--transition, list.append($prefixes, 300ms)...)};
   transition:
     filter var(--_transition),
+    color var(--_transition),
     background-color var(--_transition),
     border-color var(--_transition),
     box-shadow var(--_transition),
@@ -36,6 +37,10 @@
 // fixed white did on light themes. Themes that set --hover-color-mix keep
 // exactly the direction they chose. Mixing is done in oklab because oklch
 // interpolates hue, which drifts when one side is a near-grey.
+//
+// --<prefix>-hover-bg / --<prefix>-hover-fg (and the bare --hover-bg /
+// --hover-fg) replace either half: a text-only hover, as many tab bars do,
+// is `--tab-hover-bg: var(--tab-bg)` with a stronger --tab-hover-fg.
 @mixin clickable-hover-affordance($prefixes...) {
   filter: fn.var-with-fallbacks(
     --hover-filter,
@@ -45,12 +50,18 @@
     --hover-transform,
     list.append($prefixes, none)...
   );
-  color: var(--_color);
-  background-color: color-mix(
-    in oklab,
-    var(--_background-color) var(--hover-base-color-percentage, 90%),
-    var(--hover-color-mix, var(--_color, white))
-      calc(100% - var(--hover-base-color-percentage, 90%))
+  color: fn.var-with-fallbacks(--hover-fg, list.append($prefixes, var(--_color))...);
+  background-color: fn.var-with-fallbacks(
+    --hover-bg,
+    list.append(
+      $prefixes,
+      color-mix(
+        in oklab,
+        var(--_background-color) var(--hover-base-color-percentage, 90%),
+        var(--hover-color-mix, var(--_color, white))
+          calc(100% - var(--hover-base-color-percentage, 90%))
+      )
+    )...
   );
   box-shadow: fn.var-with-fallbacks(
     --hover-box-shadow,
