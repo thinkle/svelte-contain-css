@@ -117,3 +117,41 @@ test("Flat Surfaces drops shadows for a hairline edge", async ({ page }) => {
   await expect.poll(() => sample.evaluate(el => getComputedStyle(el).boxShadow)).toBe("rgba(0, 0, 0, 0) 0px 0px 0px 0px");
   await expect(sample).toHaveCSS("border-top-width", "1px");
 });
+
+test("accent picker recolors primary and secondary, by theme mode, and travels in the link", async ({ page }) => {
+  const root = (name: string) =>
+    page.locator("html").evaluate((el, n) => {
+      const probe = document.createElement("div");
+      probe.style.color = `var(${n})`;
+      el.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, name);
+  await page.getByRole("radio", { name: "Light", exact: true }).locator("..").click();
+  await page.getByRole("group", { name: "Primary accent" }).getByRole("button", { name: "Teal" }).click();
+  await expect.poll(() => root("--primary-bg")).toBe("rgb(0, 137, 123)"); // teal-600
+  // A dark theme takes the light shade of the same hue.
+  await page.getByRole("radio", { name: "Dark", exact: true }).locator("..").click();
+  await expect.poll(() => root("--primary-bg")).toBe("rgb(128, 203, 196)"); // teal-200
+  // A custom color is used as given; its text is automatic.
+  const custom = page.getByLabel("Custom secondary color");
+  await custom.evaluate((el: HTMLInputElement) => {
+    el.value = "#ffeb3b";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect.poll(() => root("--secondary-bg")).toBe("rgb(255, 235, 59)");
+  // Dark text on a pale fill: oklch lightness well under the 0.58 threshold.
+  await expect.poll(async () => parseFloat((await root("--secondary-fg")).replace("oklch(", ""))).toBeLessThan(0.4);
+  const href = await page.getByRole("link", { name: /Open .*full size/ }).getAttribute("href");
+  expect(href).toContain("primary=teal");
+  const popup = await page.context().newPage();
+  await popup.goto(href!);
+  await expect.poll(() => popup.locator("html").evaluate(el => {
+    const probe = document.createElement("div");
+    probe.style.color = "var(--primary-bg)";
+    el.append(probe);
+    return getComputedStyle(probe).color;
+  })).toBe("rgb(128, 203, 196)");
+  await popup.close();
+});

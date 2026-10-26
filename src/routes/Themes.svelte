@@ -24,6 +24,20 @@
   } from "$lib";
   import type { AddOnGroup, AddOnSample } from "$lib/theme/themeConfig";
   import { combinedThemeEntries } from "$lib/theme/combinedThemes";
+  import {
+    MATERIAL_HUES,
+    accentCss,
+    accentMode,
+    isCustomAccent,
+    type AccentRole,
+  } from "$lib/theme/accents";
+
+  const ACCENT_ROLES: { role: AccentRole; label: string; key: "primaryAccent" | "secondaryAccent" }[] = [
+    { role: "primary", label: "Primary", key: "primaryAccent" },
+    { role: "secondary", label: "Secondary", key: "secondaryAccent" },
+  ];
+  const hueName = (hue: string) =>
+    hue.replace("-", " ").replace(/^./, (c) => c.toUpperCase());
   import { reviewAppScenarios } from "$lib/review/scenarios";
   import { themePreviewHash } from "$lib/theme/themePreview";
   import TabBar from "$lib/layout/TabBar.svelte";
@@ -106,6 +120,7 @@
     headingThemeIndex: number,
     enabledExtras: boolean[],
     rawCss: string,
+    accents: string,
   ) {
     const files: string[] = ["defaults.css"];
     if (fullThemeIndex !== 0) {
@@ -129,6 +144,14 @@
       .map((f) => `\timport "contain-css-svelte/vars/${f}";`)
       .join("\n");
     let code = "<scri" + `pt>\n${imports}\n</scri` + "pt>";
+    if (accents) {
+      // One declaration per line: ":root { --a: x; --b: y; }" -> a block.
+      const pretty = accents
+        .replaceAll("{ ", "{\n\t")
+        .replaceAll("; ", ";\n\t")
+        .replaceAll(";\n\t}", ";\n}");
+      code += "\n\n<sty" + `le>\n${pretty}\n</sty` + "le>";
+    }
     if (rawCss) {
       code +=
         "\n\n<sty" +
@@ -146,6 +169,10 @@
       themeState.headingTheme,
       [...themeState.enabledExtras],
       themeState.rawCss,
+      accentCss(
+        { primary: themeState.primaryAccent, secondary: themeState.secondaryAccent },
+        accentMode(colorThemes[themeState.colorTheme].file, themeState.fullTheme !== 0),
+      ),
     ),
   );
 
@@ -265,6 +292,46 @@
         {/each}
       </Fieldset>
     {/if}
+
+    <Fieldset>
+      {#snippet legend()}Accents{/snippet}
+      <!-- A hue picks the shade that suits the color theme (600 on light,
+           200 on dark); a custom color is used as given. -->
+      {#each ACCENT_ROLES as { role, label, key }}
+        {@const value = themeState[key]}
+        <div class="accent-row" role="group" aria-label="{label} accent">
+          <strong>{label}</strong>
+          <div class="swatches">
+            <button
+              type="button"
+              class="swatch theme-default"
+              aria-pressed={value === ""}
+              title="The theme's own {role}"
+              onclick={() => (themeState[key] = "")}>Theme</button
+            >
+            {#each MATERIAL_HUES as hue}
+              <button
+                type="button"
+                class="swatch"
+                aria-pressed={value === hue}
+                aria-label={hueName(hue)}
+                title={hueName(hue)}
+                style:--swatch="var(--material-color-{hue}-{role === 'primary' ? 600 : 700})"
+                onclick={() => (themeState[key] = hue)}
+              ></button>
+            {/each}
+            <label class="swatch custom" class:active={isCustomAccent(value)} title="Custom color">
+              <input
+                type="color"
+                aria-label="Custom {role} color"
+                value={isCustomAccent(value) ? value : "#888888"}
+                oninput={(e) => (themeState[key] = e.currentTarget.value)}
+              />
+            </label>
+          </div>
+        </div>
+      {/each}
+    </Fieldset>
 
     <Fieldset>
       {#snippet legend()}Typography{/snippet}
@@ -393,6 +460,56 @@
 {/snippet}
 
 <style>
+  .accent-row {
+    display: grid;
+    gap: 0.25rem;
+    margin-block-end: 0.75rem;
+  }
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .swatch {
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: var(--swatch);
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--current-fg) 20%, transparent);
+  }
+  .swatch.theme-default {
+    inline-size: auto;
+    padding-inline: 0.625rem;
+    border-radius: 999px;
+    background: var(--current-bg);
+    color: var(--current-fg);
+    font-size: 0.8em;
+  }
+  .swatch[aria-pressed="true"],
+  .swatch.custom.active {
+    outline: 2px solid var(--current-fg);
+    outline-offset: 2px;
+  }
+  .swatch:focus-visible,
+  .swatch.custom:has(input:focus-visible) {
+    outline: 2px solid var(--focus-color, Highlight);
+    outline-offset: 2px;
+  }
+  .swatch.custom {
+    position: relative;
+    overflow: hidden;
+    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+  }
+  .swatch.custom input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
   .addons {
     container-type: inline-size;
     display: grid;
