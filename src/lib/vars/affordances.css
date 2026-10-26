@@ -54,20 +54,9 @@
     var(--grab-bar-fg, var(--sidebar-fg, var(--fg))) 24%,
     transparent
   );
-  --grab-bar-hover-bg: color-mix(
-    in oklab,
-    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg, var(--bg)))))
-      var(--grab-bar-hover-base-color-percentage, 88%),
-    var(--grab-bar-hover-color-mix, white)
-      calc(100% - var(--grab-bar-hover-base-color-percentage, 88%))
-  );
-  --grab-bar-active-bg: color-mix(
-    in oklab,
-    var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg, var(--bg)))))
-      var(--grab-bar-active-base-color-percentage, 80%),
-    var(--grab-bar-active-color-mix, black)
-      calc(100% - var(--grab-bar-active-base-color-percentage, 80%))
-  );
+  /* --grab-bar-hover-bg / --grab-bar-active-bg are computed on the bar
+     itself (Sidebar.svelte), from the color it actually shows: at :root they
+     would freeze to the page's colors before a sidebar's tier is known. */
   --grab-bar-hover-box-shadow: inset 0 0 0 1px var(--grab-bar-shadow-color);
   --grab-bar-active-box-shadow:
     inset 0 0 0 1px var(--grab-bar-shadow-color),

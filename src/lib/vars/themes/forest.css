@@ -7,10 +7,10 @@
   --surface-bg: #f7faf6;
   --surface-fg: #1f2d26;
 
+  /* Sidebars and card headers: a warmer, more saturated step than the
+     derived one, so it is pinned. Raised and overlay step off the surface. */
   --surface-sunken-bg: #e3ece0;
   --surface-sunken-fg: #1f2d26;
-  --menu-bg: #f4f8f3;
-  --menu-fg: #1f2d26;
 
   --primary-bg: #2f6f52;
   --primary-color: #2f6f52;
@@ -39,8 +39,8 @@
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
 
-  --stripe-bg: color-mix(in srgb, var(--menu-bg) 92%, var(--menu-fg) 8%);
-  --stripe-fg: var(--menu-fg);
+  --stripe-bg: color-mix(in srgb, var(--surface-bg) 92%, var(--surface-fg) 8%);
+  --stripe-fg: var(--surface-fg);
 
   --warning-bg: #d4841f;
   --warning-color: #d4841f;

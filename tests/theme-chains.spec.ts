@@ -54,7 +54,8 @@ test("surface and field geometry ignore unrelated legacy prefixes", async ({ pag
   await expect(page.getByTestId("select")).toHaveCSS("border-top-left-radius", "3px");
 });
 
-for (const theme of ["bootstrap", "material", "retro", "light", "forest", "canyon"]) {
+// Themes that pin their fields; light and dark derive them from the surface.
+for (const theme of ["bootstrap", "material", "retro", "forest", "canyon"]) {
   test(`${theme} preserves themed field colors and control padding`, async ({ page }) => {
     await page.goto(url);
     await page.addStyleTag({ content: readFileSync(`src/lib/vars/themes/${theme}.css`, "utf8").replaceAll(":root", "#theme") });

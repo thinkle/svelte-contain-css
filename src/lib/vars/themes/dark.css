@@ -5,13 +5,8 @@
   --body-fg: var(--material-color-blue-grey-50);
   --surface-bg: var(--material-color-blue-grey-900);
   --surface-fg: var(--material-color-blue-grey-50);
-  /* In the dark, what is raised is lighter. */
-  --surface-raised-bg: var(--material-color-blue-grey-800);
-  --surface-raised-fg: var(--material-color-blue-grey-50);
-  --surface-sunken-bg: #1e282d;
-  --surface-sunken-fg: var(--material-color-blue-grey-50);
-  --surface-overlay-bg: var(--material-color-blue-grey-700);
-  --surface-overlay-fg: var(--material-color-blue-grey-50);
+  /* In the dark, what is raised is lighter: the tiers step off
+     --surface-bg to about blue-grey 800 (raised) and 700 (overlay). */
   --inverse-bg: var(--material-color-blue-grey-50);
   --inverse-fg: var(--material-color-blue-grey-900);
   --primary-bg: var(--material-color-indigo-200);
@@ -27,16 +22,14 @@
   --secondary-fg: var(--material-color-blue-grey-900);
   --stripe-bg: color-mix(
     in srgb,
-    var(--surface-overlay-bg) 88%,
-    var(--surface-overlay-fg) 12%
+    var(--surface-bg) 88%,
+    var(--surface-fg) 12%
   );
-  --stripe-fg: var(--surface-overlay-fg);
+  --stripe-fg: var(--surface-fg);
   --border-color: var(--material-color-blue-grey-600);
-  --field-bg: var(--material-color-blue-grey-700);
-  --field-fg: var(--material-color-blue-grey-50);
   --slider-track-bg: color-mix(
     in srgb,
-    var(--field-bg) 76%,
+    var(--material-color-blue-grey-700) 76%,
     var(--border-color) 24%
   );
   --slider-fill-bg: var(--primary-bg);

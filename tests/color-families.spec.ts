@@ -94,4 +94,15 @@ test.describe("color families", () => {
     near(await rgb(page, "band-in-prose", "header h3"), WHITE);
     near(await rgb(page, "band-in-prose", "h3.bar"), DARK_FG);
   });
+
+  test("--current-bg/-fg are the nearest colored element's pair, controls included", async ({ page }) => {
+    near(await rgb(page, "current-button", ".bg"), BRAND);
+    near(await rgb(page, "current-button", ".fg"), WHITE);
+  });
+
+  test("a button given the bar's --current-* blends in, and passes them on", async ({ page }) => {
+    const button = await page.getByTestId("current-blend").locator("button").evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(button).toMatch(/^(rgb\(40, 40, 40\)|color\(srgb 0\.156\d* 0\.156\d* 0\.156\d*\))$/);
+    near(await rgb(page, "current-blend", ".bg"), [40, 40, 40]);
+  });
 });

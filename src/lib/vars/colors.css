@@ -1,4 +1,9 @@
 :root {
+  /* The page's pair, for anything outside every colored element. Each
+     colored element (surface or control) restates these as its own resolved
+     colors; see color-props() in sass/_color.scss. Read-only. */
+  --current-bg: var(--background-bg, var(--bg));
+  --current-fg: var(--background-fg, var(--fg));
   --muted-color: var(--bg);
   --muted-text-amount: 20%;
   --white: #fff;
@@ -27,11 +32,11 @@
   --bg: var(--material-color-grey-50);
   --fg: var(--material-color-grey-900);
 
-  --stripe-fg: var(--menu-fg, var(--surface-overlay-fg, var(--fg)));
+  --stripe-fg: var(--menu-fg, var(--surface-fg, var(--fg)));
   --stripe-bg: color-mix(
     in srgb,
-    var(--menu-bg, var(--surface-overlay-bg, var(--bg))) 94%,
-    var(--menu-fg, var(--surface-overlay-fg, var(--fg))) 6%
+    var(--menu-bg, var(--surface-bg, var(--bg))) 94%,
+    var(--menu-fg, var(--surface-fg, var(--fg))) 6%
   );
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   /* Derived from the page pair rather than hard-coded, so a theme that only
@@ -55,15 +60,16 @@
   --info-color: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
-  /* The neutral surface ladder (see docs/color-families.md). Each tier a
-     component compiles falls back to the one below it at the component, so
-     a theme that sets only --surface-bg colors every tier above it too.
-     Defaults are only the two ends: the page (--bg/--fg) and the reading
-     surface. A theme gives the ladder its steps:
+  /* The neutral surface ladder (see docs/color-families.md). Only the two
+     ends are defaults here: the page (--bg/--fg) and the reading surface.
+     The tiers in between step off the surface at each component -- raised
+     and overlay lighter, sunken darker -- so a theme that sets only
+     --bg/--fg (or --surface-bg) gets them all:
        --surface-raised-bg    Card, Tile
        --surface-sunken-bg    Sidebar, a Card's header and footer
-       --surface-overlay-bg   menus, dialogs (falls back to raised)
-     and `inverse`, the opposite lightness, for tooltips. */
+       --surface-overlay-bg   menus, dialogs (steps off raised)
+     Set one to pin it; --surface-depth scales the steps (0 is flat).
+     `inverse`, the opposite lightness, is for tooltips. */
   --surface-bg: var(--bg);
   --surface-fg: var(--fg);
   --inverse-bg: var(--material-color-grey-800);

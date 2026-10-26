@@ -1,4 +1,7 @@
 :root {
+  /* Surfaces step further apart, to go with the deeper shadows. */
+  --surface-depth: 1.6;
+
   --shadow-distance: 0.125rem;
   --shadow-blur: 0.625rem;
   --shadow-color: rgba(15, 23, 42, 0.14);

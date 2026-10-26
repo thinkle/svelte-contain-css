@@ -528,7 +528,6 @@
 
     .edge-bar {
       @include color-props(grab-bar, sidebar, surface-sunken);
-      background: var(--grab-bar-bg, var(--sidebar-bg, var(--surface-sunken-bg, var(--surface-bg))));
       box-shadow: var(--grab-bar-box-shadow, none);
       position: absolute;
       right: 0;
@@ -557,7 +556,17 @@
     /* Affordances */
     .edge-bar:hover {
       box-shadow: var(--grab-bar-hover-box-shadow, none);
-      background: var(--grab-bar-hover-bg);
+      /* From this bar's own resolved color, so an unset (mixed) sunken tier
+         hovers from the color it actually shows. */
+      background: var(
+        --grab-bar-hover-bg,
+        color-mix(
+          in oklab,
+          var(--_background-color)
+            var(--grab-bar-hover-base-color-percentage, 88%),
+          var(--grab-bar-hover-color-mix, white)
+        )
+      );
     }
     aside .content,
     .edge-bar {
@@ -567,7 +576,15 @@
     }
     .edge-bar:has(button:active) {
       box-shadow: var(--grab-bar-active-box-shadow, none);
-      background: var(--grab-bar-active-bg);
+      background: var(
+        --grab-bar-active-bg,
+        color-mix(
+          in oklab,
+          var(--_background-color)
+            var(--grab-bar-active-base-color-percentage, 80%),
+          var(--grab-bar-active-color-mix, black)
+        )
+      );
     }
     aside:has(.edge-bar:hover) .content {
       filter: var(--greyed-out-filter);

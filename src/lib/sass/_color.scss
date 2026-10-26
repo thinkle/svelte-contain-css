@@ -2,6 +2,7 @@
 @use "sass:list";
 @use "sass:map";
 @use "sass:meta";
+@use "sass:string";
 
 //  ── Color families ─────────────────────────────────────────────────────
 //
@@ -9,8 +10,8 @@
 // ("pins") for what sits on it. See docs/color-families.md.
 //
 // The neutral ladder: each tier falls back to the one below it, for its
-// colors (a theme that sets only --surface-bg gets the same color on cards)
-// and for its pins (--on-surface-raised-X -> --on-surface-X ->
+// colors (an unset tier is a step off the one below; see tier-step-bg()) and
+// for its pins (--on-surface-raised-X -> --on-surface-X ->
 // --on-background-X). `inverse` is the opposite lightness and stands alone.
 $ladder: (
   background: (background),
@@ -27,7 +28,11 @@ $roles: primary, secondary, info, success, warning, danger, control, inactive;
 // Text fields (Input, Select, textarea). Not a fixed pair: by default a field
 // is a step off whatever surface it sits on (see field-default()), so it can
 // never match its surface and disappear. --field-bg / --field-fg pin one.
-$relational-families: field;
+//
+// `ground` is the surface it sits on, exactly: for something that belongs to
+// whatever holds it rather than being a surface of its own (a MenuList in a
+// Sidebar takes the sidebar; inside a DropdownMenu, the menu's overlay).
+$relational-families: field, ground;
 
 $tones: primary, secondary, info, success, warning, danger, muted;
 
@@ -52,11 +57,69 @@ $heading-levels: (
 $ground-bg: var(--_ground-bg, var(--background-bg, var(--bg)));
 $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
 
-// A field's default fill: the local surface, a few percent toward its own
-// foreground -- a darker well on a light surface, a lighter one on a dark
-// surface. --field-fill-amount sets the step.
+// A field's default fill: the local surface lifted a step lighter, the way
+// a raised tier is (an sRGB mix toward white, then an oklch lightness step):
+// white on a light grey page, a lighter well on a dark one, and plain white
+// on a white card, where the edge does the work. --field-lighten scales the
+// lift (0 turns it off). --field-fill-amount first mixes toward the
+// surface's own foreground instead -- with the lift off, a darker well on a
+// light surface. A hovered field steps a little toward the foreground
+// (--_field-hover-fill, set by field-border-props()).
 @function field-default-bg() {
-  @return color-mix(in oklab, #{$ground-bg}, #{$ground-fg} var(--field-fill-amount, 5%));
+  $well: color-mix(
+    in oklab,
+    #{$ground-bg},
+    #{$ground-fg} calc(var(--field-fill-amount, 0%) + var(--_field-hover-fill, 0%))
+  );
+  $lift: var(--field-lighten, 1);
+  @return string.unquote(
+    "oklch(from color-mix(in srgb, #{$well}, white calc(4% * #{$lift})) clamp(0, l + 0.03 * #{$lift}, 1) c h)"
+  );
+}
+
+//  An unset elevated tier's background is a step off the tier below it, so
+// a theme (or an app) that sets only --bg/--fg still gets a ladder: raised
+// and overlay a little lighter, sunken a little darker. That is elevation as
+// lightness, which reads the same way on a light or a dark page.
+//
+// Each step is a small sRGB mix toward white (or black) and then a fixed
+// oklch lightness step. Neither works alone: the mix is a large step near
+// black and next to nothing near white, the lightness step the opposite.
+// Hue and chroma are kept; lightness stops at white and reflects off black
+// (amplified, since oklch lightness is so compressed down there), so a
+// sunken tier on a pure black page is a step lighter rather than the page
+// itself. On #121212 this gives Material's dark elevations within a shade;
+// on blue-grey 900, the bundled dark theme's tiers. Stepped here, at the component, so a local --surface-bg
+// override flows up to the cards inside it. Foregrounds fall back unchanged.
+//
+// Knobs: --surface-depth scales every step (0 is flat, 1.5 deeper); per tier,
+// --surface-raised-mix (a percentage) and --surface-raised-step (oklch
+// lightness), and the same for -sunken- and -overlay-.
+//
+// Sunken also lifts chroma, more on a light surface than a dark one: a step
+// darker alone reads as grey and muddy, where a sidebar wants to read as a
+// deeper shade of the same tint (on the light theme's #f4f5fb this lands on
+// its hand-picked #eef0fa). --surface-sunken-chroma sets the lift.
+$tier-steps: (
+  surface-raised: (white, 4%, 0.03, 0),
+  surface-sunken: (black, 0%, -0.015, 0.8),
+  surface-overlay: (white, 2%, 0.02, 0),
+);
+
+@function tier-step-bg($tier, $below) {
+  $spec: map.get($tier-steps, $tier);
+  $depth: var(--surface-depth, 1);
+  $mixed: color-mix(
+    in srgb,
+    #{$below},
+    #{list.nth($spec, 1)} calc(var(--#{$tier}-mix, #{list.nth($spec, 2)}) * #{$depth})
+  );
+  $l: "(l + var(--#{$tier}-step, #{list.nth($spec, 3)}) * #{$depth})";
+  $c: "c";
+  @if list.nth($spec, 4) != 0 {
+    $c: "calc(c * (1 + var(--#{$tier}-chroma, #{list.nth($spec, 4)}) * #{$depth} * l))";
+  }
+  @return string.unquote("oklch(from #{$mixed} clamp(0, max(#{$l}, -10 * #{$l}), 1) #{$c} h)");
 }
 
 //  The names a family's color variables are looked up under, most specific
@@ -70,6 +133,8 @@ $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
       $tier: list.nth($tiers, $i);
       @if $tier == background {
         $result: var(--background-#{$suffix}, var(--#{$suffix}, #{$result}));
+      } @else if $suffix == bg and map.has-key($tier-steps, $tier) {
+        $result: var(--#{$tier}-bg, #{tier-step-bg($tier, $result)});
       } @else {
         $result: var(--#{$tier}-#{$suffix}, #{$result});
       }
@@ -379,6 +444,12 @@ $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
       } @else {
         $tail: var(--field-fg, #{$ground-fg});
       }
+    } @else if $family == ground {
+      @if $channel == bg {
+        $tail: $ground-bg;
+      } @else {
+        $tail: $ground-fg;
+      }
     } @else if $family != null {
       $tail: family-color-chain($family, $channel, $tail);
     }
@@ -397,6 +468,14 @@ $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
     var(--_fg-base),
     var(--_fg-mix-color) var(--_fg-mix-amount)
   );
+  // The public, read-only form of this element's resolved pair, inherited
+  // by everything inside: an icon in a filled button, a mix in a tag. Read
+  // it; never set it -- setting it changes nothing here, only what your own
+  // children read. Use it on a wrapper (`--button-bg: var(--current-bg)`
+  // around a Button), not on the element it describes, which would read its
+  // own color while computing it.
+  --current-bg: var(--_background-color);
+  --current-fg: var(--_color);
   // Text tones belong to this resolved surface. Amount is the target share:
   // 0% preserves the foreground; 100% reaches the target color.
   // Muted targets the local surface; an explicit override can travel across

@@ -16,12 +16,12 @@
   --body-fg: #000000;
   --surface-bg: #c0c0c0;
   --surface-fg: #000000;
+  /* A flat look: every tier is the surface unless pinned. */
+  --surface-depth: 0;
   --page-bg: #008080;
   --page-fg: #000000;
   --page-content-bg: #c0c0c0;
   --page-content-fg: #000000;
-  --surface-sunken-bg: #c0c0c0;
-  --surface-sunken-fg: #000000;
 
   --primary-bg: #000080;
   --primary-color: #000080;
@@ -109,6 +109,7 @@
   --field-bg: #ffffff;
   --field-fg: #000000;
   --field-border: 2px inset #c0c0c0;
+  --field-hover-border-color: #c0c0c0;
   --field-square-radius: 0;
   --input-padding: 0.35rem 0.45rem;
 
@@ -122,10 +123,8 @@
   --select-label-padding-right: 1.4rem;
   --select-arrow-transition: transform 120ms steps(2, end), color 120ms steps(2, end);
 
-  --menu-bg: #ffffff;
-  --menu-fg: #000000;
-  --menu-item-bg: #ffffff;
-  --menu-item-fg: #000000;
+  --surface-overlay-bg: #ffffff;
+  --surface-overlay-fg: #000000;
   --menu-item-padding: 0.25rem 0.5rem;
   --menu-item-border: none;
   --menu-item-square-radius: 0;

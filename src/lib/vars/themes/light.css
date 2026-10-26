@@ -5,14 +5,8 @@
   --bg: #fcfcff;
   --surface-bg: #f4f5fb;
   --surface-fg: #1b1d2e;
-  /* The ladder: cards sit up off the reading surface, sidebars and card
-     headers sit back from it, menus and dialogs float. */
-  --surface-raised-bg: #ffffff;
-  --surface-raised-fg: #1b1d2e;
-  --surface-sunken-bg: #eef0fa;
-  --surface-sunken-fg: #1b1d2e;
-  --surface-overlay-bg: #ffffff;
-  --surface-overlay-fg: #1b1d2e;
+  /* The ladder (raised, sunken, overlay) steps off --surface-bg in
+     lightness by default; set a --surface-*-bg to pin a tier. */
   --inverse-bg: var(--material-color-indigo-900);
   --inverse-fg: var(--white);
   --primary-bg: var(--material-color-indigo-600);
@@ -25,9 +19,9 @@
   --secondary-bg: var(--material-color-pink-700);
   --secondary-color: var(--material-color-pink-700);
   --secondary-fg: var(--white);
-  --stripe-bg: color-mix(in srgb, var(--surface-overlay-bg) 94%, var(--surface-overlay-fg) 6%);
+  --stripe-bg: color-mix(in srgb, var(--surface-bg) 94%, var(--surface-fg) 6%);
   --active-color-mix: black;
-  --stripe-fg: var(--surface-overlay-fg);
+  --stripe-fg: var(--surface-fg);
   --tab-bg: var(--material-color-indigo-50);
   --tab-fg: var(--material-color-indigo-900);
   --tab-active-bg: #ffffff;
@@ -50,11 +44,9 @@
 
   --border-color: var(--material-color-indigo-300);
   --focus-color: var(--material-color-indigo-a200);
-  --field-bg: #fefefe;
-  --field-fg: var(--material-color-grey-900);
   --slider-track-bg: color-mix(
     in srgb,
-    var(--field-bg) 62%,
+    #fefefe 62%,
     var(--border-color) 38%
   );
   --slider-fill-bg: var(--primary-bg);

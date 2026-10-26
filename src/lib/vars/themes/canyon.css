@@ -7,10 +7,10 @@
   --surface-bg: #fff8f2;
   --surface-fg: #33261f;
 
+  /* Sidebars and card headers: a warmer, more saturated step than the
+     derived one, so it is pinned. Raised and overlay step off the surface. */
   --surface-sunken-bg: #f0e1d4;
   --surface-sunken-fg: #33261f;
-  --menu-bg: #fcf3ea;
-  --menu-fg: #33261f;
 
   /* The filled surface needs to support cream text plus a gentle accent;
      keep the original brighter clay as the tint target below. */
@@ -41,8 +41,8 @@
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
 
-  --stripe-bg: color-mix(in srgb, var(--menu-bg) 91%, var(--menu-fg) 9%);
-  --stripe-fg: var(--menu-fg);
+  --stripe-bg: color-mix(in srgb, var(--surface-bg) 91%, var(--surface-fg) 9%);
+  --stripe-fg: var(--surface-fg);
 
   --warning-bg: #cc8a2e;
   --warning-color: #cc8a2e;

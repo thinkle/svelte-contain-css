@@ -30,6 +30,8 @@
   --body-fg: #212529;
   --surface-bg: #ffffff;
   --surface-fg: #212529;
+  /* A flat look: every tier is the surface unless pinned. */
+  --surface-depth: 0;
   --page-bg: #ffffff;
   --page-fg: #212529;
   --page-content-bg: #ffffff;
@@ -151,10 +153,8 @@
   --select-arrow-open-transform: translateY(-50%);
   --select-arrow-right-offset: 0.75rem;
   --select-label-padding-right: 2rem;
-  --menu-bg: #ffffff;
-  --menu-fg: #212529;
-  --stripe-bg: color-mix(in srgb, var(--menu-bg) 95%, var(--menu-fg) 5%);
-  --stripe-fg: var(--menu-fg);
+  --stripe-bg: color-mix(in srgb, var(--surface-bg) 95%, var(--surface-fg) 5%);
+  --stripe-fg: var(--surface-fg);
   --menu-item-bg: transparent;
   --menu-item-fg: #212529;
   --menu-item-even-bg: #f8f9fa;

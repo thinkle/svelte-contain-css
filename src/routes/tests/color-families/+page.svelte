@@ -2,7 +2,7 @@
   // Deterministic fixtures for tests/color-families.spec.ts: exact colors
   // keyed by color family, mixing everywhere else. Plain rgb() values so the
   // spec can check pins exactly and mixes by hand.
-  import { Bar, Card, Container, TextLayout, Tile, Text, surfaceVars } from "$lib";
+  import { Bar, Button, Card, Container, TextLayout, Tile, Text, surfaceVars } from "$lib";
 
   const pins = [
     "--surface-bg: rgb(245, 245, 245)",
@@ -90,4 +90,20 @@
       <Bar bg="rgb(40, 40, 40)" fg="rgb(240, 240, 240)"><h3 class="bar">Bar heading</h3></Bar>
     </TextLayout>
   </Container>
+
+  <!-- --current-bg/-fg: the nearest colored element's own pair, controls
+       included, for an icon inside a button. -->
+  <Container data-testid="current-button">
+    <Button primary>
+      <span class="bg" style="color: var(--current-bg)">bg</span>
+      <span class="fg" style="color: var(--current-fg)">fg</span>
+    </Button>
+  </Container>
+  <!-- A button that blends into its bar by taking the bar's actual colors
+       (on a wrapper), so what is inside it reads them too. -->
+  <Bar data-testid="current-blend" bg="rgb(40, 40, 40)" fg="rgb(240, 240, 240)">
+    <div style="--button-bg: var(--current-bg); --button-fg: var(--current-fg);">
+      <Button><span class="bg" style="color: var(--current-bg)">bg</span></Button>
+    </div>
+  </Bar>
 </div>
