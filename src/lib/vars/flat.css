@@ -1,4 +1,13 @@
+/* Flat surfaces: no shadows, and the surface tiers pulled close together, so
+   depth reads as barely-there tints. Cards, tiles and data lists get a
+   hairline edge instead, since without a shadow or a tier step a card on a
+   page of nearly the same color would vanish. */
 :root {
+  --surface-depth: 0.4;
+  --card-border: 1px solid color-mix(in oklab, var(--fg) 14%, var(--bg));
+  --tile-border: 1px solid color-mix(in oklab, var(--fg) 14%, var(--bg));
+  --data-list-border: 1px solid color-mix(in oklab, var(--fg) 14%, var(--bg));
+
   --shadow-distance: 0;
   --shadow-blur: 0;
   --shadow-color: transparent;
