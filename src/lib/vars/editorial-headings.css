@@ -1,13 +1,20 @@
 /* Editorial headings: a filled h1, an accent h2 with its own rule, and
    quiet h3-h6.
 
-   The h1 paints its own background, so it names an exact fg/bg pair. Every
+   The h1 paints its own background, so it names an exact fg/bg pair, keyed
+   by color family (inverted on a primary surface). Every
    other level is a tint of the foreground around it, so it follows the
    surface it lands on: transparent at 30% reads as "subdued" on any surface
    because it lets the real backdrop through. */
 :root {
-  --heading-1-bg: var(--primary-bg);
-  --heading-1-fg: var(--primary-fg);
+  /* Keyed by family, not global: on the page and every neutral surface
+     (cards, sidebars) h1 is filled with primary; on a primary surface it
+     inverts, rather than vanishing into a primary fill on primary. Other
+     role surfaces (a danger card) get the surface's own heading color. */
+  --on-background-heading-1-bg: var(--primary-bg);
+  --on-background-heading-1-fg: var(--primary-fg);
+  --on-primary-heading-1-bg: var(--primary-fg);
+  --on-primary-heading-1-fg: var(--primary-bg);
   --heading-1-padding: 0.25em 0.45em;
   --heading-1-border-radius: 3px;
   /* Text tones nudge the filled pair rather than repaint it. */

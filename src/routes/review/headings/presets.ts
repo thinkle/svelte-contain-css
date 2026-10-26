@@ -44,15 +44,9 @@ const tiles = {
   "tile-success": onSuccess,
 };
 
-// Exact heading colors aren't component-scoped any more: clear the global
-// fills on this surface instead (`initial` is "unset" for a custom property).
+// The presets key their fills by color family, so a colored tile already
+// gets unfilled headings; only the chip's padding and shadow remain to drop.
 const unchipped: Vars = {
-  "--heading-bg": "initial",
-  "--heading-fg": "initial",
-  "--heading-major-bg": "initial",
-  "--heading-major-fg": "initial",
-  "--heading-minor-bg": "initial",
-  "--heading-minor-fg": "initial",
   "--tile-heading-padding": "0",
   "--tile-heading-box-shadow": "none",
 };
@@ -82,10 +76,8 @@ export const headingPresets: Record<
     recipes: {
       primary: {
         ...onPrimary,
-        // The filled h1 inverts, so the block still reads as a block, and
+        // The filled h1 inverts on primary by itself (--on-primary-heading-1-*);
         // the h2's rule takes the text color.
-        "--heading-1-bg": "var(--primary-fg)",
-        "--heading-1-fg": "var(--primary-bg)",
         "--heading-2-border-color": "currentColor",
       },
       ...tiles,
@@ -97,8 +89,6 @@ export const headingPresets: Record<
     recipes: {
       primary: {
         ...onPrimary,
-        "--heading-1-bg": "var(--primary-fg)",
-        "--heading-1-fg": "var(--primary-bg)",
         "--heading-2-border-color": "currentColor",
       },
       ...tiles,
@@ -113,11 +103,7 @@ export const headingPresets: Record<
     label: "Solid",
     css: solid,
     recipes: {
-      primary: {
-        ...onPrimary,
-        "--heading-major-bg": "var(--primary-fg)",
-        "--heading-major-fg": "var(--primary-bg)",
-      },
+      primary: onPrimary,
       // A gray chip on a colored tile clashes; colored tiles drop it.
       ...Object.fromEntries(
         Object.entries(tiles).map(([id, vars]) => [
