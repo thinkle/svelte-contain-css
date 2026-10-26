@@ -25,6 +25,7 @@
   import FormDemo from "./demos/FormDemo.svelte";
   import FormItemDemo from "./demos/FormItemDemo.svelte";
   import VariableDemo from "./demos/VariableDemo.svelte";
+  import CustomThemingDemo from "./demos/CustomThemingDemo.svelte";
   import Button from "$lib/controls/Button.svelte";
   import Hero from "$lib/layout/Hero.svelte";
   import PageDemo from "./demos/PageDemo.svelte";
@@ -118,6 +119,11 @@
     { name: "Intro", link: "#Intro" },
     { name: "Installation", link: "#Installation" },
     { name: "Themes", component: Themes },
+    {
+      name: "Custom Theming",
+      component: CustomThemingDemo,
+      demo: "CustomTheming",
+    },
     { name: "Layout" },
 
     { name: "Split Pane", component: SplitPaneDemo, demo: "SplitPane" },
@@ -240,17 +246,19 @@
     >
       <div class="icon equal-width"></div>
       <h1 class="site-title"><em>ContainCSS</em></h1>
-      <!-- The nav buttons and the menu trigger take the bar's colors. These
-           are --button-* / --menu-trigger-* (not a bare --bg/--fg) and stop
-           at the trigger: the open menu is themed by --menu-*, so the bar's
-           primary text color can't leak onto the menu's light surface. -->
+      <!-- The nav buttons and the menu trigger take the bar's actual colors
+           (--current-*, read here on a wrapper inside the bar), so they
+           blend in and still brighten on hover, which a transparent button
+           can't. These are --button-* / --menu-trigger-* (not a bare
+           --bg/--fg) and stop at the trigger: the open menu is its own
+           overlay surface, so the bar's text color can't leak onto it. -->
       <div
         class="info equal-width"
         bind:clientWidth={sideWidth}
-        style:--button-bg="var(--bar-bg, var(--container-bg))"
-        style:--button-fg="var(--bar-fg, var(--container-fg))"
-        style:--menu-trigger-bg="var(--bar-bg, var(--container-bg))"
-        style:--menu-trigger-fg="var(--bar-fg, var(--container-fg))"
+        style:--button-bg="var(--current-bg)"
+        style:--button-fg="var(--current-fg)"
+        style:--menu-trigger-bg="var(--current-bg)"
+        style:--menu-trigger-fg="var(--current-fg)"
         style:--button-drop-shadow="none"
         style:--button-border="none"
         style:--button-shadow-color="transparent"
@@ -267,8 +275,13 @@
 
         <DropdownMenu>
           {#snippet label()}
-            <span>
-              {menu[theItem].name}
+            <!-- Every section name in one grid cell, only the current one
+                 visible: the trigger is as wide as the longest name, so it
+                 doesn't jump as you page through sections. -->
+            <span class="nav-label">
+              {#each menu as item}
+                <span class:current={item === menu[theItem]}>{item.name}</span>
+              {/each}
             </span>
           {/snippet}
 
@@ -413,6 +426,16 @@
   }
   .equal-width {
     min-width: var(--side-width);
+  }
+  .nav-label {
+    display: inline-grid;
+  }
+  .nav-label > span {
+    grid-area: 1 / 1;
+    visibility: hidden;
+  }
+  .nav-label > .current {
+    visibility: visible;
   }
   .site-title {
     white-space: nowrap;

@@ -14,9 +14,27 @@ Headings: [headings.md](headings.md). Text tones: `AGENTS-EXTERNAL.md`.
 A family is a background, its foreground, and optional exact colors (pins)
 for what sits on it.
 
-**The neutral ladder.** Each tier falls back to the one below it, at the
-component, so a theme that sets only `--surface-bg` colors every tier above
-it too.
+**The neutral ladder.** An unset tier is a step off the one below it, at
+the component: raised and overlay a little lighter, sunken a little darker.
+So a theme that sets only `--bg`/`--fg` (or `--surface-bg`) gets every tier,
+on a light or a dark page, and a local `--surface-bg` override reaches the
+cards inside it. Pin a tier with its `-bg` to use an exact color.
+
+Each step is a small sRGB mix toward white (raised, overlay), then an oklch
+lightness step: the mix does the work near black,
+the lightness step near white. Hue and chroma are kept, and on pure black a
+sunken tier steps lighter, since nothing is darker. On `#121212` the
+defaults land within a shade of Material's dark elevations.
+
+| Knob | Default | Effect |
+| ---- | ------- | ------ |
+| `--surface-depth` | `1` | Scales every step; `0` is flat (Bootstrap, Material, Retro), Layered Depth uses `1.6` |
+| `--surface-raised-mix` / `-step` | `4%` / `0.03` | Toward white, then lighter |
+| `--surface-overlay-mix` / `-step` | `2%` / `0.02` | Off raised, toward white, then lighter |
+| `--surface-sunken-mix` / `-step` / `-chroma` | `0%` / `-0.015` / `0.8` | Darker, with a chroma lift (more on light surfaces) so it reads as a deeper tint, not grey |
+
+Foregrounds fall back to the tier below unchanged. The docs site's Custom
+Theming page has a live editor for all of this.
 
 | Tier              | Pair                                      | Components that compile it          |
 | ----------------- | ----------------------------------------- | ----------------------------------- |
@@ -24,7 +42,7 @@ it too.
 | `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, Page, Hero, DataList, Accordion, TabBar |
 | `surface-raised`  | `--surface-raised-bg/-fg`                 | Card, Tile                          |
 | `surface-sunken`  | `--surface-sunken-bg/-fg`                 | Sidebar, a Card's header and footer |
-| `surface-overlay` | `--surface-overlay-bg/-fg` (→ raised)     | DropdownMenu, MenuList, Dialog      |
+| `surface-overlay` | `--surface-overlay-bg/-fg` (steps off raised) | DropdownMenu, Dialog            |
 | `inverse`         | `--inverse-bg/-fg`                        | Tooltip                             |
 
 **Roles.** `primary`, `secondary`, `info`, `success`, `warning`, `danger`,
@@ -36,18 +54,26 @@ to fall through to `secondary`, which made `secondary` do two jobs. It is
 now its own pair (`--control-bg/-fg`), defaulting to a step off the surface
 toward its foreground, and `secondary` is an accent like `primary`.
 
-**`field`.** Text fields: Input, Select, and native inputs under a Form's
-`globalInputStyles`. A field is relative to the surface it sits on, because
+**`ground`.** Exactly the surface something sits on, for an element that
+belongs to whatever holds it rather than being a surface of its own. A
+MenuList is `ground`: in a Sidebar it is the sidebar's sunken tier, on a Card
+the card, and inside a DropdownMenu the menu's overlay. `--menu-bg` still
+gives one a background of its own (and so takes it out of any family).
+
+**`field`.** Text fields: Input, Select, TextArea, and native text inputs and
+textareas under a Form's `globalInputStyles` (not ranges, checkboxes, radios
+or other non-text inputs). A field is relative to the surface it sits on, because
 any fixed color matches some surface and the field disappears. Every
 family-aware surface publishes its resolved pair, and by default a field is:
 
-- filled a step off that surface toward its foreground
-  (`--field-fill-amount`, 5% in oklab): a darker well on a light surface, a
-  lighter one on a dark surface;
+- filled a step lighter than that surface, the way a raised tier is
+  (`--field-lighten`, 1): white on a light grey page, a lighter well on a
+  dark one, white on a white card;
 - edged with a 1px line mixed from the same pair (`--field-edge-amount`, 50%
   in oklab, about 3.5:1). Fields are the one borderless-by-default exception:
-  a fill that close to its surface can't meet the 3:1 boundary contrast WCAG
-  1.4.11 asks of a control on its own.
+  the edge is what makes a field findable where its fill matches the
+  surface (a white field on a white card), and WCAG 1.4.11 asks 3:1 of a
+  control's boundary.
 
 Knobs, all optional:
 
@@ -57,11 +83,16 @@ Knobs, all optional:
 | `--field-border-color`                     | An exact edge color                                 |
 | `--field-border` (shorthand), `-width`, `-style` | The whole edge                               |
 | `--field-border-top: none` + `--field-border-inline: none` | Underline-only fields               |
-| `--field-square-radius`                    | Corner radius of Input and Select together          |
-| `--field-fill-amount`, `--field-edge-amount` | How far the defaults step off the surface         |
+| `--field-square-radius`                    | Corner radius of every field (then `--square-radius`, then `--border-radius`) |
+| `--field-lighten`                          | Scales the lighter fill; `0` is the surface itself   |
+| `--field-fill-amount`                      | Mixes toward the surface's text first: with `--field-lighten: 0`, a darker well |
+| `--field-edge-amount`                      | How strong the default edge is                      |
+| `--field-hover-border-color`, `--field-hover-edge-amount` (80%) | The edge on hover               |
+| `--field-hover-fill-amount` (3%)           | Extra fill on hover; `0%` turns it off              |
 
 `vars/underline-fields.css` is the underline preset ("Underline Fields" in
-the theme picker); it combines with any theme. Component variables
+the theme picker): a transparent fill and a rule along the bottom, on the surface
+itself. It combines with any theme. Component variables
 (`--input-bg`, `--input-border`, `--select-*`) still win over all of these.
 
 **Unknown.** A surface whose background comes from a component-level
@@ -145,6 +176,53 @@ those: they write `--on-<role>-…` pins.
 A raw `bg` on top of a role context (`<Tile bg="#333">` inside a primary
 context) is a component-level background: no family, mix.
 
+## Reading the current colors
+
+Every colored element, surface or control (Bar, Card, Sidebar, Button, Tag,
+Tooltip, a menu item...), publishes its own resolved pair as
+`--current-bg` / `--current-fg`, and everything inside it inherits them.
+`:root` holds the page's pair. So whatever sits inside an element can read
+the colors actually behind it, after tiers, roles, pins and mixes:
+
+```svelte
+<!-- An icon in a filled button, a tag or a tooltip: that element's colors. -->
+<span class="icon" style="background: var(--current-fg)"></span>
+
+<!-- A tint made from the colors behind it. -->
+<style>
+  .badge {
+    background: color-mix(in oklab, var(--current-bg), var(--current-fg) 15%);
+  }
+</style>
+
+<!-- Buttons that blend into their bar: the bar's actual colors, set on a
+     wrapper. They still brighten on hover, which a transparent button can't,
+     and what is inside them reads the real color. -->
+<Bar primary>
+  <div style="--button-bg: var(--current-bg); --button-fg: var(--current-fg);">
+    <Button>Back</Button>
+  </div>
+</Bar>
+```
+
+Three rules:
+
+- **Read, never set.** Setting `--current-bg` recolors nothing; it only
+  changes what your own children read.
+- **Set it on a wrapper, not the element it describes.** On the Button
+  itself, `--button-bg: var(--current-bg)` would read the button's own color
+  while computing it: a cycle, and the browser drops the value. Svelte's
+  `<Button --button-bg="var(--current-bg)">` puts it on a wrapper for you.
+- **Mix where you use it.** A variable is resolved on the element that
+  declares it, so `:root { --tint: color-mix(... var(--current-bg) ...) }`
+  is frozen to the page's colors. Write the mix in the rule for the element
+  that paints it.
+
+A transparent element (`--button-bg: transparent`) publishes `transparent`:
+give it the colors behind it instead, as above. Text fields read the
+*surface* they sit on, not the nearest control, through a private pair of
+their own.
+
 ## Theming the ladder
 
 Recolor tiers, not components. Flattening is aliasing a tier's color
@@ -216,6 +294,21 @@ element that only borrows a pair (a heading inside a Bar, a menu item).
 - **Themes**: drop `--container-bg: var(--surface-bg)` aliases (they read as
   a component-level background); move `--sidebar-bg` → `--surface-sunken-bg`,
   `--menu-bg` → `--surface-overlay-bg`, `--card-bg` → `--surface-raised-bg`.
+- **`<Bar primary>` / `<Bar secondary>`** no longer set `--bar-bg` /
+  `--bar-fg`: the bar joins the role's family instead (a set `--bar-bg` is
+  what marks a hand-colored bar, which belongs to no family). Controls that
+  read `var(--bar-bg)` to blend into a primary bar now get nothing; read
+  `--current-bg` / `--current-fg` instead (see [Reading the current
+  colors](#reading-the-current-colors)), which work on any bar or surface.
+- **`--_color` / `--_background-color`** (private) have a public, supported
+  form: `--current-fg` / `--current-bg`.
+- **Fields** are a step *lighter* than their surface by default
+  (`--field-lighten`), and every field shares one corner chain
+  (`--field-square-radius` → `--square-radius` → `--border-radius`), so a
+  Select now has the same corners as the Input beside it.
+- **Heading presets** (Expressive, Editorial, Solid) key their filled
+  levels by family (`--on-background-heading-*`, inverted on primary), so a
+  primary fill no longer lands on a primary surface.
 - `--heading-*-fg` / `-bg` (global, unprefixed) are unchanged this release:
   still exact everywhere. Prefer `--on-surface-heading-*`; the globals will
   become surface-only aliases.

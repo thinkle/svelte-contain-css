@@ -1610,14 +1610,24 @@ of the surface, never by component. Full contract:
 - **Neutral ladder**: `background` (the page), `surface` (Container,
   Bar, Table, Form…), `surface-raised` (Card, Tile), `surface-sunken` (Sidebar,
   Card header/footer), `surface-overlay` (menus, Dialog), `inverse` (Tooltip).
-  Each tier falls back to the one below it. Themes recolor tiers
+  An unset tier steps off the one below it (raised and overlay lighter,
+  sunken darker), so `--bg`/`--fg` alone gives a full ladder;
+  `--surface-depth` scales the steps (`0` is flat). Themes pin tiers
   (`--surface-raised-bg`), not components (`--card-bg`).
+- **`ground`**: exactly the surface an element sits on (MenuList).
+- **Reading colors**: every colored element (surface or control) publishes
+  its resolved pair as `--current-bg` / `--current-fg`, inherited by its
+  contents: color an icon with `var(--current-fg)`, mix a tint from
+  `var(--current-bg)`. Read-only; set `--button-bg: var(--current-bg)` on a
+  wrapper (never the element itself) to blend a button into its bar; write
+  mixes on the element that paints them, not on `:root`.
 - **Roles**: `primary`, `secondary`, … and app-defined ones. Apply one with
   `<Bar primary>` or `surfaceVars(role, prefix)` on the element or a context.
 - **`control`**: quiet chrome (plain Button, Tag, inactive TabItem). Set
   `--control-bg/-fg`; `secondary` is an accent.
-- **`field`**: text fields. Fill and edge default to a step off the local
-  surface; `--field-*` knobs, `vars/underline-fields.css` preset.
+- **`field`**: text fields (Input, Select, TextArea). Fill and edge default
+  to a step off the local surface and firm up on hover; `--field-*` knobs,
+  `vars/underline-fields.css` preset.
 - **Pins**: `--on-<family>-<tone>-text-fg`, `--on-<family>-link-text-fg`,
   `--on-<family>-heading-<n|major|minor>-fg/-bg`, `--on-<family>-heading-fg`.
 - **Unknown**: a surface with a component-level background (`bg` prop,
@@ -1697,6 +1707,7 @@ Components cascade through category variables. For example, `Button`:
 - `--button-bg`, `--button-fg`, `--button-padding`
 - `--button-width` (default: `fit-content` -- a button is as wide as its label, even in a `Stack` or a grid; `width="100%"` for a full-width one, capped to fit its margins), `--button-height`
 - `--button-hover-filter`, `--button-hover-transform`
+- `--button-hover-bg`, `--button-hover-fg`: replace either half of the hover (any clickable takes its own prefix: `--tab-hover-*`, `--menu-item-hover-*`). A text-only hover, as many tab bars use, is `--tab-hover-bg: var(--tab-bg)` plus a stronger `--tab-hover-fg`.
 
 **Dialog:**
 
