@@ -48,6 +48,20 @@
   }
 }
 
+// A text field's padding and corners. One chain for every field (Input,
+// Select, TextArea, a Form's native inputs), so they match side by side and
+// one knob squares them all: --<component>-square-radius, then
+// --field-square-radius, --control-square-radius and --square-radius, then
+// the global --border-radius.
+@mixin field-box-props($prefixes...) {
+  box-sizing: border-box;
+  @include padding-props($prefixes...);
+  border-radius: fn.var-with-fallbacks(
+    --square-radius,
+    list.append($prefixes, var(--border-radius, 0))...
+  );
+}
+
 // A text field's edge. Fields are the one borderless-by-default exception:
 // a field has to be findable, and a fill a few percent off its surface can't
 // meet the 3:1 boundary contrast (WCAG 1.4.11) on its own. So the default is
@@ -80,6 +94,28 @@
       var(--field-border-inline, var(--_border-base)),
       $prefixes...
     );
+  }
+
+  // Hover: the edge firms up and the default fill steps a little further, so
+  // a field answers the pointer before it is clicked. It matters most for an
+  // underline, which has only one edge to say it is there. Only the color
+  // changes, so a dropped side stays dropped. --field-hover-border-color sets
+  // the hovered edge, and --field-hover-fill-amount: 0% turns the fill step
+  // off. Only the edge eases: a fill transition would also animate a theme
+  // change, on fields alone.
+  transition: border-color var(--transition, 150ms);
+  &:hover:not(:disabled, :focus) {
+    --_field-hover-fill: var(--field-hover-fill-amount, 3%);
+    border-color: #{fn.vars-fallback(
+        hover-border-color,
+        color-mix(
+          in oklab,
+          var(--_ground-fg, var(--background-fg, var(--fg)))
+            var(--field-hover-edge-amount, 80%),
+          var(--_ground-bg, var(--background-bg, var(--bg)))
+        ),
+        $prefixes...
+      )};
   }
 }
 

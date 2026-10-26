@@ -2,8 +2,9 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * Text fields are findable on any surface by default: the fill is a step
- * off the local surface and the edge is mixed from the local pair to at
- * least 3:1 (WCAG 1.4.11). Fixtures: /svelte-contain-css/tests/fields
+ * lighter than the local surface (white on white, where the edge does the
+ * work) and the edge is mixed from the local pair to at least 3:1
+ * (WCAG 1.4.11). Fixtures: /svelte-contain-css/tests/fields
  */
 
 type Probe = { field: number[]; ground: number[]; edge: number[]; widths: string[]; styles: string[] };
@@ -63,7 +64,9 @@ test.describe("fields", () => {
   for (const id of ["page", "container", "card", "dark", "bar"]) {
     test(`a field on the ${id} is findable with no theme`, async ({ page }) => {
       const p = await probe(page, id);
-      expect(same(p.field, p.ground), `fill ${p.field} differs from ground ${p.ground}`).toBe(false);
+      // Lighter than the surface, or white already.
+      expect(lum(p.field), `fill ${p.field} on ground ${p.ground}`).toBeGreaterThanOrEqual(lum(p.ground));
+      if (!same(p.ground, [255, 255, 255])) expect(same(p.field, p.ground)).toBe(false);
       expect(contrast(p.edge, p.ground)).toBeGreaterThanOrEqual(3);
       expect(p.styles).toEqual(["solid", "solid", "solid", "solid"]);
     });
@@ -71,7 +74,7 @@ test.describe("fields", () => {
 
   test("a select is a field too", async ({ page }) => {
     const p = await probe(page, "select", "select, .dropdown-menu > button");
-    expect(same(p.field, p.ground)).toBe(false);
+    expect(lum(p.field)).toBeGreaterThan(lum(p.ground));
     expect(contrast(p.edge, p.ground)).toBeGreaterThanOrEqual(3);
   });
 
@@ -88,8 +91,74 @@ test.describe("fields", () => {
     expect(p.edge).toEqual([200, 0, 0]);
   });
 
+  test("--field-lighten: 0 with --field-fill-amount gives a darker well", async ({ page }) => {
+    const p = await probe(page, "well");
+    expect(lum(p.field)).toBeLessThan(lum(p.ground));
+  });
+
+  test("--field-square-radius rounds every field alike", async ({ page }) => {
+    const radii = await page.evaluate(() =>
+      [...document.querySelectorAll('[data-testid="radius"] :is(input, textarea, select, .dropdown-menu > button)')].map(
+        (el) => getComputedStyle(el).borderTopLeftRadius,
+      ),
+    );
+    expect(radii.length).toBeGreaterThanOrEqual(2);
+    expect(new Set(radii)).toEqual(new Set(["0px"]));
+  });
+
   test("two knobs make an underline field", async ({ page }) => {
     const p = await probe(page, "underline");
     expect(p.styles).toEqual(["none", "none", "solid", "none"]);
+  });
+
+  test("a TextArea is a field like Input", async ({ page }) => {
+    const p = await probe(page, "textarea", "textarea");
+    expect(lum(p.field)).toBeGreaterThan(lum(p.ground));
+    expect(contrast(p.edge, p.ground)).toBeGreaterThanOrEqual(3);
+  });
+
+  test("a TextArea in a FormItem takes the row, and grows", async ({ page }) => {
+    const box = () =>
+      page.evaluate(() => {
+        const t = document.querySelector('[data-testid="global"] textarea')!;
+        const r = t.getBoundingClientRect();
+        // Out to the item's (empty) `after` slot; a side-layout label still
+        // sits beside it.
+        const item = t.closest(".form-item")!;
+        const after = item.querySelector(".after")!.getBoundingClientRect().left;
+        return [after - parseFloat(getComputedStyle(item).columnGap) - r.right, r.height];
+      });
+    const [gap, height] = await box();
+    expect(Math.abs(gap)).toBeLessThanOrEqual(1);
+    await page.locator('[data-testid="global"] textarea').fill("1\n2\n3\n4\n5\n6\n7");
+    const [, taller] = await box();
+    expect(taller).toBeGreaterThan(height);
+  });
+
+  test("globalInputStyles styles text inputs, not a slider", async ({ page }) => {
+    const text = await probe(page, "global", "input:not([type])");
+    expect(text.styles).toEqual(["solid", "solid", "solid", "solid"]);
+    const slider = await probe(page, "global", 'input[type="range"]');
+    expect(slider.styles).toEqual(["none", "none", "none", "none"]);
+  });
+
+  test("hover firms up the edge", async ({ page }) => {
+    const field = page.locator('[data-testid="container"] input');
+    const rest = await probe(page, "container");
+    await field.hover();
+    await page.evaluate(() => document.getAnimations().forEach((a) => a.finish()));
+    const hovered = await probe(page, "container");
+    expect(contrast(hovered.edge, hovered.ground)).toBeGreaterThan(contrast(rest.edge, rest.ground));
+  });
+
+  test("a MenuList takes the surface of the Sidebar it sits in", async ({ page }) => {
+    const [menu, item, sidebar] = await page.evaluate(() => {
+      const scope = document.querySelector('[data-testid="sidebar"]')!;
+      const bg = (sel: string) => getComputedStyle(scope.querySelector(sel)!).backgroundColor;
+      document.getAnimations().forEach((a) => a.finish());
+      return [bg(".menu"), bg(".menu button"), bg("aside .content")];
+    });
+    expect(menu).toBe(sidebar);
+    expect(item).toBe(sidebar);
   });
 });

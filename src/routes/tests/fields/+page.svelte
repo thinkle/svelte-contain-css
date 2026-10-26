@@ -2,7 +2,21 @@
   // Fixtures for tests/fields.spec.ts: a field must be findable on whatever
   // surface it lands on, with no theme at all.
   import "$lib/vars/defaults.css";
-  import { Bar, Card, Container, Input, Option, Select, Tile } from "$lib";
+  import {
+    Bar,
+    Card,
+    Container,
+    Form,
+    FormItem,
+    Input,
+    MenuList,
+    Option,
+    Select,
+    Sidebar,
+    Slider,
+    TextArea,
+    Tile,
+  } from "$lib";
 </script>
 
 <div data-testid="page"><Input value="on the page" /></div>
@@ -19,6 +33,26 @@
 <Container data-testid="shorthand" style="--input-border: 2px dashed rgb(200, 0, 0);">
   <Input value="shorthand" />
 </Container>
+<Container data-testid="well" style="--field-lighten: 0; --field-fill-amount: 6%;">
+  <Input value="darker well" />
+</Container>
+<Container data-testid="radius" style="--border-radius: 12px; --field-square-radius: 0;">
+  <Input value="square" /><TextArea value="square" />
+  <Select value="One"><Option value="One">One</Option></Select>
+</Container>
 <Container data-testid="underline" style="--field-border-top: none; --field-border-inline: none;">
   <Input value="underline" />
 </Container>
+
+<!-- A textarea is a field; a slider under globalInputStyles is not. -->
+<Container data-testid="textarea"><TextArea value="many lines" /></Container>
+<Container data-testid="global"><Form globalInputStyles>
+  <FormItem><input value="native text" /></FormItem>
+  <FormItem><Slider value={40} /></FormItem>
+  <FormItem><TextArea /></FormItem>
+</Form></Container>
+
+<!-- A MenuList takes the surface it sits on. -->
+<div data-testid="sidebar" style="display: flex; height: 8rem; container-type: inline-size;">
+  <Sidebar><MenuList><li><button>Item</button></li></MenuList></Sidebar>
+</div>

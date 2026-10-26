@@ -48,7 +48,7 @@
     /* A field: geometry walks input -> field -> control; colors and the
        edge come from the surface the field sits on (see field-default-bg
        and field-border-props). */
-    @include box-props(input, field, control);
+    @include field-box-props(input, field, control);
     @include field-border-props(input, field, control);
     @include color-props(input, field, $family: false);
     width: var(--input-width);

@@ -201,6 +201,23 @@
     max-width: 100%;
   }
 
+  /* A textarea is meant to be wide: its item takes the row whether or not
+     the form is fullWidth. --form-input-fixed-width still caps it. */
+  .form-item.layout-above:has(.input > :global(textarea)),
+  .form-item.layout-below:has(.input > :global(textarea)) {
+    grid-template-columns: 1fr auto;
+  }
+  .form-item:has(.input > :global(textarea)) {
+    align-items: flex-start;
+  }
+  .input:has(> :global(textarea)) {
+    flex: 1 1 auto;
+    width: var(--form-input-fixed-width, 100%);
+  }
+  .input > :global(textarea) {
+    width: 100%;
+  }
+
   /* In grid layouts, make the input area stretch fully */
   .form-item.fullWidth.layout-above .input,
   .form-item.fullWidth.layout-below .input {
@@ -245,12 +262,14 @@
     }
   }
 
-  /* Global Input Styles */
-  .globalInputStyles :global(input),
+  /* Global Input Styles: text-entry fields only. A range, checkbox, radio,
+     color or file input is not a field, and the field's fill and edge drew a
+     box around it. :where() keeps the exclusions from adding specificity. */
+  .globalInputStyles :global(input:where(:not([type="range"], [type="checkbox"], [type="radio"], [type="color"], [type="file"], [type="button"], [type="submit"], [type="reset"], [type="image"]))),
   .globalInputStyles :global(select),
   .globalInputStyles :global(textarea) {
     @include typography-props(form-input, input, ui);
-    @include box-props-square(form-input, input, field, control);
+    @include field-box-props(form-input, input, field, control);
     @include field-border-props(form-input, input, field, control);
     @include color-props(form-input, input, field, $family: false);
     @include focusable();

@@ -17,6 +17,7 @@
     Fieldset,
     RadioButton,
     FormProvider,
+    TextArea,
   } from "$lib";
   import { reviewAppScenarios } from "$lib/review/scenarios";
   import { themePreviewHash } from "$lib/theme/themePreview";
@@ -98,12 +99,6 @@
       ContainCSS uses CSS properties for theming. There are numerous presets
       included, and you can also write your own themes or customize presets with
       extra variables easily enough.
-    </p>
-    <p>
-      To see how a theme's headings hold up on light, dark and saturated
-      surfaces, open the <a href={`${base}/review/headings?preset=editorial`}
-        >heading specimen</a
-      >.
     </p>
     <p>
       You can adjust this tutorial to use a theme of your choosing to get a feel
@@ -202,8 +197,10 @@
 
     <FormItem>
       {#snippet label()}<span>Extra Variables</span>{/snippet}
-      <textarea placeholder="--bg: red;" bind:value={themeState.rawCss}
-      ></textarea>
+      <TextArea
+        placeholder="--surface-bg: lavender;&#10;--surface-raised-bg: white;"
+        bind:value={themeState.rawCss}
+      />
     </FormItem>
 
     <FormItem fullWidth>

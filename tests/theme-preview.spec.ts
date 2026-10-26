@@ -28,7 +28,7 @@ test("full-size preview preserves the selected palette, type, add-ons, and custo
   await page.getByRole("radio", { name: "Canyon", exact: true }).locator("..").click();
   await page.getByRole("radio", { name: "Modern Serif", exact: true }).locator("..").click();
   await page.getByRole("checkbox", { name: "Fancy Paragraphs", exact: true }).locator("..").click();
-  await page.getByPlaceholder("--bg: red;").fill("--sidebar-bg: rgb(1, 2, 3);");
+  await page.getByPlaceholder(/--surface-bg: lavender/).fill("--sidebar-bg: rgb(1, 2, 3);");
   const popupEvent = page.waitForEvent("popup");
   await page.getByRole("link", { name: /Open The Tidy Shelf.*full size/ }).click();
   const popup = await popupEvent;
@@ -54,7 +54,7 @@ test("full presets and extras also survive the full-size link", async ({ page })
 });
 
 test("custom variables retain priority when presets and add-ons change", async ({ page }) => {
-  await page.getByPlaceholder("--bg: red;").fill("--primary-bg: rgb(1, 2, 3); --heading-1-bg: rgb(4, 5, 6);");
+  await page.getByPlaceholder(/--surface-bg: lavender/).fill("--primary-bg: rgb(1, 2, 3); --heading-1-bg: rgb(4, 5, 6);");
   const values = () => page.locator("html").evaluate(el => {
     const css = getComputedStyle(el);
     return [css.getPropertyValue("--primary-bg").trim(), css.getPropertyValue("--heading-1-bg").trim()];

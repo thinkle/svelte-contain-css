@@ -232,7 +232,7 @@
   @use "$lib/sass/_mixins.scss" as *;
   select,
   .dropdown-wrapper > :global(.dropdown-menu > button) {
-    @include box-props-square(select, input, field, control);
+    @include field-box-props(select, input, field, control);
     @include field-border-props(select, input, field, control);
     @include color-props(select, input, field, $family: false);
     width: var(
