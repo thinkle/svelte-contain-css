@@ -21,6 +21,7 @@ import restrainedHeadings from "$lib/vars/restrained-headings.css?raw";
 import editorialHeadings from "$lib/vars/editorial-headings.css?raw";
 import expressiveHeadings from "$lib/vars/expressive-headings.css?raw";
 import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
+import underlineFields from "$lib/vars/underline-fields.css?raw";
 import { combinedThemeEntries } from "./combinedThemes";
 
 // lightordark.css uses @import url() which won't resolve when injected at
@@ -28,6 +29,19 @@ import { combinedThemeEntries } from "./combinedThemes";
 const lightordark = `@media (prefers-color-scheme: light) {\n${light}\n}\n@media (prefers-color-scheme: dark) {\n${dark}\n}`;
 
 export type ThemeEntry = { name: string; css: string; file: string; cssWithoutHeadings?: string; filesWithoutHeadings?: string[] };
+
+/* An add-on also says, in a line, what it changes, and which sample on the
+   Themes page shows it. Add-ons in the same group are alternatives (soft or
+   sharp corners): the Themes page offers them as one choice, with Default. */
+export type AddOnSample = "type" | "corners" | "depth" | "paragraph" | "fields";
+export type AddOnGroup = "corners" | "depth";
+export type AddOnEntry = ThemeEntry & {
+  description: string;
+  sample: AddOnSample;
+  group?: AddOnGroup;
+  /* Shown beside the Typography choice rather than with the other add-ons. */
+  typography?: boolean;
+};
 
 // Complete themes — define color, borders, typography themselves.
 // When one of these is active, color + typography pickers are hidden.
@@ -58,13 +72,21 @@ export const typographyThemes: ThemeEntry[] = [
   { name: "Defaults", css: "", file: "" },
 ];
 
-export const extraThemes: ThemeEntry[] = [
-  { name: "Responsive Typography", css: responsiveTypography, file: "responsive-typography.css" },
-  { name: "Soft Corners", css: softCorners, file: "soft-corners.css" },
-  { name: "Sharp Edges", css: boxy, file: "boxy.css" },
-  { name: "Flat Surfaces", css: flat, file: "flat.css" },
-  { name: "Layered Depth", css: layered, file: "layered.css" },
-  { name: "Fancy Paragraphs", css: fancyParagraphs, file: "fancy-paragraphs.css" },
+export const extraThemes: AddOnEntry[] = [
+  { name: "Responsive Typography", css: responsiveTypography, file: "responsive-typography.css", sample: "type", typography: true,
+    description: "Text size follows the window: 16px on phones, 18px on tablets, 20px on wide screens." },
+  { name: "Soft Corners", css: softCorners, file: "soft-corners.css", sample: "corners", group: "corners",
+    description: "Rounder cards and fields, and pill-shaped buttons." },
+  { name: "Sharp Edges", css: boxy, file: "boxy.css", sample: "corners", group: "corners",
+    description: "Square corners everywhere." },
+  { name: "Flat Surfaces", css: flat, file: "flat.css", sample: "depth", group: "depth",
+    description: "No shadows; surface shades pulled close together, with a hairline edge on cards." },
+  { name: "Layered Depth", css: layered, file: "layered.css", sample: "depth", group: "depth",
+    description: "Deeper, softer shadows, and surface shades pushed further apart." },
+  { name: "Fancy Paragraphs", css: fancyParagraphs, file: "fancy-paragraphs.css", sample: "paragraph", typography: true,
+    description: "A paragraph's first line in small caps, with a bold, tinted first letter." },
+  { name: "Underline Fields", css: underlineFields, file: "underline-fields.css", sample: "fields",
+    description: "Fields drop their box for a single rule along the bottom." },
 ];
 
 // Heading treatments are alternatives, rather than cumulative add-ons.

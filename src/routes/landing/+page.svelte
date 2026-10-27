@@ -40,9 +40,7 @@
     </div>
   </Hero>
   <Bar
-    bg="var(--primary-bg)"
-    fg="var(--primary-fg)"
-    --bar-link-fg="var(--primary-fg)"
+    primary
     --bar-justify="center"
     height="auto"
     marginBottom="0"

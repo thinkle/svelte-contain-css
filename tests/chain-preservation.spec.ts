@@ -39,12 +39,12 @@ test("factored borders remain local and directional overrides win", async ({ pag
 test("factored transitions preserve full timing values and variant precedence", async ({ page }) => {
   await page.goto(url);
   for (const id of ["button", "link", "circle"]) {
-    await expect(page.getByTestId(id)).toHaveCSS("transition-duration", "0.12s, 0.12s, 0.12s, 0.12s, 0.12s");
-    await expect(page.getByTestId(id)).toHaveCSS("transition-timing-function", "ease-in, ease-in, ease-in, ease-in, ease-in");
+    await expect(page.getByTestId(id)).toHaveCSS("transition-duration", "0.12s, 0.12s, 0.12s, 0.12s, 0.12s, 0.12s");
+    await expect(page.getByTestId(id)).toHaveCSS("transition-timing-function", "ease-in, ease-in, ease-in, ease-in, ease-in, ease-in");
   }
   await page.locator("#tones").evaluate(el => (el as HTMLElement).style.setProperty("--primary-transition", "240ms linear"));
   // Button's clickable variant accepts a semantic transition; CircleButton's
   // base clickable chain remains component-only, exactly as before.
-  await expect(page.getByTestId("button")).toHaveCSS("transition-duration", "0.24s, 0.24s, 0.24s, 0.24s, 0.24s");
-  await expect(page.getByTestId("circle")).toHaveCSS("transition-duration", "0.12s, 0.12s, 0.12s, 0.12s, 0.12s");
+  await expect(page.getByTestId("button")).toHaveCSS("transition-duration", "0.24s, 0.24s, 0.24s, 0.24s, 0.24s, 0.24s");
+  await expect(page.getByTestId("circle")).toHaveCSS("transition-duration", "0.12s, 0.12s, 0.12s, 0.12s, 0.12s, 0.12s");
 });

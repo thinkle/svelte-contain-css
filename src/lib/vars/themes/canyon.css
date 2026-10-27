@@ -6,25 +6,24 @@
 
   --surface-bg: #fff8f2;
   --surface-fg: #33261f;
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
 
-  --sidebar-bg: #f0e1d4;
-  --sidebar-fg: #33261f;
-  --menu-bg: #fcf3ea;
-  --menu-fg: #33261f;
+  /* Sidebars and card headers: a warmer, more saturated step than the
+     derived one, so it is pinned. Raised and overlay step off the surface. */
+  --surface-sunken-bg: #f0e1d4;
+  --surface-sunken-fg: #33261f;
 
   /* The filled surface needs to support cream text plus a gentle accent;
      keep the original brighter clay as the tint target below. */
-  --primary-bg: #a54e30;
+  --primary-bg: color-mix(in oklab, var(--primary-color), black 10%);
   --primary-color: #b85c38;
-  --primary-fg: #fff8f3;
-  --secondary-bg: #ead4c3;
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: #ead4c3;
+  --control-fg: #4a352b;
+  --secondary-bg: var(--secondary-color);
   --secondary-color: #ead4c3;
-  --secondary-fg: #4a352b;
 
-  --input-bg: #fffdfa;
-  --input-fg: #33261f;
+  --field-bg: #fffdfa;
+  --field-fg: #33261f;
 
   --tab-bg: color-mix(in srgb, var(--surface-bg) 72%, var(--secondary-bg) 28%);
   --tab-fg: #5a4033;
@@ -40,8 +39,8 @@
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
 
-  --stripe-bg: color-mix(in srgb, var(--menu-bg) 91%, var(--menu-fg) 9%);
-  --stripe-fg: var(--menu-fg);
+  --stripe-bg: color-mix(in srgb, var(--surface-bg) 91%, var(--surface-fg) 9%);
+  --stripe-fg: var(--surface-fg);
 
   --warning-bg: #cc8a2e;
   --warning-color: #cc8a2e;

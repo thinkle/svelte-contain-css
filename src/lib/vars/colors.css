@@ -1,14 +1,39 @@
 :root {
+  /* The page's pair, for anything outside every colored element. Each
+     colored element (surface or control) restates these as its own resolved
+     colors; see color-props() in sass/_color.scss. Read-only. */
+  --current-bg: var(--background-bg, var(--bg));
+  --current-fg: var(--background-fg, var(--fg));
   --muted-color: var(--bg);
   --muted-text-amount: 20%;
   --white: #fff;
   --black: #222;
-  --primary-bg: var(--material-color-indigo-600);
+  /* A role is one color: its background follows it, and its text is
+     automatic. On a background darker than oklch L 0.58 the text is
+     near-white; above it, dark text as light as contrast allows (L 0.15 to
+     0.32) and tinted with the background's hue -- about 4.5:1 at the
+     threshold, much more on pale fills. So `--primary-color: orange` alone
+     recolors buttons, bars and tags readably, on any bundled theme. Set -bg
+     or -fg to pin either. */
   --primary-color: var(--material-color-indigo-600);
-  --primary-fg: var(--white);
-  --secondary-bg: var(--material-color-indigo-50);
-  --secondary-color: var(--material-color-indigo-50);
-  --secondary-fg: var(--material-color-indigo-900);
+  --primary-bg: var(--primary-color);
+  --primary-fg: oklch(
+    from var(--primary-bg)
+      calc(0.98 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * clamp(0.15, l - 0.5, 0.32))
+      calc(c * 0.05 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * min(c * 1.2, 0.08))
+      h
+  );
+  /* Secondary is an accent, like primary: <Button secondary>, <Text
+     secondary>, a table's header rule. Quiet UI chrome -- a plain Button, a
+     Tag, an inactive tab -- is the `control` family below, not this. */
+  --secondary-color: var(--material-color-pink-700);
+  --secondary-bg: var(--secondary-color);
+  --secondary-fg: oklch(
+    from var(--secondary-bg)
+      calc(0.98 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * clamp(0.15, l - 0.5, 0.32))
+      calc(c * 0.05 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * min(c * 1.2, 0.08))
+      h
+  );
   --inactive-bg: var(--material-color-grey-400);
   --inactive-fg: var(--material-color-grey-900);
 
@@ -24,11 +49,11 @@
   --bg: var(--material-color-grey-50);
   --fg: var(--material-color-grey-900);
 
-  --stripe-fg: var(--menu-fg, var(--fg));
+  --stripe-fg: var(--menu-fg, var(--surface-fg, var(--fg)));
   --stripe-bg: color-mix(
     in srgb,
-    var(--menu-bg, var(--bg)) 94%,
-    var(--menu-fg, var(--fg)) 6%
+    var(--menu-bg, var(--surface-bg, var(--bg))) 94%,
+    var(--menu-fg, var(--surface-fg, var(--fg))) 6%
   );
   --shadow-color: color-mix(in srgb, var(--fg) 10%, rgba(34, 34, 34, 0.2));
   /* Derived from the page pair rather than hard-coded, so a theme that only
@@ -52,8 +77,27 @@
   --info-color: var(--material-color-light-blue-800);
   --info-fg: var(--white);
 
+  /* The neutral surface ladder (see docs/color-families.md). Only the two
+     ends are defaults here: the page (--bg/--fg) and the reading surface.
+     The tiers in between step off the surface at each component -- raised
+     and overlay lighter, sunken darker -- so a theme that sets only
+     --bg/--fg (or --surface-bg) gets them all:
+       --surface-raised-bg    Card, Tile
+       --surface-sunken-bg    Sidebar, a Card's header and footer
+       --surface-overlay-bg   menus, dialogs (steps off raised)
+     Set one to pin it; --surface-depth scales the steps (0 is flat).
+     `inverse`, the opposite lightness, is for tooltips. */
   --surface-bg: var(--bg);
   --surface-fg: var(--fg);
+  --inverse-bg: var(--material-color-grey-800);
+  --inverse-fg: var(--white);
+
+  /* Quiet UI chrome: a plain Button, ButtonLink, CircleButton, an inactive
+     TabItem, a Tag, an Accordion summary, a Progress track. A step off the
+     surface toward its foreground, so it reads on a light or a dark theme
+     without picking a hue. */
+  --control-bg: color-mix(in oklab, var(--surface-bg) 88%, var(--surface-fg));
+  --control-fg: var(--surface-fg);
   /* --menu-item-bg intentionally not defaulted at :root -- see the note in
      affordances.css. The color-props(menu-item, menu, button, control) chain
      resolves it to --menu-bg / --bg at the element, keeping per-instance
@@ -67,6 +111,26 @@
   --tooltip-border: none;
 }
 
+/* The page is the `background` family: what a link or heading with no color
+   surface around it reads (see family-vars() in sass/_color.scss, which
+   writes the same names on every surface and so resets these). */
+:root {
+  --_on-link-fam: var(--on-background-link-text-fg);
+  --_on-link-hover-fam: var(--on-background-link-hover-text-fg, var(--on-background-link-text-fg));
+  --_on-h1-fg-fam: var(--on-background-heading-1-fg, var(--on-background-heading-major-fg, var(--on-background-heading-fg)));
+  --_on-h1-bg-fam: var(--on-background-heading-1-bg, var(--on-background-heading-major-bg, var(--on-background-heading-bg)));
+  --_on-h2-fg-fam: var(--on-background-heading-2-fg, var(--on-background-heading-major-fg, var(--on-background-heading-fg)));
+  --_on-h2-bg-fam: var(--on-background-heading-2-bg, var(--on-background-heading-major-bg, var(--on-background-heading-bg)));
+  --_on-h3-fg-fam: var(--on-background-heading-3-fg, var(--on-background-heading-fg));
+  --_on-h3-bg-fam: var(--on-background-heading-3-bg, var(--on-background-heading-bg));
+  --_on-h4-fg-fam: var(--on-background-heading-4-fg, var(--on-background-heading-fg));
+  --_on-h4-bg-fam: var(--on-background-heading-4-bg, var(--on-background-heading-bg));
+  --_on-h5-fg-fam: var(--on-background-heading-5-fg, var(--on-background-heading-minor-fg, var(--on-background-heading-fg)));
+  --_on-h5-bg-fam: var(--on-background-heading-5-bg, var(--on-background-heading-minor-bg, var(--on-background-heading-bg)));
+  --_on-h6-fg-fam: var(--on-background-heading-6-fg, var(--on-background-heading-minor-fg, var(--on-background-heading-fg)));
+  --_on-h6-bg-fam: var(--on-background-heading-6-bg, var(--on-background-heading-minor-bg, var(--on-background-heading-bg)));
+}
+
 body {
   background-color: var(--body-bg, var(--bg));
   color: var(--body-fg, var(--fg));
@@ -74,24 +138,59 @@ body {
 
 a {
   background-color: var(--link-bg, transparent);
-  /* Exact --link-fg (including component-prefixed overrides from
-     color-props) wins. Otherwise tint the inherited foreground, just as Text
-     does: primary ink must not disappear on a primary background.
-     currentColor stays unresolved in inherited variables and, here in color,
-     means the link's inherited foreground. Keep the default tint gentle. */
+  /* The link color, in order (see docs/color-families.md):
+     - --link-fg, set by hand on or around the link, wins outright. Not for
+       themes: a theme-level --link-fg lands on every surface.
+     - The nearest color surface's pin: --on-<family>-link-text-fg for its
+       role or family -- unless that surface has a component-level
+       background, which belongs to no family.
+     - Otherwise a gentle tint of the inherited foreground, just as Text
+       does: primary ink must not disappear on a primary background.
+       currentColor stays unresolved in inherited variables and, here in
+       color, means the link's inherited foreground.
+     --_link-fg is left on the link for TextLayout's own link rule. */
+  --_comp-n: var(--_comp-flag, 0);
+  --_role-n: var(--_role-flag, 0);
   --_link-target-color: var(--link-color, var(--primary-color));
   --_link-default-fg: color-mix(
     in srgb,
     currentColor,
     var(--_link-target-color) var(--link-text-amount, var(--text-amount, 10%))
   );
-  color: var(--link-fg, var(--_link-default-fg));
+  --_link-fg: var(
+    --link-fg,
+    color-mix(
+      in srgb,
+      color-mix(
+        in srgb,
+        var(--_on-link-fam, var(--_link-default-fg)),
+        var(--_on-link-role, var(--_link-default-fg)) calc(var(--_role-n) * 100%)
+      ),
+      var(--_link-default-fg) calc(var(--_comp-n) * 100%)
+    )
+  );
+  color: var(--_link-fg);
 }
 
 a:hover,
 a:focus-visible {
   --_link-target-color: var(--link-hover-color, var(--link-color, var(--primary-color)));
-  color: var(--link-hover-fg, var(--link-fg, var(--_link-default-fg)));
+  --_link-fg: var(
+    --link-hover-fg,
+    var(
+      --link-fg,
+      color-mix(
+        in srgb,
+        color-mix(
+          in srgb,
+          var(--_on-link-hover-fam, var(--_link-default-fg)),
+          var(--_on-link-hover-role, var(--_link-default-fg))
+            calc(var(--_role-n) * 100%)
+        ),
+        var(--_link-default-fg) calc(var(--_comp-n) * 100%)
+      )
+    )
+  );
 }
 
 /* Color definitions */

@@ -53,6 +53,7 @@ test.describe("hover affordance under library defaults", () => {
     ["link", "a"],
     ["link-primary", "a"],
     ["circle", "button"],
+    ["tab", ".tab:not(.active) > button"],
     ["circle-primary", "button"],
     ["circle-danger", "button"],
     ["menu-trigger", "nav > button"],
@@ -68,6 +69,14 @@ test.describe("hover affordance under library defaults", () => {
       ).toBeGreaterThanOrEqual(12);
     });
   }
+
+  test("--tab-hover-bg / --tab-hover-fg give a text-only hover", async ({ page }) => {
+    const sel = ".tab:not(.active) > button";
+    const { rest, hover } = await restAndHover(page, "tab-text-hover", sel);
+    expect(distance(rest, hover)).toBeLessThanOrEqual(2);
+    await page.locator(`[data-testid="tab-text-hover"] ${sel}`).hover();
+    await expect(page.locator(`[data-testid="tab-text-hover"] ${sel}`)).toHaveCSS("color", "rgb(200, 0, 0)");
+  });
 
   test("light controls darken on hover, dark ones lighten", async ({
     page,

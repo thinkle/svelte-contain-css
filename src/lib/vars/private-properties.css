@@ -129,3 +129,115 @@
   syntax: "*";
   inherits: false;
 }
+
+/* sass/_color.scss family selectors: the family flags (--_comp-flag,
+   --_role-flag, which DO inherit) turned into numbers on the element that
+   picks a color with select-pinned() -- a color surface for its Text tones,
+   a typography container for its headings, an <a> in colors.css. Registered
+   as a <number> so a flag holding a color fails the syntax and falls back
+   to the initial value: 0 when the flag is unset, 1 when it is set. That is
+   the only way to make "unset" select something in plain CSS. Non-inheriting
+   on purpose: each consumer converts the flags it inherited itself. */
+@property --_comp-n {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+@property --_role-n {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+/* sass/_color.scss family-vars(): a Text tone's pins, read by the same
+   rule's --<tone>-text-fg. (The link and heading pins inherit: links and
+   typography containers inside read them.) */
+@property --_on-primary-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-primary-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-secondary-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-secondary-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-info-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-info-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-success-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-success-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-warning-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-warning-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-danger-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-danger-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-muted-fam {
+  syntax: "*";
+  inherits: false;
+}
+@property --_on-muted-role {
+  syntax: "*";
+  inherits: false;
+}
+@property --_primary-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_secondary-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_info-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_success-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_warning-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_danger-mix {
+  syntax: "*";
+  inherits: false;
+}
+@property --_muted-mix {
+  syntax: "*";
+  inherits: false;
+}
+/* colors.css: the resolved link color, read by the same <a>'s color and by
+   TextLayout's link rule on that <a>. */
+@property --_link-fg {
+  syntax: "*";
+  inherits: false;
+}

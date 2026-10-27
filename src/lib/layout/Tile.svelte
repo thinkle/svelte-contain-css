@@ -156,7 +156,7 @@
     @include box-props-square(tile, surface);
     @include border-props(tile, surface);
     @include margin-props(tile, surface);
-    @include color-props(tile, surface);
+    @include color-props(tile, surface-raised);
     @include typography-container-props(tile, surface);
     @include box-shadow(tile, surface);
     /* --_tile-width is resolved in the sizing block below. max-width also
@@ -283,7 +283,7 @@
       font,
       1em
     );
-    @include color-props(tile-checkbox, checkbox, toggle, secondary);
+    @include color-props(tile-checkbox, checkbox, toggle, inactive);
   }
   .checkbox input {
     @include visually-hidden();

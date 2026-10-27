@@ -60,7 +60,7 @@
   <Code
     code={`<Bar --bar-bg="#333"
   --button-bg="var(--material-color-purple)"
-  --bar-link-fg="var(--material-color-yellow)"
+  --link-fg="var(--material-color-yellow)"
   --button-fg="#eee"
   --button-height="3rem">  
   <Button>About</Button>
@@ -74,7 +74,7 @@
     --button-bg="var(--material-color-purple)"
     --button-fg="white"
     --button-height="3rem"
-    --bar-link-fg="var(--material-color-yellow)"
+    --link-fg="var(--material-color-yellow)"
   >
     <Button>About</Button>
     <Button>Contact</Button>

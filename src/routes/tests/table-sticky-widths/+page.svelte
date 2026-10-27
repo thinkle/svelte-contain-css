@@ -54,6 +54,31 @@
 
 <h1>Sticky table column widths</h1>
 
+<!-- Inside a scaled ancestor (a 50% theme preview): on-screen sizes are
+     half the layout sizes, and the header must still line up. -->
+<div style="transform: scale(0.5); transform-origin: top left; height: 140px;">
+  <section data-testid="scaled" class="frame">
+    <Table sticky>
+      {#snippet thead()}
+        <thead>
+          <tr>
+            {#each [...columns, "A considerably wider column heading"] as c}<th>{c}</th>{/each}
+          </tr>
+        </thead>
+      {/snippet}
+      {#snippet tbody()}
+        <tbody>
+          {#each rows as row}
+            <tr>
+              {#each [...row, "x"] as cell}<td>{cell}</td>{/each}
+            </tr>
+          {/each}
+        </tbody>
+      {/snippet}
+    </Table>
+  </section>
+</div>
+
 <section data-testid="narrow" class="frame">
   <Table sticky>
     {#snippet thead()}

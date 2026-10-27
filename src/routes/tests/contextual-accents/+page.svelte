@@ -21,10 +21,13 @@
   <div style="--link-fg: #008000;">
     <Bar primary data-testid="global-exact"><a href="#article">Exact global link</a></Bar>
   </div>
-  <Bar primary --bar-link-fg="#ffcc00" data-testid="component-exact">
-    <a href="#article">Exact component link</a>
-  </Bar>
-  <div style="--surface-link-fg: #800080;">
+  <!-- Exact link colors are keyed by color family, not by component. -->
+  <div style="--on-primary-link-text-fg: #ffcc00;">
+    <Bar primary data-testid="component-exact">
+      <a href="#article">Exact link on the primary family</a>
+    </Bar>
+  </div>
+  <div style="--on-surface-link-text-fg: #800080;">
     <Container data-testid="surface-exact"><a href="#article">Exact surface link</a></Container>
   </div>
   <Container bg="#222" fg="white" data-testid="custom-target"

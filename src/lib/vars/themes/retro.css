@@ -10,27 +10,26 @@
   --heading-line-height: 1.2;
   --heading-font-weight: 700;
 
+  /* The teal desktop is the background family (a Page's frame); windows,
+     a Page's content among them, are the grey surface. */
   --fg: #000000;
   --bg: #008080;
   --body-bg: #008080;
   --body-fg: #000000;
   --surface-bg: #c0c0c0;
   --surface-fg: #000000;
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
-  --page-bg: #008080;
-  --page-fg: #000000;
-  --page-content-bg: #c0c0c0;
-  --page-content-fg: #000000;
-  --sidebar-bg: #c0c0c0;
-  --sidebar-fg: #000000;
+  /* A flat look: every tier is the surface unless pinned. Cards and
+     fieldsets take the surface through their family rather than pinning
+     it, so family-keyed treatments (filled headings) reach them. */
+  --surface-depth: 0;
 
-  --primary-bg: #000080;
+  --primary-bg: var(--primary-color);
   --primary-color: #000080;
-  --primary-fg: #ffffff;
-  --secondary-bg: #c0c0c0;
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: #c0c0c0;
+  --control-fg: #000000;
+  --secondary-bg: var(--secondary-color);
   --secondary-color: #c0c0c0;
-  --secondary-fg: #000000;
   --success-bg: #008000;
   --success-color: #008000;
   --success-fg: #ffffff;
@@ -67,8 +66,8 @@
   --focus-outline-offset: 0;
   --focus-ring-box-shadow: none;
 
-  --bar-bg: #000080;
-  --bar-fg: #ffffff;
+  --bar-bg: var(--primary-bg);
+  --bar-fg: var(--primary-fg);
   --bar-padding: 0.35rem 0.5rem;
   --bar-margin-bottom: 0.5rem;
   --bar-border-top: 2px outset #c0c0c0;
@@ -85,18 +84,12 @@
   --circle-button-radius: 0;
   --circle-button-size: 1.8rem;
 
-  --card-bg: #c0c0c0;
-  --card-fg: #000000;
   --card-border: 2px outset #c0c0c0;
-  --card-header-bg: #000080;
-  --card-header-fg: #ffffff;
-  --card-footer-bg: #c0c0c0;
-  --card-footer-fg: #000000;
+  --card-header-bg: var(--primary-bg);
+  --card-header-fg: var(--primary-fg);
   --card-header-border: 0;
   --card-footer-border: 2px inset #c0c0c0;
 
-  --fieldset-bg: #c0c0c0;
-  --fieldset-fg: #000000;
   --fieldset-border: 2px groove #c0c0c0;
   --fieldset-border-radius: 0;
   --fieldset-padding: 0.75rem;
@@ -105,16 +98,13 @@
   --legend-font-weight: 700;
   --legend-padding: 0 0.25rem;
 
-  --input-bg: #ffffff;
-  --input-fg: #000000;
-  --input-border: 2px inset #c0c0c0;
-  --input-square-radius: 0;
+  --field-bg: #ffffff;
+  --field-fg: #000000;
+  --field-border: 2px inset #c0c0c0;
+  --field-hover-border-color: #c0c0c0;
+  --field-square-radius: 0;
   --input-padding: 0.35rem 0.45rem;
 
-  --select-bg: #ffffff;
-  --select-fg: #000000;
-  --select-border: 2px inset #c0c0c0;
-  --select-square-radius: 0;
   --select-width: 100%;
   --select-arrow: "▼";
   --select-arrow-fg: #000000;
@@ -125,17 +115,15 @@
   --select-label-padding-right: 1.4rem;
   --select-arrow-transition: transform 120ms steps(2, end), color 120ms steps(2, end);
 
-  --menu-bg: #ffffff;
-  --menu-fg: #000000;
-  --menu-item-bg: #ffffff;
-  --menu-item-fg: #000000;
+  --surface-overlay-bg: #ffffff;
+  --surface-overlay-fg: #000000;
   --menu-item-padding: 0.25rem 0.5rem;
   --menu-item-border: none;
   --menu-item-square-radius: 0;
-  --menu-item-hover-bg: #000080;
-  --menu-item-hover-fg: #ffffff;
-  --menu-item-active-bg: #000080;
-  --menu-item-active-fg: #ffffff;
+  --menu-item-hover-bg: var(--primary-bg);
+  --menu-item-hover-fg: var(--primary-fg);
+  --menu-item-active-bg: var(--primary-bg);
+  --menu-item-active-fg: var(--primary-fg);
   --menu-item-hover-filter: none;
   --menu-item-active-filter: none;
   --dropdown-menu-border: 2px outset #c0c0c0;

@@ -8,6 +8,8 @@
   import CircleButton from "$lib/controls/CircleButton.svelte";
   import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
   import Bar from "$lib/layout/Bar.svelte";
+  import TabBar from "$lib/layout/TabBar.svelte";
+  import TabItem from "$lib/controls/TabItem.svelte";
 </script>
 
 <svelte:head>
@@ -27,6 +29,16 @@
     <ButtonLink primary href="#b">Primary link</ButtonLink>
   </div>
   <div data-testid="circle"><CircleButton>+</CircleButton></div>
+  <div data-testid="tab">
+    <TabBar><TabItem active>On</TabItem><TabItem>Off</TabItem></TabBar>
+  </div>
+  <!-- A text-only hover: the background stays, the text darkens. -->
+  <div
+    data-testid="tab-text-hover"
+    style="--tab-hover-bg: var(--tab-bg, var(--control-bg)); --tab-hover-fg: rgb(200, 0, 0);"
+  >
+    <TabBar><TabItem active>On</TabItem><TabItem>Off</TabItem></TabBar>
+  </div>
   <div data-testid="circle-primary"><CircleButton primary>+</CircleButton></div>
   <div data-testid="circle-danger"><CircleButton danger>+</CircleButton></div>
   <div data-testid="menu-trigger">
@@ -37,8 +49,8 @@
   <div data-testid="primary-bar-trigger">
     <Bar primary>
       <div
-        style:--menu-trigger-bg="var(--bar-bg)"
-        style:--menu-trigger-fg="var(--bar-fg)"
+        style:--menu-trigger-bg="var(--current-bg)"
+        style:--menu-trigger-fg="var(--current-fg)"
       >
         <DropdownMenu>
           <li><button>One</button></li>

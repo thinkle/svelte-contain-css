@@ -113,7 +113,7 @@
   }
 
   .toggle-track {
-    @include color-props(toggle, toggle-off, inactive, secondary);
+    @include color-props(toggle, toggle-off, inactive);
 
     display: block;
     width: 100%;

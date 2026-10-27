@@ -12,21 +12,16 @@
   --body-fg: var(--material-color-blue-grey-900);
   --surface-bg: #ffffff;
   --surface-fg: var(--material-color-blue-grey-900);
-  --container-bg: var(--surface-bg);
-  --container-fg: var(--surface-fg);
-  --page-bg: var(--material-color-grey-100);
-  --page-fg: var(--material-color-blue-grey-900);
-  --page-content-bg: transparent;
-  --page-content-fg: var(--material-color-blue-grey-900);
-  --sidebar-bg: #ffffff;
-  --sidebar-fg: var(--material-color-blue-grey-900);
+  /* A flat look: every tier is the surface unless pinned. */
+  --surface-depth: 0;
 
-  --primary-bg: var(--material-color-indigo-500);
+  --primary-bg: var(--primary-color);
   --primary-color: var(--material-color-indigo-500);
-  --primary-fg: #ffffff;
-  --secondary-bg: #ffffff;
+  /* Quiet chrome (plain buttons, tags, inactive tabs). */
+  --control-bg: #ffffff;
+  --control-fg: var(--material-color-blue-grey-900);
+  --secondary-bg: var(--secondary-color);
   --secondary-color: #ffffff;
-  --secondary-fg: var(--material-color-blue-grey-900);
   --success-bg: var(--material-color-green-600);
   --success-color: var(--material-color-green-600);
   --success-fg: #ffffff;
@@ -40,8 +35,8 @@
   --info-color: var(--material-color-light-blue-500);
   --info-fg: #ffffff;
 
-  --link-color: var(--material-color-indigo-600);
-  --link-hover-color: var(--material-color-indigo-800);
+  --link-color: color-mix(in oklab, var(--primary-color), black 10%);
+  --link-hover-color: color-mix(in oklab, var(--primary-color), black 30%);
   /* Untinted: headings take the surface foreground, whatever it is. */
   --heading-tint: currentColor;
   --border-color: rgba(38, 50, 56, 0.16);
@@ -59,7 +54,7 @@
   --button-hover-filter: brightness(0.98);
   --button-active-filter: brightness(0.95);
 
-  --focus-color: var(--material-color-indigo-200);
+  --focus-color: color-mix(in oklab, var(--primary-color), white 60%);
   --focus-outline-offset: 0;
   --focus-shadow-color: rgba(99, 102, 241, 0.22);
   --focus-ring-box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.22);
@@ -73,12 +68,12 @@
   --tab-bg: rgba(38, 50, 56, 0.08);
   --tab-fg: var(--material-color-blue-grey-700);
   --tab-active-bg: #ffffff;
-  --tab-active-fg: var(--material-color-indigo-700);
+  --tab-active-fg: color-mix(in oklab, var(--primary-color), black 25%);
   --tab-bar-bg: transparent;
   --tab-bar-fg: var(--material-color-blue-grey-900);
 
-  --button-bg: var(--material-color-indigo-500);
-  --button-fg: #ffffff;
+  --button-bg: var(--primary-bg);
+  --button-fg: var(--primary-fg);
   --button-border: none;
   --button-padding: 0.625rem 1rem;
   --button-border-radius: 999px;
@@ -92,18 +87,11 @@
   --circle-button-radius: 999px;
   --circle-button-size: 2rem;
 
-  --card-bg: #ffffff;
-  --card-fg: var(--material-color-blue-grey-900);
   --card-border: none;
-  --card-header-bg: #ffffff;
-  --card-header-fg: var(--material-color-blue-grey-900);
-  --card-footer-bg: #ffffff;
   --card-footer-fg: var(--material-color-blue-grey-700);
   --card-header-border: none;
   --card-footer-border: 1px solid rgba(38, 50, 56, 0.08);
 
-  --fieldset-bg: #ffffff;
-  --fieldset-fg: var(--material-color-blue-grey-900);
   --fieldset-border: 1px solid rgba(38, 50, 56, 0.08);
   --fieldset-border-radius: 1.25rem;
   --fieldset-padding: 1.25rem;
@@ -112,24 +100,24 @@
   --legend-font-weight: 500;
   --legend-padding: 0 0.375rem;
 
-  --input-bg: rgba(63, 81, 181, 0.04);
-  --input-fg: var(--material-color-blue-grey-900);
-  --input-border: 1px solid rgba(63, 81, 181, 0.16);
-  --input-square-radius: 0.875rem;
+  --field-bg: color-mix(in srgb, var(--primary-color) 4%, transparent);
+  --field-fg: var(--material-color-blue-grey-900);
+  /* Filled fields with an underline, as in Material: the edge is blue-grey
+     400 (about 3.3:1 on white), so a field is findable without its fill. */
+  --field-border-color: var(--material-color-blue-grey-400);
+  --field-border-top: none;
+  --field-border-inline: none;
+  --field-square-radius: 0.25rem 0.25rem 0 0;
   --input-padding: 0.75rem 0.875rem;
   --slider-track-height: 0.375rem;
-  --slider-track-bg: rgba(63, 81, 181, 0.2);
-  --slider-fill-bg: var(--material-color-indigo-500);
+  --slider-track-bg: color-mix(in srgb, var(--primary-color) 20%, transparent);
+  --slider-fill-bg: var(--primary-bg);
   --slider-thumb-bg: #ffffff;
-  --slider-thumb-border: 2px solid var(--material-color-indigo-500);
+  --slider-thumb-border: 2px solid var(--primary-bg);
   --slider-thumb-size: 1rem;
   --slider-thumb-shadow: 0 0.15rem 0.45rem rgba(15, 23, 42, 0.18);
   --slider-thumb-hover-shadow: 0 0.25rem 0.6rem rgba(15, 23, 42, 0.2);
 
-  --select-bg: var(--input-bg);
-  --select-fg: var(--input-fg);
-  --select-border: var(--input-border);
-  --select-square-radius: var(--input-square-radius);
   --select-width: 100%;
   --select-arrow: "▾";
   --select-arrow-fg: var(--material-color-blue-grey-600);
@@ -138,18 +126,15 @@
   --select-arrow-open-transform: translateY(-50%) scaleY(-1);
   --select-arrow-right-offset: 0.75rem;
   --select-label-padding-right: 2rem;
-
-  --menu-bg: #ffffff;
-  --menu-fg: var(--material-color-blue-grey-900);
   --menu-item-bg: transparent;
   --menu-item-fg: var(--material-color-blue-grey-900);
   --menu-item-padding: 0.625rem 1rem;
   --menu-item-border: none;
   --menu-item-square-radius: 0.75rem;
-  --menu-item-hover-bg: rgba(63, 81, 181, 0.08);
-  --menu-item-hover-fg: var(--material-color-indigo-700);
-  --menu-item-active-bg: rgba(63, 81, 181, 0.14);
-  --menu-item-active-fg: var(--material-color-indigo-800);
+  --menu-item-hover-bg: color-mix(in srgb, var(--primary-color) 8%, transparent);
+  --menu-item-hover-fg: color-mix(in oklab, var(--primary-color), black 25%);
+  --menu-item-active-bg: color-mix(in srgb, var(--primary-color) 14%, transparent);
+  --menu-item-active-fg: color-mix(in oklab, var(--primary-color), black 35%);
   --menu-item-hover-filter: none;
   --menu-item-active-filter: none;
   --dropdown-menu-border: none;
@@ -166,8 +151,8 @@
 
   --checkbox-bg: #ffffff;
   --checkbox-fg: var(--material-color-blue-grey-900);
-  --checkbox-border: 2px solid rgba(63, 81, 181, 0.32);
-  --checkbox-checked-border: 2px solid var(--material-color-indigo-500);
+  --checkbox-border: 2px solid color-mix(in srgb, var(--primary-color) 32%, transparent);
+  --checkbox-checked-border: 2px solid var(--primary-bg);
   --checkbox-radius: 0.3em;
   --checkbox-size: 1em;
 

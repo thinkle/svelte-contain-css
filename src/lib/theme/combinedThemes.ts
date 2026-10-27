@@ -20,6 +20,9 @@ export type CombinedThemeEntry = {
   file: string;
   cssWithoutHeadings: string;
   filesWithoutHeadings: string[];
+  /* The picker choices this preset is made of, by file, so the Themes page
+     can apply it as a starting point rather than a separate theme. */
+  parts: { color: string; type: string; heading: string; extras: string[] };
 };
 
 // Keep typography first: its leading font @imports must precede declarations
@@ -31,6 +34,7 @@ export const combinedThemes = {
     file: "themes/canyon-modern-serif-fancy.css",
     cssWithoutHeadings: [modernSerif, canyon, fancyParagraphs].join("\n"),
     filesWithoutHeadings: ["themes/typography-modern-serif.css", "themes/canyon.css", "fancy-paragraphs.css"],
+    parts: { color: "themes/canyon.css", type: "themes/typography-modern-serif.css", heading: "editorial-headings.css", extras: ["fancy-paragraphs.css"] },
   },
   "forest-editorial-rounded": {
     name: "Forest + Editorial Serif + Restrained Headings + Rounded Corners",
@@ -38,6 +42,7 @@ export const combinedThemes = {
     file: "themes/forest-editorial-rounded.css",
     cssWithoutHeadings: [editorial, forest, softCorners].join("\n"),
     filesWithoutHeadings: ["themes/typography-editorial.css", "themes/forest.css", "soft-corners.css"],
+    parts: { color: "themes/forest.css", type: "themes/typography-editorial.css", heading: "restrained-headings.css", extras: ["soft-corners.css"] },
   },
   "dark-ibm-layered": {
     name: "Dark + IBM Plex + Expressive Headings + Layered Depth",
@@ -45,6 +50,7 @@ export const combinedThemes = {
     file: "themes/dark-ibm-layered.css",
     cssWithoutHeadings: [ibm, dark, layered].join("\n"),
     filesWithoutHeadings: ["themes/typography-carbon.css", "themes/dark.css", "layered.css"],
+    parts: { color: "themes/dark.css", type: "themes/typography-carbon.css", heading: "expressive-headings.css", extras: ["layered.css"] },
   },
   "light-airy-solid": {
     name: "Light + Airy + Solid Headings",
@@ -52,6 +58,7 @@ export const combinedThemes = {
     file: "themes/light-airy-solid.css",
     cssWithoutHeadings: [airy, light].join("\n"),
     filesWithoutHeadings: ["themes/typography-airy.css", "themes/light.css"],
+    parts: { color: "themes/light.css", type: "themes/typography-airy.css", heading: "solid-headings.css", extras: [] },
   },
 } as const satisfies Record<string, CombinedThemeEntry>;
 

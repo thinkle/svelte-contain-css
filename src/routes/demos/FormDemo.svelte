@@ -5,6 +5,7 @@
   import Option from "$lib/controls/Option.svelte";
   import Select from "$lib/controls/Select.svelte";
   import Slider from "$lib/controls/Slider.svelte";
+  import TextArea from "$lib/controls/TextArea.svelte";
   import Fieldset from "$lib/layout/Fieldset.svelte";
   import Form from "$lib/layout/Form.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
@@ -19,6 +20,7 @@
   let role = $state("editor");
   let digest = $state(true);
   let confidence = $state(68);
+  let bio = $state("");
 </script>
 
 <TextLayout>
@@ -113,6 +115,13 @@
               <Option value="editor">Editor</Option>
               <Option value="admin">Admin</Option>
             </Select>
+          </FormItem>
+
+          <FormItem>
+            {#snippet label()}
+              Bio
+            {/snippet}
+            <TextArea bind:value={bio} placeholder="A sentence or two" />
           </FormItem>
         </Fieldset>
 

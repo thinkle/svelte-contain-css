@@ -125,13 +125,13 @@
   // Diagonal stripes: subtle variation on track color
   $track-stripes: repeating-linear-gradient(
     135deg,
-    var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 0,
-    var(--progress-track-bg, var(--secondary-bg, #dfdfdf)) 20px,
+    var(--progress-track-bg, var(--control-bg, #dfdfdf)) 0,
+    var(--progress-track-bg, var(--control-bg, #dfdfdf)) 20px,
     var(
         --progress-track-stripe-bg,
         color-mix(
           in srgb,
-          var(--secondary-bg, #fff) 85%,
+          var(--control-bg, #fff) 85%,
           var(--surface-bg, #dfdfdf) 15%
         )
       )
@@ -140,7 +140,7 @@
         --progress-track-stripe-bg,
         color-mix(
           in srgb,
-          var(--secondary-bg, #fff) 85%,
+          var(--control-bg, #fff) 85%,
           var(--surface-bg, #dfdfdf) 15%
         )
       )
@@ -157,7 +157,7 @@
   }
 
   .progress-container {
-    @include color-props(progress, surface, control, secondary);
+    @include color-props(progress, surface, control);
     @include box-props(progress, surface);
     @include border-props-borderless(progress, surface);
     @include typography-container-props(progress, ui);
@@ -166,13 +166,13 @@
     position: relative;
 
     &[data-state="uninitiated"] {
-      @include color-props(progress-uninitiated, surface, control, secondary);
+      @include color-props(progress-uninitiated, surface, control, $family: false);
     }
     &[data-state="inprogress"] {
-      @include color-props(progress-inprogress, surface, control, secondary);
+      @include color-props(progress-inprogress, surface, control, $family: false);
     }
     &[data-state="complete"] {
-      @include color-props(progress-complete, surface, control, secondary);
+      @include color-props(progress-complete, surface, control, $family: false);
     }
 
     /* Hidden UI, but read by screen readers. */
@@ -185,7 +185,7 @@
       @include box-props(progress-track, progress);
       @include border-props-borderless(progress-track, progress);
       height: var(--progress-track-height, var(--progress-height, 2em));
-      background: var(--progress-track-bg, var(--secondary-bg, var(--white)));
+      background: var(--progress-track-bg, var(--control-bg, var(--white)));
       overflow: hidden;
 
       /* If animate => scrolling stripes in offwhite->white */
@@ -224,11 +224,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--progress-fg, var(--secondary-fg, var(--white)));
+      color: var(--progress-fg, var(--control-fg, var(--white)));
       /* Outline color defaults to track background so text is readable over unfilled area */
       --_progress-outline-color: var(
         --progress-outline-color,
-        var(--progress-track-bg, var(--secondary-bg, #dfdfdf))
+        var(--progress-track-bg, var(--control-bg, #dfdfdf))
       );
       -webkit-text-stroke: var(--progress-outline-width, 1px)
         var(--_progress-outline-color);

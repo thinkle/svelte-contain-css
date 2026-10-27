@@ -59,7 +59,10 @@
     margin: 0;
     margin-inline: 0;
     padding-inline: 0;
-    @include color-props(menu, control);
+    /* A list of items, not a surface of its own: it takes whatever holds it
+       (a Sidebar's sunken tier, a Card). DropdownMenu paints the overlay
+       around it when it floats. --menu-bg still gives it a background. */
+    @include color-props(menu, ground);
     overflow: hidden;
     width: 100%;
   }
@@ -106,7 +109,7 @@
       height: var(--menu-item-height);
       text-decoration: none;
       @include typography-props(menu-item, button, ui);
-      @include color-props(menu-item, menu, button, control);
+      @include color-props(menu-item, menu, ground, $family: false);
       @include box-props-square(menu-item, control);
       @include border-props-borderless(menu-item, control);
       margin: 0;
@@ -121,8 +124,9 @@
           menu-item-even,
           stripe,
           menu-item,
-          button,
-          control
+          menu,
+          ground,
+          $family: false
         );
       }
     }

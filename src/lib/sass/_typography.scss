@@ -2,6 +2,7 @@
 @use "sass:map";
 @use "functions" as fn;
 @use "responsive" as resp;
+@use "color";
 
 @mixin typography-props-bare($prefixes...) {
   font-family: fn.vars(font-family, $prefixes...);
@@ -62,7 +63,6 @@
    properties, so DOM proximity decides which component's values apply, not
    selector specificity or stylesheet order. See AGENTS-INTERNAL.md. */
 @mixin heading-box-context-vars($var-prefix, $prefixes...) {
-  --_#{$var-prefix}-background: #{fn.vars-fallback(bg, transparent, $prefixes...)};
   --_#{$var-prefix}-padding: #{fn.vars-fallback(padding, 0, $prefixes...)};
   --_#{$var-prefix}-border: #{fn.vars-fallback(border, none, $prefixes...)};
   --_#{$var-prefix}-border-width: #{fn.prefixed-vars-optional(border-width, $prefixes...)};
@@ -72,9 +72,9 @@
   --_#{$var-prefix}-box-shadow: #{fn.vars-fallback(box-shadow, none, $prefixes...)};
 }
 
-/* Heading foreground: an exact color (--heading-*-fg) or a tint
-   (--heading-*-tint + --heading-*-tint-amount) of whatever foreground the
-   heading inherits. See docs/headings.md for the full contract.
+/* Heading foreground: a family pin, an exact color (--heading-*-fg) or a
+   tint (--heading-*-tint + --heading-*-tint-amount) of whatever foreground
+   the heading inherits. See docs/headings.md and docs/color-families.md.
 
    The tint is mixed against `currentColor`, which stays an unresolved token
    in these custom properties and only resolves in the heading's own `color`
@@ -83,21 +83,27 @@
    wrapper that sets `color`) without anything being recomputed per surface.
    Only the ingredients (target, amount, scale) are resolved here.
 
-   Precedence walks the same prefix chain as every other heading var, most
-   specific first (--card-heading-1-*, ..., --heading-1-*, --heading-major-*,
-   --heading-*). At each step an exact fg beats a tint; the first step that
-   sets either wins. So --heading-2-tint beats a shared --heading-fg, and
-   --heading-2-fg beats a shared --heading-tint. Each step is its own private
-   property (--_h2-c1, --_h2-c2...) because a var() to an unset tint makes
-   that whole property invalid -- which is what lets the next step win.
-   Nothing set anywhere: currentColor, i.e. plain inheritance.
+   The mix rule walks the prefix chain, most specific first
+   (--card-heading-1-tint, ..., --heading-1-*, --heading-major-*,
+   --heading-*). Component-scoped steps carry only the tint: a tint is
+   relative, so it is safe on any surface. An exact color is not, so only the
+   global steps (--heading-1-fg ... --heading-fg) take one, and at those
+   steps an exact fg beats a tint. The first step that sets either wins.
+   Each step is its own private property (--_h2-c1, --_h2-c2...) because a
+   var() to an unset tint makes that whole property invalid -- which is what
+   lets the next step win. Nothing set anywhere: currentColor.
+
+   In front of the mix rule sit the family pins the nearest color surface
+   published (--on-<family>-heading-*-fg; see family-vars() in _color.scss):
+   a role's pin, then the family's, unless that surface has a component-level
+   background -- then only the mix rule applies.
 
    Amount follows Text: 0% keeps the inherited foreground, 100% reaches the
    target; unset, a tint reaches its target (100%). It resolves along the
    same chain and is then multiplied by --heading-tint-scale (default 1), so
    `--heading-tint-scale: 0` on a theme or a surface declines every heading
    tint below it at once, without touching exact colors or surface mixing. */
-@mixin heading-color-context-vars($var-prefix, $resolved-prefixes, $prefixes...) {
+@mixin heading-color-context-vars($var-prefix, $level, $resolved-prefixes, $global-prefixes, $prefixes...) {
   --_#{$var-prefix}-tint-amount: calc(
     #{fn.vars-fallback(tint-amount, 100%, $resolved-prefixes...)} *
       #{fn.var-with-fallbacks(--heading-tint-scale, list.append($prefixes, 1)...)}
@@ -105,27 +111,51 @@
   $chain: currentColor;
   @for $i from list.length($resolved-prefixes) through 1 {
     $prefix: list.nth($resolved-prefixes, $i);
-    --_#{$var-prefix}-c#{$i}: var(
-      #{fn.generate-var-name($prefix, fg)},
-      color-mix(
-        in srgb,
-        currentColor,
-        var(#{fn.generate-var-name($prefix, tint)})
-          var(--_#{$var-prefix}-tint-amount)
-      )
+    $tint: color-mix(
+      in srgb,
+      currentColor,
+      var(#{fn.generate-var-name($prefix, tint)})
+        var(--_#{$var-prefix}-tint-amount)
     );
+    @if list.index($global-prefixes, $prefix) {
+      --_#{$var-prefix}-c#{$i}: var(#{fn.generate-var-name($prefix, fg)}, #{$tint});
+    } @else {
+      --_#{$var-prefix}-c#{$i}: #{$tint};
+    }
     $chain: var(--_#{$var-prefix}-c#{$i}, #{$chain});
   }
-  --_#{$var-prefix}-color: #{$chain};
+  --_#{$var-prefix}-mix: #{$chain};
+  --_#{$var-prefix}-color: #{color.select-pinned(
+      --_on-h#{$level}-fg-fam,
+      --_on-h#{$level}-fg-role,
+      var(--_#{$var-prefix}-mix),
+      currentColor
+    )};
 
   /* A heading that paints its own background is its own color context: Text
      tones inside it mix from the heading's foreground, and muted targets
-     the heading's background. --_*-bg-set is only valid when some --*-bg
-     in the chain is set; the 100%/0% color-mix below is exactly
-     currentColor, but is invalid -- so falls back to the surface's
-     foreground -- whenever no background is set. A transparent heading
-     keeps the surrounding surface's ground, as Text did before. */
-  --_#{$var-prefix}-bg-set: #{fn.prefixed-vars-optional(bg, $resolved-prefixes...)};
+     the heading's background. --_*-bg-set is only valid when the heading
+     has a background (a pin for this surface's role or family, or a global
+     --heading-*-bg); the 100%/0% color-mix below is exactly currentColor,
+     but is invalid -- so falls back to the surface's foreground -- whenever
+     no background is set. A transparent heading keeps the surrounding
+     surface's ground, as Text did before. */
+  $legacy-bg: fn.prefixed-vars-optional(bg, $global-prefixes...);
+  --_#{$var-prefix}-background: #{color.select-pinned(
+      --_on-h#{$level}-bg-fam,
+      --_on-h#{$level}-bg-role,
+      var(--_#{$var-prefix}-legacy-bg, transparent)
+    )};
+  --_#{$var-prefix}-legacy-bg: #{$legacy-bg};
+  --_#{$var-prefix}-bg-set: var(
+    --_#{$var-prefix}-role-bg-set,
+    var(--_on-h#{$level}-bg-fam, var(--_#{$var-prefix}-legacy-bg))
+  );
+  --_#{$var-prefix}-role-bg-set: color-mix(
+    in srgb,
+    var(--_on-h#{$level}-bg-role) 100%,
+    var(--_role-flag) 0%
+  );
   /* --heading-*-text-amount: how far Text tones move inside this level
      (between --<tone>-text-amount and --text-amount). A filled heading's
      fg/bg is a pair chosen for contrast; a theme usually wants tones to
@@ -140,6 +170,19 @@
     currentColor 100%,
     var(--_#{$var-prefix}-bg-set) 0%
   );
+}
+
+/* For a band that paints its own pair and owns the headings in it (a Bar, a
+   Card header or footer) without being a typography container: headings take
+   the band's foreground and no fill. Declared as the same context vars a
+   typography container publishes, so it wins by proximity -- including over
+   an enclosing TextLayout, which re-applies --_hN-color to every heading
+   inside it, resolved against TextLayout's own surface. */
+@mixin heading-color-reset {
+  @for $n from 1 through 6 {
+    --_h#{$n}-color: currentColor;
+    --_h#{$n}-background: transparent;
+  }
 }
 
 @mixin heading-typography-context-vars($var-prefix, $prefixes...) {
@@ -164,7 +207,7 @@
   --_#{$var-prefix}-text-align: #{fn.var-with-fallbacks(--text-align, list.append($prefixes, revert)...)};
 }
 
-@mixin heading-context-vars-for($var-prefix, $level, $group, $prefixes...) {
+@mixin heading-context-vars-for($var-prefix, $level-number, $level, $group, $prefixes...) {
   $level-prefixes: fn.map-prefixes($level, $prefixes);
   $group-prefixes: fn.map-prefixes($group, $prefixes);
   $heading-prefixes: fn.map-prefixes(heading, $prefixes);
@@ -188,7 +231,14 @@
   // same token twice adds no behavior, including in the per-step color vars.
   $resolved-prefixes: fn.unique-prefixes($resolved-prefixes);
 
-  @include heading-color-context-vars($var-prefix, $resolved-prefixes, $prefixes...);
+  $global-prefixes: ($level, $group, heading);
+  @include heading-color-context-vars(
+    $var-prefix,
+    $level-number,
+    $resolved-prefixes,
+    $global-prefixes,
+    $prefixes...
+  );
   @include heading-box-context-vars($var-prefix, $resolved-prefixes...);
   @include heading-typography-context-vars($var-prefix, $resolved-prefixes...);
 }
@@ -197,12 +247,15 @@
    "typography container" component (Container, Card, Tile, TextLayout, ...)
    includes on itself once, alongside the shared --_heading-* vars below. */
 @mixin heading-context-vars($prefixes...) {
-  @include heading-context-vars-for(h1, heading-1, heading-major, $prefixes...);
-  @include heading-context-vars-for(h2, heading-2, heading-major, $prefixes...);
-  @include heading-context-vars-for(h3, heading-3, heading, $prefixes...);
-  @include heading-context-vars-for(h4, heading-4, heading, $prefixes...);
-  @include heading-context-vars-for(h5, heading-5, heading-minor, $prefixes...);
-  @include heading-context-vars-for(h6, heading-6, heading-minor, $prefixes...);
+  /* The family flags inherited from the nearest color surface, as numbers
+     for select-pinned(). Harmless on an element that is that surface. */
+  @include color.family-selectors;
+  @include heading-context-vars-for(h1, 1, heading-1, heading-major, $prefixes...);
+  @include heading-context-vars-for(h2, 2, heading-2, heading-major, $prefixes...);
+  @include heading-context-vars-for(h3, 3, heading-3, heading, $prefixes...);
+  @include heading-context-vars-for(h4, 4, heading-4, heading, $prefixes...);
+  @include heading-context-vars-for(h5, 5, heading-5, heading-minor, $prefixes...);
+  @include heading-context-vars-for(h6, 6, heading-6, heading-minor, $prefixes...);
 }
 
 /* Shared prose-measure group: p, blockquote, dl, ul, ol. li/dt/dd don't get
@@ -326,8 +379,6 @@
   --_first-letter-text-indent: #{fn.vars(indent, $resolved...)};
   --_first-letter-font-variant: #{fn.vars(font-variant, $resolved...)};
   --_first-letter-text-align: #{fn.vars(text-align, $resolved...)};
-  --_first-letter-link-bg: #{fn.vars(link-bg, $prefixes...)};
-  --_first-letter-link-fg: #{fn.vars(link-fg, $prefixes...)};
   --_first-letter-background: #{fn.vars-suffix-fallback(first-letter-bg, $prefixes...)};
   --_first-letter-color: #{fn.vars-suffix-fallback(first-letter-fg, $prefixes...)};
 }

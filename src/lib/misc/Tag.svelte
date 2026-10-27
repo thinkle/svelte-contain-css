@@ -89,7 +89,7 @@
     display: inline-block;
     align-self: flex-start;
     vertical-align: middle;
-    @include color-props(tag, secondary);
+    @include color-props(tag, control);
     @include typography-props-bare(tag, ui);
     @include box-props(tag);
     @include border-props-borderless(tag);

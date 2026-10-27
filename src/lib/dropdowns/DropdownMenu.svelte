@@ -346,7 +346,7 @@
   @use "$lib/sass/_mixins.scss" as *;
 
   button {
-    @include color-props(menu-trigger, menu, button, surface);
+    @include color-props(menu-trigger, menu, button, surface, $family: false);
     @include box-props-square(menu-trigger, button, control);
     @include border-props-borderless(menu-trigger, button, control);
     @include clickable(menu-trigger, menu, button, control);
@@ -368,7 +368,7 @@
   }
 
   .dropdown-content :global(.menu) {
-    @include color-props(menu, surface);
+    @include color-props(menu, surface-overlay);
     @include typography-props(menu, ui);
     @include clickable(menu, button, control);
     @include focusable();
@@ -405,7 +405,7 @@
       var(--dropdown-menu-width, 12em)
     );
     min-width: var(--dropdown-menu-min-width, 12em);
-    @include color-props(dropdown-menu, menu, surface);
+    @include color-props(dropdown-menu, menu, surface-overlay);
     @include box-shadow(dropdown-menu, dropdown);
     @include box-props-square(dropdown-menu, menu, surface);
     @include border-props(dropdown-menu, menu, surface);
@@ -432,7 +432,7 @@
     pointer-events: none;
     width: fit-content;
     max-width: calc(100% - 2 * var(--search-hint-offset, 4px));
-    @include color-props(search-hint, tag, secondary);
+    @include color-props(search-hint, tag, control);
     @include typography-props-bare(search-hint, tag, ui);
     @include box-props(search-hint, tag);
     @include border-props-borderless(search-hint, tag);

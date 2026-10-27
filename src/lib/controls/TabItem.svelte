@@ -68,7 +68,7 @@
   }
   .tab > :global(button),
   .tab > :global(div > button) {
-    @include color-props(tab, button, control, secondary);
+    @include color-props(tab, button, control);
     @include box-props(tab, button, control);
     @include border-props-borderless(tab, button, control);
     @include typography-props(tab, button, ui);
@@ -85,9 +85,15 @@
     flex-shrink: 0;
     white-space: nowrap;
   }
+  /* An inactive tab answers the pointer like any button; --tab-hover-bg and
+     --tab-hover-fg change how (a text-only hover keeps --tab-bg). */
+  .tab:not(.active) > :global(button),
+  .tab:not(.active) > :global(div > button) {
+    @include clickable(tab, button, control);
+  }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
-    @include color-props(tab-active, primary, tab, button, control, secondary);
+    @include color-props(tab-active, primary, tab, button, control);
     @include typography-props(tab-active, tab, button, ui);
   }
 </style>

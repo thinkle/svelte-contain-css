@@ -1,31 +1,37 @@
+/* Layered depth: the surface tiers pushed further apart (sidebars and card
+   headers sit deeper, cards and menus rise further on a dark page), and
+   shadows that lift each layer clearly off the one below -- larger, softer
+   and darker than the default's crisp 2px offset. */
 :root {
-  --shadow-distance: 0.125rem;
-  --shadow-blur: 0.625rem;
-  --shadow-color: rgba(15, 23, 42, 0.14);
+  --surface-depth: 2;
 
-  --button-shadow-distance: 0.125rem;
-  --button-shadow-blur: 0.5rem;
-  --button-shadow-color: rgba(15, 23, 42, 0.12);
+  --shadow-distance: 0.25rem;
+  --shadow-blur: 0.875rem;
+  --shadow-color: rgba(15, 23, 42, 0.2);
+
+  --button-shadow-distance: 0.1875rem;
+  --button-shadow-blur: 0.625rem;
+  --button-shadow-color: rgba(15, 23, 42, 0.2);
   --button-hover-transform: none;
   --button-active-transform: none;
   --button-hover-box-shadow: 0 0.25rem 0.85rem rgba(15, 23, 42, 0.18);
   --button-active-box-shadow: 0 0.125rem 0.35rem rgba(15, 23, 42, 0.16);
 
-  --card-shadow-distance: 0.25rem;
-  --card-shadow-blur: 1rem;
-  --card-shadow-color: rgba(15, 23, 42, 0.14);
+  --card-shadow-distance: 0.5rem;
+  --card-shadow-blur: 1.5rem;
+  --card-shadow-color: rgba(15, 23, 42, 0.24);
 
-  --data-list-shadow-distance: 0.2rem;
-  --data-list-shadow-blur: 0.8rem;
-  --data-list-shadow-color: rgba(15, 23, 42, 0.12);
+  --data-list-shadow-distance: 0.375rem;
+  --data-list-shadow-blur: 1.25rem;
+  --data-list-shadow-color: rgba(15, 23, 42, 0.2);
 
-  --dialog-shadow-distance: 0.75rem;
-  --dialog-shadow-blur: 2rem;
-  --dialog-shadow-color: rgba(15, 23, 42, 0.22);
+  --dialog-shadow-distance: 1rem;
+  --dialog-shadow-blur: 2.75rem;
+  --dialog-shadow-color: rgba(15, 23, 42, 0.32);
 
-  --dropdown-menu-shadow-distance: 0.4rem;
-  --dropdown-menu-shadow-blur: 1.4rem;
-  --dropdown-menu-shadow-color: rgba(15, 23, 42, 0.18);
+  --dropdown-menu-shadow-distance: 0.5rem;
+  --dropdown-menu-shadow-blur: 1.75rem;
+  --dropdown-menu-shadow-color: rgba(15, 23, 42, 0.26);
 
   --tooltip-shadow-distance: 0.2rem;
   --tooltip-shadow-blur: 0.75rem;

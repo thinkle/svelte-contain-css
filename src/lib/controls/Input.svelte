@@ -45,9 +45,12 @@
   @use "$lib/sass/_mixins.scss" as *;
   input {
     @include typography-props(input, ui);
-    @include box-props(input, control);
-    @include border-props-borderless(input, control);
-    @include color-props(input, control);
+    /* A field: geometry walks input -> field -> control; colors and the
+       edge come from the surface the field sits on (see field-default-bg
+       and field-border-props). */
+    @include field-box-props(input, field, control);
+    @include field-border-props(input, field, control);
+    @include color-props(input, field, $family: false);
     width: var(--input-width);
     @include focusable();
   }

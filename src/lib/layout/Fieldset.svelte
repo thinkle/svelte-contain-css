@@ -134,7 +134,7 @@
 
   legend {
     @include typography-props(legend, fieldset, ui);
-    @include color-props(legend, fieldset);
+    @include color-props(legend, fieldset, surface, $family: false);
 
     padding: var-with-fallbacks(--padding, legend, 0 var(--space-sm));
     font-weight: var-with-fallbacks(--weight, legend, var(--bold));

@@ -98,7 +98,7 @@
   }
 
   div :global(details > summary) {
-    @include color-props(accordion-summary, control, secondary);
+    @include color-props(accordion-summary, control);
     @include box-props-square(accordion-summary, control, surface);
     @include border-props(accordion-summary, control, surface);
     @include clickable(accordion);
@@ -136,7 +136,7 @@
   }
   div :global(summary) {
     list-style: var(--details-list-style, none);
-    @include color-props(accordion-summary, control, secondary);
+    @include color-props(accordion-summary, control);
     @include box-props-square(accordion-summary, control, surface);
   }
   div :global(summary::after) {

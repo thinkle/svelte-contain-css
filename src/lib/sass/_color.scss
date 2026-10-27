@@ -1,9 +1,380 @@
 @use "functions" as fn;
 @use "sass:list";
+@use "sass:map";
+@use "sass:meta";
+@use "sass:string";
 
-@mixin color-props($prefixes...) {
-  --link-bg: #{fn.vars(link-bg, $prefixes...)};
-  --link-fg: #{fn.vars(link-fg, $prefixes...)};
+//  ── Color families ─────────────────────────────────────────────────────
+//
+// A family is a background, its foreground, and optional exact colors
+// ("pins") for what sits on it. See docs/color-families.md.
+//
+// The neutral ladder: each tier falls back to the one below it, for its
+// colors (an unset tier is a step off the one below; see tier-step-bg()) and
+// for its pins (--on-surface-raised-X -> --on-surface-X ->
+// --on-background-X). `inverse` is the opposite lightness and stands alone.
+$ladder: (
+  background: (background),
+  surface: (surface, background),
+  surface-raised: (surface-raised, surface, background),
+  surface-sunken: (surface-sunken, surface, background),
+  surface-overlay: (surface-overlay, surface-raised, surface, background),
+  inverse: (inverse),
+);
+
+//  The roles. A role surface never borrows another family's pins.
+$roles: primary, secondary, info, success, warning, danger, control, inactive;
+
+// Text fields (Input, Select, textarea). Not a fixed pair: by default a field
+// is a step off whatever surface it sits on (see field-default()), so it can
+// never match its surface and disappear. --field-bg / --field-fg pin one.
+//
+// `ground` is the surface it sits on, exactly: for something that belongs to
+// whatever holds it rather than being a surface of its own (a MenuList in a
+// Sidebar takes the sidebar; inside a DropdownMenu, the menu's overlay).
+$relational-families: field, ground;
+
+$tones: primary, secondary, info, success, warning, danger, muted;
+
+//  Heading levels and the group each one walks through before the shared
+// --*-heading-* name: 1 -> major -> shared, 3 -> shared, 5 -> minor -> shared.
+$heading-levels: (
+  1: major,
+  2: major,
+  3: null,
+  4: null,
+  5: minor,
+  6: minor,
+);
+
+@function is-family($name) {
+  @return map.has-key($ladder, $name) or list.index($roles, $name) != null or
+    list.index($relational-families, $name) != null;
+}
+
+// The pair of the nearest family-aware surface, published by family-vars(),
+// else the page.
+$ground-bg: var(--_ground-bg, var(--background-bg, var(--bg)));
+$ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
+
+// A field's default fill: the local surface lifted a step lighter, the way
+// a raised tier is (an sRGB mix toward white, then an oklch lightness step):
+// white on a light grey page, a lighter well on a dark one, and plain white
+// on a white card, where the edge does the work. --field-lighten scales the
+// lift (0 turns it off). --field-fill-amount first mixes toward the
+// surface's own foreground instead -- with the lift off, a darker well on a
+// light surface. A hovered field steps a little toward the foreground
+// (--_field-hover-fill, set by field-border-props()).
+@function field-default-bg() {
+  $well: color-mix(
+    in oklab,
+    #{$ground-bg},
+    #{$ground-fg} calc(var(--field-fill-amount, 0%) + var(--_field-hover-fill, 0%))
+  );
+  $lift: var(--field-lighten, 1);
+  @return string.unquote(
+    "oklch(from color-mix(in srgb, #{$well}, white calc(4% * #{$lift})) clamp(0, l + 0.03 * #{$lift}, 1) c h)"
+  );
+}
+
+//  An unset elevated tier's background is a step off the tier below it, so
+// a theme (or an app) that sets only --bg/--fg still gets a ladder: raised
+// and overlay a little lighter, sunken a little darker. That is elevation as
+// lightness, which reads the same way on a light or a dark page.
+//
+// Each step is a small sRGB mix toward white (or black) and then a fixed
+// oklch lightness step. Neither works alone: the mix is a large step near
+// black and next to nothing near white, the lightness step the opposite.
+// Hue and chroma are kept; lightness stops at white and reflects off black
+// (amplified, since oklch lightness is so compressed down there), so a
+// sunken tier on a pure black page is a step lighter rather than the page
+// itself. On #121212 this gives Material's dark elevations within a shade;
+// on blue-grey 900, the bundled dark theme's tiers. Stepped here, at the component, so a local --surface-bg
+// override flows up to the cards inside it. Foregrounds fall back unchanged.
+//
+// Knobs: --surface-depth scales every step (0 is flat, 1.5 deeper); per tier,
+// --surface-raised-mix (a percentage) and --surface-raised-step (oklch
+// lightness), and the same for -sunken- and -overlay-.
+//
+// Sunken also lifts chroma, more on a light surface than a dark one: a step
+// darker alone reads as grey and muddy, where a sidebar wants to read as a
+// deeper shade of the same tint (on the light theme's #f4f5fb this lands on
+// its hand-picked #eef0fa). --surface-sunken-chroma sets the lift.
+$tier-steps: (
+  surface-raised: (white, 4%, 0.03, 0),
+  surface-sunken: (black, 0%, -0.015, 0.8),
+  surface-overlay: (white, 2%, 0.02, 0),
+);
+
+@function tier-step-bg($tier, $below) {
+  $spec: map.get($tier-steps, $tier);
+  $depth: var(--surface-depth, 1);
+  $mixed: color-mix(
+    in srgb,
+    #{$below},
+    #{list.nth($spec, 1)} calc(var(--#{$tier}-mix, #{list.nth($spec, 2)}) * #{$depth})
+  );
+  $l: "(l + var(--#{$tier}-step, #{list.nth($spec, 3)}) * #{$depth})";
+  $c: "c";
+  @if list.nth($spec, 4) != 0 {
+    $c: "calc(c * (1 + var(--#{$tier}-chroma, #{list.nth($spec, 4)}) * #{$depth} * l))";
+  }
+  @return string.unquote("oklch(from #{$mixed} clamp(0, max(#{$l}, -10 * #{$l}), 1) #{$c} h)");
+}
+
+//  The names a family's color variables are looked up under, most specific
+// first. `background` is the page itself, whose pair has always been
+// --bg/--fg; --background-bg wins over it when a theme names the tier.
+@function family-color-chain($family, $suffix, $final) {
+  $result: $final;
+  @if map.has-key($ladder, $family) {
+    $tiers: map.get($ladder, $family);
+    @for $i from list.length($tiers) through 1 {
+      $tier: list.nth($tiers, $i);
+      @if $tier == background {
+        $result: var(--background-#{$suffix}, var(--#{$suffix}, #{$result}));
+      } @else if $suffix == bg and map.has-key($tier-steps, $tier) {
+        $result: var(--#{$tier}-bg, #{tier-step-bg($tier, $result)});
+      } @else {
+        $result: var(--#{$tier}-#{$suffix}, #{$result});
+      }
+    }
+  } @else {
+    $result: var(--#{$family}-#{$suffix}, #{$result});
+  }
+  @return $result;
+}
+
+//  A pin's lookup on a family: down the ladder for neutral tiers, the role
+// alone otherwise. $names walks within a family first (heading-1, then
+// heading-major, then heading). With no $final the result is invalid when
+// nothing is pinned, which is what lets a caller's own fallback win.
+@function pin-chain($family, $names, $final: null) {
+  $tiers: ($family);
+  @if map.has-key($ladder, $family) {
+    $tiers: map.get($ladder, $family);
+  }
+  $result: $final;
+  @for $i from list.length($tiers) through 1 {
+    $tier: list.nth($tiers, $i);
+    @for $j from list.length($names) through 1 {
+      $name: list.nth($names, $j);
+      @if $result == null {
+        $result: var(--on-#{$tier}-#{$name});
+      } @else {
+        $result: var(--on-#{$tier}-#{$name}, #{$result});
+      }
+    }
+  }
+  @return $result;
+}
+
+@function heading-pin-names($level, $channel) {
+  $group: map.get($heading-levels, $level);
+  @if $group {
+    @return (heading-#{$level}-#{$channel}, heading-#{$group}-#{$channel}, heading-#{$channel});
+  }
+  @return (heading-#{$level}-#{$channel}, heading-#{$channel});
+}
+
+//  Splits a prefix list at its family: everything before the first family
+// name is component-level ("set means unknown"), the family is what the
+// component compiles as its default, the rest are legacy fallbacks.
+@function split-family($prefixes) {
+  $comp: ();
+  $family: null;
+  $rest: ();
+  @each $prefix in $prefixes {
+    @if $family == null and is-family($prefix) {
+      $family: $prefix;
+    } @else if $family == null {
+      $comp: list.append($comp, $prefix, $separator: comma);
+    } @else {
+      $rest: list.append($rest, $prefix, $separator: comma);
+    }
+  }
+  @return (comp: $comp, family: $family, rest: $rest);
+}
+
+//  --_<prefix>-role-bg / -fg / -on-<value>: what a role applied through
+// surfaceVars() (or a component's `primary` sugar) leaves for the surface.
+// Private and per component prefix, so a role set for Tiles in a context
+// never reaches a Bar inside them.
+@function role-chain($comp, $suffix) {
+  $result: null;
+  @for $i from list.length($comp) through 1 {
+    $name: --_#{list.nth($comp, $i)}-#{$suffix};
+    @if $result == null {
+      $result: var(#{$name});
+    } @else {
+      $result: var(#{$name}, #{$result});
+    }
+  }
+  @return $result;
+}
+
+@function role-chain-fallback($comp, $suffix, $final) {
+  $result: $final;
+  @for $i from list.length($comp) through 1 {
+    $result: var(--_#{list.nth($comp, $i)}-#{$suffix}, #{$result});
+  }
+  @return $result;
+}
+
+//  The part of color-props that knows which family a surface is in.
+//
+// Every value on a surface (a Text tone, the link color, each heading
+// level) resolves in this order:
+//
+// 1. A component-level background is set (--bar-bg, --tile-bg from a
+//    context, a `bg` prop): the surface belongs to no family, and the value
+//    MIXES, under every theme.
+// 2. A role was applied (surfaceVars(), `<Bar primary>`): that role's pin,
+//    or the mix when the role has none.
+// 3. The family the component compiles (surface, surface-raised...): its pin,
+//    walking down the ladder.
+// 4. The mix.
+//
+// The surface publishes two inheriting flags: --_comp-flag (valid only when
+// a component-level background is set) and --_role-flag (valid only when a
+// role was applied), plus the pins it found (--_on-<value>-fam / -role).
+// Every family-aware surface declares all of them, which resets an
+// ancestor's: an unset var() there is guaranteed-invalid, not inherited.
+//
+// CSS can only test "set", never "unset", with var() fallbacks, and step 1
+// has to STOP the chain. So wherever a value is finally computed (here for
+// tones, on the <a> for links, on the typography container for headings)
+// the flags become numbers -- `--_comp-n: var(--_comp-flag, 0)`, registered
+// as a non-inheriting <number> whose initial value is 1, is 0 when the flag
+// is unset and 1 when it holds a color -- and pick with color-mix:
+//
+//   color-mix(in srgb,
+//     color-mix(in srgb, <fam pin or mix>, <role pin or mix> <role-n * 100%>),
+//     <mix> <comp-n * 100%>)
+//
+// See select-pinned() and vars/private-properties.css.
+//
+// $role-mix is what an unpinned role surface uses instead of the mix: a
+// heading on a role's own background must not tint toward that role.
+@function select-pinned($fam, $role, $mix, $role-mix: $mix) {
+  @return color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(#{$fam}, #{$mix}),
+      var(#{$role}, #{$role-mix}) calc(var(--_role-n) * 100%)
+    ),
+    #{$mix} calc(var(--_comp-n) * 100%)
+  );
+}
+
+//  What a consumer of the flags declares on itself before select-pinned().
+@mixin family-selectors {
+  --_comp-n: var(--_comp-flag, 0);
+  --_role-n: var(--_role-flag, 0);
+}
+
+@mixin family-vars($comp, $family) {
+  // This surface's resolved pair, for fields inside it (field-default-bg(),
+  // field-border-props()). Fields never publish one, so they can't loop.
+  --_ground-bg: var(--_background-color);
+  --_ground-fg: var(--_color);
+  @if list.length($comp) > 0 {
+    --_comp-flag: #{fn.vars-fallback(bg, var(--__unset), $comp...)};
+    --_role-flag: #{role-chain($comp, role-bg)};
+  } @else {
+    --_comp-flag: initial;
+    --_role-flag: initial;
+  }
+  @include family-selectors;
+
+  // Text tones are computed here, against this surface's own foreground.
+  @each $tone in $tones {
+    $mix: color-mix(
+      in srgb,
+      var(--_color),
+      var(--#{$tone}-color)
+        var(--#{$tone}-text-amount, var(--text-amount, 50%))
+    );
+    @if list.length($comp) > 0 {
+      --_on-#{$tone}-role: #{role-chain($comp, on-#{$tone}-text-fg)};
+    } @else {
+      --_on-#{$tone}-role: initial;
+    }
+    --_on-#{$tone}-fam: #{pin-chain($family, ($tone + "-text-fg"))};
+    --_#{$tone}-mix: #{$mix};
+    --#{$tone}-text-fg: var(
+      --#{$tone}-text-fg-override,
+      #{select-pinned(--_on-#{$tone}-fam, --_on-#{$tone}-role, var(--_#{$tone}-mix))}
+    );
+  }
+
+  // Links and headings mix where they are (against currentColor), so only
+  // the pins travel. colors.css and typography-context.css select there.
+  --_on-link-fam: #{pin-chain($family, (link-text-fg))};
+  --_on-link-hover-fam: #{pin-chain($family, (link-hover-text-fg, link-text-fg))};
+  @if list.length($comp) > 0 {
+    --_on-link-role: #{role-chain($comp, on-link-text-fg)};
+    --_on-link-hover-role: #{role-chain-fallback(
+        $comp,
+        on-link-hover-text-fg,
+        role-chain($comp, on-link-text-fg)
+      )};
+  } @else {
+    --_on-link-role: initial;
+    --_on-link-hover-role: initial;
+  }
+  @each $level, $group in $heading-levels {
+    @each $channel in fg, bg {
+      --_on-h#{$level}-#{$channel}-fam: #{pin-chain(
+          $family,
+          heading-pin-names($level, $channel)
+        )};
+      @if list.length($comp) > 0 {
+        --_on-h#{$level}-#{$channel}-role: #{role-chain($comp, on-h#{$level}-#{$channel})};
+      } @else {
+        --_on-h#{$level}-#{$channel}-role: initial;
+      }
+    }
+  }
+}
+
+//  The page itself: what a link or heading with no surface around it reads.
+// Emitted once, on :root, by colors.css.
+@mixin background-family-vars {
+  --_on-link-fam: #{pin-chain(background, (link-text-fg))};
+  --_on-link-hover-fam: #{pin-chain(background, (link-hover-text-fg, link-text-fg))};
+  @each $level, $group in $heading-levels {
+    @each $channel in fg, bg {
+      --_on-h#{$level}-#{$channel}-fam: #{pin-chain(
+          background,
+          heading-pin-names($level, $channel)
+        )};
+    }
+  }
+}
+
+//  color-props(<component prefixes...>, <family>, <legacy prefixes...>)
+//
+// The first family name in the list is the component's compiled default
+// (surface, surface-raised, control, primary...). Prefixes before it are
+// component-level: setting one of their backgrounds takes the surface out of
+// its family. A neutral family (the ladder, or inverse) also gets
+// family-vars(): pins for Text tones, links and headings. Controls (a
+// family of control or a role) keep plain mixing.
+//
+// `$family: false` keeps a neutral surface's colors without the family
+// machinery, for an element that only borrows a surface's pair (a heading
+// inside a Bar).
+@mixin color-props($args...) {
+  $prefixes: $args;
+  $keywords: meta.keywords($args);
+  $family-aware: map.get($keywords, "family") != false;
+  $split: split-family($prefixes);
+  $comp: map.get($split, comp);
+  $family: map.get($split, family);
+  $rest: map.get($split, rest);
+  $neutral: $family != null and map.has-key($ladder, $family);
 
   // Optional per-channel color mixing. Lets a container dull, tint, or fully
   // remap a component's colors without restating the color itself — e.g.
@@ -52,8 +423,41 @@
   // hover, because the affordance calc would still be reading the un-mixed
   // base. Baking the mix into the private var keeps both systems in agreement:
   // rest, hover, active, and disabled all derive from the same mixed color.
-  --_bg-base: #{fn.var-no-fallbacks(--bg, $prefixes...)};
-  --_fg-base: #{fn.var-no-fallbacks(--fg, $prefixes...)};
+  //
+  // The pair resolves: component-level names, then a role applied to this
+  // component (surfaceVars), then the family -- down the ladder for a
+  // neutral tier, so a theme that only sets --surface-bg colors cards too --
+  // then any legacy prefixes after it.
+  @each $channel in bg, fg {
+    // Every chain still ends at the page pair (--bg / --fg), as it always
+    // has; a neutral family's ladder already ends there.
+    $tail: unset;
+    @if not $neutral {
+      $tail: var(--#{$channel}, unset);
+    }
+    $tail: fn.vars-fallback($channel, $tail, $rest...);
+    @if $family == field {
+      // Relative to the surface it sits on; legacy prefixes after it (a
+      // geometry category such as control) never color a field.
+      @if $channel == bg {
+        $tail: var(--field-bg, #{field-default-bg()});
+      } @else {
+        $tail: var(--field-fg, #{$ground-fg});
+      }
+    } @else if $family == ground {
+      @if $channel == bg {
+        $tail: $ground-bg;
+      } @else {
+        $tail: $ground-fg;
+      }
+    } @else if $family != null {
+      $tail: family-color-chain($family, $channel, $tail);
+    }
+    @if list.length($comp) > 0 and $neutral {
+      $tail: role-chain-fallback($comp, role-#{$channel}, $tail);
+    }
+    --_#{$channel}-base: #{fn.vars-fallback($channel, $tail, $comp...)};
+  }
   --_background-color: color-mix(
     in srgb,
     var(--_bg-base),
@@ -64,21 +468,33 @@
     var(--_fg-base),
     var(--_fg-mix-color) var(--_fg-mix-amount)
   );
+  // The public, read-only form of this element's resolved pair, inherited
+  // by everything inside: an icon in a filled button, a mix in a tag. Read
+  // it; never set it -- setting it changes nothing here, only what your own
+  // children read. Use it on a wrapper (`--button-bg: var(--current-bg)`
+  // around a Button), not on the element it describes, which would read its
+  // own color while computing it.
+  --current-bg: var(--_background-color);
+  --current-fg: var(--_color);
   // Text tones belong to this resolved surface. Amount is the target share:
   // 0% preserves the foreground; 100% reaches the target color.
   // Muted targets the local surface; an explicit override can travel across
   // nested contexts without inheriting an ancestor's computed background.
   --muted-color: var(--muted-color-override, var(--_background-color));
-  @each $tone in primary, secondary, info, success, warning, danger, muted {
-    --#{$tone}-text-fg: var(
-      --#{$tone}-text-fg-override,
-      color-mix(
-        in srgb,
-        var(--_color),
-        var(--#{$tone}-color)
-          var(--#{$tone}-text-amount, var(--text-amount, 50%))
-      )
-    );
+  @if $neutral and $family-aware {
+    @include family-vars($comp, $family);
+  } @else {
+    @each $tone in $tones {
+      --#{$tone}-text-fg: var(
+        --#{$tone}-text-fg-override,
+        color-mix(
+          in srgb,
+          var(--_color),
+          var(--#{$tone}-color)
+            var(--#{$tone}-text-amount, var(--text-amount, 50%))
+        )
+      );
+    }
   }
 
   background-color: var(--_background-color);

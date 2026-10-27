@@ -505,13 +505,19 @@ corners, and borders where enabled). For example, Button padding reads
 reads `--select-*` → `--input-*` → `--control-*` → the global fallback.
 
 Semantic roles such as `--primary-*` and `--secondary-*` select palettes; they
-no longer supply component padding, radius or typography. `--surface-*` remains
-the shared surface category. A component value takes precedence over its
+no longer supply component padding, radius or typography, and quiet chrome no
+longer falls back to `--secondary-*` (it is the `control` family; see Color
+families). `--surface-*` remains the shared surface category. A component value takes precedence over its
 category: omit `--input-padding` if inputs should follow `--control-padding`.
 
 Migration: move interface typography overrides from `--control-font-*` to
-`--ui-font-*`, and input geometry/colors from `--ui-*` to `--control-*` or
-`--input-*`. Use `--surface-*` in place of legacy `--block-*` / `--top-*` surface
+`--ui-font-*`, and input geometry from `--ui-*` to `--control-*` or
+`--input-*`. Input and Select colors and edges are the `field` family: by
+default a fill and a 1px edge mixed from the surface they sit on, so a field
+is visible on any surface and never reads as a button. Theme them with
+`--field-bg/-fg`, `--field-border-color` and `--field-square-radius`; make
+underline fields with `--field-border-top: none; --field-border-inline: none`
+or `vars/underline-fields.css`. See docs/color-families.md. Use `--surface-*` in place of legacy `--block-*` / `--top-*` surface
 fallbacks. Select no longer takes geometry/colors from menu/surface defaults;
 use input/control variables or explicit select variables. Theme variables like
 `--secondary-padding` and `--primary-font-weight` no longer affect controls;
@@ -862,8 +868,10 @@ Define themes in your stylesheets — **this is where most styling should live**
   --fg: #ffffff;
   --primary-bg: #4a90d9;
   --primary-fg: #ffffff;
-  --secondary-bg: #2d2d2d;
-  --secondary-fg: #ffffff;
+  --surface-bg: #222222;
+  --surface-raised-bg: #2d2d2d;
+  --control-bg: #3a3a3a;
+  --control-fg: #ffffff;
   --border-color: #444;
 }
 ```
@@ -1593,6 +1601,58 @@ background names an **exact** pair instead. Full contract:
 - `Text` in a transparent heading uses the surface's tones; in a filled heading
   it is grounded on the heading's own fg/bg.
 
+### Color families: exact colors keyed by what they sit on
+
+Exact colors for text, links and headings are keyed by the **color family**
+of the surface, never by component. Full contract:
+[docs/color-families.md](docs/color-families.md).
+
+- **Neutral ladder**: `background` (the page), `surface` (Container,
+  Bar, Table, Form…), `surface-raised` (Card, Tile), `surface-sunken` (Sidebar,
+  Card header/footer), `surface-overlay` (menus, Dialog), `inverse` (Tooltip).
+  An unset tier steps off the one below it (raised and overlay lighter,
+  sunken darker), so `--bg`/`--fg` alone gives a full ladder;
+  `--surface-depth` scales the steps (`0` is flat). Themes pin tiers
+  (`--surface-raised-bg`), not components (`--card-bg`).
+- **`ground`**: exactly the surface an element sits on (MenuList).
+- **Reading colors**: every colored element (surface or control) publishes
+  its resolved pair as `--current-bg` / `--current-fg`, inherited by its
+  contents: color an icon with `var(--current-fg)`, mix a tint from
+  `var(--current-bg)`. Read-only; set `--button-bg: var(--current-bg)` on a
+  wrapper (never the element itself) to blend a button into its bar; write
+  mixes on the element that paints them, not on `:root`.
+- **Roles**: `primary`, `secondary`, … and app-defined ones. Apply one with
+  `<Bar primary>` or `surfaceVars(role, prefix)` on the element or a context.
+- **`control`**: quiet chrome (plain Button, Tag, inactive TabItem). Set
+  `--control-bg/-fg`; `secondary` is an accent.
+- **`field`**: text fields (Input, Select, TextArea). Fill and edge default
+  to a step off the local surface and firm up on hover; `--field-*` knobs,
+  `vars/underline-fields.css` preset.
+- **Pins**: `--on-<family>-<tone>-text-fg`, `--on-<family>-link-text-fg`,
+  `--on-<family>-heading-<n|major|minor>-fg/-bg`, `--on-<family>-heading-fg`.
+- **Unknown**: a surface with a component-level background (`bg` prop,
+  `--tile-bg` on a wrapper, `--card-bg` in a theme) mixes, under every theme.
+
+```css
+:root {
+  --on-background-heading-fg: var(--primary-bg); /* exact on the page and every tier above it */
+  --on-background-link-text-fg: rgb(0, 51, 160);
+  --on-primary-heading-fg: var(--primary-fg);   /* exact on primary */
+  --on-primary-link-text-fg: var(--primary-fg);
+}
+```
+
+```svelte
+<Bar primary>…</Bar>                            <!-- primary family: on-primary pins -->
+<div style={surfaceVars("primary", "tile")}><Tile>…</Tile></div>  <!-- same, as a context -->
+<Bar bg="#323232" fg="#fff">…</Bar>             <!-- unknown: mixes -->
+```
+
+Do not set component-keyed colors (`--bar-link-fg`, `--card-heading-1-fg`):
+they were removed. Do not set `--link-fg` in a theme: it lands on every
+surface. Never write the private `--_<prefix>-role-*` / `--_<prefix>-on-*`
+variables by hand; `surfaceVars()` does.
+
 ### Mixing a filled surface
 
 Background/foreground mixing is independent of Text mixing. Use
@@ -1615,7 +1675,9 @@ These affect all components unless overridden:
 | `--fg`            | Foreground/text color               | -       |
 | `--primary-bg`    | Primary action background           | -       |
 | `--primary-fg`    | Primary action foreground           | -       |
-| `--secondary-bg`  | Secondary background                | -       |
+| `--secondary-bg`  | Secondary accent background         | -       |
+| `--control-bg`    | Quiet chrome (plain Button, Tag)    | -       |
+| `--surface-bg`    | Reading surface (ladder base)       | `--bg`  |
 | `--padding`       | Default padding                     | -       |
 | `--gap`           | Default gap/spacing                 | -       |
 | `--gap-xs`        | Layout rhythm step (`--gap × 0.25`) | -       |
@@ -1635,7 +1697,7 @@ These affect all components unless overridden:
 Components cascade through category variables. For example, `Button`:
 
 ```
---button-bg → --control-bg → --secondary-bg
+--button-bg → --control-bg
 --button-fg → --control-fg → --fg
 --button-padding → --control-padding → --padding
 ```
@@ -1645,6 +1707,7 @@ Components cascade through category variables. For example, `Button`:
 - `--button-bg`, `--button-fg`, `--button-padding`
 - `--button-width` (default: `fit-content` -- a button is as wide as its label, even in a `Stack` or a grid; `width="100%"` for a full-width one, capped to fit its margins), `--button-height`
 - `--button-hover-filter`, `--button-hover-transform`
+- `--button-hover-bg`, `--button-hover-fg`: replace either half of the hover (any clickable takes its own prefix: `--tab-hover-*`, `--menu-item-hover-*`). A text-only hover, as many tab bars use, is `--tab-hover-bg: var(--tab-bg)` plus a stronger `--tab-hover-fg`.
 
 **Dialog:**
 
@@ -1840,8 +1903,10 @@ Example transformation:
   /* Semantic Colors */
   --primary-bg: #0066cc;
   --primary-fg: #ffffff;
-  --secondary-bg: #f5f5f5;
-  --secondary-fg: #222222;
+  --secondary-bg: #c2185b;
+  --secondary-fg: #ffffff;
+  --control-bg: #f0f0f0; /* plain buttons, tags, inactive tabs */
+  --control-fg: #222222;
   --danger-bg: #dc3545;
   --danger-fg: #ffffff;
   --success-bg: #28a745;

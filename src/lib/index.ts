@@ -14,6 +14,7 @@ import RadioButton from "./controls/RadioButton.svelte";
 import Select from "./controls/Select.svelte";
 import Option from "./controls/Option.svelte";
 import Slider from "./controls/Slider.svelte";
+import TextArea from "./controls/TextArea.svelte";
 import TabItem from "./controls/TabItem.svelte";
 import Toggle from "./controls/Toggle.svelte";
 import Bar from "./layout/Bar.svelte";
@@ -78,6 +79,7 @@ export {
   Checkbox,
   Input,
   Slider,
+  TextArea,
   Toggle,
   RadioButton,
   MiniButton,
@@ -107,3 +109,4 @@ export { Progress, Tooltip };
 export { Table };
 export { DropdownMenu };
 export { Text };
+export { surfaceVars } from "./surfaceVars";

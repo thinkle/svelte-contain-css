@@ -1,0 +1,17 @@
+/* Underline fields: text inputs and selects drop their fill and their top and
+   side edges, leaving a rule along the bottom on the surface itself. Combine
+   with any theme. The fill is transparent rather than a color, since only
+   that matches whatever surface a field lands on, and it overrides a theme's
+   own --field-bg. The rule is the field edge (--field-border-color, mixed
+   from the surface the field sits on by default), so it stays findable
+   everywhere, and it firms up on hover. For a filled field with an underline
+   (Material's "filled" style), leave --field-bg out. */
+:root {
+  --field-bg: transparent;
+  --field-border-top: none;
+  --field-border-inline: none;
+  --field-square-radius: 0;
+  /* A tall box with only a bottom rule reads as nothing at all, so a
+     TextArea starts one line high, like an input, and grows as you type. */
+  --textarea-min-height: 0;
+}

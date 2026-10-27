@@ -378,8 +378,6 @@
   text-indent: var(--_first-letter-text-indent, revert);
   font-variant: var(--_first-letter-font-variant, revert);
   text-align: var(--_first-letter-text-align, revert);
-  --link-bg: var(--_first-letter-link-bg);
-  --link-fg: var(--_first-letter-link-fg);
   background: var(--_first-letter-background, revert);
   color: var(--_first-letter-color, revert);
   float: var(--first-letter-float, none);

@@ -296,4 +296,19 @@ test.describe("Sticky table column widths", () => {
     const unique = new Set(widths.map((w) => Math.round(w)));
     expect(unique.size).toBeGreaterThan(1);
   });
+
+  test("inside a scaled ancestor, header columns still line up with the body", async ({ page }) => {
+    await page.goto(PATH);
+    const section = page.getByTestId("scaled");
+    const lefts = (selector: string) =>
+      section.locator(selector).evaluateAll((cells) =>
+        cells.map((c) => (c as HTMLElement).getBoundingClientRect().left),
+      );
+    await expect
+      .poll(async () => {
+        const [head, body] = [await lefts(HEAD_CELLS), await lefts(BODY_CELLS)];
+        return head.length === body.length && head.every((x, i) => Math.abs(x - body[i]) <= 1);
+      })
+      .toBe(true);
+  });
 });
