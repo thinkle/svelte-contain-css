@@ -357,13 +357,18 @@
        its label on one line and truncated with an ellipsis (below). */
     max-width: 100%;
   }
-  /* The clipping lives on this inner span, not the button: overflow other
-     than visible moves an inline-level box's baseline to its bottom edge,
-     which would drop the trigger out of line with text beside it. */
+  /* The clipping lives on this inner span, not the button, and it is
+     `clip`, not `hidden`: `hidden` makes a scroll container, and a scroll
+     container's text is skipped when the button works out its baseline, which
+     then falls to the button's bottom edge and lifts the trigger (and a
+     Select) out of line with the fields and text beside it. `clip` cuts the
+     overflow without that, and still counts as overflow for the ellipsis.
+     `hidden` first for browsers that don't know `clip`. */
   .trigger-label {
     display: block;
     white-space: nowrap;
     overflow: hidden;
+    overflow: clip;
     text-overflow: ellipsis;
   }
 
