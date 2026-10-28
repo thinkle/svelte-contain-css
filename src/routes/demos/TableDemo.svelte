@@ -10,6 +10,28 @@
   import DemoWithCode from "./DemoWithCode.svelte";
   import { tableVars } from "./cssVariableDefs";
   let widthModifier = $state(0);
+
+  /* Wide-table demo: a roster whose column set grows on demand, so the
+     table starts out fitting and then has to scroll sideways. */
+  let extraColumns = $state(6);
+  const rosterFields = $derived(
+    Array.from({ length: extraColumns }, (_, i) => `Week ${i + 1}`),
+  );
+  const roster = [
+    "Ada Lovelace",
+    "Grace Hopper",
+    "Alan Turing",
+    "Katherine Johnson",
+    "Edsger Dijkstra",
+    "Barbara Liskov",
+    "Donald Knuth",
+    "Margaret Hamilton",
+    "John von Neumann",
+    "Radia Perlman",
+    "Ken Thompson",
+    "Frances Allen",
+  ];
+  let frozen = $state(1);
 </script>
 
 <CssVariableDemo variables={tableVars}>
@@ -141,8 +163,84 @@
   </TextLayout>
 
   <DemoWithCode
+    code={`
+<Table sticky stickyColumns={1}>
+  {#snippet thead()}
+    <thead>
+      <tr>
+        <th>Student</th>
+        {#each fields as field}<th>{field}</th>{/each}
+      </tr>
+    </thead>
+  {/snippet}
+  {#snippet tbody()}
+    <tbody>
+      {#each students as student}
+        <tr>
+          <th>{student.name}</th>
+          {#each fields as field}<td>{student[field]}</td>{/each}
+        </tr>
+      {/each}
+    </tbody>
+  {/snippet}
+</Table>
+      `}
+  >
+    {#snippet heading()}
+      <h3>Wide tables: horizontal scroll and frozen columns</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p>
+        A sticky table too wide for its column scrolls sideways in its own
+        strip; the header scrolls with it and still sticks on the way down.
+        It keeps its natural width rather than squeezing every column, with
+        long cells wrapping at <code>--table-cell-max-width</code> (20em). Set
+        <code>--table-width: auto</code> to fit the container instead.
+      </p>
+      <p>
+        <code>stickyColumns={"{n}"}</code> freezes the first <em>n</em> columns,
+        spreadsheet-style, in the header and the body alike.
+      </p>
+      <p>
+        <Button onclick={() => (extraColumns += 6)}>Add columns</Button>
+        <Button onclick={() => (frozen = (frozen + 1) % 3)}
+          >Frozen columns: {frozen}</Button
+        >
+      </p>
+    {/snippet}
+    <!-- The box stands in for a page's scrolling content panel, so the
+         header has something to stick to inside the demo. -->
+    <div class="demo-scroller">
+      <Table sticky stickyColumns={frozen}>
+        {#snippet thead()}
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Advisor</th>
+              {#each rosterFields as field}<th>{field}</th>{/each}
+            </tr>
+          </thead>
+        {/snippet}
+        {#snippet tbody()}
+          <tbody>
+            {#each roster as name, r}
+              <tr>
+                <th>{name}</th>
+                <td>Room {101 + (r % 4)}</td>
+                {#each rosterFields as _, i}
+                  <td>{60 + ((r * 17 + i * 11) % 41)}%</td>
+                {/each}
+              </tr>
+            {/each}
+          </tbody>
+        {/snippet}
+      </Table>
+    </div>
+  </DemoWithCode>
+
+  <DemoWithCode
     defaultTab="split"
-    code={`        
+    code={`
 <Table>
   <thead>
     <tr><th>Team</th><th>Wins</th><th>Losses</th></tr>
@@ -246,3 +344,10 @@
     </Table>
   </DemoWithCode>
 </CssVariableDemo>
+
+<style>
+  .demo-scroller {
+    max-height: 360px;
+    overflow-y: auto;
+  }
+</style>

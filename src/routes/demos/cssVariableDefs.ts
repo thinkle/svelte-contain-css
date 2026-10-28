@@ -673,6 +673,25 @@ export let tableVars = [
     defaultValue: 'var(--secondary-bg)',
     type: 'color',
   },
+  // Sticky tables scroll sideways in their own strip; these size them.
+  {
+    name: '--table-width',
+    defaultValue: 'max-content',
+    type: 'text',
+    group: 'Table',
+  },
+  {
+    name: '--table-cell-max-width',
+    defaultValue: '20em',
+    type: 'length',
+    group: 'Table',
+  },
+  {
+    name: '--table-frozen-bg',
+    defaultValue: 'var(--current-bg)',
+    type: 'color',
+    group: 'Table',
+  },
   ...colorProps('table-head'),
   ...typographyProps('table-head'),
 ]

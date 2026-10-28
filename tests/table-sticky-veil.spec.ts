@@ -19,7 +19,9 @@ for (const theme of ["bootstrap", "light", "dark"]) {
     // clip must not introduce a scroll container and break sticky positioning.
     const panel = page.locator(".page > .side-by-side > .content");
     await panel.evaluate(el => { el.scrollTop = el.scrollHeight; });
-    await expect.poll(() => page.locator(".fixed-table-head").evaluate(el => {
+    // The sticky element is the header's wrapper: the header table itself
+    // sits in a strip that scrolls sideways with the body.
+    await expect.poll(() => page.locator(".table-head-sticky").evaluate(el => {
       const panel = el.closest(".page")!.querySelector(":scope > .side-by-side > .content")!;
       const expected = panel.getBoundingClientRect().top
         + parseFloat(getComputedStyle(panel).paddingTop)
