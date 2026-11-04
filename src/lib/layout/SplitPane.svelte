@@ -16,6 +16,8 @@
        * what moving the handle does.
        */
       resizerLabel?: string;
+      /** After dragging, preserve the split ratio or keep the left pane's width. */
+      resizeBehavior?: "proportional" | "preserve-left";
     },
     {
       bg?: string | null;
@@ -31,6 +33,7 @@
     left,
     right,
     resizerLabel = "Resize panes",
+    resizeBehavior = "proportional",
     class: className,
     ...restProps
   }: Props = $props();
@@ -68,40 +71,25 @@
     const newRightWidth = startWidthRight - delta;
     setSize(newLeftWidth, newRightWidth);
   }
-  function setSize(newLeftWidth: number, newRightWidth: number) {
+  function setSize(newLeftWidth: number, _newRightWidth: number) {
     const MIN_SIZE = 32;
-    if (newLeftWidth < MIN_SIZE || newRightWidth < MIN_SIZE) {
-      // Don't allow too small of widths
-      return;
+    const style = getComputedStyle(splitPaneContainer!);
+    const gap = Number.parseFloat(style.columnGap) || 0;
+    const padding = (Number.parseFloat(style.paddingLeft) || 0) +
+      (Number.parseFloat(style.paddingRight) || 0);
+    const resizer = resizerDiv!.getBoundingClientRect().width;
+    const available = splitPaneContainer!.clientWidth - padding - gap * 2 - resizer;
+    if (available < MIN_SIZE * 2) return;
+    const width = Math.max(MIN_SIZE, Math.min(newLeftWidth, available - MIN_SIZE));
+    // Keep flexible tracks, rather than repeatedly measuring fixed pixel tracks
+    // on resize. The browser accounts for gaps/borders without accumulating drift.
+    if (resizeBehavior === "preserve-left") {
+      const reserved = resizer + gap * 2 + MIN_SIZE;
+      resizeStyle = `grid-template-columns: minmax(${MIN_SIZE}px, min(${width}px, calc(100% - ${reserved}px))) ${resizer}px minmax(${MIN_SIZE}px, 1fr);`;
+    } else {
+      const ratio = width / available;
+      resizeStyle = `grid-template-columns: minmax(${MIN_SIZE}px, ${ratio}fr) ${resizer}px minmax(${MIN_SIZE}px, ${1 - ratio}fr);`;
     }
-    const containerStyle = getComputedStyle(splitPaneContainer!);
-    const columnGap = Number.parseFloat(containerStyle.columnGap || "0") || 0;
-    const totalGap = columnGap * 2; // 3 columns => 2 gaps
-    const resizerWidth = resizerDiv!.getBoundingClientRect().width;
-    const availableWidth = splitPaneContainer!.clientWidth - totalGap;
-    const minRequired = resizerWidth + MIN_SIZE * 2;
-
-    if (availableWidth <= minRequired) {
-      return;
-    }
-
-    if (newLeftWidth + newRightWidth + resizerWidth > availableWidth) {
-      // Don't allow panes to overflow the available grid track width.
-      // Keep the left and shrink the right.
-      newRightWidth = availableWidth - newLeftWidth - resizerWidth;
-    }
-
-    if (newRightWidth < MIN_SIZE) {
-      // If right becomes too small after clamping, keep both panes usable.
-      newRightWidth = MIN_SIZE;
-      newLeftWidth = availableWidth - resizerWidth - newRightWidth;
-    }
-
-    if (newLeftWidth < MIN_SIZE) {
-      newLeftWidth = MIN_SIZE;
-      newRightWidth = availableWidth - resizerWidth - newLeftWidth;
-    }
-    resizeStyle = `grid-template-columns: ${newLeftWidth}px ${resizerWidth}px ${newRightWidth}px`;
   }
 
   function onMouseUp() {
@@ -114,6 +102,7 @@
     const STEP_SIZE = 10; // Number of pixels to resize for each key press
 
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
       const delta = event.key === "ArrowLeft" ? -STEP_SIZE : STEP_SIZE;
       // Adjust the widths of the panes
       startWidthLeft = leftPane!.getBoundingClientRect().width;
@@ -124,21 +113,8 @@
     }
   }
 
-  function handleWindowResize() {
-    if (!resizeStyle) return;
-    const existingLeftWidth = leftPane!.getBoundingClientRect().width;
-    const existingRightWidth = rightPane!.getBoundingClientRect().width;
-    let w = splitPaneContainer!.getBoundingClientRect().width;
-    let delta = w - existingLeftWidth - existingRightWidth;
-    setSize(existingLeftWidth + delta / 2, existingRightWidth + delta / 2);
-  }
+  onMount(() => () => onMouseUp());
 
-  onMount(() => {
-    if (window) {
-      window.addEventListener("resize", handleWindowResize);
-    }
-    return () => window.removeEventListener("resize", handleWindowResize);
-  });
 </script>
 
 <div
