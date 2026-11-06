@@ -212,11 +212,29 @@
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
+    /* A closed right-hand sidebar sheet waits just past the right edge
+       (translateX(100%)), and anything past the right edge widens the
+       document: every phone page with a right sidebar scrolled sideways by
+       a sheet's width, and a mobile browser zoomed the whole layout out to
+       fit it -- a modal opened half off the screen. Left-hand sheets never
+       showed it because overflow to the left is not scrollable. `clip`,
+       not `hidden`: it creates no scroll container, so nothing sticky
+       inside changes what it sticks to, and the vertical axis is left
+       alone. */
+    overflow-x: clip;
     container-type: size;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: stretch;
+  }
+  /* 100vh on a phone is the viewport with the browser's toolbars hidden, so
+     a 100vh page is taller than the screen whenever they show -- and the
+     footer sits underneath them. dvh tracks the toolbars. */
+  @supports (height: 100dvh) {
+    .page {
+      height: var(--page-height, 100dvh);
+    }
   }
   .page {
     /* Containing block for the compact sidebar, which spans the whole page

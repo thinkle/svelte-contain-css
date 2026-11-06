@@ -20,6 +20,15 @@
       fill?: boolean;
       stretch?: boolean;
       split?: boolean;
+      /**
+       * Stack into a column in the small tier (a container, or viewport, of
+       * 600px or less): each child takes the full width, buttons included.
+       * The row you lay out for a desktop -- two panels, a pair of form
+       * actions -- becomes the column a phone wants, with no breakpoint of
+       * your own. Tailwind's `flex flex-col sm:flex-row`, measured against
+       * the container instead of the screen.
+       */
+      collapse?: boolean;
       justify?: string | null;
       align?: string | null;
       gap?: string | null;
@@ -34,6 +43,7 @@
     fill = false,
     stretch = false,
     split = false,
+    collapse = false,
     justify = null,
     align = null,
     gap = null,
@@ -72,6 +82,7 @@
   class:fill
   class:stretch
   class:split
+  class:collapse
   {...el}
 >
   {@render children?.()}
@@ -115,5 +126,23 @@
 
   .inline.split {
     justify-content: var(--inline-split-justify, space-between);
+  }
+  /* `collapse`: a column in the small tier. Children stretch to the full
+     width -- Button holds itself to its label's width through
+     --button-width, so that is reset too: a stacked action on a phone is a
+     full-width one. A Button given a width of its own keeps it (the prop
+     sets the variable on the button, which outranks this). */
+  @include when-small {
+    .inline.collapse {
+      flex-direction: column;
+      align-items: stretch;
+      flex-wrap: nowrap;
+      --button-width: 100%;
+      /* A full-width button reads as one when its label is centred. */
+      --button-text-align: center;
+    }
+    .inline.collapse > :global(*) {
+      min-width: 0;
+    }
   }
 </style>

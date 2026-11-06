@@ -149,22 +149,44 @@
        Restore auto so it centers vertically; only dialog-level vars move it. */
     margin-top: var(--dialog-margin-top, auto);
     margin-bottom: var(--dialog-margin-bottom, auto);
+    /* Each bound is the theme's size OR the viewport less a margin,
+       whichever is smaller -- so on a phone a dialog fills the width and
+       stops at the screen's edge. max-width and max-height used max() here,
+       which made the theme's 800px a floor rather than a cap: on a 390px
+       phone a dialog with wide content laid out 800px wide, off both
+       edges. */
+    --_dialog-edge: calc(var(--padding, 8px) * 2);
     min-width: min(
-      calc(100vw - var(--padding) * 2),
+      calc(100vw - var(--_dialog-edge)),
       var(--dialog-min-width, 400px)
     );
-    max-width: max(
-      calc(100vw - var(--padding) * 2),
+    max-width: min(
+      calc(100vw - var(--_dialog-edge)),
       var(--dialog-max-width, 800px)
     );
     min-height: min(
-      calc(100vh - var(--padding) * 2),
+      calc(100vh - var(--_dialog-edge)),
       var(--dialog-min-height, 300px)
     );
-    max-height: max(
-      calc(100vh - var(--padding) * 2),
+    max-height: min(
+      calc(100vh - var(--_dialog-edge)),
       var(--dialog-max-height, 800px)
     );
+  }
+  /* The screen's height with the browser's toolbars showing, where dvh is
+     known: 100vh is the height with them hidden, so a tall dialog's bottom
+     edge (and its buttons) went under the toolbar on a phone. */
+  @supports (height: 100dvh) {
+    dialog {
+      min-height: min(
+        calc(100dvh - var(--_dialog-edge)),
+        var(--dialog-min-height, 300px)
+      );
+      max-height: min(
+        calc(100dvh - var(--_dialog-edge)),
+        var(--dialog-max-height, 800px)
+      );
+    }
   }
   ::backdrop {
     transition:

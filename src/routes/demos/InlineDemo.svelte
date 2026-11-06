@@ -3,6 +3,7 @@
   import Button from "$lib/controls/Button.svelte";
   import Checkbox from "$lib/controls/Checkbox.svelte";
   import Inline from "$lib/layout/Inline.svelte";
+  import Card from "$lib/Card.svelte";
   import CircleButton from "$lib/controls/CircleButton.svelte";
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import Tag from "$lib/misc/Tag.svelte";
@@ -41,6 +42,11 @@
     <code>fill</code> makes an Inline span the available row width.
     <code>stretch</code> makes it stretch across the parent cross-axis.
   </p>
+  <p>
+    <code>collapse</code> turns the row into a full-width column once its
+    container is 600px or narrower -- the layout a phone wants, with no
+    breakpoint of your own. Buttons in a collapsed row go full width too.
+  </p>
 </TextLayout>
 
 <DemoWithCode
@@ -59,6 +65,32 @@
     <Tag info>Pilot</Tag>
     <Tag warning>Needs Review</Tag>
   </Inline>
+</DemoWithCode>
+
+<DemoWithCode
+  code={`<Inline collapse>
+  <Card>...</Card>
+  <Card>...</Card>
+</Inline>
+<Inline collapse>
+  <Button>Cancel</Button>
+  <Button primary>Save</Button>
+</Inline>`}
+>
+  {#snippet header()}
+    <h3>Collapse to a column when narrow</h3>
+    <p>Drag the dashed box's corner to narrow it past 600px.</p>
+  {/snippet}
+  <div class="resizable-demo">
+    <Inline collapse>
+      <Card>{#snippet header()}<h4>Weather</h4>{/snippet}Drizzle, mostly.</Card>
+      <Card>{#snippet header()}<h4>Tides</h4>{/snippet}Low at 3:12pm.</Card>
+    </Inline>
+    <Inline collapse>
+      <Button>Cancel</Button>
+      <Button primary>Save</Button>
+    </Inline>
+  </div>
 </DemoWithCode>
 
 <DemoWithCode
@@ -165,6 +197,23 @@
 </DemoWithCode>
 
 <style>
+  /* Its own size container, so the Inline inside collapses when you drag
+     this box narrow -- whatever the window is doing. */
+  .resizable-demo {
+    container-type: inline-size;
+    resize: horizontal;
+    overflow: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 200px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding: var(--padding);
+    border: 1px dashed color-mix(in srgb, var(--fg) 20%, transparent);
+    border-radius: var(--border-radius);
+  }
   .inline-preview {
     display: flex;
     align-items: flex-start;
