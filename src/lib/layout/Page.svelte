@@ -261,7 +261,8 @@
           max(
               var(--sidebar-icon-width, 0.65rem),
               var(--sidebar-icon-height, 1rem),
-              var(--icon-size, 32px)
+              var(--icon-size, 32px),
+      var(--_touch-target, 0px)
             ) + var(--gap, 8px)
         )
       )
@@ -363,8 +364,14 @@
       position: static;
     }
     .hasSidebar.sheet-header > .side-by-side > .aside {
+      /* Centred in the header's own row, below any safe-area strip (see
+         the end of this file) -- the measured height includes that strip. */
       --sidebar-sheet-button-top: calc(
-        (var(--_page-header-height, 0px) - var(--_page-sheet-button-size)) / 2
+        var(--_page-safe-top) +
+          (
+            var(--_page-header-height, 0px) - var(--_page-safe-top) -
+              var(--_page-sheet-button-size)
+          ) / 2
       );
     }
     /* It's the header's own content (a Bar, usually) that makes room, not
@@ -385,7 +392,8 @@
     /* Same size the Sidebar gives its sheet button. */
     --_page-sheet-button-size: max(
       var(--sidebar-icon-height, 1rem),
-      var(--icon-size, 32px)
+      var(--icon-size, 32px),
+      var(--_touch-target, 0px)
     );
     --_page-header-inset: var(
       --page-header-sidebar-inset,
@@ -393,9 +401,76 @@
         max(
             var(--sidebar-icon-width, 0.65rem),
             var(--sidebar-icon-height, 1rem),
-            var(--icon-size, 32px)
+            var(--icon-size, 32px),
+      var(--_touch-target, 0px)
           ) + 2 * var(--gap, 8px)
       )
     );
+  }
+  /* A finger-sized sheet button where the primary pointer is coarse (see
+     --touch-target-size in vars/layout.css). Every size that has to agree
+     with the button -- its own box, the strip reserved for it, the header
+     inset -- takes this as one more term in its max(). */
+  @media (pointer: coarse) {
+    .page {
+      --_touch-target: var(--touch-target-size, 44px);
+    }
+  }
+
+  /* The notch and the home indicator. An app that runs edge to edge
+     (viewport-fit=cover: an installed web app, most hybrid shells) is
+     handed the whole screen, status bar and home bar included, and told how
+     much of it is covered through env(safe-area-inset-*). Everywhere else
+     those are 0 and nothing below has any effect.
+
+     The header moves its content down by the top inset, and its first child
+     -- the app's Bar, usually -- paints the strip it leaves with its own
+     background (a ::before inheriting it), so the bar's colour runs up
+     behind the status bar the way a native app's does. The footer mirrors
+     it at the bottom. A page with no header or footer pads its frame
+     instead, and the sides are padded for a phone on its side. */
+  .page {
+    --_page-safe-top: env(safe-area-inset-top, 0px);
+    --_page-safe-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+    padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+  }
+  .page:not(.hasHeader) {
+    padding-block-start: var(--_page-safe-top);
+  }
+  .page:not(.hasFooter) {
+    padding-block-end: var(--_page-safe-bottom);
+  }
+  .page > header {
+    padding-block-start: var(--_page-safe-top);
+  }
+  .page > footer {
+    padding-block-end: var(--_page-safe-bottom);
+  }
+  .page > header > :global(:first-child:not(svelte-css-wrapper)),
+  .page > header > :global(svelte-css-wrapper:first-child > *),
+  .page > footer > :global(:last-child:not(svelte-css-wrapper)),
+  .page > footer > :global(svelte-css-wrapper:last-child > *) {
+    position: relative;
+  }
+  .page > header > :global(:first-child:not(svelte-css-wrapper))::before,
+  .page > header > :global(svelte-css-wrapper:first-child > *)::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 100%;
+    height: var(--_page-safe-top);
+    background: inherit;
+    pointer-events: none;
+  }
+  .page > footer > :global(:last-child:not(svelte-css-wrapper))::after,
+  .page > footer > :global(svelte-css-wrapper:last-child > *)::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: var(--_page-safe-bottom);
+    background: inherit;
+    pointer-events: none;
   }
 </style>

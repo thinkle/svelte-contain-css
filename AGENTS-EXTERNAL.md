@@ -618,6 +618,28 @@ content, and trailing actions. Use `Table` for genuinely tabular data.
 
 ---
 
+### On a phone: what adapts without you
+
+Don't write breakpoints for these; the components already do it at a
+container (or viewport) width of 600px or less, or on a touch screen:
+
+- `<Inline collapse>` stacks into a full-width column, buttons included.
+- A `GridLayout` whose items can't fit two to a row gives the one column the
+  full width. Grids of small items keep their item width.
+- Cards drop their side margin on a phone (`--card-margin-inline-small` to
+  choose one); GridLayout drops its side padding
+  (`--grid-layout-padding-small`).
+- `<Table sticky>` scrolls in its own box (at most
+  `--table-max-height-small`, 70% of the screen tall) with its header stuck
+  to the top of the box, instead of panning the whole page sideways.
+- On a touch screen (`pointer: coarse`), Button, ButtonLink, the DropdownMenu
+  trigger and the Sidebar's sheet button are at least `--touch-target-size`
+  (44px); Checkbox, RadioButton and Toggle rows at least `--touch-row-size`
+  (36px). Set either to `0` to keep desktop sizes.
+- With `viewport-fit=cover`, Page keeps its header and footer content clear
+  of the notch and home indicator, and its header bar's colour runs behind
+  the status bar. Without it, nothing changes.
+
 ## Text is HTML's job
 
 **HTML was designed for text. Use it.** Headings are `<h2>`, paragraphs are `<p>`,

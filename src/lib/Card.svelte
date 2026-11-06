@@ -282,6 +282,16 @@
     .card {
       --w: var(--_card-width, var(--card-width-small, 100%));
       --h: var(--_card-height, var(--card-height-small));
+      /* A full-width card on a phone already sits inside its container's
+         padding; another 16px each side on top of that left a card 40px in
+         from the screen edge inside a Container and a GridLayout -- 48px of
+         text width lost to gutters. A margin you set (--card-margin-inline,
+         the marginInline prop, or --card-margin) is kept;
+         --card-margin-inline-small picks one for phones. */
+      margin-inline: var(
+        --card-margin-inline-small,
+        var(--card-margin-inline, var(--card-margin, 0))
+      );
     }
   }
 

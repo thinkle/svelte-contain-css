@@ -110,6 +110,135 @@ test.describe("on a phone", () => {
     const footer = await box(page, "app-footer");
     expect(footer.y + footer.height).toBeLessThanOrEqual(dvh + 1);
   });
+
+  test("a sticky table scrolls in its own box, not the page", async ({ page }) => {
+    const pane = page.locator(".page > .side-by-side > .content");
+    const sizes = await pane.evaluate((c) => ({ scroll: c.scrollWidth, width: c.clientWidth }));
+    expect(sizes.scroll).toBe(sizes.width);
+    const box = page.getByTestId("sticky-table").locator(".scrolling-table");
+    const inner = await box.evaluate((b) => ({
+      sw: b.scrollWidth, cw: b.clientWidth, sh: b.scrollHeight, ch: b.clientHeight,
+    }));
+    expect(inner.sw).toBeGreaterThan(inner.cw);
+    expect(inner.sh).toBeGreaterThan(inner.ch);
+  });
+
+  test("the sticky header stays at the top of the table's box", async ({ page }) => {
+    const box = page.getByTestId("sticky-table").locator(".scrolling-table");
+    await box.scrollIntoViewIfNeeded();
+    await box.evaluate((b) => (b.scrollTop = 400));
+    const head = page.getByTestId("sticky-table").locator(".fixed-table-head");
+    await expect
+      .poll(async () => {
+        const [h, b] = [(await head.boundingBox())!, (await box.boundingBox())!];
+        return Math.round(h.y - b.y);
+      })
+      .toBe(0);
+  });
+
+  test("a lone grid column fills the row", async ({ page }) => {
+    const grid = await box(page, "panel-grid");
+    const panel = await box(page, "panel");
+    expect(Math.round(panel.width)).toBe(Math.round(grid.width));
+  });
+
+  test("a grid of small items keeps their width", async ({ page }) => {
+    const chips = page.getByTestId("chip");
+    const first = (await chips.first().boundingBox())!;
+    expect(Math.round(first.width)).toBe(100);
+    const second = (await chips.nth(1).boundingBox())!;
+    expect(Math.round(second.y)).toBe(Math.round(first.y));
+  });
+
+  test("a card has no side margin on a phone, unless it sets one", async ({ page }) => {
+    const margin = (id: string) =>
+      page.getByTestId(id).first().evaluate((e) => getComputedStyle(e).marginLeft);
+    expect(await margin("card")).toBe("0px");
+    expect(await margin("card-margin")).toBe("12px");
+  });
+
+  test("the dropdown trigger and the sheet button are finger-sized", async ({ page }) => {
+    const trigger = page.getByTestId("more").locator("button").first();
+    expect((await trigger.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    const sheet = (await page.getByRole("button", { name: "Expand sidebar" }).boundingBox())!;
+    expect(sheet.height).toBeGreaterThanOrEqual(44);
+    expect(sheet.width).toBeGreaterThanOrEqual(44);
+  });
+
+  test("checkbox, radio and toggle rows are at least 36px", async ({ page }) => {
+    const heights = await page.evaluate(() =>
+      [...document.querySelectorAll(".checkbox-item, label.radio-item:not(.invisible), .toggle")]
+        .map((e) => e.getBoundingClientRect().height),
+    );
+    expect(heights.length).toBeGreaterThan(3);
+    for (const h of heights) expect(h).toBeGreaterThanOrEqual(36);
+  });
+});
+
+test.describe("on an edge-to-edge phone (viewport-fit=cover)", () => {
+  test.use({
+    viewport: phone.viewport,
+    isMobile: true,
+    hasTouch: true,
+    deviceScaleFactor: 1,
+  });
+
+  const TOP = 47;
+  const BOTTOM = 34;
+
+  test.beforeEach(async ({ page, context }) => {
+    const cdp = await context.newCDPSession(page);
+    await cdp.send("Emulation.setSafeAreaInsetsOverride", {
+      insets: { top: TOP, bottom: BOTTOM, left: 0, right: 0 },
+    });
+    await page.goto(URL);
+    await page.waitForLoadState("networkidle");
+    await page.evaluate(() => {
+      document.querySelector('meta[name="viewport"]')!.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, viewport-fit=cover",
+      );
+    });
+  });
+
+  test("the header bar's content clears the notch, its colour runs behind it", async ({ page }) => {
+    const bar = await box(page, "app-bar");
+    expect(Math.round(bar.y)).toBe(TOP);
+    const strip = await page.getByTestId("app-bar").evaluate((el) => {
+      const before = getComputedStyle(el, "::before");
+      return { bg: before.backgroundColor, h: before.height, own: getComputedStyle(el).backgroundColor };
+    });
+    expect(strip.h).toBe(`${TOP}px`);
+    expect(strip.bg).toBe(strip.own);
+  });
+
+  test("the footer's content clears the home indicator", async ({ page }) => {
+    const footer = await box(page, "app-footer");
+    const vh = await page.evaluate(() => innerHeight);
+    expect(Math.round(footer.y + footer.height)).toBeLessThanOrEqual(vh - BOTTOM);
+  });
+
+  test("the sheet button sits in the header row, below the notch", async ({ page }) => {
+    const sheet = (await page.getByRole("button", { name: "Expand sidebar" }).boundingBox())!;
+    expect(sheet.y).toBeGreaterThanOrEqual(TOP);
+  });
+});
+
+test.describe("on an ordinary phone (no safe-area insets)", () => {
+  test.use({ viewport: phone.viewport, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+
+  test("Page adds no padding of its own", async ({ page }) => {
+    await page.goto(URL);
+    await page.waitForLoadState("networkidle");
+    const pads = await page.evaluate(() => {
+      const p = document.querySelector(".page")!;
+      const h = p.querySelector(":scope > header")!;
+      const f = p.querySelector(":scope > footer")!;
+      return [getComputedStyle(p).padding, getComputedStyle(h).paddingTop, getComputedStyle(f).paddingBottom];
+    });
+    expect(pads).toEqual(["0px", "0px", "0px"]);
+    expect(Math.round((await box(page, "app-bar")).y)).toBe(0);
+  });
 });
 
 test.describe("on a desktop", () => {
@@ -129,6 +258,21 @@ test.describe("on a desktop", () => {
 
   test("buttons keep their desktop height under a mouse", async ({ page }) => {
     expect((await box(page, "cancel")).height).toBeLessThan(44);
+  });
+
+  test("touch-only sizes stay off under a mouse", async ({ page }) => {
+    const trigger = page.getByTestId("more").locator("button").first();
+    expect((await trigger.boundingBox())!.height).toBeLessThan(44);
+    const row = (await page.locator(".checkbox-item").first().boundingBox())!;
+    expect(row.height).toBeLessThan(36);
+  });
+
+  test("a sticky table on a wide screen does not get a scroll box", async ({ page }) => {
+    const overflow = await page
+      .getByTestId("sticky-table")
+      .locator(".scrolling-table")
+      .evaluate((b) => getComputedStyle(b).overflowX);
+    expect(overflow).toBe("visible");
   });
 
   test("a wide dialog is capped at --dialog-max-width, not the viewport", async ({ page }) => {

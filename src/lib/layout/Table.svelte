@@ -562,6 +562,37 @@
     border: 0;
   }
 
+  /* Small tier (see $small-max): a sticky table gets a scroll box of its own.
+     Wider than a phone, a sticky table had nowhere to scroll but the page --
+     it can't use .table-scroll, because a scroll box becomes the sticky
+     header's scroll container -- so the whole content pane, toolbar and
+     heading included, panned sideways with it. Here that trade is the right
+     one: the table scrolls both ways inside a box at most
+     --table-max-height-small tall, and the header sticks to the top of the
+     box instead of the page. The page above and below stays put. */
+  @include when-small {
+    .scrolling-table,
+    .table-container {
+      overflow: auto;
+      max-height: var(--table-max-height-small, 70vh);
+      scrollbar-width: thin;
+    }
+    @supports (height: 100dvh) {
+      .scrolling-table,
+      .table-container {
+        max-height: var(--table-max-height-small, 70dvh);
+      }
+    }
+    /* The header is at the top of its own box now: no inset, and no veil,
+       which only exists to mask page content scrolling past above it. */
+    .fixed-table-head {
+      top: 0;
+    }
+    .fixed-table-head::before,
+    .veil {
+      display: none;
+    }
+  }
   /* Interactive affordances: target rows/cells with tabindex for keyboard accessibility */
   table :global(tr[tabindex]) {
     @include clickable-cursor();

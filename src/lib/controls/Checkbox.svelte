@@ -262,4 +262,15 @@
       width: var-with-fallbacks(--size, checkbox, toggle, font, 1em);
     }
   }
+  /* Rows of options are easier to hit on a touch screen when each is a little
+     taller. --touch-row-size (36px), not the full --touch-target-size: a
+     list of options at 44px a row spreads out more than it helps, and
+     36px clears WCAG's 24px minimum with room to spare. The label is the
+     whole hit area, so it is the label that grows; it already centres its
+     content. 0 turns it off. */
+  @media (pointer: coarse) {
+    label {
+      min-height: var(--touch-row-size, 36px);
+    }
+  }
 </style>

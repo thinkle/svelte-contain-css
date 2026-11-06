@@ -192,9 +192,40 @@
       );
     }
     .grid-layout {
-      gap: var(
+      --_grid-gap: var(
         --grid-layout-gap-small,
-        var-with-fallbacks(--gap, grid-layout, 8px)
+        #{var-with-fallbacks(--gap, grid-layout, 8px)}
+      );
+      gap: var(--_grid-gap);
+      /* The grid's own side padding goes in the small tier: on a phone it
+         stacks on its container's padding (and Card's margin) and the run
+         ends up well inside the screen. Block padding stays. A padding you
+         set is kept; --grid-layout-padding-small picks one for this tier. */
+      padding: var(
+        --grid-layout-padding-small,
+        var(--grid-layout-padding, var(--padding, 4px) 0)
+      );
+    }
+    /* When only one track fits, it takes the whole row. A 250px item in a
+       358px phone column got one 250px track, centred, with 54px of nothing
+       either side -- a form panel squeezed into two thirds of the screen.
+       The clamp is a switch: when two items and a gap don't fit
+       (2W + gap > 100%) the middle term is huge and the track is 100%;
+       when they do, it's negative and the track stays W. So multi-column
+       grids keep their item width exactly; only the lone column fills.
+       Tile grids keep their own sizing: a tile is a fixed shape. */
+    .grid-layout:not(.tile-grid) {
+      --_grid-item: #{var-with-fallbacks(--item-width, grid-layout, 250px)};
+      grid-template-columns: repeat(
+        auto-fit,
+        min(
+          100%,
+          clamp(
+            var(--_grid-item),
+            (2 * var(--_grid-item) + var(--_grid-gap) - 100%) * 9999,
+            100%
+          )
+        )
       );
     }
   }

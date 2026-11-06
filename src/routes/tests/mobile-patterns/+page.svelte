@@ -17,6 +17,17 @@
   import RadioButton from "$lib/controls/RadioButton.svelte";
   import FormItem from "$lib/layout/FormItem.svelte";
   import Dialog from "$lib/overlays/Dialog.svelte";
+  import Toggle from "$lib/controls/Toggle.svelte";
+  import DropdownMenu from "$lib/dropdowns/DropdownMenu.svelte";
+  import GridLayout from "$lib/layout/GridLayout.svelte";
+  import Container from "$lib/layout/Container.svelte";
+  import Table from "$lib/layout/Table.svelte";
+
+  const columns = ["Entry", "Curator", "Family", "Priority", "Status", "Due"];
+  const rows = Array.from({ length: 30 }, (_, i) => [
+    `Entry number ${i + 1}`, "BX", "Boxes", "P1", "In review", "Tomorrow",
+  ]);
+  let sync = $state(true);
 
   let dialogOpen = $state(false);
   let wideOpen = $state(false);
@@ -88,6 +99,39 @@
     <Checkbox bind:checked={agree} data-testid="agree">Share with my team</Checkbox>
     <RadioButton bind:group={plan} value="monthly" data-testid="plan-monthly">Monthly</RadioButton>
     <RadioButton bind:group={plan} value="yearly">Yearly</RadioButton>
+    <Toggle bind:checked={sync} data-testid="sync">Sync over cellular</Toggle>
+
+    <DropdownMenu data-testid="more">
+      {#snippet label()}More{/snippet}
+      <li><Button>Duplicate</Button></li>
+    </DropdownMenu>
+
+    <!-- A panel in a plain grid (250px items) and one in a grid of small
+         items, side by side on a desktop. -->
+    <GridLayout data-testid="panel-grid">
+      <Container border data-testid="panel"><p>Filters</p></Container>
+    </GridLayout>
+    <GridLayout style="--grid-layout-item-width: 100px" data-testid="chip-grid">
+      {#each [1, 2, 3] as n}<div class="panel" data-testid="chip">Chip {n}</div>{/each}
+    </GridLayout>
+    <Card marginInline="12px" data-testid="card-margin">
+      <p>A card with a margin of its own.</p>
+    </Card>
+
+    <div data-testid="sticky-table">
+      <Table sticky>
+        {#snippet thead()}
+          <thead><tr>{#each columns as c}<th>{c}</th>{/each}</tr></thead>
+        {/snippet}
+        {#snippet tbody()}
+          <tbody>
+            {#each rows as row}
+              <tr>{#each row as cell}<td>{cell}</td>{/each}</tr>
+            {/each}
+          </tbody>
+        {/snippet}
+      </Table>
+    </div>
   </Stack>
 </Page>
 
