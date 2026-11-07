@@ -94,6 +94,7 @@
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
     @include color-props(tab-active, primary, tab, button, control);
+    @include border-props-borderless(tab-active, tab, button, control);
     @include typography-props(tab-active, tab, button, ui);
   }
 </style>

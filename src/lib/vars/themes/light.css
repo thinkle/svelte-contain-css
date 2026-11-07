@@ -84,9 +84,16 @@
   --stripe-bg: color-mix(in srgb, var(--surface-bg) 94%, var(--surface-fg) 6%);
   --active-color-mix: black;
   --stripe-fg: var(--surface-fg);
-  --tab-bg: var(--control-bg);
+  /* A quiet strip with one clear selection marker, rather than a row of
+     raised buttons. Reserve the underline on every tab to avoid a jump. */
+  --tab-bg: transparent;
   --tab-fg: var(--control-fg);
-  --tab-active-bg: #ffffff;
+  --tab-active-bg: transparent;
+  --tab-border-radius: 0;
+  --tab-border-bottom: 2px solid transparent;
+  --tab-active-border-bottom: 2px solid var(--primary-color);
+  --tab-bar-bg: transparent;
+  --tab-bar-gap: 0;
   --tab-active-fg: oklch(
     from color(
       from var(--primary-color) srgb-linear

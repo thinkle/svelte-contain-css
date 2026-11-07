@@ -1541,6 +1541,9 @@ properties to.
 ```
 
 Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
+The Light theme uses flat tabs with an underline on the selected tab.
+`--tab-active-border-bottom` customizes that marker; `--tab-border-bottom`
+sets the inactive border. Active borders fall back to the regular tab border.
 Buttons that belong on the tab row but aren't tabs go in the `actions`
 snippet, not among the tabs: they sit at the end of the row on a wide
 screen and get their own row above the tabs on a phone.
