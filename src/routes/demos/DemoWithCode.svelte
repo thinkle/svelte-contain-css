@@ -232,7 +232,8 @@
   </div>
 </Container>
 
-<style>
+<style lang="scss">
+  @use "$lib/sass/_mixins.scss" as *;
   .demo-with-code {
     box-sizing: border-box;
     display: grid;
@@ -240,11 +241,9 @@
     width: min(100%, var(--demo-with-code-width, 72rem));
     margin-inline: auto;
     padding: var(--demo-with-code-padding, var(--padding, 8px));
-    background: var(
-      --demo-with-code-bg,
-      var(--container-bg, var(--bg, rgba(255, 255, 255, 0.8)))
-    );
-    color: var(--demo-with-code-fg, var(--container-fg, var(--fg, inherit)));
+    /* This box paints its own background, so it must publish the same
+       resolved surface pair that its nested controls and tabs read. */
+    @include color-props(demo-with-code, container, background);
     border: var(
       --demo-with-code-border,
       1px solid color-mix(in srgb, var(--fg, #222) 12%, transparent)
@@ -274,6 +273,9 @@
     min-width: 0;
     display: grid;
     gap: var(--space-md);
+    /* Resolve before the panel establishes its own surface, avoiding a
+       --current-bg self-reference on the element that paints it. */
+    --_demo-panel-bg: color-mix(in srgb, var(--current-bg) 60%, white 40%);
   }
 
   .demo-input-area {
@@ -302,10 +304,7 @@
       --demo-with-code-panel-border-radius,
       var(--border-radius, 8px)
     );
-    background: var(
-      --demo-with-code-panel-bg,
-      color-mix(in srgb, var(--demo-with-code-bg, transparent) 60%, white 40%)
-    );
+    @include color-props(demo-with-code-panel, _demo-panel, surface);
     overflow: hidden;
   }
 

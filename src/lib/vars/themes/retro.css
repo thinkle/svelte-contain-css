@@ -131,6 +131,13 @@
   --dropdown-menu-shadow-distance: 0;
   --dropdown-menu-shadow-blur: 0;
   --dropdown-menu-shadow-color: transparent;
+  /* No soft shadows anywhere: the base gives dialogs and tooltips one. */
+  --dialog-shadow-distance: 0;
+  --dialog-shadow-blur: 0;
+  --dialog-shadow-color: transparent;
+  --tooltip-shadow-distance: 0;
+  --tooltip-shadow-blur: 0;
+  --tooltip-shadow-color: transparent;
 
   --checkbox-bg: #ffffff;
   --checkbox-fg: #000000;

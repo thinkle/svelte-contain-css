@@ -218,11 +218,13 @@
        -- see the padding it reserves below. */
     --_sidebar-expander-width: max(
       var(--sidebar-icon-width, 0.65rem),
-      var(--icon-size, 32px)
+      var(--icon-size, 32px),
+      var(--_touch-target, 0px)
     );
     --_sidebar-expander-height: max(
       var(--sidebar-icon-height, 1rem),
-      var(--icon-size, 32px)
+      var(--icon-size, 32px),
+      var(--_touch-target, 0px)
     );
     /* Where the open sheet's close button sits: just past the panel's outer
        edge, but never off the screen. */
@@ -269,7 +271,8 @@
     pointer-events: none;
     width: calc(
       var(--gap) +
-        max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px))
+        max(var(--sidebar-icon-width, 0.65rem), var(--icon-size, 32px),
+      var(--_touch-target, 0px))
     );
     flex: 0 0 auto;
 
@@ -661,5 +664,14 @@
      2.5px off centre. */
   .right button::after {
     transform: var(--mirror-sidebar-icons, scaleX(-1));
+  }
+  /* A finger-sized sheet button where the primary pointer is coarse (see
+     --touch-target-size in vars/layout.css). Every size that has to agree
+     with the button -- its own box, the strip reserved for it, the header
+     inset -- takes this as one more term in its max(). */
+  @media (pointer: coarse) {
+    .sidebar {
+      --_touch-target: var(--touch-target-size, 44px);
+    }
   }
 </style>

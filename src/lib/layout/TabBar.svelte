@@ -70,8 +70,8 @@
     --button-height="var(--tab-bar-height, 3em)"
     --bar-justify="var(--tab-bar-justify, start)"
     --bar-gap="var(--tab-bar-gap, var(--space-md))"
-    --bar-fg="var(--tab-bar-fg, var(--bar-fg))"
-    --bar-bg="var(--tab-bar-bg, var(--bar-bg))"
+    --bar-fg="var(--_tab-strip-fg)"
+    --bar-bg="var(--_tab-strip-bg)"
     --bar-align="var(--tab-bar-align, flex-end)"
     --bar-overflow="var(--tab-bar-overflow, auto hidden)"
     --bar-wrap="var(--tab-bar-wrap, nowrap)"
@@ -119,6 +119,15 @@
 
 <style lang="scss">
   @use "$lib/sass/_mixins.scss" as *;
+  .tabs {
+    /* Snapshot the host's public pair before Bar publishes its own. These
+       must inherit through the CSS wrapper: reading --current-bg on the
+       colored Bar itself would make its background depend on itself. */
+    --_tab-host-bg: var(--current-bg);
+    --_tab-host-fg: var(--current-fg);
+    --_tab-strip-bg: var(--tab-bar-bg, var(--bar-bg, var(--_tab-host-bg)));
+    --_tab-strip-fg: var(--tab-bar-fg, var(--bar-fg, var(--_tab-host-fg)));
+  }
   div > :global(.bar),
   /* The Bar is handed CSS variables, so Svelte 5 wraps it in a
      display: contents <svelte-css-wrapper> (Svelte 4 used a <div>, which is
@@ -201,6 +210,6 @@
   .sticky {
     position: sticky;
     top: calc(-1 * var-with-fallbacks(--padding, surface, block, 8px));
-    background-color: var-with-fallbacks(--bg, tab-bar, white);
+    background-color: var(--tab-bar-bg, var(--_tab-host-bg));
   }
 </style>

@@ -26,8 +26,8 @@
   /* Secondary is an accent, like primary: <Button secondary>, <Text
      secondary>, a table's header rule. Quiet UI chrome -- a plain Button, a
      Tag, an inactive tab -- is the `control` family below, not this. */
-  --secondary-color: var(--material-color-pink-700);
-  --secondary-bg: var(--secondary-color);
+  --secondary-color: var(--material-color-blue-grey-600);
+  --secondary-bg: var(--material-color-blue-grey-50);
   --secondary-fg: oklch(
     from var(--secondary-bg)
       calc(0.98 * clamp(0, (0.58 - l) * 1000, 1) + (1 - clamp(0, (0.58 - l) * 1000, 1)) * clamp(0.15, l - 0.5, 0.32))

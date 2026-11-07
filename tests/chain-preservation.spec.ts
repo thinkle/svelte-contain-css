@@ -5,6 +5,9 @@ const url = "/svelte-contain-css/tests/chain-preservation";
 for (const id of ["button", "link", "circle", "tag", "tab"]) {
   test(`${id} text tones follow the final local surface through variant changes`, async ({ page }) => {
     await page.goto(url);
+    // Compare final pairs, not a painted color halfway through a transition.
+    // The separate transition test below still checks the normal timings.
+    await page.addStyleTag({ content: "#tones * { transition: none !important; }" });
     for (const active of [true, false, true]) {
       if (active) await expect(page.getByTestId(id)).toHaveClass(/\bprimary\b/);
       else await expect(page.getByTestId(id)).not.toHaveClass(/\bprimary\b/);
@@ -19,7 +22,29 @@ for (const id of ["button", "link", "circle", "tag", "tab"]) {
           return Array.from(context.getImageData(0, 0, 1, 1).data).slice(0, 3);
         });
       });
-      const expected = active ? [[200, 100, 100], [110, 115, 120]] : [[105, 5, 5], [125, 125, 125]];
+      // A selected tab now joins its local surface rather than becoming a
+      // primary-colored Button. Its nested Text must mix from that actual
+      // pair in either state; the other controls retain their role colors.
+      const expected = id === "tab"
+        ? await page.getByTestId(id).evaluate(el => {
+            const canvas = document.createElement("canvas");
+            canvas.width = canvas.height = 1;
+            const ctx = canvas.getContext("2d")!;
+            const rgb = (color: string) => {
+              ctx.clearRect(0, 0, 1, 1);
+              ctx.fillStyle = color;
+              ctx.fillRect(0, 0, 1, 1);
+              return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3);
+            };
+            const css = getComputedStyle(el);
+            const fg = rgb(css.color);
+            const bg = rgb(css.backgroundColor);
+            return [
+              fg.map((channel, i) => (channel + [200, 0, 0][i]) / 2),
+              fg.map((channel, i) => (channel + bg[i]) / 2),
+            ];
+          })
+        : active ? [[200, 100, 100], [110, 115, 120]] : [[105, 5, 5], [125, 125, 125]];
       expect(colors).toHaveLength(2);
       colors.forEach((actual, index) => actual.forEach((channel, c) => expect(Math.abs(channel - expected[index][c]), JSON.stringify({ id, active, colors, expected })).toBeLessThanOrEqual(1)));
       await page.getByTestId("toggle").click();

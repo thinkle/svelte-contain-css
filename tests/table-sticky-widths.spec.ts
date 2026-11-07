@@ -22,7 +22,7 @@ const PATH = "/svelte-contain-css/tests/table-sticky-widths";
 // table is a plain auto-layout table that sizes itself.
 async function colWidths(section: Locator): Promise<number[]> {
   return section
-    .locator(".scrolling-table > table.fixed-table-head > colgroup > col")
+    .locator(".scrolling-table table.fixed-table-head > colgroup > col")
     .evaluateAll((cols) =>
       cols.map((c) => parseFloat(getComputedStyle(c).width)),
     );
@@ -31,9 +31,9 @@ async function colWidths(section: Locator): Promise<number[]> {
 // Real body cells only: the body table also carries the collapsed header copy
 // and the zero-height ruler row, neither of which is what we are checking.
 const BODY_CELLS =
-  ".scrolling-table > table.scrolling-table-body > tbody:not(.column-ruler) > tr:first-child > td";
+  ".scrolling-table table.scrolling-table-body > tbody:not(.column-ruler) > tr:first-child > td";
 const HEAD_CELLS =
-  ".scrolling-table > table.fixed-table-head > thead > tr:last-child > th";
+  ".scrolling-table table.fixed-table-head > thead > tr:last-child > th";
 
 async function cellWidths(section: Locator, selector: string) {
   return section
@@ -54,7 +54,7 @@ test.describe("Sticky table column widths", () => {
       const section = page.getByTestId(name);
       const width = (sel: string) =>
         section
-          .locator(`.scrolling-table > table.${sel}`)
+          .locator(`.scrolling-table table.${sel}`)
           .evaluate((el) => el.getBoundingClientRect().width);
 
       const head = await width("fixed-table-head");
@@ -82,11 +82,23 @@ test.describe("Sticky table column widths", () => {
      The old code measured a `position: fixed` clone, whose containing block is
      the viewport, so it sized these tables for 1280px and ignored the 600px
      frame entirely -- the wide table came out 1229px where the browser wants
-     910px, i.e. ~320px of overflow that nothing asked for. */
+     910px, i.e. ~320px of overflow that nothing asked for.
+
+     A sticky table now scrolls in its own strip, so by default a wide one
+     deliberately keeps its natural width rather than squeezing (see
+     table-scroll-freeze.spec.ts). `--table-width: auto` opts back into the
+     fit-to-container layout, and that is what the wide case checks here:
+     the measuring still reproduces the browser's own answer. */
   for (const name of ["narrow", "wide"]) {
     test(`${name}: matches a plain table in the same container`, async ({
       page,
     }) => {
+      await page
+        .getByTestId(name)
+        .evaluate((el) =>
+          (el as HTMLElement).style.setProperty("--table-width", "auto"),
+        );
+      await page.waitForTimeout(100);
       const sticky = await colWidths(page.getByTestId(name));
       const reference = await page
         .getByTestId(`${name}-reference`)
@@ -113,17 +125,21 @@ test.describe("Sticky table column widths", () => {
     expect(total).toBeLessThanOrEqual(available);
   });
 
-  test("a table too wide for its container is still allowed to overflow", async ({
+  test("a table too wide for its container overflows into its own strip", async ({
     page,
   }) => {
     const section = page.getByTestId("wide");
-    const available = await section.evaluate((el) => el.clientWidth);
-    const scrollWidth = await section.evaluate((el) => el.scrollWidth);
+    const strip = section.locator(".table-body-strip");
+    const available = await strip.evaluate((el) => el.clientWidth);
+    const scrollWidth = await strip.evaluate((el) => el.scrollWidth);
 
     // Measuring in normal flow means "lay out like the browser would", which
     // includes overflowing when the content genuinely cannot be squeezed. It
-    // must not silently crush columns to fit.
+    // must not silently crush columns to fit -- but the overflow is the
+    // table's own strip's to scroll, not the surrounding frame's.
     expect(scrollWidth).toBeGreaterThan(available);
+    const frame = await section.evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(frame).toBeLessThanOrEqual(1);
   });
 
   test("re-syncs when the container resizes", async ({ page }) => {
@@ -133,9 +149,18 @@ test.describe("Sticky table column widths", () => {
     const section = page.getByTestId("wide");
     const width = () =>
       section
-        .locator(".scrolling-table > table.fixed-table-head")
+        .locator(".scrolling-table table.fixed-table-head")
         .evaluate((el) => (el as HTMLElement).style.width);
 
+    // At its default natural width a wide table ignores its container, so
+    // opt into the fit-to-container layout, where the container is the
+    // thing that decides the columns.
+    await section.evaluate((el) =>
+      (el as HTMLElement).style.setProperty("--table-width", "auto"),
+    );
+    await expect
+      .poll(async () => parseFloat(await width()))
+      .toBeLessThan(1100);
     const before = await width();
     await section.evaluate((el) => {
       (el as HTMLElement).style.width = "1100px";
@@ -156,7 +181,7 @@ test.describe("Sticky table column widths", () => {
     const bodyCells = () => cellWidths(section, BODY_CELLS);
     const tableWidth = () =>
       section
-        .locator(".scrolling-table > table.scrolling-table-body")
+        .locator(".scrolling-table table.scrolling-table-body")
         .evaluate((el) => el.getBoundingClientRect().width);
 
     const before = await headCells();

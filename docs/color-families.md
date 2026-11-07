@@ -39,7 +39,7 @@ Theming page has a live editor for all of this.
 | Tier              | Pair                                      | Components that compile it          |
 | ----------------- | ----------------------------------------- | ----------------------------------- |
 | `background`      | `--background-bg/-fg`, else `--bg`/`--fg` | the page; a Page's frame            |
-| `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, a Page's content, Hero, DataList, Accordion, TabBar |
+| `surface`         | `--surface-bg/-fg`                        | Container, Bar, Table, Form, Fieldset, a Page's content, Hero, DataList, Accordion |
 | `surface-raised`  | `--surface-raised-bg/-fg`                 | Card, Tile                          |
 | `surface-sunken`  | `--surface-sunken-bg/-fg`                 | Sidebar, a Card's header and footer |
 | `surface-overlay` | `--surface-overlay-bg/-fg` (steps off raised) | DropdownMenu, Dialog            |
@@ -49,7 +49,7 @@ Theming page has a live editor for all of this.
 plus any your app defines with a `--<role>-bg` / `--<role>-fg` pair.
 
 **`control`.** Quiet UI chrome: a plain Button, ButtonLink, CircleButton, an
-inactive TabItem, a Tag, an Accordion summary, a Progress track. This used
+a Tag, an Accordion summary, a Progress track. This used
 to fall through to `secondary`, which made `secondary` do two jobs. It is
 now its own pair (`--control-bg/-fg`), defaulting to a step off the surface
 toward its foreground, and `secondary` is an accent like `primary`.
@@ -59,6 +59,15 @@ belongs to whatever holds it rather than being a surface of its own. A
 MenuList is `ground`: in a Sidebar it is the sidebar's sunken tier, on a Card
 the card, and inside a DropdownMenu the menu's overlay. `--menu-bg` still
 gives one a background of its own (and so takes it out of any family).
+
+Tabs belong to their containing surface too. TabBar captures the public
+`--current-bg/-fg` on its outer wrapper before its internal Bar publishes a
+new pair, so the strip matches its host rather than starting a new `surface`
+tier. TabItem uses `ground`: the selected tab joins that strip, while an
+inactive tab mixes its local pair by `--tab-recess-amount` (6%). Light and Dark
+leave tab colors unset; explicit theme `--tab-*-bg/-fg` values still win.
+The optional `vars/underlined-tabs.css` preset changes the treatment without
+changing how local surface colors are resolved.
 
 **`field`.** Text fields: Input, Select, TextArea, and native text inputs and
 textareas under a Form's `globalInputStyles` (not ranges, checkboxes, radios

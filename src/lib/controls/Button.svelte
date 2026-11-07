@@ -137,4 +137,15 @@
     line-height: 1;
   }
 
+  /* A finger needs a bigger target than a cursor: 44px is the minimum both
+     Apple's and the WCAG AAA guidance give for a touch target, and a 34px
+     button is easy to miss on a phone. Only where the primary pointer is
+     coarse, so a dense desktop toolbar keeps its size. A height you chose
+     (--button-height, or the height prop) is kept; --touch-target-size
+     moves the minimum for everything, and 0 turns it off. */
+  @media (pointer: coarse) {
+    button {
+      min-height: var(--button-height, var(--touch-target-size, 44px));
+    }
+  }
 </style>

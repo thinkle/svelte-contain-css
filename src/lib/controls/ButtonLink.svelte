@@ -142,4 +142,20 @@
   a.info {
     @include color-props(info, a, control);
   }
+  /* A finger needs a bigger target than a cursor: 44px is the minimum both
+     Apple's and the WCAG AAA guidance give for a touch target, and a 34px
+     button is easy to miss on a phone. Only where the primary pointer is
+     coarse, so a dense desktop toolbar keeps its size. A height you chose
+     (--button-height, or the height prop) is kept; --touch-target-size
+     moves the minimum for everything, and 0 turns it off. */
+  @media (pointer: coarse) {
+    a[role="button"] {
+      min-height: var(--button-height, var(--touch-target-size, 44px));
+      /* An inline-block puts its text at the top of the taller box; a
+         <button> centres it on its own. */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 </style>

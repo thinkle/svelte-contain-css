@@ -37,7 +37,8 @@ body {
     max(
       var(--sidebar-icon-width, 0.65rem),
       var(--sidebar-icon-height, 1rem),
-      var(--icon-size, 32px)
+      var(--icon-size, 32px),
+      var(--_touch-target, 0px)
     ) + var(--gap, 8px)
   );
   --border-radius: 8px;
@@ -45,6 +46,15 @@ body {
   --border-width: 1px;
   /* Simple icon sizes and such */
   --icon-size: 32px;
+  /* Where the primary pointer is a finger (pointer: coarse): the least
+     height of a Button, ButtonLink or DropdownMenu trigger, and the least
+     size of the Sidebar's sheet button. 0 keeps them at their desktop
+     size. */
+  --touch-target-size: 44px;
+  /* The least height of a Checkbox, RadioButton or Toggle row on a touch
+     screen: less than a button's, so option lists stay compact. 0 turns it
+     off. */
+  --touch-row-size: 36px;
   /* Cards */
   --card-width: 420px;
   /* --card-width-small is deliberately not set here: Card's own default
@@ -65,4 +75,14 @@ body {
 
 :root {
   --sidebar-width: 256px;
+}
+
+/* Where the primary pointer is a finger, the Sidebar's sheet button (and the
+   room Page makes for it) is at least a touch target tall and wide. Declared
+   again on .page and .sidebar themselves, so a --touch-target-size set on
+   either reaches the sizes computed there. */
+@media (pointer: coarse) {
+  :root {
+    --_touch-target: var(--touch-target-size, 44px);
+  }
 }

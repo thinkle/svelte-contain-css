@@ -498,4 +498,11 @@
     padding: 0;
     border: none;
   }
+  /* The trigger is a button to a finger as much as a Button is, so it takes
+     the same touch-screen minimum (see Button). */
+  @media (pointer: coarse) {
+    button {
+      min-height: var(--button-height, var(--touch-target-size, 44px));
+    }
+  }
 </style>

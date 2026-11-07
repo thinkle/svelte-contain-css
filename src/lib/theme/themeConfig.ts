@@ -11,6 +11,7 @@ import dark from "$lib/vars/themes/dark.css?raw";
 import material from "$lib/vars/themes/material.css?raw";
 import retro from "$lib/vars/themes/retro.css?raw";
 import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
+import quiet from "$lib/vars/themes/quiet.css?raw";
 import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
 import boxy from "$lib/vars/boxy.css?raw";
 import softCorners from "$lib/vars/soft-corners.css?raw";
@@ -22,6 +23,7 @@ import editorialHeadings from "$lib/vars/editorial-headings.css?raw";
 import expressiveHeadings from "$lib/vars/expressive-headings.css?raw";
 import fancyParagraphs from "$lib/vars/fancy-paragraphs.css?raw";
 import underlineFields from "$lib/vars/underline-fields.css?raw";
+import underlinedTabs from "$lib/vars/underlined-tabs.css?raw";
 import { combinedThemeEntries } from "./combinedThemes";
 
 // lightordark.css uses @import url() which won't resolve when injected at
@@ -33,7 +35,7 @@ export type ThemeEntry = { name: string; css: string; file: string; cssWithoutHe
 /* An add-on also says, in a line, what it changes, and which sample on the
    Themes page shows it. Add-ons in the same group are alternatives (soft or
    sharp corners): the Themes page offers them as one choice, with Default. */
-export type AddOnSample = "type" | "corners" | "depth" | "paragraph" | "fields";
+export type AddOnSample = "type" | "corners" | "depth" | "paragraph" | "fields" | "tabs";
 export type AddOnGroup = "corners" | "depth";
 export type AddOnEntry = ThemeEntry & {
   description: string;
@@ -51,6 +53,8 @@ export const fullThemes: ThemeEntry[] = [
   { name: "Material", css: material, file: "themes/material.css" },
   { name: "Retro", css: retro, file: "themes/retro.css" },
   ...combinedThemeEntries,
+  /* Appended, not inserted: the picker saves its choice as an index. */
+  { name: "Quiet", css: quiet, file: "themes/quiet.css" },
 ];
 
 export const colorThemes: ThemeEntry[] = [
@@ -87,6 +91,8 @@ export const extraThemes: AddOnEntry[] = [
     description: "A paragraph's first line in small caps, with a bold, tinted first letter." },
   { name: "Underline Fields", css: underlineFields, file: "underline-fields.css", sample: "fields",
     description: "Fields drop their box for a single rule along the bottom." },
+  { name: "Underlined Tabs", css: underlinedTabs, file: "underlined-tabs.css", sample: "tabs",
+    description: "Tabs blend into their surface, with an underline marking the selected tab." },
 ];
 
 // Heading treatments are alternatives, rather than cumulative add-ons.

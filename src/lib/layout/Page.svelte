@@ -101,6 +101,54 @@
   let headerHeight = $state(0);
   let pageElement: HTMLElement;
 
+  /* Only borrow an unused pseudo-element when a real safe-area strip is
+     present. Never replace a consumer's decoration or sticky positioning,
+     including on ordinary desktop pages where both insets are zero. */
+  function safeAreaDecoration(node: HTMLElement, edge: "start" | "end") {
+    let target: HTMLElement | null = null;
+    const attribute = `data-contain-page-safe-${edge}`;
+    const relativeAttribute = `data-contain-page-safe-${edge}-relative`;
+    const clear = () => {
+      target?.removeAttribute(attribute);
+      target?.removeAttribute(relativeAttribute);
+      target = null;
+    };
+    const update = () => {
+      clear();
+      const padding = edge === "start" ? "paddingTop" : "paddingBottom";
+      if (parseFloat(getComputedStyle(node)[padding]) <= 0) return;
+      let child = edge === "start" ? node.firstElementChild : node.lastElementChild;
+      while (child && getComputedStyle(child).display === "contents") {
+        child = edge === "start" ? child.firstElementChild : child.lastElementChild;
+      }
+      if (!(child instanceof HTMLElement)) return;
+      const pseudo = edge === "start" ? "::before" : "::after";
+      const content = getComputedStyle(child, pseudo).content;
+      if (content !== "none" && content !== "normal") return;
+      target = child;
+      if (getComputedStyle(target).position === "static") {
+        target.setAttribute(relativeAttribute, "");
+      }
+      target.setAttribute(attribute, "");
+    };
+    const observer = new MutationObserver(update);
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+    window.addEventListener("resize", update);
+    update();
+    return {
+      destroy() {
+        observer.disconnect();
+        window.removeEventListener("resize", update);
+        clear();
+      },
+    };
+  }
+
   function handleScroll() {
     if (sticky) {
       // Set up listener to disable scrolling until we're
@@ -157,7 +205,7 @@
   bind:this={pageElement}
   {...el}
 >
-  <header bind:clientHeight={headerHeight}>
+  <header bind:clientHeight={headerHeight} use:safeAreaDecoration={"start"}>
     {#if hasHeader}{@render header?.()}{/if}
   </header>
   <div class="side-by-side">
@@ -168,7 +216,7 @@
       {@render children?.()}
     </div>
   </div>
-  <footer>
+  <footer use:safeAreaDecoration={"end"}>
     {#if hasFooter}{@render footer?.()}{/if}
   </footer>
 </section>
@@ -212,11 +260,29 @@
     border: var(--page-border);
     height: var(--page-height, 100vh);
     width: var(--page-width, 100%);
+    /* A closed right-hand sidebar sheet waits just past the right edge
+       (translateX(100%)), and anything past the right edge widens the
+       document: every phone page with a right sidebar scrolled sideways by
+       a sheet's width, and a mobile browser zoomed the whole layout out to
+       fit it -- a modal opened half off the screen. Left-hand sheets never
+       showed it because overflow to the left is not scrollable. `clip`,
+       not `hidden`: it creates no scroll container, so nothing sticky
+       inside changes what it sticks to, and the vertical axis is left
+       alone. */
+    overflow-x: clip;
     container-type: size;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: stretch;
+  }
+  /* 100vh on a phone is the viewport with the browser's toolbars hidden, so
+     a 100vh page is taller than the screen whenever they show -- and the
+     footer sits underneath them. dvh tracks the toolbars. */
+  @supports (height: 100dvh) {
+    .page {
+      height: var(--page-height, 100dvh);
+    }
   }
   .page {
     /* Containing block for the compact sidebar, which spans the whole page
@@ -243,7 +309,8 @@
           max(
               var(--sidebar-icon-width, 0.65rem),
               var(--sidebar-icon-height, 1rem),
-              var(--icon-size, 32px)
+              var(--icon-size, 32px),
+      var(--_touch-target, 0px)
             ) + var(--gap, 8px)
         )
       )
@@ -345,8 +412,14 @@
       position: static;
     }
     .hasSidebar.sheet-header > .side-by-side > .aside {
+      /* Centred in the header's own row, below any safe-area strip (see
+         the end of this file) -- the measured height includes that strip. */
       --sidebar-sheet-button-top: calc(
-        (var(--_page-header-height, 0px) - var(--_page-sheet-button-size)) / 2
+        var(--_page-safe-top) +
+          (
+            var(--_page-header-height, 0px) - var(--_page-safe-top) -
+              var(--_page-sheet-button-size)
+          ) / 2
       );
     }
     /* It's the header's own content (a Bar, usually) that makes room, not
@@ -367,7 +440,8 @@
     /* Same size the Sidebar gives its sheet button. */
     --_page-sheet-button-size: max(
       var(--sidebar-icon-height, 1rem),
-      var(--icon-size, 32px)
+      var(--icon-size, 32px),
+      var(--_touch-target, 0px)
     );
     --_page-header-inset: var(
       --page-header-sidebar-inset,
@@ -375,9 +449,72 @@
         max(
             var(--sidebar-icon-width, 0.65rem),
             var(--sidebar-icon-height, 1rem),
-            var(--icon-size, 32px)
+            var(--icon-size, 32px),
+      var(--_touch-target, 0px)
           ) + 2 * var(--gap, 8px)
       )
     );
+  }
+  /* A finger-sized sheet button where the primary pointer is coarse (see
+     --touch-target-size in vars/layout.css). Every size that has to agree
+     with the button -- its own box, the strip reserved for it, the header
+     inset -- takes this as one more term in its max(). */
+  @media (pointer: coarse) {
+    .page {
+      --_touch-target: var(--touch-target-size, 44px);
+    }
+  }
+
+  /* The notch and the home indicator. An app that runs edge to edge
+     (viewport-fit=cover: an installed web app, most hybrid shells) is
+     handed the whole screen, status bar and home bar included, and told how
+     much of it is covered through env(safe-area-inset-*). Everywhere else
+     those are 0 and nothing below has any effect.
+
+     The header moves its content down by the top inset, and its first child
+     -- the app's Bar, usually -- paints the strip it leaves with its own
+     background (a ::before inheriting it), so the bar's colour runs up
+     behind the status bar the way a native app's does. The footer mirrors
+     it at the bottom. A page with no header or footer pads its frame
+     instead, and the sides are padded for a phone on its side. */
+  .page {
+    --_page-safe-top: env(safe-area-inset-top, 0px);
+    --_page-safe-bottom: env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+    padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
+  }
+  .page:not(.hasHeader) {
+    padding-block-start: var(--_page-safe-top);
+  }
+  .page:not(.hasFooter) {
+    padding-block-end: var(--_page-safe-bottom);
+  }
+  .page > header {
+    padding-block-start: var(--_page-safe-top);
+  }
+  .page > footer {
+    padding-block-end: var(--_page-safe-bottom);
+  }
+  .page :global([data-contain-page-safe-start-relative]),
+  .page :global([data-contain-page-safe-end-relative]) {
+    position: relative;
+  }
+  .page :global([data-contain-page-safe-start])::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 100%;
+    height: var(--_page-safe-top);
+    background: inherit;
+    pointer-events: none;
+  }
+  .page :global([data-contain-page-safe-end])::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: var(--_page-safe-bottom);
+    background: inherit;
+    pointer-events: none;
   }
 </style>

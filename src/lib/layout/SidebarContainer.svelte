@@ -94,6 +94,11 @@
 
     /* Deliberately NOT `overflow: hidden`: that is what makes an overlay
        sheet vanish inside a <Container>. */
+    /* But a closed right-hand sheet waits past the right edge, and would
+       widen the page by its width (see Page). `clip` on the x axis only
+       trims that: an open sheet lies inside the box, and no scroll
+       container is created. */
+    overflow-x: clip;
   }
 
   .sidebar-container.right {

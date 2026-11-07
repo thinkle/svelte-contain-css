@@ -118,6 +118,21 @@ test("Flat Surfaces drops shadows for a hairline edge", async ({ page }) => {
   await expect(sample).toHaveCSS("border-top-width", "1px");
 });
 
+test("Underlined Tabs is optional and travels in the full-size preview link", async ({ page }) => {
+  const option = page.getByRole("checkbox", { name: "Underlined Tabs", exact: true });
+  const sample = page.locator(".addon", { hasText: "Underlined Tabs" }).locator(".tab.active > button");
+  await expect(option).not.toBeChecked();
+  await expect(sample).not.toHaveCSS("border-top-left-radius", "0px");
+  await option.locator("..").click();
+  await expect(sample).toHaveCSS("border-top-left-radius", "0px");
+  await expect(sample).toHaveCSS("border-bottom-width", "2px");
+  const link = page.getByRole("link", { name: /Open The Tidy Shelf.*full size/ });
+  await expect(link).toHaveAttribute("href", /extra=underlined-tabs\.css/);
+  await option.locator("..").click();
+  await expect(sample).not.toHaveCSS("border-top-left-radius", "0px");
+  await expect(link).not.toHaveAttribute("href", /extra=underlined-tabs\.css/);
+});
+
 test("accent picker recolors primary and secondary, by theme mode, and travels in the link", async ({ page }) => {
   const root = (name: string) =>
     page.locator("html").evaluate((el, n) => {

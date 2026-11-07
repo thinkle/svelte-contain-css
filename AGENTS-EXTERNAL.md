@@ -495,6 +495,18 @@ below each other, these are the answer.
   bottom. If you are only putting things one under another, normal flow already
   does that.
 
+### What every theme starts from
+
+`vars/calm.css` (loaded by `defaults.css`) sets the structure themes inherit:
+buttons, cards and lists sit flat and only dialogs, menus and tooltips cast a
+shadow; a Card's header is divided by a hairline, not a tinted band; a
+Fieldset is a labelled group (pass `border` for a box); tables use hairlines;
+headings are 600 on a tighter scale; checkboxes and radios are outlined, and
+checking one does not change its label's weight. Palettes pick colors on top
+of that. A theme that wants depth sets the generic `--shadow-*` variables and
+every component gets it back (Material does). For a fully neutral look, use
+`themes/quiet.css`.
+
 ### Theme categories and fallback chains
 
 `--ui-*` is the shared interface **typography** category (labels, buttons,
@@ -618,6 +630,28 @@ content, and trailing actions. Use `Table` for genuinely tabular data.
 
 ---
 
+### On a phone: what adapts without you
+
+Don't write breakpoints for these; the components already do it at a
+container (or viewport) width of 600px or less, or on a touch screen:
+
+- `<Inline collapse>` stacks into a full-width column, buttons included.
+- A `GridLayout` whose items can't fit two to a row gives the one column the
+  full width. Grids of small items keep their item width.
+- Cards drop their side margin on a phone (`--card-margin-inline-small` to
+  choose one); GridLayout drops its side padding
+  (`--grid-layout-padding-small`).
+- `<Table sticky>` scrolls in its own box (at most
+  `--table-max-height-small`, 70% of the screen tall) with its header stuck
+  to the top of the box, instead of panning the whole page sideways.
+- On a touch screen (`pointer: coarse`), Button, ButtonLink, the DropdownMenu
+  trigger and the Sidebar's sheet button are at least `--touch-target-size`
+  (44px); Checkbox, RadioButton and Toggle rows at least `--touch-row-size`
+  (36px). Set either to `0` to keep desktop sizes.
+- With `viewport-fit=cover`, Page keeps its header and footer content clear
+  of the notch and home indicator, and its header bar's colour runs behind
+  the status bar. Without it, nothing changes.
+
 ## Text is HTML's job
 
 **HTML was designed for text. Use it.** Headings are `<h2>`, paragraphs are `<p>`,
@@ -676,8 +710,10 @@ wide column, so it is no longer squeezed down to 42rem. No prop needed:
   fills the container. `100vw` ignores the parent's padding and counts the
   scrollbar, so it scrolls the page sideways.
 - **Wide tables scroll inside themselves.** A `Table` grows to the wide column
-  and then scrolls horizontally in its own strip; the page doesn't widen. (The
-  `sticky` variant doesn't — it needs a scrolling ancestor, so give it one.)
+  and then scrolls horizontally in its own strip; the page doesn't widen. The
+  `sticky` variant (with a `thead` snippet) does too — its header scrolls
+  sideways with the body and still sticks to the scrolling ancestor, which it
+  needs, so give it one. See [Wide sticky tables](#wide-sticky-tables).
 - **Where the rest goes.** A `<figure>`, or an `<img>` placed straight in the
   flow, is wide. An `<img>` inside a `<p>` stays at the measure. A `<pre>`
   code block keeps the measure and scrolls sideways when a line is long.
@@ -1022,6 +1058,49 @@ second header, but development builds warn because direct rows are not semantic
 table markup. This contract only applies to `<Table sticky>`; a plain `Table`
 remains a transparent styling wrapper.
 
+### Wide sticky tables
+
+A `<Table sticky>` too wide for its column scrolls sideways in its own strip
+(`.table-body-strip`); the header sits in a matching strip, kept at the same
+scroll position, so a trackpad swipe over either moves both. Vertically the
+header still sticks to the nearest scrolling ancestor (a `Page`'s content
+panel), at `--table-sticky-top`. The horizontal scrollbar is at the bottom of
+the table. In a small container or viewport (600px or less), the table also
+gets its own vertical scroll box, capped at `--table-max-height-small`
+(default `70dvh`, with a `70vh` fallback). The header sticks to the top of
+that box; horizontal synchronization and frozen columns work inside it.
+
+- **Width.** Once it can scroll, a sticky table keeps its natural width
+  (`--table-width`, default `max-content` for sticky tables) instead of
+  squeezing every column toward one word per line. Each cell is capped at
+  `--table-cell-max-width` (default `20em`) and wraps past it, so one long
+  note can't stretch its column across the screen. `--table-width: auto`
+  restores fit-to-container; `--table-cell-max-width: none` lifts the cap.
+- **Frozen columns.** `stickyColumns={n}` freezes the first `n` columns,
+  spreadsheet-style, in the header and the body. Colspans and rowspans are
+  counted; a cell spanning past the frozen block scrolls with the rest.
+  Frozen data cells paint `--table-frozen-bg` (default: the table's own
+  background, `--current-bg`) so content scrolling under them doesn't show
+  through; the block ends in the thick first-column divider.
+
+```svelte
+<Table sticky stickyColumns={1}>
+  {#snippet thead()}
+    <thead><tr><th>Student</th>{#each fields as f}<th>{f}</th>{/each}</tr></thead>
+  {/snippet}
+  {#snippet tbody()}
+    <tbody>
+      {#each students as s}
+        <tr><th>{s.name}</th>{#each fields as f}<td>{s[f]}</td>{/each}</tr>
+      {/each}
+    </tbody>
+  {/snippet}
+</Table>
+```
+
+Frozen cells are marked `data-contain-frozen` (plus `first` / `edge` on the
+outermost ones), in both tables.
+
 ---
 
 ## Semantic Variants
@@ -1209,6 +1288,16 @@ RadioButtons work similarly but only allow one selection. The `group` will be a 
 
 Always bind (`bind:checked`, `bind:group`, `bind:value`) rather than wiring
 `onchange` handlers and casting events.
+
+**Boxed options:** `boxed` outlines the whole label, so its text reads as
+part of the control, and gives the checked option the accent edge and a faint
+tint. Good for a short list of choices that each deserve a line (plans,
+shipping speeds); plain checkboxes stay better for long or dense lists.
+
+```svelte
+<RadioButton boxed value="monthly" bind:group={plan}>Monthly</RadioButton>
+<RadioButton boxed value="yearly" bind:group={plan}>Yearly, save 20%</RadioButton>
+```
 
 **Styling Checkboxes:**
 
@@ -1452,6 +1541,19 @@ properties to.
 ```
 
 Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
+By default, the strip and selected tab take the containing surface's colors;
+inactive tabs are recessed with a small mix toward that surface's foreground.
+The selected tab keeps a subtle top-and-side edge so its rounded shape remains
+visible even when its fill matches the panel. `--tab-active-border` overrides it.
+This follows a Card, a primary Bar, or a custom background as well as the page.
+`--tab-recess-amount` (default `6%`) controls that mix. Explicit `--tab-bar-bg`,
+`--tab-bg` and `--tab-active-bg` still override these defaults.
+
+For a different treatment, enable **Underlined Tabs** in the theme picker or
+import `contain-css-svelte/vars/underlined-tabs.css`. It removes the recess and
+rounded corners and marks selection with `--tab-active-border-bottom`.
+`--tab-border-bottom` sets the inactive border; active borders fall back to the
+regular tab border.
 Buttons that belong on the tab row but aren't tabs go in the `actions`
 snippet, not among the tabs: they sit at the end of the row on a wide
 screen and get their own row above the tabs on a phone.

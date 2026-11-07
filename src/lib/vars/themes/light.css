@@ -14,7 +14,11 @@
      share of chroma: near-neutral body text, livelier tints. The targets
      (luminance = L^3) are tuned so indigo gives the original palette. */
   --primary-color: var(--material-color-indigo-600);
-  --secondary-color: var(--material-color-pink-700);
+  /* Secondary is restraint, not a second accent: slate for the things that
+     tint toward it (<Text secondary>, a table's header rule), and a pale
+     neutral fill for secondary bars and buttons. */
+  --secondary-color: var(--material-color-blue-grey-600);
+  --secondary-bg: var(--material-color-blue-grey-50);
   --neutral-tint: var(--primary-color);
 
   --fg: oklch(
@@ -80,19 +84,7 @@
   --stripe-bg: color-mix(in srgb, var(--surface-bg) 94%, var(--surface-fg) 6%);
   --active-color-mix: black;
   --stripe-fg: var(--surface-fg);
-  --tab-bg: var(--control-bg);
-  --tab-fg: var(--control-fg);
-  --tab-active-bg: #ffffff;
-  --tab-active-fg: oklch(
-    from color(
-      from var(--primary-color) srgb-linear
-      calc(r * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
-      calc(g * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
-      calc(b * min(1, 0.0720 / (0.2126 * r + 0.7152 * g + 0.0722 * b)))
-    )
-    l calc(c * 1) h
-  );
-  --tab-bar-fg: var(--fg);
+  /* Tabs resolve against their containing surface in TabBar/TabItem. */
 
   /* Semantic colors for light mode */
   --warning-bg: var(--material-color-amber-400);

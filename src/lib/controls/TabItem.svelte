@@ -65,12 +65,28 @@
   @use "$lib/sass/_mixins.scss" as *;
   .tab {
     display: contents;
+    /* Recess the inactive tab from the actual strip, not the page's fixed
+       control palette. Resolve on this wrapper before Button replaces the
+       public --current-* pair with its own. */
+    --_tab-recessed-bg: color-mix(
+      in oklab,
+      var(--current-bg),
+      var(--current-fg) var(--tab-recess-amount, 6%)
+    );
+    /* Equal border space in both states keeps the label and tab width
+       steady. The selected fill joins the panel; its edge preserves the
+       rounded tab silhouette against an otherwise identical strip. */
+    --_tab-shape-border: 1px solid transparent;
+    --_tab-selected-border: 1px solid color-mix(
+      in oklab, var(--current-fg) 25%, transparent
+    );
+    --_tab-selected-border-bottom: 1px solid transparent;
   }
   .tab > :global(button),
   .tab > :global(div > button) {
-    @include color-props(tab, button, control);
+    @include color-props(tab, _tab-recessed, ground);
     @include box-props(tab, button, control);
-    @include border-props-borderless(tab, button, control);
+    @include border-props-borderless(tab, _tab-shape, button, control);
     @include typography-props(tab, button, ui);
     // Tab bar clips overflow, so the standard outer focus ring would be cut
     // off -- use the inset ring instead. See _affordances.scss.
@@ -93,7 +109,10 @@
   }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
-    @include color-props(tab-active, primary, tab, button, control);
+    /* The selected tab joins its panel's surface. Explicit theme colors
+       still win, but there is no implicit white fill or primary surface. */
+    @include color-props(tab-active, tab, ground);
+    @include border-props-borderless(tab-active, tab, _tab-selected, button, control);
     @include typography-props(tab-active, tab, button, ui);
   }
 </style>
