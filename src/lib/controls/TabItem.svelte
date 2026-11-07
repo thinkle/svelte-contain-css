@@ -65,10 +65,18 @@
   @use "$lib/sass/_mixins.scss" as *;
   .tab {
     display: contents;
+    /* Recess the inactive tab from the actual strip, not the page's fixed
+       control palette. Resolve on this wrapper before Button replaces the
+       public --current-* pair with its own. */
+    --_tab-recessed-bg: color-mix(
+      in oklab,
+      var(--current-bg),
+      var(--current-fg) var(--tab-recess-amount, 6%)
+    );
   }
   .tab > :global(button),
   .tab > :global(div > button) {
-    @include color-props(tab, button, control);
+    @include color-props(tab, _tab-recessed, ground);
     @include box-props(tab, button, control);
     @include border-props-borderless(tab, button, control);
     @include typography-props(tab, button, ui);
@@ -93,7 +101,9 @@
   }
   .tab.active > :global(button),
   .tab.active > :global(div > button) {
-    @include color-props(tab-active, primary, tab, button, control);
+    /* The selected tab joins its panel's surface. Explicit theme colors
+       still win, but there is no implicit white fill or primary surface. */
+    @include color-props(tab-active, tab, ground);
     @include border-props-borderless(tab-active, tab, button, control);
     @include typography-props(tab-active, tab, button, ui);
   }

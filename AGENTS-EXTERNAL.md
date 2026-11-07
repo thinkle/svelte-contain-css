@@ -1541,9 +1541,17 @@ properties to.
 ```
 
 Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
-The Light theme uses flat tabs with an underline on the selected tab.
-`--tab-active-border-bottom` customizes that marker; `--tab-border-bottom`
-sets the inactive border. Active borders fall back to the regular tab border.
+By default, the strip and selected tab take the containing surface's colors;
+inactive tabs are recessed with a small mix toward that surface's foreground.
+This follows a Card, a primary Bar, or a custom background as well as the page.
+`--tab-recess-amount` (default `6%`) controls that mix. Explicit `--tab-bar-bg`,
+`--tab-bg` and `--tab-active-bg` still override these defaults.
+
+For a different treatment, enable **Underlined Tabs** in the theme picker or
+import `contain-css-svelte/vars/underlined-tabs.css`. It removes the recess and
+rounded corners and marks selection with `--tab-active-border-bottom`.
+`--tab-border-bottom` sets the inactive border; active borders fall back to the
+regular tab border.
 Buttons that belong on the tab row but aren't tabs go in the `actions`
 snippet, not among the tabs: they sit at the end of the row on a wide
 screen and get their own row above the tabs on a phone.

@@ -36,12 +36,7 @@
   --slider-thumb-border: 1px solid var(--material-color-light-blue-50);
   --slider-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.32);
   --slider-thumb-size: 1rem;
-  --tab-bg: var(--material-color-blue-grey-700);
-  --tab-fg: var(--material-color-blue-grey-100);
-  --tab-active-bg: var(--material-color-blue-grey-200);
-  --tab-active-fg: var(--material-color-blue-grey-900);
-  --tab-bar-bg: var(--material-color-blue-grey-900);
-  --tab-bar-fg: var(--material-color-blue-grey-50);
+  /* Tabs use the local surface pair, including raised and custom surfaces. */
 
   /* Semantic colors for dark mode */
   --warning-bg: var(--material-color-orange-400);

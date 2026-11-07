@@ -21,6 +21,7 @@
     Card,
     Input,
     Tag,
+    TabItem,
   } from "$lib";
   import type { AddOnGroup, AddOnSample } from "$lib/theme/themeConfig";
   import { combinedThemeEntries } from "$lib/theme/combinedThemes";
@@ -251,6 +252,11 @@
     <Button primary>Button</Button>
   {:else if kind === "fields"}
     <Input placeholder="A field" />
+  {:else if kind === "tabs"}
+    <TabBar>
+      <TabItem active>Overview</TabItem>
+      <TabItem>Details</TabItem>
+    </TabBar>
   {/if}
 {/snippet}
 

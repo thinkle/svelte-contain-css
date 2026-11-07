@@ -1,0 +1,15 @@
+/* An optional tab treatment. Resolve colors at the component, against its
+   local surface; root aliases to --current-* would freeze to page colors. */
+:root {
+  --tab-bg: initial;
+  --tab-fg: initial;
+  --tab-active-bg: initial;
+  --tab-active-fg: initial;
+  --tab-recess-amount: 0%;
+  --tab-border-radius: 0;
+  --tab-border: none;
+  --tab-active-border: none;
+  --tab-border-bottom: 2px solid transparent;
+  --tab-active-border-bottom: 2px solid currentColor;
+  --tab-bar-gap: 0;
+}
