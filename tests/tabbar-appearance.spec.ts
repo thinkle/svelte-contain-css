@@ -18,7 +18,7 @@ async function rgba(el: Locator, property = "background-color") {
 for (const palette of ["light", "dark"]) {
   test(`${palette}: the strip and selected tab match the local surface; inactive tabs are recessed`, async ({ page }) => {
     await page.goto(url);
-  await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("networkidle");
     await page.getByLabel("Palette").selectOption(palette);
     for (const id of ["surface", "raised", "custom", "role"]) {
       const host = page.getByTestId(id);
@@ -30,6 +30,11 @@ for (const palette of ["light", "dark"]) {
       await expect.poll(() => rgba(active)).toEqual(await rgba(surface));
       expect(await rgba(inactive)).not.toEqual(await rgba(surface));
       expect(await rgba(active, "color")).toEqual(await rgba(surface, "color"));
+      await expect(active).toHaveCSS("border-top-width", "1px");
+      expect((await rgba(active, "border-top-color"))[3]).toBeGreaterThan(0);
+      await expect(active).toHaveCSS("border-left-width", "1px");
+      await expect(active).not.toHaveCSS("border-top-left-radius", "0px");
+      expect((await rgba(inactive, "border-top-color"))[3]).toBe(0);
       const size = await inactive.boundingBox();
       await inactive.click();
       await page.mouse.move(0, 0);
@@ -66,7 +71,7 @@ test("underlined tabs are an optional preset and switching it off restores round
   await expect.poll(() => rgba(tabs.getByRole("button", { name: "Source", exact: true }))).toEqual(await rgba(tabs.locator(".bar")));
   await page.getByLabel("Underlined Tabs", { exact: true }).uncheck();
   await expect(active).not.toHaveCSS("border-top-left-radius", "0px");
-  await expect(active).toHaveCSS("border-bottom-width", "0px");
+  await expect(active).toHaveCSS("border-bottom-width", "1px");
   // A complete theme's Button colors must not leak into tabs, including
   // the optional treatment on a consumer-defined dark surface.
   await page.getByLabel("Palette").selectOption("quiet");
@@ -93,3 +98,24 @@ test("a narrow tab strip scrolls without widening the page", async ({ page }) =>
   await expect.poll(() => bar.evaluate(el => el.scrollWidth > el.clientWidth)).toBe(true);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
 });
+
+for (const palette of ["light", "dark"]) {
+  test(`${palette}: docs demo wrappers publish their painted backgrounds to both tab bars`, async ({ page }) => {
+    await page.goto(url);
+    await page.waitForLoadState("networkidle");
+    await page.getByLabel("Palette").selectOption(palette);
+    const demo = page.getByTestId("demo-wrapper").locator(".demo-with-code");
+    const strip = demo.locator(".demo-body > .tabs .bar");
+    const panel = demo.locator(".demo-panel");
+    const innerStrip = panel.locator(".tabs .bar");
+    for (const custom of [false, true]) {
+      if (custom) {
+        await demo.evaluate(el => el.style.setProperty("--demo-with-code-bg", "rgb(32, 48, 64)"));
+      }
+      await expect.poll(() => rgba(strip)).toEqual(await rgba(demo));
+      await expect.poll(() => rgba(innerStrip)).toEqual(await rgba(panel));
+      await expect.poll(() => rgba(strip.locator(".tab.active button"))).toEqual(await rgba(demo));
+      await expect.poll(() => rgba(innerStrip.locator(".tab.active button"))).toEqual(await rgba(panel));
+    }
+  });
+}

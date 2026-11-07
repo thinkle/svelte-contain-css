@@ -1543,6 +1543,8 @@ properties to.
 Tabs that don't fit scroll sideways (pass `wrap` to let them wrap instead).
 By default, the strip and selected tab take the containing surface's colors;
 inactive tabs are recessed with a small mix toward that surface's foreground.
+The selected tab keeps a subtle top-and-side edge so its rounded shape remains
+visible even when its fill matches the panel. `--tab-active-border` overrides it.
 This follows a Card, a primary Bar, or a custom background as well as the page.
 `--tab-recess-amount` (default `6%`) controls that mix. Explicit `--tab-bar-bg`,
 `--tab-bg` and `--tab-active-bg` still override these defaults.

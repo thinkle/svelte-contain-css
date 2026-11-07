@@ -195,6 +195,8 @@
   --tab-fg: var(--quiet-gray-600);
   --tab-active-bg: transparent;
   --tab-active-fg: var(--quiet-gray-900);
+  --tab-border: none;
+  --tab-active-border: none;
   --tab-active-border-bottom: 2px solid var(--primary-color);
   --tab-bar-fg: var(--quiet-gray-900);
 

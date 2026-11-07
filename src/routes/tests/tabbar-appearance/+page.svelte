@@ -7,6 +7,7 @@
   import dark from "$lib/vars/themes/dark.css?raw";
   import quiet from "$lib/vars/themes/quiet.css?raw";
   import underlinedTabs from "$lib/vars/underlined-tabs.css?raw";
+  import DemoWithCode from "../../demos/DemoWithCode.svelte";
 
   let palette = $state("light");
   let underlined = $state(false);
@@ -43,4 +44,10 @@
   <Bar primary data-testid="role">
     <TabBar style="width: 100%" items={["Demo", "Source", "Side by Side"]} bind:active />
   </Bar>
+  <div data-testid="demo-wrapper">
+    <DemoWithCode code={'<TabBar items={["Overview", "Details"]} />'}>
+      {#snippet heading()}<h2>A real docs demo</h2>{/snippet}
+      <TabBar items={["Overview", "Details"]} active="Overview" />
+    </DemoWithCode>
+  </div>
 </Container>
