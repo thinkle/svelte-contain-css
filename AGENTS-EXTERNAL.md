@@ -710,8 +710,10 @@ wide column, so it is no longer squeezed down to 42rem. No prop needed:
   fills the container. `100vw` ignores the parent's padding and counts the
   scrollbar, so it scrolls the page sideways.
 - **Wide tables scroll inside themselves.** A `Table` grows to the wide column
-  and then scrolls horizontally in its own strip; the page doesn't widen. (The
-  `sticky` variant doesn't — it needs a scrolling ancestor, so give it one.)
+  and then scrolls horizontally in its own strip; the page doesn't widen. The
+  `sticky` variant (with a `thead` snippet) does too — its header scrolls
+  sideways with the body and still sticks to the scrolling ancestor, which it
+  needs, so give it one. See [Wide sticky tables](#wide-sticky-tables).
 - **Where the rest goes.** A `<figure>`, or an `<img>` placed straight in the
   flow, is wide. An `<img>` inside a `<p>` stays at the measure. A `<pre>`
   code block keeps the measure and scrolls sideways when a line is long.
@@ -1055,6 +1057,46 @@ tolerated in sticky mode so an accidental omission does not produce a visible
 second header, but development builds warn because direct rows are not semantic
 table markup. This contract only applies to `<Table sticky>`; a plain `Table`
 remains a transparent styling wrapper.
+
+### Wide sticky tables
+
+A `<Table sticky>` too wide for its column scrolls sideways in its own strip
+(`.table-body-strip`); the header sits in a matching strip, kept at the same
+scroll position, so a trackpad swipe over either moves both. Vertically the
+header still sticks to the nearest scrolling ancestor (a `Page`'s content
+panel), at `--table-sticky-top`. The horizontal scrollbar is at the bottom of
+the table.
+
+- **Width.** Once it can scroll, a sticky table keeps its natural width
+  (`--table-width`, default `max-content` for sticky tables) instead of
+  squeezing every column toward one word per line. Each cell is capped at
+  `--table-cell-max-width` (default `20em`) and wraps past it, so one long
+  note can't stretch its column across the screen. `--table-width: auto`
+  restores fit-to-container; `--table-cell-max-width: none` lifts the cap.
+- **Frozen columns.** `stickyColumns={n}` freezes the first `n` columns,
+  spreadsheet-style, in the header and the body. Colspans and rowspans are
+  counted; a cell spanning past the frozen block scrolls with the rest.
+  Frozen data cells paint `--table-frozen-bg` (default: the table's own
+  background, `--current-bg`) so content scrolling under them doesn't show
+  through; the block ends in the thick first-column divider.
+
+```svelte
+<Table sticky stickyColumns={1}>
+  {#snippet thead()}
+    <thead><tr><th>Student</th>{#each fields as f}<th>{f}</th>{/each}</tr></thead>
+  {/snippet}
+  {#snippet tbody()}
+    <tbody>
+      {#each students as s}
+        <tr><th>{s.name}</th>{#each fields as f}<td>{s[f]}</td>{/each}</tr>
+      {/each}
+    </tbody>
+  {/snippet}
+</Table>
+```
+
+Frozen cells are marked `data-contain-frozen` (plus `first` / `edge` on the
+outermost ones), in both tables.
 
 ---
 
