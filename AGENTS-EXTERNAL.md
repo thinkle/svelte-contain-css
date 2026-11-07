@@ -1065,7 +1065,10 @@ A `<Table sticky>` too wide for its column scrolls sideways in its own strip
 scroll position, so a trackpad swipe over either moves both. Vertically the
 header still sticks to the nearest scrolling ancestor (a `Page`'s content
 panel), at `--table-sticky-top`. The horizontal scrollbar is at the bottom of
-the table.
+the table. In a small container or viewport (600px or less), the table also
+gets its own vertical scroll box, capped at `--table-max-height-small`
+(default `70dvh`, with a `70vh` fallback). The header sticks to the top of
+that box; horizontal synchronization and frozen columns work inside it.
 
 - **Width.** Once it can scroll, a sticky table keeps its natural width
   (`--table-width`, default `max-content` for sticky tables) instead of

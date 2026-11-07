@@ -119,7 +119,9 @@
     </Card>
 
     <div data-testid="sticky-table">
-      <Table sticky>
+      <!-- Both axes must work together: a frozen column in the phone's
+           vertically capped table must stay aligned with the sticky head. -->
+      <Table sticky stickyColumns={1}>
         {#snippet thead()}
           <thead><tr>{#each columns as c}<th>{c}</th>{/each}</tr></thead>
         {/snippet}

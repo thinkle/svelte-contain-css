@@ -858,9 +858,10 @@
      it can't use .table-scroll, because a scroll box becomes the sticky
      header's scroll container -- so the whole content pane, toolbar and
      heading included, panned sideways with it. Here that trade is the right
-     one: the table scrolls both ways inside a box at most
-     --table-max-height-small tall, and the header sticks to the top of the
-     box instead of the page. The page above and below stays put. */
+     one: the table scrolls vertically inside a box at most
+     --table-max-height-small tall, while the synchronized head/body strips
+     handle horizontal scrolling and frozen columns. The header's wrapper
+     sticks to the top of the box instead of the page. */
   @include when-small {
     .scrolling-table,
     .table-container {
@@ -876,10 +877,10 @@
     }
     /* The header is at the top of its own box now: no inset, and no veil,
        which only exists to mask page content scrolling past above it. */
-    .fixed-table-head {
+    .table-head-sticky {
       top: 0;
     }
-    .fixed-table-head::before,
+    .table-head-sticky::before,
     .veil {
       display: none;
     }

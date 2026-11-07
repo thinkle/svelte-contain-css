@@ -16,6 +16,36 @@ async function box(page: Page, id: string) {
   return b;
 }
 
+async function checkFrozenTableInSmallContainer(page: Page) {
+  const table = page.getByTestId("sticky-table");
+  const scroller = table.locator(".scrolling-table");
+  const head = table.locator(".table-head-sticky");
+  const bodyStrip = table.locator(".table-body-strip");
+  const headStrip = table.locator(".table-head-strip");
+  const headCells = table.locator(".fixed-table-head > thead > tr > th");
+  const bodyCells = table.locator(".scrolling-table-body > tbody:not(.column-ruler) > tr:first-child > td");
+  await expect(headCells.first()).toHaveAttribute("data-contain-frozen", /first/);
+  await scroller.scrollIntoViewIfNeeded();
+  const initial = (await headCells.first().boundingBox())!.x;
+  await bodyStrip.evaluate((el) => (el.scrollLeft = 100));
+  await expect.poll(() => headStrip.evaluate((el) => el.scrollLeft)).toBe(100);
+  await scroller.evaluate((el) => (el.scrollTop = 400));
+  await expect.poll(async () => {
+    const h = (await head.boundingBox())!;
+    const s = (await scroller.boundingBox())!;
+    return Math.round(h.y - s.y);
+  }).toBe(0);
+  expect(Math.abs((await headCells.first().boundingBox())!.x - initial)).toBeLessThanOrEqual(1.5);
+  for (const i of [0, 1]) {
+    const h = (await headCells.nth(i).boundingBox())!;
+    const b = (await bodyCells.nth(i).boundingBox())!;
+    expect(Math.abs(h.x - b.x)).toBeLessThanOrEqual(1);
+  }
+  expect(await head.evaluate((el) => getComputedStyle(el, "::before").display)).toBe("none");
+  await headStrip.evaluate((el) => (el.scrollLeft = 50));
+  await expect.poll(() => bodyStrip.evaluate((el) => el.scrollLeft)).toBe(50);
+}
+
 test.describe("on a phone", () => {
   test.use({
     viewport: phone.viewport,
@@ -119,8 +149,12 @@ test.describe("on a phone", () => {
     const inner = await box.evaluate((b) => ({
       sw: b.scrollWidth, cw: b.clientWidth, sh: b.scrollHeight, ch: b.clientHeight,
     }));
-    expect(inner.sw).toBeGreaterThan(inner.cw);
+    expect(inner.sw).toBe(inner.cw);
     expect(inner.sh).toBeGreaterThan(inner.ch);
+    const horizontal = await box.locator(".table-body-strip").evaluate((b) => ({
+      scroll: b.scrollWidth, width: b.clientWidth,
+    }));
+    expect(horizontal.scroll).toBeGreaterThan(horizontal.width);
   });
 
   test("the sticky header stays at the top of the table's box", async ({ page }) => {
@@ -140,6 +174,10 @@ test.describe("on a phone", () => {
     const grid = await box(page, "panel-grid");
     const panel = await box(page, "panel");
     expect(Math.round(panel.width)).toBe(Math.round(grid.width));
+  });
+
+  test("frozen columns and the sticky header work together inside the phone scroll box", async ({ page }) => {
+    await checkFrozenTableInSmallContainer(page);
   });
 
   test("a grid of small items keeps their width", async ({ page }) => {
@@ -258,6 +296,14 @@ test.describe("on a desktop", () => {
 
   test("buttons keep their desktop height under a mouse", async ({ page }) => {
     expect((await box(page, "cancel")).height).toBeLessThan(44);
+  });
+
+  test("a narrow desktop container gets the same scrolling and frozen-column behavior", async ({ page }) => {
+    await page.getByTestId("sticky-table").evaluate((el) => {
+      el.style.width = "360px";
+      el.style.containerType = "inline-size";
+    });
+    await checkFrozenTableInSmallContainer(page);
   });
 
   test("touch-only sizes stay off under a mouse", async ({ page }) => {
