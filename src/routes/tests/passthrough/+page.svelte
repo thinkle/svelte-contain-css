@@ -20,7 +20,7 @@
     DropdownMenu, Fieldset, Form, FormItem, GridLayout, GridRow, Hero,
     Inline, Input, MenuList, MiniButton, Option, Page, Progress, RadioButton,
     Row, RowContainer, Select, Slider, SplitPane, Stack, TabBar, TabItem,
-    Table, Tag, Text, TextLayout, Tile, Toggle, Tooltip,
+    Surface, Table, Tag, Text, TextLayout, Tile, Toggle, Tooltip,
   } from "$lib";
 
   // A declaration no component sets itself, so finding it proves the caller's
@@ -127,6 +127,9 @@
   <DataList data-testid="probe-DataList" id="id-DataList" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">
     <DataListItem data-testid="probe-DataListItem" id="id-DataListItem" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Item</DataListItem>
   </DataList>
+</div>
+<div data-probe="Surface" data-root-class="paint">
+  <Surface data-testid="probe-Surface" id="id-Surface" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Surface</Surface>
 </div>
 <div data-probe="Tile" data-root-class="tile">
   <Tile data-testid="probe-Tile" id="id-Tile" aria-label="probe" class="probe-class" style={STYLE} bg="rgb(4, 5, 6)">Tile</Tile>

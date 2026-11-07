@@ -45,6 +45,11 @@ Theming page has a live editor for all of this.
 | `surface-overlay` | `--surface-overlay-bg/-fg` (steps off raised) | DropdownMenu, Dialog            |
 | `inverse`         | `--inverse-bg/-fg`                        | Tooltip                             |
 
+Any tier (or role) can also be painted on an element of your own with
+`<Surface tier="surface-raised">` / `<Surface colorRole="primary">`: colors
+only, no box changes. A plain element that paints its own background must
+declare it this way, or nothing inside it knows the color.
+
 **Roles.** `primary`, `secondary`, `info`, `success`, `warning`, `danger`,
 plus any your app defines with a `--<role>-bg` / `--<role>-fg` pair.
 
