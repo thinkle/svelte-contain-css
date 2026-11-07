@@ -17,6 +17,10 @@ for (const edgeToEdge of [false, true]) {
       expect(await el.evaluate(node => getComputedStyle(node, "::before").content)).toBe('"BRAND"');
       expect(await el.evaluate(node => getComputedStyle(node, "::after").content)).toBe('"END"');
     }
+    if (!edgeToEdge) {
+      // Consumer spacing is not a notch and must not opt into decoration.
+      await page.addStyleTag({ content: ".page > header { padding-top: 16px !important; }" });
+    }
     await page.getByRole("button", { name: "Replace header and footer" }).click();
     for (const [id, edge, height] of [
       ["plain-header", "start", 47], ["plain-footer", "end", 34],

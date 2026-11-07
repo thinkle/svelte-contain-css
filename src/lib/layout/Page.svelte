@@ -115,8 +115,8 @@
     };
     const update = () => {
       clear();
-      const padding = edge === "start" ? "paddingTop" : "paddingBottom";
-      if (parseFloat(getComputedStyle(node)[padding]) <= 0) return;
+      const inset = edge === "start" ? "--_page-safe-top" : "--_page-safe-bottom";
+      if (!(parseFloat(getComputedStyle(node).getPropertyValue(inset)) > 0)) return;
       let child = edge === "start" ? node.firstElementChild : node.lastElementChild;
       while (child && getComputedStyle(child).display === "contents") {
         child = edge === "start" ? child.firstElementChild : child.lastElementChild;
