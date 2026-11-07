@@ -48,26 +48,28 @@
   --card-header-border: 1px solid color-mix(in oklab, currentColor 10%, transparent);
   --card-footer-bg: color-mix(in oklab, currentColor 3%, transparent);
   --card-footer-border: 1px solid color-mix(in oklab, currentColor 10%, transparent);
-  --fieldset-border: none;
+  /* The style longhand, not the shorthand: a theme that sets a global
+     --border (or a Fieldset given the `border` prop) still draws a box,
+     because a complete border shorthand wins over the longhands. */
+  --fieldset-border-style: none;
   --fieldset-padding: 0;
   --legend-padding: 0;
   --legend-weight: 600;
   --bar-border-top: none;
   --table-thick-border: 1px;
   --table-first-row-border-color: var(--border-color);
-  /* A sheet button against the screen edge reads as a whole button, not a
-     circle cut in half by the edge. */
-  --sidebar-sheet-edge-radius: var(--square-radius, 0.375rem);
 
   /* ── Type ──────────────────────────────────────────────── */
   --heading-font-weight: 600;
   --heading-line-height: 1.2;
-  --heading-1-font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.125rem);
-  --heading-2-font-size: clamp(1.3125rem, 1.05rem + 1vw, 1.625rem);
-  --heading-3-font-size: 1.1875rem;
-  --heading-4-font-size: 1.0625rem;
-  --heading-5-font-size: 1rem;
-  --heading-6-font-size: 0.875rem;
+  /* em, not rem: a Card or Tile scales its text to its width, and its
+     headings have to scale with it. */
+  --heading-1-font-size: 1.75em;
+  --heading-2-font-size: 1.4em;
+  --heading-3-font-size: 1.2em;
+  --heading-4-font-size: 1.05em;
+  --heading-5-font-size: 1em;
+  --heading-6-font-size: 0.875em;
 
   /* ── Checkboxes and radios ─────────────────────────────── */
   --checkbox-bg: transparent;
