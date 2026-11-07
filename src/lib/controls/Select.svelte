@@ -250,7 +250,14 @@
     @include focusable();
   }
   .select-dropdown-label {
+    /* This is a flex item inside the trigger's label. A scroll container
+       here can still replace the text baseline even when the outer
+       DropdownMenu label uses clip. Keep both layers non-scrolling.
+       clip does not zero a flex item's automatic minimum, so allow it to
+       shrink explicitly or long options stop truncating. */
+    min-width: 0;
     overflow: hidden;
+    overflow: clip;
     white-space: nowrap;
     text-overflow: ellipsis;
   }

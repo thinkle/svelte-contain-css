@@ -7,6 +7,42 @@ import { expect, test } from "@playwright/test";
  * Debug page: /svelte-contain-css/tests/field-baseline
  */
 test.describe("Field baselines", () => {
+  test("short Select labels align with search inputs across field typography and padding", async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto("/svelte-contain-css/tests/field-baseline");
+    await page.waitForLoadState("networkidle");
+
+    // Native input line boxes round differently between engines. Allow a
+    // device-independent pixel, not the 4–7px displacement of the regression.
+    for (const variant of ["normal", "airy", "updraft", "large", "dense"]) {
+      const row = page.getByTestId(`filter-${variant}`);
+      const input = (await row.locator("input").boundingBox())!;
+      const select = (await row.locator("nav.dropdown-menu > button").boundingBox())!;
+      expect(Math.abs(select.height - input.height), `${variant}: height`).toBeLessThanOrEqual(1);
+      expect(Math.abs(select.y - input.y), `${variant}: top`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("a narrow Select truncates its label without covering its arrow or widening the field", async ({ page }) => {
+    await page.setViewportSize({ width: 1200, height: 900 });
+    await page.goto("/svelte-contain-css/tests/field-baseline");
+    await page.waitForLoadState("networkidle");
+    const scope = page.getByTestId("narrow-select");
+    const label = scope.locator(".select-dropdown-label");
+    const metrics = await label.evaluate(el => {
+      const css = getComputedStyle(el);
+      return { clipped: el.scrollWidth > el.clientWidth, ellipsis: css.textOverflow, overflow: css.overflowX };
+    });
+    expect(metrics.clipped).toBe(true);
+    expect(metrics.ellipsis).toBe("ellipsis");
+    expect(metrics.overflow).toBe("clip");
+    const labelBox = (await label.boundingBox())!;
+    const labelContainer = (await scope.locator(".select-dropdown").boundingBox())!;
+    expect(labelBox.width).toBeLessThanOrEqual(labelContainer.width + 1);
+    const field = (await scope.locator("nav.dropdown-menu > button").boundingBox())!;
+    expect(field.width).toBeLessThanOrEqual(140);
+  });
+
   test("a Select sits level with an Input on a baseline row", async ({
     page,
   }) => {
