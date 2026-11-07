@@ -49,7 +49,7 @@ test("the theme catalog and switcher offer the same clearly grouped choices", as
   await expect(switcher.getByRole("group", { name: "Complete themes", exact: true })).toBeVisible();
   await expect(switcher.getByRole("group", { name: "Combinations", exact: true })).toBeVisible();
   await expect(switcher.getByRole("group", { name: "Color palettes", exact: true }).getByRole("button")).toHaveCount(6);
-  await expect(switcher.getByRole("group", { name: "Complete themes", exact: true }).getByRole("button")).toHaveCount(3);
+  await expect(switcher.getByRole("group", { name: "Complete themes", exact: true }).getByRole("button")).toHaveCount(4);
   await expect(switcher.getByRole("group", { name: "Combinations", exact: true }).getByRole("button")).toHaveCount(4);
   const labels = (await switcher.locator("fieldset a").allTextContents()).map(text => text.trim()).sort();
   await switcher.getByRole("button", { name: "Theme catalog" }).click();

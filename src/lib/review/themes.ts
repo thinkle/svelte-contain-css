@@ -6,6 +6,7 @@ import forest from "$lib/vars/themes/forest.css?raw";
 import canyon from "$lib/vars/themes/canyon.css?raw";
 import purple from "$lib/vars/themes/purple.css?raw";
 import retro from "$lib/vars/themes/retro.css?raw";
+import quiet from "$lib/vars/themes/quiet.css?raw";
 import { combinedThemes } from "$lib/theme/combinedThemes";
 
 const lightordark = `@media (prefers-color-scheme: light) {\n${light}\n}\n@media (prefers-color-scheme: dark) {\n${dark}\n}`;
@@ -20,6 +21,7 @@ export const reviewThemes = {
   forest: { label: "Forest", css: forest },
   canyon: { label: "Canyon", css: canyon },
   retro: { label: "Retro", css: retro },
+  quiet: { label: "Quiet", css: quiet },
   "canyon-modern-serif-fancy": {
     label: combinedThemes["canyon-modern-serif-fancy"].name,
     css: combinedThemes["canyon-modern-serif-fancy"].css,
@@ -63,7 +65,7 @@ export const reviewThemeGroups = [
   {
     label: "Complete themes",
     description: "Coordinated colors, controls, typography, and geometry.",
-    themes: ["bootstrap", "material", "retro"],
+    themes: ["quiet", "bootstrap", "material", "retro"],
   },
   {
     label: "Combinations",
@@ -82,6 +84,7 @@ export const reviewThemeDescriptions: Record<ReviewThemeName, string> = {
   bootstrap: "Bootstrap-inspired colors, typography, controls, and spacing.",
   material: "Material-inspired colors, typography, controls, and depth.",
   retro: "Classic desktop colors, typography, borders, and controls.",
+  quiet: "Neutral greys with one accent, flat controls, single borders, and a tighter type scale.",
   "canyon-modern-serif-fancy": "Canyon colors, Modern Serif typography, Editorial Headings, and decorative paragraph first lines and letters.",
   "forest-editorial-rounded": "Forest colors, Editorial Serif typography, Restrained Headings, and rounded corners.",
   "dark-ibm-layered": "Dark colors, IBM Plex typography, Expressive Headings, and layered surface depth.",

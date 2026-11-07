@@ -1,0 +1,255 @@
+/* Quiet: a restrained, neutral-first theme.
+
+   The interface is carried by a grey ramp; the accent appears only where it
+   means something -- the primary action, the current selection, focus.
+   Controls are flat with a hairline edge, and shadows are kept for the
+   things that float (dialogs, menus, tooltips, the sidebar sheet). Nested
+   surfaces are told apart by a slight tint rather than another border, and
+   the type scale is tighter, with headings at 600 rather than bold.
+
+   Set --primary-color to rebrand; everything else stays neutral. */
+:root {
+  /* ── Neutral ramp (cool grey) ───────────────────────────── */
+  --quiet-gray-0: #ffffff;
+  --quiet-gray-50: #f8f9fb;
+  --quiet-gray-100: #f1f3f6;
+  --quiet-gray-150: #e9ecf1;
+  --quiet-gray-200: #dfe3e9;
+  --quiet-gray-300: #c9cfd8;
+  --quiet-gray-400: #9aa3b0;
+  --quiet-gray-500: #6b7484;
+  --quiet-gray-600: #4f5765;
+  --quiet-gray-700: #3a404b;
+  --quiet-gray-800: #252a33;
+  --quiet-gray-900: #161a21;
+
+  /* ── Color roles ─────────────────────────────────────────── */
+  --primary-color: #4352d0;
+  --primary-bg: var(--primary-color);
+  --primary-fg: #ffffff;
+  /* Secondary is neutral, not a second accent: a "secondary" bar or button
+     is quieter than primary, never louder. */
+  --secondary-color: var(--quiet-gray-700);
+  --secondary-bg: var(--quiet-gray-100);
+  --secondary-fg: var(--quiet-gray-900);
+
+  --success-color: #18794e;
+  --success-bg: #18794e;
+  --success-fg: #ffffff;
+  --danger-color: #c62f2f;
+  --danger-bg: #c62f2f;
+  --danger-fg: #ffffff;
+  --warning-color: #e8a317;
+  --warning-bg: #f5b83d;
+  --warning-fg: var(--quiet-gray-900);
+  --info-color: #1f6fb2;
+  --info-bg: #1f6fb2;
+  --info-fg: #ffffff;
+
+  --bg: var(--quiet-gray-50);
+  --fg: var(--quiet-gray-900);
+  --body-bg: var(--quiet-gray-50);
+  --body-fg: var(--quiet-gray-900);
+  --surface-bg: var(--quiet-gray-0);
+  --surface-fg: var(--quiet-gray-900);
+  /* Tiers barely step: depth is a tint, not a ladder of greys. */
+  --surface-depth: 0.5;
+  --inverse-bg: var(--quiet-gray-900);
+  --inverse-fg: #ffffff;
+  --dark-bg: var(--quiet-gray-900);
+  --dark-fg: #ffffff;
+
+  --border-color: var(--quiet-gray-200);
+  --border-width: 1px;
+  --border-style: solid;
+  --focus-color: color-mix(in srgb, var(--primary-color) 70%, white);
+  --focus-outline-offset: 2px;
+  --focus-ring-box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--primary-color) 22%, transparent);
+
+  --stripe-bg: var(--quiet-gray-50);
+  --stripe-fg: var(--surface-fg);
+
+  /* ── Geometry ───────────────────────────────────────────── */
+  --border-radius: 0.5rem;
+  --square-radius: 0.375rem;
+  --card-border-radius: 0.75rem;
+  --padding: 0.75rem;
+  --gap: 1rem;
+  --space: 2px;
+
+  /* ── Elevation: only things that float ─────────────────── */
+  --shadow-distance: 0;
+  --shadow-blur: 0;
+  --shadow-color: transparent;
+  --button-shadow-distance: 0;
+  --button-shadow-blur: 0;
+  --button-shadow-color: transparent;
+  --card-shadow-distance: 0;
+  --card-shadow-blur: 0;
+  --card-shadow-color: transparent;
+  --data-list-shadow-distance: 0;
+  --data-list-shadow-blur: 0;
+  --data-list-shadow-color: transparent;
+  --dialog-shadow-distance: 0.75rem;
+  --dialog-shadow-blur: 2.5rem;
+  --dialog-shadow-color: rgba(22, 26, 33, 0.18);
+  --dropdown-menu-shadow-distance: 0.375rem;
+  --dropdown-menu-shadow-blur: 1.25rem;
+  --dropdown-menu-shadow-color: rgba(22, 26, 33, 0.14);
+  --tooltip-shadow-distance: 0.25rem;
+  --tooltip-shadow-blur: 0.75rem;
+  --tooltip-shadow-color: rgba(22, 26, 33, 0.14);
+  --overlay-box-shadow: 0 0.5rem 2rem rgba(22, 26, 33, 0.16);
+  --table-sticky-header-box-shadow: 0 1px 0 var(--quiet-gray-200);
+  --slider-thumb-shadow: 0 1px 2px rgba(22, 26, 33, 0.2);
+  --slider-thumb-hover-shadow: 0 1px 3px rgba(22, 26, 33, 0.25);
+  --slider-thumb-active-shadow: 0 1px 2px rgba(22, 26, 33, 0.2);
+
+  --hover-transform: none;
+  --active-transform: none;
+  --button-hover-transform: none;
+  --button-active-transform: none;
+  --menu-hover-transform: none;
+  --checkbox-hover-transform: none;
+  --checkbox-active-transform: none;
+  --transition: 120ms ease;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-family:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --line-height: 1.5;
+  --bold: 600;
+  --normal: 400;
+  --ui-font-weight: 500;
+  --heading-font-weight: 600;
+  --heading-line-height: 1.2;
+  --heading-letter-spacing: -0.011em;
+  --heading-tint: currentColor;
+  --heading-1-font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.125rem);
+  --heading-2-font-size: clamp(1.3125rem, 1.05rem + 1vw, 1.625rem);
+  --heading-3-font-size: 1.1875rem;
+  --heading-4-font-size: 1.0625rem;
+  --heading-5-font-size: 1rem;
+  --heading-6-font-size: 0.875rem;
+  --heading-margin-top: 1.25em;
+  --heading-margin-bottom: 0.35em;
+  --link-color: var(--primary-color);
+  /* Checking a box shouldn't make its label jump in weight. */
+  --checked-weight: inherit;
+  --checkbox-checked-font-weight: inherit;
+  --radio-button-checked-font-weight: inherit;
+
+  /* ── Controls ───────────────────────────────────────────── */
+  --control-bg: var(--quiet-gray-0);
+  --control-fg: var(--quiet-gray-800);
+  --control-padding: 0.5rem 0.875rem;
+  --button-bg: var(--quiet-gray-0);
+  --button-fg: var(--quiet-gray-800);
+  --button-border: 1px solid var(--quiet-gray-300);
+  --primary-border: 1px solid var(--primary-color);
+  --success-border: 1px solid var(--success-bg);
+  --danger-border: 1px solid var(--danger-bg);
+  --warning-border: 1px solid var(--warning-bg);
+  --info-border: 1px solid var(--info-bg);
+  --button-border-radius: var(--square-radius);
+  --circle-button-bg: var(--quiet-gray-0);
+  --circle-button-fg: var(--quiet-gray-700);
+  --circle-button-border: 1px solid var(--quiet-gray-300);
+  --menu-trigger-bg: var(--quiet-gray-0);
+  --menu-trigger-fg: var(--quiet-gray-800);
+  --menu-trigger-border: 1px solid var(--quiet-gray-300);
+  --menu-trigger-square-radius: var(--square-radius);
+
+  --field-bg: var(--quiet-gray-0);
+  --field-fg: var(--quiet-gray-900);
+  --field-border-color: var(--quiet-gray-300);
+  --field-square-radius: var(--square-radius);
+  --field-padding: 0.5rem 0.75rem;
+
+  --toggle-bg: var(--quiet-gray-0);
+  --inactive-bg: var(--quiet-gray-0);
+  --checkbox-bg: var(--quiet-gray-0);
+  --checkbox-border: 1.5px solid var(--quiet-gray-400);
+  --checkbox-checked-border: 1.5px solid var(--primary-color);
+  --checkbox-radius: 0.25em;
+  --checkbox-size: 1.05em;
+  --radio-button-bg: var(--quiet-gray-0);
+  --radio-button-border: 1.5px solid var(--quiet-gray-400);
+  --radio-button-checked-border: 1.5px solid var(--primary-color);
+
+  --progress-bg: transparent;
+  --progress-padding: 0;
+  --progress-track-bg: var(--quiet-gray-150);
+  --progress-track-stripe-bg: var(--quiet-gray-100);
+  --progress-track-height: 1.5em;
+  --progress-track-border-radius: var(--square-radius);
+
+  --slider-track-bg: var(--quiet-gray-200);
+  --slider-fill-bg: var(--primary-bg);
+  --slider-thumb-bg: #ffffff;
+  --slider-thumb-border: 1px solid var(--quiet-gray-300);
+
+  --tab-bg: transparent;
+  --tab-fg: var(--quiet-gray-600);
+  --tab-active-bg: transparent;
+  --tab-active-fg: var(--quiet-gray-900);
+  --tab-active-border-bottom: 2px solid var(--primary-color);
+  --tab-bar-fg: var(--quiet-gray-900);
+
+  --menu-item-bg: transparent;
+  --menu-item-fg: var(--quiet-gray-800);
+  --menu-item-hover-bg: var(--quiet-gray-100);
+  --menu-item-active-bg: var(--quiet-gray-150);
+  --menu-item-active-fg: var(--quiet-gray-900);
+  --menu-item-border: none;
+  --dropdown-menu-border: 1px solid var(--quiet-gray-200);
+
+  /* ── Surfaces ───────────────────────────────────────────── */
+  --card-border: 1px solid var(--quiet-gray-200);
+  --tile-border: 1px solid var(--quiet-gray-200);
+  --data-list-border: 1px solid var(--quiet-gray-200);
+  /* Card header and footer: no tinted band; a hairline does the job. */
+  --card-header-bg: transparent;
+  --card-header-border: 1px solid var(--quiet-gray-150);
+  --card-footer-bg: var(--quiet-gray-50);
+  --card-footer-border: 1px solid var(--quiet-gray-150);
+
+  /* One border per box: a Fieldset inside a bordered panel is a labelled
+     group, not another box. */
+  --fieldset-border: none;
+  --fieldset-padding: 0;
+  --legend-font-weight: 600;
+  --legend-fg: var(--quiet-gray-900);
+  --legend-padding: 0;
+
+  --bar-border-top: none;
+  --bar-border-bottom: 1px solid var(--quiet-gray-200);
+
+  /* Tables: hairlines throughout, a tinted head instead of a heavy rule. */
+  --table-border-color: var(--quiet-gray-200);
+  --table-thick-border: 1px;
+  --table-first-row-border-color: var(--quiet-gray-300);
+  --table-head-bg: var(--quiet-gray-50);
+  --table-head-fg: var(--quiet-gray-700);
+
+  /* The sheet button: a whole rounded button against the edge, not a
+     circle sliced in half by it. */
+  --sidebar-sheet-edge-radius: var(--square-radius);
+
+  /* ── Code ───────────────────────────────────────────────── */
+  --code-bg: var(--quiet-gray-50);
+  --code-fg: var(--quiet-gray-800);
+  --code-comment-fg: var(--quiet-gray-500);
+  --code-string-fg: #18794e;
+  --code-keyword-fg: #4352d0;
+  --code-attr-name-fg: #9a3fb8;
+  --code-tag-fg: #c62f2f;
+  --code-function-fg: #1f6fb2;
+  --code-variable-fg: #b35c00;
+  --code-operator-fg: var(--quiet-gray-600);
+  --code-prolog-fg: var(--quiet-gray-500);
+  --code-doctype-fg: var(--quiet-gray-500);
+  --code-cdata-fg: var(--quiet-gray-500);
+}

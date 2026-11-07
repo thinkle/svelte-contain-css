@@ -11,6 +11,7 @@ import dark from "$lib/vars/themes/dark.css?raw";
 import material from "$lib/vars/themes/material.css?raw";
 import retro from "$lib/vars/themes/retro.css?raw";
 import bootstrap from "$lib/vars/themes/bootstrap.css?raw";
+import quiet from "$lib/vars/themes/quiet.css?raw";
 import responsiveTypography from "$lib/vars/responsive-typography.css?raw";
 import boxy from "$lib/vars/boxy.css?raw";
 import softCorners from "$lib/vars/soft-corners.css?raw";
@@ -51,6 +52,8 @@ export const fullThemes: ThemeEntry[] = [
   { name: "Material", css: material, file: "themes/material.css" },
   { name: "Retro", css: retro, file: "themes/retro.css" },
   ...combinedThemeEntries,
+  /* Appended, not inserted: the picker saves its choice as an index. */
+  { name: "Quiet", css: quiet, file: "themes/quiet.css" },
 ];
 
 export const colorThemes: ThemeEntry[] = [
