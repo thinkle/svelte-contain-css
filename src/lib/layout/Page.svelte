@@ -101,6 +101,54 @@
   let headerHeight = $state(0);
   let pageElement: HTMLElement;
 
+  /* Only borrow an unused pseudo-element when a real safe-area strip is
+     present. Never replace a consumer's decoration or sticky positioning,
+     including on ordinary desktop pages where both insets are zero. */
+  function safeAreaDecoration(node: HTMLElement, edge: "start" | "end") {
+    let target: HTMLElement | null = null;
+    const attribute = `data-contain-page-safe-${edge}`;
+    const relativeAttribute = `data-contain-page-safe-${edge}-relative`;
+    const clear = () => {
+      target?.removeAttribute(attribute);
+      target?.removeAttribute(relativeAttribute);
+      target = null;
+    };
+    const update = () => {
+      clear();
+      const padding = edge === "start" ? "paddingTop" : "paddingBottom";
+      if (parseFloat(getComputedStyle(node)[padding]) <= 0) return;
+      let child = edge === "start" ? node.firstElementChild : node.lastElementChild;
+      while (child && getComputedStyle(child).display === "contents") {
+        child = edge === "start" ? child.firstElementChild : child.lastElementChild;
+      }
+      if (!(child instanceof HTMLElement)) return;
+      const pseudo = edge === "start" ? "::before" : "::after";
+      const content = getComputedStyle(child, pseudo).content;
+      if (content !== "none" && content !== "normal") return;
+      target = child;
+      if (getComputedStyle(target).position === "static") {
+        target.setAttribute(relativeAttribute, "");
+      }
+      target.setAttribute(attribute, "");
+    };
+    const observer = new MutationObserver(update);
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+    window.addEventListener("resize", update);
+    update();
+    return {
+      destroy() {
+        observer.disconnect();
+        window.removeEventListener("resize", update);
+        clear();
+      },
+    };
+  }
+
   function handleScroll() {
     if (sticky) {
       // Set up listener to disable scrolling until we're
@@ -157,7 +205,7 @@
   bind:this={pageElement}
   {...el}
 >
-  <header bind:clientHeight={headerHeight}>
+  <header bind:clientHeight={headerHeight} use:safeAreaDecoration={"start"}>
     {#if hasHeader}{@render header?.()}{/if}
   </header>
   <div class="side-by-side">
@@ -168,7 +216,7 @@
       {@render children?.()}
     </div>
   </div>
-  <footer>
+  <footer use:safeAreaDecoration={"end"}>
     {#if hasFooter}{@render footer?.()}{/if}
   </footer>
 </section>
@@ -447,14 +495,11 @@
   .page > footer {
     padding-block-end: var(--_page-safe-bottom);
   }
-  .page > header > :global(:first-child:not(svelte-css-wrapper)),
-  .page > header > :global(svelte-css-wrapper:first-child > *),
-  .page > footer > :global(:last-child:not(svelte-css-wrapper)),
-  .page > footer > :global(svelte-css-wrapper:last-child > *) {
+  .page :global([data-contain-page-safe-start-relative]),
+  .page :global([data-contain-page-safe-end-relative]) {
     position: relative;
   }
-  .page > header > :global(:first-child:not(svelte-css-wrapper))::before,
-  .page > header > :global(svelte-css-wrapper:first-child > *)::before {
+  .page :global([data-contain-page-safe-start])::before {
     content: "";
     position: absolute;
     inset-inline: 0;
@@ -463,8 +508,7 @@
     background: inherit;
     pointer-events: none;
   }
-  .page > footer > :global(:last-child:not(svelte-css-wrapper))::after,
-  .page > footer > :global(svelte-css-wrapper:last-child > *)::after {
+  .page :global([data-contain-page-safe-end])::after {
     content: "";
     position: absolute;
     inset-inline: 0;
