@@ -157,6 +157,9 @@ Or import in your CSS:
 - `Bar` - Full-width horizontal bar for a section's title/actions
 - `Sidebar`, `SplitPane` - App-shell furniture
 - `Hero` - Hero section with animations
+- `Surface` - Colors only: paints a tier or role and tells everything inside
+  about it, with no padding, border, margin, overflow or containment (see
+  [A plain element that paints must declare it](#a-plain-element-that-paints-must-declare-it))
 
 **Layout — generic flex helpers:**
 
@@ -1717,6 +1720,9 @@ of the surface, never by component. Full contract:
   `--surface-depth` scales the steps (`0` is flat). Themes pin tiers
   (`--surface-raised-bg`), not components (`--card-bg`).
 - **`ground`**: exactly the surface an element sits on (MenuList).
+- **Your own painted elements**: wrap them in `<Surface tier="…">` (or
+  `colorRole`) instead of painting a background by hand, or nothing inside
+  knows the color.
 - **Reading colors**: every colored element (surface or control) publishes
   its resolved pair as `--current-bg` / `--current-fg`, inherited by its
   contents: color an icon with `var(--current-fg)`, mix a tint from
@@ -1754,6 +1760,50 @@ Do not set component-keyed colors (`--bar-link-fg`, `--card-heading-1-fg`):
 they were removed. Do not set `--link-fg` in a theme: it lands on every
 surface. Never write the private `--_<prefix>-role-*` / `--_<prefix>-on-*`
 variables by hand; `surfaceVars()` does.
+
+### A plain element that paints must declare it
+
+**A plain element that paints its own background must declare it; use
+`Surface`.** CSS can't read an ancestor's painted color, so a
+`<div style="background: #fff">` (or a class that paints one) is invisible to
+Contain: a TabBar, Text tone, heading or field inside it resolves against the
+surface *outside* the div. A TabBar there shows a band of the page color.
+
+`Surface` paints a tier or role through the color system and publishes
+`--current-bg` / `--current-fg` and the family pins, and does nothing else. It
+adds no padding, margin, border, shadow, `overflow` or `container-type`, so it
+is a drop-in for the div: a sticky Table head inside it still sticks (Card's
+`overflow-x: hidden` and Container's `overflow: auto` would stop that).
+
+```svelte
+<!-- ❌ Contain doesn't know this div is white: tabs inside show a grey band. -->
+<div class="roster-shell" style="background: #fff">
+  <TabBar items={tabs} bind:active />
+  <Table sticky>…</Table>
+</div>
+
+<!-- ✅ The same box, declared. Pick the tier it is; themes recolor it. -->
+<Surface tier="surface-raised" class="roster-shell">
+  <TabBar items={tabs} bind:active />
+  <Table sticky>…</Table>
+</Surface>
+
+<Surface colorRole="primary">…</Surface>   <!-- a role, built-in or app-defined -->
+<Surface as="section" aria-labelledby="h">…</Surface>  <!-- any element -->
+```
+
+- `tier`: `background`, `surface` (default), `surface-raised`,
+  `surface-sunken`, `surface-overlay`, `inverse`.
+- `colorRole`: `primary`, `secondary`, `info`… or a role your app defines
+  with `--<role>-bg` / `--<role>-fg`. (Not `role`, which is the ARIA
+  attribute and still forwards.)
+- `bg` / `fg` (`--paint-bg` / `--paint-fg`): an exact color. That makes it an
+  unknown family, which mixes; prefer a tier.
+- A Surface's colors are its own: a Surface nested in a `colorRole="primary"`
+  Surface is its own tier, not primary.
+
+Want padding or a shadow too? That's a `Container` or `Card`. Surface is for
+the box you have already laid out.
 
 ### Mixing a filled surface
 

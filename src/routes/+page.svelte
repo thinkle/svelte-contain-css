@@ -36,6 +36,7 @@
   import Themes from "./Themes.svelte";
   import CardDemo from "./demos/CardDemo.svelte";
   import TileDemo from "./demos/TileDemo.svelte";
+  import SurfaceDemo from "./demos/SurfaceDemo.svelte";
   import InlineDemo from "./demos/InlineDemo.svelte";
   import StackDemo from "./demos/StackDemo.svelte";
   import RowContainerDemo from "./demos/RowContainerDemo.svelte";
@@ -147,6 +148,7 @@
     { name: "Components" },
     { name: "Card", component: CardDemo, demo: "Card" },
     { name: "Tile", component: TileDemo, demo: "Tile" },
+    { name: "Surface", component: SurfaceDemo, demo: "Surface" },
     { name: "Tags", component: TagDemo, demo: "Tag" },
     { name: "GridLayout", component: GridLayoutDemo, demo: "GridLayout" },
     {

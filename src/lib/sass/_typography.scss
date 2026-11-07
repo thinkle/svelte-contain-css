@@ -185,6 +185,51 @@
   }
 }
 
+/* For a surface that only paints colors (Surface) inside whatever typography
+   container holds it. A custom property substitutes its var()s where it is
+   declared, so the --_hN-color a Card resolved used the CARD's pins and
+   flags; a heading on a primary Surface inside that Card would still take
+   the Card's pinned color. This re-selects the pins against this surface's
+   family-vars(), keeping the container's own mix (its tints, tint amounts
+   and component-scoped heading typography are inherited untouched), and
+   re-grounds Text tones in headings on this surface's foreground. With no
+   typography container above, the mix is currentColor: plain headings,
+   unless this surface's family pins one. */
+@mixin heading-color-rebase {
+  @include color.family-selectors;
+  @for $n from 1 through 6 {
+    --_h#{$n}-color: #{color.select-pinned(
+        --_on-h#{$n}-fg-fam,
+        --_on-h#{$n}-fg-role,
+        var(--_h#{$n}-mix, currentColor),
+        currentColor
+      )};
+    --_h#{$n}-background: #{color.select-pinned(
+        --_on-h#{$n}-bg-fam,
+        --_on-h#{$n}-bg-role,
+        var(--_h#{$n}-legacy-bg, transparent)
+      )};
+    --_h#{$n}-bg-set: var(
+      --_h#{$n}-role-bg-set,
+      var(--_on-h#{$n}-bg-fam, var(--_h#{$n}-legacy-bg))
+    );
+    --_h#{$n}-role-bg-set: color-mix(
+      in srgb,
+      var(--_on-h#{$n}-bg-role) 100%,
+      var(--_role-flag) 0%
+    );
+    --_h#{$n}-ground: var(
+      --_h#{$n}-filled-ground,
+      var(--_color, currentColor)
+    );
+    --_h#{$n}-filled-ground: color-mix(
+      in srgb,
+      currentColor 100%,
+      var(--_h#{$n}-bg-set) 0%
+    );
+  }
+}
+
 @mixin heading-typography-context-vars($var-prefix, $prefixes...) {
   --_#{$var-prefix}-font-family: #{fn.var-with-fallbacks(--font-family, list.append($prefixes, revert)...)};
   --_#{$var-prefix}-text-transform: #{fn.var-with-fallbacks(

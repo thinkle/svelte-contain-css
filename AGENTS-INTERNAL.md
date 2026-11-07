@@ -530,6 +530,15 @@ components:
 - **Role sugar uses `surfaceVars(role, prefix)`** (see Bar). It writes
   private `--_<prefix>-role-bg/-fg` and `--_<prefix>-on-*` transport; the bg
   chain reads them between the component vars and the family.
+- **`Surface` is the colors-only surface.** Its component prefix is `paint`
+  (`surface` is a family name, so `color-props(surface, …)` would compile it as
+  the tier). It compiles one rule per tier, writes `initial` over the inherited
+  `--paint-bg/-fg` and role transport when it sets none (so nested Surfaces
+  don't inherit a parent's role), and includes `heading-color-rebase`, which
+  re-selects heading pins against its own family while keeping the enclosing
+  typography container's mix. Keep it free of padding, margin, border,
+  overflow and `container-type`: `tests/surface.spec.ts` checks the box
+  against a plain div and a sticky Table head inside it.
 - **"Unset" can't stop a `var()` chain**, so the comp/role flags become
   registered `<number>`s (`--_comp-n`, `--_role-n`, initial 1, non-inheriting)
   on each consumer, and `select-pinned()` picks with `color-mix` at 0%/100%.

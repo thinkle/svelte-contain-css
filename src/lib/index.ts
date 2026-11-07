@@ -41,6 +41,7 @@ import SplitPane from "./layout/SplitPane.svelte";
 import Stack from "./layout/Stack.svelte";
 import TabBar from "./layout/TabBar.svelte";
 import Tile from "./layout/Tile.svelte";
+import Surface from "./layout/Surface.svelte";
 import Code from "./misc/Code.svelte";
 import TextLayout from "./typography/TextLayout.svelte";
 import Sidebar from "./layout/Sidebar.svelte";
@@ -101,7 +102,7 @@ export {
   TabBar,
 };
 export { TextLayout, Code, Accordion };
-export { Card, Tile, Form, FormItem, FormProvider, Fieldset };
+export { Card, Tile, Surface, Form, FormItem, FormProvider, Fieldset };
 export { DataList, DataListItem };
 export { Row, Column, Columns, SplitPane, Sidebar, SidebarContainer };
 export { Dialog };
@@ -110,3 +111,4 @@ export { Table };
 export { DropdownMenu };
 export { Text };
 export { surfaceVars } from "./surfaceVars";
+export type { SurfaceTier } from "./layout/Surface.svelte";
