@@ -14,7 +14,11 @@
      share of chroma: near-neutral body text, livelier tints. The targets
      (luminance = L^3) are tuned so indigo gives the original palette. */
   --primary-color: var(--material-color-indigo-600);
-  --secondary-color: var(--material-color-pink-700);
+  /* Secondary is restraint, not a second accent: slate for the things that
+     tint toward it (<Text secondary>, a table's header rule), and a pale
+     neutral fill for secondary bars and buttons. */
+  --secondary-color: var(--material-color-blue-grey-600);
+  --secondary-bg: var(--material-color-blue-grey-50);
   --neutral-tint: var(--primary-color);
 
   --fg: oklch(

@@ -1,0 +1,86 @@
+/* Calm defaults: the structure every theme inherits unless it says otherwise.
+
+   Palettes (themes/light.css, dark, purple...) pick colors; this file decides
+   how much decoration surrounds them, and the answer is "little":
+
+   - Elevation is for things that float. Buttons, cards, data lists and
+     tables sit flat; dialogs, menus and tooltips cast a soft shadow.
+   - One border per box. A Card's header is divided from its body by a
+     hairline, not a tinted band; a Fieldset is a labelled group (pass its
+     `border` prop for a box); a table's head gets a hairline, not a 3px
+     colored rule.
+   - Headings are 600, on a tighter scale than the browser's.
+   - Checkboxes and radios are outlined on the surface they sit on, and
+     checking one changes its box, not the weight of its label.
+
+   Everything here is a plain variable at :root, so any theme -- or the depth
+   add-ons, flat.css and layered.css -- overrides it by setting the same
+   name. Values that must follow the surface they land on are written
+   against currentColor, which resolves at the element, not here. */
+:root {
+  /* ── Elevation ─────────────────────────────────────────── */
+  /* Only the generic shadow is zeroed, not each component's: a theme that
+     wants depth (Material) sets the generic one and every button, card and
+     list gets it back. Overlays are named, so they keep a soft shadow
+     whatever the generic one is. */
+  --shadow-distance: 0;
+  --shadow-blur: 0;
+  --dialog-shadow-distance: 0.75rem;
+  --dialog-shadow-blur: 2.5rem;
+  --dialog-shadow-color: rgba(20, 24, 32, 0.2);
+  --dropdown-menu-shadow-distance: 0.375rem;
+  --dropdown-menu-shadow-blur: 1.25rem;
+  --dropdown-menu-shadow-color: rgba(20, 24, 32, 0.16);
+  --tooltip-shadow-distance: 0.25rem;
+  --tooltip-shadow-blur: 0.75rem;
+  --tooltip-shadow-color: rgba(20, 24, 32, 0.16);
+  --table-sticky-header-box-shadow: 0 1px 0 var(--border-color);
+  --hover-transform: none;
+  --button-hover-transform: none;
+  --button-active-transform: none;
+  --checkbox-hover-transform: none;
+  --checkbox-active-transform: none;
+
+  /* ── One border per box ────────────────────────────────── */
+  --card-border: 1px solid color-mix(in oklab, var(--fg) 14%, var(--bg));
+  --data-list-border: 1px solid color-mix(in oklab, var(--fg) 14%, var(--bg));
+  --card-header-bg: transparent;
+  --card-header-border: 1px solid color-mix(in oklab, currentColor 10%, transparent);
+  --card-footer-bg: color-mix(in oklab, currentColor 3%, transparent);
+  --card-footer-border: 1px solid color-mix(in oklab, currentColor 10%, transparent);
+  --fieldset-border: none;
+  --fieldset-padding: 0;
+  --legend-padding: 0;
+  --legend-weight: 600;
+  --bar-border-top: none;
+  --table-thick-border: 1px;
+  --table-first-row-border-color: var(--border-color);
+  /* A sheet button against the screen edge reads as a whole button, not a
+     circle cut in half by the edge. */
+  --sidebar-sheet-edge-radius: var(--square-radius, 0.375rem);
+
+  /* ── Type ──────────────────────────────────────────────── */
+  --heading-font-weight: 600;
+  --heading-line-height: 1.2;
+  --heading-1-font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.125rem);
+  --heading-2-font-size: clamp(1.3125rem, 1.05rem + 1vw, 1.625rem);
+  --heading-3-font-size: 1.1875rem;
+  --heading-4-font-size: 1.0625rem;
+  --heading-5-font-size: 1rem;
+  --heading-6-font-size: 0.875rem;
+
+  /* ── Checkboxes and radios ─────────────────────────────── */
+  --checkbox-bg: transparent;
+  --checkbox-border: 1.5px solid color-mix(in oklab, currentColor 45%, transparent);
+  --checkbox-radius: 0.25em;
+  --radio-button-bg: transparent;
+  --radio-button-border: 1.5px solid color-mix(in oklab, currentColor 45%, transparent);
+  /* Checked: the fill shows through a transparent edge, so the box is one
+     solid color rather than a fill inside a grey ring. */
+  --checkbox-checked-border: 1.5px solid transparent;
+  --radio-button-checked-border: 1.5px solid transparent;
+  /* The checked label's weight is also the weight its invisible sizer is
+     measured at, so it must not be lighter than the unchecked label --
+     `inherit` would be, wherever the UI weight is above the page's. */
+  --checked-weight: var(--ui-font-weight, normal);
+}

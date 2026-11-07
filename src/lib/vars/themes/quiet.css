@@ -137,9 +137,7 @@
   --heading-margin-bottom: 0.35em;
   --link-color: var(--primary-color);
   /* Checking a box shouldn't make its label jump in weight. */
-  --checked-weight: inherit;
-  --checkbox-checked-font-weight: inherit;
-  --radio-button-checked-font-weight: inherit;
+  --checked-weight: var(--ui-font-weight);
 
   /* ── Controls ───────────────────────────────────────────── */
   --control-bg: var(--quiet-gray-0);

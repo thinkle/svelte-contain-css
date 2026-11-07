@@ -495,6 +495,18 @@ below each other, these are the answer.
   bottom. If you are only putting things one under another, normal flow already
   does that.
 
+### What every theme starts from
+
+`vars/calm.css` (loaded by `defaults.css`) sets the structure themes inherit:
+buttons, cards and lists sit flat and only dialogs, menus and tooltips cast a
+shadow; a Card's header is divided by a hairline, not a tinted band; a
+Fieldset is a labelled group (pass `border` for a box); tables use hairlines;
+headings are 600 on a tighter scale; checkboxes and radios are outlined, and
+checking one does not change its label's weight. Palettes pick colors on top
+of that. A theme that wants depth sets the generic `--shadow-*` variables and
+every component gets it back (Material does). For a fully neutral look, use
+`themes/quiet.css`.
+
 ### Theme categories and fallback chains
 
 `--ui-*` is the shared interface **typography** category (labels, buttons,
@@ -1231,6 +1243,16 @@ RadioButtons work similarly but only allow one selection. The `group` will be a 
 
 Always bind (`bind:checked`, `bind:group`, `bind:value`) rather than wiring
 `onchange` handlers and casting events.
+
+**Boxed options:** `boxed` outlines the whole label, so its text reads as
+part of the control, and gives the checked option the accent edge and a faint
+tint. Good for a short list of choices that each deserve a line (plans,
+shipping speeds); plain checkboxes stay better for long or dense lists.
+
+```svelte
+<RadioButton boxed value="monthly" bind:group={plan}>Monthly</RadioButton>
+<RadioButton boxed value="yearly" bind:group={plan}>Yearly, save 20%</RadioButton>
+```
 
 **Styling Checkboxes:**
 

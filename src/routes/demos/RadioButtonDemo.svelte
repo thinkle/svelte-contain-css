@@ -107,6 +107,7 @@
   ];
 
   let val = $state("lettuce");
+  let plan = $state("monthly");
 </script>
 
 <CssVariableDemo variables={radioCSSVariables}>
@@ -132,4 +133,28 @@
     <RadioButton value="onion" bind:group={val}>Onion</RadioButton>
     <p>Selected: {val}</p>
   </DemoWithCode>
+  <DemoWithCode
+    defaultTab="split"
+    code={`<RadioButton boxed value="monthly" bind:group={plan}>Monthly</RadioButton>
+<RadioButton boxed value="yearly" bind:group={plan}>Yearly, save 20%</RadioButton>`}
+  >
+    {#snippet header()}
+      <h3>Boxed</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p><code>boxed</code> outlines the whole label, so its text reads as part of the control, and marks the chosen option with the accent edge.</p>
+    {/snippet}
+    <div class="boxed-options" data-testid="boxed-radios">
+      <RadioButton boxed value="monthly" bind:group={plan}>Monthly</RadioButton>
+      <RadioButton boxed value="yearly" bind:group={plan}>Yearly, save 20%</RadioButton>
+    </div>
+  </DemoWithCode>
 </CssVariableDemo>
+
+<style>
+  .boxed-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+</style>

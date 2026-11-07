@@ -132,6 +132,7 @@
   ];
   let selectedToppings = $state(["Bacon", "Lettuce", "Tomato"]);
   let agreeToTerms = $state(false);
+  let extras = $state(["Backups"]);
 
   function updateEventInfo(event: Event) {
     console.info("Check event: ", event);
@@ -227,4 +228,28 @@
       I agree to the terms and conditions
     </Checkbox>
   </DemoWithCode>
+  <DemoWithCode
+    defaultTab="split"
+    code={`<Checkbox boxed bind:group={extras} value="Backups">Nightly backups</Checkbox>
+<Checkbox boxed bind:group={extras} value="Support">Priority support</Checkbox>`}
+  >
+    {#snippet header()}
+      <h3>Boxed</h3>
+    {/snippet}
+    {#snippet blurb()}
+      <p><code>boxed</code> outlines the whole label, so its text reads as part of the control, and marks checked options with the accent edge.</p>
+    {/snippet}
+    <div class="boxed-options" data-testid="boxed-checkboxes">
+      <Checkbox boxed bind:group={extras} value="Backups">Nightly backups</Checkbox>
+      <Checkbox boxed bind:group={extras} value="Support">Priority support</Checkbox>
+    </div>
+  </DemoWithCode>
 </CssVariableDemo>
+
+<style>
+  .boxed-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+</style>

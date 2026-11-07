@@ -16,6 +16,15 @@
       name?: string;
       value?: any;
       group?: any[];
+      /**
+       * Outline the whole label, so the text reads as part of the control:
+       * a bordered, padded option that takes the accent edge and a faint
+       * tint when checked. Style it with --checkbox-boxed-border,
+       * --checkbox-boxed-padding-block,
+       * --checkbox-boxed-padding-inline, --checkbox-boxed-radius, and
+       * --checkbox-boxed-checked-border-color / --checkbox-boxed-checked-bg.
+       */
+      boxed?: boolean;
       children?: Snippet;
     },
     BaseStyleProps &
@@ -29,6 +38,7 @@
     name = "",
     value = undefined,
     group = $bindable<any[] | undefined>(undefined),
+    boxed = false,
     children,
     class: className,
     ...restProps
@@ -77,7 +87,7 @@
   let ref: HTMLElement | null = $state(null);
 </script>
 
-<div class={["label-sizing-box", className]} style={el.style}>
+<div class={["label-sizing-box", className]} class:boxed style={el.style}>
   <label class="checkbox-item">
     {#if useGroup}
       <input
@@ -272,5 +282,40 @@
     label {
       min-height: var(--touch-row-size, 36px);
     }
+  }
+
+  /* `boxed`: the label is the visible control. Both labels -- the real one
+     and the invisible sizer under it -- take the same padding and border,
+     so the box is sized to the label at its checked weight. */
+  .boxed {
+    margin-block: var(--checkbox-boxed-margin-block, 0.2em);
+  }
+  .boxed label {
+    padding: var(--checkbox-boxed-padding-block, 0.5em)
+      var(--checkbox-boxed-padding-inline, 0.75em);
+    /* The box's own padding is the inset now; the unboxed label's left
+       margin would push the whole box in. */
+    margin-left: 0;
+    border: var(--checkbox-boxed-border, 1px solid var(--border-color));
+    border-radius: var(
+      --checkbox-boxed-radius,
+      var(--square-radius, var(--border-radius, 0.375rem))
+    );
+    box-sizing: border-box;
+  }
+  .boxed label.checkbox-item:has(input:checked) {
+    border-color: var(--checkbox-boxed-checked-border-color, var(--primary-bg));
+    background: var(
+      --checkbox-boxed-checked-bg,
+      color-mix(in oklab, var(--primary-bg) 8%, transparent)
+    );
+  }
+  /* The check mark is placed from the label's padding edge, so in a boxed
+     label it moves in by the same padding as the box it marks. */
+  .boxed label:has(input:checked)::after {
+    left: calc(
+      var(--checkbox-boxed-padding-inline, 0.75em) +
+        var(--checkbox-left-offset, 0.125em)
+    );
   }
 </style>

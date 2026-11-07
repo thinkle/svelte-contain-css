@@ -14,6 +14,15 @@
     {
       group?: any;
       value?: any;
+      /**
+       * Outline the whole label, so the text reads as part of the control:
+       * a bordered, padded option that takes the accent edge and a faint
+       * tint when checked. Style it with --radio-button-boxed-border,
+       * --radio-button-boxed-padding-block,
+       * --radio-button-boxed-padding-inline, --radio-button-boxed-radius, and
+       * --radio-button-boxed-checked-border-color / --radio-button-boxed-checked-bg.
+       */
+      boxed?: boolean;
       children?: Snippet;
     },
     BaseStyleProps &
@@ -25,6 +34,7 @@
   let {
     group = $bindable<any>(undefined),
     value = undefined,
+    boxed = false,
     children,
     class: className,
     ...restProps
@@ -56,7 +66,7 @@
   }
 </script>
 
-<div class={["label-sizing-box", className]} style={el.style}>
+<div class={["label-sizing-box", className]} class:boxed style={el.style}>
   <label class="radio-item">
     <input
       {value}
@@ -221,5 +231,34 @@
     label.radio-item {
       min-height: var(--touch-row-size, 36px);
     }
+  }
+
+  /* `boxed`: the label is the visible control. Both labels -- the real one
+     and the invisible sizer under it -- take the same padding and border,
+     so the box is sized to the label at its checked weight. */
+  .boxed {
+    margin-block: var(--radio-button-boxed-margin-block, 0.2em);
+  }
+  .boxed label {
+    padding: var(--radio-button-boxed-padding-block, 0.5em)
+      var(--radio-button-boxed-padding-inline, 0.75em);
+    border: var(--radio-button-boxed-border, 1px solid var(--border-color));
+    border-radius: var(
+      --radio-button-boxed-radius,
+      var(--square-radius, var(--border-radius, 0.375rem))
+    );
+    box-sizing: border-box;
+  }
+  .boxed label.radio-item:not(.invisible):has(input:checked) {
+    border-color: var(--radio-button-boxed-checked-border-color, var(--primary-bg));
+    background: var(
+      --radio-button-boxed-checked-bg,
+      color-mix(in oklab, var(--primary-bg) 8%, transparent)
+    );
+  }
+  /* The box's padding is the inset now; the dot's own left margin would
+     double it. */
+  .boxed label.radio-item::before {
+    margin-left: 0;
   }
 </style>
