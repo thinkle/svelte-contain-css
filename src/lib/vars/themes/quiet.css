@@ -28,10 +28,12 @@
   --primary-bg: var(--primary-color);
   --primary-fg: #ffffff;
   /* Secondary is neutral, not a second accent: a "secondary" bar or button
-     is quieter than primary, never louder. */
+     is quieter than primary, never louder. So its fill is a pale tint mixed
+     from --secondary-color rather than the color itself -- still derived,
+     so a --secondary-color set on top of Quiet carries through -- and its
+     text is computed from that fill (colors.css). */
   --secondary-color: var(--quiet-gray-700);
-  --secondary-bg: var(--quiet-gray-100);
-  --secondary-fg: var(--quiet-gray-900);
+  --secondary-bg: color-mix(in oklab, var(--secondary-color) 8%, var(--bg));
 
   --success-color: #18794e;
   --success-bg: #18794e;
