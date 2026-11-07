@@ -127,12 +127,14 @@
   --heading-line-height: 1.2;
   --heading-letter-spacing: -0.011em;
   --heading-tint: currentColor;
-  --heading-1-font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.125rem);
-  --heading-2-font-size: clamp(1.3125rem, 1.05rem + 1vw, 1.625rem);
-  --heading-3-font-size: 1.1875rem;
-  --heading-4-font-size: 1.0625rem;
-  --heading-5-font-size: 1rem;
-  --heading-6-font-size: 0.875rem;
+  /* em, not rem: a Card or Tile scales its text to its width, and its
+     headings have to scale with it. */
+  --heading-1-font-size: 1.75em;
+  --heading-2-font-size: 1.4em;
+  --heading-3-font-size: 1.2em;
+  --heading-4-font-size: 1.05em;
+  --heading-5-font-size: 1em;
+  --heading-6-font-size: 0.875em;
   --heading-margin-top: 1.25em;
   --heading-margin-bottom: 0.35em;
   --link-color: var(--primary-color);
@@ -216,7 +218,7 @@
 
   /* One border per box: a Fieldset inside a bordered panel is a labelled
      group, not another box. */
-  --fieldset-border: none;
+  --fieldset-border-style: none;
   --fieldset-padding: 0;
   --legend-font-weight: 600;
   --legend-fg: var(--quiet-gray-900);
