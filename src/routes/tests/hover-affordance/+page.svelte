@@ -32,10 +32,11 @@
   <div data-testid="tab">
     <TabBar><TabItem active>On</TabItem><TabItem>Off</TabItem></TabBar>
   </div>
-  <!-- A text-only hover: the background stays, the text darkens. -->
+  <!-- A text-only hover: pin rest and hover to the same explicit color.
+       The default tab fill now follows its local surface, not control-bg. -->
   <div
     data-testid="tab-text-hover"
-    style="--tab-hover-bg: var(--tab-bg, var(--control-bg)); --tab-hover-fg: rgb(200, 0, 0);"
+    style="--tab-bg: var(--control-bg); --tab-hover-bg: var(--tab-bg); --tab-hover-fg: rgb(200, 0, 0);"
   >
     <TabBar><TabItem active>On</TabItem><TabItem>Off</TabItem></TabBar>
   </div>
