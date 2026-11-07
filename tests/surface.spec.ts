@@ -91,6 +91,15 @@ test("forwards attributes, renders the requested element and merges class", asyn
   await expect(el).toHaveClass(/\btier-surface\b/);
 });
 
+test("as=details takes the element's own attributes and paints its tier", async ({ page }) => {
+  await open(page);
+  const el = page.getByTestId("details");
+  expect(await el.evaluate((n) => n.tagName)).toBe("DETAILS");
+  expect(await el.evaluate((n) => (n as HTMLDetailsElement).open)).toBe(true);
+  await expect(el).toHaveClass(/\btier-surface-sunken\b/);
+  expect(await el.evaluate((n) => getComputedStyle(n).backgroundColor)).not.toBe("rgba(0, 0, 0, 0)");
+});
+
 test("box geometry is identical to a plain div", async ({ page }) => {
   await open(page);
   const plain = page.getByTestId("plain");

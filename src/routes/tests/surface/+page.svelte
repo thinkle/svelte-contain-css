@@ -47,6 +47,14 @@
 
 <Surface as="section" aria-label="Section surface" data-testid="as" class="mine">Section</Surface>
 
+<!-- Element-specific attributes type-check and forward: `open` exists only on
+     <details>, so this line also fails svelte-check if Surface loses its
+     per-element typing. -->
+<Surface as="details" tier="surface-sunken" open data-testid="details">
+  <summary>Details</summary>
+  Inside
+</Surface>
+
 <!-- Same styles, one div and one Surface: their boxes must be identical. -->
 <div class="frame" data-testid="geometry">
   <div class="probe" data-testid="plain"><p>Box</p></div>

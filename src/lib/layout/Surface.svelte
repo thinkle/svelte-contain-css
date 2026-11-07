@@ -22,9 +22,11 @@
       .join("; ") + ";";
 </script>
 
-<script lang="ts">
+<!-- Generic over the element it renders, so `as="details"` accepts `open`,
+     `as="dialog"` its attributes, and so on -- and a typo still fails. -->
+<script lang="ts" generics="E extends keyof SvelteHTMLElements = 'div'">
   import type { Snippet } from "svelte";
-  import type { HTMLAttributes } from "svelte/elements";
+  import type { SvelteHTMLElements } from "svelte/elements";
   import type { ContainProps } from "$lib/types";
   import { elementProps } from "$lib/util";
   import { COLOR_VARS, type StyleProps } from "$lib/styleProps";
@@ -35,7 +37,7 @@
   const SURFACE_VARS = [...COLOR_VARS] as const;
 
   type Props = ContainProps<
-    HTMLAttributes<HTMLElement>,
+    SvelteHTMLElements[E],
     {
       /** The neutral tier this element paints. Default `surface`. */
       tier?: SurfaceTier;
@@ -44,7 +46,7 @@
           be confused with the ARIA `role` attribute, which still forwards. */
       colorRole?: string | null;
       /** The element to render. Default `div`. */
-      as?: string;
+      as?: E;
       children?: Snippet;
     },
     StyleProps<typeof SURFACE_VARS>
@@ -53,7 +55,7 @@
   let {
     tier = "surface",
     colorRole = null,
-    as = "div",
+    as = "div" as E,
     bg,
     fg,
     children,
