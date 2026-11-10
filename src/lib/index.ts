@@ -111,4 +111,5 @@ export { Table };
 export { DropdownMenu };
 export { Text };
 export { surfaceVars } from "./surfaceVars";
+export { getPageScroller, type PageScroller } from "./layout/pageScroller";
 export type { SurfaceTier } from "./layout/Surface.svelte";
