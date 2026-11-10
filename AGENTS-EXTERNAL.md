@@ -228,6 +228,25 @@ Use one per route — don't nest Pages, and don't reach for it as a generic wrap
 </Page>
 ```
 
+**The window does not scroll; the content area does.** Anything that scrolls
+"the page" — resetting to the top after client-side navigation (SvelteKit only
+resets the window), a back-to-top button, scrolling a section into view below
+a sticky bar — needs that element. Ask for it with `getPageScroller()` rather
+than selecting `.page .content`:
+
+```svelte
+<script lang="ts">
+  import { getPageScroller } from "contain-css-svelte";
+  const scroller = getPageScroller(); // call during init, inside a Page
+</script>
+
+<Button onclick={() => scroller()?.scrollTo({ top: 0 })}>Back to top</Button>
+```
+
+It returns a getter, not the element: the element doesn't exist until `Page`
+has mounted. The getter is reactive, and returns `null` outside a `Page` (the
+window scrolls there) — handle both.
+
 `Sidebar` normally widens as it opens, reflowing the page content beside it.
 Pass `overlay` to make the panel float *above* the content at every width
 instead — nothing reflows:

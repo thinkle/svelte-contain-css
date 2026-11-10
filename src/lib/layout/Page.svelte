@@ -9,6 +9,7 @@
     type StyleProps,
   } from "$lib/styleProps";
   import { onDestroy, onMount } from "svelte";
+  import { setPageScroller } from "./pageScroller";
 
   const {
     right = false,
@@ -188,6 +189,9 @@
       }
     };
   });
+
+  let contentElement = $state<HTMLElement | null>(null);
+  setPageScroller(() => contentElement);
 </script>
 
 <section
@@ -212,7 +216,7 @@
     <div class="aside" style:--_page-header-height="{headerHeight}px">
       {#if hasSidebar}{@render sidebar?.()}{/if}
     </div>
-    <div class="content">
+    <div class="content" bind:this={contentElement}>
       {@render children?.()}
     </div>
   </div>
