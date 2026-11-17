@@ -186,7 +186,9 @@
   }
 
   header {
-    @include color-props(card-header, surface-sunken);
+    /* A role given to the Card (surfaceVars(role, "card")) reaches its
+       header and footer, unless they are given one of their own. */
+    @include color-props(card-header, surface-sunken, $role-from: card);
     @include box-props-top(card-header, bar);
     @include border-props-borderless(card-header, bar);
     display: flex;
@@ -208,12 +210,12 @@
     :global(h6) {
       margin-block-start: 0 !important;
       margin-block-end: 0 !important;
-      @include color-props(card-header, surface-sunken, $family: false);
+      @include color-props(card-header, surface-sunken, $family: false, $role-from: card);
     }
   }
 
   footer {
-    @include color-props(card-footer, surface-sunken);
+    @include color-props(card-footer, surface-sunken, $role-from: card);
     @include box-props-bottom(card-footer, bar);
     @include border-props-borderless(card-footer, bar);
     /* Centred in its min-height like the header, but a column, so footer

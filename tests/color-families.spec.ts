@@ -70,6 +70,26 @@ test.describe("color families", () => {
     near(await rgb(page, "raised-pinned", "a"), [0, 128, 0]);
   });
 
+  test("a role given to a Card reaches its header and footer", async ({ page }) => {
+    // Before: the header and footer reset to the surface ink (dark on primary).
+    near(await rgb(page, "role-card", "header .plain"), WHITE);
+    near(await rgb(page, "role-card", "footer .plain"), WHITE);
+    near(await rgb(page, "role-card", "section a"), [255, 255, 0]);
+    // calm.css gives the header a component-level background: the link mixes
+    // from the role's foreground instead of taking the pin.
+    near(await rgb(page, "role-card", "header a"), mix(WHITE, LINK, 0.1));
+    // Without one, the role's pins apply in the header and footer too.
+    near(await rgb(page, "role-card-pinned", "header .plain"), WHITE);
+    near(await rgb(page, "role-card-pinned", "header a"), [255, 255, 0]);
+    near(await rgb(page, "role-card-pinned", "footer a"), [255, 255, 0]);
+  });
+
+  test("a Card header's own role wins; a plain Card is unchanged", async ({ page }) => {
+    near(await rgb(page, "role-card-own-header", "header .plain"), [250, 250, 200]);
+    near(await rgb(page, "role-card-own-header", ".body"), WHITE);
+    near(await rgb(page, "plain-card", "header .plain"), SURFACE_FG);
+  });
+
   test("role sugar and a role context resolve alike", async ({ page }) => {
     for (const id of ["sugar", "context-role"]) {
       near(await rgb(page, id, "a"), [255, 255, 0]);

@@ -1750,6 +1750,10 @@ of the surface, never by component. Full contract:
   mixes on the element that paints them, not on `:root`.
 - **Roles**: `primary`, `secondary`, … and app-defined ones. Apply one with
   `<Bar primary>` or `surfaceVars(role, prefix)` on the element or a context.
+  A role given to a Card (`surfaceVars(role, "card")`) reaches its header and
+  footer too; give them their own with the `card-header` / `card-footer`
+  prefixes. An app-defined role needs its colors and pins where the role is
+  applied: `style="--recipe-bg: …; --recipe-fg: …; --on-recipe-link-text-fg: …; {surfaceVars('recipe', 'card')}"`.
 - **`control`**: quiet chrome (plain Button, Tag, inactive TabItem). Set
   `--control-bg/-fg`; `secondary` is an accent.
 - **`field`**: text fields (Input, Select, TextArea). Fill and edge default
