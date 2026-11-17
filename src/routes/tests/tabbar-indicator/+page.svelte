@@ -2,6 +2,7 @@
   /* Fixture for tests/tabbar-indicator.spec.ts.
      ?preset=off  loads no preset (the default look);
      ?dur=<css time + easing> sets --tab-indicator-transition for every bar. */
+  import { building } from "$app/environment";
   import { page } from "$app/state";
   import TabBar from "$lib/layout/TabBar.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
@@ -9,8 +10,9 @@
   import underlinedTabs from "$lib/vars/underlined-tabs.css?raw";
   import "$lib/vars/defaults.css";
 
-  const preset = page.url.searchParams.get("preset") !== "off";
-  const dur = page.url.searchParams.get("dur") ?? "200ms linear";
+  const params = building ? null : page.url.searchParams;
+  const preset = params?.get("preset") !== "off";
+  const dur = params?.get("dur") ?? "200ms linear";
 
   let main = $state("a");
   let closable = $state("a");
