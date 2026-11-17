@@ -69,6 +69,35 @@
   <div style={surfaceVars("primary", "tile")}>
     <Tile data-testid="role-tile"><h2>Role heading</h2><h3>Role h3</h3></Tile>
   </div>
+  <!-- A role given to a Card reaches its header and footer. Under the default
+       look the header has a component-level background (calm.css), so its
+       link mixes from the role's foreground rather than taking the pin. -->
+  <Card data-testid="role-card" style={surfaceVars("primary", "card")}>
+    {#snippet header()}<span class="plain">Header</span> <a href="#x">header link</a>{/snippet}
+    <p><a href="#x">body link</a></p>
+    {#snippet footer()}<span class="plain">Footer</span>{/snippet}
+  </Card>
+  <!-- With no component-level header background the role's pins apply there. -->
+  <div style="--card-header-bg: initial; --card-footer-bg: initial;">
+    <Card data-testid="role-card-pinned" style={surfaceVars("primary", "card")}>
+      {#snippet header()}<span class="plain">Header</span> <a href="#x">header link</a>{/snippet}
+      <p>Body</p>
+      {#snippet footer()}<a href="#x">footer link</a>{/snippet}
+    </Card>
+  </div>
+  <!-- A header given its own role keeps it over the Card's. -->
+  <div style="--card-header-bg: initial;">
+    <Card data-testid="role-card-own-header" style="{surfaceVars('primary', 'card')} {surfaceVars('success', 'card-header')} --success-bg: rgb(0, 100, 0); --success-fg: rgb(250, 250, 200);">
+      {#snippet header()}<span class="plain">Header</span>{/snippet}
+      <p class="body">Body</p>
+    </Card>
+  </div>
+  <!-- A Card with no role is unchanged: its header keeps the surface ink. -->
+  <Card data-testid="plain-card">
+    {#snippet header()}<span class="plain">Header</span>{/snippet}
+    <p>Body</p>
+  </Card>
+
   <!-- A role with no pins mixes; its headings take the surface foreground. -->
   <div style="{surfaceVars('success', 'tile')} --success-bg: rgb(0, 100, 0); --success-fg: rgb(255, 255, 255); --success-color: rgb(0, 100, 0);">
     <Tile data-testid="role-unpinned"><h2>Unpinned role</h2><p><a href="#x">link</a></p></Tile>

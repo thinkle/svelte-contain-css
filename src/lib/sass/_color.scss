@@ -274,14 +274,17 @@ $tier-steps: (
   --_role-n: var(--_role-flag, 0);
 }
 
-@mixin family-vars($comp, $family) {
+// $role-comp is where a role is looked up. It is $comp unless the surface
+// also takes its owner's role (color-props' $role-from): a Card header reads
+// its own role, then the Card's.
+@mixin family-vars($comp, $family, $role-comp: $comp) {
   // This surface's resolved pair, for fields inside it (field-default-bg(),
   // field-border-props()). Fields never publish one, so they can't loop.
   --_ground-bg: var(--_background-color);
   --_ground-fg: var(--_color);
   @if list.length($comp) > 0 {
     --_comp-flag: #{fn.vars-fallback(bg, var(--__unset), $comp...)};
-    --_role-flag: #{role-chain($comp, role-bg)};
+    --_role-flag: #{role-chain($role-comp, role-bg)};
   } @else {
     --_comp-flag: initial;
     --_role-flag: initial;
@@ -297,7 +300,7 @@ $tier-steps: (
         var(--#{$tone}-text-amount, var(--text-amount, 50%))
     );
     @if list.length($comp) > 0 {
-      --_on-#{$tone}-role: #{role-chain($comp, on-#{$tone}-text-fg)};
+      --_on-#{$tone}-role: #{role-chain($role-comp, on-#{$tone}-text-fg)};
     } @else {
       --_on-#{$tone}-role: initial;
     }
@@ -314,11 +317,11 @@ $tier-steps: (
   --_on-link-fam: #{pin-chain($family, (link-text-fg))};
   --_on-link-hover-fam: #{pin-chain($family, (link-hover-text-fg, link-text-fg))};
   @if list.length($comp) > 0 {
-    --_on-link-role: #{role-chain($comp, on-link-text-fg)};
+    --_on-link-role: #{role-chain($role-comp, on-link-text-fg)};
     --_on-link-hover-role: #{role-chain-fallback(
-        $comp,
+        $role-comp,
         on-link-hover-text-fg,
-        role-chain($comp, on-link-text-fg)
+        role-chain($role-comp, on-link-text-fg)
       )};
   } @else {
     --_on-link-role: initial;
@@ -331,7 +334,7 @@ $tier-steps: (
           heading-pin-names($level, $channel)
         )};
       @if list.length($comp) > 0 {
-        --_on-h#{$level}-#{$channel}-role: #{role-chain($comp, on-h#{$level}-#{$channel})};
+        --_on-h#{$level}-#{$channel}-role: #{role-chain($role-comp, on-h#{$level}-#{$channel})};
       } @else {
         --_on-h#{$level}-#{$channel}-role: initial;
       }
@@ -375,6 +378,15 @@ $tier-steps: (
   $family: map.get($split, family);
   $rest: map.get($split, rest);
   $neutral: $family != null and map.has-key($ladder, $family);
+  // `$role-from: card` lets a part of a component (a Card's header) take the
+  // role applied to its owner when it has none of its own. Only the role
+  // travels: the owner's component-level background (--card-bg) does not.
+  $role-comp: $comp;
+  @if map.has-key($keywords, "role-from") {
+    @each $owner in map.get($keywords, "role-from") {
+      $role-comp: list.append($role-comp, $owner, $separator: comma);
+    }
+  }
 
   // Optional per-channel color mixing. Lets a container dull, tint, or fully
   // remap a component's colors without restating the color itself — e.g.
@@ -454,7 +466,7 @@ $tier-steps: (
       $tail: family-color-chain($family, $channel, $tail);
     }
     @if list.length($comp) > 0 and $neutral {
-      $tail: role-chain-fallback($comp, role-#{$channel}, $tail);
+      $tail: role-chain-fallback($role-comp, role-#{$channel}, $tail);
     }
     --_#{$channel}-base: #{fn.vars-fallback($channel, $tail, $comp...)};
   }
@@ -482,7 +494,7 @@ $tier-steps: (
   // nested contexts without inheriting an ancestor's computed background.
   --muted-color: var(--muted-color-override, var(--_background-color));
   @if $neutral and $family-aware {
-    @include family-vars($comp, $family);
+    @include family-vars($comp, $family, $role-comp);
   } @else {
     @each $tone in $tones {
       --#{$tone}-text-fg: var(
