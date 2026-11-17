@@ -90,6 +90,19 @@ test("a tab without --tab-indicator-color falls back to its own text colour", as
   await expect.poll(() => bg(indicator(page, "main"))).toBe(fg);
 });
 
+test("deselecting a borderless active tab does not flash an outline", async ({ page }) => {
+  await load(page, "?preset=off");
+  await page.getByTestId("main").locator(".tabs").evaluate((element) => {
+    element.style.setProperty("--tab-active-border", "none");
+    element.style.setProperty("--tab-transition", "5s linear");
+  });
+  const previouslyActive = page.getByTestId("a");
+  await expect(previouslyActive).toHaveCSS("border-top-style", "none");
+  await page.getByTestId("b").click();
+  expect(await previouslyActive.evaluate((element) => getComputedStyle(element).borderTopColor))
+    .toBe("rgba(0, 0, 0, 0)");
+});
+
 test("the first paint is placed without animating", async ({ page }) => {
   await load(page, "?dur=5000ms%20linear");
   // Long duration: if it had animated from 0 it would not be under the tab yet.

@@ -251,7 +251,7 @@
     </Card>
     <Button primary>Button</Button>
   {:else if kind === "fields"}
-    <Input placeholder="A field" />
+    <Input aria-label="Underline Fields preview" placeholder="Focus this field" />
   {:else if kind === "tabs"}
     <TabBar>
       <TabItem active>Overview</TabItem>
@@ -438,7 +438,11 @@
                 >
                 <small>{theme.description}</small>
               </div>
-              <div class="addon-sample" aria-hidden="true" inert>
+              <div
+                class="addon-sample"
+                aria-hidden={theme.sample === "fields" ? undefined : true}
+                inert={theme.sample !== "fields"}
+              >
                 {@render addOnSample(theme.sample)}
               </div>
             {/if}

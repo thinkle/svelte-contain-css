@@ -64,15 +64,45 @@ test("colour and origin come from the variables; default is the focus/primary co
   expect(img).not.toContain("rgb(255, 0, 128)");
 });
 
-test("the fill is untouched and the focus ring remains", async ({ page }) => {
+test("the focus line appears immediately in place of the ring", async ({ page }) => {
+  await load(page, "?dur=3000ms%20linear");
+  for (const [, field] of fields(page)) {
+    const focusStyle = await field.evaluate((element: HTMLElement) => {
+      const restingFill = getComputedStyle(element).backgroundColor;
+      element.focus();
+      const style = getComputedStyle(element);
+      return {
+        fillUnchanged: style.backgroundColor === restingFill,
+        bottomMatchesText: style.borderBottomColor === style.color,
+        outline: style.outlineStyle,
+        shadow: style.boxShadow,
+      };
+    });
+    expect(focusStyle).toEqual({
+      fillUnchanged: true,
+      bottomMatchesText: true,
+      outline: "none",
+      shadow: "none",
+    });
+  }
+});
+
+test("a pointer-focused text field uses the underline", async ({ page }) => {
   await load(page);
   const f = page.getByTestId("input");
-  const bgc = await f.evaluate((n) => getComputedStyle(n).backgroundColor);
-  expect(bgc).toMatch(/rgba\(0, 0, 0, 0\)|transparent|\/ 0\)/); // --field-bg: transparent, as before
-  await f.focus();
-  expect(await f.evaluate((n) => getComputedStyle(n).outlineStyle)).not.toBe("none");
-  expect(await f.evaluate((n) => getComputedStyle(n).boxShadow)).not.toBe("none");
-  expect(await f.evaluate((n) => getComputedStyle(n).backgroundColor)).toBe(bgc);
+  await f.click();
+  await expect(f).toBeFocused();
+  await expect(f).toHaveCSS("outline-style", "none");
+  await expect.poll(() => size(f)).toMatch(/^100% 2px$/);
+});
+
+test("forced colors retain an outline for keyboard focus", async ({ page }) => {
+  await page.emulateMedia({ forcedColors: "active" });
+  await load(page);
+  const f = page.getByTestId("input");
+  await page.keyboard.press("Tab");
+  await expect(f).toBeFocused();
+  await expect(f).not.toHaveCSS("outline-style", "none");
 });
 
 test("reduced motion: no transition on the rule", async ({ page }) => {
@@ -97,6 +127,7 @@ test("without the preset a field's background is exactly the unadorned default",
     expect(prop).toBe("border-color");
     await f.focus();
     expect(await size(f)).toBe("auto");
+    await expect(f).not.toHaveCSS("outline-style", "none");
   }
 });
 
