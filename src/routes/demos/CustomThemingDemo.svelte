@@ -306,7 +306,8 @@
     (say 5%), which mixes toward the surface's text. <code>--field-bg</code>,
     <code>--field-fg</code> and <code>--field-border-color</code> pin exact
     colors instead. For underlined fields, drop the fill and the top and side
-    edges, or load <code>vars/underline-fields.css</code>.
+    edges, or load <code>vars/underline-fields.css</code>, which also grows a
+    stronger rule from the centre when a field takes focus.
   </p>
 
   <h3>Try it</h3>

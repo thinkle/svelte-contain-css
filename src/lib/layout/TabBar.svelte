@@ -62,6 +62,146 @@
   const el = $derived(elementProps(restProps, "tab-bar", TAB_BAR_VARS));
 
   let lastActive = $state(active);
+
+  /* ---- Sliding indicator ------------------------------------------------
+     One element, inside the Bar (the scrolling box), so scrolling moves it
+     with the tabs for free. It is only ever painted when
+     --tab-indicator-height is above 0 (see underlined-tabs.css); otherwise
+     it is a 0px-high, invisible span and nothing else changes.
+
+     TabBar is not told which tab is active (tabs are children, and TabItem's
+     `active` is its own prop), so it reads it back from the DOM: the
+     `.tab.active` wrapper. Measuring uses bounding rects, converted to the
+     Bar's own scroll-content coordinates, and places the indicator with
+     transform + width. Those are physical (left/top) coordinates on
+     purpose: in a right-to-left bar the rects, scrollLeft and the
+     absolutely-positioned indicator all use the same physical axis, so one
+     formula serves both directions and no dir check is needed. */
+  let root = $state<HTMLElement | null>(null);
+  let indicator = $state<HTMLElement | null>(null);
+  let live = $state(false);
+
+  $effect(() => {
+    if (!root || !indicator) return;
+    const ind = indicator;
+    const bar = root.querySelector<HTMLElement>(".bar");
+    if (!bar) return;
+
+    let lastTab: Element | null = null;
+    let lastY: number | null = null;
+    let lastKey = "";
+    let measureQueued = false;
+
+    /* Apply a change with no transition: toggle `quiet`, flush styles, and
+       restore. Used for the first placement, for tabs shifting under the
+       active one (added, removed, resized), and for a hop between rows of a
+       wrapped bar. */
+    function quietly(fn: () => void, className = "quiet") {
+      ind.classList.add(className);
+      fn();
+      void ind.offsetWidth;
+      ind.classList.remove(className);
+    }
+
+    function measure() {
+      measureQueued = false;
+      const height = ind.offsetHeight;
+      const tab = bar!.querySelector(".tab.active");
+      /* Live = it is switched on (height > 0) and there is something to
+         underline. Only then does the preset hide its static underline. */
+      const isLive = height > 0;
+      if (isLive !== live) live = isLive;
+      const buttons = tab ? [...tab.querySelectorAll("button")] : [];
+      if (!tab || !buttons.length) {
+        ind.dataset.hidden = "";
+        lastTab = null;
+        lastY = null;
+        lastKey = "";
+        return;
+      }
+      /* The union of the tab's buttons: a closable tab spans both. The
+         `.tab` wrapper itself is display: contents for a plain tab. */
+      let left = Infinity,
+        right = -Infinity,
+        bottom = -Infinity;
+      for (const b of buttons) {
+        const r = b.getBoundingClientRect();
+        left = Math.min(left, r.left);
+        right = Math.max(right, r.right);
+        bottom = Math.max(bottom, r.bottom);
+      }
+      const barRect = bar!.getBoundingClientRect();
+      const x = left - barRect.left - bar!.clientLeft + bar!.scrollLeft;
+      const y = bottom - barRect.top - bar!.clientTop + bar!.scrollTop - height;
+      const color = (
+        getComputedStyle(buttons[0]).getPropertyValue("--tab-indicator-color").trim() ||
+        getComputedStyle(buttons[0]).color
+      );
+      const key = `${x}|${y}|${right - left}|${color}`;
+      const place = () => {
+        ind.style.transform = `translate(${x}px, ${y}px)`;
+        ind.style.width = `${right - left}px`;
+        ind.style.setProperty("--_tab-indicator-color", color);
+        delete ind.dataset.hidden;
+      };
+      if (tab !== lastTab) {
+        /* The active tab changed: slide, unless this is the first placement
+           (or it was hidden), or it moved to another row. */
+        const first = lastTab === null;
+        const rowChange = lastY !== null && Math.abs(lastY - y) > 1;
+        if (first) quietly(place);
+        else if (rowChange) quietly(place, "jump");
+        else place();
+      } else if (key !== lastKey) {
+        /* Same tab, new geometry: the layout moved under it. (Same geometry
+           means an observer echoing a slide already under way: leave it.) */
+        quietly(place);
+      }
+      lastTab = tab;
+      lastY = y;
+      lastKey = key;
+    }
+    /* Coalesce bursts (a MutationObserver and ResizeObserver firing for one
+       change) into one measurement, but before paint where possible. */
+    function queue() {
+      if (measureQueued) return;
+      measureQueued = true;
+      queueMicrotask(measure);
+    }
+
+    const resizes = new ResizeObserver(queue);
+    const observed = new Set<Element>();
+    function syncObserved() {
+      const now = new Set<Element>([bar!, ind, ...bar!.querySelectorAll("button")]);
+      for (const el of observed) if (!now.has(el)) (resizes.unobserve(el), observed.delete(el));
+      for (const el of now) if (!observed.has(el)) (resizes.observe(el), observed.add(el));
+    }
+    const mutations = new MutationObserver((records) => {
+      /* The indicator's own inline style changes are not news. */
+      if (records.every((r) => r.target === ind)) return;
+      syncObserved();
+      queue();
+    });
+    mutations.observe(bar, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class", "style"],
+    });
+    syncObserved();
+    measure();
+
+    /* A late font changes every tab's width without resizing the bar. */
+    const fonts = (document as Document).fonts;
+    fonts?.ready.then(queue);
+    fonts?.addEventListener?.("loadingdone", queue);
+    return () => {
+      resizes.disconnect();
+      mutations.disconnect();
+      fonts?.removeEventListener?.("loadingdone", queue);
+      measureQueued = true; // a pending microtask must not touch a dead node
+    };
+  });
 </script>
 
 {#snippet strip()}
@@ -97,6 +237,8 @@
       </TabItem>
     {/each}
     {@render children?.()}
+    <!-- Decoration only: the active tab is announced by the tab itself. -->
+    <span class="tab-indicator" bind:this={indicator} aria-hidden="true"></span>
   </Bar>
 {/snippet}
 
@@ -105,6 +247,8 @@
   class:sticky
   class:wrap-tabs={wrap}
   class:has-actions={!!actions}
+  class:tab-indicator-live={live}
+  bind:this={root}
   {...el}
 >
   {#if actions}
@@ -153,6 +297,45 @@
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
+  }
+  /* The sliding indicator (see the script). It lives in the scrolling Bar,
+     which therefore has to be the box its absolute position is measured
+     from. Hidden-by-size by default: --tab-indicator-height is 0 until
+     vars/underlined-tabs.css (or the app) sets it. */
+  :global(.tabs .bar) {
+    position: relative;
+  }
+  .tab-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: var(--tab-indicator-height, 0);
+    pointer-events: none;
+    background-color: var(--_tab-indicator-color, currentColor);
+    --_tab-indicator-transition: var(--tab-indicator-transition, 350ms ease-out);
+    /* Colour travels with the slide, so mid-way it is a blend of the two
+       tabs' colours. */
+    transition:
+      transform var(--_tab-indicator-transition),
+      width var(--_tab-indicator-transition),
+      background-color var(--_tab-indicator-transition);
+  }
+  /* First placement and tabs shifting under the active one: no animation. */
+  .tab-indicator:global(.quiet) {
+    transition: none;
+  }
+  /* A hop between rows of a wrapped bar jumps, but still blends colour. */
+  .tab-indicator:global(.jump) {
+    transition-property: background-color;
+  }
+  .tab-indicator[data-hidden] {
+    visibility: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tab-indicator {
+      transition: none;
+    }
   }
   /* The scroll also goes in through --bar-overflow on the Bar itself (x
      scrolls, y clipped), so it holds even where a consumer's own CSS beats

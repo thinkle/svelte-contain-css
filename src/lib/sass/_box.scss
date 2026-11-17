@@ -103,7 +103,9 @@
   // the hovered edge, and --field-hover-fill-amount: 0% turns the fill step
   // off. Only the edge eases: a fill transition would also animate a theme
   // change, on fields alone.
-  transition: border-color var(--transition, 150ms);
+  // --field-transition lets a preset add to the list (underline-fields.css
+  // eases a focus underline's background-size); unset, it is exactly this.
+  transition: var(--field-transition, border-color var(--transition, 150ms));
   &:hover:not(:disabled, :focus) {
     --_field-hover-fill: var(--field-hover-fill-amount, 3%);
     border-color: #{fn.vars-fallback(
