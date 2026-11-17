@@ -10,9 +10,17 @@
   let tabItemExample = $state("states");
   let tabBarExample = $state("bar");
   let containerExample = $state("details");
+  let docs = $state(["Brandy Balls", "Apple Pie", "Chili"]);
+  let activeDoc = $state("Brandy Balls");
+  function closeDoc(name: string) {
+    const i = docs.indexOf(name);
+    docs = docs.filter((d) => d !== name);
+    if (activeDoc === name) activeDoc = docs[Math.min(i, docs.length - 1)] ?? "";
+  }
   let items = [
     { label: "TabItem", value: "TabItem" },
     { label: "TabBar", value: "TabBar" },
+    { label: "Closable", value: "closable" },
     { label: "Containers & Tabs", value: "containers" },
     { label: "Customize", value: "vars" },
   ];
@@ -195,6 +203,48 @@
             typeof value === "string" ? value : (value?.value ?? "bar");
         }}
       />
+    </DemoWithCode>
+  {:else if active == "closable"}
+    <DemoWithCode
+      defaultTab="split"
+      code={`<TabBar>
+  {#each docs as doc}
+    <TabItem
+      active={doc === activeDoc}
+      onclick={() => (activeDoc = doc)}
+      onclose={() => closeDoc(doc)}
+      closeLabel={\`Close \${doc}\`}
+    >
+      {doc}
+    </TabItem>
+  {/each}
+</TabBar>`}
+    >
+      {#snippet header()}
+        <h3>Closable tabs</h3>
+      {/snippet}
+      {#snippet blurb()}
+        <p>
+          Give a <code>TabItem</code> an <code>onclose</code> callback and it
+          shows a close button, like a browser tab. Delete on the focused tab
+          and a middle-click close it too. Name what closes in
+          <code>closeLabel</code> (default "Close tab"). Style with
+          <code>--tab-close-button-size</code>, <code>-gap</code> and
+          <code>-border-radius</code>.
+        </p>
+      {/snippet}
+      <TabBar>
+        {#each docs as doc (doc)}
+          <TabItem
+            active={doc === activeDoc}
+            onclick={() => (activeDoc = doc)}
+            onclose={() => closeDoc(doc)}
+            closeLabel={`Close ${doc}`}
+          >
+            {doc}
+          </TabItem>
+        {/each}
+      </TabBar>
     </DemoWithCode>
   {:else if active == "containers"}
     <DemoWithCode

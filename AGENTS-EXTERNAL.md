@@ -1591,6 +1591,36 @@ screen and get their own row above the tabs on a phone.
 </TabBar>
 ```
 
+Closable tabs (an app with several documents open) take `onclose`. The tab
+gets a close button beside its own button; Delete on the focused tab and a
+middle-click also call it. Clicking the close button does not activate the
+tab. Name the thing in `closeLabel` (default `"Close tab"`) so a screen reader
+can tell the close buttons apart. Remove the tab from your list in `onclose`:
+the component only reports the request.
+
+```svelte
+<TabBar>
+  {#each docs as doc (doc.id)}
+    <TabItem
+      active={doc.id === activeId}
+      onclick={() => (activeId = doc.id)}
+      onclose={() => closeDoc(doc.id)}
+      closeLabel={`Close ${doc.title}`}
+    >
+      {doc.title}
+    </TabItem>
+  {/each}
+</TabBar>
+```
+
+The tab button and the close button are siblings and share the tab's colours,
+so they read as one tab. Knobs: `--tab-close-button-size` (circle, default
+`1.25em`), `--tab-close-button-gap` (default `0.25em`),
+`--tab-close-button-border-radius` (default `50%`),
+`--tab-close-button-hover-bg` / `-active-bg` (a scrim mixed from the text
+colour by default, so it suits any tab colour). A tab without `onclose`
+renders exactly as before.
+
 ### Split Panes
 
 ```svelte
