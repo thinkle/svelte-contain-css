@@ -63,9 +63,25 @@
     if (target?.hasAttribute?.("popover")) return;
     if (target?.closest?.("[popover]")) return;
 
-    // The dialog element receives clicks on the backdrop area;
-    // we want to close only when clicking the backdrop, not dialog content.
-    // Check if the click's coordinates are outside the dialog's content box.
+    /* A click on the backdrop is delivered to the <dialog> element itself;
+       a click on anything the caller put inside is delivered to that thing
+       and merely bubbles through here. Only the former can be a dismissal.
+
+       Coordinates alone could not tell them apart: a click made by the
+       keyboard (Enter or Space on a button inside) or by script
+       (`input.click()`, which is how a hidden file input is opened) carries
+       clientX/clientY 0, which is outside the content box of any dialog not
+       touching the top left corner. Those dismissed the dialog instead of
+       doing the button's work, and took its contents away with it. */
+    if (event.target !== dialogElement) return;
+
+    /* The dialog element is also the target for a click on its own padding,
+       which is inside the visible box and must not dismiss: that is what the
+       coordinates are for. A coordinate-less click that reached the dialog
+       itself (detail 0 at the origin) is synthetic, not a click at the
+       viewport's corner. */
+    if (event.detail === 0 && event.clientX === 0 && event.clientY === 0) return;
+
     const rect = dialogElement?.getBoundingClientRect();
     if (
       rect &&
