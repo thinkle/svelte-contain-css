@@ -90,28 +90,42 @@
         event.clientY < rect.top ||
         event.clientY > rect.bottom)
     ) {
-      onclose?.();
+      /* Close the dialog rather than reporting it: its own close event is
+         what tells the caller, exactly once, however it was closed. */
+      dialogElement.close();
     }
   }
 
+  /* The dialog's own `close` event is the single report of a closure, so
+     `onclose` runs exactly once whoever closed it -- Escape, the close
+     button, the backdrop, or the caller setting `open` to false.
+
+     This effect used to call `onclose?.()` itself as well, which reported
+     twice for every closure. Worse, it read `onclose` while running, so a
+     caller passing an inline arrow function (the usual way) was handed a new
+     one on every render: mounting a dialog with `open` false called onclose,
+     which re-rendered, which re-ran the effect, until Svelte stopped it. */
   $effect(() => {
-    if (dialogElement) {
-      if (open) {
-        if (modal) {
-          copyCSSVariables(ref, dialogElement);
-          dialogElement.showModal();
-          if (dismissible) {
-            dialogElement.addEventListener("click", handleBackdropClick);
-          }
-        } else {
-          copyCSSVariables(ref, dialogElement);
-          dialogElement.show();
-        }
-      } else if (dialogElement) {
-        dialogElement.close();
-        dialogElement.removeEventListener("click", handleBackdropClick);
-        onclose?.();
-      }
+    if (!dialogElement) return;
+
+    if (!open) {
+      if (dialogElement.open) dialogElement.close();
+      return;
+    }
+
+    copyCSSVariables(ref, dialogElement);
+    /* Reopening an open dialog throws, and this effect re-runs whenever
+       `modal` or `dismissible` changes. */
+    if (!dialogElement.open) {
+      if (modal) dialogElement.showModal();
+      else dialogElement.show();
+    }
+
+    if (modal && dismissible) {
+      dialogElement.addEventListener("click", handleBackdropClick);
+      /* Taken off when the dialog closes, when `dismissible` is turned off,
+         and when the component goes away. */
+      return () => dialogElement.removeEventListener("click", handleBackdropClick);
     }
   });
   let dialogElement: HTMLDialogElement;
@@ -123,7 +137,7 @@
   <dialog bind:this={dialogElement} {onclose} class={className} {...el.attrs}>
     <div class="close-bar">
       <div class="close-button">
-        <CircleButton onclick={onclose}>&times;</CircleButton>
+        <CircleButton onclick={() => dialogElement.close()}>&times;</CircleButton>
       </div>
     </div>
     {@render children?.()}
