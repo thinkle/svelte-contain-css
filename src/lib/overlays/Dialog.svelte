@@ -63,9 +63,29 @@
     if (target?.hasAttribute?.("popover")) return;
     if (target?.closest?.("[popover]")) return;
 
-    // The dialog element receives clicks on the backdrop area;
-    // we want to close only when clicking the backdrop, not dialog content.
-    // Check if the click's coordinates are outside the dialog's content box.
+    /* A click on the backdrop is delivered to the <dialog> element itself;
+       a click on anything the caller put inside is delivered to that thing
+       and merely bubbles through here. Only the former can be a dismissal.
+
+       Coordinates alone could not tell them apart: a click made by the
+       keyboard (Enter or Space on a button inside) or by script
+       (`input.click()`, which is how a hidden file input is opened) carries
+       clientX/clientY 0, which is outside the content box of any dialog not
+       touching the top left corner. Those dismissed the dialog instead of
+       doing the button's work, and took its contents away with it. */
+    if (event.target !== dialogElement) return;
+
+    /* Belt and braces for a click dispatched AT the dialog element by script
+       (`dialogElement.click()`): detail 0 at the origin is synthetic, not
+       someone clicking the viewport's corner. The keyboard and script clicks
+       that caused the bug above target a button inside and are already gone
+       by here. */
+    if (event.detail === 0 && event.clientX === 0 && event.clientY === 0) return;
+
+    /* The dialog element is also the target for a click on its own padding,
+       which is inside the visible box and must not dismiss: that is what the
+       coordinates below are for. */
+
     const rect = dialogElement?.getBoundingClientRect();
     if (
       rect &&
@@ -74,28 +94,52 @@
         event.clientY < rect.top ||
         event.clientY > rect.bottom)
     ) {
-      onclose?.();
+      /* Close the dialog rather than reporting it: its own close event is
+         what tells the caller, exactly once, however it was closed. */
+      dialogElement.close();
     }
   }
 
+  /* The dialog's own `close` event is the single report of a closure, so
+     `onclose` runs exactly once whoever closed it -- Escape, the close
+     button, the backdrop, or the caller setting `open` to false.
+
+     This effect used to call `onclose?.()` itself as well, which reported
+     twice for every closure. Worse, it read `onclose` while running, so a
+     caller passing an inline arrow function (the usual way) was handed a new
+     one on every render: mounting a dialog with `open` false called onclose,
+     which re-rendered, which re-ran the effect, until Svelte stopped it. */
   $effect(() => {
-    if (dialogElement) {
-      if (open) {
-        if (modal) {
-          copyCSSVariables(ref, dialogElement);
-          dialogElement.showModal();
-          if (dismissible) {
-            dialogElement.addEventListener("click", handleBackdropClick);
-          }
-        } else {
-          copyCSSVariables(ref, dialogElement);
-          dialogElement.show();
-        }
-      } else if (dialogElement) {
-        dialogElement.close();
-        dialogElement.removeEventListener("click", handleBackdropClick);
-        onclose?.();
-      }
+    if (!dialogElement) return;
+
+    if (!open) {
+      if (dialogElement.open) dialogElement.close();
+      return;
+    }
+
+    copyCSSVariables(ref, dialogElement);
+    /* An open dialog is left as it is. This effect re-runs whenever `modal`
+       or `dismissible` changes, and `show()` on an open modal dialog and
+       `showModal()` on an open non-modal one both throw. (`showModal()` on an
+       already-modal dialog is merely a no-op, so the guard is not needed for
+       the common case of toggling `dismissible`.)
+
+       So `modal` is read when the dialog opens: changing it while open does
+       nothing until the dialog is closed and opened again. Changing it here
+       instead would mean closing the dialog to reopen it in the other mode,
+       which would report a closure that never happened. */
+    if (!dialogElement.open) {
+      if (modal) dialogElement.showModal();
+      else dialogElement.show();
+    }
+
+    if (modal && dismissible) {
+      dialogElement.addEventListener("click", handleBackdropClick);
+      /* Taken off whenever this effect re-runs -- `open`, `modal` or
+         `dismissible` changing -- and when the component goes away. A
+         dialog that closed itself keeps the listener until one of those
+         happens, which is harmless: no click reaches a closed dialog. */
+      return () => dialogElement.removeEventListener("click", handleBackdropClick);
     }
   });
   let dialogElement: HTMLDialogElement;
@@ -107,7 +151,7 @@
   <dialog bind:this={dialogElement} {onclose} class={className} {...el.attrs}>
     <div class="close-bar">
       <div class="close-button">
-        <CircleButton onclick={onclose}>&times;</CircleButton>
+        <CircleButton onclick={() => dialogElement.close()}>&times;</CircleButton>
       </div>
     </div>
     {@render children?.()}
