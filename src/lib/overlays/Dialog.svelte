@@ -75,12 +75,16 @@
        doing the button's work, and took its contents away with it. */
     if (event.target !== dialogElement) return;
 
+    /* Belt and braces for a click dispatched AT the dialog element by script
+       (`dialogElement.click()`): detail 0 at the origin is synthetic, not
+       someone clicking the viewport's corner. The keyboard and script clicks
+       that caused the bug above target a button inside and are already gone
+       by here. */
+    if (event.detail === 0 && event.clientX === 0 && event.clientY === 0) return;
+
     /* The dialog element is also the target for a click on its own padding,
        which is inside the visible box and must not dismiss: that is what the
-       coordinates are for. A coordinate-less click that reached the dialog
-       itself (detail 0 at the origin) is synthetic, not a click at the
-       viewport's corner. */
-    if (event.detail === 0 && event.clientX === 0 && event.clientY === 0) return;
+       coordinates below are for. */
 
     const rect = dialogElement?.getBoundingClientRect();
     if (
@@ -114,8 +118,16 @@
     }
 
     copyCSSVariables(ref, dialogElement);
-    /* Reopening an open dialog throws, and this effect re-runs whenever
-       `modal` or `dismissible` changes. */
+    /* An open dialog is left as it is. This effect re-runs whenever `modal`
+       or `dismissible` changes, and `show()` on an open modal dialog and
+       `showModal()` on an open non-modal one both throw. (`showModal()` on an
+       already-modal dialog is merely a no-op, so the guard is not needed for
+       the common case of toggling `dismissible`.)
+
+       So `modal` is read when the dialog opens: changing it while open does
+       nothing until the dialog is closed and opened again. Changing it here
+       instead would mean closing the dialog to reopen it in the other mode,
+       which would report a closure that never happened. */
     if (!dialogElement.open) {
       if (modal) dialogElement.showModal();
       else dialogElement.show();
@@ -123,8 +135,10 @@
 
     if (modal && dismissible) {
       dialogElement.addEventListener("click", handleBackdropClick);
-      /* Taken off when the dialog closes, when `dismissible` is turned off,
-         and when the component goes away. */
+      /* Taken off whenever this effect re-runs -- `open`, `modal` or
+         `dismissible` changing -- and when the component goes away. A
+         dialog that closed itself keeps the listener until one of those
+         happens, which is harmless: no click reaches a closed dialog. */
       return () => dialogElement.removeEventListener("click", handleBackdropClick);
     }
   });

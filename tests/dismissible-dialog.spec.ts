@@ -59,3 +59,21 @@ test("clicking the dialog's own padding does not dismiss", async ({ page }) => {
   await page.mouse.click(box.x + box.width / 2, box.y + box.height - 3);
   await expect(dialog).toBeVisible();
 });
+
+test("turning dismissible off while open stops the backdrop dismissing", async ({ page }) => {
+  const dialog = await open(page);
+  await page.getByTestId("stop-dismissing").click();
+  const box = (await dialog.boundingBox())!;
+  await page.mouse.click(Math.max(2, box.x / 2), Math.max(2, box.y / 2));
+  await expect(dialog).toBeVisible();
+});
+
+// `modal` is read when the dialog opens: a browser will not switch an open
+// dialog between modal and non-modal, so the component does not pretend to.
+test("changing modal while open leaves the dialog as it was opened", async ({ page }) => {
+  const dialog = await open(page);
+  expect(await dialog.evaluate((d: HTMLDialogElement) => d.matches(":modal"))).toBe(true);
+  await page.getByTestId("make-non-modal").click();
+  await expect(dialog).toBeVisible();
+  expect(await dialog.evaluate((d: HTMLDialogElement) => d.matches(":modal"))).toBe(true);
+});

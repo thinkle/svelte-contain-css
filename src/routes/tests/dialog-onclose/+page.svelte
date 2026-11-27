@@ -8,6 +8,11 @@
   let closes = $state(0);
   // A dialog that is never opened: mounting one must not report a close.
   let neverOpenCloses = $state(0);
+  // A non-modal dialog: shown with show(), not closed by Escape.
+  let nonModalOpen = $state(false);
+  let nonModalCloses = $state(0);
+  // A dialog with no onClose at all: its close button must still work.
+  let plainOpen = $state(false);
 </script>
 
 <Page>
@@ -39,6 +44,29 @@
 
     <Dialog open={false} modal={true} onClose={() => (neverOpenCloses += 1)}>
       <h3>Never opened</h3>
+    </Dialog>
+
+    <Button data-testid="open-non-modal" onclick={() => (nonModalOpen = true)}>
+      Open non-modal
+    </Button>
+    <p>non-modal closes: <span data-testid="non-modal-closes">{nonModalCloses}</span></p>
+    <Dialog
+      data-testid="non-modal-dialog"
+      open={nonModalOpen}
+      modal={false}
+      onClose={() => {
+        nonModalCloses += 1;
+        nonModalOpen = false;
+      }}
+    >
+      <h3>Non-Modal</h3>
+    </Dialog>
+
+    <Button data-testid="open-plain" onclick={() => (plainOpen = true)}>
+      Open handler-less
+    </Button>
+    <Dialog data-testid="plain-dialog" open={plainOpen} modal={true}>
+      <h3>No onClose</h3>
     </Dialog>
   </TextLayout>
 </Page>

@@ -7,6 +7,8 @@
   let dialogOpen = $state(false);
   let count = $state(0);
   let fileInput: HTMLInputElement;
+  let dismissible = $state(true);
+  let modal = $state(true);
 </script>
 
 <Page>
@@ -25,8 +27,8 @@
 
     <Dialog
       open={dialogOpen}
-      modal={true}
-      dismissible={true}
+      modal={modal}
+      dismissible={dismissible}
       onClose={() => {
         dialogOpen = false;
       }}
@@ -45,6 +47,13 @@
         data-testid="inner-input"
         type="checkbox"
       />
+      <!-- These live inside: a modal dialog blocks the page behind it. -->
+      <Button data-testid="stop-dismissing" onclick={() => (dismissible = false)}>
+        Turn off dismissible
+      </Button>
+      <Button data-testid="make-non-modal" onclick={() => (modal = false)}>
+        Make it non-modal
+      </Button>
     </Dialog>
   </TextLayout>
 </Page>

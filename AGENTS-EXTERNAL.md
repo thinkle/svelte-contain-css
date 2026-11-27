@@ -1382,6 +1382,24 @@ Useful variables: `--toggle-width`, `--toggle-height`, `--toggle-bg`,
 </Dialog>
 ```
 
+`onclose` is a report, not a request: it runs once, after the dialog has
+closed, whoever closed it -- Escape, the close button, the backdrop (with
+`dismissible`), or your own code setting `open` to false. It is where you set
+your state back, and there is no way to decline a close from it. To ask "are
+you sure?", keep the question in a dialog of its own rather than trying to
+hold this one open.
+
+`dismissible` closes the dialog on a click on the backdrop -- the area outside
+it -- and only that. A click inside, including one made by the keyboard or by
+script, never dismisses.
+
+`modal` is read when the dialog opens. Changing it while the dialog is open has
+no effect until it is closed and opened again, because a browser will not
+switch an open dialog between modal and non-modal.
+
+Note that a non-modal dialog (`modal={false}`) is not closed by Escape: that is
+the browser's behaviour, not this component's.
+
 ### Responsive Layouts with Container Queries
 
 Components respond to their container, not viewport:

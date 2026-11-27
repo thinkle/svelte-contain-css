@@ -58,3 +58,39 @@ test("a button inside that sets open=false reports one close", async ({ page }) 
   await expect(page.locator("dialog[open]")).toHaveCount(0);
   await expect(page.getByTestId("closes")).toHaveText("1");
 });
+
+test("a non-modal dialog reports one close from its close button", async ({ page }) => {
+  const dialog = page.locator("dialog[data-testid=non-modal-dialog]");
+  await page.getByTestId("open-non-modal").click();
+  await expect(dialog).toBeVisible();
+  // Shown with show(), so the page behind it is still live.
+  expect(await dialog.evaluate((d: HTMLDialogElement) => d.matches(":modal"))).toBe(false);
+  await dialog.locator(".close-button button").click();
+  await expect(dialog).toBeHidden();
+  await expect(page.getByTestId("non-modal-closes")).toHaveText("1");
+});
+
+test("Escape does not close a non-modal dialog, which is the browser's doing", async ({ page }) => {
+  const dialog = page.locator("dialog[data-testid=non-modal-dialog]");
+  await page.getByTestId("open-non-modal").click();
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  await expect(page.getByTestId("non-modal-closes")).toHaveText("0");
+});
+
+test("the close button works on a dialog given no onClose at all", async ({ page }) => {
+  const dialog = page.locator("dialog[data-testid=plain-dialog]");
+  await page.getByTestId("open-plain").click();
+  await expect(dialog).toBeVisible();
+  await dialog.locator(".close-button button").click();
+  await expect(dialog).toBeHidden();
+});
+
+test("a dialog closed and opened again reopens", async ({ page }) => {
+  await open(page);
+  await page.keyboard.press("Escape");
+  await expect(page.locator("dialog[open]")).toHaveCount(0);
+  await open(page);
+  await expect(page.getByTestId("closes")).toHaveText("1");
+});
