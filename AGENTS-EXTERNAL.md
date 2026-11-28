@@ -1612,6 +1612,7 @@ The hover mix uses the tab background as a CSS color.
 | `--tab-indicator-height`      | Thickness; `0` (the default without the preset) paints nothing, the preset sets `2px` |
 | `--tab-indicator-transition`  | Duration and easing of the slide (preset: `350ms cubic-bezier(0.25, 0.8, 0.35, 1)`) |
 | `--tab-indicator-color`       | Colour, read from the **active tab**; default that tab's text colour |
+| `--tab-indicator-tint-amount` | Treat that colour as a *target* and mix this much of it into the indicator's own foreground; unset means the colour exactly (`100%`) |
 
 `--tab-indicator-color` is resolved on each tab, so every tab can have its own
 underline colour, and the colour blends during the slide over the same
@@ -1640,6 +1641,26 @@ duration:
 Setting it on the TabBar itself works as a bar-wide colour (tabs inherit it).
 The colour is read when the active tab changes or the tabs re-measure, not when
 a theme swap alone changes it.
+
+### Colours that came from somewhere else
+
+A colour chosen to fill a tab -- a brand, a category, a per-item palette -- is
+not necessarily readable as a thin line on the bar behind it: a pale one can
+land near 1:1 against the page, and so can a near-black one on a dark theme.
+`--tab-indicator-tint-amount` turns the colour into a target and mixes it into
+the foreground the indicator inherits, exactly as a heading tint
+(`--heading-tint-amount`) or a link (`--link-text-amount`) does. That
+foreground belongs to the surface, so one declaration covers a light and a
+dark theme:
+
+```svelte
+<TabBar style="--tab-indicator-height: 3px; --tab-indicator-tint-amount: 50%">
+```
+
+Each tab still names its own colour; the bar decides how far to take it. Since
+the mix happens in CSS on the indicator, `currentColor` resolves where the
+indicator sits -- not on the active tab, which may carry a role's foreground of
+its own.
 Buttons that belong on the tab row but aren't tabs go in the `actions`
 snippet, not among the tabs: they sit at the end of the row on a wide
 screen and get their own row above the tabs on a phone.

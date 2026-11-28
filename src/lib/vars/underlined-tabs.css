@@ -15,7 +15,11 @@
   /* The selected tab's underline slides from the previous tab to the new one
      (TabBar draws it as one element). Its colour is the selected tab's own
      text colour; give a tab --tab-indicator-color to colour its underline
-     and the colour blends during the slide. */
+     and the colour blends during the slide. A colour that came from
+     elsewhere (a brand, a category, a per-item palette) need not be legible
+     as a line on the bar: --tab-indicator-tint-amount makes it a target
+     mixed into the indicator's own foreground instead, as a heading tint
+     or a link is. */
   --tab-indicator-height: 2px;
   --tab-indicator-transition: 350ms cubic-bezier(0.25, 0.8, 0.35, 1);
 }

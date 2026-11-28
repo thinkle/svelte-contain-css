@@ -83,6 +83,39 @@ test("after switching, left/width match the new tab; mid-way it is between the t
   await expect.poll(() => bg(ind)).toBe("rgb(0, 0, 200)");
 });
 
+/* color-mix() serializes as color(srgb ...) with 0-1 channels; a plain colour
+   as rgb() with 0-255. Normalize both to 0-255 so they can be compared. */
+const channels = (s: string) => {
+  const n = s.match(/[\d.]+/g)!.slice(0, 3).map(Number);
+  return s.startsWith("color(") ? n.map((v) => v * 255) : n;
+};
+const near = (a: number[], b: number[]) => a.every((v, i) => Math.abs(v - b[i]) <= 1.5);
+
+test("--tab-indicator-tint-amount mixes the tab's colour into the indicator's own foreground", async ({ page }) => {
+  await load(page);
+  const ind = indicator(page, "tinted");
+  await expectUnder(page, "tinted");
+  /* Half the tab's colour, half whatever foreground the indicator inherits:
+     the expectation is computed from that foreground, not assumed, since it
+     belongs to the bar's surface and so to the theme. */
+  const fg = channels(await ind.evaluate((n) => getComputedStyle(n).color));
+  const mixed = (target: number[]) => target.map((v, i) => v * 0.5 + fg[i] * 0.5);
+  expect(near(channels(await bg(ind)), mixed([200, 100, 0]))).toBe(true);
+  /* It is not simply the tab's colour. */
+  expect(near(channels(await bg(ind)), [200, 100, 0])).toBe(false);
+  await page.getByTestId("tint-b").click();
+  await expect
+    .poll(async () => near(channels(await bg(ind)), mixed([0, 0, 200])))
+    .toBe(true);
+});
+
+test("without the amount the colour is used exactly, and as given", async ({ page }) => {
+  await load(page);
+  /* The same shape of colour on a bar that sets no amount: untouched, and
+     still serialized as it was written -- no mix of a colour with itself. */
+  expect(await bg(indicator(page, "main"))).toBe("rgb(200, 0, 0)");
+});
+
 test("a tab without --tab-indicator-color falls back to its own text colour", async ({ page }) => {
   await load(page);
   await page.getByTestId("c").click();

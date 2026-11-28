@@ -24,6 +24,7 @@
   let rtl = $state("a");
   let show = $state(true);
   let none = $state(false);
+  let tinted = $state("a");
   const many = Array.from({ length: 10 }, (_, i) => `t${i}`);
   const wraps = Array.from({ length: 9 }, (_, i) => `w${i}`);
 </script>
@@ -91,6 +92,16 @@
     <TabBar>
       <TabItem active>Only</TabItem>
       {#snippet actions()}<button data-testid="action">Act</button>{/snippet}
+    </TabBar>
+  </div>
+
+  <!-- --tab-indicator-tint-amount: the tab's colour as a target, mixed into
+       the foreground the indicator inherits. The bar is given a known
+       foreground so the expected mix can be computed in the test. -->
+  <div data-testid="tinted" style="width: 600px; color: rgb(0, 0, 0)">
+    <TabBar style="--tab-indicator-tint-amount: 50%">
+      <TabItem data-testid="tint-a" active={tinted === "a"} onclick={() => (tinted = "a")} style="--tab-indicator-color: rgb(200, 100, 0)">Tinted</TabItem>
+      <TabItem data-testid="tint-b" active={tinted === "b"} onclick={() => (tinted = "b")} style="--tab-indicator-color: rgb(0, 0, 200)">Also tinted</TabItem>
     </TabBar>
   </div>
 
