@@ -90,9 +90,9 @@ export const extraThemes: AddOnEntry[] = [
   { name: "Fancy Paragraphs", css: fancyParagraphs, file: "fancy-paragraphs.css", sample: "paragraph", typography: true,
     description: "A paragraph's first line in small caps, with a bold, tinted first letter." },
   { name: "Underline Fields", css: underlineFields, file: "underline-fields.css", sample: "fields",
-    description: "Fields drop their box for a single rule along the bottom." },
+    description: "Fields drop their box for a single rule along the bottom, and a stronger rule grows from the centre on focus." },
   { name: "Underlined Tabs", css: underlinedTabs, file: "underlined-tabs.css", sample: "tabs",
-    description: "Tabs blend into their surface, with an underline marking the selected tab." },
+    description: "Tabs blend into their surface, with an underline that slides to the selected tab." },
 ];
 
 // Heading treatments are alternatives, rather than cumulative add-ons.

@@ -1589,11 +1589,57 @@ This follows a Card, a primary Bar, or a custom background as well as the page.
 `--tab-recess-amount` (default `6%`) controls that mix. Explicit `--tab-bar-bg`,
 `--tab-bg` and `--tab-active-bg` still override these defaults.
 
-For a different treatment, enable **Underlined Tabs** in the theme picker or
-import `contain-css-svelte/vars/underlined-tabs.css`. It removes the recess and
-rounded corners and marks selection with `--tab-active-border-bottom`.
-`--tab-border-bottom` sets the inactive border; active borders fall back to the
-regular tab border.
+Set `--tab-indicator-height` on a `TabBar` or its containing theme to turn on
+the sliding underline. The default height is `0`. The indicator slides and
+resizes from the old tab to the new one and spans both buttons of a closable
+tab. TabBar draws it inside the scrolling strip, so it scrolls with
+the tabs, and re-places it when tabs are added, removed or resized, the bar
+resizes or fonts load. It never animates on first paint, moves without a
+transition under `prefers-reduced-motion: reduce`, hops between rows (rather
+than sliding) in a `wrap` bar, and is hidden when no tab is active.
+
+The **Underlined Tabs** theme preset (`contain-css-svelte/vars/underlined-tabs.css`)
+sets a `2px` indicator, square corners, and flat tabs. It also provides a static
+selection underline before hydration. Configure `--tab-border-radius`,
+`--tab-border`, and `--tab-active-border` to control the tab shape independently.
+Use `--tab-border-bottom` and `--tab-active-border-bottom` for a baseline under
+the individual tabs, and `--tab-bar-border-bottom` for the rule under the strip.
+Set `--tab-bg` to `transparent` for flat tabs that still get a hover tint.
+The hover mix uses the tab background as a CSS color.
+
+| Variable                      | Effect                                                    |
+| ----------------------------- | --------------------------------------------------------- |
+| `--tab-indicator-height`      | Thickness; `0` (the default without the preset) paints nothing, the preset sets `2px` |
+| `--tab-indicator-transition`  | Duration and easing of the slide (preset: `350ms cubic-bezier(0.25, 0.8, 0.35, 1)`) |
+| `--tab-indicator-color`       | Colour, read from the **active tab**; default that tab's text colour |
+
+`--tab-indicator-color` is resolved on each tab, so every tab can have its own
+underline colour, and the colour blends during the slide over the same
+duration:
+
+```svelte
+<script>
+  import { TabBar, TabItem } from "contain-css-svelte";
+  let selected = $state("brandy");
+</script>
+
+<TabBar style="--tab-indicator-height: 3px;">
+  <TabItem
+    active={selected === "brandy"}
+    onclick={() => (selected = "brandy")}
+    style="--tab-indicator-color: #5c3317"
+  >Brandy Balls</TabItem>
+  <TabItem
+    active={selected === "beans"}
+    onclick={() => (selected = "beans")}
+    style="--tab-indicator-color: #2d6a4f"
+  >Green Beans</TabItem>
+</TabBar>
+```
+
+Setting it on the TabBar itself works as a bar-wide colour (tabs inherit it).
+The colour is read when the active tab changes or the tabs re-measure, not when
+a theme swap alone changes it.
 Buttons that belong on the tab row but aren't tabs go in the `actions`
 snippet, not among the tabs: they sit at the end of the row on a wide
 screen and get their own row above the tabs on a phone.
@@ -1806,7 +1852,19 @@ of the surface, never by component. Full contract:
   `--control-bg/-fg`; `secondary` is an accent.
 - **`field`**: text fields (Input, Select, TextArea). Fill and edge default
   to a step off the local surface and firm up on hover; `--field-*` knobs,
-  `vars/underline-fields.css` preset.
+  `vars/underline-fields.css` preset. That preset also adds a focus underline: a
+stronger rule that grows from the centre of the field's bottom edge on
+`:focus-visible` (over the resting rule) and retracts on blur, painted as a
+background gradient by the field itself, so Input needs no wrapper and
+`--field-bg` is untouched. The bottom border immediately takes the text color
+to mark focus as the accent grows. This preset replaces the focus ring with
+the underline and retains the outline in forced-colors mode. Knobs:
+`--field-focus-underline-color` (default `--focus-color`, then `--primary-bg`),
+`--field-focus-underline-height` (`2px`), `--field-focus-underline-transition`
+(`250ms ease-out`) and `--field-focus-underline-origin` (`50%`; `0%` grows from
+the left). `prefers-reduced-motion: reduce` shows the rule without animating.
+Applies to Input, TextArea, Select (native and dropdown) and native text
+fields; not to checkboxes, radios or ranges.
 - **Pins**: `--on-<family>-<tone>-text-fg`, `--on-<family>-link-text-fg`,
   `--on-<family>-heading-<n|major|minor>-fg/-bg`, `--on-<family>-heading-fg`.
 - **Unknown**: a surface with a component-level background (`bg` prop,

@@ -72,7 +72,8 @@ tier. TabItem uses `ground`: the selected tab joins that strip, while an
 inactive tab mixes its local pair by `--tab-recess-amount` (6%). Light and Dark
 leave tab colors unset; explicit theme `--tab-*-bg/-fg` values still win.
 The optional `vars/underlined-tabs.css` preset changes the treatment without
-changing how local surface colors are resolved.
+changing how local surface colors are resolved; its underline is one element
+that slides between tabs (see AGENTS-EXTERNAL.md, Tab Navigation).
 
 **`field`.** Text fields: Input, Select, TextArea, and native text inputs and
 textareas under a Form's `globalInputStyles` (not ranges, checkboxes, radios
@@ -106,7 +107,8 @@ Knobs, all optional:
 
 `vars/underline-fields.css` is the underline preset ("Underline Fields" in
 the theme picker): a transparent fill and a rule along the bottom, on the surface
-itself. It combines with any theme. Component variables
+itself, and a stronger rule that grows from the centre on focus
+(`--field-focus-underline-*`). It combines with any theme. Component variables
 (`--input-bg`, `--input-border`, `--select-*`) still win over all of these.
 
 **Unknown.** A surface whose background comes from a component-level

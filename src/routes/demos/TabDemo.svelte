@@ -1,10 +1,11 @@
 <script lang="ts">
-  import CssWrapper from "./CssWrapper.svelte";
   import CssVariables from "./CssVariables.svelte";
   import DemoWithCode from "./DemoWithCode.svelte";
+  import Checkbox from "$lib/controls/Checkbox.svelte";
   import TabItem from "$lib/controls/TabItem.svelte";
   import TabBar from "$lib/layout/TabBar.svelte";
   import Container from "$lib/layout/Container.svelte";
+  import SlidingUnderlineDemo from "./SlidingUnderlineDemo.svelte";
   import type { CSSVariable } from "./types";
   let active = $state("TabItem");
   let tabItemExample = $state("states");
@@ -17,15 +18,24 @@
     docs = docs.filter((d) => d !== name);
     if (activeDoc === name) activeDoc = docs[Math.min(i, docs.length - 1)] ?? "";
   }
-  let items = [
+  const items = [
     { label: "TabItem", value: "TabItem" },
     { label: "TabBar", value: "TabBar" },
+    { label: "Sliding Underline", value: "underline" },
     { label: "Closable", value: "closable" },
     { label: "Containers & Tabs", value: "containers" },
     { label: "Customize", value: "vars" },
   ];
-  let cssValues = $state({});
-  let cssVariables: CSSVariable[] = [
+  let slidingUnderline = $state(false);
+  let cssValues = $state<Record<string, string>>({});
+  const { "--tab-indicator-color": indicatorColor, ...barOverrides } = $derived(cssValues);
+  const tabBarStyle = $derived(
+    Object.entries({
+      ...(slidingUnderline ? { "--tab-indicator-height": "3px" } : {}),
+      ...barOverrides,
+    }).map(([name, value]) => `${name}: ${value};`).join(" "),
+  );
+  const cssVariables: CSSVariable[] = [
     {
       name: "--tab-bg",
       type: "color",
@@ -49,9 +59,27 @@
     {
       name: "--tab-border-radius",
       type: "length",
-      placeholder: "4px 4px 0 0",
-      defaultValue: "8px",
-      unit: "px",
+      placeholder: "0 for square corners",
+    },
+    {
+      name: "--tab-border",
+      type: "border",
+      placeholder: "none or 1px solid currentColor",
+    },
+    {
+      name: "--tab-active-border",
+      type: "border",
+      placeholder: "none or 1px solid currentColor",
+    },
+    {
+      name: "--tab-border-bottom",
+      type: "border",
+      placeholder: "none or 1px solid var(--border-color)",
+    },
+    {
+      name: "--tab-active-border-bottom",
+      type: "border",
+      placeholder: "none or 1px solid var(--border-color)",
     },
     {
       name: "--tab-bar-border-bottom",
@@ -59,6 +87,26 @@
       placeholder: "none",
       defaultValue: "0",
       unit: "px",
+    },
+    {
+      name: "--tab-indicator-height",
+      type: "length",
+      placeholder: "3px",
+    },
+    {
+      name: "--tab-indicator-transition",
+      type: "text",
+      placeholder: "500ms ease-out",
+    },
+    {
+      name: "--tab-indicator-color",
+      type: "color",
+      placeholder: "var(--primary-color)",
+    },
+    {
+      name: "--tab-bar-height",
+      type: "length",
+      placeholder: "3em",
     },
     {
       name: "--tab-bar-gap",
@@ -94,16 +142,17 @@
 </script>
 
 <Container border height="70vh">
-  <CssWrapper variables={cssValues}>
-    <TabBar
-      {items}
-      {active}
-      sticky
-      onchange={(value) => {
-        active = typeof value === "string" ? value : (value?.value ?? active ?? "TabItem");
-      }}
-    ></TabBar></CssWrapper
-  >
+  <TabBar sticky wrap aria-label="Tabs tutorial" style={tabBarStyle || undefined}>
+    {#each items as { label, value } (value)}
+      <TabItem
+        active={active === value}
+        onclick={() => (active = value)}
+        style={indicatorColor ? `--tab-indicator-color: ${indicatorColor};` : undefined}
+      >
+        {label}
+      </TabItem>
+    {/each}
+  </TabBar>
 
   {#if active == "TabItem"}
     <DemoWithCode
@@ -204,6 +253,8 @@
         }}
       />
     </DemoWithCode>
+  {:else if active == "underline"}
+    <SlidingUnderlineDemo />
   {:else if active == "closable"}
     <DemoWithCode
       defaultTab="split"
@@ -297,19 +348,19 @@
       </Container>
     </DemoWithCode>
   {/if}
-  <div class:hide={active !== "vars"}>
-    <h3>Adjust variables to customize tabs</h3>
+  <div hidden={active !== "vars"}>
+    <h3>Customize the tutorial tabs</h3>
+    <p>
+      These controls style the tabs above. Set <code>--tab-border-radius</code> to
+      <code>0</code> for square corners. Set <code>--tab-border</code> and
+      <code>--tab-active-border</code> to <code>none</code> to remove tab outlines.
+      Use the bottom-border variables to set or remove the rules under the
+      individual tabs and the whole strip.
+    </p>
+    <Checkbox bind:checked={slidingUnderline}>Sliding underline</Checkbox>
     <CssVariables
       variables={cssVariables}
-      onSetVariables={(v) => {
-        cssValues = v;
-      }}
+      onSetVariables={(values) => (cssValues = { ...values })}
     />
   </div>
 </Container>
-
-<style>
-  .hide {
-    display: none;
-  }
-</style>

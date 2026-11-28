@@ -178,6 +178,7 @@
       style:--container-margin-block="var(--reset-margin-block)"
     >
       <TabBar
+        wrap
         items={tabItems}
         active={activeTab}
         onchange={(value) => {

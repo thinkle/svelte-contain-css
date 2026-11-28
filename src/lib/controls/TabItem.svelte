@@ -155,6 +155,9 @@
     @include box-props(tab, button, control);
     @include border-props-borderless(tab, _tab-shape, button, control);
     @include typography-props(tab, button, ui);
+    // Border width and style snap on selection. Match their timing so a
+    // border becoming visible can't briefly paint the previous state's color.
+    --_border-color-transition: 0s;
     // Tab bar clips overflow, so the standard outer focus ring would be cut
     // off -- use the inset ring instead. See _affordances.scss.
     @include focusable-inset(tab);

@@ -15,3 +15,88 @@
      TextArea starts one line high, like an input, and grows as you type. */
   --textarea-min-height: 0;
 }
+
+/* The bottom border immediately takes the text color on focus. A gradient
+   grows from the centre to accent the edge and retracts on blur. The border
+   marks focus even before the gradient has begun to grow. Forced-colors mode
+   can suppress gradients, so it keeps the regular outline.
+   Knobs: --field-focus-underline-color (default the focus colour, then the
+   primary), -height (2px), -transition (250ms ease-out), -origin (where along
+   the width it grows from: 50% centre, 0% left, 100% right). */
+:root {
+  --field-focus-underline-height: 2px;
+  --field-focus-underline-transition: 250ms ease-out;
+  --field-focus-underline-origin: 50%;
+}
+:where(
+    input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="color"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="image"]
+      ),
+    textarea,
+    select,
+    .dropdown-wrapper > .dropdown-menu > button
+  ) {
+  --_field-focus-underline-color: var(
+    --field-focus-underline-color,
+    var(--focus-color, var(--primary-bg, currentColor))
+  );
+  background-image: linear-gradient(
+    var(--_field-focus-underline-color),
+    var(--_field-focus-underline-color)
+  );
+  background-repeat: no-repeat;
+  /* Border box, so the rule sits over the resting rule, not above it. */
+  background-origin: border-box;
+  background-position: var(--field-focus-underline-origin) 100%;
+  background-size: 0% var(--field-focus-underline-height);
+  --_field-border-transition: border-color var(--transition, 150ms);
+  --field-transition:
+    var(--_field-border-transition),
+    background-size var(--field-focus-underline-transition);
+}
+@media (forced-colors: none) {
+  :where(
+      input:not(
+          [type="checkbox"],
+          [type="radio"],
+          [type="range"],
+          [type="file"],
+          [type="color"],
+          [type="button"],
+          [type="submit"],
+          [type="reset"],
+          [type="image"]
+        ),
+      textarea,
+      select,
+      .dropdown-wrapper > .dropdown-menu > button
+    ):focus-visible {
+    --focus-ring-outline: none;
+    --focus-ring-box-shadow: none;
+    --field-border-bottom: 1px solid currentColor;
+    --_field-border-transition: border-color 0s;
+    /* Also cover native fields outside a Contain form. */
+    outline: var(--focus-ring-outline);
+    border-bottom-color: currentColor;
+    background-size: 100% var(--field-focus-underline-height);
+  }
+}
+/* Reduced motion: the rule just appears (whatever duration was asked for). */
+@media (prefers-reduced-motion: reduce) {
+  :where(
+      input,
+      textarea,
+      select,
+      .dropdown-wrapper > .dropdown-menu > button
+    ) {
+    --field-transition: var(--_field-border-transition);
+  }
+}

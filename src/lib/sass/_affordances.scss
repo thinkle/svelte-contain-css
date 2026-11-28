@@ -2,7 +2,7 @@
 @use "functions" as fn;
 
 @mixin focus-ring {
-  outline: var(--focus-color, -webkit-focus-ring-color) auto 1px;
+  outline: var(--focus-ring-outline, var(--focus-color, -webkit-focus-ring-color) auto 1px);
   outline-offset: var(--focus-outline-offset, 2px);
   box-shadow: var(
     --focus-ring-box-shadow,
@@ -26,7 +26,7 @@
     filter var(--_transition),
     color var(--_transition),
     background-color var(--_transition),
-    border-color var(--_transition),
+    border-color var(--_border-color-transition, var(--_transition)),
     box-shadow var(--_transition),
     transform var(--_transition);
 }
