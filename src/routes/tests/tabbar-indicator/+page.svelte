@@ -95,7 +95,7 @@
     </TabBar>
   </div>
 
-  <!-- --tab-indicator-tint-amount: the tab's colour as a target, mixed into
+  <!-- --tab-indicator-tint-amount: the tab's color as a target, mixed into
        the foreground the indicator inherits. The bar is given a known
        foreground so the expected mix can be computed in the test. -->
   <div data-testid="tinted" style="width: 600px; color: rgb(0, 0, 0)">

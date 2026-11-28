@@ -176,7 +176,7 @@
       <p>
         Props set the matching <code>--tile-*</code> variables, so
         <code>--tile-justify</code> on an ancestor still works and only the tile
-        that differs has to say so. A tile already centres across, so
+        that differs has to say so. A tile already centers across, so
         <code>center</code> sets both axes — setting only the cross axis would do
         nothing visible.
       </p>

@@ -300,14 +300,14 @@
     a raised card is (<code>--field-lighten</code>, 1), and edged with a line
     mixed from the surface's pair (<code>--field-edge-amount</code>, 50%,
     about 3.5:1 so it stays findable). So you type in the white area of a
-    grey page, in a lighter well on a dark sidebar, and in a white box with
+    gray page, in a lighter well on a dark sidebar, and in a white box with
     a visible edge on a white card. For a darker well instead, set
     <code>--field-lighten: 0</code> and <code>--field-fill-amount</code>
     (say 5%), which mixes toward the surface's text. <code>--field-bg</code>,
     <code>--field-fg</code> and <code>--field-border-color</code> pin exact
     colors instead. For underlined fields, drop the fill and the top and side
     edges, or load <code>vars/underline-fields.css</code>, which also grows a
-    stronger rule from the centre when a field takes focus.
+    stronger rule from the center when a field takes focus.
   </p>
 
   <h3>Try it</h3>

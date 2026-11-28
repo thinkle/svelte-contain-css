@@ -3,7 +3,7 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
 /**
  * An overlay (Tooltip popover, DropdownMenu popover, Dialog) is a DOM child of
  * wherever it was placed, and the top layer does not change inheritance. The
- * test page puts each one in a nowrap / centred / bold / uppercase host. The
+ * test page puts each one in a nowrap / centered / bold / uppercase host. The
  * overlay must reset those to its own defaults, keep honouring its own
  * --component-* vars, and still inherit custom properties for theming.
  */

@@ -456,7 +456,7 @@
 
   /* The header Bar is itself an inline-size container, so its children can
      answer to the bar's width rather than the viewport's. When there isn't
-     room for the centred title with matching spacers on both sides, drop the
+     room for the centered title with matching spacers on both sides, drop the
      spacer and let the title and the section nav share one row: the nav
      takes whatever is left, and the dropdown trigger truncates its label
      instead of pushing the row onto a second line. */

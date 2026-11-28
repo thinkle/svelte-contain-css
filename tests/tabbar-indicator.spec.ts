@@ -2,7 +2,7 @@ import { test, expect, type Locator, type Page } from "@playwright/test";
 
 /**
  * With vars/underlined-tabs.css the active tab's underline is ONE element
- * (.tab-indicator) that slides and resizes between tabs, takes its colour
+ * (.tab-indicator) that slides and resizes between tabs, takes its color
  * from the active tab and blends on the way. Without the preset it paints
  * nothing.
  */
@@ -74,7 +74,7 @@ test("after switching, left/width match the new tab; mid-way it is between the t
   expect(mid.left).toBeLessThan(to.left - 1);
   expect(mid.width).toBeGreaterThan(Math.min(from.width, to.width) + 1);
   expect(mid.width).toBeLessThan(Math.max(from.width, to.width) - 1);
-  // Colour blends: red -> blue, mid-way equals neither endpoint.
+  // Color blends: red -> blue, mid-way equals neither endpoint.
   expect(midColor).not.toEqual(fromColor);
   expect(midColor).not.toEqual([0, 0, 200]);
   expect(midColor[0]).toBeLessThan(200);
@@ -83,7 +83,7 @@ test("after switching, left/width match the new tab; mid-way it is between the t
   await expect.poll(() => bg(ind)).toBe("rgb(0, 0, 200)");
 });
 
-/* color-mix() serializes as color(srgb ...) with 0-1 channels; a plain colour
+/* color-mix() serializes as color(srgb ...) with 0-1 channels; a plain color
    as rgb() with 0-255. Normalize both to 0-255 so they can be compared. */
 const channels = (s: string) => {
   const n = s.match(/[\d.]+/g)!.slice(0, 3).map(Number);
@@ -91,17 +91,17 @@ const channels = (s: string) => {
 };
 const near = (a: number[], b: number[]) => a.every((v, i) => Math.abs(v - b[i]) <= 1.5);
 
-test("--tab-indicator-tint-amount mixes the tab's colour into the indicator's own foreground", async ({ page }) => {
+test("--tab-indicator-tint-amount mixes the tab's color into the indicator's own foreground", async ({ page }) => {
   await load(page);
   const ind = indicator(page, "tinted");
   await expectUnder(page, "tinted");
-  /* Half the tab's colour, half whatever foreground the indicator inherits:
+  /* Half the tab's color, half whatever foreground the indicator inherits:
      the expectation is computed from that foreground, not assumed, since it
      belongs to the bar's surface and so to the theme. */
   const fg = channels(await ind.evaluate((n) => getComputedStyle(n).color));
   const mixed = (target: number[]) => target.map((v, i) => v * 0.5 + fg[i] * 0.5);
   expect(near(channels(await bg(ind)), mixed([200, 100, 0]))).toBe(true);
-  /* It is not simply the tab's colour. */
+  /* It is not simply the tab's color. */
   expect(near(channels(await bg(ind)), [200, 100, 0])).toBe(false);
   await page.getByTestId("tint-b").click();
   await expect
@@ -109,14 +109,14 @@ test("--tab-indicator-tint-amount mixes the tab's colour into the indicator's ow
     .toBe(true);
 });
 
-test("without the amount the colour is used exactly, and as given", async ({ page }) => {
+test("without the amount the color is used exactly, and as given", async ({ page }) => {
   await load(page);
-  /* The same shape of colour on a bar that sets no amount: untouched, and
-     still serialized as it was written -- no mix of a colour with itself. */
+  /* The same shape of color on a bar that sets no amount: untouched, and
+     still serialized as it was written -- no mix of a color with itself. */
   expect(await bg(indicator(page, "main"))).toBe("rgb(200, 0, 0)");
 });
 
-test("a tab without --tab-indicator-color falls back to its own text colour", async ({ page }) => {
+test("a tab without --tab-indicator-color falls back to its own text color", async ({ page }) => {
   await load(page);
   await page.getByTestId("c").click();
   const fg = await page.getByTestId("c").evaluate((n) => getComputedStyle(n).color);

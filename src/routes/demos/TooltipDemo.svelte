@@ -179,7 +179,7 @@
       <p>
         The popover remains a DOM child of its host. Tooltip resets inherited
         text styles so its long text wraps normally even inside this bold,
-        uppercase, centred, <code>nowrap</code> cell.
+        uppercase, centered, <code>nowrap</code> cell.
       </p>
       <p>
         Custom properties still inherit. Explicit <code>--tooltip-*</code> variables

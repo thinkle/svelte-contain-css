@@ -32,11 +32,11 @@
     StyleProps<typeof TILE_VARS> & {
     /** Distribution along the tile's own axis, which is vertical. */
     justify?: string | null;
-    /** Cross-axis alignment, which is horizontal. Centred already. */
+    /** Cross-axis alignment, which is horizontal. Centered already. */
     align?: string | null;
     /**
-     * Shorthand for centring the tile's contents. Sets both axes, unlike
-     * `Stack`'s `center`, because a Tile already centres horizontally -- setting
+     * Shorthand for centering the tile's contents. Sets both axes, unlike
+     * `Stack`'s `center`, because a Tile already centers horizontally -- setting
      * only the cross axis here would be a no-op and `<Tile center>` would look
      * broken.
      */

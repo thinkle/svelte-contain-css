@@ -28,7 +28,7 @@
   div {
     @include typography-container-props(body, text);
     @include typography-props(body, text);
-    /* A prose column centres its measure; other typography containers keep
+    /* A prose column centers its measure; other typography containers keep
        it start-aligned (see typography-container-props). */
     /* marginInline (--text-layout-margin-inline) places the *text* in the
        column, not the column in its container: TextLayout is the text, so
@@ -45,7 +45,7 @@
        typography-container-props does for every other container) only
        squeezed the non-prose children -- a table, a demo, a figure -- down
        to 42rem. The box caps at a wider column instead; those children break
-       out to it while the prose stays centred inside it, where it always was.
+       out to it while the prose stays centered inside it, where it always was.
 
        100% (not 100vw) is "as wide as the container": 100vw ignores the
        parent's padding and counts the scrollbar, so it scrolls the page
@@ -67,7 +67,7 @@
        border-box a TextLayout is always 2 * padding wider than its parent,
        which on a phone means a sideways scroll before anything else loads. */
     box-sizing: border-box;
-    /* The column itself always centres in its container (marginInline
+    /* The column itself always centers in its container (marginInline
        moves the text inside it, above). To move the whole column, wrap it:
        <Container marginInline="0 auto"><TextLayout>. marginBlock is still
        the box's own margin, as on every other component. */

@@ -19,7 +19,7 @@ export function setPageScroller(scroller: PageScroller): void {
 }
 
 /**
- * Call during component initialisation, anywhere inside a `Page`. Returns a
+ * Call during component initialization, anywhere inside a `Page`. Returns a
  * getter rather than the element because the element does not exist until
  * `Page` has mounted; call it when you need it (in a handler, an effect, or
  * after navigation). It is reactive, so reading it in `$derived` or `$effect`

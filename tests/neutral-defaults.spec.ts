@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
  * at all -- they pick. #18 ("Indigo default theme") threaded indigo through
  * --bg/--fg/--focus-color and the bare `a` link fallback while redesigning
  * themes/light.css, so an app that imports only defaults.css (or a theme
- * that only sets --bg/--fg) got Contain's own brand colour whether it asked
+ * that only sets --bg/--fg) got Contain's own brand color whether it asked
  * for one or not. This pins the fix: with no theme loaded, the structural
  * vars stay neutral or derive from whatever the app already provided
  * (--primary-color), rather than hard-coding a hue here too.
@@ -14,7 +14,7 @@ import { test, expect } from "@playwright/test";
 
 const URL = "/svelte-contain-css/tests/neutral-defaults";
 
-/** Max channel - min channel. Near 0 reads as grey; a real hue is well above it. */
+/** Max channel - min channel. Near 0 reads as gray; a real hue is well above it. */
 function chroma(rgb: string) {
   const nums = rgb.match(/\d+(\.\d+)?/g)?.map(Number) ?? [];
   const [r, g, b] = nums;

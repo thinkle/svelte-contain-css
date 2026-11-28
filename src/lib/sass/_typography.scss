@@ -315,7 +315,7 @@
     )};
   --_prose-line-height: #{fn.var-with-fallbacks(--line-height, list.append($prefixes, 1.5)...)};
   /* Start-aligned: a measure-capped paragraph in a Card or a Tile sits
-     against its container's leading edge like any other block. Centring the
+     against its container's leading edge like any other block. Centering the
      measure is what a prose column asks for, and TextLayout -- the one
      component that IS a prose column -- opts back in to `auto`. */
   --_prose-margin-inline: #{fn.var-with-fallbacks(
@@ -472,8 +472,8 @@
 
    The top layer changes how an element paints and where it is positioned, not
    what it inherits. A popover declared inside a `white-space: nowrap` table
-   cell is nowrap too, and one inside a bold, uppercase, centred header is
-   bold, uppercase and centred -- styles that belong to the trigger's context,
+   cell is nowrap too, and one inside a bold, uppercase, centered header is
+   bold, uppercase and centered -- styles that belong to the trigger's context,
    not to the overlay. typography-props() doesn't stop that: its chains end in
    `unset`, which for an inherited property means "take the parent's value".
 

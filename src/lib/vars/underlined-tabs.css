@@ -13,9 +13,9 @@
   --tab-active-border-bottom: 2px solid currentColor;
   --tab-bar-gap: 0;
   /* The selected tab's underline slides from the previous tab to the new one
-     (TabBar draws it as one element). Its colour is the selected tab's own
-     text colour; give a tab --tab-indicator-color to colour its underline
-     and the colour blends during the slide. A colour that came from
+     (TabBar draws it as one element). Its color is the selected tab's own
+     text color; give a tab --tab-indicator-color to color its underline
+     and the color blends during the slide. A color that came from
      elsewhere (a brand, a category, a per-item palette) need not be legible
      as a line on the bar: --tab-indicator-tint-amount makes it a target
      mixed into the indicator's own foreground instead, as a heading tint

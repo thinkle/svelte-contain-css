@@ -84,7 +84,7 @@ export const reviewThemeDescriptions: Record<ReviewThemeName, string> = {
   bootstrap: "Bootstrap-inspired colors, typography, controls, and spacing.",
   material: "Material-inspired colors, typography, controls, and depth.",
   retro: "Classic desktop colors, typography, borders, and controls.",
-  quiet: "Neutral greys with one accent, flat controls, single borders, and a tighter type scale.",
+  quiet: "Neutral grays with one accent, flat controls, single borders, and a tighter type scale.",
   "canyon-modern-serif-fancy": "Canyon colors, Modern Serif typography, Editorial Headings, and decorative paragraph first lines and letters.",
   "forest-editorial-rounded": "Forest colors, Editorial Serif typography, Restrained Headings, and rounded corners.",
   "dark-ibm-layered": "Dark colors, IBM Plex typography, Expressive Headings, and layered surface depth.",

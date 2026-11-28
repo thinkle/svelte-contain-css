@@ -13,7 +13,7 @@
   /**
    * One segment of a single-select `GroupedToggle` row -- the exclusive-
    * choice sibling of `GroupedToggleItem`. Visually identical (same CSS
-   * classes), but a different behavioural contract: exactly one segment in
+   * classes), but a different behavioral contract: exactly one segment in
    * the row is ever checked, and that's the ARIA "radiogroup" pattern, not a
    * row of independent buttons -- which means real roving-tabindex keyboard
    * support (Left/Right moves *and changes* the selection; only the checked

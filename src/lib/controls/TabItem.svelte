@@ -187,7 +187,7 @@
   }
 
   /* ---- Closable tab ----------------------------------------------------
-     Two sibling buttons share one box. Both take the tab's own colour rules
+     Two sibling buttons share one box. Both take the tab's own color rules
      above (each is a direct button child of .tab), so inactive/active fills,
      text and borders match by construction; what remains is making the pair
      one silhouette and one hover. */
@@ -236,7 +236,7 @@
     line-height: 1;
   }
   /* The affordance is a scrim mixed from the tab's own foreground, as in
-     Tag, so it inverts correctly on any tab colour. */
+     Tag, so it inverts correctly on any tab color. */
   .tab.closable > :global(button.tab-close-button)::before {
     content: "";
     position: absolute;

@@ -17,12 +17,12 @@
 }
 
 /* The bottom border immediately takes the text color on focus. A gradient
-   grows from the centre to accent the edge and retracts on blur. The border
+   grows from the center to accent the edge and retracts on blur. The border
    marks focus even before the gradient has begun to grow. Forced-colors mode
    can suppress gradients, so it keeps the regular outline.
-   Knobs: --field-focus-underline-color (default the focus colour, then the
+   Knobs: --field-focus-underline-color (default the focus color, then the
    primary), -height (2px), -transition (250ms ease-out), -origin (where along
-   the width it grows from: 50% centre, 0% left, 100% right). */
+   the width it grows from: 50% center, 0% left, 100% right). */
 :root {
   --field-focus-underline-height: 2px;
   --field-focus-underline-transition: 250ms ease-out;

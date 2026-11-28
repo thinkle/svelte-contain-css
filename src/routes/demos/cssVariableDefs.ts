@@ -395,7 +395,7 @@ export let buttonVars: CSSVariable[] = [
     defaultValue: "none",
     type: "border",
     group: "Box",
-    placeholder: "1px solid grey",
+    placeholder: "1px solid gray",
   },
   {
     name: "--button-icon-gap",

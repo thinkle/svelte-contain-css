@@ -54,7 +54,7 @@ A family is a background, its foreground, and optional pins for what sits on it.
 
 - The neutral surface ladder (below): `background`, `surface`, and higher
   tiers. `surface` is the app's reading surface (`--surface-bg` /
-  `--surface-fg`); in dark mode, the deep grey on near-black. These are real
+  `--surface-fg`); in dark mode, the deep gray on near-black. These are real
   color families, not the category prefix of the same name.
 - Semantic roles: `primary`, `secondary`, `info`, `success`, `warning`,
   `danger`, plus any app-defined roles (see open questions).

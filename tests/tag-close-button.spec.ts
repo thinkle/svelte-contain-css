@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 
   Three things were wrong, all of them because the button borrowed affordances
   built for a standalone button sitting on a page rather than a transparent
-  control sitting on a coloured chip:
+  control sitting on a colored chip:
 
   1. `clickable()` derives its hover fill from --_background-color, which the
      button inherits from the tag. On a red tag that gave 90% red + 10% white:
@@ -56,7 +56,7 @@ test.describe("Tag close button", () => {
       const probe = (dx: number, dy: number) =>
         document.elementFromPoint(r.left + dx, r.top + dy) === n;
       return {
-        centre: probe(r.width / 2, r.height / 2),
+        center: probe(r.width / 2, r.height / 2),
         // Outside the 15px glyph, inside the 24px target.
         aboveLeft: probe(-3, -3),
         belowRight: probe(r.width + 3, r.height + 3),
@@ -64,7 +64,7 @@ test.describe("Tag close button", () => {
         farAway: probe(-40, -40),
       };
     });
-    expect(hits.centre, "glyph itself").toBe(true);
+    expect(hits.center, "glyph itself").toBe(true);
     expect(hits.aboveLeft, "expanded target, top-left").toBe(true);
     expect(hits.belowRight, "expanded target, bottom-right").toBe(true);
     expect(hits.farAway, "target must not swallow the whole tag").toBe(false);
@@ -97,7 +97,7 @@ test.describe("Tag close button", () => {
     ]);
     expect(
       Math.abs(tagLum - scrimLum),
-      "scrim colour must contrast with the tag it sits on",
+      "scrim color must contrast with the tag it sits on",
     ).toBeGreaterThan(0.2);
   });
 

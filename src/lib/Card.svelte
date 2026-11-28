@@ -146,7 +146,7 @@
   .card.center section {
     display: grid;
     /* safe: a fixedHeight body that overflows scrolls from its top, rather
-       than centring and pushing its first lines out of reach. */
+       than centering and pushing its first lines out of reach. */
     place-content: safe center;
     text-align: center;
   }
@@ -218,7 +218,7 @@
     @include color-props(card-footer, surface-sunken, $role-from: card);
     @include box-props-bottom(card-footer, bar);
     @include border-props-borderless(card-footer, bar);
-    /* Centred in its min-height like the header, but a column, so footer
+    /* Centered in its min-height like the header, but a column, so footer
        content that was several blocks stays stacked. */
     display: flex;
     flex-direction: column;

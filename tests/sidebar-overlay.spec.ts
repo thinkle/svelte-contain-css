@@ -601,7 +601,7 @@ test.describe("Sidebar sheetButton", () => {
 
 /**
  * The sheet's menu glyph is wider than its icon box, which is sized for the
- * rail's thin chevron. The box's inline-grid centres the overflow; on a
+ * rail's thin chevron. The box's inline-grid centers the overflow; on a
  * right-hand sidebar an old `display: inline-block` overrode that, the glyph
  * spilled right from the box's left edge, and the mirror threw it left.
  * Measured on the rendered pixels, since the glyph is a pseudo-element.
@@ -640,7 +640,7 @@ test.describe("Sidebar sheet glyph", () => {
   }
 
   for (const testid of ["sheet-button-button", "overlay-sidebar"]) {
-    test(`the menu glyph is centred in its button: ${testid}`, async ({
+    test(`the menu glyph is centered in its button: ${testid}`, async ({
       page,
     }) => {
       await page.goto(ROUTE);

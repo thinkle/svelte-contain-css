@@ -522,7 +522,7 @@ below each other, these are the answer.
 `vars/calm.css` (loaded by `defaults.css`) sets the structure themes inherit:
 buttons, cards and lists sit flat and only dialogs, menus and tooltips cast a
 shadow; a Card's header is divided by a hairline, not a tinted band; a
-Fieldset is a labelled group (pass `border` for a box); tables use hairlines;
+Fieldset is a labeled group (pass `border` for a box); tables use hairlines;
 headings are 600 on a tighter scale; checkboxes and radios are outlined, and
 checking one does not change its label's weight. Palettes pick colors on top
 of that. A theme that wants depth sets the generic `--shadow-*` variables and
@@ -586,8 +586,8 @@ space-separated values set start and end independently — no top/bottom prop pa
 to remember, no 4-value `margin` shorthand order to get wrong.
 
 The one exception is `TextLayout`'s `marginInline`: it places the *text* inside
-the column (`"auto"`, the default, centres it; `"0 auto"` start-aligns it), and
-the column itself always centres in its container. To move the whole column,
+the column (`"auto"`, the default, centers it; `"0 auto"` start-aligns it), and
+the column itself always centers in its container. To move the whole column,
 wrap it: `<Container marginInline="0 auto"><TextLayout>...</TextLayout></Container>`.
 
 ```svelte
@@ -671,7 +671,7 @@ container (or viewport) width of 600px or less, or on a touch screen:
   (44px); Checkbox, RadioButton and Toggle rows at least `--touch-row-size`
   (36px). Set either to `0` to keep desktop sizes.
 - With `viewport-fit=cover`, Page keeps its header and footer content clear
-  of the notch and home indicator, and its header bar's colour runs behind
+  of the notch and home indicator, and its header bar's color runs behind
   the status bar. Without it, nothing changes.
 
 ## Text is HTML's job
@@ -723,7 +723,7 @@ wide column, so it is no longer squeezed down to 42rem. No prop needed:
 </TextLayout>
 ```
 
-- **Symmetric by default.** The prose is centred in the wide column, so a
+- **Symmetric by default.** The prose is centered in the wide column, so a
   figure sticks out evenly on both sides. For left-aligned prose with figures
   extending to the right, use `<TextLayout marginInline="0 auto">` (headings
   follow). `--prose-margin-inline="0"` on an ancestor does the same for every
@@ -788,10 +788,10 @@ So this is already fine, with no `TextLayout` in sight:
 
 **Where the measure sits.** Inside those components the capped measure is
 **start-aligned**: a paragraph narrower than its Card sits against the Card's
-leading edge like any other block. Only `TextLayout` centres it (it is the one
-prose column). Override with `--prose-margin-inline` -- `auto` to centre, `0`
+leading edge like any other block. Only `TextLayout` centers it (it is the one
+prose column). Override with `--prose-margin-inline` -- `auto` to center, `0`
 to start-align; headings follow it (`--heading-margin-inline` sets them apart,
-if you ever need that). (Before 1.4.0 every container centred
+if you ever need that). (Before 1.4.0 every container centered
 the measure, which dragged headings toward the middle of flex rows like `Bar`.)
 
 **Outside all of them** -- a heading in a bare `Inline`, a `<p>` in a plain
@@ -983,7 +983,7 @@ default is deliberately generic — replace it with what the action means in you
 app:
 
 ```svelte
-<!-- The close button is labelled "Remove" by default. Say what it removes: -->
+<!-- The close button is labeled "Remove" by default. Say what it removes: -->
 <Tag onclose={dropFilter} closeLabel="Stop filtering by {author}">{author}</Tag>
 
 <Progress value={pct} progressLabel="Uploading photos" />
@@ -1398,7 +1398,7 @@ no effect until it is closed and opened again, because a browser will not
 switch an open dialog between modal and non-modal.
 
 Note that a non-modal dialog (`modal={false}`) is not closed by Escape: that is
-the browser's behaviour, not this component's.
+the browser's behavior, not this component's.
 
 ### Responsive Layouts with Container Queries
 
@@ -1422,7 +1422,7 @@ Components respond to their container, not viewport:
 
 ### Small screens: the `-small` variables
 
-Contain's responsive behaviour follows three rules:
+Contain's responsive behavior follows three rules:
 
 1. **Outer size follows the small tier.** Things that stand alone -- a Card,
    a Container, a DataList -- fill the width they're given on a phone.
@@ -1611,11 +1611,11 @@ The hover mix uses the tab background as a CSS color.
 | ----------------------------- | --------------------------------------------------------- |
 | `--tab-indicator-height`      | Thickness; `0` (the default without the preset) paints nothing, the preset sets `2px` |
 | `--tab-indicator-transition`  | Duration and easing of the slide (preset: `350ms cubic-bezier(0.25, 0.8, 0.35, 1)`) |
-| `--tab-indicator-color`       | Colour, read from the **active tab**; default that tab's text colour |
-| `--tab-indicator-tint-amount` | Treat that colour as a *target* and mix this much of it into the indicator's own foreground; unset means the colour exactly (`100%`) |
+| `--tab-indicator-color`       | Color, read from the **active tab**; default that tab's text color |
+| `--tab-indicator-tint-amount` | Treat that color as a *target* and mix this much of it into the indicator's own foreground; unset means the color exactly (`100%`) |
 
 `--tab-indicator-color` is resolved on each tab, so every tab can have its own
-underline colour, and the colour blends during the slide over the same
+underline color, and the color blends during the slide over the same
 duration:
 
 ```svelte
@@ -1638,16 +1638,16 @@ duration:
 </TabBar>
 ```
 
-Setting it on the TabBar itself works as a bar-wide colour (tabs inherit it).
-The colour is read when the active tab changes or the tabs re-measure, not when
+Setting it on the TabBar itself works as a bar-wide color (tabs inherit it).
+The color is read when the active tab changes or the tabs re-measure, not when
 a theme swap alone changes it.
 
-### Colours that came from somewhere else
+### Colors that came from somewhere else
 
-A colour chosen to fill a tab -- a brand, a category, a per-item palette -- is
+A color chosen to fill a tab -- a brand, a category, a per-item palette -- is
 not necessarily readable as a thin line on the bar behind it: a pale one can
 land near 1:1 against the page, and so can a near-black one on a dark theme.
-`--tab-indicator-tint-amount` turns the colour into a target and mixes it into
+`--tab-indicator-tint-amount` turns the color into a target and mixes it into
 the foreground the indicator inherits, exactly as a heading tint
 (`--heading-tint-amount`) or a link (`--link-text-amount`) does. That
 foreground belongs to the surface, so one declaration covers a light and a
@@ -1657,7 +1657,7 @@ dark theme:
 <TabBar style="--tab-indicator-height: 3px; --tab-indicator-tint-amount: 50%">
 ```
 
-Each tab still names its own colour; the bar decides how far to take it. Since
+Each tab still names its own color; the bar decides how far to take it. Since
 the mix happens in CSS on the indicator, `currentColor` resolves where the
 indicator sits -- not on the active tab, which may carry a role's foreground of
 its own.
@@ -1698,12 +1698,12 @@ the component only reports the request.
 </TabBar>
 ```
 
-The tab button and the close button are siblings and share the tab's colours,
+The tab button and the close button are siblings and share the tab's colors,
 so they read as one tab. Knobs: `--tab-close-button-size` (circle, default
 `1.25em`), `--tab-close-button-gap` (default `0.25em`),
 `--tab-close-button-border-radius` (default `50%`),
 `--tab-close-button-hover-bg` / `-active-bg` (a scrim mixed from the text
-colour by default, so it suits any tab colour). A tab without `onclose`
+color by default, so it suits any tab color). A tab without `onclose`
 renders exactly as before.
 
 ### Split Panes
@@ -1874,7 +1874,7 @@ of the surface, never by component. Full contract:
 - **`field`**: text fields (Input, Select, TextArea). Fill and edge default
   to a step off the local surface and firm up on hover; `--field-*` knobs,
   `vars/underline-fields.css` preset. That preset also adds a focus underline: a
-stronger rule that grows from the centre of the field's bottom edge on
+stronger rule that grows from the center of the field's bottom edge on
 `:focus-visible` (over the resting rule) and retracts on blur, painted as a
 background gradient by the field itself, so Input needs no wrapper and
 `--field-bg` is untouched. The bottom border immediately takes the text color
@@ -1926,7 +1926,7 @@ is a drop-in for the div: a sticky Table head inside it still sticks (Card's
 `overflow-x: hidden` and Container's `overflow: auto` would stop that).
 
 ```svelte
-<!-- ❌ Contain doesn't know this div is white: tabs inside show a grey band. -->
+<!-- ❌ Contain doesn't know this div is white: tabs inside show a gray band. -->
 <div class="roster-shell" style="background: #fff">
   <TabBar items={tabs} bind:active />
   <Table sticky>…</Table>

@@ -138,7 +138,7 @@
       align-items: stretch;
       flex-wrap: nowrap;
       --button-width: 100%;
-      /* A full-width button reads as one when its label is centred. */
+      /* A full-width button reads as one when its label is centered. */
       --button-text-align: center;
     }
     .inline.collapse > :global(*) {

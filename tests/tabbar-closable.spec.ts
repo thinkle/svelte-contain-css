@@ -87,7 +87,7 @@ for (const theme of themes) {
     await page.waitForTimeout(600);
     const bar = page.getByTestId("bar");
     const props = ["background-color", "color", "border-top-color", "border-bottom-width", "border-top-width"];
-    // Colours transition (300ms); compare the pair only once they settle.
+    // Colors transition (300ms); compare the pair only once they settle.
     const check = async (tabName: string, close: string, label: string) => {
       const tab = bar.getByRole("button", { name: tabName, exact: true });
       const x = bar.getByRole("button", { name: close, exact: true });
@@ -117,13 +117,13 @@ for (const theme of themes) {
   });
 }
 
-test("a non-closable tab is unchanged: same size and colours as before the feature", async ({ page }) => {
+test("a non-closable tab is unchanged: same size and colors as before the feature", async ({ page }) => {
   const bar = page.getByTestId("bar");
   const control = bar.getByRole("button", { name: "Control", exact: true });
   const plain = bar.getByRole("button", { name: "Plain", exact: true });
   const a = await control.boundingBox();
   const b = await plain.boundingBox();
-  // Same height as its neighbours, and the same (inactive) colours as another
+  // Same height as its neighbours, and the same (inactive) colors as another
   // plain tab; width follows the label only (no reserved close space).
   expect(a!.height).toBe(b!.height);
   expect(await rgba(plain)).toEqual(await rgba(bar.getByRole("button", { name: "Second", exact: true })));

@@ -59,7 +59,7 @@ $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
 
 // A field's default fill: the local surface lifted a step lighter, the way
 // a raised tier is (an sRGB mix toward white, then an oklch lightness step):
-// white on a light grey page, a lighter well on a dark one, and plain white
+// white on a light gray page, a lighter well on a dark one, and plain white
 // on a white card, where the edge does the work. --field-lighten scales the
 // lift (0 turns it off). --field-fill-amount first mixes toward the
 // surface's own foreground instead -- with the lift off, a darker well on a
@@ -97,7 +97,7 @@ $ground-fg: var(--_ground-fg, var(--background-fg, var(--fg)));
 // lightness), and the same for -sunken- and -overlay-.
 //
 // Sunken also lifts chroma, more on a light surface than a dark one: a step
-// darker alone reads as grey and muddy, where a sidebar wants to read as a
+// darker alone reads as gray and muddy, where a sidebar wants to read as a
 // deeper shade of the same tint (on the light theme's #f4f5fb this lands on
 // its hand-picked #eef0fa). --surface-sunken-chroma sets the lift.
 $tier-steps: (

@@ -33,7 +33,7 @@
     </div>
   {/if}
   <!-- Docs pages are mostly examples: prose shares the demo boxes' left
-       edge instead of centring between them. -->
+       edge instead of centering between them. -->
   <DynamicComponent
     component={props.data.component}
     --prose-margin-inline="0"

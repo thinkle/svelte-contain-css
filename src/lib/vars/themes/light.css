@@ -5,7 +5,7 @@
      --secondary-color) and the page, surfaces, quiet chrome, tabs, borders,
      focus ring and tooltips follow, at the same lightness -- so contrast
      holds for any hue. --neutral-tint retints the neutrals separately (a
-     grey for an untinted page).
+     gray for an untinted page).
 
      Each tone takes the tint to a fixed luminance by scaling its linear RGB
      toward black or toward white -- which keeps its hue and stays on

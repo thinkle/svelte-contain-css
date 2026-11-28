@@ -101,7 +101,7 @@
   }
   /* Variants go through :where() so they only choose which colors apply.
      As plain `button.primary` they tied with the clickable mixin's
-     `button:hover` and, coming later, cancelled the hover background. */
+     `button:hover` and, coming later, canceled the hover background. */
   button:where(.primary) {
     @include color-props(primary, button, control);
   }

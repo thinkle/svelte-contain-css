@@ -4,7 +4,7 @@ import { expect, test, type Page } from "@playwright/test";
  * Hover must visibly change a control's background under the library
  * defaults. The hover mix used to default to white, which is invisible on
  * light surfaces, and color variants (CircleButton primary, ButtonLink
- * primary) re-applied their colors at a specificity that cancelled the
+ * primary) re-applied their colors at a specificity that canceled the
  * hover outright. Fixtures: /svelte-contain-css/tests/hover-affordance
  */
 

@@ -77,7 +77,7 @@
       <h4>A note on depth</h4>
       <p>
         Shallow drawers favour flat trays. Deep drawers want vertical
-        organisation, where items stand like files in a cabinet.
+        organization, where items stand like files in a cabinet.
       </p>
 
       <h3>Label what remains</h3>

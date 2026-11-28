@@ -354,7 +354,7 @@
       pointer-events: all;
       display: block;
       /* A host can line the button up with something of its own -- Page
-         centres it in its header row. */
+         centers it in its header row. */
       top: var(--sidebar-sheet-button-top, var(--padding));
       left: 0;
 
@@ -657,11 +657,11 @@
     );
   }
   /* Mirrored, and still inline-grid from the rule above: the grid is what
-     centres a glyph wider than its box (the sheet's menu glyph is, at the
+     centers a glyph wider than its box (the sheet's menu glyph is, at the
      rail chevron's 0.65rem). An old `display: inline-block` here overrode
      it, so the glyph started at the box's left edge, spilled right, and the
      mirror threw the spill left -- every right-hand sheet button sat about
-     2.5px off centre. */
+     2.5px off center. */
   .right button::after {
     transform: var(--mirror-sidebar-icons, scaleX(-1));
   }

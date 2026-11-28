@@ -52,7 +52,7 @@
   .grid-row {
     /* Spanning, stretching and the margin reset all live on `.grid-full-row`,
        in GridLayout. What this adds is releasing the measure for the content:
-       without it a heading in here is clamped to `--line-width` and centred by
+       without it a heading in here is clamped to `--line-width` and centered by
        its own auto margins, so the band spans and the words inside it do not. */
     --line-width: none;
   }

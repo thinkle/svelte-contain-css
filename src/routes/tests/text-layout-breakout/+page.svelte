@@ -71,7 +71,7 @@
 
 <div data-testid="heading-apart">
   <TextLayout --prose-margin-inline="0" --heading-margin-inline="auto">
-    <h2>Centred heading</h2>
+    <h2>Centered heading</h2>
     <p>Start-aligned prose under it.</p>
   </TextLayout>
 </div>

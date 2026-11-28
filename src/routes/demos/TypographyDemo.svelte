@@ -527,7 +527,7 @@ ${headingExampleMarkup}
       </p>
       <p>
         The width is a cap, and where the capped column sits depends on its
-        container. In a <code>TextLayout</code> -- a prose column -- it is centred.
+        container. In a <code>TextLayout</code> -- a prose column -- it is centered.
         In a <code>Card</code>, <code>Container</code>, <code>Tile</code> and the
         other typography containers it starts at the leading edge, like any other
         block. <code>--prose-margin-inline</code> overrides either way, and

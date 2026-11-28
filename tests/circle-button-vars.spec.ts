@@ -21,10 +21,10 @@ test("circle-button variables, with mini-button still behind them", async ({
   await page.goto("/svelte-contain-css/tests/circle-button-vars");
 
   /*
-    Colours come back as `color(srgb 0.0039 …)` rather than `rgb(1, 2, 3)`,
-    because `color-props` routes every colour through `color-mix()` for the
-    per-channel mix knobs. Normalise to 0-255 triples so the fixture can state
-    the colour it set rather than its float encoding.
+    Colors come back as `color(srgb 0.0039 …)` rather than `rgb(1, 2, 3)`,
+    because `color-props` routes every color through `color-mix()` for the
+    per-channel mix knobs. Normalize to 0-255 triples so the fixture can state
+    the color it set rather than its float encoding.
   */
   const read = async (testid: string) =>
     page.locator(box(testid)).evaluate((node) => {
@@ -51,7 +51,7 @@ test("circle-button variables, with mini-button still behind them", async ({
 
   /*
     ...and the prop must be *emitted* under the new prefix, which the computed
-    colour above cannot show: `--mini-button-bg` resolves through the fallback
+    color above cannot show: `--mini-button-bg` resolves through the fallback
     chain to exactly the same paint. So assert the variable the component
     actually writes. This is the one case that fails if the prefix handed to
     elementProps is left stale.

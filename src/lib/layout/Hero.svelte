@@ -99,7 +99,7 @@
        with the browser's toolbars *hidden*, so a full-height hero's content
        sits partly under them on first load. */
     height: var(--hero-height, 100svh);
-    /* Without inline padding, centred hero text runs right to the screen's
+    /* Without inline padding, centered hero text runs right to the screen's
        edges the moment the viewport is narrower than its longest line. */
     padding-inline: var(--hero-padding-inline, var(--padding, 1rem));
     /* Lets hero content size itself to the hero (cqi units, @container)

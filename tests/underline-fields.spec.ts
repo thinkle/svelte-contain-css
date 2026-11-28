@@ -1,7 +1,7 @@
 import { test, expect, type Locator, type Page } from "@playwright/test";
 
 /**
- * vars/underline-fields.css: on focus a stronger rule grows from the centre
+ * vars/underline-fields.css: on focus a stronger rule grows from the center
  * of the field (a gradient painted by the field itself, so Input needs no
  * wrapper). Without the preset nothing about a field's background changes.
  */
@@ -39,7 +39,7 @@ for (const name of ["input", "textarea", "select"]) {
   });
 }
 
-test("it grows from the centre, over the resting rule, through the transition", async ({ page }) => {
+test("it grows from the center, over the resting rule, through the transition", async ({ page }) => {
   await load(page, "?dur=2000ms%20linear");
   const f = page.getByTestId("input");
   expect(await f.evaluate((n) => getComputedStyle(n).backgroundPositionX)).toBe("50%");
@@ -53,7 +53,7 @@ test("it grows from the centre, over the resting rule, through the transition", 
   expect(await f.evaluate((n) => getComputedStyle(n).transitionProperty)).toContain("border-color");
 });
 
-test("colour and origin come from the variables; default is the focus/primary colour", async ({ page }) => {
+test("color and origin come from the variables; default is the focus/primary color", async ({ page }) => {
   await load(page);
   const c = page.getByTestId("colored");
   expect(await c.evaluate((n) => getComputedStyle(n).backgroundImage)).toContain("rgb(255, 0, 128)");

@@ -6,7 +6,7 @@
    - Elevation is for things that float. Buttons, cards, data lists and
      tables sit flat; dialogs, menus and tooltips cast a soft shadow.
    - One border per box. A Card's header is divided from its body by a
-     hairline, not a tinted band; a Fieldset is a labelled group (pass its
+     hairline, not a tinted band; a Fieldset is a labeled group (pass its
      `border` prop for a box); a table's head gets a hairline, not a 3px
      colored rule.
    - Headings are 600, on a tighter scale than the browser's.
@@ -78,7 +78,7 @@
   --radio-button-bg: transparent;
   --radio-button-border: 1.5px solid color-mix(in oklab, currentColor 45%, transparent);
   /* Checked: the fill shows through a transparent edge, so the box is one
-     solid color rather than a fill inside a grey ring. */
+     solid color rather than a fill inside a gray ring. */
   --checkbox-checked-border: 1.5px solid transparent;
   --radio-button-checked-border: 1.5px solid transparent;
   /* The checked label's weight is also the weight its invisible sizer is

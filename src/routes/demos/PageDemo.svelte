@@ -46,7 +46,7 @@
       there is a header) puts it in the header row and leaves the content's
       padding alone; <code>"gutter"</code> reserves a strip on the sidebar's
       side; <code>"symmetric"</code> reserves it on both sides so the column
-      stays centred; <code>"overlap"</code> reserves nothing.
+      stays centered; <code>"overlap"</code> reserves nothing.
     </p>
   </TextLayout>
 

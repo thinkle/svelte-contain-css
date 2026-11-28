@@ -239,7 +239,7 @@ test.describe("on an edge-to-edge phone (viewport-fit=cover)", () => {
     });
   });
 
-  test("the header bar's content clears the notch, its colour runs behind it", async ({ page }) => {
+  test("the header bar's content clears the notch, its color runs behind it", async ({ page }) => {
     const bar = await box(page, "app-bar");
     expect(Math.round(bar.y)).toBe(TOP);
     const strip = await page.getByTestId("app-bar").evaluate((el) => {

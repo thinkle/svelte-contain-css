@@ -48,10 +48,10 @@
     },
     BaseStyleProps &
       StyleProps<typeof GROUPED_TOGGLE_ITEM_VARS> & {
-        /** Override just the checked-state fill/text colour, independent of
+        /** Override just the checked-state fill/text color, independent of
          *  the unchecked styling above -- this is what lets three instances
          *  in the same row (e.g. Filter / Group / Show) each have their own
-         *  checked colour while sharing one unchecked appearance. */
+         *  checked color while sharing one unchecked appearance. */
         checkedBg?: string | null;
         checkedFg?: string | null;
       },

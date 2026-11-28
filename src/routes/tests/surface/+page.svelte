@@ -3,8 +3,8 @@
 
      A plain element that paints its own background can't tell Contain about
      it: CSS can't read an ancestor's painted color, so a TabBar inside
-     resolves against the page and shows a grey band (Updraft's white
-     `.roster-shell` on a grey page). <Surface> is the sanctioned way to
+     resolves against the page and shows a gray band (Updraft's white
+     `.roster-shell` on a gray page). <Surface> is the sanctioned way to
      declare one. If it breaks, the "raised" TabBar strip and active tab come
      out in the page's color instead of the raised tier's.
 

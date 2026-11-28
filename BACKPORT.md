@@ -24,7 +24,7 @@ every include and every `var()`, and `elementProps` emits the new prefix, so
 
 | Theme tokens renamed to `--circle-button-*` | `src/lib/vars/themes/*.css`, `src/lib/vars/soft-corners.css` | ⬜ todo |
 
-### ⚠️ The one behaviour that changes
+### ⚠️ The one behavior that changes
 
 `var()` reaches its fallback only when the name is **not defined at all** —
 proximity does not enter into it. So a theme defining `--circle-button-bg` at
@@ -61,7 +61,7 @@ Legacy branch: not started
 The three silent-breakage bugs are **present on `main` too** -- verified by
 compiling legacy `Tag.svelte` against Svelte 4.2.20:
 
-| Bug | Legacy behaviour |
+| Bug | Legacy behavior |
 |-----|------------------|
 | A caller's `class` replaces the component's own | `<Tag class="mine">` renders `class="mine svelte-hash"` -- `.tag` and all its styling gone. Identical to Svelte 5. |
 | A caller's `style` clobbers the injected variables | `{style}` sits before `{...$$restProps}`, same as the pre-fix svelte5 code |

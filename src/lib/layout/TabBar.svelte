@@ -133,11 +133,11 @@
       const barRect = bar!.getBoundingClientRect();
       const x = left - barRect.left - bar!.clientLeft + bar!.scrollLeft;
       const y = bottom - barRect.top - bar!.clientTop + bar!.scrollTop - height;
-      /* The tab's colour, read off the tab and handed to the indicator. A
+      /* The tab's color, read off the tab and handed to the indicator. A
          bare --tab-indicator-color is taken as given; with
          --tab-indicator-tint-amount it becomes a target instead, mixed into
          the indicator's own foreground in the CSS below -- the same shape
-         as a heading tint or a link, and for the same reason: a colour that
+         as a heading tint or a link, and for the same reason: a color that
          suits a tab's own fill is not necessarily readable against the bar.
          The mix is left to CSS so that currentColor resolves where the
          indicator sits, not where the tab does (an active tab may carry a
@@ -152,9 +152,9 @@
         ind.style.setProperty("--_tab-indicator-color", color);
         /* Only when an amount was asked for: the mix is written here, on the
            indicator, so its currentColor is the foreground the indicator
-           inherits. Without one the colour is passed through untouched --
+           inherits. Without one the color is passed through untouched --
            not mixed with itself, which would hold a visually identical
-           colour but serialize it as color(srgb ...) for everyone. */
+           color but serialize it as color(srgb ...) for everyone. */
         if (amount) {
           ind.style.setProperty(
             "--_tab-indicator-mix",
@@ -333,12 +333,12 @@
     width: 0;
     height: var(--tab-indicator-height, 0);
     pointer-events: none;
-    /* The colour exactly as the tab gave it, unless --tab-indicator-tint-amount
+    /* The color exactly as the tab gave it, unless --tab-indicator-tint-amount
        asked for a tint, in which case TabBar writes the mix above. */
     background-color: var(--_tab-indicator-mix, var(--_tab-indicator-color, currentColor));
     --_tab-indicator-transition: var(--tab-indicator-transition, 350ms ease-out);
-    /* Colour travels with the slide, so mid-way it is a blend of the two
-       tabs' colours. */
+    /* Color travels with the slide, so mid-way it is a blend of the two
+       tabs' colors. */
     transition:
       transform var(--_tab-indicator-transition),
       width var(--_tab-indicator-transition),
@@ -348,7 +348,7 @@
   .tab-indicator:global(.quiet) {
     transition: none;
   }
-  /* A hop between rows of a wrapped bar jumps, but still blends colour. */
+  /* A hop between rows of a wrapped bar jumps, but still blends color. */
   .tab-indicator:global(.jump) {
     transition-property: background-color;
   }

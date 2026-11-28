@@ -43,7 +43,7 @@
        * - `"gutter"` (default without a header): a button-wide strip is
        *   reserved down the sidebar's side of the content.
        * - `"symmetric"`: the same strip on both sides, so the column stays
-       *   centred at the cost of width on both.
+       *   centered at the cost of width on both.
        * - `"overlap"`: no room is made; the button floats over the top
        *   corner of the content. Fine when that corner is empty.
        *
@@ -97,7 +97,7 @@
   // Start "unfrozen" so i.e. scrolling on reload
   // or hash link works properly
   let freeze = $state(false);
-  /* Measured so the compact sheet button can be centred in the header row
+  /* Measured so the compact sheet button can be centered in the header row
      (see the compact block in the styles). */
   let headerHeight = $state(0);
   let pageElement: HTMLElement;
@@ -394,7 +394,7 @@
     }
 
     /* "symmetric": the same strip on both sides, so the column stays
-       centred. */
+       centered. */
     .hasSidebar.sheet-symmetric > .side-by-side > .content {
       padding-inline: var(--_page-gutter);
     }
@@ -410,13 +410,13 @@
        - The aside spans the whole page, header included, instead of just
          the row beside the content, so the button can sit in the header row
          and the open sheet covers the page top to bottom, like any drawer.
-       - The button is centred in the header's measured height.
+       - The button is centered in the header's measured height.
        - The header's content steps aside by the button's width. */
     .hasSidebar.sheet-header > .side-by-side {
       position: static;
     }
     .hasSidebar.sheet-header > .side-by-side > .aside {
-      /* Centred in the header's own row, below any safe-area strip (see
+      /* Centered in the header's own row, below any safe-area strip (see
          the end of this file) -- the measured height includes that strip. */
       --sidebar-sheet-button-top: calc(
         var(--_page-safe-top) +
@@ -427,8 +427,8 @@
       );
     }
     /* It's the header's own content (a Bar, usually) that makes room, not
-       the header box: padding the header would leave a strip of page colour
-       beside a coloured bar. Children passed CSS variables arrive wrapped in
+       the header box: padding the header would leave a strip of page color
+       beside a colored bar. Children passed CSS variables arrive wrapped in
        a display:contents <svelte-css-wrapper>, hence the second selector. */
     .hasSidebar.sheet-header:not(.right) > header > :global(*:not(svelte-css-wrapper)),
     .hasSidebar.sheet-header:not(.right) > header > :global(svelte-css-wrapper > *) {
@@ -477,7 +477,7 @@
 
      The header moves its content down by the top inset, and its first child
      -- the app's Bar, usually -- paints the strip it leaves with its own
-     background (a ::before inheriting it), so the bar's colour runs up
+     background (a ::before inheriting it), so the bar's color runs up
      behind the status bar the way a native app's does. The footer mirrors
      it at the bottom. A page with no header or footer pads its frame
      instead, and the sides are padded for a phone on its side. */

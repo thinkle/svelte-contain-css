@@ -152,7 +152,7 @@
     a[role="button"] {
       min-height: var(--button-height, var(--touch-target-size, 44px));
       /* An inline-block puts its text at the top of the taller box; a
-         <button> centres it on its own. */
+         <button> centers it on its own. */
       display: inline-flex;
       align-items: center;
       justify-content: center;

@@ -1,6 +1,6 @@
 /* Quiet: a restrained, neutral-first theme.
 
-   The interface is carried by a grey ramp; the accent appears only where it
+   The interface is carried by a gray ramp; the accent appears only where it
    means something -- the primary action, the current selection, focus.
    Controls are flat with a hairline edge, and shadows are kept for the
    things that float (dialogs, menus, tooltips, the sidebar sheet). Nested
@@ -9,7 +9,7 @@
 
    Set --primary-color to rebrand; everything else stays neutral. */
 :root {
-  /* ── Neutral ramp (cool grey) ───────────────────────────── */
+  /* ── Neutral ramp (cool gray) ───────────────────────────── */
   --quiet-gray-0: #ffffff;
   --quiet-gray-50: #f8f9fb;
   --quiet-gray-100: #f1f3f6;
@@ -54,7 +54,7 @@
   --body-fg: var(--quiet-gray-900);
   --surface-bg: var(--quiet-gray-0);
   --surface-fg: var(--quiet-gray-900);
-  /* Tiers barely step: depth is a tint, not a ladder of greys. */
+  /* Tiers barely step: depth is a tint, not a ladder of grays. */
   --surface-depth: 0.5;
   --inverse-bg: var(--quiet-gray-900);
   --inverse-fg: #ffffff;
@@ -220,7 +220,7 @@
   --card-footer-bg: var(--quiet-gray-50);
   --card-footer-border: 1px solid var(--quiet-gray-150);
 
-  /* One border per box: a Fieldset inside a bordered panel is a labelled
+  /* One border per box: a Fieldset inside a bordered panel is a labeled
      group, not another box. */
   --fieldset-border-style: none;
   --fieldset-padding: 0;

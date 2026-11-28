@@ -31,7 +31,7 @@ defaults land within a shade of Material's dark elevations.
 | `--surface-depth` | `1` | Scales every step; `0` is flat (Bootstrap, Material, Retro), Layered Depth uses `1.6` |
 | `--surface-raised-mix` / `-step` | `4%` / `0.03` | Toward white, then lighter |
 | `--surface-overlay-mix` / `-step` | `2%` / `0.02` | Off raised, toward white, then lighter |
-| `--surface-sunken-mix` / `-step` / `-chroma` | `0%` / `-0.015` / `0.8` | Darker, with a chroma lift (more on light surfaces) so it reads as a deeper tint, not grey |
+| `--surface-sunken-mix` / `-step` / `-chroma` | `0%` / `-0.015` / `0.8` | Darker, with a chroma lift (more on light surfaces) so it reads as a deeper tint, not gray |
 
 Foregrounds fall back to the tier below unchanged. The docs site's Custom
 Theming page has a live editor for all of this.
@@ -82,7 +82,7 @@ any fixed color matches some surface and the field disappears. Every
 family-aware surface publishes its resolved pair, and by default a field is:
 
 - filled a step lighter than that surface, the way a raised tier is
-  (`--field-lighten`, 1): white on a light grey page, a lighter well on a
+  (`--field-lighten`, 1): white on a light gray page, a lighter well on a
   dark one, white on a white card;
 - edged with a 1px line mixed from the same pair (`--field-edge-amount`, 50%
   in oklab, about 3.5:1). Fields are the one borderless-by-default exception:
@@ -107,7 +107,7 @@ Knobs, all optional:
 
 `vars/underline-fields.css` is the underline preset ("Underline Fields" in
 the theme picker): a transparent fill and a rule along the bottom, on the surface
-itself, and a stronger rule that grows from the centre on focus
+itself, and a stronger rule that grows from the center on focus
 (`--field-focus-underline-*`). It combines with any theme. Component variables
 (`--input-bg`, `--input-border`, `--select-*`) still win over all of these.
 
@@ -247,7 +247,7 @@ Setting `--card-bg` in a theme instead makes every card an unknown family:
 readable, but unpinned. The same goes for `--page-bg` and
 `--page-content-bg`: a Page's frame is `background` and its content is
 `surface`, so a desktop color around a content area is `--bg` plus
-`--surface-bg` (Retro's teal and grey).
+`--surface-bg` (Retro's teal and gray).
 
 The bundled `light` and `dark` themes give the ladder real steps: cards up,
 sidebars and card headers back, menus floating. In the dark theme, raised

@@ -89,7 +89,7 @@
       900px
     );
     /* Not the generic margin-props() mixin (_box.scss): that defaults to 0,
-       but a Container has always centred itself horizontally and kept a
+       but a Container has always centered itself horizontally and kept a
        gap's worth of vertical rhythm above/below by default. Same defaults,
        same var-with-fallbacks() prefix chain as everything else here --
        just block/inline now instead of one `margin` prop, so a caller can

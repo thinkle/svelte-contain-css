@@ -640,7 +640,7 @@
   /* The veil lives on the sticky wrapper rather than on the header table:
      the strip around the table clips its overflow, and the veil is ALL
      overflow (it hangs above the header). It now spans the strip rather
-     than just the table, so a narrow centred table is masked edge to edge. */
+     than just the table, so a narrow centered table is masked edge to edge. */
   .table-head-sticky::before {
     content: " ";
     position: absolute;

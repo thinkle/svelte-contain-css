@@ -47,7 +47,7 @@ test.describe("at 1400px", () => {
     await page.goto(URL);
   });
 
-  test("p and h2 stay at --line-width, centred", async ({ page }) => {
+  test("p and h2 stay at --line-width, centered", async ({ page }) => {
     const { lineWidth } = await layout(page, "default");
     expect(lineWidth).toBe(672);
     const p = await box(page, '[data-testid="default"] p');
@@ -143,7 +143,7 @@ test.describe("at 1400px", () => {
     expect(fig.width).toBeGreaterThan(lineWidth + 100);
   });
 
-  test('marginInline="0 auto" start-aligns the text; the column stays centred', async ({ page }) => {
+  test('marginInline="0 auto" start-aligns the text; the column stays centered', async ({ page }) => {
     const { contentLeft, lineWidth } = await layout(page, "margin-prop");
     const col = await box(page, '[data-testid="margin-prop"] .figure');
     const p = await box(page, '[data-testid="margin-prop"] p');
@@ -152,7 +152,7 @@ test.describe("at 1400px", () => {
     expect(p.left).toBeCloseTo(contentLeft, 0);
     expect(h2.left).toBeCloseTo(contentLeft, 0);
     expect(p.width).toBeCloseTo(lineWidth, 0);
-    // the wide column is still centred in its container
+    // the wide column is still centered in its container
     expect(Math.abs((col.left - host.left) - (host.right - col.right))).toBeLessThan(2);
   });
 

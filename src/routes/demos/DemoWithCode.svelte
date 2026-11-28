@@ -260,7 +260,7 @@
   }
 
   /* The caption belongs to this box, so it lines up with the box's own
-     content edge (where the tabs start), not with the page's centred reading
+     content edge (where the tabs start), not with the page's centered reading
      column: one left edge per unit. Still capped at the measure. */
   .demo-heading,
   .demo-blurb {
@@ -288,7 +288,7 @@
 
   .tab-panel {
     /* The docs page left-aligns its prose; a live demo shows the library's
-       own default instead (a TextLayout there should centre, as it would in
+       own default instead (a TextLayout there should center, as it would in
        the consumer's app). */
     --prose-margin-inline: initial;
     --heading-margin-inline: initial;

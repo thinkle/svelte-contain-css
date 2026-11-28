@@ -6,7 +6,7 @@
 
   // Regression test: an overlay is a DOM child of wherever it was placed, and
   // the top layer doesn't change inheritance. Each overlay below sits inside a
-  // `.hostile` host -- nowrap, centred, bold, uppercase, italic, spaced out,
+  // `.hostile` host -- nowrap, centered, bold, uppercase, italic, spaced out,
   // a pointer cursor -- the way a roster's name cell or a table header would
   // be. Its own text must still wrap and render with its own defaults.
 

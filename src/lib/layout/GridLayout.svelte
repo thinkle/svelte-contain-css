@@ -66,17 +66,17 @@
 
        Sizing the track to the item gives exactly the `gap` that was asked for
        between items, and hands the remainder to `justify-content: center` below,
-       which centres the whole run. That declaration has been here all along and
+       which centers the whole run. That declaration has been here all along and
        could never fire, because `1fr` tracks always consume the full width.
 
        `min(100%, …)` keeps a track from outgrowing a narrow screen.
 
        `auto-fit`, not `auto-fill`, and the difference is the whole ballgame for
-       centring. Both lay down as many tracks as fit the container; `auto-fill`
+       centering. Both lay down as many tracks as fit the container; `auto-fill`
        keeps the empty ones at full width, so three cards in a wide container
        leave `justify-content` no slack to work with and pack against the left.
        `auto-fit` collapses the tracks nothing landed in, so the run shrinks to
-       the items and centres. Three 200px items in a 1400px container: 72px left
+       the items and centers. Three 200px items in a 1400px container: 72px left
        and 696px right under `auto-fill`, 384px either side under `auto-fit`.
 
        One caveat worth knowing, because it is not a bug we can fix here: an item
@@ -84,7 +84,7 @@
        there is nothing left for `auto-fit` to collapse and the run goes back to
        full width and left-packed. A grid with full-width rows in it is a
        full-width grid. Headings kept outside the grid, one grid per section,
-       keep the centring. */
+       keep the centering. */
     grid-template-columns: repeat(
       auto-fit,
       min(100%, var-with-fallbacks(--item-width, grid-layout, 250px))
@@ -138,8 +138,8 @@
 
     /* Spanning is only half of it. How an item fills the tracks it spans is
        `justify-items` on the grid, which a tile grid sets to `center` -- and a
-       centred block with no width of its own shrinks to fit its content, so the
-       row it spans renders as a short centred blob rather than a full-width
+       centered block with no width of its own shrinks to fit its content, so the
+       row it spans renders as a short centered blob rather than a full-width
        heading. Saying `stretch` here makes the class mean the same thing in
        every grid, whatever the container prefers for ordinary items.
 
@@ -150,7 +150,7 @@
     /* And the typography has to be let go of too, which is the part that took a
        while to see. A heading inside a typographic container gets a readable
        measure and auto side margins -- `max-width: var(--line-width)`, 42rem by
-       default, with `margin-inline: auto` -- so it sits as a centred column of
+       default, with `margin-inline: auto` -- so it sits as a centered column of
        text. Sensible for prose, wrong for a band that is supposed to run the
        width of a grid.
 
@@ -207,7 +207,7 @@
       );
     }
     /* When only one track fits, it takes the whole row. A 250px item in a
-       358px phone column got one 250px track, centred, with 54px of nothing
+       358px phone column got one 250px track, centered, with 54px of nothing
        either side -- a form panel squeezed into two thirds of the screen.
        The clamp is a switch: when two items and a gap don't fit
        (2W + gap > 100%) the middle term is huge and the track is 100%;

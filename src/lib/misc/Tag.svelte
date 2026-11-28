@@ -139,7 +139,7 @@
      button inherits from the tag. On a red tag that produced 90% red + 10%
      white -- a muddy circle a shade off the tag it sits on, reading as a
      rendering artifact rather than a control. Mixing from currentColor
-     instead inverts correctly against any tag colour: a light scrim on a
+     instead inverts correctly against any tag color: a light scrim on a
      saturated tag, a dark one on the default pale tag, with no per-variant
      rules. */
   .tag .close-button::before {

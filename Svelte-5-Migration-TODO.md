@@ -28,7 +28,7 @@
 ## Component Follow-ups
 
 - [ ] Controls: refactor `Button`, `ButtonLink`, `MiniButton`, `Input`, `Checkbox`, `RadioButton`, `Slider`, `Select`, `TabItem` for runes, snippets, and TypeScript typings that work with two-way bindings.
-- [ ] Layout: migrate `FormItem.svelte`, `Table.svelte`, `Page.svelte`, `ResponsiveText.svelte`, `SplitPane.svelte`, `Tile.svelte`, `Columns.svelte`, `Column.svelte`, `Row.svelte` to the new prop/snippet APIs while keeping existing DOM behaviours.
+- [ ] Layout: migrate `FormItem.svelte`, `Table.svelte`, `Page.svelte`, `ResponsiveText.svelte`, `SplitPane.svelte`, `Tile.svelte`, `Columns.svelte`, `Column.svelte`, `Row.svelte` to the new prop/snippet APIs while keeping existing DOM behaviors.
 - [ ] Overlays & misc: update `DropdownMenu.svelte`, `Dialog.svelte`, `Tooltip.svelte`, `Progress.svelte`, `Card.svelte`, `CodeInner.svelte`/`Code.svelte` to use runes and ensure DOM observers are driven by `$effect`.
 - [ ] Shared layout wrappers (`Container.svelte`, `Bar.svelte`, `MenuList.svelte`, `Hero.svelte`, `Sidebar.svelte`, `GridLayout.svelte`) need `$props()` + `$derived` style injection and rest spreading review.
 - [ ] Dynamic loader: convert `src/routes/demos/DynamicComponent.svelte` to `$props`/`$state` and keep the async import inside an `$effect`.
@@ -44,6 +44,6 @@
 ## Validation
 
 - [ ] Run `npm run check`, `npm run build`, and `npm run package` after refactors to catch type or bundling regressions; rebuild CSS with `npm run build-css`.
-- [ ] Manually exercise interactive pieces (`DropdownMenu`, `Tooltip`, `SplitPane`, `Dialog`) to confirm `$effect` conversions preserve keyboard/mouse behaviour.
+- [ ] Manually exercise interactive pieces (`DropdownMenu`, `Tooltip`, `SplitPane`, `Dialog`) to confirm `$effect` conversions preserve keyboard/mouse behavior.
 - [ ] Inspect generated `.d.ts` output in `dist/` for correct `Snippet` typings and updated prop definitions.
 - [ ] Once everything passes, regenerate `dist`/`build` artifacts and confirm the demo app renders correctly under Svelte 5 (`npm run dev`, `npm run preview`).

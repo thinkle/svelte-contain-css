@@ -54,7 +54,7 @@ test.describe("calm defaults", () => {
     expect(after).toBe(before);
   });
 
-  test("an unchecked box is outlined on its surface, not filled grey", async ({ page }) => {
+  test("an unchecked box is outlined on its surface, not filled gray", async ({ page }) => {
     const bg = await page
       .locator(".checkbox-item")
       .first()

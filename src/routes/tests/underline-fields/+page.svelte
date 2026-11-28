@@ -19,7 +19,7 @@
   <p><TextArea data-testid="textarea" value="more text" /></p>
   <p><Select data-testid="select" value="One"><Option value="One">One</Option><Option value="Two">Two</Option></Select></p>
   <p style="--field-focus-underline-color: rgb(255, 0, 128); --field-focus-underline-origin: 0%;">
-    <Input data-testid="colored" value="coloured" />
+    <Input data-testid="colored" value="colored" />
   </p>
   <p><input type="checkbox" data-testid="check" /></p>
 </div>

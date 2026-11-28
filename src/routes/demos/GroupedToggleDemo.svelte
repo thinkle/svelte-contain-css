@@ -163,7 +163,7 @@
 </GroupedToggle>`}
   >
     {#snippet header()}
-      <h3>Per-segment checked colour</h3>
+      <h3>Per-segment checked color</h3>
     {/snippet}
     <GroupedToggle>
       <GroupedToggleItem bind:checked={toppings.cheese} checkedBg="#fde047" checkedFg="#713f12">
@@ -181,7 +181,7 @@
         .filter(([, on]) => on)
         .map(([topping]) => topping)
         .join(", ") || "just crust"}. Each segment's checked fill is independently overridable, so
-      a consuming app can colour-code a row of modes consistently with wherever else it names them
+      a consuming app can color-code a row of modes consistently with wherever else it names them
       (a legend, a summary sentence, etc).
     </p>
   </DemoWithCode>
